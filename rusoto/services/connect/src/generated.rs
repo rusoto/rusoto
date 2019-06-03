@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -145,6 +146,10 @@ pub struct DeleteUserRequest {
     #[serde(rename = "UserId")]
     pub user_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteUserResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeUserHierarchyGroupRequest {
@@ -769,6 +774,10 @@ pub struct UpdateUserHierarchyRequest {
     pub user_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateUserHierarchyResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateUserIdentityInfoRequest {
     /// <p>A <code>UserIdentityInfo</code> object.</p>
@@ -781,6 +790,10 @@ pub struct UpdateUserIdentityInfoRequest {
     #[serde(rename = "UserId")]
     pub user_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateUserIdentityInfoResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateUserPhoneConfigRequest {
@@ -795,6 +808,10 @@ pub struct UpdateUserPhoneConfigRequest {
     pub user_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateUserPhoneConfigResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateUserRoutingProfileRequest {
     /// <p>The identifier for your Amazon Connect instance. To find the ID of your instance, open the AWS console and select Amazon Connect. Select the alias of the instance in the Instance alias column. The instance ID is displayed in the Overview section of your instance settings. For example, the instance ID is the set of characters at the end of the instance ARN, after instance/, such as 10a4c4eb-f57e-4d4c-b602-bf39176ced07.</p>
@@ -808,6 +825,10 @@ pub struct UpdateUserRoutingProfileRequest {
     pub user_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateUserRoutingProfileResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateUserSecurityProfilesRequest {
     /// <p>The identifier for your Amazon Connect instance. To find the ID of your instance, open the AWS console and select Amazon Connect. Select the alias of the instance in the Instance alias column. The instance ID is displayed in the Overview section of your instance settings. For example, the instance ID is the set of characters at the end of the instance ARN, after instance/, such as 10a4c4eb-f57e-4d4c-b602-bf39176ced07.</p>
@@ -820,6 +841,10 @@ pub struct UpdateUserSecurityProfilesRequest {
     #[serde(rename = "UserId")]
     pub user_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateUserSecurityProfilesResponse {}
 
 /// <p>A <code>User</code> object that contains information about a user account in your Amazon Connect instance, including configuration settings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2246,127 +2271,112 @@ impl Error for UpdateUserSecurityProfilesError {
 /// Trait representing the capabilities of the Amazon Connect API. Amazon Connect clients implement this trait.
 pub trait Connect {
     /// <p>Creates a new user account in your Amazon Connect instance.</p>
-    fn create_user(
-        &self,
-        input: CreateUserRequest,
-    ) -> RusotoFuture<CreateUserResponse, CreateUserError>;
+    fn create_user(&self, input: CreateUserRequest) -> Request<CreateUserRequest>;
 
     /// <p>Deletes a user account from Amazon Connect.</p>
-    fn delete_user(&self, input: DeleteUserRequest) -> RusotoFuture<(), DeleteUserError>;
+    fn delete_user(&self, input: DeleteUserRequest) -> Request<DeleteUserRequest>;
 
     /// <p>Returns a <code>User</code> object that contains information about the user account specified by the <code>UserId</code>.</p>
-    fn describe_user(
-        &self,
-        input: DescribeUserRequest,
-    ) -> RusotoFuture<DescribeUserResponse, DescribeUserError>;
+    fn describe_user(&self, input: DescribeUserRequest) -> Request<DescribeUserRequest>;
 
     /// <p>Returns a <code>HierarchyGroup</code> object that includes information about a hierarchy group in your instance.</p>
     fn describe_user_hierarchy_group(
         &self,
         input: DescribeUserHierarchyGroupRequest,
-    ) -> RusotoFuture<DescribeUserHierarchyGroupResponse, DescribeUserHierarchyGroupError>;
+    ) -> Request<DescribeUserHierarchyGroupRequest>;
 
     /// <p>Returns a <code>HiearchyGroupStructure</code> object, which contains data about the levels in the agent hierarchy.</p>
     fn describe_user_hierarchy_structure(
         &self,
         input: DescribeUserHierarchyStructureRequest,
-    ) -> RusotoFuture<DescribeUserHierarchyStructureResponse, DescribeUserHierarchyStructureError>;
+    ) -> Request<DescribeUserHierarchyStructureRequest>;
 
     /// <p>Retrieves the contact attributes associated with a contact.</p>
     fn get_contact_attributes(
         &self,
         input: GetContactAttributesRequest,
-    ) -> RusotoFuture<GetContactAttributesResponse, GetContactAttributesError>;
+    ) -> Request<GetContactAttributesRequest>;
 
     /// <p>The <code>GetCurrentMetricData</code> operation retrieves current metric data from your Amazon Connect instance.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:GetCurrentMetricData</code> action.</p>
     fn get_current_metric_data(
         &self,
         input: GetCurrentMetricDataRequest,
-    ) -> RusotoFuture<GetCurrentMetricDataResponse, GetCurrentMetricDataError>;
+    ) -> Request<GetCurrentMetricDataRequest>;
 
     /// <p>Retrieves a token for federation.</p>
     fn get_federation_token(
         &self,
         input: GetFederationTokenRequest,
-    ) -> RusotoFuture<GetFederationTokenResponse, GetFederationTokenError>;
+    ) -> Request<GetFederationTokenRequest>;
 
     /// <p>The <code>GetMetricData</code> operation retrieves historical metrics data from your Amazon Connect instance.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:GetMetricData</code> action.</p>
-    fn get_metric_data(
-        &self,
-        input: GetMetricDataRequest,
-    ) -> RusotoFuture<GetMetricDataResponse, GetMetricDataError>;
+    fn get_metric_data(&self, input: GetMetricDataRequest) -> Request<GetMetricDataRequest>;
 
     /// <p>Returns an array of <code>RoutingProfileSummary</code> objects that includes information about the routing profiles in your instance.</p>
     fn list_routing_profiles(
         &self,
         input: ListRoutingProfilesRequest,
-    ) -> RusotoFuture<ListRoutingProfilesResponse, ListRoutingProfilesError>;
+    ) -> Request<ListRoutingProfilesRequest>;
 
     /// <p>Returns an array of SecurityProfileSummary objects that contain information about the security profiles in your instance, including the ARN, Id, and Name of the security profile.</p>
     fn list_security_profiles(
         &self,
         input: ListSecurityProfilesRequest,
-    ) -> RusotoFuture<ListSecurityProfilesResponse, ListSecurityProfilesError>;
+    ) -> Request<ListSecurityProfilesRequest>;
 
     /// <p>Returns a <code>UserHierarchyGroupSummaryList</code>, which is an array of <code>HierarchyGroupSummary</code> objects that contain information about the hierarchy groups in your instance.</p>
     fn list_user_hierarchy_groups(
         &self,
         input: ListUserHierarchyGroupsRequest,
-    ) -> RusotoFuture<ListUserHierarchyGroupsResponse, ListUserHierarchyGroupsError>;
+    ) -> Request<ListUserHierarchyGroupsRequest>;
 
     /// <p>Returns a <code>UserSummaryList</code>, which is an array of <code>UserSummary</code> objects.</p>
-    fn list_users(
-        &self,
-        input: ListUsersRequest,
-    ) -> RusotoFuture<ListUsersResponse, ListUsersError>;
+    fn list_users(&self, input: ListUsersRequest) -> Request<ListUsersRequest>;
 
     /// <p>The <code>StartOutboundVoiceContact</code> operation initiates a contact flow to place an outbound call to a customer.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:StartOutboundVoiceContact</code> action.</p> <p>There is a 60 second dialing timeout for this operation. If the call is not connected after 60 seconds, the call fails.</p>
     fn start_outbound_voice_contact(
         &self,
         input: StartOutboundVoiceContactRequest,
-    ) -> RusotoFuture<StartOutboundVoiceContactResponse, StartOutboundVoiceContactError>;
+    ) -> Request<StartOutboundVoiceContactRequest>;
 
     /// <p>Ends the contact initiated by the <code>StartOutboundVoiceContact</code> operation.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:StopContact</code> action.</p>
-    fn stop_contact(
-        &self,
-        input: StopContactRequest,
-    ) -> RusotoFuture<StopContactResponse, StopContactError>;
+    fn stop_contact(&self, input: StopContactRequest) -> Request<StopContactRequest>;
 
     /// <p>The <code>UpdateContactAttributes</code> operation lets you programmatically create new, or update existing, contact attributes associated with a contact. You can use the operation to add or update attributes for both ongoing and completed contacts. For example, you can update the customer's name or the reason the customer called while the call is active, or add notes about steps that the agent took during the call that are displayed to the next agent that takes the call. You can also use the <code>UpdateContactAttributes</code> operation to update attributes for a contact using data from your CRM application and save the data with the contact in Amazon Connect. You could also flag calls for additional analysis, such as legal review or identifying abusive callers.</p> <p>Contact attributes are available in Amazon Connect for 24 months, and are then deleted.</p> <p> <i>Important:</i> </p> <p>You cannot use the operation to update attributes for contacts that occurred prior to the release of the API, September 12, 2018. You can update attributes only for contacts that started after the release of the API. If you attempt to update attributes for a contact that occurred prior to the release of the API, a 400 error is returned. This applies also to queued callbacks that were initiated prior to the release of the API but are still active in your instance.</p>
     fn update_contact_attributes(
         &self,
         input: UpdateContactAttributesRequest,
-    ) -> RusotoFuture<UpdateContactAttributesResponse, UpdateContactAttributesError>;
+    ) -> Request<UpdateContactAttributesRequest>;
 
     /// <p>Assigns the specified hierarchy group to the user.</p>
     fn update_user_hierarchy(
         &self,
         input: UpdateUserHierarchyRequest,
-    ) -> RusotoFuture<(), UpdateUserHierarchyError>;
+    ) -> Request<UpdateUserHierarchyRequest>;
 
     /// <p>Updates the identity information for the specified user in a <code>UserIdentityInfo</code> object, including email, first name, and last name.</p>
     fn update_user_identity_info(
         &self,
         input: UpdateUserIdentityInfoRequest,
-    ) -> RusotoFuture<(), UpdateUserIdentityInfoError>;
+    ) -> Request<UpdateUserIdentityInfoRequest>;
 
     /// <p>Updates the phone configuration settings in the <code>UserPhoneConfig</code> object for the specified user.</p>
     fn update_user_phone_config(
         &self,
         input: UpdateUserPhoneConfigRequest,
-    ) -> RusotoFuture<(), UpdateUserPhoneConfigError>;
+    ) -> Request<UpdateUserPhoneConfigRequest>;
 
     /// <p>Assigns the specified routing profile to a user.</p>
     fn update_user_routing_profile(
         &self,
         input: UpdateUserRoutingProfileRequest,
-    ) -> RusotoFuture<(), UpdateUserRoutingProfileError>;
+    ) -> Request<UpdateUserRoutingProfileRequest>;
 
     /// <p>Updates the security profiles assigned to the user.</p>
     fn update_user_security_profiles(
         &self,
         input: UpdateUserSecurityProfilesRequest,
-    ) -> RusotoFuture<(), UpdateUserSecurityProfilesError>;
+    ) -> Request<UpdateUserSecurityProfilesRequest>;
 }
 /// A client for the Amazon Connect API.
 #[derive(Clone)]
@@ -2406,19 +2416,175 @@ impl ConnectClient {
 
 impl Connect for ConnectClient {
     /// <p>Creates a new user account in your Amazon Connect instance.</p>
-    fn create_user(
-        &self,
-        input: CreateUserRequest,
-    ) -> RusotoFuture<CreateUserResponse, CreateUserError> {
-        let request_uri = format!("/users/{instance_id}", instance_id = input.instance_id);
+    fn create_user(&self, input: CreateUserRequest) -> Request<CreateUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
 
-        let mut request = SignedRequest::new("PUT", "connect", &self.region, &request_uri);
+    /// <p>Deletes a user account from Amazon Connect.</p>
+    fn delete_user(&self, input: DeleteUserRequest) -> Request<DeleteUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a <code>User</code> object that contains information about the user account specified by the <code>UserId</code>.</p>
+    fn describe_user(&self, input: DescribeUserRequest) -> Request<DescribeUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a <code>HierarchyGroup</code> object that includes information about a hierarchy group in your instance.</p>
+    fn describe_user_hierarchy_group(
+        &self,
+        input: DescribeUserHierarchyGroupRequest,
+    ) -> Request<DescribeUserHierarchyGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a <code>HiearchyGroupStructure</code> object, which contains data about the levels in the agent hierarchy.</p>
+    fn describe_user_hierarchy_structure(
+        &self,
+        input: DescribeUserHierarchyStructureRequest,
+    ) -> Request<DescribeUserHierarchyStructureRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the contact attributes associated with a contact.</p>
+    fn get_contact_attributes(
+        &self,
+        input: GetContactAttributesRequest,
+    ) -> Request<GetContactAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>The <code>GetCurrentMetricData</code> operation retrieves current metric data from your Amazon Connect instance.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:GetCurrentMetricData</code> action.</p>
+    fn get_current_metric_data(
+        &self,
+        input: GetCurrentMetricDataRequest,
+    ) -> Request<GetCurrentMetricDataRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a token for federation.</p>
+    fn get_federation_token(
+        &self,
+        input: GetFederationTokenRequest,
+    ) -> Request<GetFederationTokenRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>The <code>GetMetricData</code> operation retrieves historical metrics data from your Amazon Connect instance.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:GetMetricData</code> action.</p>
+    fn get_metric_data(&self, input: GetMetricDataRequest) -> Request<GetMetricDataRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns an array of <code>RoutingProfileSummary</code> objects that includes information about the routing profiles in your instance.</p>
+    fn list_routing_profiles(
+        &self,
+        input: ListRoutingProfilesRequest,
+    ) -> Request<ListRoutingProfilesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns an array of SecurityProfileSummary objects that contain information about the security profiles in your instance, including the ARN, Id, and Name of the security profile.</p>
+    fn list_security_profiles(
+        &self,
+        input: ListSecurityProfilesRequest,
+    ) -> Request<ListSecurityProfilesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a <code>UserHierarchyGroupSummaryList</code>, which is an array of <code>HierarchyGroupSummary</code> objects that contain information about the hierarchy groups in your instance.</p>
+    fn list_user_hierarchy_groups(
+        &self,
+        input: ListUserHierarchyGroupsRequest,
+    ) -> Request<ListUserHierarchyGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a <code>UserSummaryList</code>, which is an array of <code>UserSummary</code> objects.</p>
+    fn list_users(&self, input: ListUsersRequest) -> Request<ListUsersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>The <code>StartOutboundVoiceContact</code> operation initiates a contact flow to place an outbound call to a customer.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:StartOutboundVoiceContact</code> action.</p> <p>There is a 60 second dialing timeout for this operation. If the call is not connected after 60 seconds, the call fails.</p>
+    fn start_outbound_voice_contact(
+        &self,
+        input: StartOutboundVoiceContactRequest,
+    ) -> Request<StartOutboundVoiceContactRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Ends the contact initiated by the <code>StartOutboundVoiceContact</code> operation.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:StopContact</code> action.</p>
+    fn stop_contact(&self, input: StopContactRequest) -> Request<StopContactRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>The <code>UpdateContactAttributes</code> operation lets you programmatically create new, or update existing, contact attributes associated with a contact. You can use the operation to add or update attributes for both ongoing and completed contacts. For example, you can update the customer's name or the reason the customer called while the call is active, or add notes about steps that the agent took during the call that are displayed to the next agent that takes the call. You can also use the <code>UpdateContactAttributes</code> operation to update attributes for a contact using data from your CRM application and save the data with the contact in Amazon Connect. You could also flag calls for additional analysis, such as legal review or identifying abusive callers.</p> <p>Contact attributes are available in Amazon Connect for 24 months, and are then deleted.</p> <p> <i>Important:</i> </p> <p>You cannot use the operation to update attributes for contacts that occurred prior to the release of the API, September 12, 2018. You can update attributes only for contacts that started after the release of the API. If you attempt to update attributes for a contact that occurred prior to the release of the API, a 400 error is returned. This applies also to queued callbacks that were initiated prior to the release of the API but are still active in your instance.</p>
+    fn update_contact_attributes(
+        &self,
+        input: UpdateContactAttributesRequest,
+    ) -> Request<UpdateContactAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Assigns the specified hierarchy group to the user.</p>
+    fn update_user_hierarchy(
+        &self,
+        input: UpdateUserHierarchyRequest,
+    ) -> Request<UpdateUserHierarchyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the identity information for the specified user in a <code>UserIdentityInfo</code> object, including email, first name, and last name.</p>
+    fn update_user_identity_info(
+        &self,
+        input: UpdateUserIdentityInfoRequest,
+    ) -> Request<UpdateUserIdentityInfoRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the phone configuration settings in the <code>UserPhoneConfig</code> object for the specified user.</p>
+    fn update_user_phone_config(
+        &self,
+        input: UpdateUserPhoneConfigRequest,
+    ) -> Request<UpdateUserPhoneConfigRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Assigns the specified routing profile to a user.</p>
+    fn update_user_routing_profile(
+        &self,
+        input: UpdateUserRoutingProfileRequest,
+    ) -> Request<UpdateUserRoutingProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the security profiles assigned to the user.</p>
+    fn update_user_security_profiles(
+        &self,
+        input: UpdateUserSecurityProfilesRequest,
+    ) -> Request<UpdateUserSecurityProfilesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CreateUserRequest {
+    type Output = CreateUserResponse;
+    type Error = CreateUserError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/users/{instance_id}", instance_id = self.instance_id);
+
+        let mut request = SignedRequest::new("PUT", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2436,22 +2602,31 @@ impl Connect for ConnectClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a user account from Amazon Connect.</p>
-    fn delete_user(&self, input: DeleteUserRequest) -> RusotoFuture<(), DeleteUserError> {
+impl ServiceRequest for DeleteUserRequest {
+    type Output = DeleteUserResponse;
+    type Error = DeleteUserError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/users/{instance_id}/{user_id}",
-            instance_id = input.instance_id,
-            user_id = input.user_id
+            instance_id = self.instance_id,
+            user_id = self.user_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "connect", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteUserResponse {};
 
                     Ok(result)
                 }))
@@ -2465,22 +2640,28 @@ impl Connect for ConnectClient {
             }
         })
     }
+}
 
-    /// <p>Returns a <code>User</code> object that contains information about the user account specified by the <code>UserId</code>.</p>
-    fn describe_user(
-        &self,
-        input: DescribeUserRequest,
-    ) -> RusotoFuture<DescribeUserResponse, DescribeUserError> {
+impl ServiceRequest for DescribeUserRequest {
+    type Output = DescribeUserResponse;
+    type Error = DescribeUserError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/users/{instance_id}/{user_id}",
-            instance_id = input.instance_id,
-            user_id = input.user_id
+            instance_id = self.instance_id,
+            user_id = self.user_id
         );
 
-        let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2498,22 +2679,28 @@ impl Connect for ConnectClient {
             }
         })
     }
+}
 
-    /// <p>Returns a <code>HierarchyGroup</code> object that includes information about a hierarchy group in your instance.</p>
-    fn describe_user_hierarchy_group(
-        &self,
-        input: DescribeUserHierarchyGroupRequest,
-    ) -> RusotoFuture<DescribeUserHierarchyGroupResponse, DescribeUserHierarchyGroupError> {
+impl ServiceRequest for DescribeUserHierarchyGroupRequest {
+    type Output = DescribeUserHierarchyGroupResponse;
+    type Error = DescribeUserHierarchyGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/user-hierarchy-groups/{instance_id}/{hierarchy_group_id}",
-            hierarchy_group_id = input.hierarchy_group_id,
-            instance_id = input.instance_id
+            hierarchy_group_id = self.hierarchy_group_id,
+            instance_id = self.instance_id
         );
 
-        let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2528,22 +2715,27 @@ impl Connect for ConnectClient {
             }
         })
     }
+}
 
-    /// <p>Returns a <code>HiearchyGroupStructure</code> object, which contains data about the levels in the agent hierarchy.</p>
-    fn describe_user_hierarchy_structure(
-        &self,
-        input: DescribeUserHierarchyStructureRequest,
-    ) -> RusotoFuture<DescribeUserHierarchyStructureResponse, DescribeUserHierarchyStructureError>
-    {
+impl ServiceRequest for DescribeUserHierarchyStructureRequest {
+    type Output = DescribeUserHierarchyStructureResponse;
+    type Error = DescribeUserHierarchyStructureError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/user-hierarchy-structure/{instance_id}",
-            instance_id = input.instance_id
+            instance_id = self.instance_id
         );
 
-        let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2558,22 +2750,28 @@ impl Connect for ConnectClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the contact attributes associated with a contact.</p>
-    fn get_contact_attributes(
-        &self,
-        input: GetContactAttributesRequest,
-    ) -> RusotoFuture<GetContactAttributesResponse, GetContactAttributesError> {
+impl ServiceRequest for GetContactAttributesRequest {
+    type Output = GetContactAttributesResponse;
+    type Error = GetContactAttributesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/contact/attributes/{instance_id}/{initial_contact_id}",
-            initial_contact_id = input.initial_contact_id,
-            instance_id = input.instance_id
+            initial_contact_id = self.initial_contact_id,
+            instance_id = self.instance_id
         );
 
-        let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2590,24 +2788,30 @@ impl Connect for ConnectClient {
             }
         })
     }
+}
 
-    /// <p>The <code>GetCurrentMetricData</code> operation retrieves current metric data from your Amazon Connect instance.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:GetCurrentMetricData</code> action.</p>
-    fn get_current_metric_data(
-        &self,
-        input: GetCurrentMetricDataRequest,
-    ) -> RusotoFuture<GetCurrentMetricDataResponse, GetCurrentMetricDataError> {
+impl ServiceRequest for GetCurrentMetricDataRequest {
+    type Output = GetCurrentMetricDataResponse;
+    type Error = GetCurrentMetricDataError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/metrics/current/{instance_id}",
-            instance_id = input.instance_id
+            instance_id = self.instance_id
         );
 
-        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2624,21 +2828,27 @@ impl Connect for ConnectClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a token for federation.</p>
-    fn get_federation_token(
-        &self,
-        input: GetFederationTokenRequest,
-    ) -> RusotoFuture<GetFederationTokenResponse, GetFederationTokenError> {
+impl ServiceRequest for GetFederationTokenRequest {
+    type Output = GetFederationTokenResponse;
+    type Error = GetFederationTokenError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/user/federate/{instance_id}",
-            instance_id = input.instance_id
+            instance_id = self.instance_id
         );
 
-        let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2656,24 +2866,30 @@ impl Connect for ConnectClient {
             }
         })
     }
+}
 
-    /// <p>The <code>GetMetricData</code> operation retrieves historical metrics data from your Amazon Connect instance.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:GetMetricData</code> action.</p>
-    fn get_metric_data(
-        &self,
-        input: GetMetricDataRequest,
-    ) -> RusotoFuture<GetMetricDataResponse, GetMetricDataError> {
+impl ServiceRequest for GetMetricDataRequest {
+    type Output = GetMetricDataResponse;
+    type Error = GetMetricDataError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/metrics/historical/{instance_id}",
-            instance_id = input.instance_id
+            instance_id = self.instance_id
         );
 
-        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2691,30 +2907,36 @@ impl Connect for ConnectClient {
             }
         })
     }
+}
 
-    /// <p>Returns an array of <code>RoutingProfileSummary</code> objects that includes information about the routing profiles in your instance.</p>
-    fn list_routing_profiles(
-        &self,
-        input: ListRoutingProfilesRequest,
-    ) -> RusotoFuture<ListRoutingProfilesResponse, ListRoutingProfilesError> {
+impl ServiceRequest for ListRoutingProfilesRequest {
+    type Output = ListRoutingProfilesResponse;
+    type Error = ListRoutingProfilesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/routing-profiles-summary/{instance_id}",
-            instance_id = input.instance_id
+            instance_id = self.instance_id
         );
 
-        let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2731,30 +2953,36 @@ impl Connect for ConnectClient {
             }
         })
     }
+}
 
-    /// <p>Returns an array of SecurityProfileSummary objects that contain information about the security profiles in your instance, including the ARN, Id, and Name of the security profile.</p>
-    fn list_security_profiles(
-        &self,
-        input: ListSecurityProfilesRequest,
-    ) -> RusotoFuture<ListSecurityProfilesResponse, ListSecurityProfilesError> {
+impl ServiceRequest for ListSecurityProfilesRequest {
+    type Output = ListSecurityProfilesResponse;
+    type Error = ListSecurityProfilesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/security-profiles-summary/{instance_id}",
-            instance_id = input.instance_id
+            instance_id = self.instance_id
         );
 
-        let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2771,30 +2999,36 @@ impl Connect for ConnectClient {
             }
         })
     }
+}
 
-    /// <p>Returns a <code>UserHierarchyGroupSummaryList</code>, which is an array of <code>HierarchyGroupSummary</code> objects that contain information about the hierarchy groups in your instance.</p>
-    fn list_user_hierarchy_groups(
-        &self,
-        input: ListUserHierarchyGroupsRequest,
-    ) -> RusotoFuture<ListUserHierarchyGroupsResponse, ListUserHierarchyGroupsError> {
+impl ServiceRequest for ListUserHierarchyGroupsRequest {
+    type Output = ListUserHierarchyGroupsResponse;
+    type Error = ListUserHierarchyGroupsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/user-hierarchy-groups-summary/{instance_id}",
-            instance_id = input.instance_id
+            instance_id = self.instance_id
         );
 
-        let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2809,30 +3043,36 @@ impl Connect for ConnectClient {
             }
         })
     }
+}
 
-    /// <p>Returns a <code>UserSummaryList</code>, which is an array of <code>UserSummary</code> objects.</p>
-    fn list_users(
-        &self,
-        input: ListUsersRequest,
-    ) -> RusotoFuture<ListUsersResponse, ListUsersError> {
+impl ServiceRequest for ListUsersRequest {
+    type Output = ListUsersResponse;
+    type Error = ListUsersError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/users-summary/{instance_id}",
-            instance_id = input.instance_id
+            instance_id = self.instance_id
         );
 
-        let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2850,21 +3090,27 @@ impl Connect for ConnectClient {
             }
         })
     }
+}
 
-    /// <p>The <code>StartOutboundVoiceContact</code> operation initiates a contact flow to place an outbound call to a customer.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:StartOutboundVoiceContact</code> action.</p> <p>There is a 60 second dialing timeout for this operation. If the call is not connected after 60 seconds, the call fails.</p>
-    fn start_outbound_voice_contact(
-        &self,
-        input: StartOutboundVoiceContactRequest,
-    ) -> RusotoFuture<StartOutboundVoiceContactResponse, StartOutboundVoiceContactError> {
+impl ServiceRequest for StartOutboundVoiceContactRequest {
+    type Output = StartOutboundVoiceContactResponse;
+    type Error = StartOutboundVoiceContactError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/contact/outbound-voice";
 
-        let mut request = SignedRequest::new("PUT", "connect", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2879,21 +3125,27 @@ impl Connect for ConnectClient {
             }
         })
     }
+}
 
-    /// <p>Ends the contact initiated by the <code>StartOutboundVoiceContact</code> operation.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:StopContact</code> action.</p>
-    fn stop_contact(
-        &self,
-        input: StopContactRequest,
-    ) -> RusotoFuture<StopContactResponse, StopContactError> {
+impl ServiceRequest for StopContactRequest {
+    type Output = StopContactResponse;
+    type Error = StopContactError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/contact/stop";
 
-        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2911,21 +3163,27 @@ impl Connect for ConnectClient {
             }
         })
     }
+}
 
-    /// <p>The <code>UpdateContactAttributes</code> operation lets you programmatically create new, or update existing, contact attributes associated with a contact. You can use the operation to add or update attributes for both ongoing and completed contacts. For example, you can update the customer's name or the reason the customer called while the call is active, or add notes about steps that the agent took during the call that are displayed to the next agent that takes the call. You can also use the <code>UpdateContactAttributes</code> operation to update attributes for a contact using data from your CRM application and save the data with the contact in Amazon Connect. You could also flag calls for additional analysis, such as legal review or identifying abusive callers.</p> <p>Contact attributes are available in Amazon Connect for 24 months, and are then deleted.</p> <p> <i>Important:</i> </p> <p>You cannot use the operation to update attributes for contacts that occurred prior to the release of the API, September 12, 2018. You can update attributes only for contacts that started after the release of the API. If you attempt to update attributes for a contact that occurred prior to the release of the API, a 400 error is returned. This applies also to queued callbacks that were initiated prior to the release of the API but are still active in your instance.</p>
-    fn update_contact_attributes(
-        &self,
-        input: UpdateContactAttributesRequest,
-    ) -> RusotoFuture<UpdateContactAttributesResponse, UpdateContactAttributesError> {
+impl ServiceRequest for UpdateContactAttributesRequest {
+    type Output = UpdateContactAttributesResponse;
+    type Error = UpdateContactAttributesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/contact/attributes";
 
-        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2940,28 +3198,34 @@ impl Connect for ConnectClient {
             }
         })
     }
+}
 
-    /// <p>Assigns the specified hierarchy group to the user.</p>
-    fn update_user_hierarchy(
-        &self,
-        input: UpdateUserHierarchyRequest,
-    ) -> RusotoFuture<(), UpdateUserHierarchyError> {
+impl ServiceRequest for UpdateUserHierarchyRequest {
+    type Output = UpdateUserHierarchyResponse;
+    type Error = UpdateUserHierarchyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/users/{instance_id}/{user_id}/hierarchy",
-            instance_id = input.instance_id,
-            user_id = input.user_id
+            instance_id = self.instance_id,
+            user_id = self.user_id
         );
 
-        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UpdateUserHierarchyResponse {};
 
                     Ok(result)
                 }))
@@ -2974,28 +3238,34 @@ impl Connect for ConnectClient {
             }
         })
     }
+}
 
-    /// <p>Updates the identity information for the specified user in a <code>UserIdentityInfo</code> object, including email, first name, and last name.</p>
-    fn update_user_identity_info(
-        &self,
-        input: UpdateUserIdentityInfoRequest,
-    ) -> RusotoFuture<(), UpdateUserIdentityInfoError> {
+impl ServiceRequest for UpdateUserIdentityInfoRequest {
+    type Output = UpdateUserIdentityInfoResponse;
+    type Error = UpdateUserIdentityInfoError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/users/{instance_id}/{user_id}/identity-info",
-            instance_id = input.instance_id,
-            user_id = input.user_id
+            instance_id = self.instance_id,
+            user_id = self.user_id
         );
 
-        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UpdateUserIdentityInfoResponse {};
 
                     Ok(result)
                 }))
@@ -3008,28 +3278,34 @@ impl Connect for ConnectClient {
             }
         })
     }
+}
 
-    /// <p>Updates the phone configuration settings in the <code>UserPhoneConfig</code> object for the specified user.</p>
-    fn update_user_phone_config(
-        &self,
-        input: UpdateUserPhoneConfigRequest,
-    ) -> RusotoFuture<(), UpdateUserPhoneConfigError> {
+impl ServiceRequest for UpdateUserPhoneConfigRequest {
+    type Output = UpdateUserPhoneConfigResponse;
+    type Error = UpdateUserPhoneConfigError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/users/{instance_id}/{user_id}/phone-config",
-            instance_id = input.instance_id,
-            user_id = input.user_id
+            instance_id = self.instance_id,
+            user_id = self.user_id
         );
 
-        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UpdateUserPhoneConfigResponse {};
 
                     Ok(result)
                 }))
@@ -3042,28 +3318,34 @@ impl Connect for ConnectClient {
             }
         })
     }
+}
 
-    /// <p>Assigns the specified routing profile to a user.</p>
-    fn update_user_routing_profile(
-        &self,
-        input: UpdateUserRoutingProfileRequest,
-    ) -> RusotoFuture<(), UpdateUserRoutingProfileError> {
+impl ServiceRequest for UpdateUserRoutingProfileRequest {
+    type Output = UpdateUserRoutingProfileResponse;
+    type Error = UpdateUserRoutingProfileError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/users/{instance_id}/{user_id}/routing-profile",
-            instance_id = input.instance_id,
-            user_id = input.user_id
+            instance_id = self.instance_id,
+            user_id = self.user_id
         );
 
-        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UpdateUserRoutingProfileResponse {};
 
                     Ok(result)
                 }))
@@ -3074,28 +3356,34 @@ impl Connect for ConnectClient {
             }
         })
     }
+}
 
-    /// <p>Updates the security profiles assigned to the user.</p>
-    fn update_user_security_profiles(
-        &self,
-        input: UpdateUserSecurityProfilesRequest,
-    ) -> RusotoFuture<(), UpdateUserSecurityProfilesError> {
+impl ServiceRequest for UpdateUserSecurityProfilesRequest {
+    type Output = UpdateUserSecurityProfilesResponse;
+    type Error = UpdateUserSecurityProfilesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/users/{instance_id}/{user_id}/security-profiles",
-            instance_id = input.instance_id,
-            user_id = input.user_id
+            instance_id = self.instance_id,
+            user_id = self.user_id
         );
 
-        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "connect", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UpdateUserSecurityProfilesResponse {};
 
                     Ok(result)
                 }))

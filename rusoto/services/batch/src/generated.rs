@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -1897,97 +1898,76 @@ impl Error for UpdateJobQueueError {
 /// Trait representing the capabilities of the AWS Batch API. AWS Batch clients implement this trait.
 pub trait Batch {
     /// <p>Cancels a job in an AWS Batch job queue. Jobs that are in the <code>SUBMITTED</code>, <code>PENDING</code>, or <code>RUNNABLE</code> state are cancelled. Jobs that have progressed to <code>STARTING</code> or <code>RUNNING</code> are not cancelled (but the API operation still succeeds, even if no job is cancelled); these jobs must be terminated with the <a>TerminateJob</a> operation.</p>
-    fn cancel_job(
-        &self,
-        input: CancelJobRequest,
-    ) -> RusotoFuture<CancelJobResponse, CancelJobError>;
+    fn cancel_job(&self, input: CancelJobRequest) -> Request<CancelJobRequest>;
 
     /// <p><p>Creates an AWS Batch compute environment. You can create <code>MANAGED</code> or <code>UNMANAGED</code> compute environments.</p> <p>In a managed compute environment, AWS Batch manages the capacity and instance types of the compute resources within the environment. This is based on the compute resource specification that you define or the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html">launch template</a> that you specify when you create the compute environment. You can choose to use Amazon EC2 On-Demand Instances or Spot Instances in your managed compute environment. You can optionally set a maximum price so that Spot Instances only launch when the Spot Instance price is below a specified percentage of the On-Demand price.</p> <note> <p>Multi-node parallel jobs are not supported on Spot Instances.</p> </note> <p>In an unmanaged compute environment, you can manage your own compute resources. This provides more compute resource configuration options, such as using a custom AMI, but you must ensure that your AMI meets the Amazon ECS container instance AMI specification. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/container_instance_AMIs.html">Container Instance AMIs</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. After you have created your unmanaged compute environment, you can use the <a>DescribeComputeEnvironments</a> operation to find the Amazon ECS cluster that is associated with it. Then, manually launch your container instances into that Amazon ECS cluster. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_container_instance.html">Launching an Amazon ECS Container Instance</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>AWS Batch does not upgrade the AMIs in a compute environment after it is created (for example, when a newer version of the Amazon ECS-optimized AMI is available). You are responsible for the management of the guest operating system (including updates and security patches) and any additional application software or utilities that you install on the compute resources. To use a new AMI for your AWS Batch jobs:</p> <ol> <li> <p>Create a new compute environment with the new AMI.</p> </li> <li> <p>Add the compute environment to an existing job queue.</p> </li> <li> <p>Remove the old compute environment from your job queue.</p> </li> <li> <p>Delete the old compute environment.</p> </li> </ol> </note></p>
     fn create_compute_environment(
         &self,
         input: CreateComputeEnvironmentRequest,
-    ) -> RusotoFuture<CreateComputeEnvironmentResponse, CreateComputeEnvironmentError>;
+    ) -> Request<CreateComputeEnvironmentRequest>;
 
     /// <p>Creates an AWS Batch job queue. When you create a job queue, you associate one or more compute environments to the queue and assign an order of preference for the compute environments.</p> <p>You also set a priority to the job queue that determines the order in which the AWS Batch scheduler places jobs onto its associated compute environments. For example, if a compute environment is associated with more than one job queue, the job queue with a higher priority is given preference for scheduling jobs to that compute environment.</p>
-    fn create_job_queue(
-        &self,
-        input: CreateJobQueueRequest,
-    ) -> RusotoFuture<CreateJobQueueResponse, CreateJobQueueError>;
+    fn create_job_queue(&self, input: CreateJobQueueRequest) -> Request<CreateJobQueueRequest>;
 
     /// <p>Deletes an AWS Batch compute environment.</p> <p>Before you can delete a compute environment, you must set its state to <code>DISABLED</code> with the <a>UpdateComputeEnvironment</a> API operation and disassociate it from any job queues with the <a>UpdateJobQueue</a> API operation.</p>
     fn delete_compute_environment(
         &self,
         input: DeleteComputeEnvironmentRequest,
-    ) -> RusotoFuture<DeleteComputeEnvironmentResponse, DeleteComputeEnvironmentError>;
+    ) -> Request<DeleteComputeEnvironmentRequest>;
 
     /// <p>Deletes the specified job queue. You must first disable submissions for a queue with the <a>UpdateJobQueue</a> operation. All jobs in the queue are terminated when you delete a job queue.</p> <p>It is not necessary to disassociate compute environments from a queue before submitting a <code>DeleteJobQueue</code> request. </p>
-    fn delete_job_queue(
-        &self,
-        input: DeleteJobQueueRequest,
-    ) -> RusotoFuture<DeleteJobQueueResponse, DeleteJobQueueError>;
+    fn delete_job_queue(&self, input: DeleteJobQueueRequest) -> Request<DeleteJobQueueRequest>;
 
     /// <p>Deregisters an AWS Batch job definition.</p>
     fn deregister_job_definition(
         &self,
         input: DeregisterJobDefinitionRequest,
-    ) -> RusotoFuture<DeregisterJobDefinitionResponse, DeregisterJobDefinitionError>;
+    ) -> Request<DeregisterJobDefinitionRequest>;
 
     /// <p>Describes one or more of your compute environments.</p> <p>If you are using an unmanaged compute environment, you can use the <code>DescribeComputeEnvironment</code> operation to determine the <code>ecsClusterArn</code> that you should launch your Amazon ECS container instances into.</p>
     fn describe_compute_environments(
         &self,
         input: DescribeComputeEnvironmentsRequest,
-    ) -> RusotoFuture<DescribeComputeEnvironmentsResponse, DescribeComputeEnvironmentsError>;
+    ) -> Request<DescribeComputeEnvironmentsRequest>;
 
     /// <p>Describes a list of job definitions. You can specify a <code>status</code> (such as <code>ACTIVE</code>) to only return job definitions that match that status.</p>
     fn describe_job_definitions(
         &self,
         input: DescribeJobDefinitionsRequest,
-    ) -> RusotoFuture<DescribeJobDefinitionsResponse, DescribeJobDefinitionsError>;
+    ) -> Request<DescribeJobDefinitionsRequest>;
 
     /// <p>Describes one or more of your job queues.</p>
     fn describe_job_queues(
         &self,
         input: DescribeJobQueuesRequest,
-    ) -> RusotoFuture<DescribeJobQueuesResponse, DescribeJobQueuesError>;
+    ) -> Request<DescribeJobQueuesRequest>;
 
     /// <p>Describes a list of AWS Batch jobs.</p>
-    fn describe_jobs(
-        &self,
-        input: DescribeJobsRequest,
-    ) -> RusotoFuture<DescribeJobsResponse, DescribeJobsError>;
+    fn describe_jobs(&self, input: DescribeJobsRequest) -> Request<DescribeJobsRequest>;
 
     /// <p>Returns a list of AWS Batch jobs.</p> <p>You must specify only one of the following:</p> <ul> <li> <p>a job queue ID to return a list of jobs in that job queue</p> </li> <li> <p>a multi-node parallel job ID to return a list of that job's nodes</p> </li> <li> <p>an array job ID to return a list of that job's children</p> </li> </ul> <p>You can filter the results by job status with the <code>jobStatus</code> parameter. If you do not specify a status, only <code>RUNNING</code> jobs are returned.</p>
-    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError>;
+    fn list_jobs(&self, input: ListJobsRequest) -> Request<ListJobsRequest>;
 
     /// <p>Registers an AWS Batch job definition. </p>
     fn register_job_definition(
         &self,
         input: RegisterJobDefinitionRequest,
-    ) -> RusotoFuture<RegisterJobDefinitionResponse, RegisterJobDefinitionError>;
+    ) -> Request<RegisterJobDefinitionRequest>;
 
     /// <p>Submits an AWS Batch job from a job definition. Parameters specified during <a>SubmitJob</a> override parameters defined in the job definition. </p>
-    fn submit_job(
-        &self,
-        input: SubmitJobRequest,
-    ) -> RusotoFuture<SubmitJobResponse, SubmitJobError>;
+    fn submit_job(&self, input: SubmitJobRequest) -> Request<SubmitJobRequest>;
 
     /// <p>Terminates a job in a job queue. Jobs that are in the <code>STARTING</code> or <code>RUNNING</code> state are terminated, which causes them to transition to <code>FAILED</code>. Jobs that have not progressed to the <code>STARTING</code> state are cancelled.</p>
-    fn terminate_job(
-        &self,
-        input: TerminateJobRequest,
-    ) -> RusotoFuture<TerminateJobResponse, TerminateJobError>;
+    fn terminate_job(&self, input: TerminateJobRequest) -> Request<TerminateJobRequest>;
 
     /// <p>Updates an AWS Batch compute environment.</p>
     fn update_compute_environment(
         &self,
         input: UpdateComputeEnvironmentRequest,
-    ) -> RusotoFuture<UpdateComputeEnvironmentResponse, UpdateComputeEnvironmentError>;
+    ) -> Request<UpdateComputeEnvironmentRequest>;
 
     /// <p>Updates a job queue.</p>
-    fn update_job_queue(
-        &self,
-        input: UpdateJobQueueRequest,
-    ) -> RusotoFuture<UpdateJobQueueResponse, UpdateJobQueueError>;
+    fn update_job_queue(&self, input: UpdateJobQueueRequest) -> Request<UpdateJobQueueRequest>;
 }
 /// A client for the AWS Batch API.
 #[derive(Clone)]
@@ -2027,19 +2007,129 @@ impl BatchClient {
 
 impl Batch for BatchClient {
     /// <p>Cancels a job in an AWS Batch job queue. Jobs that are in the <code>SUBMITTED</code>, <code>PENDING</code>, or <code>RUNNABLE</code> state are cancelled. Jobs that have progressed to <code>STARTING</code> or <code>RUNNING</code> are not cancelled (but the API operation still succeeds, even if no job is cancelled); these jobs must be terminated with the <a>TerminateJob</a> operation.</p>
-    fn cancel_job(
+    fn cancel_job(&self, input: CancelJobRequest) -> Request<CancelJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates an AWS Batch compute environment. You can create <code>MANAGED</code> or <code>UNMANAGED</code> compute environments.</p> <p>In a managed compute environment, AWS Batch manages the capacity and instance types of the compute resources within the environment. This is based on the compute resource specification that you define or the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html">launch template</a> that you specify when you create the compute environment. You can choose to use Amazon EC2 On-Demand Instances or Spot Instances in your managed compute environment. You can optionally set a maximum price so that Spot Instances only launch when the Spot Instance price is below a specified percentage of the On-Demand price.</p> <note> <p>Multi-node parallel jobs are not supported on Spot Instances.</p> </note> <p>In an unmanaged compute environment, you can manage your own compute resources. This provides more compute resource configuration options, such as using a custom AMI, but you must ensure that your AMI meets the Amazon ECS container instance AMI specification. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/container_instance_AMIs.html">Container Instance AMIs</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. After you have created your unmanaged compute environment, you can use the <a>DescribeComputeEnvironments</a> operation to find the Amazon ECS cluster that is associated with it. Then, manually launch your container instances into that Amazon ECS cluster. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_container_instance.html">Launching an Amazon ECS Container Instance</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>AWS Batch does not upgrade the AMIs in a compute environment after it is created (for example, when a newer version of the Amazon ECS-optimized AMI is available). You are responsible for the management of the guest operating system (including updates and security patches) and any additional application software or utilities that you install on the compute resources. To use a new AMI for your AWS Batch jobs:</p> <ol> <li> <p>Create a new compute environment with the new AMI.</p> </li> <li> <p>Add the compute environment to an existing job queue.</p> </li> <li> <p>Remove the old compute environment from your job queue.</p> </li> <li> <p>Delete the old compute environment.</p> </li> </ol> </note></p>
+    fn create_compute_environment(
         &self,
-        input: CancelJobRequest,
-    ) -> RusotoFuture<CancelJobResponse, CancelJobError> {
+        input: CreateComputeEnvironmentRequest,
+    ) -> Request<CreateComputeEnvironmentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an AWS Batch job queue. When you create a job queue, you associate one or more compute environments to the queue and assign an order of preference for the compute environments.</p> <p>You also set a priority to the job queue that determines the order in which the AWS Batch scheduler places jobs onto its associated compute environments. For example, if a compute environment is associated with more than one job queue, the job queue with a higher priority is given preference for scheduling jobs to that compute environment.</p>
+    fn create_job_queue(&self, input: CreateJobQueueRequest) -> Request<CreateJobQueueRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an AWS Batch compute environment.</p> <p>Before you can delete a compute environment, you must set its state to <code>DISABLED</code> with the <a>UpdateComputeEnvironment</a> API operation and disassociate it from any job queues with the <a>UpdateJobQueue</a> API operation.</p>
+    fn delete_compute_environment(
+        &self,
+        input: DeleteComputeEnvironmentRequest,
+    ) -> Request<DeleteComputeEnvironmentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified job queue. You must first disable submissions for a queue with the <a>UpdateJobQueue</a> operation. All jobs in the queue are terminated when you delete a job queue.</p> <p>It is not necessary to disassociate compute environments from a queue before submitting a <code>DeleteJobQueue</code> request. </p>
+    fn delete_job_queue(&self, input: DeleteJobQueueRequest) -> Request<DeleteJobQueueRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deregisters an AWS Batch job definition.</p>
+    fn deregister_job_definition(
+        &self,
+        input: DeregisterJobDefinitionRequest,
+    ) -> Request<DeregisterJobDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes one or more of your compute environments.</p> <p>If you are using an unmanaged compute environment, you can use the <code>DescribeComputeEnvironment</code> operation to determine the <code>ecsClusterArn</code> that you should launch your Amazon ECS container instances into.</p>
+    fn describe_compute_environments(
+        &self,
+        input: DescribeComputeEnvironmentsRequest,
+    ) -> Request<DescribeComputeEnvironmentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes a list of job definitions. You can specify a <code>status</code> (such as <code>ACTIVE</code>) to only return job definitions that match that status.</p>
+    fn describe_job_definitions(
+        &self,
+        input: DescribeJobDefinitionsRequest,
+    ) -> Request<DescribeJobDefinitionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes one or more of your job queues.</p>
+    fn describe_job_queues(
+        &self,
+        input: DescribeJobQueuesRequest,
+    ) -> Request<DescribeJobQueuesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes a list of AWS Batch jobs.</p>
+    fn describe_jobs(&self, input: DescribeJobsRequest) -> Request<DescribeJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of AWS Batch jobs.</p> <p>You must specify only one of the following:</p> <ul> <li> <p>a job queue ID to return a list of jobs in that job queue</p> </li> <li> <p>a multi-node parallel job ID to return a list of that job's nodes</p> </li> <li> <p>an array job ID to return a list of that job's children</p> </li> </ul> <p>You can filter the results by job status with the <code>jobStatus</code> parameter. If you do not specify a status, only <code>RUNNING</code> jobs are returned.</p>
+    fn list_jobs(&self, input: ListJobsRequest) -> Request<ListJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Registers an AWS Batch job definition. </p>
+    fn register_job_definition(
+        &self,
+        input: RegisterJobDefinitionRequest,
+    ) -> Request<RegisterJobDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Submits an AWS Batch job from a job definition. Parameters specified during <a>SubmitJob</a> override parameters defined in the job definition. </p>
+    fn submit_job(&self, input: SubmitJobRequest) -> Request<SubmitJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Terminates a job in a job queue. Jobs that are in the <code>STARTING</code> or <code>RUNNING</code> state are terminated, which causes them to transition to <code>FAILED</code>. Jobs that have not progressed to the <code>STARTING</code> state are cancelled.</p>
+    fn terminate_job(&self, input: TerminateJobRequest) -> Request<TerminateJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an AWS Batch compute environment.</p>
+    fn update_compute_environment(
+        &self,
+        input: UpdateComputeEnvironmentRequest,
+    ) -> Request<UpdateComputeEnvironmentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a job queue.</p>
+    fn update_job_queue(&self, input: UpdateJobQueueRequest) -> Request<UpdateJobQueueRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CancelJobRequest {
+    type Output = CancelJobResponse;
+    type Error = CancelJobError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/canceljob";
 
-        let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "batch", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2057,21 +2147,27 @@ impl Batch for BatchClient {
             }
         })
     }
+}
 
-    /// <p><p>Creates an AWS Batch compute environment. You can create <code>MANAGED</code> or <code>UNMANAGED</code> compute environments.</p> <p>In a managed compute environment, AWS Batch manages the capacity and instance types of the compute resources within the environment. This is based on the compute resource specification that you define or the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html">launch template</a> that you specify when you create the compute environment. You can choose to use Amazon EC2 On-Demand Instances or Spot Instances in your managed compute environment. You can optionally set a maximum price so that Spot Instances only launch when the Spot Instance price is below a specified percentage of the On-Demand price.</p> <note> <p>Multi-node parallel jobs are not supported on Spot Instances.</p> </note> <p>In an unmanaged compute environment, you can manage your own compute resources. This provides more compute resource configuration options, such as using a custom AMI, but you must ensure that your AMI meets the Amazon ECS container instance AMI specification. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/container_instance_AMIs.html">Container Instance AMIs</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. After you have created your unmanaged compute environment, you can use the <a>DescribeComputeEnvironments</a> operation to find the Amazon ECS cluster that is associated with it. Then, manually launch your container instances into that Amazon ECS cluster. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_container_instance.html">Launching an Amazon ECS Container Instance</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>AWS Batch does not upgrade the AMIs in a compute environment after it is created (for example, when a newer version of the Amazon ECS-optimized AMI is available). You are responsible for the management of the guest operating system (including updates and security patches) and any additional application software or utilities that you install on the compute resources. To use a new AMI for your AWS Batch jobs:</p> <ol> <li> <p>Create a new compute environment with the new AMI.</p> </li> <li> <p>Add the compute environment to an existing job queue.</p> </li> <li> <p>Remove the old compute environment from your job queue.</p> </li> <li> <p>Delete the old compute environment.</p> </li> </ol> </note></p>
-    fn create_compute_environment(
-        &self,
-        input: CreateComputeEnvironmentRequest,
-    ) -> RusotoFuture<CreateComputeEnvironmentResponse, CreateComputeEnvironmentError> {
+impl ServiceRequest for CreateComputeEnvironmentRequest {
+    type Output = CreateComputeEnvironmentResponse;
+    type Error = CreateComputeEnvironmentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/createcomputeenvironment";
 
-        let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "batch", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2086,21 +2182,27 @@ impl Batch for BatchClient {
             }
         })
     }
+}
 
-    /// <p>Creates an AWS Batch job queue. When you create a job queue, you associate one or more compute environments to the queue and assign an order of preference for the compute environments.</p> <p>You also set a priority to the job queue that determines the order in which the AWS Batch scheduler places jobs onto its associated compute environments. For example, if a compute environment is associated with more than one job queue, the job queue with a higher priority is given preference for scheduling jobs to that compute environment.</p>
-    fn create_job_queue(
-        &self,
-        input: CreateJobQueueRequest,
-    ) -> RusotoFuture<CreateJobQueueResponse, CreateJobQueueError> {
+impl ServiceRequest for CreateJobQueueRequest {
+    type Output = CreateJobQueueResponse;
+    type Error = CreateJobQueueError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/createjobqueue";
 
-        let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "batch", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2118,21 +2220,27 @@ impl Batch for BatchClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an AWS Batch compute environment.</p> <p>Before you can delete a compute environment, you must set its state to <code>DISABLED</code> with the <a>UpdateComputeEnvironment</a> API operation and disassociate it from any job queues with the <a>UpdateJobQueue</a> API operation.</p>
-    fn delete_compute_environment(
-        &self,
-        input: DeleteComputeEnvironmentRequest,
-    ) -> RusotoFuture<DeleteComputeEnvironmentResponse, DeleteComputeEnvironmentError> {
+impl ServiceRequest for DeleteComputeEnvironmentRequest {
+    type Output = DeleteComputeEnvironmentResponse;
+    type Error = DeleteComputeEnvironmentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/deletecomputeenvironment";
 
-        let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "batch", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2147,21 +2255,27 @@ impl Batch for BatchClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified job queue. You must first disable submissions for a queue with the <a>UpdateJobQueue</a> operation. All jobs in the queue are terminated when you delete a job queue.</p> <p>It is not necessary to disassociate compute environments from a queue before submitting a <code>DeleteJobQueue</code> request. </p>
-    fn delete_job_queue(
-        &self,
-        input: DeleteJobQueueRequest,
-    ) -> RusotoFuture<DeleteJobQueueResponse, DeleteJobQueueError> {
+impl ServiceRequest for DeleteJobQueueRequest {
+    type Output = DeleteJobQueueResponse;
+    type Error = DeleteJobQueueError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/deletejobqueue";
 
-        let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "batch", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2179,21 +2293,27 @@ impl Batch for BatchClient {
             }
         })
     }
+}
 
-    /// <p>Deregisters an AWS Batch job definition.</p>
-    fn deregister_job_definition(
-        &self,
-        input: DeregisterJobDefinitionRequest,
-    ) -> RusotoFuture<DeregisterJobDefinitionResponse, DeregisterJobDefinitionError> {
+impl ServiceRequest for DeregisterJobDefinitionRequest {
+    type Output = DeregisterJobDefinitionResponse;
+    type Error = DeregisterJobDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/deregisterjobdefinition";
 
-        let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "batch", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2208,21 +2328,27 @@ impl Batch for BatchClient {
             }
         })
     }
+}
 
-    /// <p>Describes one or more of your compute environments.</p> <p>If you are using an unmanaged compute environment, you can use the <code>DescribeComputeEnvironment</code> operation to determine the <code>ecsClusterArn</code> that you should launch your Amazon ECS container instances into.</p>
-    fn describe_compute_environments(
-        &self,
-        input: DescribeComputeEnvironmentsRequest,
-    ) -> RusotoFuture<DescribeComputeEnvironmentsResponse, DescribeComputeEnvironmentsError> {
+impl ServiceRequest for DescribeComputeEnvironmentsRequest {
+    type Output = DescribeComputeEnvironmentsResponse;
+    type Error = DescribeComputeEnvironmentsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/describecomputeenvironments";
 
-        let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "batch", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2237,21 +2363,27 @@ impl Batch for BatchClient {
             }
         })
     }
+}
 
-    /// <p>Describes a list of job definitions. You can specify a <code>status</code> (such as <code>ACTIVE</code>) to only return job definitions that match that status.</p>
-    fn describe_job_definitions(
-        &self,
-        input: DescribeJobDefinitionsRequest,
-    ) -> RusotoFuture<DescribeJobDefinitionsResponse, DescribeJobDefinitionsError> {
+impl ServiceRequest for DescribeJobDefinitionsRequest {
+    type Output = DescribeJobDefinitionsResponse;
+    type Error = DescribeJobDefinitionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/describejobdefinitions";
 
-        let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "batch", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2268,21 +2400,27 @@ impl Batch for BatchClient {
             }
         })
     }
+}
 
-    /// <p>Describes one or more of your job queues.</p>
-    fn describe_job_queues(
-        &self,
-        input: DescribeJobQueuesRequest,
-    ) -> RusotoFuture<DescribeJobQueuesResponse, DescribeJobQueuesError> {
+impl ServiceRequest for DescribeJobQueuesRequest {
+    type Output = DescribeJobQueuesResponse;
+    type Error = DescribeJobQueuesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/describejobqueues";
 
-        let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "batch", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2300,21 +2438,27 @@ impl Batch for BatchClient {
             }
         })
     }
+}
 
-    /// <p>Describes a list of AWS Batch jobs.</p>
-    fn describe_jobs(
-        &self,
-        input: DescribeJobsRequest,
-    ) -> RusotoFuture<DescribeJobsResponse, DescribeJobsError> {
+impl ServiceRequest for DescribeJobsRequest {
+    type Output = DescribeJobsResponse;
+    type Error = DescribeJobsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/describejobs";
 
-        let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "batch", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2332,18 +2476,27 @@ impl Batch for BatchClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of AWS Batch jobs.</p> <p>You must specify only one of the following:</p> <ul> <li> <p>a job queue ID to return a list of jobs in that job queue</p> </li> <li> <p>a multi-node parallel job ID to return a list of that job's nodes</p> </li> <li> <p>an array job ID to return a list of that job's children</p> </li> </ul> <p>You can filter the results by job status with the <code>jobStatus</code> parameter. If you do not specify a status, only <code>RUNNING</code> jobs are returned.</p>
-    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError> {
+impl ServiceRequest for ListJobsRequest {
+    type Output = ListJobsResponse;
+    type Error = ListJobsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/listjobs";
 
-        let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "batch", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2361,21 +2514,27 @@ impl Batch for BatchClient {
             }
         })
     }
+}
 
-    /// <p>Registers an AWS Batch job definition. </p>
-    fn register_job_definition(
-        &self,
-        input: RegisterJobDefinitionRequest,
-    ) -> RusotoFuture<RegisterJobDefinitionResponse, RegisterJobDefinitionError> {
+impl ServiceRequest for RegisterJobDefinitionRequest {
+    type Output = RegisterJobDefinitionResponse;
+    type Error = RegisterJobDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/registerjobdefinition";
 
-        let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "batch", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2392,21 +2551,27 @@ impl Batch for BatchClient {
             }
         })
     }
+}
 
-    /// <p>Submits an AWS Batch job from a job definition. Parameters specified during <a>SubmitJob</a> override parameters defined in the job definition. </p>
-    fn submit_job(
-        &self,
-        input: SubmitJobRequest,
-    ) -> RusotoFuture<SubmitJobResponse, SubmitJobError> {
+impl ServiceRequest for SubmitJobRequest {
+    type Output = SubmitJobResponse;
+    type Error = SubmitJobError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/submitjob";
 
-        let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "batch", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2424,21 +2589,27 @@ impl Batch for BatchClient {
             }
         })
     }
+}
 
-    /// <p>Terminates a job in a job queue. Jobs that are in the <code>STARTING</code> or <code>RUNNING</code> state are terminated, which causes them to transition to <code>FAILED</code>. Jobs that have not progressed to the <code>STARTING</code> state are cancelled.</p>
-    fn terminate_job(
-        &self,
-        input: TerminateJobRequest,
-    ) -> RusotoFuture<TerminateJobResponse, TerminateJobError> {
+impl ServiceRequest for TerminateJobRequest {
+    type Output = TerminateJobResponse;
+    type Error = TerminateJobError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/terminatejob";
 
-        let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "batch", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2456,21 +2627,27 @@ impl Batch for BatchClient {
             }
         })
     }
+}
 
-    /// <p>Updates an AWS Batch compute environment.</p>
-    fn update_compute_environment(
-        &self,
-        input: UpdateComputeEnvironmentRequest,
-    ) -> RusotoFuture<UpdateComputeEnvironmentResponse, UpdateComputeEnvironmentError> {
+impl ServiceRequest for UpdateComputeEnvironmentRequest {
+    type Output = UpdateComputeEnvironmentResponse;
+    type Error = UpdateComputeEnvironmentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/updatecomputeenvironment";
 
-        let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "batch", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2485,21 +2662,27 @@ impl Batch for BatchClient {
             }
         })
     }
+}
 
-    /// <p>Updates a job queue.</p>
-    fn update_job_queue(
-        &self,
-        input: UpdateJobQueueRequest,
-    ) -> RusotoFuture<UpdateJobQueueResponse, UpdateJobQueueError> {
+impl ServiceRequest for UpdateJobQueueRequest {
+    type Output = UpdateJobQueueResponse;
+    type Error = UpdateJobQueueError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/updatejobqueue";
 
-        let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "batch", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)

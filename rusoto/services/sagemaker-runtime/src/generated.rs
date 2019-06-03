@@ -19,12 +19,13 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct InvokeEndpointInput {
+pub struct InvokeEndpointRequest {
     /// <p>The desired MIME type of the inference in the response.</p>
     #[serde(rename = "Accept")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -51,7 +52,7 @@ pub struct InvokeEndpointInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct InvokeEndpointOutput {
+pub struct InvokeEndpointResponse {
     /// <p>Includes the inference provided by the model.</p> <p>For information about the format of the response body, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html">Common Data Formats—Inference</a>.</p>
     pub body: bytes::Bytes,
     /// <p>The MIME type of the inference returned in the response body.</p>
@@ -116,10 +117,7 @@ impl Error for InvokeEndpointError {
 /// Trait representing the capabilities of the Amazon SageMaker Runtime API. Amazon SageMaker Runtime clients implement this trait.
 pub trait SageMakerRuntime {
     /// <p><p>After you deploy a model into production using Amazon SageMaker hosting services, your client applications use this API to get inferences from the model hosted at the specified endpoint. </p> <p>For an overview of Amazon SageMaker, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p> <p>Amazon SageMaker strips all POST headers except those supported by the API. Amazon SageMaker might add additional headers. You should not rely on the behavior of headers outside those enumerated in the request syntax. </p> <p>Cals to <code>InvokeEndpoint</code> are authenticated by using AWS Signature Version 4. For information, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html">Authenticating Requests (AWS Signature Version 4)</a> in the <i>Amazon S3 API Reference</i>.</p> <note> <p>Endpoints are scoped to an individual account, and are not public. The URL does not contain the account ID, but Amazon SageMaker determines the account ID from the authentication token that is supplied by the caller.</p> </note></p>
-    fn invoke_endpoint(
-        &self,
-        input: InvokeEndpointInput,
-    ) -> RusotoFuture<InvokeEndpointOutput, InvokeEndpointError>;
+    fn invoke_endpoint(&self, input: InvokeEndpointRequest) -> Request<InvokeEndpointRequest>;
 }
 /// A client for the Amazon SageMaker Runtime API.
 #[derive(Clone)]
@@ -159,43 +157,54 @@ impl SageMakerRuntimeClient {
 
 impl SageMakerRuntime for SageMakerRuntimeClient {
     /// <p><p>After you deploy a model into production using Amazon SageMaker hosting services, your client applications use this API to get inferences from the model hosted at the specified endpoint. </p> <p>For an overview of Amazon SageMaker, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p> <p>Amazon SageMaker strips all POST headers except those supported by the API. Amazon SageMaker might add additional headers. You should not rely on the behavior of headers outside those enumerated in the request syntax. </p> <p>Cals to <code>InvokeEndpoint</code> are authenticated by using AWS Signature Version 4. For information, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html">Authenticating Requests (AWS Signature Version 4)</a> in the <i>Amazon S3 API Reference</i>.</p> <note> <p>Endpoints are scoped to an individual account, and are not public. The URL does not contain the account ID, but Amazon SageMaker determines the account ID from the authentication token that is supplied by the caller.</p> </note></p>
-    fn invoke_endpoint(
-        &self,
-        input: InvokeEndpointInput,
-    ) -> RusotoFuture<InvokeEndpointOutput, InvokeEndpointError> {
+    fn invoke_endpoint(&self, input: InvokeEndpointRequest) -> Request<InvokeEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for InvokeEndpointRequest {
+    type Output = InvokeEndpointResponse;
+    type Error = InvokeEndpointError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/endpoints/{endpoint_name}/invocations",
-            endpoint_name = input.endpoint_name
+            endpoint_name = self.endpoint_name
         );
 
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, &request_uri);
-        if input.content_type.is_none() {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, &request_uri);
+        if self.content_type.is_none() {
             request.set_content_type("application/x-amz-json-1.1".to_owned());
         }
 
         request.set_endpoint_prefix("runtime.sagemaker".to_string());
-        let encoded = Some(input.body.to_owned());
+        let encoded = Some(self.body.to_owned());
         request.set_payload(encoded);
 
-        if let Some(ref accept) = input.accept {
+        if let Some(ref accept) = self.accept {
             request.add_header("Accept", &accept.to_string());
         }
 
-        if let Some(ref content_type) = input.content_type {
+        if let Some(ref content_type) = self.content_type {
             request.add_header("Content-Type", &content_type.to_string());
         }
 
-        if let Some(ref custom_attributes) = input.custom_attributes {
+        if let Some(ref custom_attributes) = self.custom_attributes {
             request.add_header(
                 "X-Amzn-SageMaker-Custom-Attributes",
                 &custom_attributes.to_string(),
             );
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let mut result = InvokeEndpointOutput::default();
+                    let mut result = InvokeEndpointResponse::default();
                     result.body = response.body;
 
                     if let Some(content_type) = response.headers.get("Content-Type") {

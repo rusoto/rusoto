@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -82,15 +83,15 @@ impl ArtifactListDeserializer {
 }
 /// <p>Input structure for the CancelJob operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CancelJobInput {
+pub struct CancelJobRequest {
     pub api_version: Option<String>,
     pub job_id: String,
 }
 
-/// Serialize `CancelJobInput` contents to a `SignedRequest`.
-struct CancelJobInputSerializer;
-impl CancelJobInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CancelJobInput) {
+/// Serialize `CancelJobRequest` contents to a `SignedRequest`.
+struct CancelJobRequestSerializer;
+impl CancelJobRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CancelJobRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -105,18 +106,18 @@ impl CancelJobInputSerializer {
 
 /// <p>Output structure for the CancelJob operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CancelJobOutput {
+pub struct CancelJobResponse {
     pub success: Option<bool>,
 }
 
-struct CancelJobOutputDeserializer;
-impl CancelJobOutputDeserializer {
+struct CancelJobResponseDeserializer;
+impl CancelJobResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CancelJobOutput, XmlParseError> {
-        deserialize_elements::<_, CancelJobOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<CancelJobResponse, XmlParseError> {
+        deserialize_elements::<_, CancelJobResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Success" => {
                     obj.success = Some(SuccessDeserializer::deserialize("Success", stack)?);
@@ -140,7 +141,7 @@ impl CarrierDeserializer {
 }
 /// <p>Input structure for the CreateJob operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateJobInput {
+pub struct CreateJobRequest {
     pub api_version: Option<String>,
     pub job_type: String,
     pub manifest: String,
@@ -148,10 +149,10 @@ pub struct CreateJobInput {
     pub validate_only: bool,
 }
 
-/// Serialize `CreateJobInput` contents to a `SignedRequest`.
-struct CreateJobInputSerializer;
-impl CreateJobInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateJobInput) {
+/// Serialize `CreateJobRequest` contents to a `SignedRequest`.
+struct CreateJobRequestSerializer;
+impl CreateJobRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateJobRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -171,7 +172,7 @@ impl CreateJobInputSerializer {
 
 /// <p>Output structure for the CreateJob operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateJobOutput {
+pub struct CreateJobResponse {
     pub artifact_list: Option<Vec<Artifact>>,
     pub job_id: Option<String>,
     pub job_type: Option<String>,
@@ -180,14 +181,14 @@ pub struct CreateJobOutput {
     pub warning_message: Option<String>,
 }
 
-struct CreateJobOutputDeserializer;
-impl CreateJobOutputDeserializer {
+struct CreateJobResponseDeserializer;
+impl CreateJobResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateJobOutput, XmlParseError> {
-        deserialize_elements::<_, CreateJobOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<CreateJobResponse, XmlParseError> {
+        deserialize_elements::<_, CreateJobResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ArtifactList" => {
                     obj.artifact_list.get_or_insert(vec![]).extend(
@@ -278,7 +279,7 @@ impl GenericStringDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetShippingLabelInput {
+pub struct GetShippingLabelRequest {
     pub api_version: Option<String>,
     pub city: Option<String>,
     pub company: Option<String>,
@@ -293,10 +294,10 @@ pub struct GetShippingLabelInput {
     pub street_3: Option<String>,
 }
 
-/// Serialize `GetShippingLabelInput` contents to a `SignedRequest`.
-struct GetShippingLabelInputSerializer;
-impl GetShippingLabelInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GetShippingLabelInput) {
+/// Serialize `GetShippingLabelRequest` contents to a `SignedRequest`.
+struct GetShippingLabelRequestSerializer;
+impl GetShippingLabelRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &GetShippingLabelRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -340,46 +341,51 @@ impl GetShippingLabelInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetShippingLabelOutput {
+pub struct GetShippingLabelResponse {
     pub shipping_label_url: Option<String>,
     pub warning: Option<String>,
 }
 
-struct GetShippingLabelOutputDeserializer;
-impl GetShippingLabelOutputDeserializer {
+struct GetShippingLabelResponseDeserializer;
+impl GetShippingLabelResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetShippingLabelOutput, XmlParseError> {
-        deserialize_elements::<_, GetShippingLabelOutput, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "ShippingLabelURL" => {
-                    obj.shipping_label_url = Some(GenericStringDeserializer::deserialize(
-                        "ShippingLabelURL",
-                        stack,
-                    )?);
+    ) -> Result<GetShippingLabelResponse, XmlParseError> {
+        deserialize_elements::<_, GetShippingLabelResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ShippingLabelURL" => {
+                        obj.shipping_label_url = Some(GenericStringDeserializer::deserialize(
+                            "ShippingLabelURL",
+                            stack,
+                        )?);
+                    }
+                    "Warning" => {
+                        obj.warning =
+                            Some(GenericStringDeserializer::deserialize("Warning", stack)?);
+                    }
+                    _ => skip_tree(stack),
                 }
-                "Warning" => {
-                    obj.warning = Some(GenericStringDeserializer::deserialize("Warning", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Input structure for the GetStatus operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetStatusInput {
+pub struct GetStatusRequest {
     pub api_version: Option<String>,
     pub job_id: String,
 }
 
-/// Serialize `GetStatusInput` contents to a `SignedRequest`.
-struct GetStatusInputSerializer;
-impl GetStatusInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GetStatusInput) {
+/// Serialize `GetStatusRequest` contents to a `SignedRequest`.
+struct GetStatusRequestSerializer;
+impl GetStatusRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &GetStatusRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -394,7 +400,7 @@ impl GetStatusInputSerializer {
 
 /// <p>Output structure for the GetStatus operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetStatusOutput {
+pub struct GetStatusResponse {
     pub artifact_list: Option<Vec<Artifact>>,
     pub carrier: Option<String>,
     pub creation_date: Option<String>,
@@ -413,14 +419,14 @@ pub struct GetStatusOutput {
     pub tracking_number: Option<String>,
 }
 
-struct GetStatusOutputDeserializer;
-impl GetStatusOutputDeserializer {
+struct GetStatusResponseDeserializer;
+impl GetStatusResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetStatusOutput, XmlParseError> {
-        deserialize_elements::<_, GetStatusOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<GetStatusResponse, XmlParseError> {
+        deserialize_elements::<_, GetStatusResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ArtifactList" => {
                     obj.artifact_list.get_or_insert(vec![]).extend(
@@ -577,7 +583,7 @@ impl JobIdDeserializer {
 /// Serialize `JobIdList` contents to a `SignedRequest`.
 struct JobIdListSerializer;
 impl JobIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -615,16 +621,16 @@ impl JobsListDeserializer {
 }
 /// <p>Input structure for the ListJobs operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListJobsInput {
+pub struct ListJobsRequest {
     pub api_version: Option<String>,
     pub marker: Option<String>,
     pub max_jobs: Option<i64>,
 }
 
-/// Serialize `ListJobsInput` contents to a `SignedRequest`.
-struct ListJobsInputSerializer;
-impl ListJobsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListJobsInput) {
+/// Serialize `ListJobsRequest` contents to a `SignedRequest`.
+struct ListJobsRequestSerializer;
+impl ListJobsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ListJobsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -644,19 +650,19 @@ impl ListJobsInputSerializer {
 
 /// <p>Output structure for the ListJobs operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListJobsOutput {
+pub struct ListJobsResponse {
     pub is_truncated: Option<bool>,
     pub jobs: Option<Vec<Job>>,
 }
 
-struct ListJobsOutputDeserializer;
-impl ListJobsOutputDeserializer {
+struct ListJobsResponseDeserializer;
+impl ListJobsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListJobsOutput, XmlParseError> {
-        deserialize_elements::<_, ListJobsOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<ListJobsResponse, XmlParseError> {
+        deserialize_elements::<_, ListJobsResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "IsTruncated" => {
                     obj.is_truncated =
@@ -796,7 +802,7 @@ impl URLDeserializer {
 }
 /// <p>Input structure for the UpateJob operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateJobInput {
+pub struct UpdateJobRequest {
     pub api_version: Option<String>,
     pub job_id: String,
     pub job_type: String,
@@ -804,10 +810,10 @@ pub struct UpdateJobInput {
     pub validate_only: bool,
 }
 
-/// Serialize `UpdateJobInput` contents to a `SignedRequest`.
-struct UpdateJobInputSerializer;
-impl UpdateJobInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &UpdateJobInput) {
+/// Serialize `UpdateJobRequest` contents to a `SignedRequest`.
+struct UpdateJobRequestSerializer;
+impl UpdateJobRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &UpdateJobRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -825,20 +831,20 @@ impl UpdateJobInputSerializer {
 
 /// <p>Output structure for the UpateJob operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateJobOutput {
+pub struct UpdateJobResponse {
     pub artifact_list: Option<Vec<Artifact>>,
     pub success: Option<bool>,
     pub warning_message: Option<String>,
 }
 
-struct UpdateJobOutputDeserializer;
-impl UpdateJobOutputDeserializer {
+struct UpdateJobResponseDeserializer;
+impl UpdateJobResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<UpdateJobOutput, XmlParseError> {
-        deserialize_elements::<_, UpdateJobOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<UpdateJobResponse, XmlParseError> {
+        deserialize_elements::<_, UpdateJobResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ArtifactList" => {
                     obj.artifact_list.get_or_insert(vec![]).extend(
@@ -1548,25 +1554,25 @@ impl Error for UpdateJobError {
 /// Trait representing the capabilities of the AWS Import/Export API. AWS Import/Export clients implement this trait.
 pub trait ImportExport {
     /// <p>This operation cancels a specified job. Only the job owner can cancel it. The operation fails if the job has already started or is complete.</p>
-    fn cancel_job(&self, input: CancelJobInput) -> RusotoFuture<CancelJobOutput, CancelJobError>;
+    fn cancel_job(&self, input: CancelJobRequest) -> Request<CancelJobRequest>;
 
     /// <p>This operation initiates the process of scheduling an upload or download of your data. You include in the request a manifest that describes the data transfer specifics. The response to the request includes a job ID, which you can use in other operations, a signature that you use to identify your storage device, and the address where you should ship your storage device.</p>
-    fn create_job(&self, input: CreateJobInput) -> RusotoFuture<CreateJobOutput, CreateJobError>;
+    fn create_job(&self, input: CreateJobRequest) -> Request<CreateJobRequest>;
 
     /// <p>This operation generates a pre-paid UPS shipping label that you will use to ship your device to AWS for processing.</p>
     fn get_shipping_label(
         &self,
-        input: GetShippingLabelInput,
-    ) -> RusotoFuture<GetShippingLabelOutput, GetShippingLabelError>;
+        input: GetShippingLabelRequest,
+    ) -> Request<GetShippingLabelRequest>;
 
     /// <p>This operation returns information about a job, including where the job is in the processing pipeline, the status of the results, and the signature value associated with the job. You can only return information about jobs you own.</p>
-    fn get_status(&self, input: GetStatusInput) -> RusotoFuture<GetStatusOutput, GetStatusError>;
+    fn get_status(&self, input: GetStatusRequest) -> Request<GetStatusRequest>;
 
     /// <p>This operation returns the jobs associated with the requester. AWS Import/Export lists the jobs in reverse chronological order based on the date of creation. For example if Job Test1 was created 2009Dec30 and Test2 was created 2010Feb05, the ListJobs operation would return Test2 followed by Test1.</p>
-    fn list_jobs(&self, input: ListJobsInput) -> RusotoFuture<ListJobsOutput, ListJobsError>;
+    fn list_jobs(&self, input: ListJobsRequest) -> Request<ListJobsRequest>;
 
     /// <p>You use this operation to change the parameters specified in the original manifest file by supplying a new manifest file. The manifest file attached to this request replaces the original manifest file. You can only use the operation after a CreateJob request but before the data transfer starts and you can only use it on jobs you own.</p>
-    fn update_job(&self, input: UpdateJobInput) -> RusotoFuture<UpdateJobOutput, UpdateJobError>;
+    fn update_job(&self, input: UpdateJobRequest) -> Request<UpdateJobRequest>;
 }
 /// A client for the AWS Import/Export API.
 #[derive(Clone)]
@@ -1606,22 +1612,59 @@ impl ImportExportClient {
 
 impl ImportExport for ImportExportClient {
     /// <p>This operation cancels a specified job. Only the job owner can cancel it. The operation fails if the job has already started or is complete.</p>
-    fn cancel_job(&self, input: CancelJobInput) -> RusotoFuture<CancelJobOutput, CancelJobError> {
-        let mut request = SignedRequest::new(
-            "POST",
-            "importexport",
-            &self.region,
-            "/?Operation=CancelJob",
-        );
+    fn cancel_job(&self, input: CancelJobRequest) -> Request<CancelJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation initiates the process of scheduling an upload or download of your data. You include in the request a manifest that describes the data transfer specifics. The response to the request includes a job ID, which you can use in other operations, a signature that you use to identify your storage device, and the address where you should ship your storage device.</p>
+    fn create_job(&self, input: CreateJobRequest) -> Request<CreateJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation generates a pre-paid UPS shipping label that you will use to ship your device to AWS for processing.</p>
+    fn get_shipping_label(
+        &self,
+        input: GetShippingLabelRequest,
+    ) -> Request<GetShippingLabelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation returns information about a job, including where the job is in the processing pipeline, the status of the results, and the signature value associated with the job. You can only return information about jobs you own.</p>
+    fn get_status(&self, input: GetStatusRequest) -> Request<GetStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation returns the jobs associated with the requester. AWS Import/Export lists the jobs in reverse chronological order based on the date of creation. For example if Job Test1 was created 2009Dec30 and Test2 was created 2010Feb05, the ListJobs operation would return Test2 followed by Test1.</p>
+    fn list_jobs(&self, input: ListJobsRequest) -> Request<ListJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>You use this operation to change the parameters specified in the original manifest file by supplying a new manifest file. The manifest file attached to this request replaces the original manifest file. You can only use the operation after a CreateJob request but before the data transfer starts and you can only use it on jobs you own.</p>
+    fn update_job(&self, input: UpdateJobRequest) -> Request<UpdateJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CancelJobRequest {
+    type Output = CancelJobResponse;
+    type Error = CancelJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request =
+            SignedRequest::new("POST", "importexport", region, "/?Operation=CancelJob");
         let mut params = Params::new();
 
         params.put("Action", "CancelJob");
         params.put("Version", "2010-06-01");
-        CancelJobInputSerializer::serialize(&mut params, "", &input);
+        CancelJobRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -1635,7 +1678,7 @@ impl ImportExport for ImportExportClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CancelJobOutput::default();
+                    result = CancelJobResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -1646,7 +1689,7 @@ impl ImportExport for ImportExportClient {
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
                     result =
-                        CancelJobOutputDeserializer::deserialize("CancelJobResult", &mut stack)?;
+                        CancelJobResponseDeserializer::deserialize("CancelJobResult", &mut stack)?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -1655,24 +1698,28 @@ impl ImportExport for ImportExportClient {
             }))
         })
     }
+}
 
-    /// <p>This operation initiates the process of scheduling an upload or download of your data. You include in the request a manifest that describes the data transfer specifics. The response to the request includes a job ID, which you can use in other operations, a signature that you use to identify your storage device, and the address where you should ship your storage device.</p>
-    fn create_job(&self, input: CreateJobInput) -> RusotoFuture<CreateJobOutput, CreateJobError> {
-        let mut request = SignedRequest::new(
-            "POST",
-            "importexport",
-            &self.region,
-            "/?Operation=CreateJob",
-        );
+impl ServiceRequest for CreateJobRequest {
+    type Output = CreateJobResponse;
+    type Error = CreateJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request =
+            SignedRequest::new("POST", "importexport", region, "/?Operation=CreateJob");
         let mut params = Params::new();
 
         params.put("Action", "CreateJob");
         params.put("Version", "2010-06-01");
-        CreateJobInputSerializer::serialize(&mut params, "", &input);
+        CreateJobRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -1686,7 +1733,7 @@ impl ImportExport for ImportExportClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateJobOutput::default();
+                    result = CreateJobResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -1697,7 +1744,7 @@ impl ImportExport for ImportExportClient {
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
                     result =
-                        CreateJobOutputDeserializer::deserialize("CreateJobResult", &mut stack)?;
+                        CreateJobResponseDeserializer::deserialize("CreateJobResult", &mut stack)?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -1706,27 +1753,32 @@ impl ImportExport for ImportExportClient {
             }))
         })
     }
+}
 
-    /// <p>This operation generates a pre-paid UPS shipping label that you will use to ship your device to AWS for processing.</p>
-    fn get_shipping_label(
-        &self,
-        input: GetShippingLabelInput,
-    ) -> RusotoFuture<GetShippingLabelOutput, GetShippingLabelError> {
+impl ServiceRequest for GetShippingLabelRequest {
+    type Output = GetShippingLabelResponse;
+    type Error = GetShippingLabelError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let mut request = SignedRequest::new(
             "POST",
             "importexport",
-            &self.region,
+            region,
             "/?Operation=GetShippingLabel",
         );
         let mut params = Params::new();
 
         params.put("Action", "GetShippingLabel");
         params.put("Version", "2010-06-01");
-        GetShippingLabelInputSerializer::serialize(&mut params, "", &input);
+        GetShippingLabelRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -1740,7 +1792,7 @@ impl ImportExport for ImportExportClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = GetShippingLabelOutput::default();
+                    result = GetShippingLabelResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -1750,7 +1802,7 @@ impl ImportExport for ImportExportClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = GetShippingLabelOutputDeserializer::deserialize(
+                    result = GetShippingLabelResponseDeserializer::deserialize(
                         "GetShippingLabelResult",
                         &mut stack,
                     )?;
@@ -1762,24 +1814,28 @@ impl ImportExport for ImportExportClient {
             }))
         })
     }
+}
 
-    /// <p>This operation returns information about a job, including where the job is in the processing pipeline, the status of the results, and the signature value associated with the job. You can only return information about jobs you own.</p>
-    fn get_status(&self, input: GetStatusInput) -> RusotoFuture<GetStatusOutput, GetStatusError> {
-        let mut request = SignedRequest::new(
-            "POST",
-            "importexport",
-            &self.region,
-            "/?Operation=GetStatus",
-        );
+impl ServiceRequest for GetStatusRequest {
+    type Output = GetStatusResponse;
+    type Error = GetStatusError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request =
+            SignedRequest::new("POST", "importexport", region, "/?Operation=GetStatus");
         let mut params = Params::new();
 
         params.put("Action", "GetStatus");
         params.put("Version", "2010-06-01");
-        GetStatusInputSerializer::serialize(&mut params, "", &input);
+        GetStatusRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -1793,7 +1849,7 @@ impl ImportExport for ImportExportClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = GetStatusOutput::default();
+                    result = GetStatusResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -1804,7 +1860,7 @@ impl ImportExport for ImportExportClient {
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
                     result =
-                        GetStatusOutputDeserializer::deserialize("GetStatusResult", &mut stack)?;
+                        GetStatusResponseDeserializer::deserialize("GetStatusResult", &mut stack)?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -1813,20 +1869,28 @@ impl ImportExport for ImportExportClient {
             }))
         })
     }
+}
 
-    /// <p>This operation returns the jobs associated with the requester. AWS Import/Export lists the jobs in reverse chronological order based on the date of creation. For example if Job Test1 was created 2009Dec30 and Test2 was created 2010Feb05, the ListJobs operation would return Test2 followed by Test1.</p>
-    fn list_jobs(&self, input: ListJobsInput) -> RusotoFuture<ListJobsOutput, ListJobsError> {
+impl ServiceRequest for ListJobsRequest {
+    type Output = ListJobsResponse;
+    type Error = ListJobsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let mut request =
-            SignedRequest::new("POST", "importexport", &self.region, "/?Operation=ListJobs");
+            SignedRequest::new("POST", "importexport", region, "/?Operation=ListJobs");
         let mut params = Params::new();
 
         params.put("Action", "ListJobs");
         params.put("Version", "2010-06-01");
-        ListJobsInputSerializer::serialize(&mut params, "", &input);
+        ListJobsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -1840,7 +1904,7 @@ impl ImportExport for ImportExportClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ListJobsOutput::default();
+                    result = ListJobsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -1850,7 +1914,8 @@ impl ImportExport for ImportExportClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ListJobsOutputDeserializer::deserialize("ListJobsResult", &mut stack)?;
+                    result =
+                        ListJobsResponseDeserializer::deserialize("ListJobsResult", &mut stack)?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -1859,24 +1924,28 @@ impl ImportExport for ImportExportClient {
             }))
         })
     }
+}
 
-    /// <p>You use this operation to change the parameters specified in the original manifest file by supplying a new manifest file. The manifest file attached to this request replaces the original manifest file. You can only use the operation after a CreateJob request but before the data transfer starts and you can only use it on jobs you own.</p>
-    fn update_job(&self, input: UpdateJobInput) -> RusotoFuture<UpdateJobOutput, UpdateJobError> {
-        let mut request = SignedRequest::new(
-            "POST",
-            "importexport",
-            &self.region,
-            "/?Operation=UpdateJob",
-        );
+impl ServiceRequest for UpdateJobRequest {
+    type Output = UpdateJobResponse;
+    type Error = UpdateJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request =
+            SignedRequest::new("POST", "importexport", region, "/?Operation=UpdateJob");
         let mut params = Params::new();
 
         params.put("Action", "UpdateJob");
         params.put("Version", "2010-06-01");
-        UpdateJobInputSerializer::serialize(&mut params, "", &input);
+        UpdateJobRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -1890,7 +1959,7 @@ impl ImportExport for ImportExportClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = UpdateJobOutput::default();
+                    result = UpdateJobResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -1901,7 +1970,7 @@ impl ImportExport for ImportExportClient {
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
                     result =
-                        UpdateJobOutputDeserializer::deserialize("UpdateJobResult", &mut stack)?;
+                        UpdateJobResponseDeserializer::deserialize("UpdateJobResult", &mut stack)?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -1930,7 +1999,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client =
             ImportExportClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = GetStatusInput::default();
+        let request = GetStatusRequest::default();
         let result = client.get_status(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
@@ -1944,7 +2013,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             ImportExportClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ListJobsInput::default();
+        let request = ListJobsRequest::default();
         let result = client.list_jobs(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }

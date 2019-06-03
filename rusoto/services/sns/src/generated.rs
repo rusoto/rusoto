@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -49,7 +50,7 @@ impl AccountDeserializer {
 /// Serialize `ActionsList` contents to a `SignedRequest`.
 struct ActionsListSerializer;
 impl ActionsListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -58,7 +59,7 @@ impl ActionsListSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AddPermissionInput {
+pub struct AddPermissionRequest {
     /// <p>The AWS account IDs of the users (principals) who will be given access to the specified actions. The users must have AWS accounts, but do not need to be signed up for this service.</p>
     pub aws_account_id: Vec<String>,
     /// <p>The action you want to allow for the specified principal(s).</p> <p>Valid values: any Amazon SNS action name.</p>
@@ -69,10 +70,10 @@ pub struct AddPermissionInput {
     pub topic_arn: String,
 }
 
-/// Serialize `AddPermissionInput` contents to a `SignedRequest`.
-struct AddPermissionInputSerializer;
-impl AddPermissionInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AddPermissionInput) {
+/// Serialize `AddPermissionRequest` contents to a `SignedRequest`.
+struct AddPermissionRequestSerializer;
+impl AddPermissionRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &AddPermissionRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -93,6 +94,19 @@ impl AddPermissionInputSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AddPermissionResponse {}
+
+struct AddPermissionResponseDeserializer;
+impl AddPermissionResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AddPermissionResponse, XmlParseError> {
+        Ok(AddPermissionResponse::default())
+    }
+}
 struct AttributeNameDeserializer;
 impl AttributeNameDeserializer {
     #[allow(unused_variables)]
@@ -128,15 +142,19 @@ impl BooleanDeserializer {
 }
 /// <p>The input for the <code>CheckIfPhoneNumberIsOptedOut</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CheckIfPhoneNumberIsOptedOutInput {
+pub struct CheckIfPhoneNumberIsOptedOutRequest {
     /// <p>The phone number for which you want to check the opt out status.</p>
     pub phone_number: String,
 }
 
-/// Serialize `CheckIfPhoneNumberIsOptedOutInput` contents to a `SignedRequest`.
-struct CheckIfPhoneNumberIsOptedOutInputSerializer;
-impl CheckIfPhoneNumberIsOptedOutInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CheckIfPhoneNumberIsOptedOutInput) {
+/// Serialize `CheckIfPhoneNumberIsOptedOutRequest` contents to a `SignedRequest`.
+struct CheckIfPhoneNumberIsOptedOutRequestSerializer;
+impl CheckIfPhoneNumberIsOptedOutRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CheckIfPhoneNumberIsOptedOutRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -178,7 +196,7 @@ impl CheckIfPhoneNumberIsOptedOutResponseDeserializer {
 }
 /// <p>Input for ConfirmSubscription action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ConfirmSubscriptionInput {
+pub struct ConfirmSubscriptionRequest {
     /// <p>Disallows unauthenticated unsubscribes of the subscription. If the value of this parameter is <code>true</code> and the request has an AWS signature, then only the topic owner and the subscription owner can unsubscribe the endpoint. The unsubscribe action requires AWS authentication. </p>
     pub authenticate_on_unsubscribe: Option<String>,
     /// <p>Short-lived token sent to an endpoint during the <code>Subscribe</code> action.</p>
@@ -187,10 +205,10 @@ pub struct ConfirmSubscriptionInput {
     pub topic_arn: String,
 }
 
-/// Serialize `ConfirmSubscriptionInput` contents to a `SignedRequest`.
-struct ConfirmSubscriptionInputSerializer;
-impl ConfirmSubscriptionInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ConfirmSubscriptionInput) {
+/// Serialize `ConfirmSubscriptionRequest` contents to a `SignedRequest`.
+struct ConfirmSubscriptionRequestSerializer;
+impl ConfirmSubscriptionRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ConfirmSubscriptionRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -239,34 +257,9 @@ impl ConfirmSubscriptionResponseDeserializer {
         )
     }
 }
-/// <p>Response from CreateEndpoint action.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateEndpointResponse {
-    /// <p>EndpointArn returned from CreateEndpoint action.</p>
-    pub endpoint_arn: Option<String>,
-}
-
-struct CreateEndpointResponseDeserializer;
-impl CreateEndpointResponseDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CreateEndpointResponse, XmlParseError> {
-        deserialize_elements::<_, CreateEndpointResponse, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "EndpointArn" => {
-                    obj.endpoint_arn = Some(StringDeserializer::deserialize("EndpointArn", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 /// <p>Input for CreatePlatformApplication action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreatePlatformApplicationInput {
+pub struct CreatePlatformApplicationRequest {
     /// <p>For a list of attributes, see <a href="https://docs.aws.amazon.com/sns/latest/api/API_SetPlatformApplicationAttributes.html">SetPlatformApplicationAttributes</a> </p>
     pub attributes: ::std::collections::HashMap<String, String>,
     /// <p>Application names must be made up of only uppercase and lowercase ASCII letters, numbers, underscores, hyphens, and periods, and must be between 1 and 256 characters long.</p>
@@ -275,10 +268,14 @@ pub struct CreatePlatformApplicationInput {
     pub platform: String,
 }
 
-/// Serialize `CreatePlatformApplicationInput` contents to a `SignedRequest`.
-struct CreatePlatformApplicationInputSerializer;
-impl CreatePlatformApplicationInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreatePlatformApplicationInput) {
+/// Serialize `CreatePlatformApplicationRequest` contents to a `SignedRequest`.
+struct CreatePlatformApplicationRequestSerializer;
+impl CreatePlatformApplicationRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CreatePlatformApplicationRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -328,7 +325,7 @@ impl CreatePlatformApplicationResponseDeserializer {
 }
 /// <p>Input for CreatePlatformEndpoint action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreatePlatformEndpointInput {
+pub struct CreatePlatformEndpointRequest {
     /// <p>For a list of attributes, see <a href="https://docs.aws.amazon.com/sns/latest/api/API_SetEndpointAttributes.html">SetEndpointAttributes</a>.</p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
     /// <p>Arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p>
@@ -339,10 +336,10 @@ pub struct CreatePlatformEndpointInput {
     pub token: String,
 }
 
-/// Serialize `CreatePlatformEndpointInput` contents to a `SignedRequest`.
-struct CreatePlatformEndpointInputSerializer;
-impl CreatePlatformEndpointInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreatePlatformEndpointInput) {
+/// Serialize `CreatePlatformEndpointRequest` contents to a `SignedRequest`.
+struct CreatePlatformEndpointRequestSerializer;
+impl CreatePlatformEndpointRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreatePlatformEndpointRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -366,9 +363,39 @@ impl CreatePlatformEndpointInputSerializer {
     }
 }
 
+/// <p>Response from CreateEndpoint action.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreatePlatformEndpointResponse {
+    /// <p>EndpointArn returned from CreateEndpoint action.</p>
+    pub endpoint_arn: Option<String>,
+}
+
+struct CreatePlatformEndpointResponseDeserializer;
+impl CreatePlatformEndpointResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreatePlatformEndpointResponse, XmlParseError> {
+        deserialize_elements::<_, CreatePlatformEndpointResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "EndpointArn" => {
+                        obj.endpoint_arn =
+                            Some(StringDeserializer::deserialize("EndpointArn", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Input for CreateTopic action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateTopicInput {
+pub struct CreateTopicRequest {
     /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>CreateTopic</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>DisplayName</code> – The display name to use for a topic with SMS subscriptions.</p> </li> <li> <p> <code>Policy</code> – The policy that defines who can access your topic. By default, only the topic owner can publish or subscribe to the topic.</p> </li> </ul> <p>The following attribute applies only to <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html">server-side-encryption</a>:</p> <ul> <li> <p> <code>KmsMasterKeyId</code> - The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms">Key Terms</a>. For more examples, see <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters">KeyId</a> in the <i>AWS Key Management Service API Reference</i>. </p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
     /// <p>The name of the topic you want to create.</p> <p>Constraints: Topic names must be made up of only uppercase and lowercase ASCII letters, numbers, underscores, and hyphens, and must be between 1 and 256 characters long.</p>
@@ -377,10 +404,10 @@ pub struct CreateTopicInput {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateTopicInput` contents to a `SignedRequest`.
-struct CreateTopicInputSerializer;
-impl CreateTopicInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateTopicInput) {
+/// Serialize `CreateTopicRequest` contents to a `SignedRequest`.
+struct CreateTopicRequestSerializer;
+impl CreateTopicRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateTopicRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -429,7 +456,7 @@ impl CreateTopicResponseDeserializer {
 /// Serialize `DelegatesList` contents to a `SignedRequest`.
 struct DelegatesListSerializer;
 impl DelegatesListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -439,15 +466,15 @@ impl DelegatesListSerializer {
 
 /// <p>Input for DeleteEndpoint action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteEndpointInput {
+pub struct DeleteEndpointRequest {
     /// <p>EndpointArn of endpoint to delete.</p>
     pub endpoint_arn: String,
 }
 
-/// Serialize `DeleteEndpointInput` contents to a `SignedRequest`.
-struct DeleteEndpointInputSerializer;
-impl DeleteEndpointInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteEndpointInput) {
+/// Serialize `DeleteEndpointRequest` contents to a `SignedRequest`.
+struct DeleteEndpointRequestSerializer;
+impl DeleteEndpointRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteEndpointRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -457,17 +484,34 @@ impl DeleteEndpointInputSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteEndpointResponse {}
+
+struct DeleteEndpointResponseDeserializer;
+impl DeleteEndpointResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteEndpointResponse, XmlParseError> {
+        Ok(DeleteEndpointResponse::default())
+    }
+}
 /// <p>Input for DeletePlatformApplication action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeletePlatformApplicationInput {
+pub struct DeletePlatformApplicationRequest {
     /// <p>PlatformApplicationArn of platform application object to delete.</p>
     pub platform_application_arn: String,
 }
 
-/// Serialize `DeletePlatformApplicationInput` contents to a `SignedRequest`.
-struct DeletePlatformApplicationInputSerializer;
-impl DeletePlatformApplicationInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeletePlatformApplicationInput) {
+/// Serialize `DeletePlatformApplicationRequest` contents to a `SignedRequest`.
+struct DeletePlatformApplicationRequestSerializer;
+impl DeletePlatformApplicationRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DeletePlatformApplicationRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -481,15 +525,28 @@ impl DeletePlatformApplicationInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteTopicInput {
+pub struct DeletePlatformApplicationResponse {}
+
+struct DeletePlatformApplicationResponseDeserializer;
+impl DeletePlatformApplicationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeletePlatformApplicationResponse, XmlParseError> {
+        Ok(DeletePlatformApplicationResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteTopicRequest {
     /// <p>The ARN of the topic you want to delete.</p>
     pub topic_arn: String,
 }
 
-/// Serialize `DeleteTopicInput` contents to a `SignedRequest`.
-struct DeleteTopicInputSerializer;
-impl DeleteTopicInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteTopicInput) {
+/// Serialize `DeleteTopicRequest` contents to a `SignedRequest`.
+struct DeleteTopicRequestSerializer;
+impl DeleteTopicRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteTopicRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -499,6 +556,19 @@ impl DeleteTopicInputSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteTopicResponse {}
+
+struct DeleteTopicResponseDeserializer;
+impl DeleteTopicResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteTopicResponse, XmlParseError> {
+        Ok(DeleteTopicResponse::default())
+    }
+}
 struct EndpointDeserializer;
 impl EndpointDeserializer {
     #[allow(unused_variables)]
@@ -512,15 +582,15 @@ impl EndpointDeserializer {
 }
 /// <p>Input for GetEndpointAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetEndpointAttributesInput {
+pub struct GetEndpointAttributesRequest {
     /// <p>EndpointArn for GetEndpointAttributes input.</p>
     pub endpoint_arn: String,
 }
 
-/// Serialize `GetEndpointAttributesInput` contents to a `SignedRequest`.
-struct GetEndpointAttributesInputSerializer;
-impl GetEndpointAttributesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GetEndpointAttributesInput) {
+/// Serialize `GetEndpointAttributesRequest` contents to a `SignedRequest`.
+struct GetEndpointAttributesRequestSerializer;
+impl GetEndpointAttributesRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &GetEndpointAttributesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -564,15 +634,19 @@ impl GetEndpointAttributesResponseDeserializer {
 }
 /// <p>Input for GetPlatformApplicationAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetPlatformApplicationAttributesInput {
+pub struct GetPlatformApplicationAttributesRequest {
     /// <p>PlatformApplicationArn for GetPlatformApplicationAttributesInput.</p>
     pub platform_application_arn: String,
 }
 
-/// Serialize `GetPlatformApplicationAttributesInput` contents to a `SignedRequest`.
-struct GetPlatformApplicationAttributesInputSerializer;
-impl GetPlatformApplicationAttributesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GetPlatformApplicationAttributesInput) {
+/// Serialize `GetPlatformApplicationAttributesRequest` contents to a `SignedRequest`.
+struct GetPlatformApplicationAttributesRequestSerializer;
+impl GetPlatformApplicationAttributesRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &GetPlatformApplicationAttributesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -619,15 +693,15 @@ impl GetPlatformApplicationAttributesResponseDeserializer {
 }
 /// <p>The input for the <code>GetSMSAttributes</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetSMSAttributesInput {
+pub struct GetSMSAttributesRequest {
     /// <p>A list of the individual attribute names, such as <code>MonthlySpendLimit</code>, for which you want values.</p> <p>For all attribute names, see <a href="https://docs.aws.amazon.com/sns/latest/api/API_SetSMSAttributes.html">SetSMSAttributes</a>.</p> <p>If you don't use this parameter, Amazon SNS returns all SMS attributes.</p>
     pub attributes: Option<Vec<String>>,
 }
 
-/// Serialize `GetSMSAttributesInput` contents to a `SignedRequest`.
-struct GetSMSAttributesInputSerializer;
-impl GetSMSAttributesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GetSMSAttributesInput) {
+/// Serialize `GetSMSAttributesRequest` contents to a `SignedRequest`.
+struct GetSMSAttributesRequestSerializer;
+impl GetSMSAttributesRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &GetSMSAttributesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -677,15 +751,19 @@ impl GetSMSAttributesResponseDeserializer {
 }
 /// <p>Input for GetSubscriptionAttributes.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetSubscriptionAttributesInput {
+pub struct GetSubscriptionAttributesRequest {
     /// <p>The ARN of the subscription whose properties you want to get.</p>
     pub subscription_arn: String,
 }
 
-/// Serialize `GetSubscriptionAttributesInput` contents to a `SignedRequest`.
-struct GetSubscriptionAttributesInputSerializer;
-impl GetSubscriptionAttributesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GetSubscriptionAttributesInput) {
+/// Serialize `GetSubscriptionAttributesRequest` contents to a `SignedRequest`.
+struct GetSubscriptionAttributesRequestSerializer;
+impl GetSubscriptionAttributesRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &GetSubscriptionAttributesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -732,15 +810,15 @@ impl GetSubscriptionAttributesResponseDeserializer {
 }
 /// <p>Input for GetTopicAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetTopicAttributesInput {
+pub struct GetTopicAttributesRequest {
     /// <p>The ARN of the topic whose properties you want to get.</p>
     pub topic_arn: String,
 }
 
-/// Serialize `GetTopicAttributesInput` contents to a `SignedRequest`.
-struct GetTopicAttributesInputSerializer;
-impl GetTopicAttributesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GetTopicAttributesInput) {
+/// Serialize `GetTopicAttributesRequest` contents to a `SignedRequest`.
+struct GetTopicAttributesRequestSerializer;
+impl GetTopicAttributesRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &GetTopicAttributesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -784,17 +862,21 @@ impl GetTopicAttributesResponseDeserializer {
 }
 /// <p>Input for ListEndpointsByPlatformApplication action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListEndpointsByPlatformApplicationInput {
+pub struct ListEndpointsByPlatformApplicationRequest {
     /// <p>NextToken string is used when calling ListEndpointsByPlatformApplication action to retrieve additional records that are available after the first page results.</p>
     pub next_token: Option<String>,
     /// <p>PlatformApplicationArn for ListEndpointsByPlatformApplicationInput action.</p>
     pub platform_application_arn: String,
 }
 
-/// Serialize `ListEndpointsByPlatformApplicationInput` contents to a `SignedRequest`.
-struct ListEndpointsByPlatformApplicationInputSerializer;
-impl ListEndpointsByPlatformApplicationInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListEndpointsByPlatformApplicationInput) {
+/// Serialize `ListEndpointsByPlatformApplicationRequest` contents to a `SignedRequest`.
+struct ListEndpointsByPlatformApplicationRequestSerializer;
+impl ListEndpointsByPlatformApplicationRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ListEndpointsByPlatformApplicationRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -884,15 +966,19 @@ impl ListOfPlatformApplicationsDeserializer {
 }
 /// <p>The input for the <code>ListPhoneNumbersOptedOut</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListPhoneNumbersOptedOutInput {
+pub struct ListPhoneNumbersOptedOutRequest {
     /// <p>A <code>NextToken</code> string is used when you call the <code>ListPhoneNumbersOptedOut</code> action to retrieve additional records that are available after the first page of results.</p>
     pub next_token: Option<String>,
 }
 
-/// Serialize `ListPhoneNumbersOptedOutInput` contents to a `SignedRequest`.
-struct ListPhoneNumbersOptedOutInputSerializer;
-impl ListPhoneNumbersOptedOutInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListPhoneNumbersOptedOutInput) {
+/// Serialize `ListPhoneNumbersOptedOutRequest` contents to a `SignedRequest`.
+struct ListPhoneNumbersOptedOutRequestSerializer;
+impl ListPhoneNumbersOptedOutRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ListPhoneNumbersOptedOutRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -942,15 +1028,19 @@ impl ListPhoneNumbersOptedOutResponseDeserializer {
 }
 /// <p>Input for ListPlatformApplications action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListPlatformApplicationsInput {
+pub struct ListPlatformApplicationsRequest {
     /// <p>NextToken string is used when calling ListPlatformApplications action to retrieve additional records that are available after the first page results.</p>
     pub next_token: Option<String>,
 }
 
-/// Serialize `ListPlatformApplicationsInput` contents to a `SignedRequest`.
-struct ListPlatformApplicationsInputSerializer;
-impl ListPlatformApplicationsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListPlatformApplicationsInput) {
+/// Serialize `ListPlatformApplicationsRequest` contents to a `SignedRequest`.
+struct ListPlatformApplicationsRequestSerializer;
+impl ListPlatformApplicationsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ListPlatformApplicationsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1005,7 +1095,7 @@ impl ListPlatformApplicationsResponseDeserializer {
 /// Serialize `ListString` contents to a `SignedRequest`.
 struct ListStringSerializer;
 impl ListStringSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -1015,17 +1105,21 @@ impl ListStringSerializer {
 
 /// <p>Input for ListSubscriptionsByTopic action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListSubscriptionsByTopicInput {
+pub struct ListSubscriptionsByTopicRequest {
     /// <p>Token returned by the previous <code>ListSubscriptionsByTopic</code> request.</p>
     pub next_token: Option<String>,
     /// <p>The ARN of the topic for which you wish to find subscriptions.</p>
     pub topic_arn: String,
 }
 
-/// Serialize `ListSubscriptionsByTopicInput` contents to a `SignedRequest`.
-struct ListSubscriptionsByTopicInputSerializer;
-impl ListSubscriptionsByTopicInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListSubscriptionsByTopicInput) {
+/// Serialize `ListSubscriptionsByTopicRequest` contents to a `SignedRequest`.
+struct ListSubscriptionsByTopicRequestSerializer;
+impl ListSubscriptionsByTopicRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ListSubscriptionsByTopicRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1077,15 +1171,15 @@ impl ListSubscriptionsByTopicResponseDeserializer {
 }
 /// <p>Input for ListSubscriptions action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListSubscriptionsInput {
+pub struct ListSubscriptionsRequest {
     /// <p>Token returned by the previous <code>ListSubscriptions</code> request.</p>
     pub next_token: Option<String>,
 }
 
-/// Serialize `ListSubscriptionsInput` contents to a `SignedRequest`.
-struct ListSubscriptionsInputSerializer;
-impl ListSubscriptionsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListSubscriptionsInput) {
+/// Serialize `ListSubscriptionsRequest` contents to a `SignedRequest`.
+struct ListSubscriptionsRequestSerializer;
+impl ListSubscriptionsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ListSubscriptionsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1143,7 +1237,7 @@ pub struct ListTagsForResourceRequest {
 /// Serialize `ListTagsForResourceRequest` contents to a `SignedRequest`.
 struct ListTagsForResourceRequestSerializer;
 impl ListTagsForResourceRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListTagsForResourceRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ListTagsForResourceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1184,15 +1278,15 @@ impl ListTagsForResourceResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListTopicsInput {
+pub struct ListTopicsRequest {
     /// <p>Token returned by the previous <code>ListTopics</code> request.</p>
     pub next_token: Option<String>,
 }
 
-/// Serialize `ListTopicsInput` contents to a `SignedRequest`.
-struct ListTopicsInputSerializer;
-impl ListTopicsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListTopicsInput) {
+/// Serialize `ListTopicsRequest` contents to a `SignedRequest`.
+struct ListTopicsRequestSerializer;
+impl ListTopicsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ListTopicsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1264,7 +1358,7 @@ impl MapStringToStringDeserializer {
 struct MapStringToStringSerializer;
 impl MapStringToStringSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &::std::collections::HashMap<String, String>,
     ) {
@@ -1280,7 +1374,7 @@ impl MapStringToStringSerializer {
 struct MessageAttributeMapSerializer;
 impl MessageAttributeMapSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &::std::collections::HashMap<String, MessageAttributeValue>,
     ) {
@@ -1310,7 +1404,7 @@ pub struct MessageAttributeValue {
 /// Serialize `MessageAttributeValue` contents to a `SignedRequest`.
 struct MessageAttributeValueSerializer;
 impl MessageAttributeValueSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &MessageAttributeValue) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &MessageAttributeValue) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1353,15 +1447,15 @@ impl NextTokenDeserializer {
 }
 /// <p>Input for the OptInPhoneNumber action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct OptInPhoneNumberInput {
+pub struct OptInPhoneNumberRequest {
     /// <p>The phone number to opt in.</p>
     pub phone_number: String,
 }
 
-/// Serialize `OptInPhoneNumberInput` contents to a `SignedRequest`.
-struct OptInPhoneNumberInputSerializer;
-impl OptInPhoneNumberInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &OptInPhoneNumberInput) {
+/// Serialize `OptInPhoneNumberRequest` contents to a `SignedRequest`.
+struct OptInPhoneNumberRequestSerializer;
+impl OptInPhoneNumberRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &OptInPhoneNumberRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1468,7 +1562,7 @@ impl ProtocolDeserializer {
 }
 /// <p>Input for Publish action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PublishInput {
+pub struct PublishRequest {
     /// <p><p>The message you want to send.</p> <important> <p>The <code>Message</code> parameter is always a string. If you set <code>MessageStructure</code> to <code>json</code>, you must string-encode the <code>Message</code> parameter.</p> </important> <p>If you are publishing to a topic and you want to send the same message to all transport protocols, include the text of the message as a String value. If you want to send different messages for each transport protocol, set the value of the <code>MessageStructure</code> parameter to <code>json</code> and use a JSON object for the <code>Message</code> parameter. </p> <p/> <p>Constraints:</p> <ul> <li> <p>With the exception of SMS, messages must be UTF-8 encoded strings and at most 256 KB in size (262,144 bytes, not 262,144 characters).</p> </li> <li> <p>For SMS, each message can contain up to 140 characters. This character limit depends on the encoding schema. For example, an SMS message can contain 160 GSM characters, 140 ASCII characters, or 70 UCS-2 characters.</p> <p>If you publish a message that exceeds this size limit, Amazon SNS sends the message as multiple messages, each fitting within the size limit. Messages aren&#39;t truncated mid-word but are cut off at whole-word boundaries.</p> <p>The total size limit for a single SMS <code>Publish</code> action is 1,600 characters.</p> </li> </ul> <p>JSON-specific constraints:</p> <ul> <li> <p>Keys in the JSON object that correspond to supported transport protocols must have simple JSON string values.</p> </li> <li> <p>The values will be parsed (unescaped) before they are used in outgoing messages.</p> </li> <li> <p>Outbound notifications are JSON encoded (meaning that the characters will be reescaped for sending).</p> </li> <li> <p>Values have a minimum length of 0 (the empty string, &quot;&quot;, is allowed).</p> </li> <li> <p>Values have a maximum length bounded by the overall message size (so, including multiple protocols may limit message sizes).</p> </li> <li> <p>Non-string values will cause the key to be ignored.</p> </li> <li> <p>Keys that do not correspond to supported transport protocols are ignored.</p> </li> <li> <p>Duplicate keys are not allowed.</p> </li> <li> <p>Failure to parse or validate any key or value in the message will cause the <code>Publish</code> call to return an error (no partial delivery).</p> </li> </ul></p>
     pub message: String,
     /// <p>Message attributes for Publish action.</p>
@@ -1485,10 +1579,10 @@ pub struct PublishInput {
     pub topic_arn: Option<String>,
 }
 
-/// Serialize `PublishInput` contents to a `SignedRequest`.
-struct PublishInputSerializer;
-impl PublishInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PublishInput) {
+/// Serialize `PublishRequest` contents to a `SignedRequest`.
+struct PublishRequestSerializer;
+impl PublishRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &PublishRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1547,17 +1641,17 @@ impl PublishResponseDeserializer {
 }
 /// <p>Input for RemovePermission action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RemovePermissionInput {
+pub struct RemovePermissionRequest {
     /// <p>The unique label of the statement you want to remove.</p>
     pub label: String,
     /// <p>The ARN of the topic whose access control policy you wish to modify.</p>
     pub topic_arn: String,
 }
 
-/// Serialize `RemovePermissionInput` contents to a `SignedRequest`.
-struct RemovePermissionInputSerializer;
-impl RemovePermissionInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RemovePermissionInput) {
+/// Serialize `RemovePermissionRequest` contents to a `SignedRequest`.
+struct RemovePermissionRequestSerializer;
+impl RemovePermissionRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &RemovePermissionRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1568,19 +1662,32 @@ impl RemovePermissionInputSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RemovePermissionResponse {}
+
+struct RemovePermissionResponseDeserializer;
+impl RemovePermissionResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RemovePermissionResponse, XmlParseError> {
+        Ok(RemovePermissionResponse::default())
+    }
+}
 /// <p>Input for SetEndpointAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetEndpointAttributesInput {
+pub struct SetEndpointAttributesRequest {
     /// <p><p>A map of the endpoint attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>CustomUserData</code> – arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p> </li> <li> <p> <code>Enabled</code> – flag that enables/disables delivery to the endpoint. Amazon SNS will set this to false when a notification service indicates to Amazon SNS that the endpoint is invalid. Users can set it back to true, typically after updating Token.</p> </li> <li> <p> <code>Token</code> – device token, also referred to as a registration id, for an app and mobile device. This is returned from the notification service when an app and mobile device are registered with the notification service.</p> </li> </ul></p>
     pub attributes: ::std::collections::HashMap<String, String>,
     /// <p>EndpointArn used for SetEndpointAttributes action.</p>
     pub endpoint_arn: String,
 }
 
-/// Serialize `SetEndpointAttributesInput` contents to a `SignedRequest`.
-struct SetEndpointAttributesInputSerializer;
-impl SetEndpointAttributesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetEndpointAttributesInput) {
+/// Serialize `SetEndpointAttributesRequest` contents to a `SignedRequest`.
+struct SetEndpointAttributesRequestSerializer;
+impl SetEndpointAttributesRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SetEndpointAttributesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1595,19 +1702,36 @@ impl SetEndpointAttributesInputSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SetEndpointAttributesResponse {}
+
+struct SetEndpointAttributesResponseDeserializer;
+impl SetEndpointAttributesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SetEndpointAttributesResponse, XmlParseError> {
+        Ok(SetEndpointAttributesResponse::default())
+    }
+}
 /// <p>Input for SetPlatformApplicationAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetPlatformApplicationAttributesInput {
+pub struct SetPlatformApplicationAttributesRequest {
     /// <p><p>A map of the platform application attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>PlatformCredential</code> – The credential received from the notification service. For APNS/APNS<em>SANDBOX, PlatformCredential is private key. For GCM, PlatformCredential is &quot;API key&quot;. For ADM, PlatformCredential is &quot;client secret&quot;.</p> </li> <li> <p> <code>PlatformPrincipal</code> – The principal received from the notification service. For APNS/APNS</em>SANDBOX, PlatformPrincipal is SSL certificate. For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is &quot;client id&quot;.</p> </li> <li> <p> <code>EventEndpointCreated</code> – Topic ARN to which EndpointCreated event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointDeleted</code> – Topic ARN to which EndpointDeleted event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointUpdated</code> – Topic ARN to which EndpointUpdate event notifications should be sent.</p> </li> <li> <p> <code>EventDeliveryFailure</code> – Topic ARN to which DeliveryFailure event notifications should be sent upon Direct Publish delivery failure (permanent) to one of the application&#39;s endpoints.</p> </li> <li> <p> <code>SuccessFeedbackRoleArn</code> – IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>FailureFeedbackRoleArn</code> – IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>SuccessFeedbackSampleRate</code> – Sample rate percentage (0-100) of successfully delivered messages.</p> </li> </ul></p>
     pub attributes: ::std::collections::HashMap<String, String>,
     /// <p>PlatformApplicationArn for SetPlatformApplicationAttributes action.</p>
     pub platform_application_arn: String,
 }
 
-/// Serialize `SetPlatformApplicationAttributesInput` contents to a `SignedRequest`.
-struct SetPlatformApplicationAttributesInputSerializer;
-impl SetPlatformApplicationAttributesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetPlatformApplicationAttributesInput) {
+/// Serialize `SetPlatformApplicationAttributesRequest` contents to a `SignedRequest`.
+struct SetPlatformApplicationAttributesRequestSerializer;
+impl SetPlatformApplicationAttributesRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &SetPlatformApplicationAttributesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1625,17 +1749,30 @@ impl SetPlatformApplicationAttributesInputSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SetPlatformApplicationAttributesResponse {}
+
+struct SetPlatformApplicationAttributesResponseDeserializer;
+impl SetPlatformApplicationAttributesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SetPlatformApplicationAttributesResponse, XmlParseError> {
+        Ok(SetPlatformApplicationAttributesResponse::default())
+    }
+}
 /// <p>The input for the SetSMSAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetSMSAttributesInput {
+pub struct SetSMSAttributesRequest {
     /// <p>The default settings for sending SMS messages from your account. You can set values for the following attribute names:</p> <p> <code>MonthlySpendLimit</code> – The maximum amount in USD that you are willing to spend each month to send SMS messages. When Amazon SNS determines that sending an SMS message would incur a cost that exceeds this limit, it stops sending SMS messages within minutes.</p> <important> <p>Amazon SNS stops sending SMS messages within minutes of the limit being crossed. During that interval, if you continue to send SMS messages, you will incur costs that exceed your limit.</p> </important> <p>By default, the spend limit is set to the maximum allowed by Amazon SNS. If you want to raise the limit, submit an <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=service-limit-increase&amp;limitType=service-code-sns">SNS Limit Increase case</a>. For <b>New limit value</b>, enter your desired monthly spend limit. In the <b>Use Case Description</b> field, explain that you are requesting an SMS monthly spend limit increase.</p> <p> <code>DeliveryStatusIAMRole</code> – The ARN of the IAM role that allows Amazon SNS to write logs about SMS deliveries in CloudWatch Logs. For each SMS message that you send, Amazon SNS writes a log that includes the message price, the success or failure status, the reason for failure (if the message failed), the message dwell time, and other information.</p> <p> <code>DeliveryStatusSuccessSamplingRate</code> – The percentage of successful SMS deliveries for which Amazon SNS will write logs in CloudWatch Logs. The value can be an integer from 0 - 100. For example, to write logs only for failed deliveries, set this value to <code>0</code>. To write logs for 10% of your successful deliveries, set it to <code>10</code>.</p> <p> <code>DefaultSenderID</code> – A string, such as your business brand, that is displayed as the sender on the receiving device. Support for sender IDs varies by country. The sender ID can be 1 - 11 alphanumeric characters, and it must contain at least one letter.</p> <p> <code>DefaultSMSType</code> – The type of SMS message that you will send by default. You can assign the following values:</p> <ul> <li> <p> <code>Promotional</code> – (Default) Noncritical messages, such as marketing messages. Amazon SNS optimizes the message delivery to incur the lowest cost.</p> </li> <li> <p> <code>Transactional</code> – Critical messages that support customer transactions, such as one-time passcodes for multi-factor authentication. Amazon SNS optimizes the message delivery to achieve the highest reliability.</p> </li> </ul> <p> <code>UsageReportS3Bucket</code> – The name of the Amazon S3 bucket to receive daily SMS usage reports from Amazon SNS. Each day, Amazon SNS will deliver a usage report as a CSV file to the bucket. The report includes the following information for each SMS message that was successfully delivered by your account:</p> <ul> <li> <p>Time that the message was published (in UTC)</p> </li> <li> <p>Message ID</p> </li> <li> <p>Destination phone number</p> </li> <li> <p>Message type</p> </li> <li> <p>Delivery status</p> </li> <li> <p>Message price (in USD)</p> </li> <li> <p>Part number (a message is split into multiple parts if it is too long for a single message)</p> </li> <li> <p>Total number of parts</p> </li> </ul> <p>To receive the report, the bucket must have a policy that allows the Amazon SNS service principle to perform the <code>s3:PutObject</code> and <code>s3:GetBucketLocation</code> actions.</p> <p>For an example bucket policy and usage report, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sms_stats.html">Monitoring SMS Activity</a> in the <i>Amazon SNS Developer Guide</i>.</p>
     pub attributes: ::std::collections::HashMap<String, String>,
 }
 
-/// Serialize `SetSMSAttributesInput` contents to a `SignedRequest`.
-struct SetSMSAttributesInputSerializer;
-impl SetSMSAttributesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetSMSAttributesInput) {
+/// Serialize `SetSMSAttributesRequest` contents to a `SignedRequest`.
+struct SetSMSAttributesRequestSerializer;
+impl SetSMSAttributesRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SetSMSAttributesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1671,7 +1808,7 @@ impl SetSMSAttributesResponseDeserializer {
 }
 /// <p>Input for SetSubscriptionAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetSubscriptionAttributesInput {
+pub struct SetSubscriptionAttributesRequest {
     /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetTopicAttributes</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>FilterPolicy</code> – The simple JSON object that lets your subscriber receive only a subset of messages, rather than receiving every message published to the topic.</p> </li> <li> <p> <code>RawMessageDelivery</code> – When set to <code>true</code>, enables raw message delivery to Amazon SQS or HTTP/S endpoints. This eliminates the need for the endpoints to process JSON formatting, which is otherwise created for Amazon SNS metadata.</p> </li> </ul></p>
     pub attribute_name: String,
     /// <p>The new value for the attribute in JSON format.</p>
@@ -1680,10 +1817,14 @@ pub struct SetSubscriptionAttributesInput {
     pub subscription_arn: String,
 }
 
-/// Serialize `SetSubscriptionAttributesInput` contents to a `SignedRequest`.
-struct SetSubscriptionAttributesInputSerializer;
-impl SetSubscriptionAttributesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetSubscriptionAttributesInput) {
+/// Serialize `SetSubscriptionAttributesRequest` contents to a `SignedRequest`.
+struct SetSubscriptionAttributesRequestSerializer;
+impl SetSubscriptionAttributesRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &SetSubscriptionAttributesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1703,9 +1844,22 @@ impl SetSubscriptionAttributesInputSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SetSubscriptionAttributesResponse {}
+
+struct SetSubscriptionAttributesResponseDeserializer;
+impl SetSubscriptionAttributesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SetSubscriptionAttributesResponse, XmlParseError> {
+        Ok(SetSubscriptionAttributesResponse::default())
+    }
+}
 /// <p>Input for SetTopicAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetTopicAttributesInput {
+pub struct SetTopicAttributesRequest {
     /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetTopicAttributes</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>DisplayName</code> – The display name to use for a topic with SMS subscriptions.</p> </li> <li> <p> <code>Policy</code> – The policy that defines who can access your topic. By default, only the topic owner can publish or subscribe to the topic.</p> </li> </ul> <p>The following attribute applies only to <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html">server-side-encryption</a>:</p> <ul> <li> <p> <code>KmsMasterKeyId</code> - The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms">Key Terms</a>. For more examples, see <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters">KeyId</a> in the <i>AWS Key Management Service API Reference</i>. </p> </li> </ul></p>
     pub attribute_name: String,
     /// <p>The new value for the attribute.</p>
@@ -1714,10 +1868,10 @@ pub struct SetTopicAttributesInput {
     pub topic_arn: String,
 }
 
-/// Serialize `SetTopicAttributesInput` contents to a `SignedRequest`.
-struct SetTopicAttributesInputSerializer;
-impl SetTopicAttributesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetTopicAttributesInput) {
+/// Serialize `SetTopicAttributesRequest` contents to a `SignedRequest`.
+struct SetTopicAttributesRequestSerializer;
+impl SetTopicAttributesRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SetTopicAttributesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1734,6 +1888,19 @@ impl SetTopicAttributesInputSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SetTopicAttributesResponse {}
+
+struct SetTopicAttributesResponseDeserializer;
+impl SetTopicAttributesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SetTopicAttributesResponse, XmlParseError> {
+        Ok(SetTopicAttributesResponse::default())
+    }
+}
 struct StringDeserializer;
 impl StringDeserializer {
     #[allow(unused_variables)]
@@ -1747,7 +1914,7 @@ impl StringDeserializer {
 }
 /// <p>Input for Subscribe action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SubscribeInput {
+pub struct SubscribeRequest {
     /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetTopicAttributes</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>FilterPolicy</code> – The simple JSON object that lets your subscriber receive only a subset of messages, rather than receiving every message published to the topic.</p> </li> <li> <p> <code>RawMessageDelivery</code> – When set to <code>true</code>, enables raw message delivery to Amazon SQS or HTTP/S endpoints. This eliminates the need for the endpoints to process JSON formatting, which is otherwise created for Amazon SNS metadata.</p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
     /// <p><p>The endpoint that you want to receive notifications. Endpoints vary by protocol:</p> <ul> <li> <p>For the <code>http</code> protocol, the endpoint is an URL beginning with &quot;https://&quot;</p> </li> <li> <p>For the <code>https</code> protocol, the endpoint is a URL beginning with &quot;https://&quot;</p> </li> <li> <p>For the <code>email</code> protocol, the endpoint is an email address</p> </li> <li> <p>For the <code>email-json</code> protocol, the endpoint is an email address</p> </li> <li> <p>For the <code>sms</code> protocol, the endpoint is a phone number of an SMS-enabled device</p> </li> <li> <p>For the <code>sqs</code> protocol, the endpoint is the ARN of an Amazon SQS queue</p> </li> <li> <p>For the <code>application</code> protocol, the endpoint is the EndpointArn of a mobile app and device.</p> </li> <li> <p>For the <code>lambda</code> protocol, the endpoint is the ARN of an AWS Lambda function.</p> </li> </ul></p>
@@ -1760,10 +1927,10 @@ pub struct SubscribeInput {
     pub topic_arn: String,
 }
 
-/// Serialize `SubscribeInput` contents to a `SignedRequest`.
-struct SubscribeInputSerializer;
-impl SubscribeInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SubscribeInput) {
+/// Serialize `SubscribeRequest` contents to a `SignedRequest`.
+struct SubscribeRequestSerializer;
+impl SubscribeRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SubscribeRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1905,7 +2072,7 @@ impl SubscriptionAttributesMapDeserializer {
 struct SubscriptionAttributesMapSerializer;
 impl SubscriptionAttributesMapSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &::std::collections::HashMap<String, String>,
     ) {
@@ -1965,7 +2132,7 @@ impl TagDeserializer {
 /// Serialize `Tag` contents to a `SignedRequest`.
 struct TagSerializer;
 impl TagSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Tag) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Tag) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1991,7 +2158,7 @@ impl TagKeyDeserializer {
 /// Serialize `TagKeyList` contents to a `SignedRequest`.
 struct TagKeyListSerializer;
 impl TagKeyListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -2020,7 +2187,7 @@ impl TagListDeserializer {
 /// Serialize `TagList` contents to a `SignedRequest`.
 struct TagListSerializer;
 impl TagListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<Tag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             TagSerializer::serialize(params, &key, obj);
@@ -2039,7 +2206,7 @@ pub struct TagResourceRequest {
 /// Serialize `TagResourceRequest` contents to a `SignedRequest`.
 struct TagResourceRequestSerializer;
 impl TagResourceRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TagResourceRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &TagResourceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2141,7 +2308,7 @@ impl TopicAttributesMapDeserializer {
 struct TopicAttributesMapSerializer;
 impl TopicAttributesMapSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &::std::collections::HashMap<String, String>,
     ) {
@@ -2172,15 +2339,15 @@ impl TopicsListDeserializer {
 }
 /// <p>Input for Unsubscribe action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct UnsubscribeInput {
+pub struct UnsubscribeRequest {
     /// <p>The ARN of the subscription to be deleted.</p>
     pub subscription_arn: String,
 }
 
-/// Serialize `UnsubscribeInput` contents to a `SignedRequest`.
-struct UnsubscribeInputSerializer;
-impl UnsubscribeInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &UnsubscribeInput) {
+/// Serialize `UnsubscribeRequest` contents to a `SignedRequest`.
+struct UnsubscribeRequestSerializer;
+impl UnsubscribeRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &UnsubscribeRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2194,6 +2361,19 @@ impl UnsubscribeInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct UnsubscribeResponse {}
+
+struct UnsubscribeResponseDeserializer;
+impl UnsubscribeResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UnsubscribeResponse, XmlParseError> {
+        Ok(UnsubscribeResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the topic from which to remove tags.</p>
     pub resource_arn: String,
@@ -2204,7 +2384,7 @@ pub struct UntagResourceRequest {
 /// Serialize `UntagResourceRequest` contents to a `SignedRequest`.
 struct UntagResourceRequestSerializer;
 impl UntagResourceRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &UntagResourceRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &UntagResourceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4844,187 +5024,170 @@ impl Error for UntagResourceError {
 /// Trait representing the capabilities of the Amazon SNS API. Amazon SNS clients implement this trait.
 pub trait Sns {
     /// <p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>
-    fn add_permission(&self, input: AddPermissionInput) -> RusotoFuture<(), AddPermissionError>;
+    fn add_permission(&self, input: AddPermissionRequest) -> Request<AddPermissionRequest>;
 
     /// <p>Accepts a phone number and indicates whether the phone holder has opted out of receiving SMS messages from your account. You cannot send SMS messages to a number that is opted out.</p> <p>To resume sending messages, you can opt in the number by using the <code>OptInPhoneNumber</code> action.</p>
     fn check_if_phone_number_is_opted_out(
         &self,
-        input: CheckIfPhoneNumberIsOptedOutInput,
-    ) -> RusotoFuture<CheckIfPhoneNumberIsOptedOutResponse, CheckIfPhoneNumberIsOptedOutError>;
+        input: CheckIfPhoneNumberIsOptedOutRequest,
+    ) -> Request<CheckIfPhoneNumberIsOptedOutRequest>;
 
     /// <p>Verifies an endpoint owner's intent to receive messages by validating the token sent to the endpoint by an earlier <code>Subscribe</code> action. If the token is valid, the action creates a new subscription and returns its Amazon Resource Name (ARN). This call requires an AWS signature only when the <code>AuthenticateOnUnsubscribe</code> flag is set to "true".</p>
     fn confirm_subscription(
         &self,
-        input: ConfirmSubscriptionInput,
-    ) -> RusotoFuture<ConfirmSubscriptionResponse, ConfirmSubscriptionError>;
+        input: ConfirmSubscriptionRequest,
+    ) -> Request<ConfirmSubscriptionRequest>;
 
     /// <p>Creates a platform application object for one of the supported push notification services, such as APNS and FCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is "SSL certificate". For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is "client id". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is "Package Security Identifier". For MPNS, PlatformPrincipal is "TLS certificate". For Baidu, PlatformPrincipal is "API key".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is "private key". For GCM, PlatformCredential is "API key". For ADM, PlatformCredential is "client secret". For WNS, PlatformCredential is "secret key". For MPNS, PlatformCredential is "private key". For Baidu, PlatformCredential is "secret key". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For more information about obtaining the PlatformPrincipal and PlatformCredential for each of the supported push notification services, see <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-apns.html">Getting Started with Apple Push Notification Service</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-adm.html">Getting Started with Amazon Device Messaging</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-baidu.html">Getting Started with Baidu Cloud Push</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-gcm.html">Getting Started with Google Cloud Messaging for Android</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-mpns.html">Getting Started with MPNS</a>, or <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-wns.html">Getting Started with WNS</a>. </p>
     fn create_platform_application(
         &self,
-        input: CreatePlatformApplicationInput,
-    ) -> RusotoFuture<CreatePlatformApplicationResponse, CreatePlatformApplicationError>;
+        input: CreatePlatformApplicationRequest,
+    ) -> Request<CreatePlatformApplicationRequest>;
 
     /// <p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as GCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html">Creating an Amazon SNS Endpoint for Baidu</a>. </p>
     fn create_platform_endpoint(
         &self,
-        input: CreatePlatformEndpointInput,
-    ) -> RusotoFuture<CreateEndpointResponse, CreatePlatformEndpointError>;
+        input: CreatePlatformEndpointRequest,
+    ) -> Request<CreatePlatformEndpointRequest>;
 
     /// <p>Creates a topic to which notifications can be published. Users can create at most 100,000 topics. For more information, see <a href="http://aws.amazon.com/sns/">https://aws.amazon.com/sns</a>. This action is idempotent, so if the requester already owns a topic with the specified name, that topic's ARN is returned without creating a new topic.</p>
-    fn create_topic(
-        &self,
-        input: CreateTopicInput,
-    ) -> RusotoFuture<CreateTopicResponse, CreateTopicError>;
+    fn create_topic(&self, input: CreateTopicRequest) -> Request<CreateTopicRequest>;
 
     /// <p>Deletes the endpoint for a device and mobile app from Amazon SNS. This action is idempotent. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When you delete an endpoint that is also subscribed to a topic, then you must also unsubscribe the endpoint from the topic.</p>
-    fn delete_endpoint(&self, input: DeleteEndpointInput) -> RusotoFuture<(), DeleteEndpointError>;
+    fn delete_endpoint(&self, input: DeleteEndpointRequest) -> Request<DeleteEndpointRequest>;
 
     /// <p>Deletes a platform application object for one of the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn delete_platform_application(
         &self,
-        input: DeletePlatformApplicationInput,
-    ) -> RusotoFuture<(), DeletePlatformApplicationError>;
+        input: DeletePlatformApplicationRequest,
+    ) -> Request<DeletePlatformApplicationRequest>;
 
     /// <p>Deletes a topic and all its subscriptions. Deleting a topic might prevent some messages previously sent to the topic from being delivered to subscribers. This action is idempotent, so deleting a topic that does not exist does not result in an error.</p>
-    fn delete_topic(&self, input: DeleteTopicInput) -> RusotoFuture<(), DeleteTopicError>;
+    fn delete_topic(&self, input: DeleteTopicRequest) -> Request<DeleteTopicRequest>;
 
     /// <p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn get_endpoint_attributes(
         &self,
-        input: GetEndpointAttributesInput,
-    ) -> RusotoFuture<GetEndpointAttributesResponse, GetEndpointAttributesError>;
+        input: GetEndpointAttributesRequest,
+    ) -> Request<GetEndpointAttributesRequest>;
 
     /// <p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn get_platform_application_attributes(
         &self,
-        input: GetPlatformApplicationAttributesInput,
-    ) -> RusotoFuture<GetPlatformApplicationAttributesResponse, GetPlatformApplicationAttributesError>;
+        input: GetPlatformApplicationAttributesRequest,
+    ) -> Request<GetPlatformApplicationAttributesRequest>;
 
     /// <p>Returns the settings for sending SMS messages from your account.</p> <p>These settings are set with the <code>SetSMSAttributes</code> action.</p>
     fn get_sms_attributes(
         &self,
-        input: GetSMSAttributesInput,
-    ) -> RusotoFuture<GetSMSAttributesResponse, GetSMSAttributesError>;
+        input: GetSMSAttributesRequest,
+    ) -> Request<GetSMSAttributesRequest>;
 
     /// <p>Returns all of the properties of a subscription.</p>
     fn get_subscription_attributes(
         &self,
-        input: GetSubscriptionAttributesInput,
-    ) -> RusotoFuture<GetSubscriptionAttributesResponse, GetSubscriptionAttributesError>;
+        input: GetSubscriptionAttributesRequest,
+    ) -> Request<GetSubscriptionAttributesRequest>;
 
     /// <p>Returns all of the properties of a topic. Topic properties returned might differ based on the authorization of the user.</p>
     fn get_topic_attributes(
         &self,
-        input: GetTopicAttributesInput,
-    ) -> RusotoFuture<GetTopicAttributesResponse, GetTopicAttributesError>;
+        input: GetTopicAttributesRequest,
+    ) -> Request<GetTopicAttributesRequest>;
 
     /// <p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as GCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>This action is throttled at 30 transactions per second (TPS).</p>
     fn list_endpoints_by_platform_application(
         &self,
-        input: ListEndpointsByPlatformApplicationInput,
-    ) -> RusotoFuture<
-        ListEndpointsByPlatformApplicationResponse,
-        ListEndpointsByPlatformApplicationError,
-    >;
+        input: ListEndpointsByPlatformApplicationRequest,
+    ) -> Request<ListEndpointsByPlatformApplicationRequest>;
 
     /// <p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>
     fn list_phone_numbers_opted_out(
         &self,
-        input: ListPhoneNumbersOptedOutInput,
-    ) -> RusotoFuture<ListPhoneNumbersOptedOutResponse, ListPhoneNumbersOptedOutError>;
+        input: ListPhoneNumbersOptedOutRequest,
+    ) -> Request<ListPhoneNumbersOptedOutRequest>;
 
     /// <p>Lists the platform application objects for the supported push notification services, such as APNS and GCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>This action is throttled at 15 transactions per second (TPS).</p>
     fn list_platform_applications(
         &self,
-        input: ListPlatformApplicationsInput,
-    ) -> RusotoFuture<ListPlatformApplicationsResponse, ListPlatformApplicationsError>;
+        input: ListPlatformApplicationsRequest,
+    ) -> Request<ListPlatformApplicationsRequest>;
 
     /// <p>Returns a list of the requester's subscriptions. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptions</code> call to get further results.</p> <p>This action is throttled at 30 transactions per second (TPS).</p>
     fn list_subscriptions(
         &self,
-        input: ListSubscriptionsInput,
-    ) -> RusotoFuture<ListSubscriptionsResponse, ListSubscriptionsError>;
+        input: ListSubscriptionsRequest,
+    ) -> Request<ListSubscriptionsRequest>;
 
     /// <p>Returns a list of the subscriptions to a specific topic. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptionsByTopic</code> call to get further results.</p> <p>This action is throttled at 30 transactions per second (TPS).</p>
     fn list_subscriptions_by_topic(
         &self,
-        input: ListSubscriptionsByTopicInput,
-    ) -> RusotoFuture<ListSubscriptionsByTopicResponse, ListSubscriptionsByTopicError>;
+        input: ListSubscriptionsByTopicRequest,
+    ) -> Request<ListSubscriptionsByTopicRequest>;
 
     /// <p>List all tags added to the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon Simple Notification Service Developer Guide</i>.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Returns a list of the requester's topics. Each call returns a limited list of topics, up to 100. If there are more topics, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListTopics</code> call to get further results.</p> <p>This action is throttled at 30 transactions per second (TPS).</p>
-    fn list_topics(
-        &self,
-        input: ListTopicsInput,
-    ) -> RusotoFuture<ListTopicsResponse, ListTopicsError>;
+    fn list_topics(&self, input: ListTopicsRequest) -> Request<ListTopicsRequest>;
 
     /// <p>Use this request to opt in a phone number that is opted out, which enables you to resume sending SMS messages to the number.</p> <p>You can opt in a phone number only once every 30 days.</p>
     fn opt_in_phone_number(
         &self,
-        input: OptInPhoneNumberInput,
-    ) -> RusotoFuture<OptInPhoneNumberResponse, OptInPhoneNumberError>;
+        input: OptInPhoneNumberRequest,
+    ) -> Request<OptInPhoneNumberRequest>;
 
     /// <p>Sends a message to an Amazon SNS topic or sends a text message (SMS message) directly to a phone number. </p> <p>If you send a message to a topic, Amazon SNS delivers the message to each endpoint that is subscribed to the topic. The format of the message depends on the notification protocol for each subscribed endpoint.</p> <p>When a <code>messageId</code> is returned, the message has been saved and Amazon SNS will attempt to deliver it shortly.</p> <p>To use the <code>Publish</code> action for sending a message to a mobile endpoint, such as an app on a Kindle device or mobile phone, you must specify the EndpointArn for the TargetArn parameter. The EndpointArn is returned when making a call with the <code>CreatePlatformEndpoint</code> action. </p> <p>For more information about formatting messages, see <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html">Send Custom Platform-Specific Payloads in Messages to Mobile Devices</a>. </p>
-    fn publish(&self, input: PublishInput) -> RusotoFuture<PublishResponse, PublishError>;
+    fn publish(&self, input: PublishRequest) -> Request<PublishRequest>;
 
     /// <p>Removes a statement from a topic's access control policy.</p>
-    fn remove_permission(
-        &self,
-        input: RemovePermissionInput,
-    ) -> RusotoFuture<(), RemovePermissionError>;
+    fn remove_permission(&self, input: RemovePermissionRequest)
+        -> Request<RemovePermissionRequest>;
 
     /// <p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn set_endpoint_attributes(
         &self,
-        input: SetEndpointAttributesInput,
-    ) -> RusotoFuture<(), SetEndpointAttributesError>;
+        input: SetEndpointAttributesRequest,
+    ) -> Request<SetEndpointAttributesRequest>;
 
     /// <p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>
     fn set_platform_application_attributes(
         &self,
-        input: SetPlatformApplicationAttributesInput,
-    ) -> RusotoFuture<(), SetPlatformApplicationAttributesError>;
+        input: SetPlatformApplicationAttributesRequest,
+    ) -> Request<SetPlatformApplicationAttributesRequest>;
 
     /// <p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html">Sending an SMS Message</a> in the <i>Amazon SNS Developer Guide</i>.</p>
     fn set_sms_attributes(
         &self,
-        input: SetSMSAttributesInput,
-    ) -> RusotoFuture<SetSMSAttributesResponse, SetSMSAttributesError>;
+        input: SetSMSAttributesRequest,
+    ) -> Request<SetSMSAttributesRequest>;
 
     /// <p>Allows a subscription owner to set an attribute of the subscription to a new value.</p>
     fn set_subscription_attributes(
         &self,
-        input: SetSubscriptionAttributesInput,
-    ) -> RusotoFuture<(), SetSubscriptionAttributesError>;
+        input: SetSubscriptionAttributesRequest,
+    ) -> Request<SetSubscriptionAttributesRequest>;
 
     /// <p>Allows a topic owner to set an attribute of the topic to a new value.</p>
     fn set_topic_attributes(
         &self,
-        input: SetTopicAttributesInput,
-    ) -> RusotoFuture<(), SetTopicAttributesError>;
+        input: SetTopicAttributesRequest,
+    ) -> Request<SetTopicAttributesRequest>;
 
     /// <p>Prepares to subscribe an endpoint by sending the endpoint a confirmation message. To actually create a subscription, the endpoint owner must call the <code>ConfirmSubscription</code> action with the token from the confirmation message. Confirmation tokens are valid for three days.</p> <p>This action is throttled at 100 transactions per second (TPS).</p>
-    fn subscribe(&self, input: SubscribeInput) -> RusotoFuture<SubscribeResponse, SubscribeError>;
+    fn subscribe(&self, input: SubscribeRequest) -> Request<SubscribeRequest>;
 
     /// <p>Add tags to the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon SNS Developer Guide</i>.</p> <p>When you use topic tags, keep the following guidelines in mind:</p> <ul> <li> <p>Adding more than 50 tags to a topic isn't recommended.</p> </li> <li> <p>Tags don't have any semantic meaning. Amazon SNS interprets tags as character strings.</p> </li> <li> <p>Tags are case-sensitive.</p> </li> <li> <p>A new tag with a key identical to that of an existing tag overwrites the existing tag.</p> </li> <li> <p>Tagging actions are limited to 10 TPS per AWS account. If your application requires a higher throughput, file a <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=technical">technical support request</a>.</p> </li> </ul> <p>For a full list of tag restrictions, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-limits.html#limits-topics">Limits Related to Topics</a> in the <i>Amazon SNS Developer Guide</i>.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Deletes a subscription. If the subscription requires authentication for deletion, only the owner of the subscription or the topic's owner can unsubscribe, and an AWS signature is required. If the <code>Unsubscribe</code> call does not require authentication and the requester is not the subscription owner, a final cancellation message is delivered to the endpoint, so that the endpoint owner can easily resubscribe to the topic if the <code>Unsubscribe</code> request was unintended.</p> <p>This action is throttled at 100 transactions per second (TPS).</p>
-    fn unsubscribe(&self, input: UnsubscribeInput) -> RusotoFuture<(), UnsubscribeError>;
+    fn unsubscribe(&self, input: UnsubscribeRequest) -> Request<UnsubscribeRequest>;
 
     /// <p>Remove tags from the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon SNS Developer Guide</i>.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 }
 /// A client for the Amazon SNS API.
 #[derive(Clone)]
@@ -5064,17 +5227,259 @@ impl SnsClient {
 
 impl Sns for SnsClient {
     /// <p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>
-    fn add_permission(&self, input: AddPermissionInput) -> RusotoFuture<(), AddPermissionError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+    fn add_permission(&self, input: AddPermissionRequest) -> Request<AddPermissionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Accepts a phone number and indicates whether the phone holder has opted out of receiving SMS messages from your account. You cannot send SMS messages to a number that is opted out.</p> <p>To resume sending messages, you can opt in the number by using the <code>OptInPhoneNumber</code> action.</p>
+    fn check_if_phone_number_is_opted_out(
+        &self,
+        input: CheckIfPhoneNumberIsOptedOutRequest,
+    ) -> Request<CheckIfPhoneNumberIsOptedOutRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Verifies an endpoint owner's intent to receive messages by validating the token sent to the endpoint by an earlier <code>Subscribe</code> action. If the token is valid, the action creates a new subscription and returns its Amazon Resource Name (ARN). This call requires an AWS signature only when the <code>AuthenticateOnUnsubscribe</code> flag is set to "true".</p>
+    fn confirm_subscription(
+        &self,
+        input: ConfirmSubscriptionRequest,
+    ) -> Request<ConfirmSubscriptionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a platform application object for one of the supported push notification services, such as APNS and FCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is "SSL certificate". For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is "client id". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is "Package Security Identifier". For MPNS, PlatformPrincipal is "TLS certificate". For Baidu, PlatformPrincipal is "API key".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is "private key". For GCM, PlatformCredential is "API key". For ADM, PlatformCredential is "client secret". For WNS, PlatformCredential is "secret key". For MPNS, PlatformCredential is "private key". For Baidu, PlatformCredential is "secret key". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For more information about obtaining the PlatformPrincipal and PlatformCredential for each of the supported push notification services, see <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-apns.html">Getting Started with Apple Push Notification Service</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-adm.html">Getting Started with Amazon Device Messaging</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-baidu.html">Getting Started with Baidu Cloud Push</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-gcm.html">Getting Started with Google Cloud Messaging for Android</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-mpns.html">Getting Started with MPNS</a>, or <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-wns.html">Getting Started with WNS</a>. </p>
+    fn create_platform_application(
+        &self,
+        input: CreatePlatformApplicationRequest,
+    ) -> Request<CreatePlatformApplicationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as GCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html">Creating an Amazon SNS Endpoint for Baidu</a>. </p>
+    fn create_platform_endpoint(
+        &self,
+        input: CreatePlatformEndpointRequest,
+    ) -> Request<CreatePlatformEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a topic to which notifications can be published. Users can create at most 100,000 topics. For more information, see <a href="http://aws.amazon.com/sns/">https://aws.amazon.com/sns</a>. This action is idempotent, so if the requester already owns a topic with the specified name, that topic's ARN is returned without creating a new topic.</p>
+    fn create_topic(&self, input: CreateTopicRequest) -> Request<CreateTopicRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the endpoint for a device and mobile app from Amazon SNS. This action is idempotent. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When you delete an endpoint that is also subscribed to a topic, then you must also unsubscribe the endpoint from the topic.</p>
+    fn delete_endpoint(&self, input: DeleteEndpointRequest) -> Request<DeleteEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a platform application object for one of the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
+    fn delete_platform_application(
+        &self,
+        input: DeletePlatformApplicationRequest,
+    ) -> Request<DeletePlatformApplicationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a topic and all its subscriptions. Deleting a topic might prevent some messages previously sent to the topic from being delivered to subscribers. This action is idempotent, so deleting a topic that does not exist does not result in an error.</p>
+    fn delete_topic(&self, input: DeleteTopicRequest) -> Request<DeleteTopicRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
+    fn get_endpoint_attributes(
+        &self,
+        input: GetEndpointAttributesRequest,
+    ) -> Request<GetEndpointAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
+    fn get_platform_application_attributes(
+        &self,
+        input: GetPlatformApplicationAttributesRequest,
+    ) -> Request<GetPlatformApplicationAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the settings for sending SMS messages from your account.</p> <p>These settings are set with the <code>SetSMSAttributes</code> action.</p>
+    fn get_sms_attributes(
+        &self,
+        input: GetSMSAttributesRequest,
+    ) -> Request<GetSMSAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns all of the properties of a subscription.</p>
+    fn get_subscription_attributes(
+        &self,
+        input: GetSubscriptionAttributesRequest,
+    ) -> Request<GetSubscriptionAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns all of the properties of a topic. Topic properties returned might differ based on the authorization of the user.</p>
+    fn get_topic_attributes(
+        &self,
+        input: GetTopicAttributesRequest,
+    ) -> Request<GetTopicAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as GCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>This action is throttled at 30 transactions per second (TPS).</p>
+    fn list_endpoints_by_platform_application(
+        &self,
+        input: ListEndpointsByPlatformApplicationRequest,
+    ) -> Request<ListEndpointsByPlatformApplicationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>
+    fn list_phone_numbers_opted_out(
+        &self,
+        input: ListPhoneNumbersOptedOutRequest,
+    ) -> Request<ListPhoneNumbersOptedOutRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the platform application objects for the supported push notification services, such as APNS and GCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>This action is throttled at 15 transactions per second (TPS).</p>
+    fn list_platform_applications(
+        &self,
+        input: ListPlatformApplicationsRequest,
+    ) -> Request<ListPlatformApplicationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of the requester's subscriptions. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptions</code> call to get further results.</p> <p>This action is throttled at 30 transactions per second (TPS).</p>
+    fn list_subscriptions(
+        &self,
+        input: ListSubscriptionsRequest,
+    ) -> Request<ListSubscriptionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of the subscriptions to a specific topic. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptionsByTopic</code> call to get further results.</p> <p>This action is throttled at 30 transactions per second (TPS).</p>
+    fn list_subscriptions_by_topic(
+        &self,
+        input: ListSubscriptionsByTopicRequest,
+    ) -> Request<ListSubscriptionsByTopicRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>List all tags added to the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon Simple Notification Service Developer Guide</i>.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of the requester's topics. Each call returns a limited list of topics, up to 100. If there are more topics, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListTopics</code> call to get further results.</p> <p>This action is throttled at 30 transactions per second (TPS).</p>
+    fn list_topics(&self, input: ListTopicsRequest) -> Request<ListTopicsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Use this request to opt in a phone number that is opted out, which enables you to resume sending SMS messages to the number.</p> <p>You can opt in a phone number only once every 30 days.</p>
+    fn opt_in_phone_number(
+        &self,
+        input: OptInPhoneNumberRequest,
+    ) -> Request<OptInPhoneNumberRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sends a message to an Amazon SNS topic or sends a text message (SMS message) directly to a phone number. </p> <p>If you send a message to a topic, Amazon SNS delivers the message to each endpoint that is subscribed to the topic. The format of the message depends on the notification protocol for each subscribed endpoint.</p> <p>When a <code>messageId</code> is returned, the message has been saved and Amazon SNS will attempt to deliver it shortly.</p> <p>To use the <code>Publish</code> action for sending a message to a mobile endpoint, such as an app on a Kindle device or mobile phone, you must specify the EndpointArn for the TargetArn parameter. The EndpointArn is returned when making a call with the <code>CreatePlatformEndpoint</code> action. </p> <p>For more information about formatting messages, see <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html">Send Custom Platform-Specific Payloads in Messages to Mobile Devices</a>. </p>
+    fn publish(&self, input: PublishRequest) -> Request<PublishRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes a statement from a topic's access control policy.</p>
+    fn remove_permission(
+        &self,
+        input: RemovePermissionRequest,
+    ) -> Request<RemovePermissionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
+    fn set_endpoint_attributes(
+        &self,
+        input: SetEndpointAttributesRequest,
+    ) -> Request<SetEndpointAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>
+    fn set_platform_application_attributes(
+        &self,
+        input: SetPlatformApplicationAttributesRequest,
+    ) -> Request<SetPlatformApplicationAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html">Sending an SMS Message</a> in the <i>Amazon SNS Developer Guide</i>.</p>
+    fn set_sms_attributes(
+        &self,
+        input: SetSMSAttributesRequest,
+    ) -> Request<SetSMSAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Allows a subscription owner to set an attribute of the subscription to a new value.</p>
+    fn set_subscription_attributes(
+        &self,
+        input: SetSubscriptionAttributesRequest,
+    ) -> Request<SetSubscriptionAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Allows a topic owner to set an attribute of the topic to a new value.</p>
+    fn set_topic_attributes(
+        &self,
+        input: SetTopicAttributesRequest,
+    ) -> Request<SetTopicAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Prepares to subscribe an endpoint by sending the endpoint a confirmation message. To actually create a subscription, the endpoint owner must call the <code>ConfirmSubscription</code> action with the token from the confirmation message. Confirmation tokens are valid for three days.</p> <p>This action is throttled at 100 transactions per second (TPS).</p>
+    fn subscribe(&self, input: SubscribeRequest) -> Request<SubscribeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Add tags to the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon SNS Developer Guide</i>.</p> <p>When you use topic tags, keep the following guidelines in mind:</p> <ul> <li> <p>Adding more than 50 tags to a topic isn't recommended.</p> </li> <li> <p>Tags don't have any semantic meaning. Amazon SNS interprets tags as character strings.</p> </li> <li> <p>Tags are case-sensitive.</p> </li> <li> <p>A new tag with a key identical to that of an existing tag overwrites the existing tag.</p> </li> <li> <p>Tagging actions are limited to 10 TPS per AWS account. If your application requires a higher throughput, file a <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=technical">technical support request</a>.</p> </li> </ul> <p>For a full list of tag restrictions, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-limits.html#limits-topics">Limits Related to Topics</a> in the <i>Amazon SNS Developer Guide</i>.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a subscription. If the subscription requires authentication for deletion, only the owner of the subscription or the topic's owner can unsubscribe, and an AWS signature is required. If the <code>Unsubscribe</code> call does not require authentication and the requester is not the subscription owner, a final cancellation message is delivered to the endpoint, so that the endpoint owner can easily resubscribe to the topic if the <code>Unsubscribe</code> request was unintended.</p> <p>This action is throttled at 100 transactions per second (TPS).</p>
+    fn unsubscribe(&self, input: UnsubscribeRequest) -> Request<UnsubscribeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Remove tags from the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon SNS Developer Guide</i>.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AddPermissionRequest {
+    type Output = AddPermissionResponse;
+    type Error = AddPermissionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AddPermission");
         params.put("Version", "2010-03-31");
-        AddPermissionInputSerializer::serialize(&mut params, "", &input);
+        AddPermissionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -5084,25 +5489,50 @@ impl Sns for SnsClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = AddPermissionResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = AddPermissionResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Accepts a phone number and indicates whether the phone holder has opted out of receiving SMS messages from your account. You cannot send SMS messages to a number that is opted out.</p> <p>To resume sending messages, you can opt in the number by using the <code>OptInPhoneNumber</code> action.</p>
-    fn check_if_phone_number_is_opted_out(
-        &self,
-        input: CheckIfPhoneNumberIsOptedOutInput,
-    ) -> RusotoFuture<CheckIfPhoneNumberIsOptedOutResponse, CheckIfPhoneNumberIsOptedOutError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for CheckIfPhoneNumberIsOptedOutRequest {
+    type Output = CheckIfPhoneNumberIsOptedOutResponse;
+    type Error = CheckIfPhoneNumberIsOptedOutError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CheckIfPhoneNumberIsOptedOut");
         params.put("Version", "2010-03-31");
-        CheckIfPhoneNumberIsOptedOutInputSerializer::serialize(&mut params, "", &input);
+        CheckIfPhoneNumberIsOptedOutRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CheckIfPhoneNumberIsOptedOutError::from_response(response))
@@ -5135,22 +5565,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Verifies an endpoint owner's intent to receive messages by validating the token sent to the endpoint by an earlier <code>Subscribe</code> action. If the token is valid, the action creates a new subscription and returns its Amazon Resource Name (ARN). This call requires an AWS signature only when the <code>AuthenticateOnUnsubscribe</code> flag is set to "true".</p>
-    fn confirm_subscription(
-        &self,
-        input: ConfirmSubscriptionInput,
-    ) -> RusotoFuture<ConfirmSubscriptionResponse, ConfirmSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for ConfirmSubscriptionRequest {
+    type Output = ConfirmSubscriptionResponse;
+    type Error = ConfirmSubscriptionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ConfirmSubscription");
         params.put("Version", "2010-03-31");
-        ConfirmSubscriptionInputSerializer::serialize(&mut params, "", &input);
+        ConfirmSubscriptionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -5185,22 +5620,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a platform application object for one of the supported push notification services, such as APNS and FCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is "SSL certificate". For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is "client id". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is "Package Security Identifier". For MPNS, PlatformPrincipal is "TLS certificate". For Baidu, PlatformPrincipal is "API key".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is "private key". For GCM, PlatformCredential is "API key". For ADM, PlatformCredential is "client secret". For WNS, PlatformCredential is "secret key". For MPNS, PlatformCredential is "private key". For Baidu, PlatformCredential is "secret key". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For more information about obtaining the PlatformPrincipal and PlatformCredential for each of the supported push notification services, see <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-apns.html">Getting Started with Apple Push Notification Service</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-adm.html">Getting Started with Amazon Device Messaging</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-baidu.html">Getting Started with Baidu Cloud Push</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-gcm.html">Getting Started with Google Cloud Messaging for Android</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-mpns.html">Getting Started with MPNS</a>, or <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-wns.html">Getting Started with WNS</a>. </p>
-    fn create_platform_application(
-        &self,
-        input: CreatePlatformApplicationInput,
-    ) -> RusotoFuture<CreatePlatformApplicationResponse, CreatePlatformApplicationError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for CreatePlatformApplicationRequest {
+    type Output = CreatePlatformApplicationResponse;
+    type Error = CreatePlatformApplicationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreatePlatformApplication");
         params.put("Version", "2010-03-31");
-        CreatePlatformApplicationInputSerializer::serialize(&mut params, "", &input);
+        CreatePlatformApplicationRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreatePlatformApplicationError::from_response(response))
@@ -5233,22 +5673,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as GCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html">Creating an Amazon SNS Endpoint for Baidu</a>. </p>
-    fn create_platform_endpoint(
-        &self,
-        input: CreatePlatformEndpointInput,
-    ) -> RusotoFuture<CreateEndpointResponse, CreatePlatformEndpointError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for CreatePlatformEndpointRequest {
+    type Output = CreatePlatformEndpointResponse;
+    type Error = CreatePlatformEndpointError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreatePlatformEndpoint");
         params.put("Version", "2010-03-31");
-        CreatePlatformEndpointInputSerializer::serialize(&mut params, "", &input);
+        CreatePlatformEndpointRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreatePlatformEndpointError::from_response(response))
@@ -5259,7 +5704,7 @@ impl Sns for SnsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateEndpointResponse::default();
+                    result = CreatePlatformEndpointResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -5269,7 +5714,7 @@ impl Sns for SnsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateEndpointResponseDeserializer::deserialize(
+                    result = CreatePlatformEndpointResponseDeserializer::deserialize(
                         "CreatePlatformEndpointResult",
                         &mut stack,
                     )?;
@@ -5281,22 +5726,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a topic to which notifications can be published. Users can create at most 100,000 topics. For more information, see <a href="http://aws.amazon.com/sns/">https://aws.amazon.com/sns</a>. This action is idempotent, so if the requester already owns a topic with the specified name, that topic's ARN is returned without creating a new topic.</p>
-    fn create_topic(
-        &self,
-        input: CreateTopicInput,
-    ) -> RusotoFuture<CreateTopicResponse, CreateTopicError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for CreateTopicRequest {
+    type Output = CreateTopicResponse;
+    type Error = CreateTopicError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateTopic");
         params.put("Version", "2010-03-31");
-        CreateTopicInputSerializer::serialize(&mut params, "", &input);
+        CreateTopicRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -5332,19 +5782,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes the endpoint for a device and mobile app from Amazon SNS. This action is idempotent. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When you delete an endpoint that is also subscribed to a topic, then you must also unsubscribe the endpoint from the topic.</p>
-    fn delete_endpoint(&self, input: DeleteEndpointInput) -> RusotoFuture<(), DeleteEndpointError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for DeleteEndpointRequest {
+    type Output = DeleteEndpointResponse;
+    type Error = DeleteEndpointError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteEndpoint");
         params.put("Version", "2010-03-31");
-        DeleteEndpointInputSerializer::serialize(&mut params, "", &input);
+        DeleteEndpointRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -5354,47 +5812,100 @@ impl Sns for SnsClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteEndpointResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteEndpointResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes a platform application object for one of the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
-    fn delete_platform_application(
-        &self,
-        input: DeletePlatformApplicationInput,
-    ) -> RusotoFuture<(), DeletePlatformApplicationError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for DeletePlatformApplicationRequest {
+    type Output = DeletePlatformApplicationResponse;
+    type Error = DeletePlatformApplicationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeletePlatformApplication");
         params.put("Version", "2010-03-31");
-        DeletePlatformApplicationInputSerializer::serialize(&mut params, "", &input);
+        DeletePlatformApplicationRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeletePlatformApplicationError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeletePlatformApplicationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeletePlatformApplicationResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes a topic and all its subscriptions. Deleting a topic might prevent some messages previously sent to the topic from being delivered to subscribers. This action is idempotent, so deleting a topic that does not exist does not result in an error.</p>
-    fn delete_topic(&self, input: DeleteTopicInput) -> RusotoFuture<(), DeleteTopicError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for DeleteTopicRequest {
+    type Output = DeleteTopicResponse;
+    type Error = DeleteTopicError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteTopic");
         params.put("Version", "2010-03-31");
-        DeleteTopicInputSerializer::serialize(&mut params, "", &input);
+        DeleteTopicRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -5404,25 +5915,48 @@ impl Sns for SnsClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteTopicResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        DeleteTopicResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
-    fn get_endpoint_attributes(
-        &self,
-        input: GetEndpointAttributesInput,
-    ) -> RusotoFuture<GetEndpointAttributesResponse, GetEndpointAttributesError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for GetEndpointAttributesRequest {
+    type Output = GetEndpointAttributesResponse;
+    type Error = GetEndpointAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetEndpointAttributes");
         params.put("Version", "2010-03-31");
-        GetEndpointAttributesInputSerializer::serialize(&mut params, "", &input);
+        GetEndpointAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetEndpointAttributesError::from_response(response))
@@ -5455,23 +5989,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
-    fn get_platform_application_attributes(
-        &self,
-        input: GetPlatformApplicationAttributesInput,
-    ) -> RusotoFuture<GetPlatformApplicationAttributesResponse, GetPlatformApplicationAttributesError>
-    {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for GetPlatformApplicationAttributesRequest {
+    type Output = GetPlatformApplicationAttributesResponse;
+    type Error = GetPlatformApplicationAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetPlatformApplicationAttributes");
         params.put("Version", "2010-03-31");
-        GetPlatformApplicationAttributesInputSerializer::serialize(&mut params, "", &input);
+        GetPlatformApplicationAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetPlatformApplicationAttributesError::from_response(
@@ -5506,22 +6044,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns the settings for sending SMS messages from your account.</p> <p>These settings are set with the <code>SetSMSAttributes</code> action.</p>
-    fn get_sms_attributes(
-        &self,
-        input: GetSMSAttributesInput,
-    ) -> RusotoFuture<GetSMSAttributesResponse, GetSMSAttributesError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for GetSMSAttributesRequest {
+    type Output = GetSMSAttributesResponse;
+    type Error = GetSMSAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetSMSAttributes");
         params.put("Version", "2010-03-31");
-        GetSMSAttributesInputSerializer::serialize(&mut params, "", &input);
+        GetSMSAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -5557,22 +6100,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns all of the properties of a subscription.</p>
-    fn get_subscription_attributes(
-        &self,
-        input: GetSubscriptionAttributesInput,
-    ) -> RusotoFuture<GetSubscriptionAttributesResponse, GetSubscriptionAttributesError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for GetSubscriptionAttributesRequest {
+    type Output = GetSubscriptionAttributesResponse;
+    type Error = GetSubscriptionAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetSubscriptionAttributes");
         params.put("Version", "2010-03-31");
-        GetSubscriptionAttributesInputSerializer::serialize(&mut params, "", &input);
+        GetSubscriptionAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetSubscriptionAttributesError::from_response(response))
@@ -5605,22 +6153,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns all of the properties of a topic. Topic properties returned might differ based on the authorization of the user.</p>
-    fn get_topic_attributes(
-        &self,
-        input: GetTopicAttributesInput,
-    ) -> RusotoFuture<GetTopicAttributesResponse, GetTopicAttributesError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for GetTopicAttributesRequest {
+    type Output = GetTopicAttributesResponse;
+    type Error = GetTopicAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetTopicAttributes");
         params.put("Version", "2010-03-31");
-        GetTopicAttributesInputSerializer::serialize(&mut params, "", &input);
+        GetTopicAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -5656,25 +6209,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as GCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>This action is throttled at 30 transactions per second (TPS).</p>
-    fn list_endpoints_by_platform_application(
-        &self,
-        input: ListEndpointsByPlatformApplicationInput,
-    ) -> RusotoFuture<
-        ListEndpointsByPlatformApplicationResponse,
-        ListEndpointsByPlatformApplicationError,
-    > {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for ListEndpointsByPlatformApplicationRequest {
+    type Output = ListEndpointsByPlatformApplicationResponse;
+    type Error = ListEndpointsByPlatformApplicationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListEndpointsByPlatformApplication");
         params.put("Version", "2010-03-31");
-        ListEndpointsByPlatformApplicationInputSerializer::serialize(&mut params, "", &input);
+        ListEndpointsByPlatformApplicationRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListEndpointsByPlatformApplicationError::from_response(
@@ -5709,22 +6264,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>
-    fn list_phone_numbers_opted_out(
-        &self,
-        input: ListPhoneNumbersOptedOutInput,
-    ) -> RusotoFuture<ListPhoneNumbersOptedOutResponse, ListPhoneNumbersOptedOutError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for ListPhoneNumbersOptedOutRequest {
+    type Output = ListPhoneNumbersOptedOutResponse;
+    type Error = ListPhoneNumbersOptedOutError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListPhoneNumbersOptedOut");
         params.put("Version", "2010-03-31");
-        ListPhoneNumbersOptedOutInputSerializer::serialize(&mut params, "", &input);
+        ListPhoneNumbersOptedOutRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListPhoneNumbersOptedOutError::from_response(response))
@@ -5757,22 +6317,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the platform application objects for the supported push notification services, such as APNS and GCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>This action is throttled at 15 transactions per second (TPS).</p>
-    fn list_platform_applications(
-        &self,
-        input: ListPlatformApplicationsInput,
-    ) -> RusotoFuture<ListPlatformApplicationsResponse, ListPlatformApplicationsError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for ListPlatformApplicationsRequest {
+    type Output = ListPlatformApplicationsResponse;
+    type Error = ListPlatformApplicationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListPlatformApplications");
         params.put("Version", "2010-03-31");
-        ListPlatformApplicationsInputSerializer::serialize(&mut params, "", &input);
+        ListPlatformApplicationsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListPlatformApplicationsError::from_response(response))
@@ -5805,22 +6370,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of the requester's subscriptions. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptions</code> call to get further results.</p> <p>This action is throttled at 30 transactions per second (TPS).</p>
-    fn list_subscriptions(
-        &self,
-        input: ListSubscriptionsInput,
-    ) -> RusotoFuture<ListSubscriptionsResponse, ListSubscriptionsError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for ListSubscriptionsRequest {
+    type Output = ListSubscriptionsResponse;
+    type Error = ListSubscriptionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListSubscriptions");
         params.put("Version", "2010-03-31");
-        ListSubscriptionsInputSerializer::serialize(&mut params, "", &input);
+        ListSubscriptionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -5856,22 +6426,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of the subscriptions to a specific topic. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptionsByTopic</code> call to get further results.</p> <p>This action is throttled at 30 transactions per second (TPS).</p>
-    fn list_subscriptions_by_topic(
-        &self,
-        input: ListSubscriptionsByTopicInput,
-    ) -> RusotoFuture<ListSubscriptionsByTopicResponse, ListSubscriptionsByTopicError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for ListSubscriptionsByTopicRequest {
+    type Output = ListSubscriptionsByTopicResponse;
+    type Error = ListSubscriptionsByTopicError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListSubscriptionsByTopic");
         params.put("Version", "2010-03-31");
-        ListSubscriptionsByTopicInputSerializer::serialize(&mut params, "", &input);
+        ListSubscriptionsByTopicRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListSubscriptionsByTopicError::from_response(response))
@@ -5904,22 +6479,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>List all tags added to the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon Simple Notification Service Developer Guide</i>.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListTagsForResource");
         params.put("Version", "2010-03-31");
-        ListTagsForResourceRequestSerializer::serialize(&mut params, "", &input);
+        ListTagsForResourceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -5954,22 +6534,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of the requester's topics. Each call returns a limited list of topics, up to 100. If there are more topics, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListTopics</code> call to get further results.</p> <p>This action is throttled at 30 transactions per second (TPS).</p>
-    fn list_topics(
-        &self,
-        input: ListTopicsInput,
-    ) -> RusotoFuture<ListTopicsResponse, ListTopicsError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for ListTopicsRequest {
+    type Output = ListTopicsResponse;
+    type Error = ListTopicsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListTopics");
         params.put("Version", "2010-03-31");
-        ListTopicsInputSerializer::serialize(&mut params, "", &input);
+        ListTopicsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6005,22 +6590,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Use this request to opt in a phone number that is opted out, which enables you to resume sending SMS messages to the number.</p> <p>You can opt in a phone number only once every 30 days.</p>
-    fn opt_in_phone_number(
-        &self,
-        input: OptInPhoneNumberInput,
-    ) -> RusotoFuture<OptInPhoneNumberResponse, OptInPhoneNumberError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for OptInPhoneNumberRequest {
+    type Output = OptInPhoneNumberResponse;
+    type Error = OptInPhoneNumberError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "OptInPhoneNumber");
         params.put("Version", "2010-03-31");
-        OptInPhoneNumberInputSerializer::serialize(&mut params, "", &input);
+        OptInPhoneNumberRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6056,19 +6646,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Sends a message to an Amazon SNS topic or sends a text message (SMS message) directly to a phone number. </p> <p>If you send a message to a topic, Amazon SNS delivers the message to each endpoint that is subscribed to the topic. The format of the message depends on the notification protocol for each subscribed endpoint.</p> <p>When a <code>messageId</code> is returned, the message has been saved and Amazon SNS will attempt to deliver it shortly.</p> <p>To use the <code>Publish</code> action for sending a message to a mobile endpoint, such as an app on a Kindle device or mobile phone, you must specify the EndpointArn for the TargetArn parameter. The EndpointArn is returned when making a call with the <code>CreatePlatformEndpoint</code> action. </p> <p>For more information about formatting messages, see <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html">Send Custom Platform-Specific Payloads in Messages to Mobile Devices</a>. </p>
-    fn publish(&self, input: PublishInput) -> RusotoFuture<PublishResponse, PublishError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for PublishRequest {
+    type Output = PublishResponse;
+    type Error = PublishError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "Publish");
         params.put("Version", "2010-03-31");
-        PublishInputSerializer::serialize(&mut params, "", &input);
+        PublishRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6101,22 +6699,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Removes a statement from a topic's access control policy.</p>
-    fn remove_permission(
-        &self,
-        input: RemovePermissionInput,
-    ) -> RusotoFuture<(), RemovePermissionError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for RemovePermissionRequest {
+    type Output = RemovePermissionResponse;
+    type Error = RemovePermissionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RemovePermission");
         params.put("Version", "2010-03-31");
-        RemovePermissionInputSerializer::serialize(&mut params, "", &input);
+        RemovePermissionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6126,50 +6729,100 @@ impl Sns for SnsClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = RemovePermissionResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = RemovePermissionResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
-    fn set_endpoint_attributes(
-        &self,
-        input: SetEndpointAttributesInput,
-    ) -> RusotoFuture<(), SetEndpointAttributesError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for SetEndpointAttributesRequest {
+    type Output = SetEndpointAttributesResponse;
+    type Error = SetEndpointAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetEndpointAttributes");
         params.put("Version", "2010-03-31");
-        SetEndpointAttributesInputSerializer::serialize(&mut params, "", &input);
+        SetEndpointAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetEndpointAttributesError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = SetEndpointAttributesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = SetEndpointAttributesResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>
-    fn set_platform_application_attributes(
-        &self,
-        input: SetPlatformApplicationAttributesInput,
-    ) -> RusotoFuture<(), SetPlatformApplicationAttributesError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for SetPlatformApplicationAttributesRequest {
+    type Output = SetPlatformApplicationAttributesResponse;
+    type Error = SetPlatformApplicationAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetPlatformApplicationAttributes");
         params.put("Version", "2010-03-31");
-        SetPlatformApplicationAttributesInputSerializer::serialize(&mut params, "", &input);
+        SetPlatformApplicationAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetPlatformApplicationAttributesError::from_response(
@@ -6178,25 +6831,50 @@ impl Sns for SnsClient {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = SetPlatformApplicationAttributesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = SetPlatformApplicationAttributesResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html">Sending an SMS Message</a> in the <i>Amazon SNS Developer Guide</i>.</p>
-    fn set_sms_attributes(
-        &self,
-        input: SetSMSAttributesInput,
-    ) -> RusotoFuture<SetSMSAttributesResponse, SetSMSAttributesError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for SetSMSAttributesRequest {
+    type Output = SetSMSAttributesResponse;
+    type Error = SetSMSAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetSMSAttributes");
         params.put("Version", "2010-03-31");
-        SetSMSAttributesInputSerializer::serialize(&mut params, "", &input);
+        SetSMSAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6232,47 +6910,77 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Allows a subscription owner to set an attribute of the subscription to a new value.</p>
-    fn set_subscription_attributes(
-        &self,
-        input: SetSubscriptionAttributesInput,
-    ) -> RusotoFuture<(), SetSubscriptionAttributesError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for SetSubscriptionAttributesRequest {
+    type Output = SetSubscriptionAttributesResponse;
+    type Error = SetSubscriptionAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetSubscriptionAttributes");
         params.put("Version", "2010-03-31");
-        SetSubscriptionAttributesInputSerializer::serialize(&mut params, "", &input);
+        SetSubscriptionAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetSubscriptionAttributesError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = SetSubscriptionAttributesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = SetSubscriptionAttributesResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Allows a topic owner to set an attribute of the topic to a new value.</p>
-    fn set_topic_attributes(
-        &self,
-        input: SetTopicAttributesInput,
-    ) -> RusotoFuture<(), SetTopicAttributesError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for SetTopicAttributesRequest {
+    type Output = SetTopicAttributesResponse;
+    type Error = SetTopicAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetTopicAttributes");
         params.put("Version", "2010-03-31");
-        SetTopicAttributesInputSerializer::serialize(&mut params, "", &input);
+        SetTopicAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6282,22 +6990,50 @@ impl Sns for SnsClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = SetTopicAttributesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = SetTopicAttributesResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Prepares to subscribe an endpoint by sending the endpoint a confirmation message. To actually create a subscription, the endpoint owner must call the <code>ConfirmSubscription</code> action with the token from the confirmation message. Confirmation tokens are valid for three days.</p> <p>This action is throttled at 100 transactions per second (TPS).</p>
-    fn subscribe(&self, input: SubscribeInput) -> RusotoFuture<SubscribeResponse, SubscribeError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for SubscribeRequest {
+    type Output = SubscribeResponse;
+    type Error = SubscribeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "Subscribe");
         params.put("Version", "2010-03-31");
-        SubscribeInputSerializer::serialize(&mut params, "", &input);
+        SubscribeRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6331,22 +7067,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Add tags to the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon SNS Developer Guide</i>.</p> <p>When you use topic tags, keep the following guidelines in mind:</p> <ul> <li> <p>Adding more than 50 tags to a topic isn't recommended.</p> </li> <li> <p>Tags don't have any semantic meaning. Amazon SNS interprets tags as character strings.</p> </li> <li> <p>Tags are case-sensitive.</p> </li> <li> <p>A new tag with a key identical to that of an existing tag overwrites the existing tag.</p> </li> <li> <p>Tagging actions are limited to 10 TPS per AWS account. If your application requires a higher throughput, file a <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=technical">technical support request</a>.</p> </li> </ul> <p>For a full list of tag restrictions, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-limits.html#limits-topics">Limits Related to Topics</a> in the <i>Amazon SNS Developer Guide</i>.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "TagResource");
         params.put("Version", "2010-03-31");
-        TagResourceRequestSerializer::serialize(&mut params, "", &input);
+        TagResourceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6382,19 +7123,27 @@ impl Sns for SnsClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes a subscription. If the subscription requires authentication for deletion, only the owner of the subscription or the topic's owner can unsubscribe, and an AWS signature is required. If the <code>Unsubscribe</code> call does not require authentication and the requester is not the subscription owner, a final cancellation message is delivered to the endpoint, so that the endpoint owner can easily resubscribe to the topic if the <code>Unsubscribe</code> request was unintended.</p> <p>This action is throttled at 100 transactions per second (TPS).</p>
-    fn unsubscribe(&self, input: UnsubscribeInput) -> RusotoFuture<(), UnsubscribeError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for UnsubscribeRequest {
+    type Output = UnsubscribeResponse;
+    type Error = UnsubscribeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "Unsubscribe");
         params.put("Version", "2010-03-31");
-        UnsubscribeInputSerializer::serialize(&mut params, "", &input);
+        UnsubscribeRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6404,25 +7153,48 @@ impl Sns for SnsClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = UnsubscribeResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        UnsubscribeResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Remove tags from the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon SNS Developer Guide</i>.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sns", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UntagResource");
         params.put("Version", "2010-03-31");
-        UntagResourceRequestSerializer::serialize(&mut params, "", &input);
+        UntagResourceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6477,7 +7249,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DeleteTopicInput::default();
+        let request = DeleteTopicRequest::default();
         let result = client.delete_topic(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
@@ -6490,7 +7262,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = AddPermissionInput::default();
+        let request = AddPermissionRequest::default();
         let result = client.add_permission(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -6503,7 +7275,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ConfirmSubscriptionInput::default();
+        let request = ConfirmSubscriptionRequest::default();
         let result = client.confirm_subscription(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -6516,7 +7288,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = CreateTopicInput::default();
+        let request = CreateTopicRequest::default();
         let result = client.create_topic(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -6529,7 +7301,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = GetSubscriptionAttributesInput::default();
+        let request = GetSubscriptionAttributesRequest::default();
         let result = client.get_subscription_attributes(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -6542,7 +7314,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = GetTopicAttributesInput::default();
+        let request = GetTopicAttributesRequest::default();
         let result = client.get_topic_attributes(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -6555,7 +7327,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ListSubscriptionsByTopicInput::default();
+        let request = ListSubscriptionsByTopicRequest::default();
         let result = client.list_subscriptions_by_topic(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -6568,7 +7340,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ListSubscriptionsInput::default();
+        let request = ListSubscriptionsRequest::default();
         let result = client.list_subscriptions(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -6581,7 +7353,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ListTopicsInput::default();
+        let request = ListTopicsRequest::default();
         let result = client.list_topics(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -6592,7 +7364,7 @@ mod protocol_tests {
             MockResponseReader::read_response("test_resources/generated/valid", "sns-publish.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = PublishInput::default();
+        let request = PublishRequest::default();
         let result = client.publish(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -6605,7 +7377,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = SubscribeInput::default();
+        let request = SubscribeRequest::default();
         let result = client.subscribe(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }

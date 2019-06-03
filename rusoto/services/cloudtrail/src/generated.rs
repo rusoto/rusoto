@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -1945,82 +1946,52 @@ impl Error for UpdateTrailError {
 /// Trait representing the capabilities of the CloudTrail API. CloudTrail clients implement this trait.
 pub trait CloudTrail {
     /// <p>Adds one or more tags to a trail, up to a limit of 50. Tags must be unique per trail. Overwrites an existing tag's value when a new value is specified for an existing tag key. If you specify a key without a value, the tag will be created with the specified key and a value of null. You can tag a trail that applies to all regions only from the region in which the trail was created (that is, from its home region).</p>
-    fn add_tags(&self, input: AddTagsRequest) -> RusotoFuture<AddTagsResponse, AddTagsError>;
+    fn add_tags(&self, input: AddTagsRequest) -> Request<AddTagsRequest>;
 
     /// <p>Creates a trail that specifies the settings for delivery of log data to an Amazon S3 bucket. A maximum of five trails can exist in a region, irrespective of the region in which they were created.</p>
-    fn create_trail(
-        &self,
-        input: CreateTrailRequest,
-    ) -> RusotoFuture<CreateTrailResponse, CreateTrailError>;
+    fn create_trail(&self, input: CreateTrailRequest) -> Request<CreateTrailRequest>;
 
     /// <p>Deletes a trail. This operation must be called from the region in which the trail was created. <code>DeleteTrail</code> cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>
-    fn delete_trail(
-        &self,
-        input: DeleteTrailRequest,
-    ) -> RusotoFuture<DeleteTrailResponse, DeleteTrailError>;
+    fn delete_trail(&self, input: DeleteTrailRequest) -> Request<DeleteTrailRequest>;
 
     /// <p>Retrieves settings for the trail associated with the current region for your account.</p>
-    fn describe_trails(
-        &self,
-        input: DescribeTrailsRequest,
-    ) -> RusotoFuture<DescribeTrailsResponse, DescribeTrailsError>;
+    fn describe_trails(&self, input: DescribeTrailsRequest) -> Request<DescribeTrailsRequest>;
 
     /// <p>Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:</p> <ul> <li> <p>If your event selector includes read-only events, write-only events, or all events. This applies to both management events and data events.</p> </li> <li> <p>If your event selector includes management events.</p> </li> <li> <p>If your event selector includes data events, the Amazon S3 objects or AWS Lambda functions that you are logging for data events.</p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
     fn get_event_selectors(
         &self,
         input: GetEventSelectorsRequest,
-    ) -> RusotoFuture<GetEventSelectorsResponse, GetEventSelectorsError>;
+    ) -> Request<GetEventSelectorsRequest>;
 
     /// <p>Returns a JSON-formatted list of information about the specified trail. Fields include information on delivery errors, Amazon SNS and Amazon S3 errors, and start and stop logging times for each trail. This operation returns trail status from a single region. To return trail status from all regions, you must call the operation on each region.</p>
-    fn get_trail_status(
-        &self,
-        input: GetTrailStatusRequest,
-    ) -> RusotoFuture<GetTrailStatusResponse, GetTrailStatusError>;
+    fn get_trail_status(&self, input: GetTrailStatusRequest) -> Request<GetTrailStatusRequest>;
 
     /// <p><p>Returns all public keys whose private keys were used to sign the digest files within the specified time range. The public key is needed to validate digest files that were signed with its corresponding private key.</p> <note> <p>CloudTrail uses different private/public key pairs per region. Each digest file is signed with a private key unique to its region. Therefore, when you validate a digest file from a particular region, you must look in the same region for its corresponding public key.</p> </note></p>
-    fn list_public_keys(
-        &self,
-        input: ListPublicKeysRequest,
-    ) -> RusotoFuture<ListPublicKeysResponse, ListPublicKeysError>;
+    fn list_public_keys(&self, input: ListPublicKeysRequest) -> Request<ListPublicKeysRequest>;
 
     /// <p>Lists the tags for the trail in the current region.</p>
-    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
+    fn list_tags(&self, input: ListTagsRequest) -> Request<ListTagsRequest>;
 
     /// <p><p>Looks up <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-management-events">management events</a> captured by CloudTrail. Events for a region can be looked up in that region during the last 90 days. Lookup supports the following attributes:</p> <ul> <li> <p>AWS access key</p> </li> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> <li> <p>Read only</p> </li> <li> <p>Resource name</p> </li> <li> <p>Resource type</p> </li> <li> <p>User name</p> </li> </ul> <p>All attributes are optional. The default number of results returned is 50, with a maximum of 50 possible. The response includes a token that you can use to get the next page of results.</p> <important> <p>The rate of lookup requests is limited to one per second per account. If this limit is exceeded, a throttling error occurs.</p> </important> <important> <p>Events that occurred during the selected time range will not be available for lookup if CloudTrail logging was not enabled when the events occurred.</p> </important></p>
-    fn lookup_events(
-        &self,
-        input: LookupEventsRequest,
-    ) -> RusotoFuture<LookupEventsResponse, LookupEventsError>;
+    fn lookup_events(&self, input: LookupEventsRequest) -> Request<LookupEventsRequest>;
 
     /// <p>Configures an event selector for your trail. Use event selectors to further specify the management and data event settings for your trail. By default, trails created without specific event selectors will be configured to log all read and write management events, and no data events. </p> <p>When an event occurs in your account, CloudTrail evaluates the event selectors in all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify that you want write-only events.</p> </li> <li> <p>The EC2 <code>GetConsoleOutput</code> and <code>RunInstances</code> API operations occur in your account.</p> </li> <li> <p>CloudTrail evaluates whether the events match your event selectors.</p> </li> <li> <p>The <code>RunInstances</code> is a write-only event and it matches your event selector. The trail logs the event.</p> </li> <li> <p>The <code>GetConsoleOutput</code> is a read-only event but it doesn't match your event selector. The trail doesn't log the event. </p> </li> </ol> <p>The <code>PutEventSelectors</code> operation must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p> <p>You can configure up to five event selectors for each trail. For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> and <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html">Limits in AWS CloudTrail</a> in the <i>AWS CloudTrail User Guide</i>.</p>
     fn put_event_selectors(
         &self,
         input: PutEventSelectorsRequest,
-    ) -> RusotoFuture<PutEventSelectorsResponse, PutEventSelectorsError>;
+    ) -> Request<PutEventSelectorsRequest>;
 
     /// <p>Removes the specified tags from a trail.</p>
-    fn remove_tags(
-        &self,
-        input: RemoveTagsRequest,
-    ) -> RusotoFuture<RemoveTagsResponse, RemoveTagsError>;
+    fn remove_tags(&self, input: RemoveTagsRequest) -> Request<RemoveTagsRequest>;
 
     /// <p>Starts the recording of AWS API calls and log file delivery for a trail. For a trail that is enabled in all regions, this operation must be called from the region in which the trail was created. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>
-    fn start_logging(
-        &self,
-        input: StartLoggingRequest,
-    ) -> RusotoFuture<StartLoggingResponse, StartLoggingError>;
+    fn start_logging(&self, input: StartLoggingRequest) -> Request<StartLoggingRequest>;
 
     /// <p>Suspends the recording of AWS API calls and log file delivery for the specified trail. Under most circumstances, there is no need to use this action. You can update a trail without stopping it first. This action is the only way to stop recording. For a trail enabled in all regions, this operation must be called from the region in which the trail was created, or an <code>InvalidHomeRegionException</code> will occur. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail enabled in all regions.</p>
-    fn stop_logging(
-        &self,
-        input: StopLoggingRequest,
-    ) -> RusotoFuture<StopLoggingResponse, StopLoggingError>;
+    fn stop_logging(&self, input: StopLoggingRequest) -> Request<StopLoggingRequest>;
 
     /// <p>Updates the settings that specify delivery of log files. Changes to a trail do not require stopping the CloudTrail service. Use this action to designate an existing bucket for log delivery. If the existing bucket has previously been a target for CloudTrail log files, an IAM policy exists for the bucket. <code>UpdateTrail</code> must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p>
-    fn update_trail(
-        &self,
-        input: UpdateTrailRequest,
-    ) -> RusotoFuture<UpdateTrailResponse, UpdateTrailError>;
+    fn update_trail(&self, input: UpdateTrailRequest) -> Request<UpdateTrailRequest>;
 }
 /// A client for the CloudTrail API.
 #[derive(Clone)]
@@ -2060,18 +2031,102 @@ impl CloudTrailClient {
 
 impl CloudTrail for CloudTrailClient {
     /// <p>Adds one or more tags to a trail, up to a limit of 50. Tags must be unique per trail. Overwrites an existing tag's value when a new value is specified for an existing tag key. If you specify a key without a value, the tag will be created with the specified key and a value of null. You can tag a trail that applies to all regions only from the region in which the trail was created (that is, from its home region).</p>
-    fn add_tags(&self, input: AddTagsRequest) -> RusotoFuture<AddTagsResponse, AddTagsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+    fn add_tags(&self, input: AddTagsRequest) -> Request<AddTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a trail that specifies the settings for delivery of log data to an Amazon S3 bucket. A maximum of five trails can exist in a region, irrespective of the region in which they were created.</p>
+    fn create_trail(&self, input: CreateTrailRequest) -> Request<CreateTrailRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a trail. This operation must be called from the region in which the trail was created. <code>DeleteTrail</code> cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>
+    fn delete_trail(&self, input: DeleteTrailRequest) -> Request<DeleteTrailRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves settings for the trail associated with the current region for your account.</p>
+    fn describe_trails(&self, input: DescribeTrailsRequest) -> Request<DescribeTrailsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:</p> <ul> <li> <p>If your event selector includes read-only events, write-only events, or all events. This applies to both management events and data events.</p> </li> <li> <p>If your event selector includes management events.</p> </li> <li> <p>If your event selector includes data events, the Amazon S3 objects or AWS Lambda functions that you are logging for data events.</p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
+    fn get_event_selectors(
+        &self,
+        input: GetEventSelectorsRequest,
+    ) -> Request<GetEventSelectorsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a JSON-formatted list of information about the specified trail. Fields include information on delivery errors, Amazon SNS and Amazon S3 errors, and start and stop logging times for each trail. This operation returns trail status from a single region. To return trail status from all regions, you must call the operation on each region.</p>
+    fn get_trail_status(&self, input: GetTrailStatusRequest) -> Request<GetTrailStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Returns all public keys whose private keys were used to sign the digest files within the specified time range. The public key is needed to validate digest files that were signed with its corresponding private key.</p> <note> <p>CloudTrail uses different private/public key pairs per region. Each digest file is signed with a private key unique to its region. Therefore, when you validate a digest file from a particular region, you must look in the same region for its corresponding public key.</p> </note></p>
+    fn list_public_keys(&self, input: ListPublicKeysRequest) -> Request<ListPublicKeysRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the tags for the trail in the current region.</p>
+    fn list_tags(&self, input: ListTagsRequest) -> Request<ListTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Looks up <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-management-events">management events</a> captured by CloudTrail. Events for a region can be looked up in that region during the last 90 days. Lookup supports the following attributes:</p> <ul> <li> <p>AWS access key</p> </li> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> <li> <p>Read only</p> </li> <li> <p>Resource name</p> </li> <li> <p>Resource type</p> </li> <li> <p>User name</p> </li> </ul> <p>All attributes are optional. The default number of results returned is 50, with a maximum of 50 possible. The response includes a token that you can use to get the next page of results.</p> <important> <p>The rate of lookup requests is limited to one per second per account. If this limit is exceeded, a throttling error occurs.</p> </important> <important> <p>Events that occurred during the selected time range will not be available for lookup if CloudTrail logging was not enabled when the events occurred.</p> </important></p>
+    fn lookup_events(&self, input: LookupEventsRequest) -> Request<LookupEventsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Configures an event selector for your trail. Use event selectors to further specify the management and data event settings for your trail. By default, trails created without specific event selectors will be configured to log all read and write management events, and no data events. </p> <p>When an event occurs in your account, CloudTrail evaluates the event selectors in all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify that you want write-only events.</p> </li> <li> <p>The EC2 <code>GetConsoleOutput</code> and <code>RunInstances</code> API operations occur in your account.</p> </li> <li> <p>CloudTrail evaluates whether the events match your event selectors.</p> </li> <li> <p>The <code>RunInstances</code> is a write-only event and it matches your event selector. The trail logs the event.</p> </li> <li> <p>The <code>GetConsoleOutput</code> is a read-only event but it doesn't match your event selector. The trail doesn't log the event. </p> </li> </ol> <p>The <code>PutEventSelectors</code> operation must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p> <p>You can configure up to five event selectors for each trail. For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> and <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html">Limits in AWS CloudTrail</a> in the <i>AWS CloudTrail User Guide</i>.</p>
+    fn put_event_selectors(
+        &self,
+        input: PutEventSelectorsRequest,
+    ) -> Request<PutEventSelectorsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified tags from a trail.</p>
+    fn remove_tags(&self, input: RemoveTagsRequest) -> Request<RemoveTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts the recording of AWS API calls and log file delivery for a trail. For a trail that is enabled in all regions, this operation must be called from the region in which the trail was created. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>
+    fn start_logging(&self, input: StartLoggingRequest) -> Request<StartLoggingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Suspends the recording of AWS API calls and log file delivery for the specified trail. Under most circumstances, there is no need to use this action. You can update a trail without stopping it first. This action is the only way to stop recording. For a trail enabled in all regions, this operation must be called from the region in which the trail was created, or an <code>InvalidHomeRegionException</code> will occur. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail enabled in all regions.</p>
+    fn stop_logging(&self, input: StopLoggingRequest) -> Request<StopLoggingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the settings that specify delivery of log files. Changes to a trail do not require stopping the CloudTrail service. Use this action to designate an existing bucket for log delivery. If the existing bucket has previously been a target for CloudTrail log files, an IAM policy exists for the bucket. <code>UpdateTrail</code> must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p>
+    fn update_trail(&self, input: UpdateTrailRequest) -> Request<UpdateTrailRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AddTagsRequest {
+    type Output = AddTagsResponse;
+    type Error = AddTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudtrail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.AddTags",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response).deserialize::<AddTagsResponse, _>()
@@ -2086,23 +2141,28 @@ impl CloudTrail for CloudTrailClient {
             }
         })
     }
+}
 
-    /// <p>Creates a trail that specifies the settings for delivery of log data to an Amazon S3 bucket. A maximum of five trails can exist in a region, irrespective of the region in which they were created.</p>
-    fn create_trail(
-        &self,
-        input: CreateTrailRequest,
-    ) -> RusotoFuture<CreateTrailResponse, CreateTrailError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+impl ServiceRequest for CreateTrailRequest {
+    type Output = CreateTrailResponse;
+    type Error = CreateTrailError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudtrail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.CreateTrail",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2118,23 +2178,28 @@ impl CloudTrail for CloudTrailClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a trail. This operation must be called from the region in which the trail was created. <code>DeleteTrail</code> cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>
-    fn delete_trail(
-        &self,
-        input: DeleteTrailRequest,
-    ) -> RusotoFuture<DeleteTrailResponse, DeleteTrailError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+impl ServiceRequest for DeleteTrailRequest {
+    type Output = DeleteTrailResponse;
+    type Error = DeleteTrailError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudtrail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.DeleteTrail",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2150,23 +2215,28 @@ impl CloudTrail for CloudTrailClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves settings for the trail associated with the current region for your account.</p>
-    fn describe_trails(
-        &self,
-        input: DescribeTrailsRequest,
-    ) -> RusotoFuture<DescribeTrailsResponse, DescribeTrailsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+impl ServiceRequest for DescribeTrailsRequest {
+    type Output = DescribeTrailsResponse;
+    type Error = DescribeTrailsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudtrail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.DescribeTrails",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2182,23 +2252,28 @@ impl CloudTrail for CloudTrailClient {
             }
         })
     }
+}
 
-    /// <p>Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:</p> <ul> <li> <p>If your event selector includes read-only events, write-only events, or all events. This applies to both management events and data events.</p> </li> <li> <p>If your event selector includes management events.</p> </li> <li> <p>If your event selector includes data events, the Amazon S3 objects or AWS Lambda functions that you are logging for data events.</p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
-    fn get_event_selectors(
-        &self,
-        input: GetEventSelectorsRequest,
-    ) -> RusotoFuture<GetEventSelectorsResponse, GetEventSelectorsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+impl ServiceRequest for GetEventSelectorsRequest {
+    type Output = GetEventSelectorsResponse;
+    type Error = GetEventSelectorsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudtrail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.GetEventSelectors",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2214,23 +2289,28 @@ impl CloudTrail for CloudTrailClient {
             }
         })
     }
+}
 
-    /// <p>Returns a JSON-formatted list of information about the specified trail. Fields include information on delivery errors, Amazon SNS and Amazon S3 errors, and start and stop logging times for each trail. This operation returns trail status from a single region. To return trail status from all regions, you must call the operation on each region.</p>
-    fn get_trail_status(
-        &self,
-        input: GetTrailStatusRequest,
-    ) -> RusotoFuture<GetTrailStatusResponse, GetTrailStatusError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+impl ServiceRequest for GetTrailStatusRequest {
+    type Output = GetTrailStatusResponse;
+    type Error = GetTrailStatusError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudtrail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.GetTrailStatus",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2246,23 +2326,28 @@ impl CloudTrail for CloudTrailClient {
             }
         })
     }
+}
 
-    /// <p><p>Returns all public keys whose private keys were used to sign the digest files within the specified time range. The public key is needed to validate digest files that were signed with its corresponding private key.</p> <note> <p>CloudTrail uses different private/public key pairs per region. Each digest file is signed with a private key unique to its region. Therefore, when you validate a digest file from a particular region, you must look in the same region for its corresponding public key.</p> </note></p>
-    fn list_public_keys(
-        &self,
-        input: ListPublicKeysRequest,
-    ) -> RusotoFuture<ListPublicKeysResponse, ListPublicKeysError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+impl ServiceRequest for ListPublicKeysRequest {
+    type Output = ListPublicKeysResponse;
+    type Error = ListPublicKeysError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudtrail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.ListPublicKeys",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2278,20 +2363,28 @@ impl CloudTrail for CloudTrailClient {
             }
         })
     }
+}
 
-    /// <p>Lists the tags for the trail in the current region.</p>
-    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+impl ServiceRequest for ListTagsRequest {
+    type Output = ListTagsResponse;
+    type Error = ListTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudtrail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.ListTags",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2307,23 +2400,28 @@ impl CloudTrail for CloudTrailClient {
             }
         })
     }
+}
 
-    /// <p><p>Looks up <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-management-events">management events</a> captured by CloudTrail. Events for a region can be looked up in that region during the last 90 days. Lookup supports the following attributes:</p> <ul> <li> <p>AWS access key</p> </li> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> <li> <p>Read only</p> </li> <li> <p>Resource name</p> </li> <li> <p>Resource type</p> </li> <li> <p>User name</p> </li> </ul> <p>All attributes are optional. The default number of results returned is 50, with a maximum of 50 possible. The response includes a token that you can use to get the next page of results.</p> <important> <p>The rate of lookup requests is limited to one per second per account. If this limit is exceeded, a throttling error occurs.</p> </important> <important> <p>Events that occurred during the selected time range will not be available for lookup if CloudTrail logging was not enabled when the events occurred.</p> </important></p>
-    fn lookup_events(
-        &self,
-        input: LookupEventsRequest,
-    ) -> RusotoFuture<LookupEventsResponse, LookupEventsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+impl ServiceRequest for LookupEventsRequest {
+    type Output = LookupEventsResponse;
+    type Error = LookupEventsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudtrail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.LookupEvents",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2339,23 +2437,28 @@ impl CloudTrail for CloudTrailClient {
             }
         })
     }
+}
 
-    /// <p>Configures an event selector for your trail. Use event selectors to further specify the management and data event settings for your trail. By default, trails created without specific event selectors will be configured to log all read and write management events, and no data events. </p> <p>When an event occurs in your account, CloudTrail evaluates the event selectors in all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify that you want write-only events.</p> </li> <li> <p>The EC2 <code>GetConsoleOutput</code> and <code>RunInstances</code> API operations occur in your account.</p> </li> <li> <p>CloudTrail evaluates whether the events match your event selectors.</p> </li> <li> <p>The <code>RunInstances</code> is a write-only event and it matches your event selector. The trail logs the event.</p> </li> <li> <p>The <code>GetConsoleOutput</code> is a read-only event but it doesn't match your event selector. The trail doesn't log the event. </p> </li> </ol> <p>The <code>PutEventSelectors</code> operation must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p> <p>You can configure up to five event selectors for each trail. For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> and <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html">Limits in AWS CloudTrail</a> in the <i>AWS CloudTrail User Guide</i>.</p>
-    fn put_event_selectors(
-        &self,
-        input: PutEventSelectorsRequest,
-    ) -> RusotoFuture<PutEventSelectorsResponse, PutEventSelectorsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+impl ServiceRequest for PutEventSelectorsRequest {
+    type Output = PutEventSelectorsResponse;
+    type Error = PutEventSelectorsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudtrail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.PutEventSelectors",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2371,23 +2474,28 @@ impl CloudTrail for CloudTrailClient {
             }
         })
     }
+}
 
-    /// <p>Removes the specified tags from a trail.</p>
-    fn remove_tags(
-        &self,
-        input: RemoveTagsRequest,
-    ) -> RusotoFuture<RemoveTagsResponse, RemoveTagsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+impl ServiceRequest for RemoveTagsRequest {
+    type Output = RemoveTagsResponse;
+    type Error = RemoveTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudtrail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.RemoveTags",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2403,23 +2511,28 @@ impl CloudTrail for CloudTrailClient {
             }
         })
     }
+}
 
-    /// <p>Starts the recording of AWS API calls and log file delivery for a trail. For a trail that is enabled in all regions, this operation must be called from the region in which the trail was created. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>
-    fn start_logging(
-        &self,
-        input: StartLoggingRequest,
-    ) -> RusotoFuture<StartLoggingResponse, StartLoggingError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+impl ServiceRequest for StartLoggingRequest {
+    type Output = StartLoggingResponse;
+    type Error = StartLoggingError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudtrail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.StartLogging",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2435,23 +2548,28 @@ impl CloudTrail for CloudTrailClient {
             }
         })
     }
+}
 
-    /// <p>Suspends the recording of AWS API calls and log file delivery for the specified trail. Under most circumstances, there is no need to use this action. You can update a trail without stopping it first. This action is the only way to stop recording. For a trail enabled in all regions, this operation must be called from the region in which the trail was created, or an <code>InvalidHomeRegionException</code> will occur. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail enabled in all regions.</p>
-    fn stop_logging(
-        &self,
-        input: StopLoggingRequest,
-    ) -> RusotoFuture<StopLoggingResponse, StopLoggingError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+impl ServiceRequest for StopLoggingRequest {
+    type Output = StopLoggingResponse;
+    type Error = StopLoggingError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudtrail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.StopLogging",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2467,23 +2585,28 @@ impl CloudTrail for CloudTrailClient {
             }
         })
     }
+}
 
-    /// <p>Updates the settings that specify delivery of log files. Changes to a trail do not require stopping the CloudTrail service. Use this action to designate an existing bucket for log delivery. If the existing bucket has previously been a target for CloudTrail log files, an IAM policy exists for the bucket. <code>UpdateTrail</code> must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p>
-    fn update_trail(
-        &self,
-        input: UpdateTrailRequest,
-    ) -> RusotoFuture<UpdateTrailResponse, UpdateTrailError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+impl ServiceRequest for UpdateTrailRequest {
+    type Output = UpdateTrailResponse;
+    type Error = UpdateTrailError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudtrail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.UpdateTrail",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)

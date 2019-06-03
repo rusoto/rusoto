@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -305,16 +306,10 @@ impl Error for DetectPHIError {
 /// Trait representing the capabilities of the ComprehendMedical API. ComprehendMedical clients implement this trait.
 pub trait ComprehendMedical {
     /// <p> Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information .</p>
-    fn detect_entities(
-        &self,
-        input: DetectEntitiesRequest,
-    ) -> RusotoFuture<DetectEntitiesResponse, DetectEntitiesError>;
+    fn detect_entities(&self, input: DetectEntitiesRequest) -> Request<DetectEntitiesRequest>;
 
     /// <p> Inspects the clinical text for personal health information (PHI) entities and entity category, location, and confidence score on that information.</p>
-    fn detect_phi(
-        &self,
-        input: DetectPHIRequest,
-    ) -> RusotoFuture<DetectPHIResponse, DetectPHIError>;
+    fn detect_phi(&self, input: DetectPHIRequest) -> Request<DetectPHIRequest>;
 }
 /// A client for the ComprehendMedical API.
 #[derive(Clone)]
@@ -354,18 +349,33 @@ impl ComprehendMedicalClient {
 
 impl ComprehendMedical for ComprehendMedicalClient {
     /// <p> Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information .</p>
-    fn detect_entities(
-        &self,
-        input: DetectEntitiesRequest,
-    ) -> RusotoFuture<DetectEntitiesResponse, DetectEntitiesError> {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
+    fn detect_entities(&self, input: DetectEntitiesRequest) -> Request<DetectEntitiesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Inspects the clinical text for personal health information (PHI) entities and entity category, location, and confidence score on that information.</p>
+    fn detect_phi(&self, input: DetectPHIRequest) -> Request<DetectPHIRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for DetectEntitiesRequest {
+    type Output = DetectEntitiesResponse;
+    type Error = DetectEntitiesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehendmedical", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ComprehendMedical_20181030.DetectEntities");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -381,20 +391,25 @@ impl ComprehendMedical for ComprehendMedicalClient {
             }
         })
     }
+}
 
-    /// <p> Inspects the clinical text for personal health information (PHI) entities and entity category, location, and confidence score on that information.</p>
-    fn detect_phi(
-        &self,
-        input: DetectPHIRequest,
-    ) -> RusotoFuture<DetectPHIResponse, DetectPHIError> {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
+impl ServiceRequest for DetectPHIRequest {
+    type Output = DetectPHIResponse;
+    type Error = DetectPHIError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehendmedical", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ComprehendMedical_20181030.DetectPHI");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)

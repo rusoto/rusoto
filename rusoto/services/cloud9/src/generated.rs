@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -56,7 +57,7 @@ pub struct CreateEnvironmentEC2Request {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateEnvironmentEC2Result {
+pub struct CreateEnvironmentEC2Response {
     /// <p>The ID of the environment that was created.</p>
     #[serde(rename = "environmentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -78,7 +79,7 @@ pub struct CreateEnvironmentMembershipRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateEnvironmentMembershipResult {
+pub struct CreateEnvironmentMembershipResponse {
     /// <p>Information about the environment member that was added.</p>
     #[serde(rename = "membership")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -97,7 +98,7 @@ pub struct DeleteEnvironmentMembershipRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteEnvironmentMembershipResult {}
+pub struct DeleteEnvironmentMembershipResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteEnvironmentRequest {
@@ -108,7 +109,7 @@ pub struct DeleteEnvironmentRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteEnvironmentResult {}
+pub struct DeleteEnvironmentResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeEnvironmentMembershipsRequest {
@@ -136,7 +137,7 @@ pub struct DescribeEnvironmentMembershipsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeEnvironmentMembershipsResult {
+pub struct DescribeEnvironmentMembershipsResponse {
     /// <p>Information about the environment members for the environment.</p>
     #[serde(rename = "memberships")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -156,7 +157,7 @@ pub struct DescribeEnvironmentStatusRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeEnvironmentStatusResult {
+pub struct DescribeEnvironmentStatusResponse {
     /// <p>Any informational message about the status of the environment.</p>
     #[serde(rename = "message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -176,7 +177,7 @@ pub struct DescribeEnvironmentsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeEnvironmentsResult {
+pub struct DescribeEnvironmentsResponse {
     /// <p>Information about the environments that are returned.</p>
     #[serde(rename = "environments")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -275,7 +276,7 @@ pub struct ListEnvironmentsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListEnvironmentsResult {
+pub struct ListEnvironmentsResponse {
     /// <p>The list of environment identifiers.</p>
     #[serde(rename = "environmentIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -301,7 +302,7 @@ pub struct UpdateEnvironmentMembershipRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateEnvironmentMembershipResult {
+pub struct UpdateEnvironmentMembershipResponse {
     /// <p>Information about the environment member whose settings were changed.</p>
     #[serde(rename = "membership")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -325,7 +326,7 @@ pub struct UpdateEnvironmentRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateEnvironmentResult {}
+pub struct UpdateEnvironmentResponse {}
 
 /// Errors returned by CreateEnvironmentEC2
 #[derive(Debug, PartialEq)]
@@ -1109,61 +1110,59 @@ pub trait Cloud9 {
     fn create_environment_ec2(
         &self,
         input: CreateEnvironmentEC2Request,
-    ) -> RusotoFuture<CreateEnvironmentEC2Result, CreateEnvironmentEC2Error>;
+    ) -> Request<CreateEnvironmentEC2Request>;
 
     /// <p>Adds an environment member to an AWS Cloud9 development environment.</p>
     fn create_environment_membership(
         &self,
         input: CreateEnvironmentMembershipRequest,
-    ) -> RusotoFuture<CreateEnvironmentMembershipResult, CreateEnvironmentMembershipError>;
+    ) -> Request<CreateEnvironmentMembershipRequest>;
 
     /// <p>Deletes an AWS Cloud9 development environment. If an Amazon EC2 instance is connected to the environment, also terminates the instance.</p>
     fn delete_environment(
         &self,
         input: DeleteEnvironmentRequest,
-    ) -> RusotoFuture<DeleteEnvironmentResult, DeleteEnvironmentError>;
+    ) -> Request<DeleteEnvironmentRequest>;
 
     /// <p>Deletes an environment member from an AWS Cloud9 development environment.</p>
     fn delete_environment_membership(
         &self,
         input: DeleteEnvironmentMembershipRequest,
-    ) -> RusotoFuture<DeleteEnvironmentMembershipResult, DeleteEnvironmentMembershipError>;
+    ) -> Request<DeleteEnvironmentMembershipRequest>;
 
     /// <p>Gets information about environment members for an AWS Cloud9 development environment.</p>
     fn describe_environment_memberships(
         &self,
         input: DescribeEnvironmentMembershipsRequest,
-    ) -> RusotoFuture<DescribeEnvironmentMembershipsResult, DescribeEnvironmentMembershipsError>;
+    ) -> Request<DescribeEnvironmentMembershipsRequest>;
 
     /// <p>Gets status information for an AWS Cloud9 development environment.</p>
     fn describe_environment_status(
         &self,
         input: DescribeEnvironmentStatusRequest,
-    ) -> RusotoFuture<DescribeEnvironmentStatusResult, DescribeEnvironmentStatusError>;
+    ) -> Request<DescribeEnvironmentStatusRequest>;
 
     /// <p>Gets information about AWS Cloud9 development environments.</p>
     fn describe_environments(
         &self,
         input: DescribeEnvironmentsRequest,
-    ) -> RusotoFuture<DescribeEnvironmentsResult, DescribeEnvironmentsError>;
+    ) -> Request<DescribeEnvironmentsRequest>;
 
     /// <p>Gets a list of AWS Cloud9 development environment identifiers.</p>
-    fn list_environments(
-        &self,
-        input: ListEnvironmentsRequest,
-    ) -> RusotoFuture<ListEnvironmentsResult, ListEnvironmentsError>;
+    fn list_environments(&self, input: ListEnvironmentsRequest)
+        -> Request<ListEnvironmentsRequest>;
 
     /// <p>Changes the settings of an existing AWS Cloud9 development environment.</p>
     fn update_environment(
         &self,
         input: UpdateEnvironmentRequest,
-    ) -> RusotoFuture<UpdateEnvironmentResult, UpdateEnvironmentError>;
+    ) -> Request<UpdateEnvironmentRequest>;
 
     /// <p>Changes the settings of an existing environment member for an AWS Cloud9 development environment.</p>
     fn update_environment_membership(
         &self,
         input: UpdateEnvironmentMembershipRequest,
-    ) -> RusotoFuture<UpdateEnvironmentMembershipResult, UpdateEnvironmentMembershipError>;
+    ) -> Request<UpdateEnvironmentMembershipRequest>;
 }
 /// A client for the AWS Cloud9 API.
 #[derive(Clone)]
@@ -1206,22 +1205,107 @@ impl Cloud9 for Cloud9Client {
     fn create_environment_ec2(
         &self,
         input: CreateEnvironmentEC2Request,
-    ) -> RusotoFuture<CreateEnvironmentEC2Result, CreateEnvironmentEC2Error> {
-        let mut request = SignedRequest::new("POST", "cloud9", &self.region, "/");
+    ) -> Request<CreateEnvironmentEC2Request> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds an environment member to an AWS Cloud9 development environment.</p>
+    fn create_environment_membership(
+        &self,
+        input: CreateEnvironmentMembershipRequest,
+    ) -> Request<CreateEnvironmentMembershipRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an AWS Cloud9 development environment. If an Amazon EC2 instance is connected to the environment, also terminates the instance.</p>
+    fn delete_environment(
+        &self,
+        input: DeleteEnvironmentRequest,
+    ) -> Request<DeleteEnvironmentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an environment member from an AWS Cloud9 development environment.</p>
+    fn delete_environment_membership(
+        &self,
+        input: DeleteEnvironmentMembershipRequest,
+    ) -> Request<DeleteEnvironmentMembershipRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about environment members for an AWS Cloud9 development environment.</p>
+    fn describe_environment_memberships(
+        &self,
+        input: DescribeEnvironmentMembershipsRequest,
+    ) -> Request<DescribeEnvironmentMembershipsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets status information for an AWS Cloud9 development environment.</p>
+    fn describe_environment_status(
+        &self,
+        input: DescribeEnvironmentStatusRequest,
+    ) -> Request<DescribeEnvironmentStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about AWS Cloud9 development environments.</p>
+    fn describe_environments(
+        &self,
+        input: DescribeEnvironmentsRequest,
+    ) -> Request<DescribeEnvironmentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a list of AWS Cloud9 development environment identifiers.</p>
+    fn list_environments(
+        &self,
+        input: ListEnvironmentsRequest,
+    ) -> Request<ListEnvironmentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes the settings of an existing AWS Cloud9 development environment.</p>
+    fn update_environment(
+        &self,
+        input: UpdateEnvironmentRequest,
+    ) -> Request<UpdateEnvironmentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes the settings of an existing environment member for an AWS Cloud9 development environment.</p>
+    fn update_environment_membership(
+        &self,
+        input: UpdateEnvironmentMembershipRequest,
+    ) -> Request<UpdateEnvironmentMembershipRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CreateEnvironmentEC2Request {
+    type Output = CreateEnvironmentEC2Response;
+    type Error = CreateEnvironmentEC2Error;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloud9", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCloud9WorkspaceManagementService.CreateEnvironmentEC2",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateEnvironmentEC2Result, _>()
+                        .deserialize::<CreateEnvironmentEC2Response, _>()
                 }))
             } else {
                 Box::new(
@@ -1232,27 +1316,32 @@ impl Cloud9 for Cloud9Client {
             }
         })
     }
+}
 
-    /// <p>Adds an environment member to an AWS Cloud9 development environment.</p>
-    fn create_environment_membership(
-        &self,
-        input: CreateEnvironmentMembershipRequest,
-    ) -> RusotoFuture<CreateEnvironmentMembershipResult, CreateEnvironmentMembershipError> {
-        let mut request = SignedRequest::new("POST", "cloud9", &self.region, "/");
+impl ServiceRequest for CreateEnvironmentMembershipRequest {
+    type Output = CreateEnvironmentMembershipResponse;
+    type Error = CreateEnvironmentMembershipError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloud9", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCloud9WorkspaceManagementService.CreateEnvironmentMembership",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateEnvironmentMembershipResult, _>()
+                        .deserialize::<CreateEnvironmentMembershipResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -1261,27 +1350,32 @@ impl Cloud9 for Cloud9Client {
             }
         })
     }
+}
 
-    /// <p>Deletes an AWS Cloud9 development environment. If an Amazon EC2 instance is connected to the environment, also terminates the instance.</p>
-    fn delete_environment(
-        &self,
-        input: DeleteEnvironmentRequest,
-    ) -> RusotoFuture<DeleteEnvironmentResult, DeleteEnvironmentError> {
-        let mut request = SignedRequest::new("POST", "cloud9", &self.region, "/");
+impl ServiceRequest for DeleteEnvironmentRequest {
+    type Output = DeleteEnvironmentResponse;
+    type Error = DeleteEnvironmentError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloud9", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCloud9WorkspaceManagementService.DeleteEnvironment",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteEnvironmentResult, _>()
+                        .deserialize::<DeleteEnvironmentResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1293,27 +1387,32 @@ impl Cloud9 for Cloud9Client {
             }
         })
     }
+}
 
-    /// <p>Deletes an environment member from an AWS Cloud9 development environment.</p>
-    fn delete_environment_membership(
-        &self,
-        input: DeleteEnvironmentMembershipRequest,
-    ) -> RusotoFuture<DeleteEnvironmentMembershipResult, DeleteEnvironmentMembershipError> {
-        let mut request = SignedRequest::new("POST", "cloud9", &self.region, "/");
+impl ServiceRequest for DeleteEnvironmentMembershipRequest {
+    type Output = DeleteEnvironmentMembershipResponse;
+    type Error = DeleteEnvironmentMembershipError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloud9", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCloud9WorkspaceManagementService.DeleteEnvironmentMembership",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteEnvironmentMembershipResult, _>()
+                        .deserialize::<DeleteEnvironmentMembershipResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -1322,28 +1421,32 @@ impl Cloud9 for Cloud9Client {
             }
         })
     }
+}
 
-    /// <p>Gets information about environment members for an AWS Cloud9 development environment.</p>
-    fn describe_environment_memberships(
-        &self,
-        input: DescribeEnvironmentMembershipsRequest,
-    ) -> RusotoFuture<DescribeEnvironmentMembershipsResult, DescribeEnvironmentMembershipsError>
-    {
-        let mut request = SignedRequest::new("POST", "cloud9", &self.region, "/");
+impl ServiceRequest for DescribeEnvironmentMembershipsRequest {
+    type Output = DescribeEnvironmentMembershipsResponse;
+    type Error = DescribeEnvironmentMembershipsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloud9", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCloud9WorkspaceManagementService.DescribeEnvironmentMemberships",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEnvironmentMembershipsResult, _>()
+                        .deserialize::<DescribeEnvironmentMembershipsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -1352,27 +1455,32 @@ impl Cloud9 for Cloud9Client {
             }
         })
     }
+}
 
-    /// <p>Gets status information for an AWS Cloud9 development environment.</p>
-    fn describe_environment_status(
-        &self,
-        input: DescribeEnvironmentStatusRequest,
-    ) -> RusotoFuture<DescribeEnvironmentStatusResult, DescribeEnvironmentStatusError> {
-        let mut request = SignedRequest::new("POST", "cloud9", &self.region, "/");
+impl ServiceRequest for DescribeEnvironmentStatusRequest {
+    type Output = DescribeEnvironmentStatusResponse;
+    type Error = DescribeEnvironmentStatusError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloud9", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCloud9WorkspaceManagementService.DescribeEnvironmentStatus",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEnvironmentStatusResult, _>()
+                        .deserialize::<DescribeEnvironmentStatusResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -1381,27 +1489,32 @@ impl Cloud9 for Cloud9Client {
             }
         })
     }
+}
 
-    /// <p>Gets information about AWS Cloud9 development environments.</p>
-    fn describe_environments(
-        &self,
-        input: DescribeEnvironmentsRequest,
-    ) -> RusotoFuture<DescribeEnvironmentsResult, DescribeEnvironmentsError> {
-        let mut request = SignedRequest::new("POST", "cloud9", &self.region, "/");
+impl ServiceRequest for DescribeEnvironmentsRequest {
+    type Output = DescribeEnvironmentsResponse;
+    type Error = DescribeEnvironmentsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloud9", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCloud9WorkspaceManagementService.DescribeEnvironments",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEnvironmentsResult, _>()
+                        .deserialize::<DescribeEnvironmentsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1412,27 +1525,32 @@ impl Cloud9 for Cloud9Client {
             }
         })
     }
+}
 
-    /// <p>Gets a list of AWS Cloud9 development environment identifiers.</p>
-    fn list_environments(
-        &self,
-        input: ListEnvironmentsRequest,
-    ) -> RusotoFuture<ListEnvironmentsResult, ListEnvironmentsError> {
-        let mut request = SignedRequest::new("POST", "cloud9", &self.region, "/");
+impl ServiceRequest for ListEnvironmentsRequest {
+    type Output = ListEnvironmentsResponse;
+    type Error = ListEnvironmentsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloud9", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCloud9WorkspaceManagementService.ListEnvironments",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListEnvironmentsResult, _>()
+                        .deserialize::<ListEnvironmentsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1444,27 +1562,32 @@ impl Cloud9 for Cloud9Client {
             }
         })
     }
+}
 
-    /// <p>Changes the settings of an existing AWS Cloud9 development environment.</p>
-    fn update_environment(
-        &self,
-        input: UpdateEnvironmentRequest,
-    ) -> RusotoFuture<UpdateEnvironmentResult, UpdateEnvironmentError> {
-        let mut request = SignedRequest::new("POST", "cloud9", &self.region, "/");
+impl ServiceRequest for UpdateEnvironmentRequest {
+    type Output = UpdateEnvironmentResponse;
+    type Error = UpdateEnvironmentError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloud9", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCloud9WorkspaceManagementService.UpdateEnvironment",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateEnvironmentResult, _>()
+                        .deserialize::<UpdateEnvironmentResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1476,27 +1599,32 @@ impl Cloud9 for Cloud9Client {
             }
         })
     }
+}
 
-    /// <p>Changes the settings of an existing environment member for an AWS Cloud9 development environment.</p>
-    fn update_environment_membership(
-        &self,
-        input: UpdateEnvironmentMembershipRequest,
-    ) -> RusotoFuture<UpdateEnvironmentMembershipResult, UpdateEnvironmentMembershipError> {
-        let mut request = SignedRequest::new("POST", "cloud9", &self.region, "/");
+impl ServiceRequest for UpdateEnvironmentMembershipRequest {
+    type Output = UpdateEnvironmentMembershipResponse;
+    type Error = UpdateEnvironmentMembershipError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloud9", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCloud9WorkspaceManagementService.UpdateEnvironmentMembership",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateEnvironmentMembershipResult, _>()
+                        .deserialize::<UpdateEnvironmentMembershipResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {

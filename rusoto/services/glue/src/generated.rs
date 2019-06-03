@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -9608,570 +9609,409 @@ pub trait Glue {
     fn batch_create_partition(
         &self,
         input: BatchCreatePartitionRequest,
-    ) -> RusotoFuture<BatchCreatePartitionResponse, BatchCreatePartitionError>;
+    ) -> Request<BatchCreatePartitionRequest>;
 
     /// <p>Deletes a list of connection definitions from the Data Catalog.</p>
     fn batch_delete_connection(
         &self,
         input: BatchDeleteConnectionRequest,
-    ) -> RusotoFuture<BatchDeleteConnectionResponse, BatchDeleteConnectionError>;
+    ) -> Request<BatchDeleteConnectionRequest>;
 
     /// <p>Deletes one or more partitions in a batch operation.</p>
     fn batch_delete_partition(
         &self,
         input: BatchDeletePartitionRequest,
-    ) -> RusotoFuture<BatchDeletePartitionResponse, BatchDeletePartitionError>;
+    ) -> Request<BatchDeletePartitionRequest>;
 
     /// <p><p>Deletes multiple tables at once.</p> <note> <p>After completing this operation, you will no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>BatchDeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note></p>
     fn batch_delete_table(
         &self,
         input: BatchDeleteTableRequest,
-    ) -> RusotoFuture<BatchDeleteTableResponse, BatchDeleteTableError>;
+    ) -> Request<BatchDeleteTableRequest>;
 
     /// <p>Deletes a specified batch of versions of a table.</p>
     fn batch_delete_table_version(
         &self,
         input: BatchDeleteTableVersionRequest,
-    ) -> RusotoFuture<BatchDeleteTableVersionResponse, BatchDeleteTableVersionError>;
+    ) -> Request<BatchDeleteTableVersionRequest>;
 
     /// <p>Returns a list of resource metadata for a given list of crawler names. After calling the <code>ListCrawlers</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
     fn batch_get_crawlers(
         &self,
         input: BatchGetCrawlersRequest,
-    ) -> RusotoFuture<BatchGetCrawlersResponse, BatchGetCrawlersError>;
+    ) -> Request<BatchGetCrawlersRequest>;
 
     /// <p>Returns a list of resource metadata for a given list of DevEndpoint names. After calling the <code>ListDevEndpoints</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
     fn batch_get_dev_endpoints(
         &self,
         input: BatchGetDevEndpointsRequest,
-    ) -> RusotoFuture<BatchGetDevEndpointsResponse, BatchGetDevEndpointsError>;
+    ) -> Request<BatchGetDevEndpointsRequest>;
 
     /// <p>Returns a list of resource metadata for a given list of job names. After calling the <code>ListJobs</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags. </p>
-    fn batch_get_jobs(
-        &self,
-        input: BatchGetJobsRequest,
-    ) -> RusotoFuture<BatchGetJobsResponse, BatchGetJobsError>;
+    fn batch_get_jobs(&self, input: BatchGetJobsRequest) -> Request<BatchGetJobsRequest>;
 
     /// <p>Retrieves partitions in a batch request.</p>
     fn batch_get_partition(
         &self,
         input: BatchGetPartitionRequest,
-    ) -> RusotoFuture<BatchGetPartitionResponse, BatchGetPartitionError>;
+    ) -> Request<BatchGetPartitionRequest>;
 
     /// <p>Returns a list of resource metadata for a given list of trigger names. After calling the <code>ListTriggers</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
     fn batch_get_triggers(
         &self,
         input: BatchGetTriggersRequest,
-    ) -> RusotoFuture<BatchGetTriggersResponse, BatchGetTriggersError>;
+    ) -> Request<BatchGetTriggersRequest>;
 
     /// <p>Stops one or more job runs for a specified job definition.</p>
-    fn batch_stop_job_run(
-        &self,
-        input: BatchStopJobRunRequest,
-    ) -> RusotoFuture<BatchStopJobRunResponse, GlueBatchStopJobRunError>;
+    fn batch_stop_job_run(&self, input: BatchStopJobRunRequest) -> Request<BatchStopJobRunRequest>;
 
     /// <p>Creates a classifier in the user's account. This can be a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, a <code>JsonClassifier</code>, or a <code>CsvClassifier</code>, depending on which field of the request is present.</p>
-    fn create_classifier(
-        &self,
-        input: CreateClassifierRequest,
-    ) -> RusotoFuture<CreateClassifierResponse, CreateClassifierError>;
+    fn create_classifier(&self, input: CreateClassifierRequest)
+        -> Request<CreateClassifierRequest>;
 
     /// <p>Creates a connection definition in the Data Catalog.</p>
-    fn create_connection(
-        &self,
-        input: CreateConnectionRequest,
-    ) -> RusotoFuture<CreateConnectionResponse, CreateConnectionError>;
+    fn create_connection(&self, input: CreateConnectionRequest)
+        -> Request<CreateConnectionRequest>;
 
     /// <p>Creates a new crawler with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in the <code>s3Targets</code> field, the <code>jdbcTargets</code> field, or the <code>DynamoDBTargets</code> field.</p>
-    fn create_crawler(
-        &self,
-        input: CreateCrawlerRequest,
-    ) -> RusotoFuture<CreateCrawlerResponse, CreateCrawlerError>;
+    fn create_crawler(&self, input: CreateCrawlerRequest) -> Request<CreateCrawlerRequest>;
 
     /// <p>Creates a new database in a Data Catalog.</p>
-    fn create_database(
-        &self,
-        input: CreateDatabaseRequest,
-    ) -> RusotoFuture<CreateDatabaseResponse, CreateDatabaseError>;
+    fn create_database(&self, input: CreateDatabaseRequest) -> Request<CreateDatabaseRequest>;
 
     /// <p>Creates a new DevEndpoint.</p>
     fn create_dev_endpoint(
         &self,
         input: CreateDevEndpointRequest,
-    ) -> RusotoFuture<CreateDevEndpointResponse, CreateDevEndpointError>;
+    ) -> Request<CreateDevEndpointRequest>;
 
     /// <p>Creates a new job definition.</p>
-    fn create_job(
-        &self,
-        input: CreateJobRequest,
-    ) -> RusotoFuture<CreateJobResponse, CreateJobError>;
+    fn create_job(&self, input: CreateJobRequest) -> Request<CreateJobRequest>;
 
     /// <p>Creates a new partition.</p>
-    fn create_partition(
-        &self,
-        input: CreatePartitionRequest,
-    ) -> RusotoFuture<CreatePartitionResponse, CreatePartitionError>;
+    fn create_partition(&self, input: CreatePartitionRequest) -> Request<CreatePartitionRequest>;
 
     /// <p>Transforms a directed acyclic graph (DAG) into code.</p>
-    fn create_script(
-        &self,
-        input: CreateScriptRequest,
-    ) -> RusotoFuture<CreateScriptResponse, CreateScriptError>;
+    fn create_script(&self, input: CreateScriptRequest) -> Request<CreateScriptRequest>;
 
     /// <p>Creates a new security configuration.</p>
     fn create_security_configuration(
         &self,
         input: CreateSecurityConfigurationRequest,
-    ) -> RusotoFuture<CreateSecurityConfigurationResponse, CreateSecurityConfigurationError>;
+    ) -> Request<CreateSecurityConfigurationRequest>;
 
     /// <p>Creates a new table definition in the Data Catalog.</p>
-    fn create_table(
-        &self,
-        input: CreateTableRequest,
-    ) -> RusotoFuture<CreateTableResponse, CreateTableError>;
+    fn create_table(&self, input: CreateTableRequest) -> Request<CreateTableRequest>;
 
     /// <p>Creates a new trigger.</p>
-    fn create_trigger(
-        &self,
-        input: CreateTriggerRequest,
-    ) -> RusotoFuture<CreateTriggerResponse, CreateTriggerError>;
+    fn create_trigger(&self, input: CreateTriggerRequest) -> Request<CreateTriggerRequest>;
 
     /// <p>Creates a new function definition in the Data Catalog.</p>
     fn create_user_defined_function(
         &self,
         input: CreateUserDefinedFunctionRequest,
-    ) -> RusotoFuture<CreateUserDefinedFunctionResponse, CreateUserDefinedFunctionError>;
+    ) -> Request<CreateUserDefinedFunctionRequest>;
 
     /// <p>Removes a classifier from the Data Catalog.</p>
-    fn delete_classifier(
-        &self,
-        input: DeleteClassifierRequest,
-    ) -> RusotoFuture<DeleteClassifierResponse, DeleteClassifierError>;
+    fn delete_classifier(&self, input: DeleteClassifierRequest)
+        -> Request<DeleteClassifierRequest>;
 
     /// <p>Deletes a connection from the Data Catalog.</p>
-    fn delete_connection(
-        &self,
-        input: DeleteConnectionRequest,
-    ) -> RusotoFuture<DeleteConnectionResponse, DeleteConnectionError>;
+    fn delete_connection(&self, input: DeleteConnectionRequest)
+        -> Request<DeleteConnectionRequest>;
 
     /// <p>Removes a specified crawler from the AWS Glue Data Catalog, unless the crawler state is <code>RUNNING</code>.</p>
-    fn delete_crawler(
-        &self,
-        input: DeleteCrawlerRequest,
-    ) -> RusotoFuture<DeleteCrawlerResponse, DeleteCrawlerError>;
+    fn delete_crawler(&self, input: DeleteCrawlerRequest) -> Request<DeleteCrawlerRequest>;
 
     /// <p><p>Removes a specified Database from a Data Catalog.</p> <note> <p>After completing this operation, you will no longer have access to the tables (and all table versions and partitions that might belong to the tables) and the user-defined functions in the deleted database. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>DeleteDatabase</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, <code>DeletePartition</code> or <code>BatchDeletePartition</code>, <code>DeleteUserDefinedFunction</code>, and <code>DeleteTable</code> or <code>BatchDeleteTable</code>, to delete any resources that belong to the database.</p> </note></p>
-    fn delete_database(
-        &self,
-        input: DeleteDatabaseRequest,
-    ) -> RusotoFuture<DeleteDatabaseResponse, DeleteDatabaseError>;
+    fn delete_database(&self, input: DeleteDatabaseRequest) -> Request<DeleteDatabaseRequest>;
 
     /// <p>Deletes a specified DevEndpoint.</p>
     fn delete_dev_endpoint(
         &self,
         input: DeleteDevEndpointRequest,
-    ) -> RusotoFuture<DeleteDevEndpointResponse, DeleteDevEndpointError>;
+    ) -> Request<DeleteDevEndpointRequest>;
 
     /// <p>Deletes a specified job definition. If the job definition is not found, no exception is thrown.</p>
-    fn delete_job(
-        &self,
-        input: DeleteJobRequest,
-    ) -> RusotoFuture<DeleteJobResponse, DeleteJobError>;
+    fn delete_job(&self, input: DeleteJobRequest) -> Request<DeleteJobRequest>;
 
     /// <p>Deletes a specified partition.</p>
-    fn delete_partition(
-        &self,
-        input: DeletePartitionRequest,
-    ) -> RusotoFuture<DeletePartitionResponse, DeletePartitionError>;
+    fn delete_partition(&self, input: DeletePartitionRequest) -> Request<DeletePartitionRequest>;
 
     /// <p>Deletes a specified policy.</p>
     fn delete_resource_policy(
         &self,
         input: DeleteResourcePolicyRequest,
-    ) -> RusotoFuture<DeleteResourcePolicyResponse, DeleteResourcePolicyError>;
+    ) -> Request<DeleteResourcePolicyRequest>;
 
     /// <p>Deletes a specified security configuration.</p>
     fn delete_security_configuration(
         &self,
         input: DeleteSecurityConfigurationRequest,
-    ) -> RusotoFuture<DeleteSecurityConfigurationResponse, DeleteSecurityConfigurationError>;
+    ) -> Request<DeleteSecurityConfigurationRequest>;
 
     /// <p><p>Removes a table definition from the Data Catalog.</p> <note> <p>After completing this operation, you will no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>DeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note></p>
-    fn delete_table(
-        &self,
-        input: DeleteTableRequest,
-    ) -> RusotoFuture<DeleteTableResponse, DeleteTableError>;
+    fn delete_table(&self, input: DeleteTableRequest) -> Request<DeleteTableRequest>;
 
     /// <p>Deletes a specified version of a table.</p>
     fn delete_table_version(
         &self,
         input: DeleteTableVersionRequest,
-    ) -> RusotoFuture<DeleteTableVersionResponse, DeleteTableVersionError>;
+    ) -> Request<DeleteTableVersionRequest>;
 
     /// <p>Deletes a specified trigger. If the trigger is not found, no exception is thrown.</p>
-    fn delete_trigger(
-        &self,
-        input: DeleteTriggerRequest,
-    ) -> RusotoFuture<DeleteTriggerResponse, DeleteTriggerError>;
+    fn delete_trigger(&self, input: DeleteTriggerRequest) -> Request<DeleteTriggerRequest>;
 
     /// <p>Deletes an existing function definition from the Data Catalog.</p>
     fn delete_user_defined_function(
         &self,
         input: DeleteUserDefinedFunctionRequest,
-    ) -> RusotoFuture<DeleteUserDefinedFunctionResponse, DeleteUserDefinedFunctionError>;
+    ) -> Request<DeleteUserDefinedFunctionRequest>;
 
     /// <p>Retrieves the status of a migration operation.</p>
     fn get_catalog_import_status(
         &self,
         input: GetCatalogImportStatusRequest,
-    ) -> RusotoFuture<GetCatalogImportStatusResponse, GetCatalogImportStatusError>;
+    ) -> Request<GetCatalogImportStatusRequest>;
 
     /// <p>Retrieve a classifier by name.</p>
-    fn get_classifier(
-        &self,
-        input: GetClassifierRequest,
-    ) -> RusotoFuture<GetClassifierResponse, GetClassifierError>;
+    fn get_classifier(&self, input: GetClassifierRequest) -> Request<GetClassifierRequest>;
 
     /// <p>Lists all classifier objects in the Data Catalog.</p>
-    fn get_classifiers(
-        &self,
-        input: GetClassifiersRequest,
-    ) -> RusotoFuture<GetClassifiersResponse, GetClassifiersError>;
+    fn get_classifiers(&self, input: GetClassifiersRequest) -> Request<GetClassifiersRequest>;
 
     /// <p>Retrieves a connection definition from the Data Catalog.</p>
-    fn get_connection(
-        &self,
-        input: GetConnectionRequest,
-    ) -> RusotoFuture<GetConnectionResponse, GetConnectionError>;
+    fn get_connection(&self, input: GetConnectionRequest) -> Request<GetConnectionRequest>;
 
     /// <p>Retrieves a list of connection definitions from the Data Catalog.</p>
-    fn get_connections(
-        &self,
-        input: GetConnectionsRequest,
-    ) -> RusotoFuture<GetConnectionsResponse, GetConnectionsError>;
+    fn get_connections(&self, input: GetConnectionsRequest) -> Request<GetConnectionsRequest>;
 
     /// <p>Retrieves metadata for a specified crawler.</p>
-    fn get_crawler(
-        &self,
-        input: GetCrawlerRequest,
-    ) -> RusotoFuture<GetCrawlerResponse, GetCrawlerError>;
+    fn get_crawler(&self, input: GetCrawlerRequest) -> Request<GetCrawlerRequest>;
 
     /// <p>Retrieves metrics about specified crawlers.</p>
     fn get_crawler_metrics(
         &self,
         input: GetCrawlerMetricsRequest,
-    ) -> RusotoFuture<GetCrawlerMetricsResponse, GetCrawlerMetricsError>;
+    ) -> Request<GetCrawlerMetricsRequest>;
 
     /// <p>Retrieves metadata for all crawlers defined in the customer account.</p>
-    fn get_crawlers(
-        &self,
-        input: GetCrawlersRequest,
-    ) -> RusotoFuture<GetCrawlersResponse, GetCrawlersError>;
+    fn get_crawlers(&self, input: GetCrawlersRequest) -> Request<GetCrawlersRequest>;
 
     /// <p>Retrieves the security configuration for a specified catalog.</p>
     fn get_data_catalog_encryption_settings(
         &self,
         input: GetDataCatalogEncryptionSettingsRequest,
-    ) -> RusotoFuture<GetDataCatalogEncryptionSettingsResponse, GetDataCatalogEncryptionSettingsError>;
+    ) -> Request<GetDataCatalogEncryptionSettingsRequest>;
 
     /// <p>Retrieves the definition of a specified database.</p>
-    fn get_database(
-        &self,
-        input: GetDatabaseRequest,
-    ) -> RusotoFuture<GetDatabaseResponse, GetDatabaseError>;
+    fn get_database(&self, input: GetDatabaseRequest) -> Request<GetDatabaseRequest>;
 
     /// <p>Retrieves all Databases defined in a given Data Catalog.</p>
-    fn get_databases(
-        &self,
-        input: GetDatabasesRequest,
-    ) -> RusotoFuture<GetDatabasesResponse, GetDatabasesError>;
+    fn get_databases(&self, input: GetDatabasesRequest) -> Request<GetDatabasesRequest>;
 
     /// <p>Transforms a Python script into a directed acyclic graph (DAG). </p>
     fn get_dataflow_graph(
         &self,
         input: GetDataflowGraphRequest,
-    ) -> RusotoFuture<GetDataflowGraphResponse, GetDataflowGraphError>;
+    ) -> Request<GetDataflowGraphRequest>;
 
     /// <p><p>Retrieves information about a specified DevEndpoint.</p> <note> <p>When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address, and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address.</p> </note></p>
-    fn get_dev_endpoint(
-        &self,
-        input: GetDevEndpointRequest,
-    ) -> RusotoFuture<GetDevEndpointResponse, GetDevEndpointError>;
+    fn get_dev_endpoint(&self, input: GetDevEndpointRequest) -> Request<GetDevEndpointRequest>;
 
     /// <p><p>Retrieves all the DevEndpoints in this AWS account.</p> <note> <p>When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address.</p> </note></p>
-    fn get_dev_endpoints(
-        &self,
-        input: GetDevEndpointsRequest,
-    ) -> RusotoFuture<GetDevEndpointsResponse, GetDevEndpointsError>;
+    fn get_dev_endpoints(&self, input: GetDevEndpointsRequest) -> Request<GetDevEndpointsRequest>;
 
     /// <p>Retrieves an existing job definition.</p>
-    fn get_job(&self, input: GetJobRequest) -> RusotoFuture<GetJobResponse, GetJobError>;
+    fn get_job(&self, input: GetJobRequest) -> Request<GetJobRequest>;
 
     /// <p>Retrieves the metadata for a given job run.</p>
-    fn get_job_run(
-        &self,
-        input: GetJobRunRequest,
-    ) -> RusotoFuture<GetJobRunResponse, GetJobRunError>;
+    fn get_job_run(&self, input: GetJobRunRequest) -> Request<GetJobRunRequest>;
 
     /// <p>Retrieves metadata for all runs of a given job definition.</p>
-    fn get_job_runs(
-        &self,
-        input: GetJobRunsRequest,
-    ) -> RusotoFuture<GetJobRunsResponse, GetJobRunsError>;
+    fn get_job_runs(&self, input: GetJobRunsRequest) -> Request<GetJobRunsRequest>;
 
     /// <p>Retrieves all current job definitions.</p>
-    fn get_jobs(&self, input: GetJobsRequest) -> RusotoFuture<GetJobsResponse, GetJobsError>;
+    fn get_jobs(&self, input: GetJobsRequest) -> Request<GetJobsRequest>;
 
     /// <p>Creates mappings.</p>
-    fn get_mapping(
-        &self,
-        input: GetMappingRequest,
-    ) -> RusotoFuture<GetMappingResponse, GetMappingError>;
+    fn get_mapping(&self, input: GetMappingRequest) -> Request<GetMappingRequest>;
 
     /// <p>Retrieves information about a specified partition.</p>
-    fn get_partition(
-        &self,
-        input: GetPartitionRequest,
-    ) -> RusotoFuture<GetPartitionResponse, GetPartitionError>;
+    fn get_partition(&self, input: GetPartitionRequest) -> Request<GetPartitionRequest>;
 
     /// <p>Retrieves information about the partitions in a table.</p>
-    fn get_partitions(
-        &self,
-        input: GetPartitionsRequest,
-    ) -> RusotoFuture<GetPartitionsResponse, GetPartitionsError>;
+    fn get_partitions(&self, input: GetPartitionsRequest) -> Request<GetPartitionsRequest>;
 
     /// <p>Gets code to perform a specified mapping.</p>
-    fn get_plan(&self, input: GetPlanRequest) -> RusotoFuture<GetPlanResponse, GetPlanError>;
+    fn get_plan(&self, input: GetPlanRequest) -> Request<GetPlanRequest>;
 
     /// <p>Retrieves a specified resource policy.</p>
-    fn get_resource_policy(
-        &self,
-    ) -> RusotoFuture<GetResourcePolicyResponse, GetResourcePolicyError>;
+    fn get_resource_policy(&self) -> Request<GetResourcePolicyRequest>;
 
     /// <p>Retrieves a specified security configuration.</p>
     fn get_security_configuration(
         &self,
         input: GetSecurityConfigurationRequest,
-    ) -> RusotoFuture<GetSecurityConfigurationResponse, GetSecurityConfigurationError>;
+    ) -> Request<GetSecurityConfigurationRequest>;
 
     /// <p>Retrieves a list of all security configurations.</p>
     fn get_security_configurations(
         &self,
         input: GetSecurityConfigurationsRequest,
-    ) -> RusotoFuture<GetSecurityConfigurationsResponse, GetSecurityConfigurationsError>;
+    ) -> Request<GetSecurityConfigurationsRequest>;
 
     /// <p>Retrieves the <code>Table</code> definition in a Data Catalog for a specified table.</p>
-    fn get_table(&self, input: GetTableRequest) -> RusotoFuture<GetTableResponse, GetTableError>;
+    fn get_table(&self, input: GetTableRequest) -> Request<GetTableRequest>;
 
     /// <p>Retrieves a specified version of a table.</p>
-    fn get_table_version(
-        &self,
-        input: GetTableVersionRequest,
-    ) -> RusotoFuture<GetTableVersionResponse, GetTableVersionError>;
+    fn get_table_version(&self, input: GetTableVersionRequest) -> Request<GetTableVersionRequest>;
 
     /// <p>Retrieves a list of strings that identify available versions of a specified table.</p>
     fn get_table_versions(
         &self,
         input: GetTableVersionsRequest,
-    ) -> RusotoFuture<GetTableVersionsResponse, GetTableVersionsError>;
+    ) -> Request<GetTableVersionsRequest>;
 
     /// <p>Retrieves the definitions of some or all of the tables in a given <code>Database</code>.</p>
-    fn get_tables(
-        &self,
-        input: GetTablesRequest,
-    ) -> RusotoFuture<GetTablesResponse, GetTablesError>;
+    fn get_tables(&self, input: GetTablesRequest) -> Request<GetTablesRequest>;
 
     /// <p>Retrieves a list of tags associated with a resource.</p>
-    fn get_tags(&self, input: GetTagsRequest) -> RusotoFuture<GetTagsResponse, GetTagsError>;
+    fn get_tags(&self, input: GetTagsRequest) -> Request<GetTagsRequest>;
 
     /// <p>Retrieves the definition of a trigger.</p>
-    fn get_trigger(
-        &self,
-        input: GetTriggerRequest,
-    ) -> RusotoFuture<GetTriggerResponse, GetTriggerError>;
+    fn get_trigger(&self, input: GetTriggerRequest) -> Request<GetTriggerRequest>;
 
     /// <p>Gets all the triggers associated with a job.</p>
-    fn get_triggers(
-        &self,
-        input: GetTriggersRequest,
-    ) -> RusotoFuture<GetTriggersResponse, GetTriggersError>;
+    fn get_triggers(&self, input: GetTriggersRequest) -> Request<GetTriggersRequest>;
 
     /// <p>Retrieves a specified function definition from the Data Catalog.</p>
     fn get_user_defined_function(
         &self,
         input: GetUserDefinedFunctionRequest,
-    ) -> RusotoFuture<GetUserDefinedFunctionResponse, GetUserDefinedFunctionError>;
+    ) -> Request<GetUserDefinedFunctionRequest>;
 
     /// <p>Retrieves a multiple function definitions from the Data Catalog.</p>
     fn get_user_defined_functions(
         &self,
         input: GetUserDefinedFunctionsRequest,
-    ) -> RusotoFuture<GetUserDefinedFunctionsResponse, GetUserDefinedFunctionsError>;
+    ) -> Request<GetUserDefinedFunctionsRequest>;
 
     /// <p>Imports an existing Athena Data Catalog to AWS Glue</p>
     fn import_catalog_to_glue(
         &self,
         input: ImportCatalogToGlueRequest,
-    ) -> RusotoFuture<ImportCatalogToGlueResponse, ImportCatalogToGlueError>;
+    ) -> Request<ImportCatalogToGlueRequest>;
 
     /// <p>Retrieves the names of all crawler resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
-    fn list_crawlers(
-        &self,
-        input: ListCrawlersRequest,
-    ) -> RusotoFuture<ListCrawlersResponse, ListCrawlersError>;
+    fn list_crawlers(&self, input: ListCrawlersRequest) -> Request<ListCrawlersRequest>;
 
     /// <p>Retrieves the names of all DevEndpoint resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
     fn list_dev_endpoints(
         &self,
         input: ListDevEndpointsRequest,
-    ) -> RusotoFuture<ListDevEndpointsResponse, ListDevEndpointsError>;
+    ) -> Request<ListDevEndpointsRequest>;
 
     /// <p>Retrieves the names of all job resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
-    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError>;
+    fn list_jobs(&self, input: ListJobsRequest) -> Request<ListJobsRequest>;
 
     /// <p>Retrieves the names of all trigger resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
-    fn list_triggers(
-        &self,
-        input: ListTriggersRequest,
-    ) -> RusotoFuture<ListTriggersResponse, ListTriggersError>;
+    fn list_triggers(&self, input: ListTriggersRequest) -> Request<ListTriggersRequest>;
 
     /// <p>Sets the security configuration for a specified catalog. After the configuration has been set, the specified encryption is applied to every catalog write thereafter.</p>
     fn put_data_catalog_encryption_settings(
         &self,
         input: PutDataCatalogEncryptionSettingsRequest,
-    ) -> RusotoFuture<PutDataCatalogEncryptionSettingsResponse, PutDataCatalogEncryptionSettingsError>;
+    ) -> Request<PutDataCatalogEncryptionSettingsRequest>;
 
     /// <p>Sets the Data Catalog resource policy for access control.</p>
     fn put_resource_policy(
         &self,
         input: PutResourcePolicyRequest,
-    ) -> RusotoFuture<PutResourcePolicyResponse, PutResourcePolicyError>;
+    ) -> Request<PutResourcePolicyRequest>;
 
     /// <p>Resets a bookmark entry.</p>
     fn reset_job_bookmark(
         &self,
         input: ResetJobBookmarkRequest,
-    ) -> RusotoFuture<ResetJobBookmarkResponse, ResetJobBookmarkError>;
+    ) -> Request<ResetJobBookmarkRequest>;
 
     /// <p>Starts a crawl using the specified crawler, regardless of what is scheduled. If the crawler is already running, returns a <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-exceptions.html#aws-glue-api-exceptions-CrawlerRunningException">CrawlerRunningException</a>.</p>
-    fn start_crawler(
-        &self,
-        input: StartCrawlerRequest,
-    ) -> RusotoFuture<StartCrawlerResponse, StartCrawlerError>;
+    fn start_crawler(&self, input: StartCrawlerRequest) -> Request<StartCrawlerRequest>;
 
     /// <p>Changes the schedule state of the specified crawler to <code>SCHEDULED</code>, unless the crawler is already running or the schedule state is already <code>SCHEDULED</code>.</p>
     fn start_crawler_schedule(
         &self,
         input: StartCrawlerScheduleRequest,
-    ) -> RusotoFuture<StartCrawlerScheduleResponse, StartCrawlerScheduleError>;
+    ) -> Request<StartCrawlerScheduleRequest>;
 
     /// <p>Starts a job run using a job definition.</p>
-    fn start_job_run(
-        &self,
-        input: StartJobRunRequest,
-    ) -> RusotoFuture<StartJobRunResponse, StartJobRunError>;
+    fn start_job_run(&self, input: StartJobRunRequest) -> Request<StartJobRunRequest>;
 
     /// <p>Starts an existing trigger. See <a href="http://docs.aws.amazon.com/glue/latest/dg/trigger-job.html">Triggering Jobs</a> for information about how different types of trigger are started.</p>
-    fn start_trigger(
-        &self,
-        input: StartTriggerRequest,
-    ) -> RusotoFuture<StartTriggerResponse, StartTriggerError>;
+    fn start_trigger(&self, input: StartTriggerRequest) -> Request<StartTriggerRequest>;
 
     /// <p>If the specified crawler is running, stops the crawl.</p>
-    fn stop_crawler(
-        &self,
-        input: StopCrawlerRequest,
-    ) -> RusotoFuture<StopCrawlerResponse, StopCrawlerError>;
+    fn stop_crawler(&self, input: StopCrawlerRequest) -> Request<StopCrawlerRequest>;
 
     /// <p>Sets the schedule state of the specified crawler to <code>NOT_SCHEDULED</code>, but does not stop the crawler if it is already running.</p>
     fn stop_crawler_schedule(
         &self,
         input: StopCrawlerScheduleRequest,
-    ) -> RusotoFuture<StopCrawlerScheduleResponse, StopCrawlerScheduleError>;
+    ) -> Request<StopCrawlerScheduleRequest>;
 
     /// <p>Stops a specified trigger.</p>
-    fn stop_trigger(
-        &self,
-        input: StopTriggerRequest,
-    ) -> RusotoFuture<StopTriggerResponse, StopTriggerError>;
+    fn stop_trigger(&self, input: StopTriggerRequest) -> Request<StopTriggerRequest>;
 
     /// <p>Adds tags to a resource. A tag is a label you can assign to an AWS resource. In AWS Glue, you can tag only certain resources. For information about what resources you can tag, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a>.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Removes tags from a resource.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Modifies an existing classifier (a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, a <code>JsonClassifier</code>, or a <code>CsvClassifier</code>, depending on which field is present).</p>
-    fn update_classifier(
-        &self,
-        input: UpdateClassifierRequest,
-    ) -> RusotoFuture<UpdateClassifierResponse, UpdateClassifierError>;
+    fn update_classifier(&self, input: UpdateClassifierRequest)
+        -> Request<UpdateClassifierRequest>;
 
     /// <p>Updates a connection definition in the Data Catalog.</p>
-    fn update_connection(
-        &self,
-        input: UpdateConnectionRequest,
-    ) -> RusotoFuture<UpdateConnectionResponse, UpdateConnectionError>;
+    fn update_connection(&self, input: UpdateConnectionRequest)
+        -> Request<UpdateConnectionRequest>;
 
     /// <p>Updates a crawler. If a crawler is running, you must stop it using <code>StopCrawler</code> before updating it.</p>
-    fn update_crawler(
-        &self,
-        input: UpdateCrawlerRequest,
-    ) -> RusotoFuture<UpdateCrawlerResponse, UpdateCrawlerError>;
+    fn update_crawler(&self, input: UpdateCrawlerRequest) -> Request<UpdateCrawlerRequest>;
 
     /// <p>Updates the schedule of a crawler using a <code>cron</code> expression. </p>
     fn update_crawler_schedule(
         &self,
         input: UpdateCrawlerScheduleRequest,
-    ) -> RusotoFuture<UpdateCrawlerScheduleResponse, UpdateCrawlerScheduleError>;
+    ) -> Request<UpdateCrawlerScheduleRequest>;
 
     /// <p>Updates an existing database definition in a Data Catalog.</p>
-    fn update_database(
-        &self,
-        input: UpdateDatabaseRequest,
-    ) -> RusotoFuture<UpdateDatabaseResponse, UpdateDatabaseError>;
+    fn update_database(&self, input: UpdateDatabaseRequest) -> Request<UpdateDatabaseRequest>;
 
     /// <p>Updates a specified DevEndpoint.</p>
     fn update_dev_endpoint(
         &self,
         input: UpdateDevEndpointRequest,
-    ) -> RusotoFuture<UpdateDevEndpointResponse, UpdateDevEndpointError>;
+    ) -> Request<UpdateDevEndpointRequest>;
 
     /// <p>Updates an existing job definition.</p>
-    fn update_job(
-        &self,
-        input: UpdateJobRequest,
-    ) -> RusotoFuture<UpdateJobResponse, UpdateJobError>;
+    fn update_job(&self, input: UpdateJobRequest) -> Request<UpdateJobRequest>;
 
     /// <p>Updates a partition.</p>
-    fn update_partition(
-        &self,
-        input: UpdatePartitionRequest,
-    ) -> RusotoFuture<UpdatePartitionResponse, UpdatePartitionError>;
+    fn update_partition(&self, input: UpdatePartitionRequest) -> Request<UpdatePartitionRequest>;
 
     /// <p>Updates a metadata table in the Data Catalog.</p>
-    fn update_table(
-        &self,
-        input: UpdateTableRequest,
-    ) -> RusotoFuture<UpdateTableResponse, UpdateTableError>;
+    fn update_table(&self, input: UpdateTableRequest) -> Request<UpdateTableRequest>;
 
     /// <p>Updates a trigger definition.</p>
-    fn update_trigger(
-        &self,
-        input: UpdateTriggerRequest,
-    ) -> RusotoFuture<UpdateTriggerResponse, UpdateTriggerError>;
+    fn update_trigger(&self, input: UpdateTriggerRequest) -> Request<UpdateTriggerRequest>;
 
     /// <p>Updates an existing function definition in the Data Catalog.</p>
     fn update_user_defined_function(
         &self,
         input: UpdateUserDefinedFunctionRequest,
-    ) -> RusotoFuture<UpdateUserDefinedFunctionResponse, UpdateUserDefinedFunctionError>;
+    ) -> Request<UpdateUserDefinedFunctionRequest>;
 }
 /// A client for the AWS Glue API.
 #[derive(Clone)]
@@ -10214,15 +10054,640 @@ impl Glue for GlueClient {
     fn batch_create_partition(
         &self,
         input: BatchCreatePartitionRequest,
-    ) -> RusotoFuture<BatchCreatePartitionResponse, BatchCreatePartitionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+    ) -> Request<BatchCreatePartitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a list of connection definitions from the Data Catalog.</p>
+    fn batch_delete_connection(
+        &self,
+        input: BatchDeleteConnectionRequest,
+    ) -> Request<BatchDeleteConnectionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes one or more partitions in a batch operation.</p>
+    fn batch_delete_partition(
+        &self,
+        input: BatchDeletePartitionRequest,
+    ) -> Request<BatchDeletePartitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes multiple tables at once.</p> <note> <p>After completing this operation, you will no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>BatchDeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note></p>
+    fn batch_delete_table(
+        &self,
+        input: BatchDeleteTableRequest,
+    ) -> Request<BatchDeleteTableRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specified batch of versions of a table.</p>
+    fn batch_delete_table_version(
+        &self,
+        input: BatchDeleteTableVersionRequest,
+    ) -> Request<BatchDeleteTableVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of resource metadata for a given list of crawler names. After calling the <code>ListCrawlers</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
+    fn batch_get_crawlers(
+        &self,
+        input: BatchGetCrawlersRequest,
+    ) -> Request<BatchGetCrawlersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of resource metadata for a given list of DevEndpoint names. After calling the <code>ListDevEndpoints</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
+    fn batch_get_dev_endpoints(
+        &self,
+        input: BatchGetDevEndpointsRequest,
+    ) -> Request<BatchGetDevEndpointsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of resource metadata for a given list of job names. After calling the <code>ListJobs</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags. </p>
+    fn batch_get_jobs(&self, input: BatchGetJobsRequest) -> Request<BatchGetJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves partitions in a batch request.</p>
+    fn batch_get_partition(
+        &self,
+        input: BatchGetPartitionRequest,
+    ) -> Request<BatchGetPartitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of resource metadata for a given list of trigger names. After calling the <code>ListTriggers</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
+    fn batch_get_triggers(
+        &self,
+        input: BatchGetTriggersRequest,
+    ) -> Request<BatchGetTriggersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops one or more job runs for a specified job definition.</p>
+    fn batch_stop_job_run(&self, input: BatchStopJobRunRequest) -> Request<BatchStopJobRunRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a classifier in the user's account. This can be a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, a <code>JsonClassifier</code>, or a <code>CsvClassifier</code>, depending on which field of the request is present.</p>
+    fn create_classifier(
+        &self,
+        input: CreateClassifierRequest,
+    ) -> Request<CreateClassifierRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a connection definition in the Data Catalog.</p>
+    fn create_connection(
+        &self,
+        input: CreateConnectionRequest,
+    ) -> Request<CreateConnectionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new crawler with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in the <code>s3Targets</code> field, the <code>jdbcTargets</code> field, or the <code>DynamoDBTargets</code> field.</p>
+    fn create_crawler(&self, input: CreateCrawlerRequest) -> Request<CreateCrawlerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new database in a Data Catalog.</p>
+    fn create_database(&self, input: CreateDatabaseRequest) -> Request<CreateDatabaseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new DevEndpoint.</p>
+    fn create_dev_endpoint(
+        &self,
+        input: CreateDevEndpointRequest,
+    ) -> Request<CreateDevEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new job definition.</p>
+    fn create_job(&self, input: CreateJobRequest) -> Request<CreateJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new partition.</p>
+    fn create_partition(&self, input: CreatePartitionRequest) -> Request<CreatePartitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Transforms a directed acyclic graph (DAG) into code.</p>
+    fn create_script(&self, input: CreateScriptRequest) -> Request<CreateScriptRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new security configuration.</p>
+    fn create_security_configuration(
+        &self,
+        input: CreateSecurityConfigurationRequest,
+    ) -> Request<CreateSecurityConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new table definition in the Data Catalog.</p>
+    fn create_table(&self, input: CreateTableRequest) -> Request<CreateTableRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new trigger.</p>
+    fn create_trigger(&self, input: CreateTriggerRequest) -> Request<CreateTriggerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new function definition in the Data Catalog.</p>
+    fn create_user_defined_function(
+        &self,
+        input: CreateUserDefinedFunctionRequest,
+    ) -> Request<CreateUserDefinedFunctionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes a classifier from the Data Catalog.</p>
+    fn delete_classifier(
+        &self,
+        input: DeleteClassifierRequest,
+    ) -> Request<DeleteClassifierRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a connection from the Data Catalog.</p>
+    fn delete_connection(
+        &self,
+        input: DeleteConnectionRequest,
+    ) -> Request<DeleteConnectionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes a specified crawler from the AWS Glue Data Catalog, unless the crawler state is <code>RUNNING</code>.</p>
+    fn delete_crawler(&self, input: DeleteCrawlerRequest) -> Request<DeleteCrawlerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Removes a specified Database from a Data Catalog.</p> <note> <p>After completing this operation, you will no longer have access to the tables (and all table versions and partitions that might belong to the tables) and the user-defined functions in the deleted database. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>DeleteDatabase</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, <code>DeletePartition</code> or <code>BatchDeletePartition</code>, <code>DeleteUserDefinedFunction</code>, and <code>DeleteTable</code> or <code>BatchDeleteTable</code>, to delete any resources that belong to the database.</p> </note></p>
+    fn delete_database(&self, input: DeleteDatabaseRequest) -> Request<DeleteDatabaseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specified DevEndpoint.</p>
+    fn delete_dev_endpoint(
+        &self,
+        input: DeleteDevEndpointRequest,
+    ) -> Request<DeleteDevEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specified job definition. If the job definition is not found, no exception is thrown.</p>
+    fn delete_job(&self, input: DeleteJobRequest) -> Request<DeleteJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specified partition.</p>
+    fn delete_partition(&self, input: DeletePartitionRequest) -> Request<DeletePartitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specified policy.</p>
+    fn delete_resource_policy(
+        &self,
+        input: DeleteResourcePolicyRequest,
+    ) -> Request<DeleteResourcePolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specified security configuration.</p>
+    fn delete_security_configuration(
+        &self,
+        input: DeleteSecurityConfigurationRequest,
+    ) -> Request<DeleteSecurityConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Removes a table definition from the Data Catalog.</p> <note> <p>After completing this operation, you will no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>DeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note></p>
+    fn delete_table(&self, input: DeleteTableRequest) -> Request<DeleteTableRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specified version of a table.</p>
+    fn delete_table_version(
+        &self,
+        input: DeleteTableVersionRequest,
+    ) -> Request<DeleteTableVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specified trigger. If the trigger is not found, no exception is thrown.</p>
+    fn delete_trigger(&self, input: DeleteTriggerRequest) -> Request<DeleteTriggerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an existing function definition from the Data Catalog.</p>
+    fn delete_user_defined_function(
+        &self,
+        input: DeleteUserDefinedFunctionRequest,
+    ) -> Request<DeleteUserDefinedFunctionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the status of a migration operation.</p>
+    fn get_catalog_import_status(
+        &self,
+        input: GetCatalogImportStatusRequest,
+    ) -> Request<GetCatalogImportStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieve a classifier by name.</p>
+    fn get_classifier(&self, input: GetClassifierRequest) -> Request<GetClassifierRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all classifier objects in the Data Catalog.</p>
+    fn get_classifiers(&self, input: GetClassifiersRequest) -> Request<GetClassifiersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a connection definition from the Data Catalog.</p>
+    fn get_connection(&self, input: GetConnectionRequest) -> Request<GetConnectionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list of connection definitions from the Data Catalog.</p>
+    fn get_connections(&self, input: GetConnectionsRequest) -> Request<GetConnectionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves metadata for a specified crawler.</p>
+    fn get_crawler(&self, input: GetCrawlerRequest) -> Request<GetCrawlerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves metrics about specified crawlers.</p>
+    fn get_crawler_metrics(
+        &self,
+        input: GetCrawlerMetricsRequest,
+    ) -> Request<GetCrawlerMetricsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves metadata for all crawlers defined in the customer account.</p>
+    fn get_crawlers(&self, input: GetCrawlersRequest) -> Request<GetCrawlersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the security configuration for a specified catalog.</p>
+    fn get_data_catalog_encryption_settings(
+        &self,
+        input: GetDataCatalogEncryptionSettingsRequest,
+    ) -> Request<GetDataCatalogEncryptionSettingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the definition of a specified database.</p>
+    fn get_database(&self, input: GetDatabaseRequest) -> Request<GetDatabaseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves all Databases defined in a given Data Catalog.</p>
+    fn get_databases(&self, input: GetDatabasesRequest) -> Request<GetDatabasesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Transforms a Python script into a directed acyclic graph (DAG). </p>
+    fn get_dataflow_graph(
+        &self,
+        input: GetDataflowGraphRequest,
+    ) -> Request<GetDataflowGraphRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Retrieves information about a specified DevEndpoint.</p> <note> <p>When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address, and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address.</p> </note></p>
+    fn get_dev_endpoint(&self, input: GetDevEndpointRequest) -> Request<GetDevEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Retrieves all the DevEndpoints in this AWS account.</p> <note> <p>When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address.</p> </note></p>
+    fn get_dev_endpoints(&self, input: GetDevEndpointsRequest) -> Request<GetDevEndpointsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves an existing job definition.</p>
+    fn get_job(&self, input: GetJobRequest) -> Request<GetJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the metadata for a given job run.</p>
+    fn get_job_run(&self, input: GetJobRunRequest) -> Request<GetJobRunRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves metadata for all runs of a given job definition.</p>
+    fn get_job_runs(&self, input: GetJobRunsRequest) -> Request<GetJobRunsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves all current job definitions.</p>
+    fn get_jobs(&self, input: GetJobsRequest) -> Request<GetJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates mappings.</p>
+    fn get_mapping(&self, input: GetMappingRequest) -> Request<GetMappingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about a specified partition.</p>
+    fn get_partition(&self, input: GetPartitionRequest) -> Request<GetPartitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about the partitions in a table.</p>
+    fn get_partitions(&self, input: GetPartitionsRequest) -> Request<GetPartitionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets code to perform a specified mapping.</p>
+    fn get_plan(&self, input: GetPlanRequest) -> Request<GetPlanRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a specified resource policy.</p>
+    fn get_resource_policy(&self) -> Request<GetResourcePolicyRequest> {
+        Request::new(
+            GetResourcePolicyRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Retrieves a specified security configuration.</p>
+    fn get_security_configuration(
+        &self,
+        input: GetSecurityConfigurationRequest,
+    ) -> Request<GetSecurityConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list of all security configurations.</p>
+    fn get_security_configurations(
+        &self,
+        input: GetSecurityConfigurationsRequest,
+    ) -> Request<GetSecurityConfigurationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the <code>Table</code> definition in a Data Catalog for a specified table.</p>
+    fn get_table(&self, input: GetTableRequest) -> Request<GetTableRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a specified version of a table.</p>
+    fn get_table_version(&self, input: GetTableVersionRequest) -> Request<GetTableVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list of strings that identify available versions of a specified table.</p>
+    fn get_table_versions(
+        &self,
+        input: GetTableVersionsRequest,
+    ) -> Request<GetTableVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the definitions of some or all of the tables in a given <code>Database</code>.</p>
+    fn get_tables(&self, input: GetTablesRequest) -> Request<GetTablesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list of tags associated with a resource.</p>
+    fn get_tags(&self, input: GetTagsRequest) -> Request<GetTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the definition of a trigger.</p>
+    fn get_trigger(&self, input: GetTriggerRequest) -> Request<GetTriggerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets all the triggers associated with a job.</p>
+    fn get_triggers(&self, input: GetTriggersRequest) -> Request<GetTriggersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a specified function definition from the Data Catalog.</p>
+    fn get_user_defined_function(
+        &self,
+        input: GetUserDefinedFunctionRequest,
+    ) -> Request<GetUserDefinedFunctionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a multiple function definitions from the Data Catalog.</p>
+    fn get_user_defined_functions(
+        &self,
+        input: GetUserDefinedFunctionsRequest,
+    ) -> Request<GetUserDefinedFunctionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Imports an existing Athena Data Catalog to AWS Glue</p>
+    fn import_catalog_to_glue(
+        &self,
+        input: ImportCatalogToGlueRequest,
+    ) -> Request<ImportCatalogToGlueRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the names of all crawler resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
+    fn list_crawlers(&self, input: ListCrawlersRequest) -> Request<ListCrawlersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the names of all DevEndpoint resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
+    fn list_dev_endpoints(
+        &self,
+        input: ListDevEndpointsRequest,
+    ) -> Request<ListDevEndpointsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the names of all job resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
+    fn list_jobs(&self, input: ListJobsRequest) -> Request<ListJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the names of all trigger resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
+    fn list_triggers(&self, input: ListTriggersRequest) -> Request<ListTriggersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the security configuration for a specified catalog. After the configuration has been set, the specified encryption is applied to every catalog write thereafter.</p>
+    fn put_data_catalog_encryption_settings(
+        &self,
+        input: PutDataCatalogEncryptionSettingsRequest,
+    ) -> Request<PutDataCatalogEncryptionSettingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the Data Catalog resource policy for access control.</p>
+    fn put_resource_policy(
+        &self,
+        input: PutResourcePolicyRequest,
+    ) -> Request<PutResourcePolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Resets a bookmark entry.</p>
+    fn reset_job_bookmark(
+        &self,
+        input: ResetJobBookmarkRequest,
+    ) -> Request<ResetJobBookmarkRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts a crawl using the specified crawler, regardless of what is scheduled. If the crawler is already running, returns a <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-exceptions.html#aws-glue-api-exceptions-CrawlerRunningException">CrawlerRunningException</a>.</p>
+    fn start_crawler(&self, input: StartCrawlerRequest) -> Request<StartCrawlerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes the schedule state of the specified crawler to <code>SCHEDULED</code>, unless the crawler is already running or the schedule state is already <code>SCHEDULED</code>.</p>
+    fn start_crawler_schedule(
+        &self,
+        input: StartCrawlerScheduleRequest,
+    ) -> Request<StartCrawlerScheduleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts a job run using a job definition.</p>
+    fn start_job_run(&self, input: StartJobRunRequest) -> Request<StartJobRunRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts an existing trigger. See <a href="http://docs.aws.amazon.com/glue/latest/dg/trigger-job.html">Triggering Jobs</a> for information about how different types of trigger are started.</p>
+    fn start_trigger(&self, input: StartTriggerRequest) -> Request<StartTriggerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>If the specified crawler is running, stops the crawl.</p>
+    fn stop_crawler(&self, input: StopCrawlerRequest) -> Request<StopCrawlerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the schedule state of the specified crawler to <code>NOT_SCHEDULED</code>, but does not stop the crawler if it is already running.</p>
+    fn stop_crawler_schedule(
+        &self,
+        input: StopCrawlerScheduleRequest,
+    ) -> Request<StopCrawlerScheduleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops a specified trigger.</p>
+    fn stop_trigger(&self, input: StopTriggerRequest) -> Request<StopTriggerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds tags to a resource. A tag is a label you can assign to an AWS resource. In AWS Glue, you can tag only certain resources. For information about what resources you can tag, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a>.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes tags from a resource.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies an existing classifier (a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, a <code>JsonClassifier</code>, or a <code>CsvClassifier</code>, depending on which field is present).</p>
+    fn update_classifier(
+        &self,
+        input: UpdateClassifierRequest,
+    ) -> Request<UpdateClassifierRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a connection definition in the Data Catalog.</p>
+    fn update_connection(
+        &self,
+        input: UpdateConnectionRequest,
+    ) -> Request<UpdateConnectionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a crawler. If a crawler is running, you must stop it using <code>StopCrawler</code> before updating it.</p>
+    fn update_crawler(&self, input: UpdateCrawlerRequest) -> Request<UpdateCrawlerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the schedule of a crawler using a <code>cron</code> expression. </p>
+    fn update_crawler_schedule(
+        &self,
+        input: UpdateCrawlerScheduleRequest,
+    ) -> Request<UpdateCrawlerScheduleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an existing database definition in a Data Catalog.</p>
+    fn update_database(&self, input: UpdateDatabaseRequest) -> Request<UpdateDatabaseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a specified DevEndpoint.</p>
+    fn update_dev_endpoint(
+        &self,
+        input: UpdateDevEndpointRequest,
+    ) -> Request<UpdateDevEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an existing job definition.</p>
+    fn update_job(&self, input: UpdateJobRequest) -> Request<UpdateJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a partition.</p>
+    fn update_partition(&self, input: UpdatePartitionRequest) -> Request<UpdatePartitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a metadata table in the Data Catalog.</p>
+    fn update_table(&self, input: UpdateTableRequest) -> Request<UpdateTableRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a trigger definition.</p>
+    fn update_trigger(&self, input: UpdateTriggerRequest) -> Request<UpdateTriggerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an existing function definition in the Data Catalog.</p>
+    fn update_user_defined_function(
+        &self,
+        input: UpdateUserDefinedFunctionRequest,
+    ) -> Request<UpdateUserDefinedFunctionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for BatchCreatePartitionRequest {
+    type Output = BatchCreatePartitionResponse;
+    type Error = BatchCreatePartitionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchCreatePartition");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10237,20 +10702,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a list of connection definitions from the Data Catalog.</p>
-    fn batch_delete_connection(
-        &self,
-        input: BatchDeleteConnectionRequest,
-    ) -> RusotoFuture<BatchDeleteConnectionResponse, BatchDeleteConnectionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for BatchDeleteConnectionRequest {
+    type Output = BatchDeleteConnectionResponse;
+    type Error = BatchDeleteConnectionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchDeleteConnection");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10265,20 +10735,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Deletes one or more partitions in a batch operation.</p>
-    fn batch_delete_partition(
-        &self,
-        input: BatchDeletePartitionRequest,
-    ) -> RusotoFuture<BatchDeletePartitionResponse, BatchDeletePartitionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for BatchDeletePartitionRequest {
+    type Output = BatchDeletePartitionResponse;
+    type Error = BatchDeletePartitionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchDeletePartition");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10293,20 +10768,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p><p>Deletes multiple tables at once.</p> <note> <p>After completing this operation, you will no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>BatchDeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note></p>
-    fn batch_delete_table(
-        &self,
-        input: BatchDeleteTableRequest,
-    ) -> RusotoFuture<BatchDeleteTableResponse, BatchDeleteTableError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for BatchDeleteTableRequest {
+    type Output = BatchDeleteTableResponse;
+    type Error = BatchDeleteTableError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchDeleteTable");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10322,20 +10802,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specified batch of versions of a table.</p>
-    fn batch_delete_table_version(
-        &self,
-        input: BatchDeleteTableVersionRequest,
-    ) -> RusotoFuture<BatchDeleteTableVersionResponse, BatchDeleteTableVersionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for BatchDeleteTableVersionRequest {
+    type Output = BatchDeleteTableVersionResponse;
+    type Error = BatchDeleteTableVersionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchDeleteTableVersion");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10348,20 +10833,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of resource metadata for a given list of crawler names. After calling the <code>ListCrawlers</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
-    fn batch_get_crawlers(
-        &self,
-        input: BatchGetCrawlersRequest,
-    ) -> RusotoFuture<BatchGetCrawlersResponse, BatchGetCrawlersError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for BatchGetCrawlersRequest {
+    type Output = BatchGetCrawlersResponse;
+    type Error = BatchGetCrawlersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchGetCrawlers");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10377,20 +10867,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of resource metadata for a given list of DevEndpoint names. After calling the <code>ListDevEndpoints</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
-    fn batch_get_dev_endpoints(
-        &self,
-        input: BatchGetDevEndpointsRequest,
-    ) -> RusotoFuture<BatchGetDevEndpointsResponse, BatchGetDevEndpointsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for BatchGetDevEndpointsRequest {
+    type Output = BatchGetDevEndpointsResponse;
+    type Error = BatchGetDevEndpointsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchGetDevEndpoints");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10405,20 +10900,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of resource metadata for a given list of job names. After calling the <code>ListJobs</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags. </p>
-    fn batch_get_jobs(
-        &self,
-        input: BatchGetJobsRequest,
-    ) -> RusotoFuture<BatchGetJobsResponse, BatchGetJobsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for BatchGetJobsRequest {
+    type Output = BatchGetJobsResponse;
+    type Error = BatchGetJobsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchGetJobs");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10434,20 +10934,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves partitions in a batch request.</p>
-    fn batch_get_partition(
-        &self,
-        input: BatchGetPartitionRequest,
-    ) -> RusotoFuture<BatchGetPartitionResponse, BatchGetPartitionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for BatchGetPartitionRequest {
+    type Output = BatchGetPartitionResponse;
+    type Error = BatchGetPartitionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchGetPartition");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10463,20 +10968,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of resource metadata for a given list of trigger names. After calling the <code>ListTriggers</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
-    fn batch_get_triggers(
-        &self,
-        input: BatchGetTriggersRequest,
-    ) -> RusotoFuture<BatchGetTriggersResponse, BatchGetTriggersError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for BatchGetTriggersRequest {
+    type Output = BatchGetTriggersResponse;
+    type Error = BatchGetTriggersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchGetTriggers");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10492,20 +11002,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Stops one or more job runs for a specified job definition.</p>
-    fn batch_stop_job_run(
-        &self,
-        input: BatchStopJobRunRequest,
-    ) -> RusotoFuture<BatchStopJobRunResponse, GlueBatchStopJobRunError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for BatchStopJobRunRequest {
+    type Output = BatchStopJobRunResponse;
+    type Error = GlueBatchStopJobRunError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchStopJobRun");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10520,20 +11035,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Creates a classifier in the user's account. This can be a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, a <code>JsonClassifier</code>, or a <code>CsvClassifier</code>, depending on which field of the request is present.</p>
-    fn create_classifier(
-        &self,
-        input: CreateClassifierRequest,
-    ) -> RusotoFuture<CreateClassifierResponse, CreateClassifierError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for CreateClassifierRequest {
+    type Output = CreateClassifierResponse;
+    type Error = CreateClassifierError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateClassifier");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10549,20 +11069,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Creates a connection definition in the Data Catalog.</p>
-    fn create_connection(
-        &self,
-        input: CreateConnectionRequest,
-    ) -> RusotoFuture<CreateConnectionResponse, CreateConnectionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for CreateConnectionRequest {
+    type Output = CreateConnectionResponse;
+    type Error = CreateConnectionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateConnection");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10578,20 +11103,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new crawler with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in the <code>s3Targets</code> field, the <code>jdbcTargets</code> field, or the <code>DynamoDBTargets</code> field.</p>
-    fn create_crawler(
-        &self,
-        input: CreateCrawlerRequest,
-    ) -> RusotoFuture<CreateCrawlerResponse, CreateCrawlerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for CreateCrawlerRequest {
+    type Output = CreateCrawlerResponse;
+    type Error = CreateCrawlerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateCrawler");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10607,20 +11137,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new database in a Data Catalog.</p>
-    fn create_database(
-        &self,
-        input: CreateDatabaseRequest,
-    ) -> RusotoFuture<CreateDatabaseResponse, CreateDatabaseError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for CreateDatabaseRequest {
+    type Output = CreateDatabaseResponse;
+    type Error = CreateDatabaseError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateDatabase");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10636,20 +11171,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new DevEndpoint.</p>
-    fn create_dev_endpoint(
-        &self,
-        input: CreateDevEndpointRequest,
-    ) -> RusotoFuture<CreateDevEndpointResponse, CreateDevEndpointError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for CreateDevEndpointRequest {
+    type Output = CreateDevEndpointResponse;
+    type Error = CreateDevEndpointError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateDevEndpoint");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10665,20 +11205,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new job definition.</p>
-    fn create_job(
-        &self,
-        input: CreateJobRequest,
-    ) -> RusotoFuture<CreateJobResponse, CreateJobError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for CreateJobRequest {
+    type Output = CreateJobResponse;
+    type Error = CreateJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateJob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10694,20 +11239,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new partition.</p>
-    fn create_partition(
-        &self,
-        input: CreatePartitionRequest,
-    ) -> RusotoFuture<CreatePartitionResponse, CreatePartitionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for CreatePartitionRequest {
+    type Output = CreatePartitionResponse;
+    type Error = CreatePartitionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreatePartition");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10723,20 +11273,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Transforms a directed acyclic graph (DAG) into code.</p>
-    fn create_script(
-        &self,
-        input: CreateScriptRequest,
-    ) -> RusotoFuture<CreateScriptResponse, CreateScriptError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for CreateScriptRequest {
+    type Output = CreateScriptResponse;
+    type Error = CreateScriptError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateScript");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10752,20 +11307,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new security configuration.</p>
-    fn create_security_configuration(
-        &self,
-        input: CreateSecurityConfigurationRequest,
-    ) -> RusotoFuture<CreateSecurityConfigurationResponse, CreateSecurityConfigurationError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for CreateSecurityConfigurationRequest {
+    type Output = CreateSecurityConfigurationResponse;
+    type Error = CreateSecurityConfigurationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateSecurityConfiguration");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10778,20 +11338,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new table definition in the Data Catalog.</p>
-    fn create_table(
-        &self,
-        input: CreateTableRequest,
-    ) -> RusotoFuture<CreateTableResponse, CreateTableError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for CreateTableRequest {
+    type Output = CreateTableResponse;
+    type Error = CreateTableError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateTable");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10807,20 +11372,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new trigger.</p>
-    fn create_trigger(
-        &self,
-        input: CreateTriggerRequest,
-    ) -> RusotoFuture<CreateTriggerResponse, CreateTriggerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for CreateTriggerRequest {
+    type Output = CreateTriggerResponse;
+    type Error = CreateTriggerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateTrigger");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10836,20 +11406,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new function definition in the Data Catalog.</p>
-    fn create_user_defined_function(
-        &self,
-        input: CreateUserDefinedFunctionRequest,
-    ) -> RusotoFuture<CreateUserDefinedFunctionResponse, CreateUserDefinedFunctionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for CreateUserDefinedFunctionRequest {
+    type Output = CreateUserDefinedFunctionResponse;
+    type Error = CreateUserDefinedFunctionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateUserDefinedFunction");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10862,20 +11437,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Removes a classifier from the Data Catalog.</p>
-    fn delete_classifier(
-        &self,
-        input: DeleteClassifierRequest,
-    ) -> RusotoFuture<DeleteClassifierResponse, DeleteClassifierError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for DeleteClassifierRequest {
+    type Output = DeleteClassifierResponse;
+    type Error = DeleteClassifierError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteClassifier");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10891,20 +11471,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a connection from the Data Catalog.</p>
-    fn delete_connection(
-        &self,
-        input: DeleteConnectionRequest,
-    ) -> RusotoFuture<DeleteConnectionResponse, DeleteConnectionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for DeleteConnectionRequest {
+    type Output = DeleteConnectionResponse;
+    type Error = DeleteConnectionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteConnection");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10920,20 +11505,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Removes a specified crawler from the AWS Glue Data Catalog, unless the crawler state is <code>RUNNING</code>.</p>
-    fn delete_crawler(
-        &self,
-        input: DeleteCrawlerRequest,
-    ) -> RusotoFuture<DeleteCrawlerResponse, DeleteCrawlerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for DeleteCrawlerRequest {
+    type Output = DeleteCrawlerResponse;
+    type Error = DeleteCrawlerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteCrawler");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10949,20 +11539,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p><p>Removes a specified Database from a Data Catalog.</p> <note> <p>After completing this operation, you will no longer have access to the tables (and all table versions and partitions that might belong to the tables) and the user-defined functions in the deleted database. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>DeleteDatabase</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, <code>DeletePartition</code> or <code>BatchDeletePartition</code>, <code>DeleteUserDefinedFunction</code>, and <code>DeleteTable</code> or <code>BatchDeleteTable</code>, to delete any resources that belong to the database.</p> </note></p>
-    fn delete_database(
-        &self,
-        input: DeleteDatabaseRequest,
-    ) -> RusotoFuture<DeleteDatabaseResponse, DeleteDatabaseError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for DeleteDatabaseRequest {
+    type Output = DeleteDatabaseResponse;
+    type Error = DeleteDatabaseError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteDatabase");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -10978,20 +11573,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specified DevEndpoint.</p>
-    fn delete_dev_endpoint(
-        &self,
-        input: DeleteDevEndpointRequest,
-    ) -> RusotoFuture<DeleteDevEndpointResponse, DeleteDevEndpointError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for DeleteDevEndpointRequest {
+    type Output = DeleteDevEndpointResponse;
+    type Error = DeleteDevEndpointError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteDevEndpoint");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11007,20 +11607,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specified job definition. If the job definition is not found, no exception is thrown.</p>
-    fn delete_job(
-        &self,
-        input: DeleteJobRequest,
-    ) -> RusotoFuture<DeleteJobResponse, DeleteJobError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for DeleteJobRequest {
+    type Output = DeleteJobResponse;
+    type Error = DeleteJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteJob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11036,20 +11641,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specified partition.</p>
-    fn delete_partition(
-        &self,
-        input: DeletePartitionRequest,
-    ) -> RusotoFuture<DeletePartitionResponse, DeletePartitionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for DeletePartitionRequest {
+    type Output = DeletePartitionResponse;
+    type Error = DeletePartitionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeletePartition");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11065,20 +11675,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specified policy.</p>
-    fn delete_resource_policy(
-        &self,
-        input: DeleteResourcePolicyRequest,
-    ) -> RusotoFuture<DeleteResourcePolicyResponse, DeleteResourcePolicyError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for DeleteResourcePolicyRequest {
+    type Output = DeleteResourcePolicyResponse;
+    type Error = DeleteResourcePolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteResourcePolicy");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11093,20 +11708,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specified security configuration.</p>
-    fn delete_security_configuration(
-        &self,
-        input: DeleteSecurityConfigurationRequest,
-    ) -> RusotoFuture<DeleteSecurityConfigurationResponse, DeleteSecurityConfigurationError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for DeleteSecurityConfigurationRequest {
+    type Output = DeleteSecurityConfigurationResponse;
+    type Error = DeleteSecurityConfigurationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteSecurityConfiguration");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11119,20 +11739,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p><p>Removes a table definition from the Data Catalog.</p> <note> <p>After completing this operation, you will no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>DeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note></p>
-    fn delete_table(
-        &self,
-        input: DeleteTableRequest,
-    ) -> RusotoFuture<DeleteTableResponse, DeleteTableError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for DeleteTableRequest {
+    type Output = DeleteTableResponse;
+    type Error = DeleteTableError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteTable");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11148,20 +11773,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specified version of a table.</p>
-    fn delete_table_version(
-        &self,
-        input: DeleteTableVersionRequest,
-    ) -> RusotoFuture<DeleteTableVersionResponse, DeleteTableVersionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for DeleteTableVersionRequest {
+    type Output = DeleteTableVersionResponse;
+    type Error = DeleteTableVersionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteTableVersion");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11177,20 +11807,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specified trigger. If the trigger is not found, no exception is thrown.</p>
-    fn delete_trigger(
-        &self,
-        input: DeleteTriggerRequest,
-    ) -> RusotoFuture<DeleteTriggerResponse, DeleteTriggerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for DeleteTriggerRequest {
+    type Output = DeleteTriggerResponse;
+    type Error = DeleteTriggerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteTrigger");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11206,20 +11841,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an existing function definition from the Data Catalog.</p>
-    fn delete_user_defined_function(
-        &self,
-        input: DeleteUserDefinedFunctionRequest,
-    ) -> RusotoFuture<DeleteUserDefinedFunctionResponse, DeleteUserDefinedFunctionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for DeleteUserDefinedFunctionRequest {
+    type Output = DeleteUserDefinedFunctionResponse;
+    type Error = DeleteUserDefinedFunctionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteUserDefinedFunction");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11232,20 +11872,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the status of a migration operation.</p>
-    fn get_catalog_import_status(
-        &self,
-        input: GetCatalogImportStatusRequest,
-    ) -> RusotoFuture<GetCatalogImportStatusResponse, GetCatalogImportStatusError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetCatalogImportStatusRequest {
+    type Output = GetCatalogImportStatusResponse;
+    type Error = GetCatalogImportStatusError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetCatalogImportStatus");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11260,20 +11905,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieve a classifier by name.</p>
-    fn get_classifier(
-        &self,
-        input: GetClassifierRequest,
-    ) -> RusotoFuture<GetClassifierResponse, GetClassifierError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetClassifierRequest {
+    type Output = GetClassifierResponse;
+    type Error = GetClassifierError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetClassifier");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11289,20 +11939,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Lists all classifier objects in the Data Catalog.</p>
-    fn get_classifiers(
-        &self,
-        input: GetClassifiersRequest,
-    ) -> RusotoFuture<GetClassifiersResponse, GetClassifiersError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetClassifiersRequest {
+    type Output = GetClassifiersResponse;
+    type Error = GetClassifiersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetClassifiers");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11318,20 +11973,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a connection definition from the Data Catalog.</p>
-    fn get_connection(
-        &self,
-        input: GetConnectionRequest,
-    ) -> RusotoFuture<GetConnectionResponse, GetConnectionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetConnectionRequest {
+    type Output = GetConnectionResponse;
+    type Error = GetConnectionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetConnection");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11347,20 +12007,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list of connection definitions from the Data Catalog.</p>
-    fn get_connections(
-        &self,
-        input: GetConnectionsRequest,
-    ) -> RusotoFuture<GetConnectionsResponse, GetConnectionsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetConnectionsRequest {
+    type Output = GetConnectionsResponse;
+    type Error = GetConnectionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetConnections");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11376,20 +12041,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves metadata for a specified crawler.</p>
-    fn get_crawler(
-        &self,
-        input: GetCrawlerRequest,
-    ) -> RusotoFuture<GetCrawlerResponse, GetCrawlerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetCrawlerRequest {
+    type Output = GetCrawlerResponse;
+    type Error = GetCrawlerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetCrawler");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11405,20 +12075,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves metrics about specified crawlers.</p>
-    fn get_crawler_metrics(
-        &self,
-        input: GetCrawlerMetricsRequest,
-    ) -> RusotoFuture<GetCrawlerMetricsResponse, GetCrawlerMetricsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetCrawlerMetricsRequest {
+    type Output = GetCrawlerMetricsResponse;
+    type Error = GetCrawlerMetricsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetCrawlerMetrics");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11434,20 +12109,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves metadata for all crawlers defined in the customer account.</p>
-    fn get_crawlers(
-        &self,
-        input: GetCrawlersRequest,
-    ) -> RusotoFuture<GetCrawlersResponse, GetCrawlersError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetCrawlersRequest {
+    type Output = GetCrawlersResponse;
+    type Error = GetCrawlersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetCrawlers");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11463,21 +12143,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the security configuration for a specified catalog.</p>
-    fn get_data_catalog_encryption_settings(
-        &self,
-        input: GetDataCatalogEncryptionSettingsRequest,
-    ) -> RusotoFuture<GetDataCatalogEncryptionSettingsResponse, GetDataCatalogEncryptionSettingsError>
-    {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetDataCatalogEncryptionSettingsRequest {
+    type Output = GetDataCatalogEncryptionSettingsResponse;
+    type Error = GetDataCatalogEncryptionSettingsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetDataCatalogEncryptionSettings");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11492,20 +12176,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the definition of a specified database.</p>
-    fn get_database(
-        &self,
-        input: GetDatabaseRequest,
-    ) -> RusotoFuture<GetDatabaseResponse, GetDatabaseError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetDatabaseRequest {
+    type Output = GetDatabaseResponse;
+    type Error = GetDatabaseError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetDatabase");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11521,20 +12210,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves all Databases defined in a given Data Catalog.</p>
-    fn get_databases(
-        &self,
-        input: GetDatabasesRequest,
-    ) -> RusotoFuture<GetDatabasesResponse, GetDatabasesError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetDatabasesRequest {
+    type Output = GetDatabasesResponse;
+    type Error = GetDatabasesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetDatabases");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11550,20 +12244,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Transforms a Python script into a directed acyclic graph (DAG). </p>
-    fn get_dataflow_graph(
-        &self,
-        input: GetDataflowGraphRequest,
-    ) -> RusotoFuture<GetDataflowGraphResponse, GetDataflowGraphError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetDataflowGraphRequest {
+    type Output = GetDataflowGraphResponse;
+    type Error = GetDataflowGraphError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetDataflowGraph");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11579,20 +12278,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p><p>Retrieves information about a specified DevEndpoint.</p> <note> <p>When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address, and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address.</p> </note></p>
-    fn get_dev_endpoint(
-        &self,
-        input: GetDevEndpointRequest,
-    ) -> RusotoFuture<GetDevEndpointResponse, GetDevEndpointError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetDevEndpointRequest {
+    type Output = GetDevEndpointResponse;
+    type Error = GetDevEndpointError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetDevEndpoint");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11608,20 +12312,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p><p>Retrieves all the DevEndpoints in this AWS account.</p> <note> <p>When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address.</p> </note></p>
-    fn get_dev_endpoints(
-        &self,
-        input: GetDevEndpointsRequest,
-    ) -> RusotoFuture<GetDevEndpointsResponse, GetDevEndpointsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetDevEndpointsRequest {
+    type Output = GetDevEndpointsResponse;
+    type Error = GetDevEndpointsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetDevEndpoints");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11637,17 +12346,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves an existing job definition.</p>
-    fn get_job(&self, input: GetJobRequest) -> RusotoFuture<GetJobResponse, GetJobError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetJobRequest {
+    type Output = GetJobResponse;
+    type Error = GetJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetJob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response).deserialize::<GetJobResponse, _>()
@@ -11662,20 +12379,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the metadata for a given job run.</p>
-    fn get_job_run(
-        &self,
-        input: GetJobRunRequest,
-    ) -> RusotoFuture<GetJobRunResponse, GetJobRunError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetJobRunRequest {
+    type Output = GetJobRunResponse;
+    type Error = GetJobRunError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetJobRun");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11691,20 +12413,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves metadata for all runs of a given job definition.</p>
-    fn get_job_runs(
-        &self,
-        input: GetJobRunsRequest,
-    ) -> RusotoFuture<GetJobRunsResponse, GetJobRunsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetJobRunsRequest {
+    type Output = GetJobRunsResponse;
+    type Error = GetJobRunsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetJobRuns");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11720,17 +12447,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves all current job definitions.</p>
-    fn get_jobs(&self, input: GetJobsRequest) -> RusotoFuture<GetJobsResponse, GetJobsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetJobsRequest {
+    type Output = GetJobsResponse;
+    type Error = GetJobsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetJobs");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response).deserialize::<GetJobsResponse, _>()
@@ -11745,20 +12480,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Creates mappings.</p>
-    fn get_mapping(
-        &self,
-        input: GetMappingRequest,
-    ) -> RusotoFuture<GetMappingResponse, GetMappingError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetMappingRequest {
+    type Output = GetMappingResponse;
+    type Error = GetMappingError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetMapping");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11774,20 +12514,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a specified partition.</p>
-    fn get_partition(
-        &self,
-        input: GetPartitionRequest,
-    ) -> RusotoFuture<GetPartitionResponse, GetPartitionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetPartitionRequest {
+    type Output = GetPartitionResponse;
+    type Error = GetPartitionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetPartition");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11803,20 +12548,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about the partitions in a table.</p>
-    fn get_partitions(
-        &self,
-        input: GetPartitionsRequest,
-    ) -> RusotoFuture<GetPartitionsResponse, GetPartitionsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetPartitionsRequest {
+    type Output = GetPartitionsResponse;
+    type Error = GetPartitionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetPartitions");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11832,17 +12582,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Gets code to perform a specified mapping.</p>
-    fn get_plan(&self, input: GetPlanRequest) -> RusotoFuture<GetPlanResponse, GetPlanError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetPlanRequest {
+    type Output = GetPlanResponse;
+    type Error = GetPlanError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetPlan");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response).deserialize::<GetPlanResponse, _>()
@@ -11857,18 +12615,24 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a specified resource policy.</p>
-    fn get_resource_policy(
-        &self,
-    ) -> RusotoFuture<GetResourcePolicyResponse, GetResourcePolicyError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetResourcePolicyRequest {
+    type Output = GetResourcePolicyResponse;
+    type Error = GetResourcePolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetResourcePolicy");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11884,20 +12648,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a specified security configuration.</p>
-    fn get_security_configuration(
-        &self,
-        input: GetSecurityConfigurationRequest,
-    ) -> RusotoFuture<GetSecurityConfigurationResponse, GetSecurityConfigurationError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetSecurityConfigurationRequest {
+    type Output = GetSecurityConfigurationResponse;
+    type Error = GetSecurityConfigurationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetSecurityConfiguration");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11910,20 +12679,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list of all security configurations.</p>
-    fn get_security_configurations(
-        &self,
-        input: GetSecurityConfigurationsRequest,
-    ) -> RusotoFuture<GetSecurityConfigurationsResponse, GetSecurityConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetSecurityConfigurationsRequest {
+    type Output = GetSecurityConfigurationsResponse;
+    type Error = GetSecurityConfigurationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetSecurityConfigurations");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11936,17 +12710,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the <code>Table</code> definition in a Data Catalog for a specified table.</p>
-    fn get_table(&self, input: GetTableRequest) -> RusotoFuture<GetTableResponse, GetTableError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetTableRequest {
+    type Output = GetTableResponse;
+    type Error = GetTableError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetTable");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11962,20 +12744,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a specified version of a table.</p>
-    fn get_table_version(
-        &self,
-        input: GetTableVersionRequest,
-    ) -> RusotoFuture<GetTableVersionResponse, GetTableVersionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetTableVersionRequest {
+    type Output = GetTableVersionResponse;
+    type Error = GetTableVersionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetTableVersion");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -11991,20 +12778,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list of strings that identify available versions of a specified table.</p>
-    fn get_table_versions(
-        &self,
-        input: GetTableVersionsRequest,
-    ) -> RusotoFuture<GetTableVersionsResponse, GetTableVersionsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetTableVersionsRequest {
+    type Output = GetTableVersionsResponse;
+    type Error = GetTableVersionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetTableVersions");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12020,20 +12812,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the definitions of some or all of the tables in a given <code>Database</code>.</p>
-    fn get_tables(
-        &self,
-        input: GetTablesRequest,
-    ) -> RusotoFuture<GetTablesResponse, GetTablesError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetTablesRequest {
+    type Output = GetTablesResponse;
+    type Error = GetTablesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetTables");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12049,17 +12846,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list of tags associated with a resource.</p>
-    fn get_tags(&self, input: GetTagsRequest) -> RusotoFuture<GetTagsResponse, GetTagsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetTagsRequest {
+    type Output = GetTagsResponse;
+    type Error = GetTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetTags");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response).deserialize::<GetTagsResponse, _>()
@@ -12074,20 +12879,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the definition of a trigger.</p>
-    fn get_trigger(
-        &self,
-        input: GetTriggerRequest,
-    ) -> RusotoFuture<GetTriggerResponse, GetTriggerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetTriggerRequest {
+    type Output = GetTriggerResponse;
+    type Error = GetTriggerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetTrigger");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12103,20 +12913,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Gets all the triggers associated with a job.</p>
-    fn get_triggers(
-        &self,
-        input: GetTriggersRequest,
-    ) -> RusotoFuture<GetTriggersResponse, GetTriggersError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetTriggersRequest {
+    type Output = GetTriggersResponse;
+    type Error = GetTriggersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetTriggers");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12132,20 +12947,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a specified function definition from the Data Catalog.</p>
-    fn get_user_defined_function(
-        &self,
-        input: GetUserDefinedFunctionRequest,
-    ) -> RusotoFuture<GetUserDefinedFunctionResponse, GetUserDefinedFunctionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetUserDefinedFunctionRequest {
+    type Output = GetUserDefinedFunctionResponse;
+    type Error = GetUserDefinedFunctionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetUserDefinedFunction");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12160,20 +12980,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a multiple function definitions from the Data Catalog.</p>
-    fn get_user_defined_functions(
-        &self,
-        input: GetUserDefinedFunctionsRequest,
-    ) -> RusotoFuture<GetUserDefinedFunctionsResponse, GetUserDefinedFunctionsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for GetUserDefinedFunctionsRequest {
+    type Output = GetUserDefinedFunctionsResponse;
+    type Error = GetUserDefinedFunctionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetUserDefinedFunctions");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12186,20 +13011,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Imports an existing Athena Data Catalog to AWS Glue</p>
-    fn import_catalog_to_glue(
-        &self,
-        input: ImportCatalogToGlueRequest,
-    ) -> RusotoFuture<ImportCatalogToGlueResponse, ImportCatalogToGlueError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for ImportCatalogToGlueRequest {
+    type Output = ImportCatalogToGlueResponse;
+    type Error = ImportCatalogToGlueError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.ImportCatalogToGlue");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12214,20 +13044,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the names of all crawler resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
-    fn list_crawlers(
-        &self,
-        input: ListCrawlersRequest,
-    ) -> RusotoFuture<ListCrawlersResponse, ListCrawlersError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for ListCrawlersRequest {
+    type Output = ListCrawlersResponse;
+    type Error = ListCrawlersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.ListCrawlers");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12243,20 +13078,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the names of all DevEndpoint resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
-    fn list_dev_endpoints(
-        &self,
-        input: ListDevEndpointsRequest,
-    ) -> RusotoFuture<ListDevEndpointsResponse, ListDevEndpointsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for ListDevEndpointsRequest {
+    type Output = ListDevEndpointsResponse;
+    type Error = ListDevEndpointsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.ListDevEndpoints");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12272,17 +13112,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the names of all job resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
-    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for ListJobsRequest {
+    type Output = ListJobsResponse;
+    type Error = ListJobsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.ListJobs");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12298,20 +13146,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the names of all trigger resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
-    fn list_triggers(
-        &self,
-        input: ListTriggersRequest,
-    ) -> RusotoFuture<ListTriggersResponse, ListTriggersError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for ListTriggersRequest {
+    type Output = ListTriggersResponse;
+    type Error = ListTriggersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.ListTriggers");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12327,21 +13180,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Sets the security configuration for a specified catalog. After the configuration has been set, the specified encryption is applied to every catalog write thereafter.</p>
-    fn put_data_catalog_encryption_settings(
-        &self,
-        input: PutDataCatalogEncryptionSettingsRequest,
-    ) -> RusotoFuture<PutDataCatalogEncryptionSettingsResponse, PutDataCatalogEncryptionSettingsError>
-    {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for PutDataCatalogEncryptionSettingsRequest {
+    type Output = PutDataCatalogEncryptionSettingsResponse;
+    type Error = PutDataCatalogEncryptionSettingsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.PutDataCatalogEncryptionSettings");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12356,20 +13213,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Sets the Data Catalog resource policy for access control.</p>
-    fn put_resource_policy(
-        &self,
-        input: PutResourcePolicyRequest,
-    ) -> RusotoFuture<PutResourcePolicyResponse, PutResourcePolicyError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for PutResourcePolicyRequest {
+    type Output = PutResourcePolicyResponse;
+    type Error = PutResourcePolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.PutResourcePolicy");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12385,20 +13247,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Resets a bookmark entry.</p>
-    fn reset_job_bookmark(
-        &self,
-        input: ResetJobBookmarkRequest,
-    ) -> RusotoFuture<ResetJobBookmarkResponse, ResetJobBookmarkError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for ResetJobBookmarkRequest {
+    type Output = ResetJobBookmarkResponse;
+    type Error = ResetJobBookmarkError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.ResetJobBookmark");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12414,20 +13281,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Starts a crawl using the specified crawler, regardless of what is scheduled. If the crawler is already running, returns a <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-exceptions.html#aws-glue-api-exceptions-CrawlerRunningException">CrawlerRunningException</a>.</p>
-    fn start_crawler(
-        &self,
-        input: StartCrawlerRequest,
-    ) -> RusotoFuture<StartCrawlerResponse, StartCrawlerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for StartCrawlerRequest {
+    type Output = StartCrawlerResponse;
+    type Error = StartCrawlerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StartCrawler");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12443,20 +13315,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Changes the schedule state of the specified crawler to <code>SCHEDULED</code>, unless the crawler is already running or the schedule state is already <code>SCHEDULED</code>.</p>
-    fn start_crawler_schedule(
-        &self,
-        input: StartCrawlerScheduleRequest,
-    ) -> RusotoFuture<StartCrawlerScheduleResponse, StartCrawlerScheduleError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for StartCrawlerScheduleRequest {
+    type Output = StartCrawlerScheduleResponse;
+    type Error = StartCrawlerScheduleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StartCrawlerSchedule");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12471,20 +13348,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Starts a job run using a job definition.</p>
-    fn start_job_run(
-        &self,
-        input: StartJobRunRequest,
-    ) -> RusotoFuture<StartJobRunResponse, StartJobRunError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for StartJobRunRequest {
+    type Output = StartJobRunResponse;
+    type Error = StartJobRunError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StartJobRun");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12500,20 +13382,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Starts an existing trigger. See <a href="http://docs.aws.amazon.com/glue/latest/dg/trigger-job.html">Triggering Jobs</a> for information about how different types of trigger are started.</p>
-    fn start_trigger(
-        &self,
-        input: StartTriggerRequest,
-    ) -> RusotoFuture<StartTriggerResponse, StartTriggerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for StartTriggerRequest {
+    type Output = StartTriggerResponse;
+    type Error = StartTriggerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StartTrigger");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12529,20 +13416,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>If the specified crawler is running, stops the crawl.</p>
-    fn stop_crawler(
-        &self,
-        input: StopCrawlerRequest,
-    ) -> RusotoFuture<StopCrawlerResponse, StopCrawlerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for StopCrawlerRequest {
+    type Output = StopCrawlerResponse;
+    type Error = StopCrawlerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StopCrawler");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12558,20 +13450,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Sets the schedule state of the specified crawler to <code>NOT_SCHEDULED</code>, but does not stop the crawler if it is already running.</p>
-    fn stop_crawler_schedule(
-        &self,
-        input: StopCrawlerScheduleRequest,
-    ) -> RusotoFuture<StopCrawlerScheduleResponse, StopCrawlerScheduleError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for StopCrawlerScheduleRequest {
+    type Output = StopCrawlerScheduleResponse;
+    type Error = StopCrawlerScheduleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StopCrawlerSchedule");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12586,20 +13483,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Stops a specified trigger.</p>
-    fn stop_trigger(
-        &self,
-        input: StopTriggerRequest,
-    ) -> RusotoFuture<StopTriggerResponse, StopTriggerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for StopTriggerRequest {
+    type Output = StopTriggerResponse;
+    type Error = StopTriggerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StopTrigger");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12615,20 +13517,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Adds tags to a resource. A tag is a label you can assign to an AWS resource. In AWS Glue, you can tag only certain resources. For information about what resources you can tag, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a>.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.TagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12644,20 +13551,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Removes tags from a resource.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UntagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12673,20 +13585,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Modifies an existing classifier (a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, a <code>JsonClassifier</code>, or a <code>CsvClassifier</code>, depending on which field is present).</p>
-    fn update_classifier(
-        &self,
-        input: UpdateClassifierRequest,
-    ) -> RusotoFuture<UpdateClassifierResponse, UpdateClassifierError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for UpdateClassifierRequest {
+    type Output = UpdateClassifierResponse;
+    type Error = UpdateClassifierError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateClassifier");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12702,20 +13619,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Updates a connection definition in the Data Catalog.</p>
-    fn update_connection(
-        &self,
-        input: UpdateConnectionRequest,
-    ) -> RusotoFuture<UpdateConnectionResponse, UpdateConnectionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for UpdateConnectionRequest {
+    type Output = UpdateConnectionResponse;
+    type Error = UpdateConnectionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateConnection");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12731,20 +13653,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Updates a crawler. If a crawler is running, you must stop it using <code>StopCrawler</code> before updating it.</p>
-    fn update_crawler(
-        &self,
-        input: UpdateCrawlerRequest,
-    ) -> RusotoFuture<UpdateCrawlerResponse, UpdateCrawlerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for UpdateCrawlerRequest {
+    type Output = UpdateCrawlerResponse;
+    type Error = UpdateCrawlerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateCrawler");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12760,20 +13687,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Updates the schedule of a crawler using a <code>cron</code> expression. </p>
-    fn update_crawler_schedule(
-        &self,
-        input: UpdateCrawlerScheduleRequest,
-    ) -> RusotoFuture<UpdateCrawlerScheduleResponse, UpdateCrawlerScheduleError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for UpdateCrawlerScheduleRequest {
+    type Output = UpdateCrawlerScheduleResponse;
+    type Error = UpdateCrawlerScheduleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateCrawlerSchedule");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12788,20 +13720,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Updates an existing database definition in a Data Catalog.</p>
-    fn update_database(
-        &self,
-        input: UpdateDatabaseRequest,
-    ) -> RusotoFuture<UpdateDatabaseResponse, UpdateDatabaseError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for UpdateDatabaseRequest {
+    type Output = UpdateDatabaseResponse;
+    type Error = UpdateDatabaseError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateDatabase");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12817,20 +13754,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Updates a specified DevEndpoint.</p>
-    fn update_dev_endpoint(
-        &self,
-        input: UpdateDevEndpointRequest,
-    ) -> RusotoFuture<UpdateDevEndpointResponse, UpdateDevEndpointError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for UpdateDevEndpointRequest {
+    type Output = UpdateDevEndpointResponse;
+    type Error = UpdateDevEndpointError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateDevEndpoint");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12846,20 +13788,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Updates an existing job definition.</p>
-    fn update_job(
-        &self,
-        input: UpdateJobRequest,
-    ) -> RusotoFuture<UpdateJobResponse, UpdateJobError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for UpdateJobRequest {
+    type Output = UpdateJobResponse;
+    type Error = UpdateJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateJob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12875,20 +13822,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Updates a partition.</p>
-    fn update_partition(
-        &self,
-        input: UpdatePartitionRequest,
-    ) -> RusotoFuture<UpdatePartitionResponse, UpdatePartitionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for UpdatePartitionRequest {
+    type Output = UpdatePartitionResponse;
+    type Error = UpdatePartitionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdatePartition");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12904,20 +13856,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Updates a metadata table in the Data Catalog.</p>
-    fn update_table(
-        &self,
-        input: UpdateTableRequest,
-    ) -> RusotoFuture<UpdateTableResponse, UpdateTableError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for UpdateTableRequest {
+    type Output = UpdateTableResponse;
+    type Error = UpdateTableError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateTable");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12933,20 +13890,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Updates a trigger definition.</p>
-    fn update_trigger(
-        &self,
-        input: UpdateTriggerRequest,
-    ) -> RusotoFuture<UpdateTriggerResponse, UpdateTriggerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for UpdateTriggerRequest {
+    type Output = UpdateTriggerResponse;
+    type Error = UpdateTriggerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateTrigger");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12962,20 +13924,25 @@ impl Glue for GlueClient {
             }
         })
     }
+}
 
-    /// <p>Updates an existing function definition in the Data Catalog.</p>
-    fn update_user_defined_function(
-        &self,
-        input: UpdateUserDefinedFunctionRequest,
-    ) -> RusotoFuture<UpdateUserDefinedFunctionResponse, UpdateUserDefinedFunctionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+impl ServiceRequest for UpdateUserDefinedFunctionRequest {
+    type Output = UpdateUserDefinedFunctionResponse;
+    type Error = UpdateUserDefinedFunctionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "glue", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateUserDefinedFunction");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)

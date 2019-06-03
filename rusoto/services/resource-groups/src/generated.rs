@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -26,7 +27,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateGroupInput {
+pub struct CreateGroupRequest {
     /// <p>The description of the resource group. Descriptions can have a maximum of 511 characters, including letters, numbers, hyphens, underscores, punctuation, and spaces.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -45,7 +46,7 @@ pub struct CreateGroupInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateGroupOutput {
+pub struct CreateGroupResponse {
     /// <p>A full description of the resource group after it is created.</p>
     #[serde(rename = "Group")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -61,7 +62,7 @@ pub struct CreateGroupOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteGroupInput {
+pub struct DeleteGroupRequest {
     /// <p>The name of the resource group to delete.</p>
     #[serde(rename = "GroupName")]
     pub group_name: String,
@@ -69,7 +70,7 @@ pub struct DeleteGroupInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteGroupOutput {
+pub struct DeleteGroupResponse {
     /// <p>A full description of the deleted resource group.</p>
     #[serde(rename = "Group")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -77,7 +78,7 @@ pub struct DeleteGroupOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetGroupInput {
+pub struct GetGroupQueryRequest {
     /// <p>The name of the resource group.</p>
     #[serde(rename = "GroupName")]
     pub group_name: String,
@@ -85,23 +86,7 @@ pub struct GetGroupInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetGroupOutput {
-    /// <p>A full description of the resource group.</p>
-    #[serde(rename = "Group")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub group: Option<Group>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetGroupQueryInput {
-    /// <p>The name of the resource group.</p>
-    #[serde(rename = "GroupName")]
-    pub group_name: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct GetGroupQueryOutput {
+pub struct GetGroupQueryResponse {
     /// <p>The resource query associated with the specified group.</p>
     #[serde(rename = "GroupQuery")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -109,7 +94,23 @@ pub struct GetGroupQueryOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetTagsInput {
+pub struct GetGroupRequest {
+    /// <p>The name of the resource group.</p>
+    #[serde(rename = "GroupName")]
+    pub group_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetGroupResponse {
+    /// <p>A full description of the resource group.</p>
+    #[serde(rename = "Group")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group: Option<Group>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetTagsRequest {
     /// <p>The ARN of the resource group for which you want a list of tags. The resource must exist within the account you are using.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
@@ -117,7 +118,7 @@ pub struct GetTagsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetTagsOutput {
+pub struct GetTagsResponse {
     /// <p>The ARN of the tagged resource group.</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -182,7 +183,7 @@ pub struct GroupQuery {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListGroupResourcesInput {
+pub struct ListGroupResourcesRequest {
     /// <p><p>Filters, formatted as ResourceFilter objects, that you want to apply to a ListGroupResources operation.</p> <ul> <li> <p> <code>resource-type</code> - Filter resources by their type. Specify up to five resource types in the format AWS::ServiceCode::ResourceType. For example, AWS::EC2::Instance, or AWS::S3::Bucket.</p> </li> </ul></p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -202,7 +203,7 @@ pub struct ListGroupResourcesInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListGroupResourcesOutput {
+pub struct ListGroupResourcesResponse {
     /// <p>The NextToken value to include in a subsequent <code>ListGroupResources</code> request, to get more results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -218,7 +219,7 @@ pub struct ListGroupResourcesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListGroupsInput {
+pub struct ListGroupsRequest {
     /// <p><p>Filters, formatted as GroupFilter objects, that you want to apply to a ListGroups operation.</p> <ul> <li> <p> <code>resource-type</code> - Filter groups by resource type. Specify up to five resource types in the format AWS::ServiceCode::ResourceType. For example, AWS::EC2::Instance, or AWS::S3::Bucket.</p> </li> </ul></p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -235,7 +236,7 @@ pub struct ListGroupsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListGroupsOutput {
+pub struct ListGroupsResponse {
     /// <p>A list of GroupIdentifier objects. Each identifier is an object that contains both the GroupName and the GroupArn.</p>
     #[serde(rename = "GroupIdentifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -297,7 +298,7 @@ pub struct ResourceQuery {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct SearchResourcesInput {
+pub struct SearchResourcesRequest {
     /// <p>The maximum number of group member ARNs returned by <code>SearchResources</code> in paginated output. By default, this number is 50.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -313,7 +314,7 @@ pub struct SearchResourcesInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct SearchResourcesOutput {
+pub struct SearchResourcesResponse {
     /// <p>The NextToken value to include in a subsequent <code>SearchResources</code> request, to get more results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -329,7 +330,7 @@ pub struct SearchResourcesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct TagInput {
+pub struct TagRequest {
     /// <p>The ARN of the resource to which to add tags.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
@@ -340,7 +341,7 @@ pub struct TagInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct TagOutput {
+pub struct TagResponse {
     /// <p>The ARN of the tagged resource.</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -352,7 +353,7 @@ pub struct TagOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UntagInput {
+pub struct UntagRequest {
     /// <p>The ARN of the resource from which to remove tags.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
@@ -363,7 +364,7 @@ pub struct UntagInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UntagOutput {
+pub struct UntagResponse {
     /// <p>The ARN of the resource from which tags have been removed.</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -375,7 +376,26 @@ pub struct UntagOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateGroupInput {
+pub struct UpdateGroupQueryRequest {
+    /// <p>The name of the resource group for which you want to edit the query.</p>
+    #[serde(rename = "GroupName")]
+    pub group_name: String,
+    /// <p>The resource query that determines which AWS resources are members of the resource group.</p>
+    #[serde(rename = "ResourceQuery")]
+    pub resource_query: ResourceQuery,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateGroupQueryResponse {
+    /// <p>The resource query associated with the resource group after the update.</p>
+    #[serde(rename = "GroupQuery")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_query: Option<GroupQuery>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateGroupRequest {
     /// <p>The description of the resource group. Descriptions can have a maximum of 511 characters, including letters, numbers, hyphens, underscores, punctuation, and spaces.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -387,30 +407,11 @@ pub struct UpdateGroupInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateGroupOutput {
+pub struct UpdateGroupResponse {
     /// <p>The full description of the resource group after it has been updated.</p>
     #[serde(rename = "Group")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group: Option<Group>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateGroupQueryInput {
-    /// <p>The name of the resource group for which you want to edit the query.</p>
-    #[serde(rename = "GroupName")]
-    pub group_name: String,
-    /// <p>The resource query that determines which AWS resources are members of the resource group.</p>
-    #[serde(rename = "ResourceQuery")]
-    pub resource_query: ResourceQuery,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct UpdateGroupQueryOutput {
-    /// <p>The resource query associated with the resource group after the update.</p>
-    #[serde(rename = "GroupQuery")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub group_query: Option<GroupQuery>,
 }
 
 /// Errors returned by CreateGroup
@@ -1164,64 +1165,46 @@ impl Error for UpdateGroupQueryError {
 /// Trait representing the capabilities of the Resource Groups API. Resource Groups clients implement this trait.
 pub trait ResourceGroups {
     /// <p>Creates a group with a specified name, description, and resource query.</p>
-    fn create_group(
-        &self,
-        input: CreateGroupInput,
-    ) -> RusotoFuture<CreateGroupOutput, CreateGroupError>;
+    fn create_group(&self, input: CreateGroupRequest) -> Request<CreateGroupRequest>;
 
     /// <p>Deletes a specified resource group. Deleting a resource group does not delete resources that are members of the group; it only deletes the group structure.</p>
-    fn delete_group(
-        &self,
-        input: DeleteGroupInput,
-    ) -> RusotoFuture<DeleteGroupOutput, DeleteGroupError>;
+    fn delete_group(&self, input: DeleteGroupRequest) -> Request<DeleteGroupRequest>;
 
     /// <p>Returns information about a specified resource group.</p>
-    fn get_group(&self, input: GetGroupInput) -> RusotoFuture<GetGroupOutput, GetGroupError>;
+    fn get_group(&self, input: GetGroupRequest) -> Request<GetGroupRequest>;
 
     /// <p>Returns the resource query associated with the specified resource group.</p>
-    fn get_group_query(
-        &self,
-        input: GetGroupQueryInput,
-    ) -> RusotoFuture<GetGroupQueryOutput, GetGroupQueryError>;
+    fn get_group_query(&self, input: GetGroupQueryRequest) -> Request<GetGroupQueryRequest>;
 
     /// <p>Returns a list of tags that are associated with a resource group, specified by an ARN.</p>
-    fn get_tags(&self, input: GetTagsInput) -> RusotoFuture<GetTagsOutput, GetTagsError>;
+    fn get_tags(&self, input: GetTagsRequest) -> Request<GetTagsRequest>;
 
     /// <p>Returns a list of ARNs of resources that are members of a specified resource group.</p>
     fn list_group_resources(
         &self,
-        input: ListGroupResourcesInput,
-    ) -> RusotoFuture<ListGroupResourcesOutput, ListGroupResourcesError>;
+        input: ListGroupResourcesRequest,
+    ) -> Request<ListGroupResourcesRequest>;
 
     /// <p>Returns a list of existing resource groups in your account.</p>
-    fn list_groups(
-        &self,
-        input: ListGroupsInput,
-    ) -> RusotoFuture<ListGroupsOutput, ListGroupsError>;
+    fn list_groups(&self, input: ListGroupsRequest) -> Request<ListGroupsRequest>;
 
     /// <p>Returns a list of AWS resource identifiers that matches a specified query. The query uses the same format as a resource query in a CreateGroup or UpdateGroupQuery operation.</p>
-    fn search_resources(
-        &self,
-        input: SearchResourcesInput,
-    ) -> RusotoFuture<SearchResourcesOutput, SearchResourcesError>;
+    fn search_resources(&self, input: SearchResourcesRequest) -> Request<SearchResourcesRequest>;
 
     /// <p>Adds tags to a resource group with the specified ARN. Existing tags on a resource group are not changed if they are not specified in the request parameters.</p>
-    fn tag(&self, input: TagInput) -> RusotoFuture<TagOutput, TagError>;
+    fn tag(&self, input: TagRequest) -> Request<TagRequest>;
 
     /// <p>Deletes specified tags from a specified resource.</p>
-    fn untag(&self, input: UntagInput) -> RusotoFuture<UntagOutput, UntagError>;
+    fn untag(&self, input: UntagRequest) -> Request<UntagRequest>;
 
     /// <p>Updates an existing group with a new or changed description. You cannot update the name of a resource group.</p>
-    fn update_group(
-        &self,
-        input: UpdateGroupInput,
-    ) -> RusotoFuture<UpdateGroupOutput, UpdateGroupError>;
+    fn update_group(&self, input: UpdateGroupRequest) -> Request<UpdateGroupRequest>;
 
     /// <p>Updates the resource query of a group.</p>
     fn update_group_query(
         &self,
-        input: UpdateGroupQueryInput,
-    ) -> RusotoFuture<UpdateGroupQueryOutput, UpdateGroupQueryError>;
+        input: UpdateGroupQueryRequest,
+    ) -> Request<UpdateGroupQueryRequest>;
 }
 /// A client for the Resource Groups API.
 #[derive(Clone)]
@@ -1261,23 +1244,95 @@ impl ResourceGroupsClient {
 
 impl ResourceGroups for ResourceGroupsClient {
     /// <p>Creates a group with a specified name, description, and resource query.</p>
-    fn create_group(
+    fn create_group(&self, input: CreateGroupRequest) -> Request<CreateGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specified resource group. Deleting a resource group does not delete resources that are members of the group; it only deletes the group structure.</p>
+    fn delete_group(&self, input: DeleteGroupRequest) -> Request<DeleteGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a specified resource group.</p>
+    fn get_group(&self, input: GetGroupRequest) -> Request<GetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the resource query associated with the specified resource group.</p>
+    fn get_group_query(&self, input: GetGroupQueryRequest) -> Request<GetGroupQueryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of tags that are associated with a resource group, specified by an ARN.</p>
+    fn get_tags(&self, input: GetTagsRequest) -> Request<GetTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of ARNs of resources that are members of a specified resource group.</p>
+    fn list_group_resources(
         &self,
-        input: CreateGroupInput,
-    ) -> RusotoFuture<CreateGroupOutput, CreateGroupError> {
+        input: ListGroupResourcesRequest,
+    ) -> Request<ListGroupResourcesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of existing resource groups in your account.</p>
+    fn list_groups(&self, input: ListGroupsRequest) -> Request<ListGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of AWS resource identifiers that matches a specified query. The query uses the same format as a resource query in a CreateGroup or UpdateGroupQuery operation.</p>
+    fn search_resources(&self, input: SearchResourcesRequest) -> Request<SearchResourcesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds tags to a resource group with the specified ARN. Existing tags on a resource group are not changed if they are not specified in the request parameters.</p>
+    fn tag(&self, input: TagRequest) -> Request<TagRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes specified tags from a specified resource.</p>
+    fn untag(&self, input: UntagRequest) -> Request<UntagRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an existing group with a new or changed description. You cannot update the name of a resource group.</p>
+    fn update_group(&self, input: UpdateGroupRequest) -> Request<UpdateGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the resource query of a group.</p>
+    fn update_group_query(
+        &self,
+        input: UpdateGroupQueryRequest,
+    ) -> Request<UpdateGroupQueryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CreateGroupRequest {
+    type Output = CreateGroupResponse;
+    type Error = CreateGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/groups";
 
-        let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "resource-groups", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateGroupOutput, _>()?;
+                        .deserialize::<CreateGroupResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1291,23 +1346,28 @@ impl ResourceGroups for ResourceGroupsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specified resource group. Deleting a resource group does not delete resources that are members of the group; it only deletes the group structure.</p>
-    fn delete_group(
-        &self,
-        input: DeleteGroupInput,
-    ) -> RusotoFuture<DeleteGroupOutput, DeleteGroupError> {
-        let request_uri = format!("/groups/{group_name}", group_name = input.group_name);
+impl ServiceRequest for DeleteGroupRequest {
+    type Output = DeleteGroupResponse;
+    type Error = DeleteGroupError;
 
-        let mut request =
-            SignedRequest::new("DELETE", "resource-groups", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/groups/{group_name}", group_name = self.group_name);
+
+        let mut request = SignedRequest::new("DELETE", "resource-groups", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteGroupOutput, _>()?;
+                        .deserialize::<DeleteGroupResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1321,19 +1381,28 @@ impl ResourceGroups for ResourceGroupsClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a specified resource group.</p>
-    fn get_group(&self, input: GetGroupInput) -> RusotoFuture<GetGroupOutput, GetGroupError> {
-        let request_uri = format!("/groups/{group_name}", group_name = input.group_name);
+impl ServiceRequest for GetGroupRequest {
+    type Output = GetGroupResponse;
+    type Error = GetGroupError;
 
-        let mut request = SignedRequest::new("GET", "resource-groups", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/groups/{group_name}", group_name = self.group_name);
+
+        let mut request = SignedRequest::new("GET", "resource-groups", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetGroupOutput, _>()?;
+                        .deserialize::<GetGroupResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1347,22 +1416,28 @@ impl ResourceGroups for ResourceGroupsClient {
             }
         })
     }
+}
 
-    /// <p>Returns the resource query associated with the specified resource group.</p>
-    fn get_group_query(
-        &self,
-        input: GetGroupQueryInput,
-    ) -> RusotoFuture<GetGroupQueryOutput, GetGroupQueryError> {
-        let request_uri = format!("/groups/{group_name}/query", group_name = input.group_name);
+impl ServiceRequest for GetGroupQueryRequest {
+    type Output = GetGroupQueryResponse;
+    type Error = GetGroupQueryError;
 
-        let mut request = SignedRequest::new("GET", "resource-groups", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/groups/{group_name}/query", group_name = self.group_name);
+
+        let mut request = SignedRequest::new("GET", "resource-groups", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetGroupQueryOutput, _>()?;
+                        .deserialize::<GetGroupQueryResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1376,19 +1451,28 @@ impl ResourceGroups for ResourceGroupsClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of tags that are associated with a resource group, specified by an ARN.</p>
-    fn get_tags(&self, input: GetTagsInput) -> RusotoFuture<GetTagsOutput, GetTagsError> {
-        let request_uri = format!("/resources/{arn}/tags", arn = input.arn);
+impl ServiceRequest for GetTagsRequest {
+    type Output = GetTagsResponse;
+    type Error = GetTagsError;
 
-        let mut request = SignedRequest::new("GET", "resource-groups", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/resources/{arn}/tags", arn = self.arn);
+
+        let mut request = SignedRequest::new("GET", "resource-groups", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetTagsOutput, _>()?;
+                        .deserialize::<GetTagsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1402,37 +1486,43 @@ impl ResourceGroups for ResourceGroupsClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of ARNs of resources that are members of a specified resource group.</p>
-    fn list_group_resources(
-        &self,
-        input: ListGroupResourcesInput,
-    ) -> RusotoFuture<ListGroupResourcesOutput, ListGroupResourcesError> {
+impl ServiceRequest for ListGroupResourcesRequest {
+    type Output = ListGroupResourcesResponse;
+    type Error = ListGroupResourcesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/groups/{group_name}/resource-identifiers-list",
-            group_name = input.group_name
+            group_name = self.group_name
         );
 
-        let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "resource-groups", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListGroupResourcesOutput, _>()?;
+                        .deserialize::<ListGroupResourcesResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1446,34 +1536,40 @@ impl ResourceGroups for ResourceGroupsClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of existing resource groups in your account.</p>
-    fn list_groups(
-        &self,
-        input: ListGroupsInput,
-    ) -> RusotoFuture<ListGroupsOutput, ListGroupsError> {
+impl ServiceRequest for ListGroupsRequest {
+    type Output = ListGroupsResponse;
+    type Error = ListGroupsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/groups-list";
 
-        let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "resource-groups", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListGroupsOutput, _>()?;
+                        .deserialize::<ListGroupsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1487,25 +1583,31 @@ impl ResourceGroups for ResourceGroupsClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of AWS resource identifiers that matches a specified query. The query uses the same format as a resource query in a CreateGroup or UpdateGroupQuery operation.</p>
-    fn search_resources(
-        &self,
-        input: SearchResourcesInput,
-    ) -> RusotoFuture<SearchResourcesOutput, SearchResourcesError> {
+impl ServiceRequest for SearchResourcesRequest {
+    type Output = SearchResourcesResponse;
+    type Error = SearchResourcesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/resources/search";
 
-        let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "resource-groups", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SearchResourcesOutput, _>()?;
+                        .deserialize::<SearchResourcesResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1519,22 +1621,31 @@ impl ResourceGroups for ResourceGroupsClient {
             }
         })
     }
+}
 
-    /// <p>Adds tags to a resource group with the specified ARN. Existing tags on a resource group are not changed if they are not specified in the request parameters.</p>
-    fn tag(&self, input: TagInput) -> RusotoFuture<TagOutput, TagError> {
-        let request_uri = format!("/resources/{arn}/tags", arn = input.arn);
+impl ServiceRequest for TagRequest {
+    type Output = TagResponse;
+    type Error = TagError;
 
-        let mut request = SignedRequest::new("PUT", "resource-groups", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/resources/{arn}/tags", arn = self.arn);
+
+        let mut request = SignedRequest::new("PUT", "resource-groups", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TagOutput, _>()?;
+                        .deserialize::<TagResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1548,23 +1659,31 @@ impl ResourceGroups for ResourceGroupsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes specified tags from a specified resource.</p>
-    fn untag(&self, input: UntagInput) -> RusotoFuture<UntagOutput, UntagError> {
-        let request_uri = format!("/resources/{arn}/tags", arn = input.arn);
+impl ServiceRequest for UntagRequest {
+    type Output = UntagResponse;
+    type Error = UntagError;
 
-        let mut request =
-            SignedRequest::new("PATCH", "resource-groups", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/resources/{arn}/tags", arn = self.arn);
+
+        let mut request = SignedRequest::new("PATCH", "resource-groups", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UntagOutput, _>()?;
+                        .deserialize::<UntagResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1578,25 +1697,31 @@ impl ResourceGroups for ResourceGroupsClient {
             }
         })
     }
+}
 
-    /// <p>Updates an existing group with a new or changed description. You cannot update the name of a resource group.</p>
-    fn update_group(
-        &self,
-        input: UpdateGroupInput,
-    ) -> RusotoFuture<UpdateGroupOutput, UpdateGroupError> {
-        let request_uri = format!("/groups/{group_name}", group_name = input.group_name);
+impl ServiceRequest for UpdateGroupRequest {
+    type Output = UpdateGroupResponse;
+    type Error = UpdateGroupError;
 
-        let mut request = SignedRequest::new("PUT", "resource-groups", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/groups/{group_name}", group_name = self.group_name);
+
+        let mut request = SignedRequest::new("PUT", "resource-groups", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateGroupOutput, _>()?;
+                        .deserialize::<UpdateGroupResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1610,25 +1735,31 @@ impl ResourceGroups for ResourceGroupsClient {
             }
         })
     }
+}
 
-    /// <p>Updates the resource query of a group.</p>
-    fn update_group_query(
-        &self,
-        input: UpdateGroupQueryInput,
-    ) -> RusotoFuture<UpdateGroupQueryOutput, UpdateGroupQueryError> {
-        let request_uri = format!("/groups/{group_name}/query", group_name = input.group_name);
+impl ServiceRequest for UpdateGroupQueryRequest {
+    type Output = UpdateGroupQueryResponse;
+    type Error = UpdateGroupQueryError;
 
-        let mut request = SignedRequest::new("PUT", "resource-groups", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/groups/{group_name}/query", group_name = self.group_name);
+
+        let mut request = SignedRequest::new("PUT", "resource-groups", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateGroupQueryOutput, _>()?;
+                        .deserialize::<UpdateGroupQueryResponse, _>()?;
 
                     Ok(result)
                 }))

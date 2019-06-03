@@ -19,13 +19,14 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct AddTagsInput {
+pub struct AddTagsRequest {
     /// <p>The ID of the ML object to tag. For example, <code>exampleModelId</code>.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
@@ -40,7 +41,7 @@ pub struct AddTagsInput {
 /// <p>Amazon ML returns the following elements. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct AddTagsOutput {
+pub struct AddTagsResponse {
     /// <p>The ID of the ML object that was tagged.</p>
     #[serde(rename = "ResourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -117,7 +118,7 @@ pub struct BatchPrediction {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateBatchPredictionInput {
+pub struct CreateBatchPredictionRequest {
     /// <p>The ID of the <code>DataSource</code> that points to the group of observations to predict.</p>
     #[serde(rename = "BatchPredictionDataSourceId")]
     pub batch_prediction_data_source_id: String,
@@ -139,7 +140,7 @@ pub struct CreateBatchPredictionInput {
 /// <p> Represents the output of a <code>CreateBatchPrediction</code> operation, and is an acknowledgement that Amazon ML received the request.</p> <p>The <code>CreateBatchPrediction</code> operation is asynchronous. You can poll for status updates by using the <code>&gt;GetBatchPrediction</code> operation and checking the <code>Status</code> parameter of the result. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateBatchPredictionOutput {
+pub struct CreateBatchPredictionResponse {
     /// <p>A user-supplied ID that uniquely identifies the <code>BatchPrediction</code>. This value is identical to the value of the <code>BatchPredictionId</code> in the request.</p>
     #[serde(rename = "BatchPredictionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -147,7 +148,7 @@ pub struct CreateBatchPredictionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateDataSourceFromRDSInput {
+pub struct CreateDataSourceFromRDSRequest {
     /// <p>The compute statistics for a <code>DataSource</code>. The statistics are generated from the observation data referenced by a <code>DataSource</code>. Amazon ML uses the statistics internally during <code>MLModel</code> training. This parameter must be set to <code>true</code> if the <code></code>DataSource<code></code> needs to be used for <code>MLModel</code> training. </p>
     #[serde(rename = "ComputeStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -170,7 +171,7 @@ pub struct CreateDataSourceFromRDSInput {
 /// <p> Represents the output of a <code>CreateDataSourceFromRDS</code> operation, and is an acknowledgement that Amazon ML received the request.</p> <p>The <code>CreateDataSourceFromRDS</code>&gt; operation is asynchronous. You can poll for updates by using the <code>GetBatchPrediction</code> operation and checking the <code>Status</code> parameter. You can inspect the <code>Message</code> when <code>Status</code> shows up as <code>FAILED</code>. You can also check the progress of the copy operation by going to the <code>DataPipeline</code> console and looking up the pipeline using the <code>pipelineId </code> from the describe call.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateDataSourceFromRDSOutput {
+pub struct CreateDataSourceFromRDSResponse {
     /// <p>A user-supplied ID that uniquely identifies the datasource. This value should be identical to the value of the <code>DataSourceID</code> in the request. </p>
     #[serde(rename = "DataSourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -178,7 +179,7 @@ pub struct CreateDataSourceFromRDSOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateDataSourceFromRedshiftInput {
+pub struct CreateDataSourceFromRedshiftRequest {
     /// <p>The compute statistics for a <code>DataSource</code>. The statistics are generated from the observation data referenced by a <code>DataSource</code>. Amazon ML uses the statistics internally during <code>MLModel</code> training. This parameter must be set to <code>true</code> if the <code>DataSource</code> needs to be used for <code>MLModel</code> training.</p>
     #[serde(rename = "ComputeStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -201,7 +202,7 @@ pub struct CreateDataSourceFromRedshiftInput {
 /// <p> Represents the output of a <code>CreateDataSourceFromRedshift</code> operation, and is an acknowledgement that Amazon ML received the request.</p> <p>The <code>CreateDataSourceFromRedshift</code> operation is asynchronous. You can poll for updates by using the <code>GetBatchPrediction</code> operation and checking the <code>Status</code> parameter. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateDataSourceFromRedshiftOutput {
+pub struct CreateDataSourceFromRedshiftResponse {
     /// <p>A user-supplied ID that uniquely identifies the datasource. This value should be identical to the value of the <code>DataSourceID</code> in the request. </p>
     #[serde(rename = "DataSourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -209,7 +210,7 @@ pub struct CreateDataSourceFromRedshiftOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateDataSourceFromS3Input {
+pub struct CreateDataSourceFromS3Request {
     /// <p>The compute statistics for a <code>DataSource</code>. The statistics are generated from the observation data referenced by a <code>DataSource</code>. Amazon ML uses the statistics internally during <code>MLModel</code> training. This parameter must be set to <code>true</code> if the <code></code>DataSource<code></code> needs to be used for <code>MLModel</code> training.</p>
     #[serde(rename = "ComputeStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -229,7 +230,7 @@ pub struct CreateDataSourceFromS3Input {
 /// <p> Represents the output of a <code>CreateDataSourceFromS3</code> operation, and is an acknowledgement that Amazon ML received the request.</p> <p>The <code>CreateDataSourceFromS3</code> operation is asynchronous. You can poll for updates by using the <code>GetBatchPrediction</code> operation and checking the <code>Status</code> parameter. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateDataSourceFromS3Output {
+pub struct CreateDataSourceFromS3Response {
     /// <p>A user-supplied ID that uniquely identifies the <code>DataSource</code>. This value should be identical to the value of the <code>DataSourceID</code> in the request. </p>
     #[serde(rename = "DataSourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -237,7 +238,7 @@ pub struct CreateDataSourceFromS3Output {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateEvaluationInput {
+pub struct CreateEvaluationRequest {
     /// <p>The ID of the <code>DataSource</code> for the evaluation. The schema of the <code>DataSource</code> must match the schema used to create the <code>MLModel</code>.</p>
     #[serde(rename = "EvaluationDataSourceId")]
     pub evaluation_data_source_id: String,
@@ -256,7 +257,7 @@ pub struct CreateEvaluationInput {
 /// <p> Represents the output of a <code>CreateEvaluation</code> operation, and is an acknowledgement that Amazon ML received the request.</p> <p><code>CreateEvaluation</code> operation is asynchronous. You can poll for status updates by using the <code>GetEvcaluation</code> operation and checking the <code>Status</code> parameter. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateEvaluationOutput {
+pub struct CreateEvaluationResponse {
     /// <p>The user-supplied ID that uniquely identifies the <code>Evaluation</code>. This value should be identical to the value of the <code>EvaluationId</code> in the request.</p>
     #[serde(rename = "EvaluationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -264,7 +265,7 @@ pub struct CreateEvaluationOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateMLModelInput {
+pub struct CreateMLModelRequest {
     /// <p>A user-supplied ID that uniquely identifies the <code>MLModel</code>.</p>
     #[serde(rename = "MLModelId")]
     pub ml_model_id: String,
@@ -295,7 +296,7 @@ pub struct CreateMLModelInput {
 /// <p> Represents the output of a <code>CreateMLModel</code> operation, and is an acknowledgement that Amazon ML received the request.</p> <p>The <code>CreateMLModel</code> operation is asynchronous. You can poll for status updates by using the <code>GetMLModel</code> operation and checking the <code>Status</code> parameter. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateMLModelOutput {
+pub struct CreateMLModelResponse {
     /// <p>A user-supplied ID that uniquely identifies the <code>MLModel</code>. This value should be identical to the value of the <code>MLModelId</code> in the request. </p>
     #[serde(rename = "MLModelId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -303,7 +304,7 @@ pub struct CreateMLModelOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateRealtimeEndpointInput {
+pub struct CreateRealtimeEndpointRequest {
     /// <p>The ID assigned to the <code>MLModel</code> during creation.</p>
     #[serde(rename = "MLModelId")]
     pub ml_model_id: String,
@@ -312,7 +313,7 @@ pub struct CreateRealtimeEndpointInput {
 /// <p><p>Represents the output of an <code>CreateRealtimeEndpoint</code> operation.</p> <p>The result contains the <code>MLModelId</code> and the endpoint information for the <code>MLModel</code>.</p> <note> <p>The endpoint information includes the URI of the <code>MLModel</code>; that is, the location to send online prediction requests for the specified <code>MLModel</code>.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateRealtimeEndpointOutput {
+pub struct CreateRealtimeEndpointResponse {
     /// <p>A user-supplied ID that uniquely identifies the <code>MLModel</code>. This value should be identical to the value of the <code>MLModelId</code> in the request.</p>
     #[serde(rename = "MLModelId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -396,7 +397,7 @@ pub struct DataSource {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteBatchPredictionInput {
+pub struct DeleteBatchPredictionRequest {
     /// <p>A user-supplied ID that uniquely identifies the <code>BatchPrediction</code>.</p>
     #[serde(rename = "BatchPredictionId")]
     pub batch_prediction_id: String,
@@ -405,7 +406,7 @@ pub struct DeleteBatchPredictionInput {
 /// <p> Represents the output of a <code>DeleteBatchPrediction</code> operation.</p> <p>You can use the <code>GetBatchPrediction</code> operation and check the value of the <code>Status</code> parameter to see whether a <code>BatchPrediction</code> is marked as <code>DELETED</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteBatchPredictionOutput {
+pub struct DeleteBatchPredictionResponse {
     /// <p>A user-supplied ID that uniquely identifies the <code>BatchPrediction</code>. This value should be identical to the value of the <code>BatchPredictionID</code> in the request.</p>
     #[serde(rename = "BatchPredictionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -413,7 +414,7 @@ pub struct DeleteBatchPredictionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteDataSourceInput {
+pub struct DeleteDataSourceRequest {
     /// <p>A user-supplied ID that uniquely identifies the <code>DataSource</code>.</p>
     #[serde(rename = "DataSourceId")]
     pub data_source_id: String,
@@ -422,7 +423,7 @@ pub struct DeleteDataSourceInput {
 /// <p> Represents the output of a <code>DeleteDataSource</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteDataSourceOutput {
+pub struct DeleteDataSourceResponse {
     /// <p>A user-supplied ID that uniquely identifies the <code>DataSource</code>. This value should be identical to the value of the <code>DataSourceID</code> in the request.</p>
     #[serde(rename = "DataSourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -430,7 +431,7 @@ pub struct DeleteDataSourceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteEvaluationInput {
+pub struct DeleteEvaluationRequest {
     /// <p>A user-supplied ID that uniquely identifies the <code>Evaluation</code> to delete.</p>
     #[serde(rename = "EvaluationId")]
     pub evaluation_id: String,
@@ -439,7 +440,7 @@ pub struct DeleteEvaluationInput {
 /// <p> Represents the output of a <code>DeleteEvaluation</code> operation. The output indicates that Amazon Machine Learning (Amazon ML) received the request.</p> <p>You can use the <code>GetEvaluation</code> operation and check the value of the <code>Status</code> parameter to see whether an <code>Evaluation</code> is marked as <code>DELETED</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteEvaluationOutput {
+pub struct DeleteEvaluationResponse {
     /// <p>A user-supplied ID that uniquely identifies the <code>Evaluation</code>. This value should be identical to the value of the <code>EvaluationId</code> in the request.</p>
     #[serde(rename = "EvaluationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -447,7 +448,7 @@ pub struct DeleteEvaluationOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteMLModelInput {
+pub struct DeleteMLModelRequest {
     /// <p>A user-supplied ID that uniquely identifies the <code>MLModel</code>.</p>
     #[serde(rename = "MLModelId")]
     pub ml_model_id: String,
@@ -456,7 +457,7 @@ pub struct DeleteMLModelInput {
 /// <p>Represents the output of a <code>DeleteMLModel</code> operation.</p> <p>You can use the <code>GetMLModel</code> operation and check the value of the <code>Status</code> parameter to see whether an <code>MLModel</code> is marked as <code>DELETED</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteMLModelOutput {
+pub struct DeleteMLModelResponse {
     /// <p>A user-supplied ID that uniquely identifies the <code>MLModel</code>. This value should be identical to the value of the <code>MLModelID</code> in the request.</p>
     #[serde(rename = "MLModelId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -464,7 +465,7 @@ pub struct DeleteMLModelOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteRealtimeEndpointInput {
+pub struct DeleteRealtimeEndpointRequest {
     /// <p>The ID assigned to the <code>MLModel</code> during creation.</p>
     #[serde(rename = "MLModelId")]
     pub ml_model_id: String,
@@ -473,7 +474,7 @@ pub struct DeleteRealtimeEndpointInput {
 /// <p>Represents the output of an <code>DeleteRealtimeEndpoint</code> operation.</p> <p>The result contains the <code>MLModelId</code> and the endpoint information for the <code>MLModel</code>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteRealtimeEndpointOutput {
+pub struct DeleteRealtimeEndpointResponse {
     /// <p>A user-supplied ID that uniquely identifies the <code>MLModel</code>. This value should be identical to the value of the <code>MLModelId</code> in the request.</p>
     #[serde(rename = "MLModelId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -485,7 +486,7 @@ pub struct DeleteRealtimeEndpointOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteTagsInput {
+pub struct DeleteTagsRequest {
     /// <p>The ID of the tagged ML object. For example, <code>exampleModelId</code>.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
@@ -500,7 +501,7 @@ pub struct DeleteTagsInput {
 /// <p>Amazon ML returns the following elements. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteTagsOutput {
+pub struct DeleteTagsResponse {
     /// <p>The ID of the ML object from which tags were deleted.</p>
     #[serde(rename = "ResourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -512,7 +513,7 @@ pub struct DeleteTagsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeBatchPredictionsInput {
+pub struct DescribeBatchPredictionsRequest {
     /// <p>The equal to operator. The <code>BatchPrediction</code> results will have <code>FilterVariable</code> values that exactly match the value specified with <code>EQ</code>.</p>
     #[serde(rename = "EQ")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -562,7 +563,7 @@ pub struct DescribeBatchPredictionsInput {
 /// <p>Represents the output of a <code>DescribeBatchPredictions</code> operation. The content is essentially a list of <code>BatchPrediction</code>s.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeBatchPredictionsOutput {
+pub struct DescribeBatchPredictionsResponse {
     /// <p>The ID of the next page in the paginated results that indicates at least one more page follows.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -574,7 +575,7 @@ pub struct DescribeBatchPredictionsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeDataSourcesInput {
+pub struct DescribeDataSourcesRequest {
     /// <p>The equal to operator. The <code>DataSource</code> results will have <code>FilterVariable</code> values that exactly match the value specified with <code>EQ</code>.</p>
     #[serde(rename = "EQ")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -624,7 +625,7 @@ pub struct DescribeDataSourcesInput {
 /// <p>Represents the query results from a <a>DescribeDataSources</a> operation. The content is essentially a list of <code>DataSource</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeDataSourcesOutput {
+pub struct DescribeDataSourcesResponse {
     /// <p>An ID of the next page in the paginated results that indicates at least one more page follows.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -636,7 +637,7 @@ pub struct DescribeDataSourcesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeEvaluationsInput {
+pub struct DescribeEvaluationsRequest {
     /// <p>The equal to operator. The <code>Evaluation</code> results will have <code>FilterVariable</code> values that exactly match the value specified with <code>EQ</code>.</p>
     #[serde(rename = "EQ")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -686,7 +687,7 @@ pub struct DescribeEvaluationsInput {
 /// <p>Represents the query results from a <code>DescribeEvaluations</code> operation. The content is essentially a list of <code>Evaluation</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeEvaluationsOutput {
+pub struct DescribeEvaluationsResponse {
     /// <p>The ID of the next page in the paginated results that indicates at least one more page follows.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -698,7 +699,7 @@ pub struct DescribeEvaluationsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeMLModelsInput {
+pub struct DescribeMLModelsRequest {
     /// <p>The equal to operator. The <code>MLModel</code> results will have <code>FilterVariable</code> values that exactly match the value specified with <code>EQ</code>.</p>
     #[serde(rename = "EQ")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -748,7 +749,7 @@ pub struct DescribeMLModelsInput {
 /// <p>Represents the output of a <code>DescribeMLModels</code> operation. The content is essentially a list of <code>MLModel</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeMLModelsOutput {
+pub struct DescribeMLModelsResponse {
     /// <p>The ID of the next page in the paginated results that indicates at least one more page follows.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -760,7 +761,7 @@ pub struct DescribeMLModelsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeTagsInput {
+pub struct DescribeTagsRequest {
     /// <p>The ID of the ML object. For example, <code>exampleModelId</code>. </p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
@@ -772,7 +773,7 @@ pub struct DescribeTagsInput {
 /// <p>Amazon ML returns the following elements. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeTagsOutput {
+pub struct DescribeTagsResponse {
     /// <p>The ID of the tagged ML object.</p>
     #[serde(rename = "ResourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -847,7 +848,7 @@ pub struct Evaluation {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetBatchPredictionInput {
+pub struct GetBatchPredictionRequest {
     /// <p>An ID assigned to the <code>BatchPrediction</code> at creation.</p>
     #[serde(rename = "BatchPredictionId")]
     pub batch_prediction_id: String,
@@ -856,7 +857,7 @@ pub struct GetBatchPredictionInput {
 /// <p>Represents the output of a <code>GetBatchPrediction</code> operation and describes a <code>BatchPrediction</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetBatchPredictionOutput {
+pub struct GetBatchPredictionResponse {
     /// <p>The ID of the <code>DataSource</code> that was used to create the <code>BatchPrediction</code>. </p>
     #[serde(rename = "BatchPredictionDataSourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -928,7 +929,7 @@ pub struct GetBatchPredictionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetDataSourceInput {
+pub struct GetDataSourceRequest {
     /// <p>The ID assigned to the <code>DataSource</code> at creation.</p>
     #[serde(rename = "DataSourceId")]
     pub data_source_id: String,
@@ -941,7 +942,7 @@ pub struct GetDataSourceInput {
 /// <p>Represents the output of a <code>GetDataSource</code> operation and describes a <code>DataSource</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetDataSourceOutput {
+pub struct GetDataSourceResponse {
     /// <p> The parameter is <code>true</code> if statistics need to be generated from the observation data. </p>
     #[serde(rename = "ComputeStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1022,7 +1023,7 @@ pub struct GetDataSourceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetEvaluationInput {
+pub struct GetEvaluationRequest {
     /// <p>The ID of the <code>Evaluation</code> to retrieve. The evaluation of each <code>MLModel</code> is recorded and cataloged. The ID provides the means to access the information. </p>
     #[serde(rename = "EvaluationId")]
     pub evaluation_id: String,
@@ -1031,7 +1032,7 @@ pub struct GetEvaluationInput {
 /// <p>Represents the output of a <code>GetEvaluation</code> operation and describes an <code>Evaluation</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetEvaluationOutput {
+pub struct GetEvaluationResponse {
     /// <p>The approximate CPU time in milliseconds that Amazon Machine Learning spent processing the <code>Evaluation</code>, normalized and scaled on computation resources. <code>ComputeTime</code> is only available if the <code>Evaluation</code> is in the <code>COMPLETED</code> state.</p>
     #[serde(rename = "ComputeTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1095,7 +1096,7 @@ pub struct GetEvaluationOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetMLModelInput {
+pub struct GetMLModelRequest {
     /// <p>The ID assigned to the <code>MLModel</code> at creation.</p>
     #[serde(rename = "MLModelId")]
     pub ml_model_id: String,
@@ -1108,7 +1109,7 @@ pub struct GetMLModelInput {
 /// <p>Represents the output of a <code>GetMLModel</code> operation, and provides detailed information about a <code>MLModel</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetMLModelOutput {
+pub struct GetMLModelResponse {
     /// <p>The approximate CPU time in milliseconds that Amazon Machine Learning spent processing the <code>MLModel</code>, normalized and scaled on computation resources. <code>ComputeTime</code> is only available if the <code>MLModel</code> is in the <code>COMPLETED</code> state.</p>
     #[serde(rename = "ComputeTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1281,7 +1282,7 @@ pub struct PerformanceMetrics {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PredictInput {
+pub struct PredictRequest {
     /// <p>A unique identifier of the <code>MLModel</code>.</p>
     #[serde(rename = "MLModelId")]
     pub ml_model_id: String,
@@ -1293,7 +1294,7 @@ pub struct PredictInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct PredictOutput {
+pub struct PredictResponse {
     #[serde(rename = "Prediction")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prediction: Option<Prediction>,
@@ -1527,7 +1528,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateBatchPredictionInput {
+pub struct UpdateBatchPredictionRequest {
     /// <p>The ID assigned to the <code>BatchPrediction</code> during creation.</p>
     #[serde(rename = "BatchPredictionId")]
     pub batch_prediction_id: String,
@@ -1539,7 +1540,7 @@ pub struct UpdateBatchPredictionInput {
 /// <p>Represents the output of an <code>UpdateBatchPrediction</code> operation.</p> <p>You can see the updated content by using the <code>GetBatchPrediction</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateBatchPredictionOutput {
+pub struct UpdateBatchPredictionResponse {
     /// <p>The ID assigned to the <code>BatchPrediction</code> during creation. This value should be identical to the value of the <code>BatchPredictionId</code> in the request.</p>
     #[serde(rename = "BatchPredictionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1547,7 +1548,7 @@ pub struct UpdateBatchPredictionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateDataSourceInput {
+pub struct UpdateDataSourceRequest {
     /// <p>The ID assigned to the <code>DataSource</code> during creation.</p>
     #[serde(rename = "DataSourceId")]
     pub data_source_id: String,
@@ -1559,7 +1560,7 @@ pub struct UpdateDataSourceInput {
 /// <p>Represents the output of an <code>UpdateDataSource</code> operation.</p> <p>You can see the updated content by using the <code>GetBatchPrediction</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateDataSourceOutput {
+pub struct UpdateDataSourceResponse {
     /// <p>The ID assigned to the <code>DataSource</code> during creation. This value should be identical to the value of the <code>DataSourceID</code> in the request.</p>
     #[serde(rename = "DataSourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1567,7 +1568,7 @@ pub struct UpdateDataSourceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateEvaluationInput {
+pub struct UpdateEvaluationRequest {
     /// <p>The ID assigned to the <code>Evaluation</code> during creation.</p>
     #[serde(rename = "EvaluationId")]
     pub evaluation_id: String,
@@ -1579,7 +1580,7 @@ pub struct UpdateEvaluationInput {
 /// <p>Represents the output of an <code>UpdateEvaluation</code> operation.</p> <p>You can see the updated content by using the <code>GetEvaluation</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateEvaluationOutput {
+pub struct UpdateEvaluationResponse {
     /// <p>The ID assigned to the <code>Evaluation</code> during creation. This value should be identical to the value of the <code>Evaluation</code> in the request.</p>
     #[serde(rename = "EvaluationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1587,7 +1588,7 @@ pub struct UpdateEvaluationOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateMLModelInput {
+pub struct UpdateMLModelRequest {
     /// <p>The ID assigned to the <code>MLModel</code> during creation.</p>
     #[serde(rename = "MLModelId")]
     pub ml_model_id: String,
@@ -1604,7 +1605,7 @@ pub struct UpdateMLModelInput {
 /// <p>Represents the output of an <code>UpdateMLModel</code> operation.</p> <p>You can see the updated content by using the <code>GetMLModel</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateMLModelOutput {
+pub struct UpdateMLModelResponse {
     /// <p>The ID assigned to the <code>MLModel</code> during creation. This value should be identical to the value of the <code>MLModelID</code> in the request.</p>
     #[serde(rename = "MLModelId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2926,166 +2927,136 @@ impl Error for UpdateMLModelError {
 /// Trait representing the capabilities of the Amazon Machine Learning API. Amazon Machine Learning clients implement this trait.
 pub trait MachineLearning {
     /// <p>Adds one or more tags to an object, up to a limit of 10. Each tag consists of a key and an optional value. If you add a tag using a key that is already associated with the ML object, <code>AddTags</code> updates the tag's value.</p>
-    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError>;
+    fn add_tags(&self, input: AddTagsRequest) -> Request<AddTagsRequest>;
 
     /// <p>Generates predictions for a group of observations. The observations to process exist in one or more data files referenced by a <code>DataSource</code>. This operation creates a new <code>BatchPrediction</code>, and uses an <code>MLModel</code> and the data files referenced by the <code>DataSource</code> as information sources. </p> <p><code>CreateBatchPrediction</code> is an asynchronous operation. In response to <code>CreateBatchPrediction</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>BatchPrediction</code> status to <code>PENDING</code>. After the <code>BatchPrediction</code> completes, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can poll for status updates by using the <a>GetBatchPrediction</a> operation and checking the <code>Status</code> parameter of the result. After the <code>COMPLETED</code> status appears, the results are available in the location specified by the <code>OutputUri</code> parameter.</p>
     fn create_batch_prediction(
         &self,
-        input: CreateBatchPredictionInput,
-    ) -> RusotoFuture<CreateBatchPredictionOutput, CreateBatchPredictionError>;
+        input: CreateBatchPredictionRequest,
+    ) -> Request<CreateBatchPredictionRequest>;
 
     /// <p>Creates a <code>DataSource</code> object from an <a href="http://aws.amazon.com/rds/"> Amazon Relational Database Service</a> (Amazon RDS). A <code>DataSource</code> references data that can be used to perform <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromRDS</code> is an asynchronous operation. In response to <code>CreateDataSourceFromRDS</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> is created and ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or <code>PENDING</code> state can be used only to perform <code>&gt;CreateMLModel</code>&gt;, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML cannot accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p>
     fn create_data_source_from_rds(
         &self,
-        input: CreateDataSourceFromRDSInput,
-    ) -> RusotoFuture<CreateDataSourceFromRDSOutput, CreateDataSourceFromRDSError>;
+        input: CreateDataSourceFromRDSRequest,
+    ) -> Request<CreateDataSourceFromRDSRequest>;
 
     /// <p><p>Creates a <code>DataSource</code> from a database hosted on an Amazon Redshift cluster. A <code>DataSource</code> references data that can be used to perform either <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromRedshift</code> is an asynchronous operation. In response to <code>CreateDataSourceFromRedshift</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> is created and ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in <code>COMPLETED</code> or <code>PENDING</code> states can be used to perform only <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML can&#39;t accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p> <p>The observations should be contained in the database hosted on an Amazon Redshift cluster and should be specified by a <code>SelectSqlQuery</code> query. Amazon ML executes an <code>Unload</code> command in Amazon Redshift to transfer the result set of the <code>SelectSqlQuery</code> query to <code>S3StagingLocation</code>.</p> <p>After the <code>DataSource</code> has been created, it&#39;s ready for use in evaluations and batch predictions. If you plan to use the <code>DataSource</code> to train an <code>MLModel</code>, the <code>DataSource</code> also requires a recipe. A recipe describes how each input variable will be used in training an <code>MLModel</code>. Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.</p> &lt;?oxy<em>insert</em>start author=&quot;laurama&quot; timestamp=&quot;20160406T153842-0700&quot;&gt;<p>You can&#39;t change an existing datasource, but you can copy and modify the settings from an existing Amazon Redshift datasource to create a new datasource. To do so, call <code>GetDataSource</code> for an existing datasource and copy the values to a <code>CreateDataSource</code> call. Change the settings that you want to change and make sure that all required fields have the appropriate values.</p> &lt;?oxy<em>insert</em>end&gt;</p>
     fn create_data_source_from_redshift(
         &self,
-        input: CreateDataSourceFromRedshiftInput,
-    ) -> RusotoFuture<CreateDataSourceFromRedshiftOutput, CreateDataSourceFromRedshiftError>;
+        input: CreateDataSourceFromRedshiftRequest,
+    ) -> Request<CreateDataSourceFromRedshiftRequest>;
 
     /// <p>Creates a <code>DataSource</code> object. A <code>DataSource</code> references data that can be used to perform <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromS3</code> is an asynchronous operation. In response to <code>CreateDataSourceFromS3</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> has been created and is ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or <code>PENDING</code> state can be used to perform only <code>CreateMLModel</code>, <code>CreateEvaluation</code> or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML can't accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p> <p>The observation data used in a <code>DataSource</code> should be ready to use; that is, it should have a consistent structure, and missing data values should be kept to a minimum. The observation data must reside in one or more .csv files in an Amazon Simple Storage Service (Amazon S3) location, along with a schema that describes the data items by name and type. The same schema must be used for all of the data files referenced by the <code>DataSource</code>. </p> <p>After the <code>DataSource</code> has been created, it's ready to use in evaluations and batch predictions. If you plan to use the <code>DataSource</code> to train an <code>MLModel</code>, the <code>DataSource</code> also needs a recipe. A recipe describes how each input variable will be used in training an <code>MLModel</code>. Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.</p>
     fn create_data_source_from_s3(
         &self,
-        input: CreateDataSourceFromS3Input,
-    ) -> RusotoFuture<CreateDataSourceFromS3Output, CreateDataSourceFromS3Error>;
+        input: CreateDataSourceFromS3Request,
+    ) -> Request<CreateDataSourceFromS3Request>;
 
     /// <p>Creates a new <code>Evaluation</code> of an <code>MLModel</code>. An <code>MLModel</code> is evaluated on a set of observations associated to a <code>DataSource</code>. Like a <code>DataSource</code> for an <code>MLModel</code>, the <code>DataSource</code> for an <code>Evaluation</code> contains values for the <code>Target Variable</code>. The <code>Evaluation</code> compares the predicted result for each observation to the actual outcome and provides a summary so that you know how effective the <code>MLModel</code> functions on the test data. Evaluation generates a relevant performance metric, such as BinaryAUC, RegressionRMSE or MulticlassAvgFScore based on the corresponding <code>MLModelType</code>: <code>BINARY</code>, <code>REGRESSION</code> or <code>MULTICLASS</code>. </p> <p><code>CreateEvaluation</code> is an asynchronous operation. In response to <code>CreateEvaluation</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the evaluation status to <code>PENDING</code>. After the <code>Evaluation</code> is created and ready for use, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can use the <code>GetEvaluation</code> operation to check progress of the evaluation during the creation operation.</p>
-    fn create_evaluation(
-        &self,
-        input: CreateEvaluationInput,
-    ) -> RusotoFuture<CreateEvaluationOutput, CreateEvaluationError>;
+    fn create_evaluation(&self, input: CreateEvaluationRequest)
+        -> Request<CreateEvaluationRequest>;
 
     /// <p>Creates a new <code>MLModel</code> using the <code>DataSource</code> and the recipe as information sources. </p> <p>An <code>MLModel</code> is nearly immutable. Users can update only the <code>MLModelName</code> and the <code>ScoreThreshold</code> in an <code>MLModel</code> without creating a new <code>MLModel</code>. </p> <p><code>CreateMLModel</code> is an asynchronous operation. In response to <code>CreateMLModel</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>MLModel</code> status to <code>PENDING</code>. After the <code>MLModel</code> has been created and ready is for use, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can use the <code>GetMLModel</code> operation to check the progress of the <code>MLModel</code> during the creation operation.</p> <p> <code>CreateMLModel</code> requires a <code>DataSource</code> with computed statistics, which can be created by setting <code>ComputeStatistics</code> to <code>true</code> in <code>CreateDataSourceFromRDS</code>, <code>CreateDataSourceFromS3</code>, or <code>CreateDataSourceFromRedshift</code> operations. </p>
-    fn create_ml_model(
-        &self,
-        input: CreateMLModelInput,
-    ) -> RusotoFuture<CreateMLModelOutput, CreateMLModelError>;
+    fn create_ml_model(&self, input: CreateMLModelRequest) -> Request<CreateMLModelRequest>;
 
     /// <p>Creates a real-time endpoint for the <code>MLModel</code>. The endpoint contains the URI of the <code>MLModel</code>; that is, the location to send real-time prediction requests for the specified <code>MLModel</code>.</p>
     fn create_realtime_endpoint(
         &self,
-        input: CreateRealtimeEndpointInput,
-    ) -> RusotoFuture<CreateRealtimeEndpointOutput, CreateRealtimeEndpointError>;
+        input: CreateRealtimeEndpointRequest,
+    ) -> Request<CreateRealtimeEndpointRequest>;
 
     /// <p>Assigns the DELETED status to a <code>BatchPrediction</code>, rendering it unusable.</p> <p>After using the <code>DeleteBatchPrediction</code> operation, you can use the <a>GetBatchPrediction</a> operation to verify that the status of the <code>BatchPrediction</code> changed to DELETED.</p> <p><b>Caution:</b> The result of the <code>DeleteBatchPrediction</code> operation is irreversible.</p>
     fn delete_batch_prediction(
         &self,
-        input: DeleteBatchPredictionInput,
-    ) -> RusotoFuture<DeleteBatchPredictionOutput, DeleteBatchPredictionError>;
+        input: DeleteBatchPredictionRequest,
+    ) -> Request<DeleteBatchPredictionRequest>;
 
     /// <p>Assigns the DELETED status to a <code>DataSource</code>, rendering it unusable.</p> <p>After using the <code>DeleteDataSource</code> operation, you can use the <a>GetDataSource</a> operation to verify that the status of the <code>DataSource</code> changed to DELETED.</p> <p><b>Caution:</b> The results of the <code>DeleteDataSource</code> operation are irreversible.</p>
     fn delete_data_source(
         &self,
-        input: DeleteDataSourceInput,
-    ) -> RusotoFuture<DeleteDataSourceOutput, DeleteDataSourceError>;
+        input: DeleteDataSourceRequest,
+    ) -> Request<DeleteDataSourceRequest>;
 
     /// <p><p>Assigns the <code>DELETED</code> status to an <code>Evaluation</code>, rendering it unusable.</p> <p>After invoking the <code>DeleteEvaluation</code> operation, you can use the <code>GetEvaluation</code> operation to verify that the status of the <code>Evaluation</code> changed to <code>DELETED</code>.</p> <caution><title>Caution</title> <p>The results of the <code>DeleteEvaluation</code> operation are irreversible.</p></caution></p>
-    fn delete_evaluation(
-        &self,
-        input: DeleteEvaluationInput,
-    ) -> RusotoFuture<DeleteEvaluationOutput, DeleteEvaluationError>;
+    fn delete_evaluation(&self, input: DeleteEvaluationRequest)
+        -> Request<DeleteEvaluationRequest>;
 
     /// <p>Assigns the <code>DELETED</code> status to an <code>MLModel</code>, rendering it unusable.</p> <p>After using the <code>DeleteMLModel</code> operation, you can use the <code>GetMLModel</code> operation to verify that the status of the <code>MLModel</code> changed to DELETED.</p> <p><b>Caution:</b> The result of the <code>DeleteMLModel</code> operation is irreversible.</p>
-    fn delete_ml_model(
-        &self,
-        input: DeleteMLModelInput,
-    ) -> RusotoFuture<DeleteMLModelOutput, DeleteMLModelError>;
+    fn delete_ml_model(&self, input: DeleteMLModelRequest) -> Request<DeleteMLModelRequest>;
 
     /// <p>Deletes a real time endpoint of an <code>MLModel</code>.</p>
     fn delete_realtime_endpoint(
         &self,
-        input: DeleteRealtimeEndpointInput,
-    ) -> RusotoFuture<DeleteRealtimeEndpointOutput, DeleteRealtimeEndpointError>;
+        input: DeleteRealtimeEndpointRequest,
+    ) -> Request<DeleteRealtimeEndpointRequest>;
 
     /// <p>Deletes the specified tags associated with an ML object. After this operation is complete, you can't recover deleted tags.</p> <p>If you specify a tag that doesn't exist, Amazon ML ignores it.</p>
-    fn delete_tags(
-        &self,
-        input: DeleteTagsInput,
-    ) -> RusotoFuture<DeleteTagsOutput, DeleteTagsError>;
+    fn delete_tags(&self, input: DeleteTagsRequest) -> Request<DeleteTagsRequest>;
 
     /// <p>Returns a list of <code>BatchPrediction</code> operations that match the search criteria in the request.</p>
     fn describe_batch_predictions(
         &self,
-        input: DescribeBatchPredictionsInput,
-    ) -> RusotoFuture<DescribeBatchPredictionsOutput, DescribeBatchPredictionsError>;
+        input: DescribeBatchPredictionsRequest,
+    ) -> Request<DescribeBatchPredictionsRequest>;
 
     /// <p>Returns a list of <code>DataSource</code> that match the search criteria in the request.</p>
     fn describe_data_sources(
         &self,
-        input: DescribeDataSourcesInput,
-    ) -> RusotoFuture<DescribeDataSourcesOutput, DescribeDataSourcesError>;
+        input: DescribeDataSourcesRequest,
+    ) -> Request<DescribeDataSourcesRequest>;
 
     /// <p>Returns a list of <code>DescribeEvaluations</code> that match the search criteria in the request.</p>
     fn describe_evaluations(
         &self,
-        input: DescribeEvaluationsInput,
-    ) -> RusotoFuture<DescribeEvaluationsOutput, DescribeEvaluationsError>;
+        input: DescribeEvaluationsRequest,
+    ) -> Request<DescribeEvaluationsRequest>;
 
     /// <p>Returns a list of <code>MLModel</code> that match the search criteria in the request.</p>
     fn describe_ml_models(
         &self,
-        input: DescribeMLModelsInput,
-    ) -> RusotoFuture<DescribeMLModelsOutput, DescribeMLModelsError>;
+        input: DescribeMLModelsRequest,
+    ) -> Request<DescribeMLModelsRequest>;
 
     /// <p>Describes one or more of the tags for your Amazon ML object.</p>
-    fn describe_tags(
-        &self,
-        input: DescribeTagsInput,
-    ) -> RusotoFuture<DescribeTagsOutput, DescribeTagsError>;
+    fn describe_tags(&self, input: DescribeTagsRequest) -> Request<DescribeTagsRequest>;
 
     /// <p>Returns a <code>BatchPrediction</code> that includes detailed metadata, status, and data file information for a <code>Batch Prediction</code> request.</p>
     fn get_batch_prediction(
         &self,
-        input: GetBatchPredictionInput,
-    ) -> RusotoFuture<GetBatchPredictionOutput, GetBatchPredictionError>;
+        input: GetBatchPredictionRequest,
+    ) -> Request<GetBatchPredictionRequest>;
 
     /// <p>Returns a <code>DataSource</code> that includes metadata and data file information, as well as the current status of the <code>DataSource</code>.</p> <p><code>GetDataSource</code> provides results in normal or verbose format. The verbose format adds the schema description and the list of files pointed to by the DataSource to the normal format.</p>
-    fn get_data_source(
-        &self,
-        input: GetDataSourceInput,
-    ) -> RusotoFuture<GetDataSourceOutput, GetDataSourceError>;
+    fn get_data_source(&self, input: GetDataSourceRequest) -> Request<GetDataSourceRequest>;
 
     /// <p>Returns an <code>Evaluation</code> that includes metadata as well as the current status of the <code>Evaluation</code>.</p>
-    fn get_evaluation(
-        &self,
-        input: GetEvaluationInput,
-    ) -> RusotoFuture<GetEvaluationOutput, GetEvaluationError>;
+    fn get_evaluation(&self, input: GetEvaluationRequest) -> Request<GetEvaluationRequest>;
 
     /// <p>Returns an <code>MLModel</code> that includes detailed metadata, data source information, and the current status of the <code>MLModel</code>.</p> <p><code>GetMLModel</code> provides results in normal or verbose format. </p>
-    fn get_ml_model(
-        &self,
-        input: GetMLModelInput,
-    ) -> RusotoFuture<GetMLModelOutput, GetMLModelError>;
+    fn get_ml_model(&self, input: GetMLModelRequest) -> Request<GetMLModelRequest>;
 
     /// <p><p>Generates a prediction for the observation using the specified <code>ML Model</code>.</p> <note><title>Note</title> <p>Not all response parameters will be populated. Whether a response parameter is populated depends on the type of model requested.</p></note></p>
-    fn predict(&self, input: PredictInput) -> RusotoFuture<PredictOutput, PredictError>;
+    fn predict(&self, input: PredictRequest) -> Request<PredictRequest>;
 
     /// <p>Updates the <code>BatchPredictionName</code> of a <code>BatchPrediction</code>.</p> <p>You can use the <code>GetBatchPrediction</code> operation to view the contents of the updated data element.</p>
     fn update_batch_prediction(
         &self,
-        input: UpdateBatchPredictionInput,
-    ) -> RusotoFuture<UpdateBatchPredictionOutput, UpdateBatchPredictionError>;
+        input: UpdateBatchPredictionRequest,
+    ) -> Request<UpdateBatchPredictionRequest>;
 
     /// <p>Updates the <code>DataSourceName</code> of a <code>DataSource</code>.</p> <p>You can use the <code>GetDataSource</code> operation to view the contents of the updated data element.</p>
     fn update_data_source(
         &self,
-        input: UpdateDataSourceInput,
-    ) -> RusotoFuture<UpdateDataSourceOutput, UpdateDataSourceError>;
+        input: UpdateDataSourceRequest,
+    ) -> Request<UpdateDataSourceRequest>;
 
     /// <p>Updates the <code>EvaluationName</code> of an <code>Evaluation</code>.</p> <p>You can use the <code>GetEvaluation</code> operation to view the contents of the updated data element.</p>
-    fn update_evaluation(
-        &self,
-        input: UpdateEvaluationInput,
-    ) -> RusotoFuture<UpdateEvaluationOutput, UpdateEvaluationError>;
+    fn update_evaluation(&self, input: UpdateEvaluationRequest)
+        -> Request<UpdateEvaluationRequest>;
 
     /// <p>Updates the <code>MLModelName</code> and the <code>ScoreThreshold</code> of an <code>MLModel</code>.</p> <p>You can use the <code>GetMLModel</code> operation to view the contents of the updated data element.</p>
-    fn update_ml_model(
-        &self,
-        input: UpdateMLModelInput,
-    ) -> RusotoFuture<UpdateMLModelOutput, UpdateMLModelError>;
+    fn update_ml_model(&self, input: UpdateMLModelRequest) -> Request<UpdateMLModelRequest>;
 }
 /// A client for the Amazon Machine Learning API.
 #[derive(Clone)]
@@ -3125,18 +3096,220 @@ impl MachineLearningClient {
 
 impl MachineLearning for MachineLearningClient {
     /// <p>Adds one or more tags to an object, up to a limit of 10. Each tag consists of a key and an optional value. If you add a tag using a key that is already associated with the ML object, <code>AddTags</code> updates the tag's value.</p>
-    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+    fn add_tags(&self, input: AddTagsRequest) -> Request<AddTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Generates predictions for a group of observations. The observations to process exist in one or more data files referenced by a <code>DataSource</code>. This operation creates a new <code>BatchPrediction</code>, and uses an <code>MLModel</code> and the data files referenced by the <code>DataSource</code> as information sources. </p> <p><code>CreateBatchPrediction</code> is an asynchronous operation. In response to <code>CreateBatchPrediction</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>BatchPrediction</code> status to <code>PENDING</code>. After the <code>BatchPrediction</code> completes, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can poll for status updates by using the <a>GetBatchPrediction</a> operation and checking the <code>Status</code> parameter of the result. After the <code>COMPLETED</code> status appears, the results are available in the location specified by the <code>OutputUri</code> parameter.</p>
+    fn create_batch_prediction(
+        &self,
+        input: CreateBatchPredictionRequest,
+    ) -> Request<CreateBatchPredictionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a <code>DataSource</code> object from an <a href="http://aws.amazon.com/rds/"> Amazon Relational Database Service</a> (Amazon RDS). A <code>DataSource</code> references data that can be used to perform <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromRDS</code> is an asynchronous operation. In response to <code>CreateDataSourceFromRDS</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> is created and ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or <code>PENDING</code> state can be used only to perform <code>&gt;CreateMLModel</code>&gt;, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML cannot accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p>
+    fn create_data_source_from_rds(
+        &self,
+        input: CreateDataSourceFromRDSRequest,
+    ) -> Request<CreateDataSourceFromRDSRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a <code>DataSource</code> from a database hosted on an Amazon Redshift cluster. A <code>DataSource</code> references data that can be used to perform either <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromRedshift</code> is an asynchronous operation. In response to <code>CreateDataSourceFromRedshift</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> is created and ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in <code>COMPLETED</code> or <code>PENDING</code> states can be used to perform only <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML can&#39;t accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p> <p>The observations should be contained in the database hosted on an Amazon Redshift cluster and should be specified by a <code>SelectSqlQuery</code> query. Amazon ML executes an <code>Unload</code> command in Amazon Redshift to transfer the result set of the <code>SelectSqlQuery</code> query to <code>S3StagingLocation</code>.</p> <p>After the <code>DataSource</code> has been created, it&#39;s ready for use in evaluations and batch predictions. If you plan to use the <code>DataSource</code> to train an <code>MLModel</code>, the <code>DataSource</code> also requires a recipe. A recipe describes how each input variable will be used in training an <code>MLModel</code>. Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.</p> &lt;?oxy<em>insert</em>start author=&quot;laurama&quot; timestamp=&quot;20160406T153842-0700&quot;&gt;<p>You can&#39;t change an existing datasource, but you can copy and modify the settings from an existing Amazon Redshift datasource to create a new datasource. To do so, call <code>GetDataSource</code> for an existing datasource and copy the values to a <code>CreateDataSource</code> call. Change the settings that you want to change and make sure that all required fields have the appropriate values.</p> &lt;?oxy<em>insert</em>end&gt;</p>
+    fn create_data_source_from_redshift(
+        &self,
+        input: CreateDataSourceFromRedshiftRequest,
+    ) -> Request<CreateDataSourceFromRedshiftRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a <code>DataSource</code> object. A <code>DataSource</code> references data that can be used to perform <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromS3</code> is an asynchronous operation. In response to <code>CreateDataSourceFromS3</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> has been created and is ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or <code>PENDING</code> state can be used to perform only <code>CreateMLModel</code>, <code>CreateEvaluation</code> or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML can't accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p> <p>The observation data used in a <code>DataSource</code> should be ready to use; that is, it should have a consistent structure, and missing data values should be kept to a minimum. The observation data must reside in one or more .csv files in an Amazon Simple Storage Service (Amazon S3) location, along with a schema that describes the data items by name and type. The same schema must be used for all of the data files referenced by the <code>DataSource</code>. </p> <p>After the <code>DataSource</code> has been created, it's ready to use in evaluations and batch predictions. If you plan to use the <code>DataSource</code> to train an <code>MLModel</code>, the <code>DataSource</code> also needs a recipe. A recipe describes how each input variable will be used in training an <code>MLModel</code>. Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.</p>
+    fn create_data_source_from_s3(
+        &self,
+        input: CreateDataSourceFromS3Request,
+    ) -> Request<CreateDataSourceFromS3Request> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new <code>Evaluation</code> of an <code>MLModel</code>. An <code>MLModel</code> is evaluated on a set of observations associated to a <code>DataSource</code>. Like a <code>DataSource</code> for an <code>MLModel</code>, the <code>DataSource</code> for an <code>Evaluation</code> contains values for the <code>Target Variable</code>. The <code>Evaluation</code> compares the predicted result for each observation to the actual outcome and provides a summary so that you know how effective the <code>MLModel</code> functions on the test data. Evaluation generates a relevant performance metric, such as BinaryAUC, RegressionRMSE or MulticlassAvgFScore based on the corresponding <code>MLModelType</code>: <code>BINARY</code>, <code>REGRESSION</code> or <code>MULTICLASS</code>. </p> <p><code>CreateEvaluation</code> is an asynchronous operation. In response to <code>CreateEvaluation</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the evaluation status to <code>PENDING</code>. After the <code>Evaluation</code> is created and ready for use, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can use the <code>GetEvaluation</code> operation to check progress of the evaluation during the creation operation.</p>
+    fn create_evaluation(
+        &self,
+        input: CreateEvaluationRequest,
+    ) -> Request<CreateEvaluationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new <code>MLModel</code> using the <code>DataSource</code> and the recipe as information sources. </p> <p>An <code>MLModel</code> is nearly immutable. Users can update only the <code>MLModelName</code> and the <code>ScoreThreshold</code> in an <code>MLModel</code> without creating a new <code>MLModel</code>. </p> <p><code>CreateMLModel</code> is an asynchronous operation. In response to <code>CreateMLModel</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>MLModel</code> status to <code>PENDING</code>. After the <code>MLModel</code> has been created and ready is for use, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can use the <code>GetMLModel</code> operation to check the progress of the <code>MLModel</code> during the creation operation.</p> <p> <code>CreateMLModel</code> requires a <code>DataSource</code> with computed statistics, which can be created by setting <code>ComputeStatistics</code> to <code>true</code> in <code>CreateDataSourceFromRDS</code>, <code>CreateDataSourceFromS3</code>, or <code>CreateDataSourceFromRedshift</code> operations. </p>
+    fn create_ml_model(&self, input: CreateMLModelRequest) -> Request<CreateMLModelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a real-time endpoint for the <code>MLModel</code>. The endpoint contains the URI of the <code>MLModel</code>; that is, the location to send real-time prediction requests for the specified <code>MLModel</code>.</p>
+    fn create_realtime_endpoint(
+        &self,
+        input: CreateRealtimeEndpointRequest,
+    ) -> Request<CreateRealtimeEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Assigns the DELETED status to a <code>BatchPrediction</code>, rendering it unusable.</p> <p>After using the <code>DeleteBatchPrediction</code> operation, you can use the <a>GetBatchPrediction</a> operation to verify that the status of the <code>BatchPrediction</code> changed to DELETED.</p> <p><b>Caution:</b> The result of the <code>DeleteBatchPrediction</code> operation is irreversible.</p>
+    fn delete_batch_prediction(
+        &self,
+        input: DeleteBatchPredictionRequest,
+    ) -> Request<DeleteBatchPredictionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Assigns the DELETED status to a <code>DataSource</code>, rendering it unusable.</p> <p>After using the <code>DeleteDataSource</code> operation, you can use the <a>GetDataSource</a> operation to verify that the status of the <code>DataSource</code> changed to DELETED.</p> <p><b>Caution:</b> The results of the <code>DeleteDataSource</code> operation are irreversible.</p>
+    fn delete_data_source(
+        &self,
+        input: DeleteDataSourceRequest,
+    ) -> Request<DeleteDataSourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Assigns the <code>DELETED</code> status to an <code>Evaluation</code>, rendering it unusable.</p> <p>After invoking the <code>DeleteEvaluation</code> operation, you can use the <code>GetEvaluation</code> operation to verify that the status of the <code>Evaluation</code> changed to <code>DELETED</code>.</p> <caution><title>Caution</title> <p>The results of the <code>DeleteEvaluation</code> operation are irreversible.</p></caution></p>
+    fn delete_evaluation(
+        &self,
+        input: DeleteEvaluationRequest,
+    ) -> Request<DeleteEvaluationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Assigns the <code>DELETED</code> status to an <code>MLModel</code>, rendering it unusable.</p> <p>After using the <code>DeleteMLModel</code> operation, you can use the <code>GetMLModel</code> operation to verify that the status of the <code>MLModel</code> changed to DELETED.</p> <p><b>Caution:</b> The result of the <code>DeleteMLModel</code> operation is irreversible.</p>
+    fn delete_ml_model(&self, input: DeleteMLModelRequest) -> Request<DeleteMLModelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a real time endpoint of an <code>MLModel</code>.</p>
+    fn delete_realtime_endpoint(
+        &self,
+        input: DeleteRealtimeEndpointRequest,
+    ) -> Request<DeleteRealtimeEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified tags associated with an ML object. After this operation is complete, you can't recover deleted tags.</p> <p>If you specify a tag that doesn't exist, Amazon ML ignores it.</p>
+    fn delete_tags(&self, input: DeleteTagsRequest) -> Request<DeleteTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of <code>BatchPrediction</code> operations that match the search criteria in the request.</p>
+    fn describe_batch_predictions(
+        &self,
+        input: DescribeBatchPredictionsRequest,
+    ) -> Request<DescribeBatchPredictionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of <code>DataSource</code> that match the search criteria in the request.</p>
+    fn describe_data_sources(
+        &self,
+        input: DescribeDataSourcesRequest,
+    ) -> Request<DescribeDataSourcesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of <code>DescribeEvaluations</code> that match the search criteria in the request.</p>
+    fn describe_evaluations(
+        &self,
+        input: DescribeEvaluationsRequest,
+    ) -> Request<DescribeEvaluationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of <code>MLModel</code> that match the search criteria in the request.</p>
+    fn describe_ml_models(
+        &self,
+        input: DescribeMLModelsRequest,
+    ) -> Request<DescribeMLModelsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes one or more of the tags for your Amazon ML object.</p>
+    fn describe_tags(&self, input: DescribeTagsRequest) -> Request<DescribeTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a <code>BatchPrediction</code> that includes detailed metadata, status, and data file information for a <code>Batch Prediction</code> request.</p>
+    fn get_batch_prediction(
+        &self,
+        input: GetBatchPredictionRequest,
+    ) -> Request<GetBatchPredictionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a <code>DataSource</code> that includes metadata and data file information, as well as the current status of the <code>DataSource</code>.</p> <p><code>GetDataSource</code> provides results in normal or verbose format. The verbose format adds the schema description and the list of files pointed to by the DataSource to the normal format.</p>
+    fn get_data_source(&self, input: GetDataSourceRequest) -> Request<GetDataSourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns an <code>Evaluation</code> that includes metadata as well as the current status of the <code>Evaluation</code>.</p>
+    fn get_evaluation(&self, input: GetEvaluationRequest) -> Request<GetEvaluationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns an <code>MLModel</code> that includes detailed metadata, data source information, and the current status of the <code>MLModel</code>.</p> <p><code>GetMLModel</code> provides results in normal or verbose format. </p>
+    fn get_ml_model(&self, input: GetMLModelRequest) -> Request<GetMLModelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Generates a prediction for the observation using the specified <code>ML Model</code>.</p> <note><title>Note</title> <p>Not all response parameters will be populated. Whether a response parameter is populated depends on the type of model requested.</p></note></p>
+    fn predict(&self, input: PredictRequest) -> Request<PredictRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the <code>BatchPredictionName</code> of a <code>BatchPrediction</code>.</p> <p>You can use the <code>GetBatchPrediction</code> operation to view the contents of the updated data element.</p>
+    fn update_batch_prediction(
+        &self,
+        input: UpdateBatchPredictionRequest,
+    ) -> Request<UpdateBatchPredictionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the <code>DataSourceName</code> of a <code>DataSource</code>.</p> <p>You can use the <code>GetDataSource</code> operation to view the contents of the updated data element.</p>
+    fn update_data_source(
+        &self,
+        input: UpdateDataSourceRequest,
+    ) -> Request<UpdateDataSourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the <code>EvaluationName</code> of an <code>Evaluation</code>.</p> <p>You can use the <code>GetEvaluation</code> operation to view the contents of the updated data element.</p>
+    fn update_evaluation(
+        &self,
+        input: UpdateEvaluationRequest,
+    ) -> Request<UpdateEvaluationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the <code>MLModelName</code> and the <code>ScoreThreshold</code> of an <code>MLModel</code>.</p> <p>You can use the <code>GetMLModel</code> operation to view the contents of the updated data element.</p>
+    fn update_ml_model(&self, input: UpdateMLModelRequest) -> Request<UpdateMLModelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AddTagsRequest {
+    type Output = AddTagsResponse;
+    type Error = AddTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.AddTags");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<AddTagsOutput, _>()
+                    proto::json::ResponsePayload::new(&response).deserialize::<AddTagsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3148,24 +3321,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Generates predictions for a group of observations. The observations to process exist in one or more data files referenced by a <code>DataSource</code>. This operation creates a new <code>BatchPrediction</code>, and uses an <code>MLModel</code> and the data files referenced by the <code>DataSource</code> as information sources. </p> <p><code>CreateBatchPrediction</code> is an asynchronous operation. In response to <code>CreateBatchPrediction</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>BatchPrediction</code> status to <code>PENDING</code>. After the <code>BatchPrediction</code> completes, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can poll for status updates by using the <a>GetBatchPrediction</a> operation and checking the <code>Status</code> parameter of the result. After the <code>COMPLETED</code> status appears, the results are available in the location specified by the <code>OutputUri</code> parameter.</p>
-    fn create_batch_prediction(
-        &self,
-        input: CreateBatchPredictionInput,
-    ) -> RusotoFuture<CreateBatchPredictionOutput, CreateBatchPredictionError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for CreateBatchPredictionRequest {
+    type Output = CreateBatchPredictionResponse;
+    type Error = CreateBatchPredictionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.CreateBatchPrediction");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateBatchPredictionOutput, _>()
+                        .deserialize::<CreateBatchPredictionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3176,24 +3354,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Creates a <code>DataSource</code> object from an <a href="http://aws.amazon.com/rds/"> Amazon Relational Database Service</a> (Amazon RDS). A <code>DataSource</code> references data that can be used to perform <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromRDS</code> is an asynchronous operation. In response to <code>CreateDataSourceFromRDS</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> is created and ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or <code>PENDING</code> state can be used only to perform <code>&gt;CreateMLModel</code>&gt;, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML cannot accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p>
-    fn create_data_source_from_rds(
-        &self,
-        input: CreateDataSourceFromRDSInput,
-    ) -> RusotoFuture<CreateDataSourceFromRDSOutput, CreateDataSourceFromRDSError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for CreateDataSourceFromRDSRequest {
+    type Output = CreateDataSourceFromRDSResponse;
+    type Error = CreateDataSourceFromRDSError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.CreateDataSourceFromRDS");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDataSourceFromRDSOutput, _>()
+                        .deserialize::<CreateDataSourceFromRDSResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3202,27 +3385,32 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p><p>Creates a <code>DataSource</code> from a database hosted on an Amazon Redshift cluster. A <code>DataSource</code> references data that can be used to perform either <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromRedshift</code> is an asynchronous operation. In response to <code>CreateDataSourceFromRedshift</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> is created and ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in <code>COMPLETED</code> or <code>PENDING</code> states can be used to perform only <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML can&#39;t accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p> <p>The observations should be contained in the database hosted on an Amazon Redshift cluster and should be specified by a <code>SelectSqlQuery</code> query. Amazon ML executes an <code>Unload</code> command in Amazon Redshift to transfer the result set of the <code>SelectSqlQuery</code> query to <code>S3StagingLocation</code>.</p> <p>After the <code>DataSource</code> has been created, it&#39;s ready for use in evaluations and batch predictions. If you plan to use the <code>DataSource</code> to train an <code>MLModel</code>, the <code>DataSource</code> also requires a recipe. A recipe describes how each input variable will be used in training an <code>MLModel</code>. Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.</p> &lt;?oxy<em>insert</em>start author=&quot;laurama&quot; timestamp=&quot;20160406T153842-0700&quot;&gt;<p>You can&#39;t change an existing datasource, but you can copy and modify the settings from an existing Amazon Redshift datasource to create a new datasource. To do so, call <code>GetDataSource</code> for an existing datasource and copy the values to a <code>CreateDataSource</code> call. Change the settings that you want to change and make sure that all required fields have the appropriate values.</p> &lt;?oxy<em>insert</em>end&gt;</p>
-    fn create_data_source_from_redshift(
-        &self,
-        input: CreateDataSourceFromRedshiftInput,
-    ) -> RusotoFuture<CreateDataSourceFromRedshiftOutput, CreateDataSourceFromRedshiftError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for CreateDataSourceFromRedshiftRequest {
+    type Output = CreateDataSourceFromRedshiftResponse;
+    type Error = CreateDataSourceFromRedshiftError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonML_20141212.CreateDataSourceFromRedshift",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDataSourceFromRedshiftOutput, _>()
+                        .deserialize::<CreateDataSourceFromRedshiftResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3231,24 +3419,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Creates a <code>DataSource</code> object. A <code>DataSource</code> references data that can be used to perform <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromS3</code> is an asynchronous operation. In response to <code>CreateDataSourceFromS3</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> has been created and is ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or <code>PENDING</code> state can be used to perform only <code>CreateMLModel</code>, <code>CreateEvaluation</code> or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML can't accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p> <p>The observation data used in a <code>DataSource</code> should be ready to use; that is, it should have a consistent structure, and missing data values should be kept to a minimum. The observation data must reside in one or more .csv files in an Amazon Simple Storage Service (Amazon S3) location, along with a schema that describes the data items by name and type. The same schema must be used for all of the data files referenced by the <code>DataSource</code>. </p> <p>After the <code>DataSource</code> has been created, it's ready to use in evaluations and batch predictions. If you plan to use the <code>DataSource</code> to train an <code>MLModel</code>, the <code>DataSource</code> also needs a recipe. A recipe describes how each input variable will be used in training an <code>MLModel</code>. Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.</p>
-    fn create_data_source_from_s3(
-        &self,
-        input: CreateDataSourceFromS3Input,
-    ) -> RusotoFuture<CreateDataSourceFromS3Output, CreateDataSourceFromS3Error> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for CreateDataSourceFromS3Request {
+    type Output = CreateDataSourceFromS3Response;
+    type Error = CreateDataSourceFromS3Error;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.CreateDataSourceFromS3");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDataSourceFromS3Output, _>()
+                        .deserialize::<CreateDataSourceFromS3Response, _>()
                 }))
             } else {
                 Box::new(
@@ -3259,24 +3452,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new <code>Evaluation</code> of an <code>MLModel</code>. An <code>MLModel</code> is evaluated on a set of observations associated to a <code>DataSource</code>. Like a <code>DataSource</code> for an <code>MLModel</code>, the <code>DataSource</code> for an <code>Evaluation</code> contains values for the <code>Target Variable</code>. The <code>Evaluation</code> compares the predicted result for each observation to the actual outcome and provides a summary so that you know how effective the <code>MLModel</code> functions on the test data. Evaluation generates a relevant performance metric, such as BinaryAUC, RegressionRMSE or MulticlassAvgFScore based on the corresponding <code>MLModelType</code>: <code>BINARY</code>, <code>REGRESSION</code> or <code>MULTICLASS</code>. </p> <p><code>CreateEvaluation</code> is an asynchronous operation. In response to <code>CreateEvaluation</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the evaluation status to <code>PENDING</code>. After the <code>Evaluation</code> is created and ready for use, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can use the <code>GetEvaluation</code> operation to check progress of the evaluation during the creation operation.</p>
-    fn create_evaluation(
-        &self,
-        input: CreateEvaluationInput,
-    ) -> RusotoFuture<CreateEvaluationOutput, CreateEvaluationError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for CreateEvaluationRequest {
+    type Output = CreateEvaluationResponse;
+    type Error = CreateEvaluationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.CreateEvaluation");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateEvaluationOutput, _>()
+                        .deserialize::<CreateEvaluationResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3288,24 +3486,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new <code>MLModel</code> using the <code>DataSource</code> and the recipe as information sources. </p> <p>An <code>MLModel</code> is nearly immutable. Users can update only the <code>MLModelName</code> and the <code>ScoreThreshold</code> in an <code>MLModel</code> without creating a new <code>MLModel</code>. </p> <p><code>CreateMLModel</code> is an asynchronous operation. In response to <code>CreateMLModel</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>MLModel</code> status to <code>PENDING</code>. After the <code>MLModel</code> has been created and ready is for use, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can use the <code>GetMLModel</code> operation to check the progress of the <code>MLModel</code> during the creation operation.</p> <p> <code>CreateMLModel</code> requires a <code>DataSource</code> with computed statistics, which can be created by setting <code>ComputeStatistics</code> to <code>true</code> in <code>CreateDataSourceFromRDS</code>, <code>CreateDataSourceFromS3</code>, or <code>CreateDataSourceFromRedshift</code> operations. </p>
-    fn create_ml_model(
-        &self,
-        input: CreateMLModelInput,
-    ) -> RusotoFuture<CreateMLModelOutput, CreateMLModelError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for CreateMLModelRequest {
+    type Output = CreateMLModelResponse;
+    type Error = CreateMLModelError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.CreateMLModel");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateMLModelOutput, _>()
+                        .deserialize::<CreateMLModelResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3317,24 +3520,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Creates a real-time endpoint for the <code>MLModel</code>. The endpoint contains the URI of the <code>MLModel</code>; that is, the location to send real-time prediction requests for the specified <code>MLModel</code>.</p>
-    fn create_realtime_endpoint(
-        &self,
-        input: CreateRealtimeEndpointInput,
-    ) -> RusotoFuture<CreateRealtimeEndpointOutput, CreateRealtimeEndpointError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for CreateRealtimeEndpointRequest {
+    type Output = CreateRealtimeEndpointResponse;
+    type Error = CreateRealtimeEndpointError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.CreateRealtimeEndpoint");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateRealtimeEndpointOutput, _>()
+                        .deserialize::<CreateRealtimeEndpointResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3345,24 +3553,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Assigns the DELETED status to a <code>BatchPrediction</code>, rendering it unusable.</p> <p>After using the <code>DeleteBatchPrediction</code> operation, you can use the <a>GetBatchPrediction</a> operation to verify that the status of the <code>BatchPrediction</code> changed to DELETED.</p> <p><b>Caution:</b> The result of the <code>DeleteBatchPrediction</code> operation is irreversible.</p>
-    fn delete_batch_prediction(
-        &self,
-        input: DeleteBatchPredictionInput,
-    ) -> RusotoFuture<DeleteBatchPredictionOutput, DeleteBatchPredictionError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for DeleteBatchPredictionRequest {
+    type Output = DeleteBatchPredictionResponse;
+    type Error = DeleteBatchPredictionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DeleteBatchPrediction");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteBatchPredictionOutput, _>()
+                        .deserialize::<DeleteBatchPredictionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3373,24 +3586,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Assigns the DELETED status to a <code>DataSource</code>, rendering it unusable.</p> <p>After using the <code>DeleteDataSource</code> operation, you can use the <a>GetDataSource</a> operation to verify that the status of the <code>DataSource</code> changed to DELETED.</p> <p><b>Caution:</b> The results of the <code>DeleteDataSource</code> operation are irreversible.</p>
-    fn delete_data_source(
-        &self,
-        input: DeleteDataSourceInput,
-    ) -> RusotoFuture<DeleteDataSourceOutput, DeleteDataSourceError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for DeleteDataSourceRequest {
+    type Output = DeleteDataSourceResponse;
+    type Error = DeleteDataSourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DeleteDataSource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteDataSourceOutput, _>()
+                        .deserialize::<DeleteDataSourceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3402,24 +3620,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p><p>Assigns the <code>DELETED</code> status to an <code>Evaluation</code>, rendering it unusable.</p> <p>After invoking the <code>DeleteEvaluation</code> operation, you can use the <code>GetEvaluation</code> operation to verify that the status of the <code>Evaluation</code> changed to <code>DELETED</code>.</p> <caution><title>Caution</title> <p>The results of the <code>DeleteEvaluation</code> operation are irreversible.</p></caution></p>
-    fn delete_evaluation(
-        &self,
-        input: DeleteEvaluationInput,
-    ) -> RusotoFuture<DeleteEvaluationOutput, DeleteEvaluationError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for DeleteEvaluationRequest {
+    type Output = DeleteEvaluationResponse;
+    type Error = DeleteEvaluationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DeleteEvaluation");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteEvaluationOutput, _>()
+                        .deserialize::<DeleteEvaluationResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3431,24 +3654,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Assigns the <code>DELETED</code> status to an <code>MLModel</code>, rendering it unusable.</p> <p>After using the <code>DeleteMLModel</code> operation, you can use the <code>GetMLModel</code> operation to verify that the status of the <code>MLModel</code> changed to DELETED.</p> <p><b>Caution:</b> The result of the <code>DeleteMLModel</code> operation is irreversible.</p>
-    fn delete_ml_model(
-        &self,
-        input: DeleteMLModelInput,
-    ) -> RusotoFuture<DeleteMLModelOutput, DeleteMLModelError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for DeleteMLModelRequest {
+    type Output = DeleteMLModelResponse;
+    type Error = DeleteMLModelError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DeleteMLModel");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteMLModelOutput, _>()
+                        .deserialize::<DeleteMLModelResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3460,24 +3688,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a real time endpoint of an <code>MLModel</code>.</p>
-    fn delete_realtime_endpoint(
-        &self,
-        input: DeleteRealtimeEndpointInput,
-    ) -> RusotoFuture<DeleteRealtimeEndpointOutput, DeleteRealtimeEndpointError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for DeleteRealtimeEndpointRequest {
+    type Output = DeleteRealtimeEndpointResponse;
+    type Error = DeleteRealtimeEndpointError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DeleteRealtimeEndpoint");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteRealtimeEndpointOutput, _>()
+                        .deserialize::<DeleteRealtimeEndpointResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3488,24 +3721,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified tags associated with an ML object. After this operation is complete, you can't recover deleted tags.</p> <p>If you specify a tag that doesn't exist, Amazon ML ignores it.</p>
-    fn delete_tags(
-        &self,
-        input: DeleteTagsInput,
-    ) -> RusotoFuture<DeleteTagsOutput, DeleteTagsError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for DeleteTagsRequest {
+    type Output = DeleteTagsResponse;
+    type Error = DeleteTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DeleteTags");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteTagsOutput, _>()
+                        .deserialize::<DeleteTagsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3517,24 +3755,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of <code>BatchPrediction</code> operations that match the search criteria in the request.</p>
-    fn describe_batch_predictions(
-        &self,
-        input: DescribeBatchPredictionsInput,
-    ) -> RusotoFuture<DescribeBatchPredictionsOutput, DescribeBatchPredictionsError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for DescribeBatchPredictionsRequest {
+    type Output = DescribeBatchPredictionsResponse;
+    type Error = DescribeBatchPredictionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DescribeBatchPredictions");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeBatchPredictionsOutput, _>()
+                        .deserialize::<DescribeBatchPredictionsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3543,24 +3786,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of <code>DataSource</code> that match the search criteria in the request.</p>
-    fn describe_data_sources(
-        &self,
-        input: DescribeDataSourcesInput,
-    ) -> RusotoFuture<DescribeDataSourcesOutput, DescribeDataSourcesError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for DescribeDataSourcesRequest {
+    type Output = DescribeDataSourcesResponse;
+    type Error = DescribeDataSourcesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DescribeDataSources");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeDataSourcesOutput, _>()
+                        .deserialize::<DescribeDataSourcesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3571,24 +3819,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of <code>DescribeEvaluations</code> that match the search criteria in the request.</p>
-    fn describe_evaluations(
-        &self,
-        input: DescribeEvaluationsInput,
-    ) -> RusotoFuture<DescribeEvaluationsOutput, DescribeEvaluationsError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for DescribeEvaluationsRequest {
+    type Output = DescribeEvaluationsResponse;
+    type Error = DescribeEvaluationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DescribeEvaluations");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEvaluationsOutput, _>()
+                        .deserialize::<DescribeEvaluationsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3599,24 +3852,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of <code>MLModel</code> that match the search criteria in the request.</p>
-    fn describe_ml_models(
-        &self,
-        input: DescribeMLModelsInput,
-    ) -> RusotoFuture<DescribeMLModelsOutput, DescribeMLModelsError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for DescribeMLModelsRequest {
+    type Output = DescribeMLModelsResponse;
+    type Error = DescribeMLModelsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DescribeMLModels");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeMLModelsOutput, _>()
+                        .deserialize::<DescribeMLModelsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3628,24 +3886,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Describes one or more of the tags for your Amazon ML object.</p>
-    fn describe_tags(
-        &self,
-        input: DescribeTagsInput,
-    ) -> RusotoFuture<DescribeTagsOutput, DescribeTagsError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for DescribeTagsRequest {
+    type Output = DescribeTagsResponse;
+    type Error = DescribeTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DescribeTags");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeTagsOutput, _>()
+                        .deserialize::<DescribeTagsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3657,24 +3920,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Returns a <code>BatchPrediction</code> that includes detailed metadata, status, and data file information for a <code>Batch Prediction</code> request.</p>
-    fn get_batch_prediction(
-        &self,
-        input: GetBatchPredictionInput,
-    ) -> RusotoFuture<GetBatchPredictionOutput, GetBatchPredictionError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for GetBatchPredictionRequest {
+    type Output = GetBatchPredictionResponse;
+    type Error = GetBatchPredictionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.GetBatchPrediction");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetBatchPredictionOutput, _>()
+                        .deserialize::<GetBatchPredictionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3686,24 +3954,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Returns a <code>DataSource</code> that includes metadata and data file information, as well as the current status of the <code>DataSource</code>.</p> <p><code>GetDataSource</code> provides results in normal or verbose format. The verbose format adds the schema description and the list of files pointed to by the DataSource to the normal format.</p>
-    fn get_data_source(
-        &self,
-        input: GetDataSourceInput,
-    ) -> RusotoFuture<GetDataSourceOutput, GetDataSourceError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for GetDataSourceRequest {
+    type Output = GetDataSourceResponse;
+    type Error = GetDataSourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.GetDataSource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetDataSourceOutput, _>()
+                        .deserialize::<GetDataSourceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3715,24 +3988,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Returns an <code>Evaluation</code> that includes metadata as well as the current status of the <code>Evaluation</code>.</p>
-    fn get_evaluation(
-        &self,
-        input: GetEvaluationInput,
-    ) -> RusotoFuture<GetEvaluationOutput, GetEvaluationError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for GetEvaluationRequest {
+    type Output = GetEvaluationResponse;
+    type Error = GetEvaluationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.GetEvaluation");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetEvaluationOutput, _>()
+                        .deserialize::<GetEvaluationResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3744,24 +4022,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Returns an <code>MLModel</code> that includes detailed metadata, data source information, and the current status of the <code>MLModel</code>.</p> <p><code>GetMLModel</code> provides results in normal or verbose format. </p>
-    fn get_ml_model(
-        &self,
-        input: GetMLModelInput,
-    ) -> RusotoFuture<GetMLModelOutput, GetMLModelError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for GetMLModelRequest {
+    type Output = GetMLModelResponse;
+    type Error = GetMLModelError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.GetMLModel");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetMLModelOutput, _>()
+                        .deserialize::<GetMLModelResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3773,20 +4056,28 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p><p>Generates a prediction for the observation using the specified <code>ML Model</code>.</p> <note><title>Note</title> <p>Not all response parameters will be populated. Whether a response parameter is populated depends on the type of model requested.</p></note></p>
-    fn predict(&self, input: PredictInput) -> RusotoFuture<PredictOutput, PredictError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for PredictRequest {
+    type Output = PredictResponse;
+    type Error = PredictError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.Predict");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<PredictOutput, _>()
+                    proto::json::ResponsePayload::new(&response).deserialize::<PredictResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3798,24 +4089,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Updates the <code>BatchPredictionName</code> of a <code>BatchPrediction</code>.</p> <p>You can use the <code>GetBatchPrediction</code> operation to view the contents of the updated data element.</p>
-    fn update_batch_prediction(
-        &self,
-        input: UpdateBatchPredictionInput,
-    ) -> RusotoFuture<UpdateBatchPredictionOutput, UpdateBatchPredictionError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for UpdateBatchPredictionRequest {
+    type Output = UpdateBatchPredictionResponse;
+    type Error = UpdateBatchPredictionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.UpdateBatchPrediction");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateBatchPredictionOutput, _>()
+                        .deserialize::<UpdateBatchPredictionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3826,24 +4122,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Updates the <code>DataSourceName</code> of a <code>DataSource</code>.</p> <p>You can use the <code>GetDataSource</code> operation to view the contents of the updated data element.</p>
-    fn update_data_source(
-        &self,
-        input: UpdateDataSourceInput,
-    ) -> RusotoFuture<UpdateDataSourceOutput, UpdateDataSourceError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for UpdateDataSourceRequest {
+    type Output = UpdateDataSourceResponse;
+    type Error = UpdateDataSourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.UpdateDataSource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateDataSourceOutput, _>()
+                        .deserialize::<UpdateDataSourceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3855,24 +4156,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Updates the <code>EvaluationName</code> of an <code>Evaluation</code>.</p> <p>You can use the <code>GetEvaluation</code> operation to view the contents of the updated data element.</p>
-    fn update_evaluation(
-        &self,
-        input: UpdateEvaluationInput,
-    ) -> RusotoFuture<UpdateEvaluationOutput, UpdateEvaluationError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for UpdateEvaluationRequest {
+    type Output = UpdateEvaluationResponse;
+    type Error = UpdateEvaluationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.UpdateEvaluation");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateEvaluationOutput, _>()
+                        .deserialize::<UpdateEvaluationResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3884,24 +4190,29 @@ impl MachineLearning for MachineLearningClient {
             }
         })
     }
+}
 
-    /// <p>Updates the <code>MLModelName</code> and the <code>ScoreThreshold</code> of an <code>MLModel</code>.</p> <p>You can use the <code>GetMLModel</code> operation to view the contents of the updated data element.</p>
-    fn update_ml_model(
-        &self,
-        input: UpdateMLModelInput,
-    ) -> RusotoFuture<UpdateMLModelOutput, UpdateMLModelError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+impl ServiceRequest for UpdateMLModelRequest {
+    type Output = UpdateMLModelResponse;
+    type Error = UpdateMLModelError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "machinelearning", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.UpdateMLModel");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateMLModelOutput, _>()
+                        .deserialize::<UpdateMLModelResponse, _>()
                 }))
             } else {
                 Box::new(

@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -3363,252 +3364,179 @@ impl Error for UpdateThreatIntelSetError {
 /// Trait representing the capabilities of the Amazon GuardDuty API. Amazon GuardDuty clients implement this trait.
 pub trait GuardDuty {
     /// <p>Accepts the invitation to be monitored by a master GuardDuty account.</p>
-    fn accept_invitation(
-        &self,
-        input: AcceptInvitationRequest,
-    ) -> RusotoFuture<AcceptInvitationResponse, AcceptInvitationError>;
+    fn accept_invitation(&self, input: AcceptInvitationRequest)
+        -> Request<AcceptInvitationRequest>;
 
     /// <p>Archives Amazon GuardDuty findings specified by the list of finding IDs.</p>
-    fn archive_findings(
-        &self,
-        input: ArchiveFindingsRequest,
-    ) -> RusotoFuture<ArchiveFindingsResponse, ArchiveFindingsError>;
+    fn archive_findings(&self, input: ArchiveFindingsRequest) -> Request<ArchiveFindingsRequest>;
 
     /// <p>Creates a single Amazon GuardDuty detector. A detector is an object that represents the GuardDuty service. A detector must be created in order for GuardDuty to become operational.</p>
-    fn create_detector(
-        &self,
-        input: CreateDetectorRequest,
-    ) -> RusotoFuture<CreateDetectorResponse, CreateDetectorError>;
+    fn create_detector(&self, input: CreateDetectorRequest) -> Request<CreateDetectorRequest>;
 
     /// <p>Creates a filter using the specified finding criteria.</p>
-    fn create_filter(
-        &self,
-        input: CreateFilterRequest,
-    ) -> RusotoFuture<CreateFilterResponse, CreateFilterError>;
+    fn create_filter(&self, input: CreateFilterRequest) -> Request<CreateFilterRequest>;
 
     /// <p>Creates a new IPSet - a list of trusted IP addresses that have been whitelisted for secure communication with AWS infrastructure and applications.</p>
-    fn create_ip_set(
-        &self,
-        input: CreateIPSetRequest,
-    ) -> RusotoFuture<CreateIPSetResponse, CreateIPSetError>;
+    fn create_ip_set(&self, input: CreateIPSetRequest) -> Request<CreateIPSetRequest>;
 
     /// <p>Creates member accounts of the current AWS account by specifying a list of AWS account IDs. The current AWS account can then invite these members to manage GuardDuty in their accounts.</p>
-    fn create_members(
-        &self,
-        input: CreateMembersRequest,
-    ) -> RusotoFuture<CreateMembersResponse, CreateMembersError>;
+    fn create_members(&self, input: CreateMembersRequest) -> Request<CreateMembersRequest>;
 
     /// <p>Generates example findings of types specified by the list of finding types. If &#39;NULL&#39; is specified for findingTypes, the API generates example findings of all supported finding types.</p>
     fn create_sample_findings(
         &self,
         input: CreateSampleFindingsRequest,
-    ) -> RusotoFuture<CreateSampleFindingsResponse, CreateSampleFindingsError>;
+    ) -> Request<CreateSampleFindingsRequest>;
 
     /// <p>Create a new ThreatIntelSet. ThreatIntelSets consist of known malicious IP addresses. GuardDuty generates findings based on ThreatIntelSets.</p>
     fn create_threat_intel_set(
         &self,
         input: CreateThreatIntelSetRequest,
-    ) -> RusotoFuture<CreateThreatIntelSetResponse, CreateThreatIntelSetError>;
+    ) -> Request<CreateThreatIntelSetRequest>;
 
     /// <p>Declines invitations sent to the current member account by AWS account specified by their account IDs.</p>
     fn decline_invitations(
         &self,
         input: DeclineInvitationsRequest,
-    ) -> RusotoFuture<DeclineInvitationsResponse, DeclineInvitationsError>;
+    ) -> Request<DeclineInvitationsRequest>;
 
     /// <p>Deletes a Amazon GuardDuty detector specified by the detector ID.</p>
-    fn delete_detector(
-        &self,
-        input: DeleteDetectorRequest,
-    ) -> RusotoFuture<DeleteDetectorResponse, DeleteDetectorError>;
+    fn delete_detector(&self, input: DeleteDetectorRequest) -> Request<DeleteDetectorRequest>;
 
     /// <p>Deletes the filter specified by the filter name.</p>
-    fn delete_filter(
-        &self,
-        input: DeleteFilterRequest,
-    ) -> RusotoFuture<DeleteFilterResponse, DeleteFilterError>;
+    fn delete_filter(&self, input: DeleteFilterRequest) -> Request<DeleteFilterRequest>;
 
     /// <p>Deletes the IPSet specified by the IPSet ID.</p>
-    fn delete_ip_set(
-        &self,
-        input: DeleteIPSetRequest,
-    ) -> RusotoFuture<DeleteIPSetResponse, DeleteIPSetError>;
+    fn delete_ip_set(&self, input: DeleteIPSetRequest) -> Request<DeleteIPSetRequest>;
 
     /// <p>Deletes invitations sent to the current member account by AWS accounts specified by their account IDs.</p>
     fn delete_invitations(
         &self,
         input: DeleteInvitationsRequest,
-    ) -> RusotoFuture<DeleteInvitationsResponse, DeleteInvitationsError>;
+    ) -> Request<DeleteInvitationsRequest>;
 
     /// <p>Deletes GuardDuty member accounts (to the current GuardDuty master account) specified by the account IDs.</p>
-    fn delete_members(
-        &self,
-        input: DeleteMembersRequest,
-    ) -> RusotoFuture<DeleteMembersResponse, DeleteMembersError>;
+    fn delete_members(&self, input: DeleteMembersRequest) -> Request<DeleteMembersRequest>;
 
     /// <p>Deletes ThreatIntelSet specified by the ThreatIntelSet ID.</p>
     fn delete_threat_intel_set(
         &self,
         input: DeleteThreatIntelSetRequest,
-    ) -> RusotoFuture<DeleteThreatIntelSetResponse, DeleteThreatIntelSetError>;
+    ) -> Request<DeleteThreatIntelSetRequest>;
 
     /// <p>Disassociates the current GuardDuty member account from its master account.</p>
     fn disassociate_from_master_account(
         &self,
         input: DisassociateFromMasterAccountRequest,
-    ) -> RusotoFuture<DisassociateFromMasterAccountResponse, DisassociateFromMasterAccountError>;
+    ) -> Request<DisassociateFromMasterAccountRequest>;
 
     /// <p>Disassociates GuardDuty member accounts (to the current GuardDuty master account) specified by the account IDs.</p>
     fn disassociate_members(
         &self,
         input: DisassociateMembersRequest,
-    ) -> RusotoFuture<DisassociateMembersResponse, DisassociateMembersError>;
+    ) -> Request<DisassociateMembersRequest>;
 
     /// <p>Retrieves an Amazon GuardDuty detector specified by the detectorId.</p>
-    fn get_detector(
-        &self,
-        input: GetDetectorRequest,
-    ) -> RusotoFuture<GetDetectorResponse, GetDetectorError>;
+    fn get_detector(&self, input: GetDetectorRequest) -> Request<GetDetectorRequest>;
 
     /// <p>Returns the details of the filter specified by the filter name.</p>
-    fn get_filter(
-        &self,
-        input: GetFilterRequest,
-    ) -> RusotoFuture<GetFilterResponse, GetFilterError>;
+    fn get_filter(&self, input: GetFilterRequest) -> Request<GetFilterRequest>;
 
     /// <p>Describes Amazon GuardDuty findings specified by finding IDs.</p>
-    fn get_findings(
-        &self,
-        input: GetFindingsRequest,
-    ) -> RusotoFuture<GetFindingsResponse, GetFindingsError>;
+    fn get_findings(&self, input: GetFindingsRequest) -> Request<GetFindingsRequest>;
 
     /// <p>Lists Amazon GuardDuty findings&#39; statistics for the specified detector ID.</p>
     fn get_findings_statistics(
         &self,
         input: GetFindingsStatisticsRequest,
-    ) -> RusotoFuture<GetFindingsStatisticsResponse, GetFindingsStatisticsError>;
+    ) -> Request<GetFindingsStatisticsRequest>;
 
     /// <p>Retrieves the IPSet specified by the IPSet ID.</p>
-    fn get_ip_set(&self, input: GetIPSetRequest) -> RusotoFuture<GetIPSetResponse, GetIPSetError>;
+    fn get_ip_set(&self, input: GetIPSetRequest) -> Request<GetIPSetRequest>;
 
     /// <p>Returns the count of all GuardDuty membership invitations that were sent to the current member account except the currently accepted invitation.</p>
-    fn get_invitations_count(
-        &self,
-    ) -> RusotoFuture<GetInvitationsCountResponse, GetInvitationsCountError>;
+    fn get_invitations_count(&self) -> Request<GetInvitationsCountRequest>;
 
     /// <p>Provides the details for the GuardDuty master account to the current GuardDuty member account.</p>
     fn get_master_account(
         &self,
         input: GetMasterAccountRequest,
-    ) -> RusotoFuture<GetMasterAccountResponse, GetMasterAccountError>;
+    ) -> Request<GetMasterAccountRequest>;
 
     /// <p>Retrieves GuardDuty member accounts (to the current GuardDuty master account) specified by the account IDs.</p>
-    fn get_members(
-        &self,
-        input: GetMembersRequest,
-    ) -> RusotoFuture<GetMembersResponse, GetMembersError>;
+    fn get_members(&self, input: GetMembersRequest) -> Request<GetMembersRequest>;
 
     /// <p>Retrieves the ThreatIntelSet that is specified by the ThreatIntelSet ID.</p>
     fn get_threat_intel_set(
         &self,
         input: GetThreatIntelSetRequest,
-    ) -> RusotoFuture<GetThreatIntelSetResponse, GetThreatIntelSetError>;
+    ) -> Request<GetThreatIntelSetRequest>;
 
     /// <p>Invites other AWS accounts (created as members of the current AWS account by CreateMembers) to enable GuardDuty and allow the current AWS account to view and manage these accounts&#39; GuardDuty findings on their behalf as the master account.</p>
-    fn invite_members(
-        &self,
-        input: InviteMembersRequest,
-    ) -> RusotoFuture<InviteMembersResponse, InviteMembersError>;
+    fn invite_members(&self, input: InviteMembersRequest) -> Request<InviteMembersRequest>;
 
     /// <p>Lists detectorIds of all the existing Amazon GuardDuty detector resources.</p>
-    fn list_detectors(
-        &self,
-        input: ListDetectorsRequest,
-    ) -> RusotoFuture<ListDetectorsResponse, ListDetectorsError>;
+    fn list_detectors(&self, input: ListDetectorsRequest) -> Request<ListDetectorsRequest>;
 
     /// <p>Returns a paginated list of the current filters.</p>
-    fn list_filters(
-        &self,
-        input: ListFiltersRequest,
-    ) -> RusotoFuture<ListFiltersResponse, ListFiltersError>;
+    fn list_filters(&self, input: ListFiltersRequest) -> Request<ListFiltersRequest>;
 
     /// <p>Lists Amazon GuardDuty findings for the specified detector ID.</p>
-    fn list_findings(
-        &self,
-        input: ListFindingsRequest,
-    ) -> RusotoFuture<ListFindingsResponse, ListFindingsError>;
+    fn list_findings(&self, input: ListFindingsRequest) -> Request<ListFindingsRequest>;
 
     /// <p>Lists the IPSets of the GuardDuty service specified by the detector ID.</p>
-    fn list_ip_sets(
-        &self,
-        input: ListIPSetsRequest,
-    ) -> RusotoFuture<ListIPSetsResponse, ListIPSetsError>;
+    fn list_ip_sets(&self, input: ListIPSetsRequest) -> Request<ListIPSetsRequest>;
 
     /// <p>Lists all GuardDuty membership invitations that were sent to the current AWS account.</p>
-    fn list_invitations(
-        &self,
-        input: ListInvitationsRequest,
-    ) -> RusotoFuture<ListInvitationsResponse, ListInvitationsError>;
+    fn list_invitations(&self, input: ListInvitationsRequest) -> Request<ListInvitationsRequest>;
 
     /// <p>Lists details about all member accounts for the current GuardDuty master account.</p>
-    fn list_members(
-        &self,
-        input: ListMembersRequest,
-    ) -> RusotoFuture<ListMembersResponse, ListMembersError>;
+    fn list_members(&self, input: ListMembersRequest) -> Request<ListMembersRequest>;
 
     /// <p>Lists the ThreatIntelSets of the GuardDuty service specified by the detector ID.</p>
     fn list_threat_intel_sets(
         &self,
         input: ListThreatIntelSetsRequest,
-    ) -> RusotoFuture<ListThreatIntelSetsResponse, ListThreatIntelSetsError>;
+    ) -> Request<ListThreatIntelSetsRequest>;
 
     /// <p>Re-enables GuardDuty to monitor findings of the member accounts specified by the account IDs. A master GuardDuty account can run this command after disabling GuardDuty from monitoring these members&#39; findings by running StopMonitoringMembers.</p>
     fn start_monitoring_members(
         &self,
         input: StartMonitoringMembersRequest,
-    ) -> RusotoFuture<StartMonitoringMembersResponse, StartMonitoringMembersError>;
+    ) -> Request<StartMonitoringMembersRequest>;
 
     /// <p>Disables GuardDuty from monitoring findings of the member accounts specified by the account IDs. After running this command, a master GuardDuty account can run StartMonitoringMembers to re-enable GuardDuty to monitor these members’ findings.</p>
     fn stop_monitoring_members(
         &self,
         input: StopMonitoringMembersRequest,
-    ) -> RusotoFuture<StopMonitoringMembersResponse, StopMonitoringMembersError>;
+    ) -> Request<StopMonitoringMembersRequest>;
 
     /// <p>Unarchives Amazon GuardDuty findings specified by the list of finding IDs.</p>
     fn unarchive_findings(
         &self,
         input: UnarchiveFindingsRequest,
-    ) -> RusotoFuture<UnarchiveFindingsResponse, UnarchiveFindingsError>;
+    ) -> Request<UnarchiveFindingsRequest>;
 
     /// <p>Updates an Amazon GuardDuty detector specified by the detectorId.</p>
-    fn update_detector(
-        &self,
-        input: UpdateDetectorRequest,
-    ) -> RusotoFuture<UpdateDetectorResponse, UpdateDetectorError>;
+    fn update_detector(&self, input: UpdateDetectorRequest) -> Request<UpdateDetectorRequest>;
 
     /// <p>Updates the filter specified by the filter name.</p>
-    fn update_filter(
-        &self,
-        input: UpdateFilterRequest,
-    ) -> RusotoFuture<UpdateFilterResponse, UpdateFilterError>;
+    fn update_filter(&self, input: UpdateFilterRequest) -> Request<UpdateFilterRequest>;
 
     /// <p>Marks specified Amazon GuardDuty findings as useful or not useful.</p>
     fn update_findings_feedback(
         &self,
         input: UpdateFindingsFeedbackRequest,
-    ) -> RusotoFuture<UpdateFindingsFeedbackResponse, UpdateFindingsFeedbackError>;
+    ) -> Request<UpdateFindingsFeedbackRequest>;
 
     /// <p>Updates the IPSet specified by the IPSet ID.</p>
-    fn update_ip_set(
-        &self,
-        input: UpdateIPSetRequest,
-    ) -> RusotoFuture<UpdateIPSetResponse, UpdateIPSetError>;
+    fn update_ip_set(&self, input: UpdateIPSetRequest) -> Request<UpdateIPSetRequest>;
 
     /// <p>Updates the ThreatIntelSet specified by ThreatIntelSet ID.</p>
     fn update_threat_intel_set(
         &self,
         input: UpdateThreatIntelSetRequest,
-    ) -> RusotoFuture<UpdateThreatIntelSetResponse, UpdateThreatIntelSetError>;
+    ) -> Request<UpdateThreatIntelSetRequest>;
 }
 /// A client for the Amazon GuardDuty API.
 #[derive(Clone)]
@@ -3651,19 +3579,290 @@ impl GuardDuty for GuardDutyClient {
     fn accept_invitation(
         &self,
         input: AcceptInvitationRequest,
-    ) -> RusotoFuture<AcceptInvitationResponse, AcceptInvitationError> {
+    ) -> Request<AcceptInvitationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Archives Amazon GuardDuty findings specified by the list of finding IDs.</p>
+    fn archive_findings(&self, input: ArchiveFindingsRequest) -> Request<ArchiveFindingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a single Amazon GuardDuty detector. A detector is an object that represents the GuardDuty service. A detector must be created in order for GuardDuty to become operational.</p>
+    fn create_detector(&self, input: CreateDetectorRequest) -> Request<CreateDetectorRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a filter using the specified finding criteria.</p>
+    fn create_filter(&self, input: CreateFilterRequest) -> Request<CreateFilterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new IPSet - a list of trusted IP addresses that have been whitelisted for secure communication with AWS infrastructure and applications.</p>
+    fn create_ip_set(&self, input: CreateIPSetRequest) -> Request<CreateIPSetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates member accounts of the current AWS account by specifying a list of AWS account IDs. The current AWS account can then invite these members to manage GuardDuty in their accounts.</p>
+    fn create_members(&self, input: CreateMembersRequest) -> Request<CreateMembersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Generates example findings of types specified by the list of finding types. If &#39;NULL&#39; is specified for findingTypes, the API generates example findings of all supported finding types.</p>
+    fn create_sample_findings(
+        &self,
+        input: CreateSampleFindingsRequest,
+    ) -> Request<CreateSampleFindingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Create a new ThreatIntelSet. ThreatIntelSets consist of known malicious IP addresses. GuardDuty generates findings based on ThreatIntelSets.</p>
+    fn create_threat_intel_set(
+        &self,
+        input: CreateThreatIntelSetRequest,
+    ) -> Request<CreateThreatIntelSetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Declines invitations sent to the current member account by AWS account specified by their account IDs.</p>
+    fn decline_invitations(
+        &self,
+        input: DeclineInvitationsRequest,
+    ) -> Request<DeclineInvitationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a Amazon GuardDuty detector specified by the detector ID.</p>
+    fn delete_detector(&self, input: DeleteDetectorRequest) -> Request<DeleteDetectorRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the filter specified by the filter name.</p>
+    fn delete_filter(&self, input: DeleteFilterRequest) -> Request<DeleteFilterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the IPSet specified by the IPSet ID.</p>
+    fn delete_ip_set(&self, input: DeleteIPSetRequest) -> Request<DeleteIPSetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes invitations sent to the current member account by AWS accounts specified by their account IDs.</p>
+    fn delete_invitations(
+        &self,
+        input: DeleteInvitationsRequest,
+    ) -> Request<DeleteInvitationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes GuardDuty member accounts (to the current GuardDuty master account) specified by the account IDs.</p>
+    fn delete_members(&self, input: DeleteMembersRequest) -> Request<DeleteMembersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes ThreatIntelSet specified by the ThreatIntelSet ID.</p>
+    fn delete_threat_intel_set(
+        &self,
+        input: DeleteThreatIntelSetRequest,
+    ) -> Request<DeleteThreatIntelSetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disassociates the current GuardDuty member account from its master account.</p>
+    fn disassociate_from_master_account(
+        &self,
+        input: DisassociateFromMasterAccountRequest,
+    ) -> Request<DisassociateFromMasterAccountRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disassociates GuardDuty member accounts (to the current GuardDuty master account) specified by the account IDs.</p>
+    fn disassociate_members(
+        &self,
+        input: DisassociateMembersRequest,
+    ) -> Request<DisassociateMembersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves an Amazon GuardDuty detector specified by the detectorId.</p>
+    fn get_detector(&self, input: GetDetectorRequest) -> Request<GetDetectorRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the details of the filter specified by the filter name.</p>
+    fn get_filter(&self, input: GetFilterRequest) -> Request<GetFilterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes Amazon GuardDuty findings specified by finding IDs.</p>
+    fn get_findings(&self, input: GetFindingsRequest) -> Request<GetFindingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists Amazon GuardDuty findings&#39; statistics for the specified detector ID.</p>
+    fn get_findings_statistics(
+        &self,
+        input: GetFindingsStatisticsRequest,
+    ) -> Request<GetFindingsStatisticsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the IPSet specified by the IPSet ID.</p>
+    fn get_ip_set(&self, input: GetIPSetRequest) -> Request<GetIPSetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the count of all GuardDuty membership invitations that were sent to the current member account except the currently accepted invitation.</p>
+    fn get_invitations_count(&self) -> Request<GetInvitationsCountRequest> {
+        Request::new(
+            GetInvitationsCountRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Provides the details for the GuardDuty master account to the current GuardDuty member account.</p>
+    fn get_master_account(
+        &self,
+        input: GetMasterAccountRequest,
+    ) -> Request<GetMasterAccountRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves GuardDuty member accounts (to the current GuardDuty master account) specified by the account IDs.</p>
+    fn get_members(&self, input: GetMembersRequest) -> Request<GetMembersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the ThreatIntelSet that is specified by the ThreatIntelSet ID.</p>
+    fn get_threat_intel_set(
+        &self,
+        input: GetThreatIntelSetRequest,
+    ) -> Request<GetThreatIntelSetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Invites other AWS accounts (created as members of the current AWS account by CreateMembers) to enable GuardDuty and allow the current AWS account to view and manage these accounts&#39; GuardDuty findings on their behalf as the master account.</p>
+    fn invite_members(&self, input: InviteMembersRequest) -> Request<InviteMembersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists detectorIds of all the existing Amazon GuardDuty detector resources.</p>
+    fn list_detectors(&self, input: ListDetectorsRequest) -> Request<ListDetectorsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a paginated list of the current filters.</p>
+    fn list_filters(&self, input: ListFiltersRequest) -> Request<ListFiltersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists Amazon GuardDuty findings for the specified detector ID.</p>
+    fn list_findings(&self, input: ListFindingsRequest) -> Request<ListFindingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the IPSets of the GuardDuty service specified by the detector ID.</p>
+    fn list_ip_sets(&self, input: ListIPSetsRequest) -> Request<ListIPSetsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all GuardDuty membership invitations that were sent to the current AWS account.</p>
+    fn list_invitations(&self, input: ListInvitationsRequest) -> Request<ListInvitationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists details about all member accounts for the current GuardDuty master account.</p>
+    fn list_members(&self, input: ListMembersRequest) -> Request<ListMembersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the ThreatIntelSets of the GuardDuty service specified by the detector ID.</p>
+    fn list_threat_intel_sets(
+        &self,
+        input: ListThreatIntelSetsRequest,
+    ) -> Request<ListThreatIntelSetsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Re-enables GuardDuty to monitor findings of the member accounts specified by the account IDs. A master GuardDuty account can run this command after disabling GuardDuty from monitoring these members&#39; findings by running StopMonitoringMembers.</p>
+    fn start_monitoring_members(
+        &self,
+        input: StartMonitoringMembersRequest,
+    ) -> Request<StartMonitoringMembersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disables GuardDuty from monitoring findings of the member accounts specified by the account IDs. After running this command, a master GuardDuty account can run StartMonitoringMembers to re-enable GuardDuty to monitor these members’ findings.</p>
+    fn stop_monitoring_members(
+        &self,
+        input: StopMonitoringMembersRequest,
+    ) -> Request<StopMonitoringMembersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Unarchives Amazon GuardDuty findings specified by the list of finding IDs.</p>
+    fn unarchive_findings(
+        &self,
+        input: UnarchiveFindingsRequest,
+    ) -> Request<UnarchiveFindingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an Amazon GuardDuty detector specified by the detectorId.</p>
+    fn update_detector(&self, input: UpdateDetectorRequest) -> Request<UpdateDetectorRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the filter specified by the filter name.</p>
+    fn update_filter(&self, input: UpdateFilterRequest) -> Request<UpdateFilterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Marks specified Amazon GuardDuty findings as useful or not useful.</p>
+    fn update_findings_feedback(
+        &self,
+        input: UpdateFindingsFeedbackRequest,
+    ) -> Request<UpdateFindingsFeedbackRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the IPSet specified by the IPSet ID.</p>
+    fn update_ip_set(&self, input: UpdateIPSetRequest) -> Request<UpdateIPSetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the ThreatIntelSet specified by ThreatIntelSet ID.</p>
+    fn update_threat_intel_set(
+        &self,
+        input: UpdateThreatIntelSetRequest,
+    ) -> Request<UpdateThreatIntelSetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AcceptInvitationRequest {
+    type Output = AcceptInvitationResponse;
+    type Error = AcceptInvitationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/master",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3681,24 +3880,30 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Archives Amazon GuardDuty findings specified by the list of finding IDs.</p>
-    fn archive_findings(
-        &self,
-        input: ArchiveFindingsRequest,
-    ) -> RusotoFuture<ArchiveFindingsResponse, ArchiveFindingsError> {
+impl ServiceRequest for ArchiveFindingsRequest {
+    type Output = ArchiveFindingsResponse;
+    type Error = ArchiveFindingsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/findings/archive",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3716,21 +3921,27 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Creates a single Amazon GuardDuty detector. A detector is an object that represents the GuardDuty service. A detector must be created in order for GuardDuty to become operational.</p>
-    fn create_detector(
-        &self,
-        input: CreateDetectorRequest,
-    ) -> RusotoFuture<CreateDetectorResponse, CreateDetectorError> {
+impl ServiceRequest for CreateDetectorRequest {
+    type Output = CreateDetectorResponse;
+    type Error = CreateDetectorError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/detector";
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3748,24 +3959,30 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Creates a filter using the specified finding criteria.</p>
-    fn create_filter(
-        &self,
-        input: CreateFilterRequest,
-    ) -> RusotoFuture<CreateFilterResponse, CreateFilterError> {
+impl ServiceRequest for CreateFilterRequest {
+    type Output = CreateFilterResponse;
+    type Error = CreateFilterError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/filter",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3783,24 +4000,30 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new IPSet - a list of trusted IP addresses that have been whitelisted for secure communication with AWS infrastructure and applications.</p>
-    fn create_ip_set(
-        &self,
-        input: CreateIPSetRequest,
-    ) -> RusotoFuture<CreateIPSetResponse, CreateIPSetError> {
+impl ServiceRequest for CreateIPSetRequest {
+    type Output = CreateIPSetResponse;
+    type Error = CreateIPSetError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/ipset",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3818,24 +4041,30 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Creates member accounts of the current AWS account by specifying a list of AWS account IDs. The current AWS account can then invite these members to manage GuardDuty in their accounts.</p>
-    fn create_members(
-        &self,
-        input: CreateMembersRequest,
-    ) -> RusotoFuture<CreateMembersResponse, CreateMembersError> {
+impl ServiceRequest for CreateMembersRequest {
+    type Output = CreateMembersResponse;
+    type Error = CreateMembersError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/member",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3853,24 +4082,30 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Generates example findings of types specified by the list of finding types. If &#39;NULL&#39; is specified for findingTypes, the API generates example findings of all supported finding types.</p>
-    fn create_sample_findings(
-        &self,
-        input: CreateSampleFindingsRequest,
-    ) -> RusotoFuture<CreateSampleFindingsResponse, CreateSampleFindingsError> {
+impl ServiceRequest for CreateSampleFindingsRequest {
+    type Output = CreateSampleFindingsResponse;
+    type Error = CreateSampleFindingsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/findings/create",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3887,24 +4122,30 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Create a new ThreatIntelSet. ThreatIntelSets consist of known malicious IP addresses. GuardDuty generates findings based on ThreatIntelSets.</p>
-    fn create_threat_intel_set(
-        &self,
-        input: CreateThreatIntelSetRequest,
-    ) -> RusotoFuture<CreateThreatIntelSetResponse, CreateThreatIntelSetError> {
+impl ServiceRequest for CreateThreatIntelSetRequest {
+    type Output = CreateThreatIntelSetResponse;
+    type Error = CreateThreatIntelSetError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/threatintelset",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3921,21 +4162,27 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Declines invitations sent to the current member account by AWS account specified by their account IDs.</p>
-    fn decline_invitations(
-        &self,
-        input: DeclineInvitationsRequest,
-    ) -> RusotoFuture<DeclineInvitationsResponse, DeclineInvitationsError> {
+impl ServiceRequest for DeclineInvitationsRequest {
+    type Output = DeclineInvitationsResponse;
+    type Error = DeclineInvitationsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/invitation/decline";
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3953,18 +4200,24 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a Amazon GuardDuty detector specified by the detector ID.</p>
-    fn delete_detector(
-        &self,
-        input: DeleteDetectorRequest,
-    ) -> RusotoFuture<DeleteDetectorResponse, DeleteDetectorError> {
-        let request_uri = format!("/detector/{detector_id}", detector_id = input.detector_id);
+impl ServiceRequest for DeleteDetectorRequest {
+    type Output = DeleteDetectorResponse;
+    type Error = DeleteDetectorError;
 
-        let mut request = SignedRequest::new("DELETE", "guardduty", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/detector/{detector_id}", detector_id = self.detector_id);
+
+        let mut request = SignedRequest::new("DELETE", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3982,22 +4235,28 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the filter specified by the filter name.</p>
-    fn delete_filter(
-        &self,
-        input: DeleteFilterRequest,
-    ) -> RusotoFuture<DeleteFilterResponse, DeleteFilterError> {
+impl ServiceRequest for DeleteFilterRequest {
+    type Output = DeleteFilterResponse;
+    type Error = DeleteFilterError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/filter/{filter_name}",
-            detector_id = input.detector_id,
-            filter_name = input.filter_name
+            detector_id = self.detector_id,
+            filter_name = self.filter_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4015,22 +4274,28 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the IPSet specified by the IPSet ID.</p>
-    fn delete_ip_set(
-        &self,
-        input: DeleteIPSetRequest,
-    ) -> RusotoFuture<DeleteIPSetResponse, DeleteIPSetError> {
+impl ServiceRequest for DeleteIPSetRequest {
+    type Output = DeleteIPSetResponse;
+    type Error = DeleteIPSetError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/ipset/{ip_set_id}",
-            detector_id = input.detector_id,
-            ip_set_id = input.ip_set_id
+            detector_id = self.detector_id,
+            ip_set_id = self.ip_set_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4048,21 +4313,27 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Deletes invitations sent to the current member account by AWS accounts specified by their account IDs.</p>
-    fn delete_invitations(
-        &self,
-        input: DeleteInvitationsRequest,
-    ) -> RusotoFuture<DeleteInvitationsResponse, DeleteInvitationsError> {
+impl ServiceRequest for DeleteInvitationsRequest {
+    type Output = DeleteInvitationsResponse;
+    type Error = DeleteInvitationsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/invitation/delete";
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4080,24 +4351,30 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Deletes GuardDuty member accounts (to the current GuardDuty master account) specified by the account IDs.</p>
-    fn delete_members(
-        &self,
-        input: DeleteMembersRequest,
-    ) -> RusotoFuture<DeleteMembersResponse, DeleteMembersError> {
+impl ServiceRequest for DeleteMembersRequest {
+    type Output = DeleteMembersResponse;
+    type Error = DeleteMembersError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/member/delete",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4115,22 +4392,28 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Deletes ThreatIntelSet specified by the ThreatIntelSet ID.</p>
-    fn delete_threat_intel_set(
-        &self,
-        input: DeleteThreatIntelSetRequest,
-    ) -> RusotoFuture<DeleteThreatIntelSetResponse, DeleteThreatIntelSetError> {
+impl ServiceRequest for DeleteThreatIntelSetRequest {
+    type Output = DeleteThreatIntelSetResponse;
+    type Error = DeleteThreatIntelSetError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/threatintelset/{threat_intel_set_id}",
-            detector_id = input.detector_id,
-            threat_intel_set_id = input.threat_intel_set_id
+            detector_id = self.detector_id,
+            threat_intel_set_id = self.threat_intel_set_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4147,22 +4430,27 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Disassociates the current GuardDuty member account from its master account.</p>
-    fn disassociate_from_master_account(
-        &self,
-        input: DisassociateFromMasterAccountRequest,
-    ) -> RusotoFuture<DisassociateFromMasterAccountResponse, DisassociateFromMasterAccountError>
-    {
+impl ServiceRequest for DisassociateFromMasterAccountRequest {
+    type Output = DisassociateFromMasterAccountResponse;
+    type Error = DisassociateFromMasterAccountError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/master/disassociate",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4177,24 +4465,30 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Disassociates GuardDuty member accounts (to the current GuardDuty master account) specified by the account IDs.</p>
-    fn disassociate_members(
-        &self,
-        input: DisassociateMembersRequest,
-    ) -> RusotoFuture<DisassociateMembersResponse, DisassociateMembersError> {
+impl ServiceRequest for DisassociateMembersRequest {
+    type Output = DisassociateMembersResponse;
+    type Error = DisassociateMembersError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/member/disassociate",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4211,18 +4505,24 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves an Amazon GuardDuty detector specified by the detectorId.</p>
-    fn get_detector(
-        &self,
-        input: GetDetectorRequest,
-    ) -> RusotoFuture<GetDetectorResponse, GetDetectorError> {
-        let request_uri = format!("/detector/{detector_id}", detector_id = input.detector_id);
+impl ServiceRequest for GetDetectorRequest {
+    type Output = GetDetectorResponse;
+    type Error = GetDetectorError;
 
-        let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/detector/{detector_id}", detector_id = self.detector_id);
+
+        let mut request = SignedRequest::new("GET", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4240,22 +4540,28 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Returns the details of the filter specified by the filter name.</p>
-    fn get_filter(
-        &self,
-        input: GetFilterRequest,
-    ) -> RusotoFuture<GetFilterResponse, GetFilterError> {
+impl ServiceRequest for GetFilterRequest {
+    type Output = GetFilterResponse;
+    type Error = GetFilterError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/filter/{filter_name}",
-            detector_id = input.detector_id,
-            filter_name = input.filter_name
+            detector_id = self.detector_id,
+            filter_name = self.filter_name
         );
 
-        let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4273,24 +4579,30 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Describes Amazon GuardDuty findings specified by finding IDs.</p>
-    fn get_findings(
-        &self,
-        input: GetFindingsRequest,
-    ) -> RusotoFuture<GetFindingsResponse, GetFindingsError> {
+impl ServiceRequest for GetFindingsRequest {
+    type Output = GetFindingsResponse;
+    type Error = GetFindingsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/findings/get",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4308,24 +4620,30 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Lists Amazon GuardDuty findings&#39; statistics for the specified detector ID.</p>
-    fn get_findings_statistics(
-        &self,
-        input: GetFindingsStatisticsRequest,
-    ) -> RusotoFuture<GetFindingsStatisticsResponse, GetFindingsStatisticsError> {
+impl ServiceRequest for GetFindingsStatisticsRequest {
+    type Output = GetFindingsStatisticsResponse;
+    type Error = GetFindingsStatisticsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/findings/statistics",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4342,19 +4660,28 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the IPSet specified by the IPSet ID.</p>
-    fn get_ip_set(&self, input: GetIPSetRequest) -> RusotoFuture<GetIPSetResponse, GetIPSetError> {
+impl ServiceRequest for GetIPSetRequest {
+    type Output = GetIPSetResponse;
+    type Error = GetIPSetError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/ipset/{ip_set_id}",
-            detector_id = input.detector_id,
-            ip_set_id = input.ip_set_id
+            detector_id = self.detector_id,
+            ip_set_id = self.ip_set_id
         );
 
-        let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4372,17 +4699,24 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Returns the count of all GuardDuty membership invitations that were sent to the current member account except the currently accepted invitation.</p>
-    fn get_invitations_count(
-        &self,
-    ) -> RusotoFuture<GetInvitationsCountResponse, GetInvitationsCountError> {
+impl ServiceRequest for GetInvitationsCountRequest {
+    type Output = GetInvitationsCountResponse;
+    type Error = GetInvitationsCountError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/invitation/count";
 
-        let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4399,21 +4733,27 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Provides the details for the GuardDuty master account to the current GuardDuty member account.</p>
-    fn get_master_account(
-        &self,
-        input: GetMasterAccountRequest,
-    ) -> RusotoFuture<GetMasterAccountResponse, GetMasterAccountError> {
+impl ServiceRequest for GetMasterAccountRequest {
+    type Output = GetMasterAccountResponse;
+    type Error = GetMasterAccountError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/master",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4431,24 +4771,30 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves GuardDuty member accounts (to the current GuardDuty master account) specified by the account IDs.</p>
-    fn get_members(
-        &self,
-        input: GetMembersRequest,
-    ) -> RusotoFuture<GetMembersResponse, GetMembersError> {
+impl ServiceRequest for GetMembersRequest {
+    type Output = GetMembersResponse;
+    type Error = GetMembersError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/member/get",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4466,22 +4812,28 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the ThreatIntelSet that is specified by the ThreatIntelSet ID.</p>
-    fn get_threat_intel_set(
-        &self,
-        input: GetThreatIntelSetRequest,
-    ) -> RusotoFuture<GetThreatIntelSetResponse, GetThreatIntelSetError> {
+impl ServiceRequest for GetThreatIntelSetRequest {
+    type Output = GetThreatIntelSetResponse;
+    type Error = GetThreatIntelSetError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/threatintelset/{threat_intel_set_id}",
-            detector_id = input.detector_id,
-            threat_intel_set_id = input.threat_intel_set_id
+            detector_id = self.detector_id,
+            threat_intel_set_id = self.threat_intel_set_id
         );
 
-        let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4499,24 +4851,30 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Invites other AWS accounts (created as members of the current AWS account by CreateMembers) to enable GuardDuty and allow the current AWS account to view and manage these accounts&#39; GuardDuty findings on their behalf as the master account.</p>
-    fn invite_members(
-        &self,
-        input: InviteMembersRequest,
-    ) -> RusotoFuture<InviteMembersResponse, InviteMembersError> {
+impl ServiceRequest for InviteMembersRequest {
+    type Output = InviteMembersResponse;
+    type Error = InviteMembersError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/member/invite",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4534,27 +4892,33 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Lists detectorIds of all the existing Amazon GuardDuty detector resources.</p>
-    fn list_detectors(
-        &self,
-        input: ListDetectorsRequest,
-    ) -> RusotoFuture<ListDetectorsResponse, ListDetectorsError> {
+impl ServiceRequest for ListDetectorsRequest {
+    type Output = ListDetectorsResponse;
+    type Error = ListDetectorsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/detector";
 
-        let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4572,30 +4936,36 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Returns a paginated list of the current filters.</p>
-    fn list_filters(
-        &self,
-        input: ListFiltersRequest,
-    ) -> RusotoFuture<ListFiltersResponse, ListFiltersError> {
+impl ServiceRequest for ListFiltersRequest {
+    type Output = ListFiltersResponse;
+    type Error = ListFiltersError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/filter",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4613,24 +4983,30 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Lists Amazon GuardDuty findings for the specified detector ID.</p>
-    fn list_findings(
-        &self,
-        input: ListFindingsRequest,
-    ) -> RusotoFuture<ListFindingsResponse, ListFindingsError> {
+impl ServiceRequest for ListFindingsRequest {
+    type Output = ListFindingsResponse;
+    type Error = ListFindingsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/findings",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4648,30 +5024,36 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Lists the IPSets of the GuardDuty service specified by the detector ID.</p>
-    fn list_ip_sets(
-        &self,
-        input: ListIPSetsRequest,
-    ) -> RusotoFuture<ListIPSetsResponse, ListIPSetsError> {
+impl ServiceRequest for ListIPSetsRequest {
+    type Output = ListIPSetsResponse;
+    type Error = ListIPSetsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/ipset",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4689,27 +5071,33 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Lists all GuardDuty membership invitations that were sent to the current AWS account.</p>
-    fn list_invitations(
-        &self,
-        input: ListInvitationsRequest,
-    ) -> RusotoFuture<ListInvitationsResponse, ListInvitationsError> {
+impl ServiceRequest for ListInvitationsRequest {
+    type Output = ListInvitationsResponse;
+    type Error = ListInvitationsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/invitation";
 
-        let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4727,33 +5115,39 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Lists details about all member accounts for the current GuardDuty master account.</p>
-    fn list_members(
-        &self,
-        input: ListMembersRequest,
-    ) -> RusotoFuture<ListMembersResponse, ListMembersError> {
+impl ServiceRequest for ListMembersRequest {
+    type Output = ListMembersResponse;
+    type Error = ListMembersError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/member",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        if let Some(ref x) = input.only_associated {
+        if let Some(ref x) = self.only_associated {
             params.put("onlyAssociated", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4771,30 +5165,36 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Lists the ThreatIntelSets of the GuardDuty service specified by the detector ID.</p>
-    fn list_threat_intel_sets(
-        &self,
-        input: ListThreatIntelSetsRequest,
-    ) -> RusotoFuture<ListThreatIntelSetsResponse, ListThreatIntelSetsError> {
+impl ServiceRequest for ListThreatIntelSetsRequest {
+    type Output = ListThreatIntelSetsResponse;
+    type Error = ListThreatIntelSetsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/threatintelset",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4811,24 +5211,30 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Re-enables GuardDuty to monitor findings of the member accounts specified by the account IDs. A master GuardDuty account can run this command after disabling GuardDuty from monitoring these members&#39; findings by running StopMonitoringMembers.</p>
-    fn start_monitoring_members(
-        &self,
-        input: StartMonitoringMembersRequest,
-    ) -> RusotoFuture<StartMonitoringMembersResponse, StartMonitoringMembersError> {
+impl ServiceRequest for StartMonitoringMembersRequest {
+    type Output = StartMonitoringMembersResponse;
+    type Error = StartMonitoringMembersError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/member/start",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4845,24 +5251,30 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Disables GuardDuty from monitoring findings of the member accounts specified by the account IDs. After running this command, a master GuardDuty account can run StartMonitoringMembers to re-enable GuardDuty to monitor these members’ findings.</p>
-    fn stop_monitoring_members(
-        &self,
-        input: StopMonitoringMembersRequest,
-    ) -> RusotoFuture<StopMonitoringMembersResponse, StopMonitoringMembersError> {
+impl ServiceRequest for StopMonitoringMembersRequest {
+    type Output = StopMonitoringMembersResponse;
+    type Error = StopMonitoringMembersError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/member/stop",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4879,24 +5291,30 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Unarchives Amazon GuardDuty findings specified by the list of finding IDs.</p>
-    fn unarchive_findings(
-        &self,
-        input: UnarchiveFindingsRequest,
-    ) -> RusotoFuture<UnarchiveFindingsResponse, UnarchiveFindingsError> {
+impl ServiceRequest for UnarchiveFindingsRequest {
+    type Output = UnarchiveFindingsResponse;
+    type Error = UnarchiveFindingsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/findings/unarchive",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4914,21 +5332,27 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Updates an Amazon GuardDuty detector specified by the detectorId.</p>
-    fn update_detector(
-        &self,
-        input: UpdateDetectorRequest,
-    ) -> RusotoFuture<UpdateDetectorResponse, UpdateDetectorError> {
-        let request_uri = format!("/detector/{detector_id}", detector_id = input.detector_id);
+impl ServiceRequest for UpdateDetectorRequest {
+    type Output = UpdateDetectorResponse;
+    type Error = UpdateDetectorError;
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/detector/{detector_id}", detector_id = self.detector_id);
+
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4946,25 +5370,31 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Updates the filter specified by the filter name.</p>
-    fn update_filter(
-        &self,
-        input: UpdateFilterRequest,
-    ) -> RusotoFuture<UpdateFilterResponse, UpdateFilterError> {
+impl ServiceRequest for UpdateFilterRequest {
+    type Output = UpdateFilterResponse;
+    type Error = UpdateFilterError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/filter/{filter_name}",
-            detector_id = input.detector_id,
-            filter_name = input.filter_name
+            detector_id = self.detector_id,
+            filter_name = self.filter_name
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4982,24 +5412,30 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Marks specified Amazon GuardDuty findings as useful or not useful.</p>
-    fn update_findings_feedback(
-        &self,
-        input: UpdateFindingsFeedbackRequest,
-    ) -> RusotoFuture<UpdateFindingsFeedbackResponse, UpdateFindingsFeedbackError> {
+impl ServiceRequest for UpdateFindingsFeedbackRequest {
+    type Output = UpdateFindingsFeedbackResponse;
+    type Error = UpdateFindingsFeedbackError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/findings/feedback",
-            detector_id = input.detector_id
+            detector_id = self.detector_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5016,25 +5452,31 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Updates the IPSet specified by the IPSet ID.</p>
-    fn update_ip_set(
-        &self,
-        input: UpdateIPSetRequest,
-    ) -> RusotoFuture<UpdateIPSetResponse, UpdateIPSetError> {
+impl ServiceRequest for UpdateIPSetRequest {
+    type Output = UpdateIPSetResponse;
+    type Error = UpdateIPSetError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/ipset/{ip_set_id}",
-            detector_id = input.detector_id,
-            ip_set_id = input.ip_set_id
+            detector_id = self.detector_id,
+            ip_set_id = self.ip_set_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5052,25 +5494,31 @@ impl GuardDuty for GuardDutyClient {
             }
         })
     }
+}
 
-    /// <p>Updates the ThreatIntelSet specified by ThreatIntelSet ID.</p>
-    fn update_threat_intel_set(
-        &self,
-        input: UpdateThreatIntelSetRequest,
-    ) -> RusotoFuture<UpdateThreatIntelSetResponse, UpdateThreatIntelSetError> {
+impl ServiceRequest for UpdateThreatIntelSetRequest {
+    type Output = UpdateThreatIntelSetResponse;
+    type Error = UpdateThreatIntelSetError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/detector/{detector_id}/threatintelset/{threat_intel_set_id}",
-            detector_id = input.detector_id,
-            threat_intel_set_id = input.threat_intel_set_id
+            detector_id = self.detector_id,
+            threat_intel_set_id = self.threat_intel_set_id
         );
 
-        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "guardduty", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)

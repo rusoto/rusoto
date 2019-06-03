@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -2028,96 +2029,84 @@ pub trait Ram {
     fn accept_resource_share_invitation(
         &self,
         input: AcceptResourceShareInvitationRequest,
-    ) -> RusotoFuture<AcceptResourceShareInvitationResponse, AcceptResourceShareInvitationError>;
+    ) -> Request<AcceptResourceShareInvitationRequest>;
 
     /// <p>Associates the specified resource share with the specified principals and resources.</p>
     fn associate_resource_share(
         &self,
         input: AssociateResourceShareRequest,
-    ) -> RusotoFuture<AssociateResourceShareResponse, AssociateResourceShareError>;
+    ) -> Request<AssociateResourceShareRequest>;
 
     /// <p>Creates a resource share.</p>
     fn create_resource_share(
         &self,
         input: CreateResourceShareRequest,
-    ) -> RusotoFuture<CreateResourceShareResponse, CreateResourceShareError>;
+    ) -> Request<CreateResourceShareRequest>;
 
     /// <p>Deletes the specified resource share.</p>
     fn delete_resource_share(
         &self,
         input: DeleteResourceShareRequest,
-    ) -> RusotoFuture<DeleteResourceShareResponse, DeleteResourceShareError>;
+    ) -> Request<DeleteResourceShareRequest>;
 
     /// <p>Disassociates the specified principals or resources from the specified resource share.</p>
     fn disassociate_resource_share(
         &self,
         input: DisassociateResourceShareRequest,
-    ) -> RusotoFuture<DisassociateResourceShareResponse, DisassociateResourceShareError>;
+    ) -> Request<DisassociateResourceShareRequest>;
 
     /// <p>Enables resource sharing within your organization.</p>
     fn enable_sharing_with_aws_organization(
         &self,
-    ) -> RusotoFuture<EnableSharingWithAwsOrganizationResponse, EnableSharingWithAwsOrganizationError>;
+    ) -> Request<EnableSharingWithAwsOrganizationRequest>;
 
     /// <p>Gets the policies for the specifies resources.</p>
     fn get_resource_policies(
         &self,
         input: GetResourcePoliciesRequest,
-    ) -> RusotoFuture<GetResourcePoliciesResponse, GetResourcePoliciesError>;
+    ) -> Request<GetResourcePoliciesRequest>;
 
     /// <p>Gets the associations for the specified resource share.</p>
     fn get_resource_share_associations(
         &self,
         input: GetResourceShareAssociationsRequest,
-    ) -> RusotoFuture<GetResourceShareAssociationsResponse, GetResourceShareAssociationsError>;
+    ) -> Request<GetResourceShareAssociationsRequest>;
 
     /// <p>Gets the specified invitations for resource sharing.</p>
     fn get_resource_share_invitations(
         &self,
         input: GetResourceShareInvitationsRequest,
-    ) -> RusotoFuture<GetResourceShareInvitationsResponse, GetResourceShareInvitationsError>;
+    ) -> Request<GetResourceShareInvitationsRequest>;
 
     /// <p>Gets the specified resource shares or all of your resource shares.</p>
     fn get_resource_shares(
         &self,
         input: GetResourceSharesRequest,
-    ) -> RusotoFuture<GetResourceSharesResponse, GetResourceSharesError>;
+    ) -> Request<GetResourceSharesRequest>;
 
     /// <p>Lists the principals with access to the specified resource.</p>
-    fn list_principals(
-        &self,
-        input: ListPrincipalsRequest,
-    ) -> RusotoFuture<ListPrincipalsResponse, ListPrincipalsError>;
+    fn list_principals(&self, input: ListPrincipalsRequest) -> Request<ListPrincipalsRequest>;
 
     /// <p>Lists the resources that the specified principal can access.</p>
-    fn list_resources(
-        &self,
-        input: ListResourcesRequest,
-    ) -> RusotoFuture<ListResourcesResponse, ListResourcesError>;
+    fn list_resources(&self, input: ListResourcesRequest) -> Request<ListResourcesRequest>;
 
     /// <p>Rejects an invitation to a resource share from another AWS account.</p>
     fn reject_resource_share_invitation(
         &self,
         input: RejectResourceShareInvitationRequest,
-    ) -> RusotoFuture<RejectResourceShareInvitationResponse, RejectResourceShareInvitationError>;
+    ) -> Request<RejectResourceShareInvitationRequest>;
 
     /// <p>Adds the specified tags to the specified resource share.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Removes the specified tags from the specified resource share.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Updates the specified resource share.</p>
     fn update_resource_share(
         &self,
         input: UpdateResourceShareRequest,
-    ) -> RusotoFuture<UpdateResourceShareResponse, UpdateResourceShareError>;
+    ) -> Request<UpdateResourceShareRequest>;
 }
 /// A client for the RAM API.
 #[derive(Clone)]
@@ -2160,17 +2149,141 @@ impl Ram for RamClient {
     fn accept_resource_share_invitation(
         &self,
         input: AcceptResourceShareInvitationRequest,
-    ) -> RusotoFuture<AcceptResourceShareInvitationResponse, AcceptResourceShareInvitationError>
-    {
+    ) -> Request<AcceptResourceShareInvitationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Associates the specified resource share with the specified principals and resources.</p>
+    fn associate_resource_share(
+        &self,
+        input: AssociateResourceShareRequest,
+    ) -> Request<AssociateResourceShareRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a resource share.</p>
+    fn create_resource_share(
+        &self,
+        input: CreateResourceShareRequest,
+    ) -> Request<CreateResourceShareRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified resource share.</p>
+    fn delete_resource_share(
+        &self,
+        input: DeleteResourceShareRequest,
+    ) -> Request<DeleteResourceShareRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disassociates the specified principals or resources from the specified resource share.</p>
+    fn disassociate_resource_share(
+        &self,
+        input: DisassociateResourceShareRequest,
+    ) -> Request<DisassociateResourceShareRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Enables resource sharing within your organization.</p>
+    fn enable_sharing_with_aws_organization(
+        &self,
+    ) -> Request<EnableSharingWithAwsOrganizationRequest> {
+        Request::new(
+            EnableSharingWithAwsOrganizationRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Gets the policies for the specifies resources.</p>
+    fn get_resource_policies(
+        &self,
+        input: GetResourcePoliciesRequest,
+    ) -> Request<GetResourcePoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the associations for the specified resource share.</p>
+    fn get_resource_share_associations(
+        &self,
+        input: GetResourceShareAssociationsRequest,
+    ) -> Request<GetResourceShareAssociationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the specified invitations for resource sharing.</p>
+    fn get_resource_share_invitations(
+        &self,
+        input: GetResourceShareInvitationsRequest,
+    ) -> Request<GetResourceShareInvitationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the specified resource shares or all of your resource shares.</p>
+    fn get_resource_shares(
+        &self,
+        input: GetResourceSharesRequest,
+    ) -> Request<GetResourceSharesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the principals with access to the specified resource.</p>
+    fn list_principals(&self, input: ListPrincipalsRequest) -> Request<ListPrincipalsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the resources that the specified principal can access.</p>
+    fn list_resources(&self, input: ListResourcesRequest) -> Request<ListResourcesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Rejects an invitation to a resource share from another AWS account.</p>
+    fn reject_resource_share_invitation(
+        &self,
+        input: RejectResourceShareInvitationRequest,
+    ) -> Request<RejectResourceShareInvitationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds the specified tags to the specified resource share.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified tags from the specified resource share.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the specified resource share.</p>
+    fn update_resource_share(
+        &self,
+        input: UpdateResourceShareRequest,
+    ) -> Request<UpdateResourceShareRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AcceptResourceShareInvitationRequest {
+    type Output = AcceptResourceShareInvitationResponse;
+    type Error = AcceptResourceShareInvitationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/acceptresourceshareinvitation";
 
-        let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "ram", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2185,21 +2298,27 @@ impl Ram for RamClient {
             }
         })
     }
+}
 
-    /// <p>Associates the specified resource share with the specified principals and resources.</p>
-    fn associate_resource_share(
-        &self,
-        input: AssociateResourceShareRequest,
-    ) -> RusotoFuture<AssociateResourceShareResponse, AssociateResourceShareError> {
+impl ServiceRequest for AssociateResourceShareRequest {
+    type Output = AssociateResourceShareResponse;
+    type Error = AssociateResourceShareError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/associateresourceshare";
 
-        let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "ram", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2216,21 +2335,27 @@ impl Ram for RamClient {
             }
         })
     }
+}
 
-    /// <p>Creates a resource share.</p>
-    fn create_resource_share(
-        &self,
-        input: CreateResourceShareRequest,
-    ) -> RusotoFuture<CreateResourceShareResponse, CreateResourceShareError> {
+impl ServiceRequest for CreateResourceShareRequest {
+    type Output = CreateResourceShareResponse;
+    type Error = CreateResourceShareError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/createresourceshare";
 
-        let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "ram", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2247,25 +2372,31 @@ impl Ram for RamClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified resource share.</p>
-    fn delete_resource_share(
-        &self,
-        input: DeleteResourceShareRequest,
-    ) -> RusotoFuture<DeleteResourceShareResponse, DeleteResourceShareError> {
+impl ServiceRequest for DeleteResourceShareRequest {
+    type Output = DeleteResourceShareResponse;
+    type Error = DeleteResourceShareError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/deleteresourceshare";
 
-        let mut request = SignedRequest::new("DELETE", "ram", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "ram", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.client_token {
+        if let Some(ref x) = self.client_token {
             params.put("clientToken", x);
         }
-        params.put("resourceShareArn", &input.resource_share_arn);
+        params.put("resourceShareArn", &self.resource_share_arn);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2282,21 +2413,27 @@ impl Ram for RamClient {
             }
         })
     }
+}
 
-    /// <p>Disassociates the specified principals or resources from the specified resource share.</p>
-    fn disassociate_resource_share(
-        &self,
-        input: DisassociateResourceShareRequest,
-    ) -> RusotoFuture<DisassociateResourceShareResponse, DisassociateResourceShareError> {
+impl ServiceRequest for DisassociateResourceShareRequest {
+    type Output = DisassociateResourceShareResponse;
+    type Error = DisassociateResourceShareError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/disassociateresourceshare";
 
-        let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "ram", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2311,18 +2448,24 @@ impl Ram for RamClient {
             }
         })
     }
+}
 
-    /// <p>Enables resource sharing within your organization.</p>
-    fn enable_sharing_with_aws_organization(
-        &self,
-    ) -> RusotoFuture<EnableSharingWithAwsOrganizationResponse, EnableSharingWithAwsOrganizationError>
-    {
+impl ServiceRequest for EnableSharingWithAwsOrganizationRequest {
+    type Output = EnableSharingWithAwsOrganizationResponse;
+    type Error = EnableSharingWithAwsOrganizationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/enablesharingwithawsorganization";
 
-        let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "ram", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2339,21 +2482,27 @@ impl Ram for RamClient {
             }
         })
     }
+}
 
-    /// <p>Gets the policies for the specifies resources.</p>
-    fn get_resource_policies(
-        &self,
-        input: GetResourcePoliciesRequest,
-    ) -> RusotoFuture<GetResourcePoliciesResponse, GetResourcePoliciesError> {
+impl ServiceRequest for GetResourcePoliciesRequest {
+    type Output = GetResourcePoliciesResponse;
+    type Error = GetResourcePoliciesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/getresourcepolicies";
 
-        let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "ram", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2370,21 +2519,27 @@ impl Ram for RamClient {
             }
         })
     }
+}
 
-    /// <p>Gets the associations for the specified resource share.</p>
-    fn get_resource_share_associations(
-        &self,
-        input: GetResourceShareAssociationsRequest,
-    ) -> RusotoFuture<GetResourceShareAssociationsResponse, GetResourceShareAssociationsError> {
+impl ServiceRequest for GetResourceShareAssociationsRequest {
+    type Output = GetResourceShareAssociationsResponse;
+    type Error = GetResourceShareAssociationsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/getresourceshareassociations";
 
-        let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "ram", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2399,21 +2554,27 @@ impl Ram for RamClient {
             }
         })
     }
+}
 
-    /// <p>Gets the specified invitations for resource sharing.</p>
-    fn get_resource_share_invitations(
-        &self,
-        input: GetResourceShareInvitationsRequest,
-    ) -> RusotoFuture<GetResourceShareInvitationsResponse, GetResourceShareInvitationsError> {
+impl ServiceRequest for GetResourceShareInvitationsRequest {
+    type Output = GetResourceShareInvitationsResponse;
+    type Error = GetResourceShareInvitationsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/getresourceshareinvitations";
 
-        let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "ram", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2428,21 +2589,27 @@ impl Ram for RamClient {
             }
         })
     }
+}
 
-    /// <p>Gets the specified resource shares or all of your resource shares.</p>
-    fn get_resource_shares(
-        &self,
-        input: GetResourceSharesRequest,
-    ) -> RusotoFuture<GetResourceSharesResponse, GetResourceSharesError> {
+impl ServiceRequest for GetResourceSharesRequest {
+    type Output = GetResourceSharesResponse;
+    type Error = GetResourceSharesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/getresourceshares";
 
-        let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "ram", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2460,21 +2627,27 @@ impl Ram for RamClient {
             }
         })
     }
+}
 
-    /// <p>Lists the principals with access to the specified resource.</p>
-    fn list_principals(
-        &self,
-        input: ListPrincipalsRequest,
-    ) -> RusotoFuture<ListPrincipalsResponse, ListPrincipalsError> {
+impl ServiceRequest for ListPrincipalsRequest {
+    type Output = ListPrincipalsResponse;
+    type Error = ListPrincipalsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/listprincipals";
 
-        let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "ram", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2492,21 +2665,27 @@ impl Ram for RamClient {
             }
         })
     }
+}
 
-    /// <p>Lists the resources that the specified principal can access.</p>
-    fn list_resources(
-        &self,
-        input: ListResourcesRequest,
-    ) -> RusotoFuture<ListResourcesResponse, ListResourcesError> {
+impl ServiceRequest for ListResourcesRequest {
+    type Output = ListResourcesResponse;
+    type Error = ListResourcesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/listresources";
 
-        let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "ram", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2524,22 +2703,27 @@ impl Ram for RamClient {
             }
         })
     }
+}
 
-    /// <p>Rejects an invitation to a resource share from another AWS account.</p>
-    fn reject_resource_share_invitation(
-        &self,
-        input: RejectResourceShareInvitationRequest,
-    ) -> RusotoFuture<RejectResourceShareInvitationResponse, RejectResourceShareInvitationError>
-    {
+impl ServiceRequest for RejectResourceShareInvitationRequest {
+    type Output = RejectResourceShareInvitationResponse;
+    type Error = RejectResourceShareInvitationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/rejectresourceshareinvitation";
 
-        let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "ram", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2554,21 +2738,27 @@ impl Ram for RamClient {
             }
         })
     }
+}
 
-    /// <p>Adds the specified tags to the specified resource share.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/tagresource";
 
-        let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "ram", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2586,21 +2776,27 @@ impl Ram for RamClient {
             }
         })
     }
+}
 
-    /// <p>Removes the specified tags from the specified resource share.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/untagresource";
 
-        let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "ram", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2618,21 +2814,27 @@ impl Ram for RamClient {
             }
         })
     }
+}
 
-    /// <p>Updates the specified resource share.</p>
-    fn update_resource_share(
-        &self,
-        input: UpdateResourceShareRequest,
-    ) -> RusotoFuture<UpdateResourceShareResponse, UpdateResourceShareError> {
+impl ServiceRequest for UpdateResourceShareRequest {
+    type Output = UpdateResourceShareResponse;
+    type Error = UpdateResourceShareError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/updateresourceshare";
 
-        let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "ram", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)

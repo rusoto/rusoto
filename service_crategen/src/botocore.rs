@@ -87,7 +87,7 @@ pub struct HttpRequest {
     pub response_code: Option<i32>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Default, Debug, Deserialize)]
 pub struct Input {
     pub documentation: Option<String>,
     #[serde(deserialize_with = "ShapeName::deserialize_shape_name")]
@@ -96,7 +96,7 @@ pub struct Input {
     pub xml_namespace: Option<XmlNamespace>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Default, Debug, Deserialize)]
 pub struct Output {
     pub documentation: Option<String>,
     #[serde(rename = "resultWrapper")]
@@ -116,7 +116,7 @@ impl Error {
     }
 }
 
-#[derive(Debug, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
 pub struct HttpError {
     pub code: Option<String>,
     #[serde(rename = "httpStatusCode")]
@@ -125,7 +125,7 @@ pub struct HttpError {
     pub sender_fault: Option<bool>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct Member {
     pub deprecated: Option<bool>,
     pub documentation: Option<String>,
@@ -152,13 +152,13 @@ impl Member {
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct XmlNamespace {
     pub prefix: Option<String>,
     pub uri: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct Key {
     pub documentation: Option<String>,
     #[serde(rename = "locationName")]
@@ -178,7 +178,7 @@ impl Key {
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct Value {
     pub documentation: Option<String>,
     #[serde(rename = "locationName")]
@@ -197,7 +197,7 @@ impl Value {
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize)]
 pub struct Shape {
     #[serde(rename = "box")]
     pub aws_box: Option<bool>,
@@ -236,14 +236,24 @@ impl Shape {
         }
     }
 
+    pub fn is_non_empty(&self) -> bool {
+        self.members.as_ref()
+            .map(|m| !m.is_empty())
+            .unwrap_or(false)
+    }
+
     pub fn has_query_parameters(&self) -> bool {
-        self.members.as_ref().unwrap().iter().any(|(_, member)| {
-            if let Some(ref loc) = member.location {
-                !member.deprecated() && loc == "querystring"
-            } else {
-                false
-            }
-        })
+        if let Some(ref members) = self.members {
+            members.iter().any(|(_, member)| {
+                if let Some(ref loc) = member.location {
+                    !member.deprecated() && loc == "querystring"
+                } else {
+                    false
+                }
+            })
+        } else {
+            false
+        }
     }
 }
 
@@ -299,6 +309,12 @@ pub enum ShapeType {
     Structure,
     #[serde(rename = "timestamp")]
     Timestamp,
+}
+
+impl Default for ShapeType {
+    fn default() -> Self {
+        ShapeType::Structure
+    }
 }
 
 #[derive(Debug, Deserialize)]

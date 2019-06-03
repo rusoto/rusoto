@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -34,37 +35,6 @@ use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::EventReader;
 
-/// <p>Data returned by the <b>DescribeAccountAttributes</b> action.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct AccountAttributesMessage {
-    /// <p>A list of <code>AccountQuota</code> objects. Within this list, each quota has a name, a count of usage toward the quota maximum, and a maximum value for the quota.</p>
-    pub account_quotas: Option<Vec<AccountQuota>>,
-}
-
-struct AccountAttributesMessageDeserializer;
-impl AccountAttributesMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<AccountAttributesMessage, XmlParseError> {
-        deserialize_elements::<_, AccountAttributesMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "AccountQuotas" => {
-                        obj.account_quotas.get_or_insert(vec![]).extend(
-                            AccountQuotaListDeserializer::deserialize("AccountQuotas", stack)?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p>Describes a quota for an AWS account.</p> <p>The following are account quotas:</p> <ul> <li> <p> <code>AllocatedStorage</code> - The total allocated storage per account, in GiB. The used value is the total allocated storage in the account, in GiB.</p> </li> <li> <p> <code>AuthorizationsPerDBSecurityGroup</code> - The number of ingress rules per DB security group. The used value is the highest number of ingress rules in a DB security group in the account. Other DB security groups in the account might have a lower number of ingress rules.</p> </li> <li> <p> <code>CustomEndpointsPerDBCluster</code> - The number of custom endpoints per DB cluster. The used value is the highest number of custom endpoints in a DB clusters in the account. Other DB clusters in the account might have a lower number of custom endpoints.</p> </li> <li> <p> <code>DBClusterParameterGroups</code> - The number of DB cluster parameter groups per account, excluding default parameter groups. The used value is the count of nondefault DB cluster parameter groups in the account.</p> </li> <li> <p> <code>DBClusterRoles</code> - The number of associated AWS Identity and Access Management (IAM) roles per DB cluster. The used value is the highest number of associated IAM roles for a DB cluster in the account. Other DB clusters in the account might have a lower number of associated IAM roles.</p> </li> <li> <p> <code>DBClusters</code> - The number of DB clusters per account. The used value is the count of DB clusters in the account.</p> </li> <li> <p> <code>DBInstanceRoles</code> - The number of associated IAM roles per DB instance. The used value is the highest number of associated IAM roles for a DB instance in the account. Other DB instances in the account might have a lower number of associated IAM roles.</p> </li> <li> <p> <code>DBInstances</code> - The number of DB instances per account. The used value is the count of the DB instances in the account.</p> </li> <li> <p> <code>DBParameterGroups</code> - The number of DB parameter groups per account, excluding default parameter groups. The used value is the count of nondefault DB parameter groups in the account.</p> </li> <li> <p> <code>DBSecurityGroups</code> - The number of DB security groups (not VPC security groups) per account, excluding the default security group. The used value is the count of nondefault DB security groups in the account.</p> </li> <li> <p> <code>DBSubnetGroups</code> - The number of DB subnet groups per account. The used value is the count of the DB subnet groups in the account.</p> </li> <li> <p> <code>EventSubscriptions</code> - The number of event subscriptions per account. The used value is the count of the event subscriptions in the account.</p> </li> <li> <p> <code>ManualSnapshots</code> - The number of manual DB snapshots per account. The used value is the count of the manual DB snapshots in the account.</p> </li> <li> <p> <code>OptionGroups</code> - The number of DB option groups per account, excluding default option groups. The used value is the count of nondefault DB option groups in the account.</p> </li> <li> <p> <code>ReadReplicasPerMaster</code> - The number of Read Replicas per DB instance. The used value is the highest number of Read Replicas for a DB instance in the account. Other DB instances in the account might have a lower number of Read Replicas.</p> </li> <li> <p> <code>ReservedDBInstances</code> - The number of reserved DB instances per account. The used value is the count of the active reserved DB instances in the account.</p> </li> <li> <p> <code>SubnetsPerDBSubnetGroup</code> - The number of subnets per DB subnet group. The used value is highest number of subnets for a DB subnet group in the account. Other DB subnet groups in the account might have a lower number of subnets.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Limits.html">Limits</a> in the <i>Amazon RDS User Guide</i> and <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_Limits.html">Limits</a> in the <i>Amazon Aurora User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccountQuota {
@@ -122,7 +92,7 @@ impl AccountQuotaListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AddRoleToDBClusterMessage {
+pub struct AddRoleToDBClusterRequest {
     /// <p>The name of the DB cluster to associate the IAM role with.</p>
     pub db_cluster_identifier: String,
     /// <p>The name of the feature for the DB cluster that the IAM role is to be associated with. For the list of supported feature names, see <a>DBEngineVersion</a>.</p>
@@ -131,10 +101,10 @@ pub struct AddRoleToDBClusterMessage {
     pub role_arn: String,
 }
 
-/// Serialize `AddRoleToDBClusterMessage` contents to a `SignedRequest`.
-struct AddRoleToDBClusterMessageSerializer;
-impl AddRoleToDBClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AddRoleToDBClusterMessage) {
+/// Serialize `AddRoleToDBClusterRequest` contents to a `SignedRequest`.
+struct AddRoleToDBClusterRequestSerializer;
+impl AddRoleToDBClusterRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &AddRoleToDBClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -152,7 +122,20 @@ impl AddRoleToDBClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AddRoleToDBInstanceMessage {
+pub struct AddRoleToDBClusterResponse {}
+
+struct AddRoleToDBClusterResponseDeserializer;
+impl AddRoleToDBClusterResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AddRoleToDBClusterResponse, XmlParseError> {
+        Ok(AddRoleToDBClusterResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AddRoleToDBInstanceRequest {
     /// <p>The name of the DB instance to associate the IAM role with.</p>
     pub db_instance_identifier: String,
     /// <p>The name of the feature for the DB instance that the IAM role is to be associated with. For the list of supported feature names, see <code>DBEngineVersion</code>. </p>
@@ -161,10 +144,10 @@ pub struct AddRoleToDBInstanceMessage {
     pub role_arn: String,
 }
 
-/// Serialize `AddRoleToDBInstanceMessage` contents to a `SignedRequest`.
-struct AddRoleToDBInstanceMessageSerializer;
-impl AddRoleToDBInstanceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AddRoleToDBInstanceMessage) {
+/// Serialize `AddRoleToDBInstanceRequest` contents to a `SignedRequest`.
+struct AddRoleToDBInstanceRequestSerializer;
+impl AddRoleToDBInstanceRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &AddRoleToDBInstanceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -179,19 +162,36 @@ impl AddRoleToDBInstanceMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AddRoleToDBInstanceResponse {}
+
+struct AddRoleToDBInstanceResponseDeserializer;
+impl AddRoleToDBInstanceResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AddRoleToDBInstanceResponse, XmlParseError> {
+        Ok(AddRoleToDBInstanceResponse::default())
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AddSourceIdentifierToSubscriptionMessage {
+pub struct AddSourceIdentifierToSubscriptionRequest {
     /// <p><p>The identifier of the event source to be added.</p> <p>Constraints:</p> <ul> <li> <p>If the source type is a DB instance, then a <code>DBInstanceIdentifier</code> must be supplied.</p> </li> <li> <p>If the source type is a DB security group, a <code>DBSecurityGroupName</code> must be supplied.</p> </li> <li> <p>If the source type is a DB parameter group, a <code>DBParameterGroupName</code> must be supplied.</p> </li> <li> <p>If the source type is a DB snapshot, a <code>DBSnapshotIdentifier</code> must be supplied.</p> </li> </ul></p>
     pub source_identifier: String,
     /// <p>The name of the RDS event notification subscription you want to add a source identifier to.</p>
     pub subscription_name: String,
 }
 
-/// Serialize `AddSourceIdentifierToSubscriptionMessage` contents to a `SignedRequest`.
-struct AddSourceIdentifierToSubscriptionMessageSerializer;
-impl AddSourceIdentifierToSubscriptionMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AddSourceIdentifierToSubscriptionMessage) {
+/// Serialize `AddSourceIdentifierToSubscriptionRequest` contents to a `SignedRequest`.
+struct AddSourceIdentifierToSubscriptionRequestSerializer;
+impl AddSourceIdentifierToSubscriptionRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &AddSourceIdentifierToSubscriptionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -209,18 +209,18 @@ impl AddSourceIdentifierToSubscriptionMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AddSourceIdentifierToSubscriptionResult {
+pub struct AddSourceIdentifierToSubscriptionResponse {
     pub event_subscription: Option<EventSubscription>,
 }
 
-struct AddSourceIdentifierToSubscriptionResultDeserializer;
-impl AddSourceIdentifierToSubscriptionResultDeserializer {
+struct AddSourceIdentifierToSubscriptionResponseDeserializer;
+impl AddSourceIdentifierToSubscriptionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<AddSourceIdentifierToSubscriptionResult, XmlParseError> {
-        deserialize_elements::<_, AddSourceIdentifierToSubscriptionResult, _>(
+    ) -> Result<AddSourceIdentifierToSubscriptionResponse, XmlParseError> {
+        deserialize_elements::<_, AddSourceIdentifierToSubscriptionResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -240,17 +240,17 @@ impl AddSourceIdentifierToSubscriptionResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AddTagsToResourceMessage {
+pub struct AddTagsToResourceRequest {
     /// <p>The Amazon RDS resource that the tags are added to. This value is an Amazon Resource Name (ARN). For information about creating an ARN, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing"> Constructing an RDS Amazon Resource Name (ARN)</a>.</p>
     pub resource_name: String,
     /// <p>The tags to be assigned to the Amazon RDS resource.</p>
     pub tags: Vec<Tag>,
 }
 
-/// Serialize `AddTagsToResourceMessage` contents to a `SignedRequest`.
-struct AddTagsToResourceMessageSerializer;
-impl AddTagsToResourceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AddTagsToResourceMessage) {
+/// Serialize `AddTagsToResourceRequest` contents to a `SignedRequest`.
+struct AddTagsToResourceRequestSerializer;
+impl AddTagsToResourceRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &AddTagsToResourceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -261,6 +261,19 @@ impl AddTagsToResourceMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AddTagsToResourceResponse {}
+
+struct AddTagsToResourceResponseDeserializer;
+impl AddTagsToResourceResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AddTagsToResourceResponse, XmlParseError> {
+        Ok(AddTagsToResourceResponse::default())
+    }
+}
 struct ApplyMethodDeserializer;
 impl ApplyMethodDeserializer {
     #[allow(unused_variables)]
@@ -274,7 +287,7 @@ impl ApplyMethodDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ApplyPendingMaintenanceActionMessage {
+pub struct ApplyPendingMaintenanceActionRequest {
     /// <p>The pending maintenance action to apply to this resource.</p> <p>Valid values: <code>system-update</code>, <code>db-upgrade</code>, <code>hardware-maintenance</code> </p>
     pub apply_action: String,
     /// <p><p>A value that specifies the type of opt-in request, or undoes an opt-in request. An opt-in request of type <code>immediate</code> can&#39;t be undone.</p> <p>Valid values:</p> <ul> <li> <p> <code>immediate</code> - Apply the maintenance action immediately.</p> </li> <li> <p> <code>next-maintenance</code> - Apply the maintenance action during the next maintenance window for the resource.</p> </li> <li> <p> <code>undo-opt-in</code> - Cancel any existing <code>next-maintenance</code> opt-in requests.</p> </li> </ul></p>
@@ -283,10 +296,14 @@ pub struct ApplyPendingMaintenanceActionMessage {
     pub resource_identifier: String,
 }
 
-/// Serialize `ApplyPendingMaintenanceActionMessage` contents to a `SignedRequest`.
-struct ApplyPendingMaintenanceActionMessageSerializer;
-impl ApplyPendingMaintenanceActionMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ApplyPendingMaintenanceActionMessage) {
+/// Serialize `ApplyPendingMaintenanceActionRequest` contents to a `SignedRequest`.
+struct ApplyPendingMaintenanceActionRequestSerializer;
+impl ApplyPendingMaintenanceActionRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ApplyPendingMaintenanceActionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -302,18 +319,18 @@ impl ApplyPendingMaintenanceActionMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ApplyPendingMaintenanceActionResult {
+pub struct ApplyPendingMaintenanceActionResponse {
     pub resource_pending_maintenance_actions: Option<ResourcePendingMaintenanceActions>,
 }
 
-struct ApplyPendingMaintenanceActionResultDeserializer;
-impl ApplyPendingMaintenanceActionResultDeserializer {
+struct ApplyPendingMaintenanceActionResponseDeserializer;
+impl ApplyPendingMaintenanceActionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ApplyPendingMaintenanceActionResult, XmlParseError> {
-        deserialize_elements::<_, ApplyPendingMaintenanceActionResult, _>(
+    ) -> Result<ApplyPendingMaintenanceActionResponse, XmlParseError> {
+        deserialize_elements::<_, ApplyPendingMaintenanceActionResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -353,7 +370,7 @@ impl AttributeValueListDeserializer {
 /// Serialize `AttributeValueList` contents to a `SignedRequest`.
 struct AttributeValueListSerializer;
 impl AttributeValueListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -363,7 +380,7 @@ impl AttributeValueListSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AuthorizeDBSecurityGroupIngressMessage {
+pub struct AuthorizeDBSecurityGroupIngressRequest {
     /// <p>The IP range to authorize.</p>
     pub cidrip: Option<String>,
     /// <p>The name of the DB security group to add authorization to.</p>
@@ -376,10 +393,14 @@ pub struct AuthorizeDBSecurityGroupIngressMessage {
     pub ec2_security_group_owner_id: Option<String>,
 }
 
-/// Serialize `AuthorizeDBSecurityGroupIngressMessage` contents to a `SignedRequest`.
-struct AuthorizeDBSecurityGroupIngressMessageSerializer;
-impl AuthorizeDBSecurityGroupIngressMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AuthorizeDBSecurityGroupIngressMessage) {
+/// Serialize `AuthorizeDBSecurityGroupIngressRequest` contents to a `SignedRequest`.
+struct AuthorizeDBSecurityGroupIngressRequestSerializer;
+impl AuthorizeDBSecurityGroupIngressRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &AuthorizeDBSecurityGroupIngressRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -411,18 +432,18 @@ impl AuthorizeDBSecurityGroupIngressMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AuthorizeDBSecurityGroupIngressResult {
+pub struct AuthorizeDBSecurityGroupIngressResponse {
     pub db_security_group: Option<DBSecurityGroup>,
 }
 
-struct AuthorizeDBSecurityGroupIngressResultDeserializer;
-impl AuthorizeDBSecurityGroupIngressResultDeserializer {
+struct AuthorizeDBSecurityGroupIngressResponseDeserializer;
+impl AuthorizeDBSecurityGroupIngressResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<AuthorizeDBSecurityGroupIngressResult, XmlParseError> {
-        deserialize_elements::<_, AuthorizeDBSecurityGroupIngressResult, _>(
+    ) -> Result<AuthorizeDBSecurityGroupIngressResponse, XmlParseError> {
+        deserialize_elements::<_, AuthorizeDBSecurityGroupIngressResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -506,7 +527,7 @@ impl AvailabilityZonesDeserializer {
 /// Serialize `AvailabilityZones` contents to a `SignedRequest`.
 struct AvailabilityZonesSerializer;
 impl AvailabilityZonesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -577,7 +598,7 @@ impl AvailableProcessorFeatureListDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct BacktrackDBClusterMessage {
+pub struct BacktrackDBClusterRequest {
     /// <p>The timestamp of the time to backtrack the DB cluster to, specified in ISO 8601 format. For more information about ISO 8601, see the <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO8601 Wikipedia page.</a> </p> <note> <p>If the specified time is not a consistent time for the DB cluster, Aurora automatically chooses the nearest possible consistent time for the DB cluster.</p> </note> <p>Constraints:</p> <ul> <li> <p>Must contain a valid ISO 8601 timestamp.</p> </li> <li> <p>Can't contain a timestamp set in the future.</p> </li> </ul> <p>Example: <code>2017-07-08T18:00Z</code> </p>
     pub backtrack_to: String,
     /// <p>The DB cluster identifier of the DB cluster to be backtracked. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Can't end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>my-cluster1</code> </p>
@@ -588,10 +609,10 @@ pub struct BacktrackDBClusterMessage {
     pub use_earliest_time_on_point_in_time_unavailable: Option<bool>,
 }
 
-/// Serialize `BacktrackDBClusterMessage` contents to a `SignedRequest`.
-struct BacktrackDBClusterMessageSerializer;
-impl BacktrackDBClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &BacktrackDBClusterMessage) {
+/// Serialize `BacktrackDBClusterRequest` contents to a `SignedRequest`.
+struct BacktrackDBClusterRequestSerializer;
+impl BacktrackDBClusterRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &BacktrackDBClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -614,6 +635,70 @@ impl BacktrackDBClusterMessageSerializer {
     }
 }
 
+/// <p>This data type is used as a response element in the <code>DescribeDBClusterBacktracks</code> action.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BacktrackDBClusterResponse {
+    /// <p>Contains the backtrack identifier.</p>
+    pub backtrack_identifier: Option<String>,
+    /// <p>The timestamp of the time at which the backtrack was requested.</p>
+    pub backtrack_request_creation_time: Option<String>,
+    /// <p>The timestamp of the time to which the DB cluster was backtracked.</p>
+    pub backtrack_to: Option<String>,
+    /// <p>The timestamp of the time from which the DB cluster was backtracked.</p>
+    pub backtracked_from: Option<String>,
+    /// <p>Contains a user-supplied DB cluster identifier. This identifier is the unique key that identifies a DB cluster.</p>
+    pub db_cluster_identifier: Option<String>,
+    /// <p><p>The status of the backtrack. This property returns one of the following values:</p> <ul> <li> <p> <code>applying</code> - The backtrack is currently being applied to or rolled back from the DB cluster.</p> </li> <li> <p> <code>completed</code> - The backtrack has successfully been applied to or rolled back from the DB cluster.</p> </li> <li> <p> <code>failed</code> - An error occurred while the backtrack was applied to or rolled back from the DB cluster.</p> </li> <li> <p> <code>pending</code> - The backtrack is currently pending application to or rollback from the DB cluster.</p> </li> </ul></p>
+    pub status: Option<String>,
+}
+
+struct BacktrackDBClusterResponseDeserializer;
+impl BacktrackDBClusterResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<BacktrackDBClusterResponse, XmlParseError> {
+        deserialize_elements::<_, BacktrackDBClusterResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "BacktrackIdentifier" => {
+                        obj.backtrack_identifier = Some(StringDeserializer::deserialize(
+                            "BacktrackIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "BacktrackRequestCreationTime" => {
+                        obj.backtrack_request_creation_time = Some(
+                            TStampDeserializer::deserialize("BacktrackRequestCreationTime", stack)?,
+                        );
+                    }
+                    "BacktrackTo" => {
+                        obj.backtrack_to =
+                            Some(TStampDeserializer::deserialize("BacktrackTo", stack)?);
+                    }
+                    "BacktrackedFrom" => {
+                        obj.backtracked_from =
+                            Some(TStampDeserializer::deserialize("BacktrackedFrom", stack)?);
+                    }
+                    "DBClusterIdentifier" => {
+                        obj.db_cluster_identifier = Some(StringDeserializer::deserialize(
+                            "DBClusterIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "Status" => {
+                        obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(unused_variables)]
@@ -708,38 +793,6 @@ impl CertificateListDeserializer {
         })
     }
 }
-/// <p>Data returned by the <b>DescribeCertificates</b> action.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CertificateMessage {
-    /// <p>The list of <code>Certificate</code> objects for the AWS account.</p>
-    pub certificates: Option<Vec<Certificate>>,
-    /// <p> An optional pagination token provided by a previous <code>DescribeCertificates</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
-    pub marker: Option<String>,
-}
-
-struct CertificateMessageDeserializer;
-impl CertificateMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CertificateMessage, XmlParseError> {
-        deserialize_elements::<_, CertificateMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "Certificates" => {
-                    obj.certificates.get_or_insert(vec![]).extend(
-                        CertificateListDeserializer::deserialize("Certificates", stack)?,
-                    );
-                }
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 /// <p> This data type is used as a response element in the action <code>DescribeDBEngineVersions</code>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CharacterSet {
@@ -786,7 +839,11 @@ pub struct CloudwatchLogsExportConfiguration {
 /// Serialize `CloudwatchLogsExportConfiguration` contents to a `SignedRequest`.
 struct CloudwatchLogsExportConfigurationSerializer;
 impl CloudwatchLogsExportConfigurationSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CloudwatchLogsExportConfiguration) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CloudwatchLogsExportConfiguration,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -810,7 +867,7 @@ impl CloudwatchLogsExportConfigurationSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CopyDBClusterParameterGroupMessage {
+pub struct CopyDBClusterParameterGroupRequest {
     /// <p><p>The identifier or Amazon Resource Name (ARN) for the source DB cluster parameter group. For information about creating an ARN, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing"> Constructing an ARN for Amazon RDS</a> in the <i>Amazon Aurora User Guide</i>. </p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid DB cluster parameter group.</p> </li> <li> <p>If the source DB cluster parameter group is in the same AWS Region as the copy, specify a valid DB parameter group identifier, for example <code>my-db-cluster-param-group</code>, or a valid ARN.</p> </li> <li> <p>If the source DB parameter group is in a different AWS Region than the copy, specify a valid DB cluster parameter group ARN, for example <code>arn:aws:rds:us-east-1:123456789012:cluster-pg:custom-cluster-group1</code>.</p> </li> </ul></p>
     pub source_db_cluster_parameter_group_identifier: String,
     pub tags: Option<Vec<Tag>>,
@@ -820,10 +877,14 @@ pub struct CopyDBClusterParameterGroupMessage {
     pub target_db_cluster_parameter_group_identifier: String,
 }
 
-/// Serialize `CopyDBClusterParameterGroupMessage` contents to a `SignedRequest`.
-struct CopyDBClusterParameterGroupMessageSerializer;
-impl CopyDBClusterParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CopyDBClusterParameterGroupMessage) {
+/// Serialize `CopyDBClusterParameterGroupRequest` contents to a `SignedRequest`.
+struct CopyDBClusterParameterGroupRequestSerializer;
+impl CopyDBClusterParameterGroupRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CopyDBClusterParameterGroupRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -848,18 +909,18 @@ impl CopyDBClusterParameterGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CopyDBClusterParameterGroupResult {
+pub struct CopyDBClusterParameterGroupResponse {
     pub db_cluster_parameter_group: Option<DBClusterParameterGroup>,
 }
 
-struct CopyDBClusterParameterGroupResultDeserializer;
-impl CopyDBClusterParameterGroupResultDeserializer {
+struct CopyDBClusterParameterGroupResponseDeserializer;
+impl CopyDBClusterParameterGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CopyDBClusterParameterGroupResult, XmlParseError> {
-        deserialize_elements::<_, CopyDBClusterParameterGroupResult, _>(
+    ) -> Result<CopyDBClusterParameterGroupResponse, XmlParseError> {
+        deserialize_elements::<_, CopyDBClusterParameterGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -880,7 +941,7 @@ impl CopyDBClusterParameterGroupResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CopyDBClusterSnapshotMessage {
+pub struct CopyDBClusterSnapshotRequest {
     /// <p>A value that indicates whether to copy all tags from the source DB cluster snapshot to the target DB cluster snapshot. By default, tags are not copied.</p>
     pub copy_tags: Option<bool>,
     /// <p>The AWS AWS KMS key ID for an encrypted DB cluster snapshot. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key. </p> <p>If you copy an encrypted DB cluster snapshot from your AWS account, you can specify a value for <code>KmsKeyId</code> to encrypt the copy with a new KMS encryption key. If you don't specify a value for <code>KmsKeyId</code>, then the copy of the DB cluster snapshot is encrypted with the same KMS key as the source DB cluster snapshot. </p> <p>If you copy an encrypted DB cluster snapshot that is shared from another AWS account, then you must specify a value for <code>KmsKeyId</code>. </p> <p>To copy an encrypted DB cluster snapshot to another AWS Region, you must set <code>KmsKeyId</code> to the KMS key ID you want to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region. KMS encryption keys are specific to the AWS Region that they are created in, and you can't use encryption keys from one AWS Region in another AWS Region.</p> <p>If you copy an unencrypted DB cluster snapshot and specify a value for the <code>KmsKeyId</code> parameter, an error is returned.</p>
@@ -894,10 +955,10 @@ pub struct CopyDBClusterSnapshotMessage {
     pub target_db_cluster_snapshot_identifier: String,
 }
 
-/// Serialize `CopyDBClusterSnapshotMessage` contents to a `SignedRequest`.
-struct CopyDBClusterSnapshotMessageSerializer;
-impl CopyDBClusterSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CopyDBClusterSnapshotMessage) {
+/// Serialize `CopyDBClusterSnapshotRequest` contents to a `SignedRequest`.
+struct CopyDBClusterSnapshotRequestSerializer;
+impl CopyDBClusterSnapshotRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CopyDBClusterSnapshotRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -927,18 +988,18 @@ impl CopyDBClusterSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CopyDBClusterSnapshotResult {
+pub struct CopyDBClusterSnapshotResponse {
     pub db_cluster_snapshot: Option<DBClusterSnapshot>,
 }
 
-struct CopyDBClusterSnapshotResultDeserializer;
-impl CopyDBClusterSnapshotResultDeserializer {
+struct CopyDBClusterSnapshotResponseDeserializer;
+impl CopyDBClusterSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CopyDBClusterSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, CopyDBClusterSnapshotResult, _>(
+    ) -> Result<CopyDBClusterSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, CopyDBClusterSnapshotResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -958,7 +1019,7 @@ impl CopyDBClusterSnapshotResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CopyDBParameterGroupMessage {
+pub struct CopyDBParameterGroupRequest {
     /// <p><p> The identifier or ARN for the source DB parameter group. For information about creating an ARN, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing"> Constructing an ARN for Amazon RDS</a> in the <i>Amazon RDS User Guide</i>. </p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid DB parameter group.</p> </li> <li> <p>Must specify a valid DB parameter group identifier, for example <code>my-db-param-group</code>, or a valid ARN.</p> </li> </ul></p>
     pub source_db_parameter_group_identifier: String,
     pub tags: Option<Vec<Tag>>,
@@ -968,10 +1029,10 @@ pub struct CopyDBParameterGroupMessage {
     pub target_db_parameter_group_identifier: String,
 }
 
-/// Serialize `CopyDBParameterGroupMessage` contents to a `SignedRequest`.
-struct CopyDBParameterGroupMessageSerializer;
-impl CopyDBParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CopyDBParameterGroupMessage) {
+/// Serialize `CopyDBParameterGroupRequest` contents to a `SignedRequest`.
+struct CopyDBParameterGroupRequestSerializer;
+impl CopyDBParameterGroupRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CopyDBParameterGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -996,18 +1057,18 @@ impl CopyDBParameterGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CopyDBParameterGroupResult {
+pub struct CopyDBParameterGroupResponse {
     pub db_parameter_group: Option<DBParameterGroup>,
 }
 
-struct CopyDBParameterGroupResultDeserializer;
-impl CopyDBParameterGroupResultDeserializer {
+struct CopyDBParameterGroupResponseDeserializer;
+impl CopyDBParameterGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CopyDBParameterGroupResult, XmlParseError> {
-        deserialize_elements::<_, CopyDBParameterGroupResult, _>(
+    ) -> Result<CopyDBParameterGroupResponse, XmlParseError> {
+        deserialize_elements::<_, CopyDBParameterGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1027,7 +1088,7 @@ impl CopyDBParameterGroupResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CopyDBSnapshotMessage {
+pub struct CopyDBSnapshotRequest {
     /// <p>A value that indicates whether to copy all tags from the source DB snapshot to the target DB snapshot. By default, tags are not copied.</p>
     pub copy_tags: Option<bool>,
     /// <p>The AWS KMS key ID for an encrypted DB snapshot. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key. </p> <p>If you copy an encrypted DB snapshot from your AWS account, you can specify a value for this parameter to encrypt the copy with a new KMS encryption key. If you don't specify a value for this parameter, then the copy of the DB snapshot is encrypted with the same KMS key as the source DB snapshot. </p> <p>If you copy an encrypted DB snapshot that is shared from another AWS account, then you must specify a value for this parameter. </p> <p>If you specify this parameter when you copy an unencrypted snapshot, the copy is encrypted. </p> <p>If you copy an encrypted snapshot to a different AWS Region, then you must specify a KMS key for the destination AWS Region. KMS encryption keys are specific to the AWS Region that they are created in, and you can't use encryption keys from one AWS Region in another AWS Region. </p>
@@ -1043,10 +1104,10 @@ pub struct CopyDBSnapshotMessage {
     pub target_db_snapshot_identifier: String,
 }
 
-/// Serialize `CopyDBSnapshotMessage` contents to a `SignedRequest`.
-struct CopyDBSnapshotMessageSerializer;
-impl CopyDBSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CopyDBSnapshotMessage) {
+/// Serialize `CopyDBSnapshotRequest` contents to a `SignedRequest`.
+struct CopyDBSnapshotRequestSerializer;
+impl CopyDBSnapshotRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CopyDBSnapshotRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1079,18 +1140,18 @@ impl CopyDBSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CopyDBSnapshotResult {
+pub struct CopyDBSnapshotResponse {
     pub db_snapshot: Option<DBSnapshot>,
 }
 
-struct CopyDBSnapshotResultDeserializer;
-impl CopyDBSnapshotResultDeserializer {
+struct CopyDBSnapshotResponseDeserializer;
+impl CopyDBSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CopyDBSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, CopyDBSnapshotResult, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<CopyDBSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, CopyDBSnapshotResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBSnapshot" => {
                     obj.db_snapshot =
@@ -1104,7 +1165,7 @@ impl CopyDBSnapshotResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CopyOptionGroupMessage {
+pub struct CopyOptionGroupRequest {
     /// <p><p>The identifier or ARN for the source option group. For information about creating an ARN, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing"> Constructing an ARN for Amazon RDS</a> in the <i>Amazon RDS User Guide</i>. </p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid option group.</p> </li> <li> <p>If the source option group is in the same AWS Region as the copy, specify a valid option group identifier, for example <code>my-option-group</code>, or a valid ARN.</p> </li> <li> <p>If the source option group is in a different AWS Region than the copy, specify a valid option group ARN, for example <code>arn:aws:rds:us-west-2:123456789012:og:special-options</code>.</p> </li> </ul></p>
     pub source_option_group_identifier: String,
     pub tags: Option<Vec<Tag>>,
@@ -1114,10 +1175,10 @@ pub struct CopyOptionGroupMessage {
     pub target_option_group_identifier: String,
 }
 
-/// Serialize `CopyOptionGroupMessage` contents to a `SignedRequest`.
-struct CopyOptionGroupMessageSerializer;
-impl CopyOptionGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CopyOptionGroupMessage) {
+/// Serialize `CopyOptionGroupRequest` contents to a `SignedRequest`.
+struct CopyOptionGroupRequestSerializer;
+impl CopyOptionGroupRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CopyOptionGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1142,31 +1203,35 @@ impl CopyOptionGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CopyOptionGroupResult {
+pub struct CopyOptionGroupResponse {
     pub option_group: Option<OptionGroup>,
 }
 
-struct CopyOptionGroupResultDeserializer;
-impl CopyOptionGroupResultDeserializer {
+struct CopyOptionGroupResponseDeserializer;
+impl CopyOptionGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CopyOptionGroupResult, XmlParseError> {
-        deserialize_elements::<_, CopyOptionGroupResult, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "OptionGroup" => {
-                    obj.option_group =
-                        Some(OptionGroupDeserializer::deserialize("OptionGroup", stack)?);
+    ) -> Result<CopyOptionGroupResponse, XmlParseError> {
+        deserialize_elements::<_, CopyOptionGroupResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "OptionGroup" => {
+                        obj.option_group =
+                            Some(OptionGroupDeserializer::deserialize("OptionGroup", stack)?);
+                    }
+                    _ => skip_tree(stack),
                 }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBClusterEndpointMessage {
+pub struct CreateDBClusterEndpointRequest {
     /// <p>The identifier to use for the new endpoint. This parameter is stored as a lowercase string.</p>
     pub db_cluster_endpoint_identifier: String,
     /// <p>The DB cluster identifier of the DB cluster associated with the endpoint. This parameter is stored as a lowercase string.</p>
@@ -1179,10 +1244,14 @@ pub struct CreateDBClusterEndpointMessage {
     pub static_members: Option<Vec<String>>,
 }
 
-/// Serialize `CreateDBClusterEndpointMessage` contents to a `SignedRequest`.
-struct CreateDBClusterEndpointMessageSerializer;
-impl CreateDBClusterEndpointMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterEndpointMessage) {
+/// Serialize `CreateDBClusterEndpointRequest` contents to a `SignedRequest`.
+struct CreateDBClusterEndpointRequestSerializer;
+impl CreateDBClusterEndpointRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CreateDBClusterEndpointRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1214,9 +1283,176 @@ impl CreateDBClusterEndpointMessageSerializer {
     }
 }
 
+/// <p>This data type represents the information you need to connect to an Amazon Aurora DB cluster. This data type is used as a response element in the following actions:</p> <ul> <li> <p> <code>CreateDBClusterEndpoint</code> </p> </li> <li> <p> <code>DescribeDBClusterEndpoints</code> </p> </li> <li> <p> <code>ModifyDBClusterEndpoint</code> </p> </li> <li> <p> <code>DeleteDBClusterEndpoint</code> </p> </li> </ul> <p>For the data structure that represents Amazon RDS DB instance endpoints, see <code>Endpoint</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateDBClusterEndpointResponse {
+    /// <p>The type associated with a custom endpoint. One of: <code>READER</code>, <code>ANY</code>.</p>
+    pub custom_endpoint_type: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for the endpoint.</p>
+    pub db_cluster_endpoint_arn: Option<String>,
+    /// <p>The identifier associated with the endpoint. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_endpoint_identifier: Option<String>,
+    /// <p>A unique system-generated identifier for an endpoint. It remains the same for the whole life of the endpoint.</p>
+    pub db_cluster_endpoint_resource_identifier: Option<String>,
+    /// <p>The DB cluster identifier of the DB cluster associated with the endpoint. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_identifier: Option<String>,
+    /// <p>The DNS address of the endpoint.</p>
+    pub endpoint: Option<String>,
+    /// <p>The type of the endpoint. One of: <code>READER</code>, <code>WRITER</code>, <code>CUSTOM</code>.</p>
+    pub endpoint_type: Option<String>,
+    /// <p>List of DB instance identifiers that aren't part of the custom endpoint group. All other eligible instances are reachable through the custom endpoint. Only relevant if the list of static members is empty.</p>
+    pub excluded_members: Option<Vec<String>>,
+    /// <p>List of DB instance identifiers that are part of the custom endpoint group.</p>
+    pub static_members: Option<Vec<String>>,
+    /// <p>The current status of the endpoint. One of: <code>creating</code>, <code>available</code>, <code>deleting</code>, <code>modifying</code>.</p>
+    pub status: Option<String>,
+}
+
+struct CreateDBClusterEndpointResponseDeserializer;
+impl CreateDBClusterEndpointResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateDBClusterEndpointResponse, XmlParseError> {
+        deserialize_elements::<_, CreateDBClusterEndpointResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CustomEndpointType" => {
+                        obj.custom_endpoint_type = Some(StringDeserializer::deserialize(
+                            "CustomEndpointType",
+                            stack,
+                        )?);
+                    }
+                    "DBClusterEndpointArn" => {
+                        obj.db_cluster_endpoint_arn = Some(StringDeserializer::deserialize(
+                            "DBClusterEndpointArn",
+                            stack,
+                        )?);
+                    }
+                    "DBClusterEndpointIdentifier" => {
+                        obj.db_cluster_endpoint_identifier = Some(StringDeserializer::deserialize(
+                            "DBClusterEndpointIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "DBClusterEndpointResourceIdentifier" => {
+                        obj.db_cluster_endpoint_resource_identifier =
+                            Some(StringDeserializer::deserialize(
+                                "DBClusterEndpointResourceIdentifier",
+                                stack,
+                            )?);
+                    }
+                    "DBClusterIdentifier" => {
+                        obj.db_cluster_identifier = Some(StringDeserializer::deserialize(
+                            "DBClusterIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "Endpoint" => {
+                        obj.endpoint = Some(StringDeserializer::deserialize("Endpoint", stack)?);
+                    }
+                    "EndpointType" => {
+                        obj.endpoint_type =
+                            Some(StringDeserializer::deserialize("EndpointType", stack)?);
+                    }
+                    "ExcludedMembers" => {
+                        obj.excluded_members.get_or_insert(vec![]).extend(
+                            StringListDeserializer::deserialize("ExcludedMembers", stack)?,
+                        );
+                    }
+                    "StaticMembers" => {
+                        obj.static_members
+                            .get_or_insert(vec![])
+                            .extend(StringListDeserializer::deserialize("StaticMembers", stack)?);
+                    }
+                    "Status" => {
+                        obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBClusterMessage {
+pub struct CreateDBClusterParameterGroupRequest {
+    /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must match the name of an existing DB cluster parameter group.</p> </li> </ul> <note> <p>This value is stored as a lowercase string.</p> </note></p>
+    pub db_cluster_parameter_group_name: String,
+    /// <p>The DB cluster parameter group family name. A DB cluster parameter group can be associated with one and only one DB cluster parameter group family, and can be applied only to a DB cluster running a database engine and engine version compatible with that DB cluster parameter group family.</p> <p> <b>Aurora MySQL</b> </p> <p>Example: <code>aurora5.6</code>, <code>aurora-mysql5.7</code> </p> <p> <b>Aurora PostgreSQL</b> </p> <p>Example: <code>aurora-postgresql9.6</code> </p>
+    pub db_parameter_group_family: String,
+    /// <p>The description for the DB cluster parameter group.</p>
+    pub description: String,
+    /// <p>Tags to assign to the DB cluster parameter group.</p>
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// Serialize `CreateDBClusterParameterGroupRequest` contents to a `SignedRequest`.
+struct CreateDBClusterParameterGroupRequestSerializer;
+impl CreateDBClusterParameterGroupRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CreateDBClusterParameterGroupRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "DBClusterParameterGroupName"),
+            &obj.db_cluster_parameter_group_name,
+        );
+        params.put(
+            &format!("{}{}", prefix, "DBParameterGroupFamily"),
+            &obj.db_parameter_group_family,
+        );
+        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
+        if let Some(ref field_value) = obj.tags {
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateDBClusterParameterGroupResponse {
+    pub db_cluster_parameter_group: Option<DBClusterParameterGroup>,
+}
+
+struct CreateDBClusterParameterGroupResponseDeserializer;
+impl CreateDBClusterParameterGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateDBClusterParameterGroupResponse, XmlParseError> {
+        deserialize_elements::<_, CreateDBClusterParameterGroupResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBClusterParameterGroup" => {
+                        obj.db_cluster_parameter_group =
+                            Some(DBClusterParameterGroupDeserializer::deserialize(
+                                "DBClusterParameterGroup",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateDBClusterRequest {
     /// <p>A list of Availability Zones (AZs) where instances in the DB cluster can be created. For information on AWS Regions and Availability Zones, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Concepts.RegionsAndAvailabilityZones.html">Choosing the Regions and Availability Zones</a> in the <i>Amazon Aurora User Guide</i>. </p>
     pub availability_zones: Option<Vec<String>>,
     /// <p><p>The target backtrack window, in seconds. To disable backtracking, set this value to 0. </p> <p>Default: 0</p> <p>Constraints:</p> <ul> <li> <p>If specified, this value must be set to a number from 0 to 259,200 (72 hours).</p> </li> </ul></p>
@@ -1277,10 +1513,10 @@ pub struct CreateDBClusterMessage {
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-/// Serialize `CreateDBClusterMessage` contents to a `SignedRequest`.
-struct CreateDBClusterMessageSerializer;
-impl CreateDBClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterMessage) {
+/// Serialize `CreateDBClusterRequest` contents to a `SignedRequest`.
+struct CreateDBClusterRequestSerializer;
+impl CreateDBClusterRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateDBClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1412,66 +1648,26 @@ impl CreateDBClusterMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBClusterParameterGroupMessage {
-    /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must match the name of an existing DB cluster parameter group.</p> </li> </ul> <note> <p>This value is stored as a lowercase string.</p> </note></p>
-    pub db_cluster_parameter_group_name: String,
-    /// <p>The DB cluster parameter group family name. A DB cluster parameter group can be associated with one and only one DB cluster parameter group family, and can be applied only to a DB cluster running a database engine and engine version compatible with that DB cluster parameter group family.</p> <p> <b>Aurora MySQL</b> </p> <p>Example: <code>aurora5.6</code>, <code>aurora-mysql5.7</code> </p> <p> <b>Aurora PostgreSQL</b> </p> <p>Example: <code>aurora-postgresql9.6</code> </p>
-    pub db_parameter_group_family: String,
-    /// <p>The description for the DB cluster parameter group.</p>
-    pub description: String,
-    /// <p>Tags to assign to the DB cluster parameter group.</p>
-    pub tags: Option<Vec<Tag>>,
+pub struct CreateDBClusterResponse {
+    pub db_cluster: Option<DBCluster>,
 }
 
-/// Serialize `CreateDBClusterParameterGroupMessage` contents to a `SignedRequest`.
-struct CreateDBClusterParameterGroupMessageSerializer;
-impl CreateDBClusterParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterParameterGroupMessage) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        params.put(
-            &format!("{}{}", prefix, "DBClusterParameterGroupName"),
-            &obj.db_cluster_parameter_group_name,
-        );
-        params.put(
-            &format!("{}{}", prefix, "DBParameterGroupFamily"),
-            &obj.db_parameter_group_family,
-        );
-        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
-        if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
-        }
-    }
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBClusterParameterGroupResult {
-    pub db_cluster_parameter_group: Option<DBClusterParameterGroup>,
-}
-
-struct CreateDBClusterParameterGroupResultDeserializer;
-impl CreateDBClusterParameterGroupResultDeserializer {
+struct CreateDBClusterResponseDeserializer;
+impl CreateDBClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateDBClusterParameterGroupResult, XmlParseError> {
-        deserialize_elements::<_, CreateDBClusterParameterGroupResult, _>(
+    ) -> Result<CreateDBClusterResponse, XmlParseError> {
+        deserialize_elements::<_, CreateDBClusterResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
                 match name {
-                    "DBClusterParameterGroup" => {
-                        obj.db_cluster_parameter_group =
-                            Some(DBClusterParameterGroupDeserializer::deserialize(
-                                "DBClusterParameterGroup",
-                                stack,
-                            )?);
+                    "DBCluster" => {
+                        obj.db_cluster =
+                            Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -1480,32 +1676,9 @@ impl CreateDBClusterParameterGroupResultDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBClusterResult {
-    pub db_cluster: Option<DBCluster>,
-}
-
-struct CreateDBClusterResultDeserializer;
-impl CreateDBClusterResultDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CreateDBClusterResult, XmlParseError> {
-        deserialize_elements::<_, CreateDBClusterResult, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBCluster" => {
-                    obj.db_cluster = Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBClusterSnapshotMessage {
+pub struct CreateDBClusterSnapshotRequest {
     /// <p>The identifier of the DB cluster to create a snapshot for. This parameter is not case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBCluster.</p> </li> </ul> <p>Example: <code>my-cluster1</code> </p>
     pub db_cluster_identifier: String,
     /// <p>The identifier of the DB cluster snapshot. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Can't end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>my-cluster1-snapshot1</code> </p>
@@ -1514,10 +1687,14 @@ pub struct CreateDBClusterSnapshotMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateDBClusterSnapshotMessage` contents to a `SignedRequest`.
-struct CreateDBClusterSnapshotMessageSerializer;
-impl CreateDBClusterSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterSnapshotMessage) {
+/// Serialize `CreateDBClusterSnapshotRequest` contents to a `SignedRequest`.
+struct CreateDBClusterSnapshotRequestSerializer;
+impl CreateDBClusterSnapshotRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CreateDBClusterSnapshotRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1538,18 +1715,18 @@ impl CreateDBClusterSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBClusterSnapshotResult {
+pub struct CreateDBClusterSnapshotResponse {
     pub db_cluster_snapshot: Option<DBClusterSnapshot>,
 }
 
-struct CreateDBClusterSnapshotResultDeserializer;
-impl CreateDBClusterSnapshotResultDeserializer {
+struct CreateDBClusterSnapshotResponseDeserializer;
+impl CreateDBClusterSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateDBClusterSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, CreateDBClusterSnapshotResult, _>(
+    ) -> Result<CreateDBClusterSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, CreateDBClusterSnapshotResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1567,9 +1744,223 @@ impl CreateDBClusterSnapshotResultDeserializer {
         )
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateDBInstanceReadReplicaRequest {
+    /// <p>A value that indicates whether minor engine upgrades are applied automatically to the Read Replica during the maintenance window.</p> <p>Default: Inherits from the source DB instance</p>
+    pub auto_minor_version_upgrade: Option<bool>,
+    /// <p>The Availability Zone (AZ) where the Read Replica will be created.</p> <p>Default: A random, system-chosen Availability Zone in the endpoint's AWS Region.</p> <p> Example: <code>us-east-1d</code> </p>
+    pub availability_zone: Option<String>,
+    /// <p>A value that indicates whether to copy all tags from the Read Replica to snapshots of the Read Replica. By default, tags are not copied.</p>
+    pub copy_tags_to_snapshot: Option<bool>,
+    /// <p>The compute and memory capacity of the Read Replica, for example, <code>db.m4.large</code>. Not all DB instance classes are available in all AWS Regions, or for all database engines. For the full list of DB instance classes, and availability for your engine, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html">DB Instance Class</a> in the <i>Amazon RDS User Guide.</i> </p> <p>Default: Inherits from the source DB instance.</p>
+    pub db_instance_class: Option<String>,
+    /// <p>The DB instance identifier of the Read Replica. This identifier is the unique key that identifies a DB instance. This parameter is stored as a lowercase string.</p>
+    pub db_instance_identifier: String,
+    /// <p>Specifies a DB subnet group for the DB instance. The new DB instance is created in the VPC associated with the DB subnet group. If no DB subnet group is specified, then the new DB instance is not created in a VPC.</p> <p>Constraints:</p> <ul> <li> <p>Can only be specified if the source DB instance identifier specifies a DB instance in another AWS Region.</p> </li> <li> <p>If supplied, must match the name of an existing DBSubnetGroup.</p> </li> <li> <p>The specified DB subnet group must be in the same AWS Region in which the operation is running.</p> </li> <li> <p>All Read Replicas in one AWS Region that are created from the same source DB instance must either:&gt;</p> <ul> <li> <p>Specify DB subnet groups from the same VPC. All these Read Replicas are created in the same VPC.</p> </li> <li> <p>Not specify a DB subnet group. All these Read Replicas are created outside of any VPC.</p> </li> </ul> </li> </ul> <p>Example: <code>mySubnetgroup</code> </p>
+    pub db_subnet_group_name: Option<String>,
+    /// <p>A value that indicates whether the DB instance has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html"> Deleting a DB Instance</a>. </p>
+    pub deletion_protection: Option<bool>,
+    /// <p>The list of logs that the new DB instance is to export to CloudWatch Logs. The values in the list depend on the DB engine being used. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch">Publishing Database Logs to Amazon CloudWatch Logs </a> in the <i>Amazon RDS User Guide</i>.</p>
+    pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
+    /// <p><p>A value that indicates whether to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts. By default, mapping is disabled.</p> <p>You can enable IAM database authentication for the following database engines</p> <ul> <li> <p>For MySQL 5.6, minor version 5.6.34 or higher</p> </li> <li> <p>For MySQL 5.7, minor version 5.7.16 or higher</p> </li> <li> <p>Aurora MySQL 5.6 or higher</p> </li> </ul></p>
+    pub enable_iam_database_authentication: Option<bool>,
+    /// <p>A value that indicates whether to enable Performance Insights for the Read Replica. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html">Using Amazon Performance Insights</a> in the <i>Amazon RDS User Guide</i>. </p>
+    pub enable_performance_insights: Option<bool>,
+    /// <p>The amount of Provisioned IOPS (input/output operations per second) to be initially allocated for the DB instance.</p>
+    pub iops: Option<i64>,
+    /// <p>The AWS KMS key ID for an encrypted Read Replica. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key. </p> <p>If you create an encrypted Read Replica in the same AWS Region as the source DB instance, then you do not have to specify a value for this parameter. The Read Replica is encrypted with the same KMS key as the source DB instance. </p> <p>If you create an encrypted Read Replica in a different AWS Region, then you must specify a KMS key for the destination AWS Region. KMS encryption keys are specific to the AWS Region that they are created in, and you can't use encryption keys from one AWS Region in another AWS Region. </p> <p>You can't create an encrypted Read Replica from an unencrypted DB instance. </p>
+    pub kms_key_id: Option<String>,
+    /// <p>The interval, in seconds, between points when Enhanced Monitoring metrics are collected for the Read Replica. To disable collecting Enhanced Monitoring metrics, specify 0. The default is 0.</p> <p>If <code>MonitoringRoleArn</code> is specified, then you must also set <code>MonitoringInterval</code> to a value other than 0.</p> <p>Valid Values: <code>0, 1, 5, 10, 15, 30, 60</code> </p>
+    pub monitoring_interval: Option<i64>,
+    /// <p>The ARN for the IAM role that permits RDS to send enhanced monitoring metrics to Amazon CloudWatch Logs. For example, <code>arn:aws:iam:123456789012:role/emaccess</code>. For information on creating a monitoring role, go to <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Monitoring.html#USER_Monitoring.OS.IAMRole">To create an IAM role for Amazon RDS Enhanced Monitoring</a> in the <i>Amazon RDS User Guide</i>.</p> <p>If <code>MonitoringInterval</code> is set to a value other than 0, then you must supply a <code>MonitoringRoleArn</code> value.</p>
+    pub monitoring_role_arn: Option<String>,
+    /// <p>A value that indicates whether the Read Replica is in a Multi-AZ deployment. </p> <p>You can create a Read Replica as a Multi-AZ DB instance. RDS creates a standby of your replica in another Availability Zone for failover support for the replica. Creating your Read Replica as a Multi-AZ DB instance is independent of whether the source database is a Multi-AZ DB instance. </p>
+    pub multi_az: Option<bool>,
+    /// <p>The option group the DB instance is associated with. If omitted, the option group associated with the source instance is used.</p>
+    pub option_group_name: Option<String>,
+    /// <p>The AWS KMS key identifier for encryption of Performance Insights data. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key.</p> <p>If you do not specify a value for <code>PerformanceInsightsKMSKeyId</code>, then Amazon RDS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
+    pub performance_insights_kms_key_id: Option<String>,
+    /// <p>The amount of time, in days, to retain Performance Insights data. Valid values are 7 or 731 (2 years). </p>
+    pub performance_insights_retention_period: Option<i64>,
+    /// <p>The port number that the DB instance uses for connections.</p> <p>Default: Inherits from the source DB instance</p> <p>Valid Values: <code>1150-65535</code> </p>
+    pub port: Option<i64>,
+    /// <p>The URL that contains a Signature Version 4 signed request for the <code>CreateDBInstanceReadReplica</code> API action in the source AWS Region that contains the source DB instance. </p> <p>You must specify this parameter when you create an encrypted Read Replica from another AWS Region by using the Amazon RDS API. You can specify the <code>--source-region</code> option instead of this parameter when you create an encrypted Read Replica from another AWS Region by using the AWS CLI. </p> <p>The presigned URL must be a valid request for the <code>CreateDBInstanceReadReplica</code> API action that can be executed in the source AWS Region that contains the encrypted source DB instance. The presigned URL request must contain the following parameter values: </p> <ul> <li> <p> <code>DestinationRegion</code> - The AWS Region that the encrypted Read Replica is created in. This AWS Region is the same one where the <code>CreateDBInstanceReadReplica</code> action is called that contains this presigned URL. </p> <p>For example, if you create an encrypted DB instance in the us-west-1 AWS Region, from a source DB instance in the us-east-2 AWS Region, then you call the <code>CreateDBInstanceReadReplica</code> action in the us-east-1 AWS Region and provide a presigned URL that contains a call to the <code>CreateDBInstanceReadReplica</code> action in the us-west-2 AWS Region. For this example, the <code>DestinationRegion</code> in the presigned URL must be set to the us-east-1 AWS Region. </p> </li> <li> <p> <code>KmsKeyId</code> - The AWS KMS key identifier for the key to use to encrypt the Read Replica in the destination AWS Region. This is the same identifier for both the <code>CreateDBInstanceReadReplica</code> action that is called in the destination AWS Region, and the action contained in the presigned URL. </p> </li> <li> <p> <code>SourceDBInstanceIdentifier</code> - The DB instance identifier for the encrypted DB instance to be replicated. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are creating an encrypted Read Replica from a DB instance in the us-west-2 AWS Region, then your <code>SourceDBInstanceIdentifier</code> looks like the following example: <code>arn:aws:rds:us-west-2:123456789012:instance:mysql-instance1-20161115</code>. </p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html">Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4 Signing Process</a>. </p>
+    pub pre_signed_url: Option<String>,
+    /// <p>The number of CPU cores and the number of threads per core for the DB instance class of the DB instance.</p>
+    pub processor_features: Option<Vec<ProcessorFeature>>,
+    /// <p>A value that indicates whether the DB instance is publicly accessible. When the DB instance is publicly accessible, it is an Internet-facing instance with a publicly resolvable DNS name, which resolves to a public IP address. When the DB instance is not publicly accessible, it is an internal instance with a DNS name that resolves to a private IP address. For more information, see <a>CreateDBInstance</a>.</p>
+    pub publicly_accessible: Option<bool>,
+    /// <p><p>The identifier of the DB instance that will act as the source for the Read Replica. Each DB instance can have up to five Read Replicas.</p> <p>Constraints:</p> <ul> <li> <p>Must be the identifier of an existing MySQL, MariaDB, Oracle, or PostgreSQL DB instance.</p> </li> <li> <p>Can specify a DB instance that is a MySQL Read Replica only if the source is running MySQL 5.6 or later.</p> </li> <li> <p>For the limitations of Oracle Read Replicas, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-read-replicas.html">Read Replica Limitations with Oracle</a> in the <i>Amazon RDS User Guide</i>.</p> </li> <li> <p>Can specify a DB instance that is a PostgreSQL DB instance only if the source is running PostgreSQL 9.3.5 or later (9.4.7 and higher for cross-region replication).</p> </li> <li> <p>The specified DB instance must have automatic backups enabled, its backup retention period must be greater than 0.</p> </li> <li> <p>If the source DB instance is in the same AWS Region as the Read Replica, specify a valid DB instance identifier.</p> </li> <li> <p>If the source DB instance is in a different AWS Region than the Read Replica, specify a valid DB instance ARN. For more information, go to <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing"> Constructing an ARN for Amazon RDS</a> in the <i>Amazon RDS User Guide</i>.</p> </li> </ul></p>
+    pub source_db_instance_identifier: String,
+    /// <p>Specifies the storage type to be associated with the Read Replica.</p> <p> Valid values: <code>standard | gp2 | io1</code> </p> <p> If you specify <code>io1</code>, you must also include a value for the <code>Iops</code> parameter. </p> <p> Default: <code>io1</code> if the <code>Iops</code> parameter is specified, otherwise <code>gp2</code> </p>
+    pub storage_type: Option<String>,
+    pub tags: Option<Vec<Tag>>,
+    /// <p>A value that indicates whether the DB instance class of the DB instance uses its default processor features.</p>
+    pub use_default_processor_features: Option<bool>,
+    /// <p> A list of EC2 VPC security groups to associate with the Read Replica. </p> <p> Default: The default EC2 VPC security group for the DB subnet group's VPC. </p>
+    pub vpc_security_group_ids: Option<Vec<String>>,
+}
+
+/// Serialize `CreateDBInstanceReadReplicaRequest` contents to a `SignedRequest`.
+struct CreateDBInstanceReadReplicaRequestSerializer;
+impl CreateDBInstanceReadReplicaRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CreateDBInstanceReadReplicaRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.auto_minor_version_upgrade {
+            params.put(
+                &format!("{}{}", prefix, "AutoMinorVersionUpgrade"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.availability_zone {
+            params.put(&format!("{}{}", prefix, "AvailabilityZone"), &field_value);
+        }
+        if let Some(ref field_value) = obj.copy_tags_to_snapshot {
+            params.put(&format!("{}{}", prefix, "CopyTagsToSnapshot"), &field_value);
+        }
+        if let Some(ref field_value) = obj.db_instance_class {
+            params.put(&format!("{}{}", prefix, "DBInstanceClass"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "DBInstanceIdentifier"),
+            &obj.db_instance_identifier,
+        );
+        if let Some(ref field_value) = obj.db_subnet_group_name {
+            params.put(&format!("{}{}", prefix, "DBSubnetGroupName"), &field_value);
+        }
+        if let Some(ref field_value) = obj.deletion_protection {
+            params.put(&format!("{}{}", prefix, "DeletionProtection"), &field_value);
+        }
+        if let Some(ref field_value) = obj.enable_cloudwatch_logs_exports {
+            LogTypeListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "EnableCloudwatchLogsExports"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.enable_iam_database_authentication {
+            params.put(
+                &format!("{}{}", prefix, "EnableIAMDatabaseAuthentication"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.enable_performance_insights {
+            params.put(
+                &format!("{}{}", prefix, "EnablePerformanceInsights"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.iops {
+            params.put(&format!("{}{}", prefix, "Iops"), &field_value);
+        }
+        if let Some(ref field_value) = obj.kms_key_id {
+            params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
+        }
+        if let Some(ref field_value) = obj.monitoring_interval {
+            params.put(&format!("{}{}", prefix, "MonitoringInterval"), &field_value);
+        }
+        if let Some(ref field_value) = obj.monitoring_role_arn {
+            params.put(&format!("{}{}", prefix, "MonitoringRoleArn"), &field_value);
+        }
+        if let Some(ref field_value) = obj.multi_az {
+            params.put(&format!("{}{}", prefix, "MultiAZ"), &field_value);
+        }
+        if let Some(ref field_value) = obj.option_group_name {
+            params.put(&format!("{}{}", prefix, "OptionGroupName"), &field_value);
+        }
+        if let Some(ref field_value) = obj.performance_insights_kms_key_id {
+            params.put(
+                &format!("{}{}", prefix, "PerformanceInsightsKMSKeyId"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.performance_insights_retention_period {
+            params.put(
+                &format!("{}{}", prefix, "PerformanceInsightsRetentionPeriod"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.port {
+            params.put(&format!("{}{}", prefix, "Port"), &field_value);
+        }
+        if let Some(ref field_value) = obj.pre_signed_url {
+            params.put(&format!("{}{}", prefix, "PreSignedUrl"), &field_value);
+        }
+        if let Some(ref field_value) = obj.processor_features {
+            ProcessorFeatureListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ProcessorFeature"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.publicly_accessible {
+            params.put(&format!("{}{}", prefix, "PubliclyAccessible"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "SourceDBInstanceIdentifier"),
+            &obj.source_db_instance_identifier,
+        );
+        if let Some(ref field_value) = obj.storage_type {
+            params.put(&format!("{}{}", prefix, "StorageType"), &field_value);
+        }
+        if let Some(ref field_value) = obj.tags {
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
+        }
+        if let Some(ref field_value) = obj.use_default_processor_features {
+            params.put(
+                &format!("{}{}", prefix, "UseDefaultProcessorFeatures"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.vpc_security_group_ids {
+            VpcSecurityGroupIdListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
+                field_value,
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateDBInstanceReadReplicaResponse {
+    pub db_instance: Option<DBInstance>,
+}
+
+struct CreateDBInstanceReadReplicaResponseDeserializer;
+impl CreateDBInstanceReadReplicaResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateDBInstanceReadReplicaResponse, XmlParseError> {
+        deserialize_elements::<_, CreateDBInstanceReadReplicaResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBInstance" => {
+                        obj.db_instance =
+                            Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBInstanceMessage {
+pub struct CreateDBInstanceRequest {
     /// <p><p>The amount of storage (in gibibytes) to allocate for the DB instance.</p> <p>Type: Integer</p> <p> <b>Amazon Aurora</b> </p> <p>Not applicable. Aurora cluster volumes automatically grow as the amount of data in your database increases, though you are only charged for the space that you use in an Aurora cluster volume.</p> <p> <b>MySQL</b> </p> <p>Constraints to the amount of storage for each storage type are the following: </p> <ul> <li> <p>General Purpose (SSD) storage (gp2): Must be an integer from 20 to 65536.</p> </li> <li> <p>Provisioned IOPS storage (io1): Must be an integer from 100 to 65536.</p> </li> <li> <p>Magnetic storage (standard): Must be an integer from 5 to 3072.</p> </li> </ul> <p> <b>MariaDB</b> </p> <p>Constraints to the amount of storage for each storage type are the following: </p> <ul> <li> <p>General Purpose (SSD) storage (gp2): Must be an integer from 20 to 65536.</p> </li> <li> <p>Provisioned IOPS storage (io1): Must be an integer from 100 to 65536.</p> </li> <li> <p>Magnetic storage (standard): Must be an integer from 5 to 3072.</p> </li> </ul> <p> <b>PostgreSQL</b> </p> <p>Constraints to the amount of storage for each storage type are the following: </p> <ul> <li> <p>General Purpose (SSD) storage (gp2): Must be an integer from 20 to 65536.</p> </li> <li> <p>Provisioned IOPS storage (io1): Must be an integer from 100 to 65536.</p> </li> <li> <p>Magnetic storage (standard): Must be an integer from 5 to 3072.</p> </li> </ul> <p> <b>Oracle</b> </p> <p>Constraints to the amount of storage for each storage type are the following: </p> <ul> <li> <p>General Purpose (SSD) storage (gp2): Must be an integer from 20 to 65536.</p> </li> <li> <p>Provisioned IOPS storage (io1): Must be an integer from 100 to 65536.</p> </li> <li> <p>Magnetic storage (standard): Must be an integer from 10 to 3072.</p> </li> </ul> <p> <b>SQL Server</b> </p> <p>Constraints to the amount of storage for each storage type are the following: </p> <ul> <li> <p>General Purpose (SSD) storage (gp2):</p> <ul> <li> <p>Enterprise and Standard editions: Must be an integer from 200 to 16384.</p> </li> <li> <p>Web and Express editions: Must be an integer from 20 to 16384.</p> </li> </ul> </li> <li> <p>Provisioned IOPS storage (io1):</p> <ul> <li> <p>Enterprise and Standard editions: Must be an integer from 200 to 16384.</p> </li> <li> <p>Web and Express editions: Must be an integer from 100 to 16384.</p> </li> </ul> </li> <li> <p>Magnetic storage (standard):</p> <ul> <li> <p>Enterprise and Standard editions: Must be an integer from 200 to 1024.</p> </li> <li> <p>Web and Express editions: Must be an integer from 20 to 1024.</p> </li> </ul> </li> </ul></p>
     pub allocated_storage: Option<i64>,
     /// <p>A value that indicates whether minor engine upgrades are applied automatically to the DB instance during the maintenance window. By default, minor engine upgrades are applied automatically.</p>
@@ -1662,10 +2053,10 @@ pub struct CreateDBInstanceMessage {
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-/// Serialize `CreateDBInstanceMessage` contents to a `SignedRequest`.
-struct CreateDBInstanceMessageSerializer;
-impl CreateDBInstanceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBInstanceMessage) {
+/// Serialize `CreateDBInstanceRequest` contents to a `SignedRequest`.
+struct CreateDBInstanceRequestSerializer;
+impl CreateDBInstanceRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateDBInstanceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1859,200 +2250,18 @@ impl CreateDBInstanceMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBInstanceReadReplicaMessage {
-    /// <p>A value that indicates whether minor engine upgrades are applied automatically to the Read Replica during the maintenance window.</p> <p>Default: Inherits from the source DB instance</p>
-    pub auto_minor_version_upgrade: Option<bool>,
-    /// <p>The Availability Zone (AZ) where the Read Replica will be created.</p> <p>Default: A random, system-chosen Availability Zone in the endpoint's AWS Region.</p> <p> Example: <code>us-east-1d</code> </p>
-    pub availability_zone: Option<String>,
-    /// <p>A value that indicates whether to copy all tags from the Read Replica to snapshots of the Read Replica. By default, tags are not copied.</p>
-    pub copy_tags_to_snapshot: Option<bool>,
-    /// <p>The compute and memory capacity of the Read Replica, for example, <code>db.m4.large</code>. Not all DB instance classes are available in all AWS Regions, or for all database engines. For the full list of DB instance classes, and availability for your engine, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html">DB Instance Class</a> in the <i>Amazon RDS User Guide.</i> </p> <p>Default: Inherits from the source DB instance.</p>
-    pub db_instance_class: Option<String>,
-    /// <p>The DB instance identifier of the Read Replica. This identifier is the unique key that identifies a DB instance. This parameter is stored as a lowercase string.</p>
-    pub db_instance_identifier: String,
-    /// <p>Specifies a DB subnet group for the DB instance. The new DB instance is created in the VPC associated with the DB subnet group. If no DB subnet group is specified, then the new DB instance is not created in a VPC.</p> <p>Constraints:</p> <ul> <li> <p>Can only be specified if the source DB instance identifier specifies a DB instance in another AWS Region.</p> </li> <li> <p>If supplied, must match the name of an existing DBSubnetGroup.</p> </li> <li> <p>The specified DB subnet group must be in the same AWS Region in which the operation is running.</p> </li> <li> <p>All Read Replicas in one AWS Region that are created from the same source DB instance must either:&gt;</p> <ul> <li> <p>Specify DB subnet groups from the same VPC. All these Read Replicas are created in the same VPC.</p> </li> <li> <p>Not specify a DB subnet group. All these Read Replicas are created outside of any VPC.</p> </li> </ul> </li> </ul> <p>Example: <code>mySubnetgroup</code> </p>
-    pub db_subnet_group_name: Option<String>,
-    /// <p>A value that indicates whether the DB instance has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html"> Deleting a DB Instance</a>. </p>
-    pub deletion_protection: Option<bool>,
-    /// <p>The list of logs that the new DB instance is to export to CloudWatch Logs. The values in the list depend on the DB engine being used. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch">Publishing Database Logs to Amazon CloudWatch Logs </a> in the <i>Amazon RDS User Guide</i>.</p>
-    pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
-    /// <p><p>A value that indicates whether to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts. By default, mapping is disabled.</p> <p>You can enable IAM database authentication for the following database engines</p> <ul> <li> <p>For MySQL 5.6, minor version 5.6.34 or higher</p> </li> <li> <p>For MySQL 5.7, minor version 5.7.16 or higher</p> </li> <li> <p>Aurora MySQL 5.6 or higher</p> </li> </ul></p>
-    pub enable_iam_database_authentication: Option<bool>,
-    /// <p>A value that indicates whether to enable Performance Insights for the Read Replica. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html">Using Amazon Performance Insights</a> in the <i>Amazon RDS User Guide</i>. </p>
-    pub enable_performance_insights: Option<bool>,
-    /// <p>The amount of Provisioned IOPS (input/output operations per second) to be initially allocated for the DB instance.</p>
-    pub iops: Option<i64>,
-    /// <p>The AWS KMS key ID for an encrypted Read Replica. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key. </p> <p>If you create an encrypted Read Replica in the same AWS Region as the source DB instance, then you do not have to specify a value for this parameter. The Read Replica is encrypted with the same KMS key as the source DB instance. </p> <p>If you create an encrypted Read Replica in a different AWS Region, then you must specify a KMS key for the destination AWS Region. KMS encryption keys are specific to the AWS Region that they are created in, and you can't use encryption keys from one AWS Region in another AWS Region. </p> <p>You can't create an encrypted Read Replica from an unencrypted DB instance. </p>
-    pub kms_key_id: Option<String>,
-    /// <p>The interval, in seconds, between points when Enhanced Monitoring metrics are collected for the Read Replica. To disable collecting Enhanced Monitoring metrics, specify 0. The default is 0.</p> <p>If <code>MonitoringRoleArn</code> is specified, then you must also set <code>MonitoringInterval</code> to a value other than 0.</p> <p>Valid Values: <code>0, 1, 5, 10, 15, 30, 60</code> </p>
-    pub monitoring_interval: Option<i64>,
-    /// <p>The ARN for the IAM role that permits RDS to send enhanced monitoring metrics to Amazon CloudWatch Logs. For example, <code>arn:aws:iam:123456789012:role/emaccess</code>. For information on creating a monitoring role, go to <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Monitoring.html#USER_Monitoring.OS.IAMRole">To create an IAM role for Amazon RDS Enhanced Monitoring</a> in the <i>Amazon RDS User Guide</i>.</p> <p>If <code>MonitoringInterval</code> is set to a value other than 0, then you must supply a <code>MonitoringRoleArn</code> value.</p>
-    pub monitoring_role_arn: Option<String>,
-    /// <p>A value that indicates whether the Read Replica is in a Multi-AZ deployment. </p> <p>You can create a Read Replica as a Multi-AZ DB instance. RDS creates a standby of your replica in another Availability Zone for failover support for the replica. Creating your Read Replica as a Multi-AZ DB instance is independent of whether the source database is a Multi-AZ DB instance. </p>
-    pub multi_az: Option<bool>,
-    /// <p>The option group the DB instance is associated with. If omitted, the option group associated with the source instance is used.</p>
-    pub option_group_name: Option<String>,
-    /// <p>The AWS KMS key identifier for encryption of Performance Insights data. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key.</p> <p>If you do not specify a value for <code>PerformanceInsightsKMSKeyId</code>, then Amazon RDS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
-    pub performance_insights_kms_key_id: Option<String>,
-    /// <p>The amount of time, in days, to retain Performance Insights data. Valid values are 7 or 731 (2 years). </p>
-    pub performance_insights_retention_period: Option<i64>,
-    /// <p>The port number that the DB instance uses for connections.</p> <p>Default: Inherits from the source DB instance</p> <p>Valid Values: <code>1150-65535</code> </p>
-    pub port: Option<i64>,
-    /// <p>The URL that contains a Signature Version 4 signed request for the <code>CreateDBInstanceReadReplica</code> API action in the source AWS Region that contains the source DB instance. </p> <p>You must specify this parameter when you create an encrypted Read Replica from another AWS Region by using the Amazon RDS API. You can specify the <code>--source-region</code> option instead of this parameter when you create an encrypted Read Replica from another AWS Region by using the AWS CLI. </p> <p>The presigned URL must be a valid request for the <code>CreateDBInstanceReadReplica</code> API action that can be executed in the source AWS Region that contains the encrypted source DB instance. The presigned URL request must contain the following parameter values: </p> <ul> <li> <p> <code>DestinationRegion</code> - The AWS Region that the encrypted Read Replica is created in. This AWS Region is the same one where the <code>CreateDBInstanceReadReplica</code> action is called that contains this presigned URL. </p> <p>For example, if you create an encrypted DB instance in the us-west-1 AWS Region, from a source DB instance in the us-east-2 AWS Region, then you call the <code>CreateDBInstanceReadReplica</code> action in the us-east-1 AWS Region and provide a presigned URL that contains a call to the <code>CreateDBInstanceReadReplica</code> action in the us-west-2 AWS Region. For this example, the <code>DestinationRegion</code> in the presigned URL must be set to the us-east-1 AWS Region. </p> </li> <li> <p> <code>KmsKeyId</code> - The AWS KMS key identifier for the key to use to encrypt the Read Replica in the destination AWS Region. This is the same identifier for both the <code>CreateDBInstanceReadReplica</code> action that is called in the destination AWS Region, and the action contained in the presigned URL. </p> </li> <li> <p> <code>SourceDBInstanceIdentifier</code> - The DB instance identifier for the encrypted DB instance to be replicated. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are creating an encrypted Read Replica from a DB instance in the us-west-2 AWS Region, then your <code>SourceDBInstanceIdentifier</code> looks like the following example: <code>arn:aws:rds:us-west-2:123456789012:instance:mysql-instance1-20161115</code>. </p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html">Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4 Signing Process</a>. </p>
-    pub pre_signed_url: Option<String>,
-    /// <p>The number of CPU cores and the number of threads per core for the DB instance class of the DB instance.</p>
-    pub processor_features: Option<Vec<ProcessorFeature>>,
-    /// <p>A value that indicates whether the DB instance is publicly accessible. When the DB instance is publicly accessible, it is an Internet-facing instance with a publicly resolvable DNS name, which resolves to a public IP address. When the DB instance is not publicly accessible, it is an internal instance with a DNS name that resolves to a private IP address. For more information, see <a>CreateDBInstance</a>.</p>
-    pub publicly_accessible: Option<bool>,
-    /// <p><p>The identifier of the DB instance that will act as the source for the Read Replica. Each DB instance can have up to five Read Replicas.</p> <p>Constraints:</p> <ul> <li> <p>Must be the identifier of an existing MySQL, MariaDB, Oracle, or PostgreSQL DB instance.</p> </li> <li> <p>Can specify a DB instance that is a MySQL Read Replica only if the source is running MySQL 5.6 or later.</p> </li> <li> <p>For the limitations of Oracle Read Replicas, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-read-replicas.html">Read Replica Limitations with Oracle</a> in the <i>Amazon RDS User Guide</i>.</p> </li> <li> <p>Can specify a DB instance that is a PostgreSQL DB instance only if the source is running PostgreSQL 9.3.5 or later (9.4.7 and higher for cross-region replication).</p> </li> <li> <p>The specified DB instance must have automatic backups enabled, its backup retention period must be greater than 0.</p> </li> <li> <p>If the source DB instance is in the same AWS Region as the Read Replica, specify a valid DB instance identifier.</p> </li> <li> <p>If the source DB instance is in a different AWS Region than the Read Replica, specify a valid DB instance ARN. For more information, go to <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing"> Constructing an ARN for Amazon RDS</a> in the <i>Amazon RDS User Guide</i>.</p> </li> </ul></p>
-    pub source_db_instance_identifier: String,
-    /// <p>Specifies the storage type to be associated with the Read Replica.</p> <p> Valid values: <code>standard | gp2 | io1</code> </p> <p> If you specify <code>io1</code>, you must also include a value for the <code>Iops</code> parameter. </p> <p> Default: <code>io1</code> if the <code>Iops</code> parameter is specified, otherwise <code>gp2</code> </p>
-    pub storage_type: Option<String>,
-    pub tags: Option<Vec<Tag>>,
-    /// <p>A value that indicates whether the DB instance class of the DB instance uses its default processor features.</p>
-    pub use_default_processor_features: Option<bool>,
-    /// <p> A list of EC2 VPC security groups to associate with the Read Replica. </p> <p> Default: The default EC2 VPC security group for the DB subnet group's VPC. </p>
-    pub vpc_security_group_ids: Option<Vec<String>>,
-}
-
-/// Serialize `CreateDBInstanceReadReplicaMessage` contents to a `SignedRequest`.
-struct CreateDBInstanceReadReplicaMessageSerializer;
-impl CreateDBInstanceReadReplicaMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBInstanceReadReplicaMessage) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        if let Some(ref field_value) = obj.auto_minor_version_upgrade {
-            params.put(
-                &format!("{}{}", prefix, "AutoMinorVersionUpgrade"),
-                &field_value,
-            );
-        }
-        if let Some(ref field_value) = obj.availability_zone {
-            params.put(&format!("{}{}", prefix, "AvailabilityZone"), &field_value);
-        }
-        if let Some(ref field_value) = obj.copy_tags_to_snapshot {
-            params.put(&format!("{}{}", prefix, "CopyTagsToSnapshot"), &field_value);
-        }
-        if let Some(ref field_value) = obj.db_instance_class {
-            params.put(&format!("{}{}", prefix, "DBInstanceClass"), &field_value);
-        }
-        params.put(
-            &format!("{}{}", prefix, "DBInstanceIdentifier"),
-            &obj.db_instance_identifier,
-        );
-        if let Some(ref field_value) = obj.db_subnet_group_name {
-            params.put(&format!("{}{}", prefix, "DBSubnetGroupName"), &field_value);
-        }
-        if let Some(ref field_value) = obj.deletion_protection {
-            params.put(&format!("{}{}", prefix, "DeletionProtection"), &field_value);
-        }
-        if let Some(ref field_value) = obj.enable_cloudwatch_logs_exports {
-            LogTypeListSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "EnableCloudwatchLogsExports"),
-                field_value,
-            );
-        }
-        if let Some(ref field_value) = obj.enable_iam_database_authentication {
-            params.put(
-                &format!("{}{}", prefix, "EnableIAMDatabaseAuthentication"),
-                &field_value,
-            );
-        }
-        if let Some(ref field_value) = obj.enable_performance_insights {
-            params.put(
-                &format!("{}{}", prefix, "EnablePerformanceInsights"),
-                &field_value,
-            );
-        }
-        if let Some(ref field_value) = obj.iops {
-            params.put(&format!("{}{}", prefix, "Iops"), &field_value);
-        }
-        if let Some(ref field_value) = obj.kms_key_id {
-            params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
-        }
-        if let Some(ref field_value) = obj.monitoring_interval {
-            params.put(&format!("{}{}", prefix, "MonitoringInterval"), &field_value);
-        }
-        if let Some(ref field_value) = obj.monitoring_role_arn {
-            params.put(&format!("{}{}", prefix, "MonitoringRoleArn"), &field_value);
-        }
-        if let Some(ref field_value) = obj.multi_az {
-            params.put(&format!("{}{}", prefix, "MultiAZ"), &field_value);
-        }
-        if let Some(ref field_value) = obj.option_group_name {
-            params.put(&format!("{}{}", prefix, "OptionGroupName"), &field_value);
-        }
-        if let Some(ref field_value) = obj.performance_insights_kms_key_id {
-            params.put(
-                &format!("{}{}", prefix, "PerformanceInsightsKMSKeyId"),
-                &field_value,
-            );
-        }
-        if let Some(ref field_value) = obj.performance_insights_retention_period {
-            params.put(
-                &format!("{}{}", prefix, "PerformanceInsightsRetentionPeriod"),
-                &field_value,
-            );
-        }
-        if let Some(ref field_value) = obj.port {
-            params.put(&format!("{}{}", prefix, "Port"), &field_value);
-        }
-        if let Some(ref field_value) = obj.pre_signed_url {
-            params.put(&format!("{}{}", prefix, "PreSignedUrl"), &field_value);
-        }
-        if let Some(ref field_value) = obj.processor_features {
-            ProcessorFeatureListSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "ProcessorFeature"),
-                field_value,
-            );
-        }
-        if let Some(ref field_value) = obj.publicly_accessible {
-            params.put(&format!("{}{}", prefix, "PubliclyAccessible"), &field_value);
-        }
-        params.put(
-            &format!("{}{}", prefix, "SourceDBInstanceIdentifier"),
-            &obj.source_db_instance_identifier,
-        );
-        if let Some(ref field_value) = obj.storage_type {
-            params.put(&format!("{}{}", prefix, "StorageType"), &field_value);
-        }
-        if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
-        }
-        if let Some(ref field_value) = obj.use_default_processor_features {
-            params.put(
-                &format!("{}{}", prefix, "UseDefaultProcessorFeatures"),
-                &field_value,
-            );
-        }
-        if let Some(ref field_value) = obj.vpc_security_group_ids {
-            VpcSecurityGroupIdListSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "VpcSecurityGroupId"),
-                field_value,
-            );
-        }
-    }
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBInstanceReadReplicaResult {
+pub struct CreateDBInstanceResponse {
     pub db_instance: Option<DBInstance>,
 }
 
-struct CreateDBInstanceReadReplicaResultDeserializer;
-impl CreateDBInstanceReadReplicaResultDeserializer {
+struct CreateDBInstanceResponseDeserializer;
+impl CreateDBInstanceResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateDBInstanceReadReplicaResult, XmlParseError> {
-        deserialize_elements::<_, CreateDBInstanceReadReplicaResult, _>(
+    ) -> Result<CreateDBInstanceResponse, XmlParseError> {
+        deserialize_elements::<_, CreateDBInstanceResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2068,33 +2277,9 @@ impl CreateDBInstanceReadReplicaResultDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBInstanceResult {
-    pub db_instance: Option<DBInstance>,
-}
-
-struct CreateDBInstanceResultDeserializer;
-impl CreateDBInstanceResultDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CreateDBInstanceResult, XmlParseError> {
-        deserialize_elements::<_, CreateDBInstanceResult, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBInstance" => {
-                    obj.db_instance =
-                        Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBParameterGroupMessage {
+pub struct CreateDBParameterGroupRequest {
     /// <p><p>The DB parameter group family name. A DB parameter group can be associated with one and only one DB parameter group family, and can be applied only to a DB instance running a database engine and engine version compatible with that DB parameter group family.</p> <p>To list all of the available parameter group families, use the following command:</p> <p> <code>aws rds describe-db-engine-versions --query &quot;DBEngineVersions[].DBParameterGroupFamily&quot;</code> </p> <note> <p>The output contains duplicates.</p> </note></p>
     pub db_parameter_group_family: String,
     /// <p><p>The name of the DB parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 letters, numbers, or hyphens.</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Can&#39;t end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <note> <p>This value is stored as a lowercase string.</p> </note></p>
@@ -2105,10 +2290,10 @@ pub struct CreateDBParameterGroupMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateDBParameterGroupMessage` contents to a `SignedRequest`.
-struct CreateDBParameterGroupMessageSerializer;
-impl CreateDBParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBParameterGroupMessage) {
+/// Serialize `CreateDBParameterGroupRequest` contents to a `SignedRequest`.
+struct CreateDBParameterGroupRequestSerializer;
+impl CreateDBParameterGroupRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateDBParameterGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2130,18 +2315,18 @@ impl CreateDBParameterGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBParameterGroupResult {
+pub struct CreateDBParameterGroupResponse {
     pub db_parameter_group: Option<DBParameterGroup>,
 }
 
-struct CreateDBParameterGroupResultDeserializer;
-impl CreateDBParameterGroupResultDeserializer {
+struct CreateDBParameterGroupResponseDeserializer;
+impl CreateDBParameterGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateDBParameterGroupResult, XmlParseError> {
-        deserialize_elements::<_, CreateDBParameterGroupResult, _>(
+    ) -> Result<CreateDBParameterGroupResponse, XmlParseError> {
+        deserialize_elements::<_, CreateDBParameterGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2161,7 +2346,7 @@ impl CreateDBParameterGroupResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBSecurityGroupMessage {
+pub struct CreateDBSecurityGroupRequest {
     /// <p>The description for the DB security group.</p>
     pub db_security_group_description: String,
     /// <p>The name for the DB security group. This value is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 letters, numbers, or hyphens.</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Can't end with a hyphen or contain two consecutive hyphens</p> </li> <li> <p>Must not be "Default"</p> </li> </ul> <p>Example: <code>mysecuritygroup</code> </p>
@@ -2170,10 +2355,10 @@ pub struct CreateDBSecurityGroupMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateDBSecurityGroupMessage` contents to a `SignedRequest`.
-struct CreateDBSecurityGroupMessageSerializer;
-impl CreateDBSecurityGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBSecurityGroupMessage) {
+/// Serialize `CreateDBSecurityGroupRequest` contents to a `SignedRequest`.
+struct CreateDBSecurityGroupRequestSerializer;
+impl CreateDBSecurityGroupRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateDBSecurityGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2194,18 +2379,18 @@ impl CreateDBSecurityGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBSecurityGroupResult {
+pub struct CreateDBSecurityGroupResponse {
     pub db_security_group: Option<DBSecurityGroup>,
 }
 
-struct CreateDBSecurityGroupResultDeserializer;
-impl CreateDBSecurityGroupResultDeserializer {
+struct CreateDBSecurityGroupResponseDeserializer;
+impl CreateDBSecurityGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateDBSecurityGroupResult, XmlParseError> {
-        deserialize_elements::<_, CreateDBSecurityGroupResult, _>(
+    ) -> Result<CreateDBSecurityGroupResponse, XmlParseError> {
+        deserialize_elements::<_, CreateDBSecurityGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2225,7 +2410,7 @@ impl CreateDBSecurityGroupResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBSnapshotMessage {
+pub struct CreateDBSnapshotRequest {
     /// <p><p>The identifier of the DB instance that you want to create the snapshot of.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBInstance.</p> </li> </ul></p>
     pub db_instance_identifier: String,
     /// <p>The identifier for the DB snapshot.</p> <p>Constraints:</p> <ul> <li> <p>Can't be null, empty, or blank</p> </li> <li> <p>Must contain from 1 to 255 letters, numbers, or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Can't end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <p>Example: <code>my-snapshot-id</code> </p>
@@ -2233,10 +2418,10 @@ pub struct CreateDBSnapshotMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateDBSnapshotMessage` contents to a `SignedRequest`.
-struct CreateDBSnapshotMessageSerializer;
-impl CreateDBSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBSnapshotMessage) {
+/// Serialize `CreateDBSnapshotRequest` contents to a `SignedRequest`.
+struct CreateDBSnapshotRequestSerializer;
+impl CreateDBSnapshotRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateDBSnapshotRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2257,32 +2442,36 @@ impl CreateDBSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBSnapshotResult {
+pub struct CreateDBSnapshotResponse {
     pub db_snapshot: Option<DBSnapshot>,
 }
 
-struct CreateDBSnapshotResultDeserializer;
-impl CreateDBSnapshotResultDeserializer {
+struct CreateDBSnapshotResponseDeserializer;
+impl CreateDBSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateDBSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, CreateDBSnapshotResult, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBSnapshot" => {
-                    obj.db_snapshot =
-                        Some(DBSnapshotDeserializer::deserialize("DBSnapshot", stack)?);
+    ) -> Result<CreateDBSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, CreateDBSnapshotResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBSnapshot" => {
+                        obj.db_snapshot =
+                            Some(DBSnapshotDeserializer::deserialize("DBSnapshot", stack)?);
+                    }
+                    _ => skip_tree(stack),
                 }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+                Ok(())
+            },
+        )
     }
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBSubnetGroupMessage {
+pub struct CreateDBSubnetGroupRequest {
     /// <p>The description for the DB subnet group.</p>
     pub db_subnet_group_description: String,
     /// <p>The name for the DB subnet group. This value is stored as a lowercase string.</p> <p>Constraints: Must contain no more than 255 letters, numbers, periods, underscores, spaces, or hyphens. Must not be default.</p> <p>Example: <code>mySubnetgroup</code> </p>
@@ -2293,10 +2482,10 @@ pub struct CreateDBSubnetGroupMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateDBSubnetGroupMessage` contents to a `SignedRequest`.
-struct CreateDBSubnetGroupMessageSerializer;
-impl CreateDBSubnetGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBSubnetGroupMessage) {
+/// Serialize `CreateDBSubnetGroupRequest` contents to a `SignedRequest`.
+struct CreateDBSubnetGroupRequestSerializer;
+impl CreateDBSubnetGroupRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateDBSubnetGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2322,18 +2511,18 @@ impl CreateDBSubnetGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBSubnetGroupResult {
+pub struct CreateDBSubnetGroupResponse {
     pub db_subnet_group: Option<DBSubnetGroup>,
 }
 
-struct CreateDBSubnetGroupResultDeserializer;
-impl CreateDBSubnetGroupResultDeserializer {
+struct CreateDBSubnetGroupResponseDeserializer;
+impl CreateDBSubnetGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateDBSubnetGroupResult, XmlParseError> {
-        deserialize_elements::<_, CreateDBSubnetGroupResult, _>(
+    ) -> Result<CreateDBSubnetGroupResponse, XmlParseError> {
+        deserialize_elements::<_, CreateDBSubnetGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2353,7 +2542,7 @@ impl CreateDBSubnetGroupResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateEventSubscriptionMessage {
+pub struct CreateEventSubscriptionRequest {
     /// <p> A value that indicates whether to activate the subscription. If the event notification subscription is not activated, the subscription is created but not active. </p>
     pub enabled: Option<bool>,
     /// <p> A list of event categories for a SourceType that you want to subscribe to. You can see a list of the categories for a given SourceType in the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html">Events</a> topic in the <i>Amazon RDS User Guide</i> or by using the <b>DescribeEventCategories</b> action. </p>
@@ -2369,10 +2558,14 @@ pub struct CreateEventSubscriptionMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateEventSubscriptionMessage` contents to a `SignedRequest`.
-struct CreateEventSubscriptionMessageSerializer;
-impl CreateEventSubscriptionMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateEventSubscriptionMessage) {
+/// Serialize `CreateEventSubscriptionRequest` contents to a `SignedRequest`.
+struct CreateEventSubscriptionRequestSerializer;
+impl CreateEventSubscriptionRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CreateEventSubscriptionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2410,18 +2603,18 @@ impl CreateEventSubscriptionMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateEventSubscriptionResult {
+pub struct CreateEventSubscriptionResponse {
     pub event_subscription: Option<EventSubscription>,
 }
 
-struct CreateEventSubscriptionResultDeserializer;
-impl CreateEventSubscriptionResultDeserializer {
+struct CreateEventSubscriptionResponseDeserializer;
+impl CreateEventSubscriptionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateEventSubscriptionResult, XmlParseError> {
-        deserialize_elements::<_, CreateEventSubscriptionResult, _>(
+    ) -> Result<CreateEventSubscriptionResponse, XmlParseError> {
+        deserialize_elements::<_, CreateEventSubscriptionResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2440,7 +2633,7 @@ impl CreateEventSubscriptionResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateGlobalClusterMessage {
+pub struct CreateGlobalClusterRequest {
     /// <p> The name for your database of up to 64 alpha-numeric characters. If you do not provide a name, Amazon Aurora will not create a database in the global database cluster you are creating. </p>
     pub database_name: Option<String>,
     /// <p> The deletion protection setting for the new global database. The global database can't be deleted when deletion protection is enabled. </p>
@@ -2457,10 +2650,10 @@ pub struct CreateGlobalClusterMessage {
     pub storage_encrypted: Option<bool>,
 }
 
-/// Serialize `CreateGlobalClusterMessage` contents to a `SignedRequest`.
-struct CreateGlobalClusterMessageSerializer;
-impl CreateGlobalClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateGlobalClusterMessage) {
+/// Serialize `CreateGlobalClusterRequest` contents to a `SignedRequest`.
+struct CreateGlobalClusterRequestSerializer;
+impl CreateGlobalClusterRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateGlobalClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2497,18 +2690,18 @@ impl CreateGlobalClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateGlobalClusterResult {
+pub struct CreateGlobalClusterResponse {
     pub global_cluster: Option<GlobalCluster>,
 }
 
-struct CreateGlobalClusterResultDeserializer;
-impl CreateGlobalClusterResultDeserializer {
+struct CreateGlobalClusterResponseDeserializer;
+impl CreateGlobalClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateGlobalClusterResult, XmlParseError> {
-        deserialize_elements::<_, CreateGlobalClusterResult, _>(
+    ) -> Result<CreateGlobalClusterResponse, XmlParseError> {
+        deserialize_elements::<_, CreateGlobalClusterResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2528,7 +2721,7 @@ impl CreateGlobalClusterResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateOptionGroupMessage {
+pub struct CreateOptionGroupRequest {
     /// <p>Specifies the name of the engine that this option group should be associated with.</p>
     pub engine_name: String,
     /// <p>Specifies the major version of the engine that this option group should be associated with.</p>
@@ -2541,10 +2734,10 @@ pub struct CreateOptionGroupMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateOptionGroupMessage` contents to a `SignedRequest`.
-struct CreateOptionGroupMessageSerializer;
-impl CreateOptionGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateOptionGroupMessage) {
+/// Serialize `CreateOptionGroupRequest` contents to a `SignedRequest`.
+struct CreateOptionGroupRequestSerializer;
+impl CreateOptionGroupRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateOptionGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2570,18 +2763,18 @@ impl CreateOptionGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateOptionGroupResult {
+pub struct CreateOptionGroupResponse {
     pub option_group: Option<OptionGroup>,
 }
 
-struct CreateOptionGroupResultDeserializer;
-impl CreateOptionGroupResultDeserializer {
+struct CreateOptionGroupResponseDeserializer;
+impl CreateOptionGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateOptionGroupResult, XmlParseError> {
-        deserialize_elements::<_, CreateOptionGroupResult, _>(
+    ) -> Result<CreateOptionGroupResponse, XmlParseError> {
+        deserialize_elements::<_, CreateOptionGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -3024,102 +3217,6 @@ impl DBClusterBacktrackListDeserializer {
         })
     }
 }
-/// <p>Contains the result of a successful invocation of the <code>DescribeDBClusterBacktracks</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBClusterBacktrackMessage {
-    /// <p>Contains a list of backtracks for the user.</p>
-    pub db_cluster_backtracks: Option<Vec<DBClusterBacktrack>>,
-    /// <p>A pagination token that can be used in a subsequent <code>DescribeDBClusterBacktracks</code> request.</p>
-    pub marker: Option<String>,
-}
-
-struct DBClusterBacktrackMessageDeserializer;
-impl DBClusterBacktrackMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBClusterBacktrackMessage, XmlParseError> {
-        deserialize_elements::<_, DBClusterBacktrackMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "DBClusterBacktracks" => {
-                        obj.db_cluster_backtracks.get_or_insert(vec![]).extend(
-                            DBClusterBacktrackListDeserializer::deserialize(
-                                "DBClusterBacktracks",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBClusterCapacityInfo {
-    /// <p>The current capacity of the DB cluster.</p>
-    pub current_capacity: Option<i64>,
-    /// <p>A user-supplied DB cluster identifier. This identifier is the unique key that identifies a DB cluster. </p>
-    pub db_cluster_identifier: Option<String>,
-    /// <p>A value that specifies the capacity that the DB cluster scales to next.</p>
-    pub pending_capacity: Option<i64>,
-    /// <p>The number of seconds before a call to <code>ModifyCurrentDBClusterCapacity</code> times out.</p>
-    pub seconds_before_timeout: Option<i64>,
-    /// <p>The timeout action of a call to <code>ModifyCurrentDBClusterCapacity</code>, either <code>ForceApplyCapacityChange</code> or <code>RollbackCapacityChange</code>.</p>
-    pub timeout_action: Option<String>,
-}
-
-struct DBClusterCapacityInfoDeserializer;
-impl DBClusterCapacityInfoDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBClusterCapacityInfo, XmlParseError> {
-        deserialize_elements::<_, DBClusterCapacityInfo, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "CurrentCapacity" => {
-                    obj.current_capacity = Some(IntegerOptionalDeserializer::deserialize(
-                        "CurrentCapacity",
-                        stack,
-                    )?);
-                }
-                "DBClusterIdentifier" => {
-                    obj.db_cluster_identifier = Some(StringDeserializer::deserialize(
-                        "DBClusterIdentifier",
-                        stack,
-                    )?);
-                }
-                "PendingCapacity" => {
-                    obj.pending_capacity = Some(IntegerOptionalDeserializer::deserialize(
-                        "PendingCapacity",
-                        stack,
-                    )?);
-                }
-                "SecondsBeforeTimeout" => {
-                    obj.seconds_before_timeout = Some(IntegerOptionalDeserializer::deserialize(
-                        "SecondsBeforeTimeout",
-                        stack,
-                    )?);
-                }
-                "TimeoutAction" => {
-                    obj.timeout_action =
-                        Some(StringDeserializer::deserialize("TimeoutAction", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 /// <p>This data type represents the information you need to connect to an Amazon Aurora DB cluster. This data type is used as a response element in the following actions:</p> <ul> <li> <p> <code>CreateDBClusterEndpoint</code> </p> </li> <li> <p> <code>DescribeDBClusterEndpoints</code> </p> </li> <li> <p> <code>ModifyDBClusterEndpoint</code> </p> </li> <li> <p> <code>DeleteDBClusterEndpoint</code> </p> </li> </ul> <p>For the data structure that represents Amazon RDS DB instance endpoints, see <code>Endpoint</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterEndpoint {
@@ -3231,44 +3328,6 @@ impl DBClusterEndpointListDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBClusterEndpointMessage {
-    /// <p>Contains the details of the endpoints associated with the cluster and matching any filter conditions.</p>
-    pub db_cluster_endpoints: Option<Vec<DBClusterEndpoint>>,
-    /// <p> An optional pagination token provided by a previous <code>DescribeDBClusterEndpoints</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
-    pub marker: Option<String>,
-}
-
-struct DBClusterEndpointMessageDeserializer;
-impl DBClusterEndpointMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBClusterEndpointMessage, XmlParseError> {
-        deserialize_elements::<_, DBClusterEndpointMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "DBClusterEndpoints" => {
-                        obj.db_cluster_endpoints.get_or_insert(vec![]).extend(
-                            DBClusterEndpointListDeserializer::deserialize(
-                                "DBClusterEndpoints",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 struct DBClusterListDeserializer;
 impl DBClusterListDeserializer {
     #[allow(unused_variables)]
@@ -3351,38 +3410,6 @@ impl DBClusterMemberListDeserializer {
                 )?);
             } else {
                 skip_tree(stack);
-            }
-            Ok(())
-        })
-    }
-}
-/// <p>Contains the result of a successful invocation of the <code>DescribeDBClusters</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBClusterMessage {
-    /// <p>Contains a list of DB clusters for the user.</p>
-    pub db_clusters: Option<Vec<DBCluster>>,
-    /// <p>A pagination token that can be used in a subsequent DescribeDBClusters request.</p>
-    pub marker: Option<String>,
-}
-
-struct DBClusterMessageDeserializer;
-impl DBClusterMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBClusterMessage, XmlParseError> {
-        deserialize_elements::<_, DBClusterMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBClusters" => {
-                    obj.db_clusters
-                        .get_or_insert(vec![])
-                        .extend(DBClusterListDeserializer::deserialize("DBClusters", stack)?);
-                }
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                _ => skip_tree(stack),
             }
             Ok(())
         })
@@ -3498,42 +3525,6 @@ impl DBClusterParameterGroupDeserializer {
         )
     }
 }
-/// <p>Provides details about a DB cluster parameter group including the parameters in the DB cluster parameter group.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBClusterParameterGroupDetails {
-    /// <p> An optional pagination token provided by a previous DescribeDBClusterParameters request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
-    pub marker: Option<String>,
-    /// <p>Provides a list of parameters for the DB cluster parameter group.</p>
-    pub parameters: Option<Vec<Parameter>>,
-}
-
-struct DBClusterParameterGroupDetailsDeserializer;
-impl DBClusterParameterGroupDetailsDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBClusterParameterGroupDetails, XmlParseError> {
-        deserialize_elements::<_, DBClusterParameterGroupDetails, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "Parameters" => {
-                        obj.parameters.get_or_insert(vec![]).extend(
-                            ParametersListDeserializer::deserialize("Parameters", stack)?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 struct DBClusterParameterGroupListDeserializer;
 impl DBClusterParameterGroupListDeserializer {
     #[allow(unused_variables)]
@@ -3552,76 +3543,6 @@ impl DBClusterParameterGroupListDeserializer {
             }
             Ok(())
         })
-    }
-}
-/// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBClusterParameterGroupNameMessage {
-    /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 letters or numbers.</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Can&#39;t end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <note> <p>This value is stored as a lowercase string.</p> </note></p>
-    pub db_cluster_parameter_group_name: Option<String>,
-}
-
-struct DBClusterParameterGroupNameMessageDeserializer;
-impl DBClusterParameterGroupNameMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBClusterParameterGroupNameMessage, XmlParseError> {
-        deserialize_elements::<_, DBClusterParameterGroupNameMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "DBClusterParameterGroupName" => {
-                        obj.db_cluster_parameter_group_name = Some(
-                            StringDeserializer::deserialize("DBClusterParameterGroupName", stack)?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
-/// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBClusterParameterGroupsMessage {
-    /// <p>A list of DB cluster parameter groups.</p>
-    pub db_cluster_parameter_groups: Option<Vec<DBClusterParameterGroup>>,
-    /// <p> An optional pagination token provided by a previous <code>DescribeDBClusterParameterGroups</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
-    pub marker: Option<String>,
-}
-
-struct DBClusterParameterGroupsMessageDeserializer;
-impl DBClusterParameterGroupsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBClusterParameterGroupsMessage, XmlParseError> {
-        deserialize_elements::<_, DBClusterParameterGroupsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "DBClusterParameterGroups" => {
-                        obj.db_cluster_parameter_groups
-                            .get_or_insert(vec![])
-                            .extend(DBClusterParameterGroupListDeserializer::deserialize(
-                                "DBClusterParameterGroups",
-                                stack,
-                            )?);
-                    }
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
     }
 }
 /// <p>Describes an AWS Identity and Access Management (IAM) role that is associated with a DB cluster.</p>
@@ -3947,45 +3868,6 @@ impl DBClusterSnapshotListDeserializer {
         })
     }
 }
-/// <p> Provides a list of DB cluster snapshots for the user as the result of a call to the <code>DescribeDBClusterSnapshots</code> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBClusterSnapshotMessage {
-    /// <p>Provides a list of DB cluster snapshots for the user.</p>
-    pub db_cluster_snapshots: Option<Vec<DBClusterSnapshot>>,
-    /// <p> An optional pagination token provided by a previous <code>DescribeDBClusterSnapshots</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
-    pub marker: Option<String>,
-}
-
-struct DBClusterSnapshotMessageDeserializer;
-impl DBClusterSnapshotMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBClusterSnapshotMessage, XmlParseError> {
-        deserialize_elements::<_, DBClusterSnapshotMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "DBClusterSnapshots" => {
-                        obj.db_cluster_snapshots.get_or_insert(vec![]).extend(
-                            DBClusterSnapshotListDeserializer::deserialize(
-                                "DBClusterSnapshots",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p> This data type is used as a response element in the action <code>DescribeDBEngineVersions</code>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBEngineVersion {
@@ -4132,38 +4014,6 @@ impl DBEngineVersionListDeserializer {
                 )?);
             } else {
                 skip_tree(stack);
-            }
-            Ok(())
-        })
-    }
-}
-/// <p> Contains the result of a successful invocation of the <code>DescribeDBEngineVersions</code> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBEngineVersionMessage {
-    /// <p> A list of <code>DBEngineVersion</code> elements. </p>
-    pub db_engine_versions: Option<Vec<DBEngineVersion>>,
-    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
-    pub marker: Option<String>,
-}
-
-struct DBEngineVersionMessageDeserializer;
-impl DBEngineVersionMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBEngineVersionMessage, XmlParseError> {
-        deserialize_elements::<_, DBEngineVersionMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBEngineVersions" => {
-                    obj.db_engine_versions.get_or_insert(vec![]).extend(
-                        DBEngineVersionListDeserializer::deserialize("DBEngineVersions", stack)?,
-                    );
-                }
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                _ => skip_tree(stack),
             }
             Ok(())
         })
@@ -4792,45 +4642,6 @@ impl DBInstanceAutomatedBackupListDeserializer {
         })
     }
 }
-/// <p> Contains the result of a successful invocation of the <code>DescribeDBInstanceAutomatedBackups</code> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBInstanceAutomatedBackupMessage {
-    /// <p> A list of <code>DBInstanceAutomatedBackup</code> instances. </p>
-    pub db_instance_automated_backups: Option<Vec<DBInstanceAutomatedBackup>>,
-    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
-    pub marker: Option<String>,
-}
-
-struct DBInstanceAutomatedBackupMessageDeserializer;
-impl DBInstanceAutomatedBackupMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBInstanceAutomatedBackupMessage, XmlParseError> {
-        deserialize_elements::<_, DBInstanceAutomatedBackupMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "DBInstanceAutomatedBackups" => {
-                        obj.db_instance_automated_backups
-                            .get_or_insert(vec![])
-                            .extend(DBInstanceAutomatedBackupListDeserializer::deserialize(
-                                "DBInstanceAutomatedBackups",
-                                stack,
-                            )?);
-                    }
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 struct DBInstanceListDeserializer;
 impl DBInstanceListDeserializer {
     #[allow(unused_variables)]
@@ -4843,38 +4654,6 @@ impl DBInstanceListDeserializer {
                 obj.push(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
             } else {
                 skip_tree(stack);
-            }
-            Ok(())
-        })
-    }
-}
-/// <p> Contains the result of a successful invocation of the <code>DescribeDBInstances</code> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBInstanceMessage {
-    /// <p> A list of <code>DBInstance</code> instances. </p>
-    pub db_instances: Option<Vec<DBInstance>>,
-    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
-    pub marker: Option<String>,
-}
-
-struct DBInstanceMessageDeserializer;
-impl DBInstanceMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBInstanceMessage, XmlParseError> {
-        deserialize_elements::<_, DBInstanceMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBInstances" => {
-                    obj.db_instances.get_or_insert(vec![]).extend(
-                        DBInstanceListDeserializer::deserialize("DBInstances", stack)?,
-                    );
-                }
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                _ => skip_tree(stack),
             }
             Ok(())
         })
@@ -5044,42 +4823,6 @@ impl DBParameterGroupDeserializer {
         })
     }
 }
-/// <p> Contains the result of a successful invocation of the <code>DescribeDBParameters</code> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBParameterGroupDetails {
-    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
-    pub marker: Option<String>,
-    /// <p> A list of <code>Parameter</code> values. </p>
-    pub parameters: Option<Vec<Parameter>>,
-}
-
-struct DBParameterGroupDetailsDeserializer;
-impl DBParameterGroupDetailsDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBParameterGroupDetails, XmlParseError> {
-        deserialize_elements::<_, DBParameterGroupDetails, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "Parameters" => {
-                        obj.parameters.get_or_insert(vec![]).extend(
-                            ParametersListDeserializer::deserialize("Parameters", stack)?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 struct DBParameterGroupListDeserializer;
 impl DBParameterGroupListDeserializer {
     #[allow(unused_variables)]
@@ -5098,38 +4841,6 @@ impl DBParameterGroupListDeserializer {
             }
             Ok(())
         })
-    }
-}
-/// <p> Contains the result of a successful invocation of the <code>ModifyDBParameterGroup</code> or <code>ResetDBParameterGroup</code> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBParameterGroupNameMessage {
-    /// <p>Provides the name of the DB parameter group.</p>
-    pub db_parameter_group_name: Option<String>,
-}
-
-struct DBParameterGroupNameMessageDeserializer;
-impl DBParameterGroupNameMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBParameterGroupNameMessage, XmlParseError> {
-        deserialize_elements::<_, DBParameterGroupNameMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "DBParameterGroupName" => {
-                        obj.db_parameter_group_name = Some(StringDeserializer::deserialize(
-                            "DBParameterGroupName",
-                            stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
     }
 }
 /// <p><p>The status of the DB parameter group.</p> <p>This data type is used as a response element in the following actions:</p> <ul> <li> <p> <code>CreateDBInstance</code> </p> </li> <li> <p> <code>CreateDBInstanceReadReplica</code> </p> </li> <li> <p> <code>DeleteDBInstance</code> </p> </li> <li> <p> <code>ModifyDBInstance</code> </p> </li> <li> <p> <code>RebootDBInstance</code> </p> </li> <li> <p> <code>RestoreDBInstanceFromDBSnapshot</code> </p> </li> </ul></p>
@@ -5186,45 +4897,6 @@ impl DBParameterGroupStatusListDeserializer {
             }
             Ok(())
         })
-    }
-}
-/// <p> Contains the result of a successful invocation of the <code>DescribeDBParameterGroups</code> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBParameterGroupsMessage {
-    /// <p> A list of <code>DBParameterGroup</code> instances. </p>
-    pub db_parameter_groups: Option<Vec<DBParameterGroup>>,
-    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
-    pub marker: Option<String>,
-}
-
-struct DBParameterGroupsMessageDeserializer;
-impl DBParameterGroupsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBParameterGroupsMessage, XmlParseError> {
-        deserialize_elements::<_, DBParameterGroupsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "DBParameterGroups" => {
-                        obj.db_parameter_groups.get_or_insert(vec![]).extend(
-                            DBParameterGroupListDeserializer::deserialize(
-                                "DBParameterGroups",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
     }
 }
 /// <p>Contains the details for an Amazon RDS DB security group. </p> <p>This data type is used as a response element in the <code>DescribeDBSecurityGroups</code> action. </p>
@@ -5352,43 +5024,11 @@ impl DBSecurityGroupMembershipListDeserializer {
         })
     }
 }
-/// <p> Contains the result of a successful invocation of the <code>DescribeDBSecurityGroups</code> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBSecurityGroupMessage {
-    /// <p> A list of <code>DBSecurityGroup</code> instances. </p>
-    pub db_security_groups: Option<Vec<DBSecurityGroup>>,
-    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
-    pub marker: Option<String>,
-}
-
-struct DBSecurityGroupMessageDeserializer;
-impl DBSecurityGroupMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBSecurityGroupMessage, XmlParseError> {
-        deserialize_elements::<_, DBSecurityGroupMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBSecurityGroups" => {
-                    obj.db_security_groups.get_or_insert(vec![]).extend(
-                        DBSecurityGroupsDeserializer::deserialize("DBSecurityGroups", stack)?,
-                    );
-                }
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 
 /// Serialize `DBSecurityGroupNameList` contents to a `SignedRequest`.
 struct DBSecurityGroupNameListSerializer;
 impl DBSecurityGroupNameListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5721,38 +5361,6 @@ impl DBSnapshotListDeserializer {
         })
     }
 }
-/// <p> Contains the result of a successful invocation of the <code>DescribeDBSnapshots</code> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBSnapshotMessage {
-    /// <p> A list of <code>DBSnapshot</code> instances. </p>
-    pub db_snapshots: Option<Vec<DBSnapshot>>,
-    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
-    pub marker: Option<String>,
-}
-
-struct DBSnapshotMessageDeserializer;
-impl DBSnapshotMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBSnapshotMessage, XmlParseError> {
-        deserialize_elements::<_, DBSnapshotMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBSnapshots" => {
-                    obj.db_snapshots.get_or_insert(vec![]).extend(
-                        DBSnapshotListDeserializer::deserialize("DBSnapshots", stack)?,
-                    );
-                }
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 /// <p>Contains the details of an Amazon RDS DB subnet group. </p> <p>This data type is used as a response element in the <code>DescribeDBSubnetGroups</code> action. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBSubnetGroup {
@@ -5811,38 +5419,6 @@ impl DBSubnetGroupDeserializer {
         })
     }
 }
-/// <p> Contains the result of a successful invocation of the <code>DescribeDBSubnetGroups</code> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBSubnetGroupMessage {
-    /// <p> A list of <code>DBSubnetGroup</code> instances. </p>
-    pub db_subnet_groups: Option<Vec<DBSubnetGroup>>,
-    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
-    pub marker: Option<String>,
-}
-
-struct DBSubnetGroupMessageDeserializer;
-impl DBSubnetGroupMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBSubnetGroupMessage, XmlParseError> {
-        deserialize_elements::<_, DBSubnetGroupMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBSubnetGroups" => {
-                    obj.db_subnet_groups.get_or_insert(vec![]).extend(
-                        DBSubnetGroupsDeserializer::deserialize("DBSubnetGroups", stack)?,
-                    );
-                }
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 struct DBSubnetGroupsDeserializer;
 impl DBSubnetGroupsDeserializer {
     #[allow(unused_variables)]
@@ -5864,15 +5440,19 @@ impl DBSubnetGroupsDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBClusterEndpointMessage {
+pub struct DeleteDBClusterEndpointRequest {
     /// <p>The identifier associated with the custom endpoint. This parameter is stored as a lowercase string.</p>
     pub db_cluster_endpoint_identifier: String,
 }
 
-/// Serialize `DeleteDBClusterEndpointMessage` contents to a `SignedRequest`.
-struct DeleteDBClusterEndpointMessageSerializer;
-impl DeleteDBClusterEndpointMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterEndpointMessage) {
+/// Serialize `DeleteDBClusterEndpointRequest` contents to a `SignedRequest`.
+struct DeleteDBClusterEndpointRequestSerializer;
+impl DeleteDBClusterEndpointRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DeleteDBClusterEndpointRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5885,9 +5465,144 @@ impl DeleteDBClusterEndpointMessageSerializer {
     }
 }
 
+/// <p>This data type represents the information you need to connect to an Amazon Aurora DB cluster. This data type is used as a response element in the following actions:</p> <ul> <li> <p> <code>CreateDBClusterEndpoint</code> </p> </li> <li> <p> <code>DescribeDBClusterEndpoints</code> </p> </li> <li> <p> <code>ModifyDBClusterEndpoint</code> </p> </li> <li> <p> <code>DeleteDBClusterEndpoint</code> </p> </li> </ul> <p>For the data structure that represents Amazon RDS DB instance endpoints, see <code>Endpoint</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteDBClusterEndpointResponse {
+    /// <p>The type associated with a custom endpoint. One of: <code>READER</code>, <code>ANY</code>.</p>
+    pub custom_endpoint_type: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for the endpoint.</p>
+    pub db_cluster_endpoint_arn: Option<String>,
+    /// <p>The identifier associated with the endpoint. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_endpoint_identifier: Option<String>,
+    /// <p>A unique system-generated identifier for an endpoint. It remains the same for the whole life of the endpoint.</p>
+    pub db_cluster_endpoint_resource_identifier: Option<String>,
+    /// <p>The DB cluster identifier of the DB cluster associated with the endpoint. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_identifier: Option<String>,
+    /// <p>The DNS address of the endpoint.</p>
+    pub endpoint: Option<String>,
+    /// <p>The type of the endpoint. One of: <code>READER</code>, <code>WRITER</code>, <code>CUSTOM</code>.</p>
+    pub endpoint_type: Option<String>,
+    /// <p>List of DB instance identifiers that aren't part of the custom endpoint group. All other eligible instances are reachable through the custom endpoint. Only relevant if the list of static members is empty.</p>
+    pub excluded_members: Option<Vec<String>>,
+    /// <p>List of DB instance identifiers that are part of the custom endpoint group.</p>
+    pub static_members: Option<Vec<String>>,
+    /// <p>The current status of the endpoint. One of: <code>creating</code>, <code>available</code>, <code>deleting</code>, <code>modifying</code>.</p>
+    pub status: Option<String>,
+}
+
+struct DeleteDBClusterEndpointResponseDeserializer;
+impl DeleteDBClusterEndpointResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteDBClusterEndpointResponse, XmlParseError> {
+        deserialize_elements::<_, DeleteDBClusterEndpointResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CustomEndpointType" => {
+                        obj.custom_endpoint_type = Some(StringDeserializer::deserialize(
+                            "CustomEndpointType",
+                            stack,
+                        )?);
+                    }
+                    "DBClusterEndpointArn" => {
+                        obj.db_cluster_endpoint_arn = Some(StringDeserializer::deserialize(
+                            "DBClusterEndpointArn",
+                            stack,
+                        )?);
+                    }
+                    "DBClusterEndpointIdentifier" => {
+                        obj.db_cluster_endpoint_identifier = Some(StringDeserializer::deserialize(
+                            "DBClusterEndpointIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "DBClusterEndpointResourceIdentifier" => {
+                        obj.db_cluster_endpoint_resource_identifier =
+                            Some(StringDeserializer::deserialize(
+                                "DBClusterEndpointResourceIdentifier",
+                                stack,
+                            )?);
+                    }
+                    "DBClusterIdentifier" => {
+                        obj.db_cluster_identifier = Some(StringDeserializer::deserialize(
+                            "DBClusterIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "Endpoint" => {
+                        obj.endpoint = Some(StringDeserializer::deserialize("Endpoint", stack)?);
+                    }
+                    "EndpointType" => {
+                        obj.endpoint_type =
+                            Some(StringDeserializer::deserialize("EndpointType", stack)?);
+                    }
+                    "ExcludedMembers" => {
+                        obj.excluded_members.get_or_insert(vec![]).extend(
+                            StringListDeserializer::deserialize("ExcludedMembers", stack)?,
+                        );
+                    }
+                    "StaticMembers" => {
+                        obj.static_members
+                            .get_or_insert(vec![])
+                            .extend(StringListDeserializer::deserialize("StaticMembers", stack)?);
+                    }
+                    "Status" => {
+                        obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBClusterMessage {
+pub struct DeleteDBClusterParameterGroupRequest {
+    /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be the name of an existing DB cluster parameter group.</p> </li> <li> <p>You can&#39;t delete a default DB cluster parameter group.</p> </li> <li> <p>Can&#39;t be associated with any DB clusters.</p> </li> </ul></p>
+    pub db_cluster_parameter_group_name: String,
+}
+
+/// Serialize `DeleteDBClusterParameterGroupRequest` contents to a `SignedRequest`.
+struct DeleteDBClusterParameterGroupRequestSerializer;
+impl DeleteDBClusterParameterGroupRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DeleteDBClusterParameterGroupRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "DBClusterParameterGroupName"),
+            &obj.db_cluster_parameter_group_name,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteDBClusterParameterGroupResponse {}
+
+struct DeleteDBClusterParameterGroupResponseDeserializer;
+impl DeleteDBClusterParameterGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteDBClusterParameterGroupResponse, XmlParseError> {
+        Ok(DeleteDBClusterParameterGroupResponse::default())
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteDBClusterRequest {
     /// <p><p>The DB cluster identifier for the DB cluster to be deleted. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match an existing DBClusterIdentifier.</p> </li> </ul></p>
     pub db_cluster_identifier: String,
     /// <p><p> The DB cluster snapshot identifier of the new DB cluster snapshot created when <code>SkipFinalSnapshot</code> is disabled. </p> <note> <p> Specifying this parameter and also skipping the creation of a final DB cluster snapshot with the <code>SkipFinalShapshot</code> parameter results in an error.</p> </note> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 letters, numbers, or hyphens.</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Can&#39;t end with a hyphen or contain two consecutive hyphens</p> </li> </ul></p>
@@ -5896,10 +5611,10 @@ pub struct DeleteDBClusterMessage {
     pub skip_final_snapshot: Option<bool>,
 }
 
-/// Serialize `DeleteDBClusterMessage` contents to a `SignedRequest`.
-struct DeleteDBClusterMessageSerializer;
-impl DeleteDBClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterMessage) {
+/// Serialize `DeleteDBClusterRequest` contents to a `SignedRequest`.
+struct DeleteDBClusterRequestSerializer;
+impl DeleteDBClusterRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteDBClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5921,63 +5636,49 @@ impl DeleteDBClusterMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBClusterParameterGroupMessage {
-    /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be the name of an existing DB cluster parameter group.</p> </li> <li> <p>You can&#39;t delete a default DB cluster parameter group.</p> </li> <li> <p>Can&#39;t be associated with any DB clusters.</p> </li> </ul></p>
-    pub db_cluster_parameter_group_name: String,
-}
-
-/// Serialize `DeleteDBClusterParameterGroupMessage` contents to a `SignedRequest`.
-struct DeleteDBClusterParameterGroupMessageSerializer;
-impl DeleteDBClusterParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterParameterGroupMessage) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        params.put(
-            &format!("{}{}", prefix, "DBClusterParameterGroupName"),
-            &obj.db_cluster_parameter_group_name,
-        );
-    }
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBClusterResult {
+pub struct DeleteDBClusterResponse {
     pub db_cluster: Option<DBCluster>,
 }
 
-struct DeleteDBClusterResultDeserializer;
-impl DeleteDBClusterResultDeserializer {
+struct DeleteDBClusterResponseDeserializer;
+impl DeleteDBClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteDBClusterResult, XmlParseError> {
-        deserialize_elements::<_, DeleteDBClusterResult, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBCluster" => {
-                    obj.db_cluster = Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
+    ) -> Result<DeleteDBClusterResponse, XmlParseError> {
+        deserialize_elements::<_, DeleteDBClusterResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBCluster" => {
+                        obj.db_cluster =
+                            Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
+                    }
+                    _ => skip_tree(stack),
                 }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+                Ok(())
+            },
+        )
     }
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBClusterSnapshotMessage {
+pub struct DeleteDBClusterSnapshotRequest {
     /// <p>The identifier of the DB cluster snapshot to delete.</p> <p>Constraints: Must be the name of an existing DB cluster snapshot in the <code>available</code> state.</p>
     pub db_cluster_snapshot_identifier: String,
 }
 
-/// Serialize `DeleteDBClusterSnapshotMessage` contents to a `SignedRequest`.
-struct DeleteDBClusterSnapshotMessageSerializer;
-impl DeleteDBClusterSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterSnapshotMessage) {
+/// Serialize `DeleteDBClusterSnapshotRequest` contents to a `SignedRequest`.
+struct DeleteDBClusterSnapshotRequestSerializer;
+impl DeleteDBClusterSnapshotRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DeleteDBClusterSnapshotRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5991,18 +5692,18 @@ impl DeleteDBClusterSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBClusterSnapshotResult {
+pub struct DeleteDBClusterSnapshotResponse {
     pub db_cluster_snapshot: Option<DBClusterSnapshot>,
 }
 
-struct DeleteDBClusterSnapshotResultDeserializer;
-impl DeleteDBClusterSnapshotResultDeserializer {
+struct DeleteDBClusterSnapshotResponseDeserializer;
+impl DeleteDBClusterSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteDBClusterSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, DeleteDBClusterSnapshotResult, _>(
+    ) -> Result<DeleteDBClusterSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, DeleteDBClusterSnapshotResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -6022,15 +5723,19 @@ impl DeleteDBClusterSnapshotResultDeserializer {
 }
 /// <p>Parameter input for the <code>DeleteDBInstanceAutomatedBackup</code> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBInstanceAutomatedBackupMessage {
+pub struct DeleteDBInstanceAutomatedBackupRequest {
     /// <p>The identifier for the source DB instance, which can't be changed and which is unique to an AWS Region.</p>
     pub dbi_resource_id: String,
 }
 
-/// Serialize `DeleteDBInstanceAutomatedBackupMessage` contents to a `SignedRequest`.
-struct DeleteDBInstanceAutomatedBackupMessageSerializer;
-impl DeleteDBInstanceAutomatedBackupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBInstanceAutomatedBackupMessage) {
+/// Serialize `DeleteDBInstanceAutomatedBackupRequest` contents to a `SignedRequest`.
+struct DeleteDBInstanceAutomatedBackupRequestSerializer;
+impl DeleteDBInstanceAutomatedBackupRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DeleteDBInstanceAutomatedBackupRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6044,18 +5749,18 @@ impl DeleteDBInstanceAutomatedBackupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBInstanceAutomatedBackupResult {
+pub struct DeleteDBInstanceAutomatedBackupResponse {
     pub db_instance_automated_backup: Option<DBInstanceAutomatedBackup>,
 }
 
-struct DeleteDBInstanceAutomatedBackupResultDeserializer;
-impl DeleteDBInstanceAutomatedBackupResultDeserializer {
+struct DeleteDBInstanceAutomatedBackupResponseDeserializer;
+impl DeleteDBInstanceAutomatedBackupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteDBInstanceAutomatedBackupResult, XmlParseError> {
-        deserialize_elements::<_, DeleteDBInstanceAutomatedBackupResult, _>(
+    ) -> Result<DeleteDBInstanceAutomatedBackupResponse, XmlParseError> {
+        deserialize_elements::<_, DeleteDBInstanceAutomatedBackupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -6076,7 +5781,7 @@ impl DeleteDBInstanceAutomatedBackupResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBInstanceMessage {
+pub struct DeleteDBInstanceRequest {
     /// <p><p>The DB instance identifier for the DB instance to be deleted. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the name of an existing DB instance.</p> </li> </ul></p>
     pub db_instance_identifier: String,
     /// <p>A value that indicates whether to remove automated backups immediately after the DB instance is deleted. This parameter isn't case-sensitive. The default is to remove automated backups immediately after the DB instance is deleted.</p>
@@ -6087,10 +5792,10 @@ pub struct DeleteDBInstanceMessage {
     pub skip_final_snapshot: Option<bool>,
 }
 
-/// Serialize `DeleteDBInstanceMessage` contents to a `SignedRequest`.
-struct DeleteDBInstanceMessageSerializer;
-impl DeleteDBInstanceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBInstanceMessage) {
+/// Serialize `DeleteDBInstanceRequest` contents to a `SignedRequest`.
+struct DeleteDBInstanceRequestSerializer;
+impl DeleteDBInstanceRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteDBInstanceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6119,40 +5824,44 @@ impl DeleteDBInstanceMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBInstanceResult {
+pub struct DeleteDBInstanceResponse {
     pub db_instance: Option<DBInstance>,
 }
 
-struct DeleteDBInstanceResultDeserializer;
-impl DeleteDBInstanceResultDeserializer {
+struct DeleteDBInstanceResponseDeserializer;
+impl DeleteDBInstanceResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteDBInstanceResult, XmlParseError> {
-        deserialize_elements::<_, DeleteDBInstanceResult, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBInstance" => {
-                    obj.db_instance =
-                        Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
+    ) -> Result<DeleteDBInstanceResponse, XmlParseError> {
+        deserialize_elements::<_, DeleteDBInstanceResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBInstance" => {
+                        obj.db_instance =
+                            Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
+                    }
+                    _ => skip_tree(stack),
                 }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+                Ok(())
+            },
+        )
     }
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBParameterGroupMessage {
+pub struct DeleteDBParameterGroupRequest {
     /// <p><p>The name of the DB parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be the name of an existing DB parameter group</p> </li> <li> <p>You can&#39;t delete a default DB parameter group</p> </li> <li> <p>Can&#39;t be associated with any DB instances</p> </li> </ul></p>
     pub db_parameter_group_name: String,
 }
 
-/// Serialize `DeleteDBParameterGroupMessage` contents to a `SignedRequest`.
-struct DeleteDBParameterGroupMessageSerializer;
-impl DeleteDBParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBParameterGroupMessage) {
+/// Serialize `DeleteDBParameterGroupRequest` contents to a `SignedRequest`.
+struct DeleteDBParameterGroupRequestSerializer;
+impl DeleteDBParameterGroupRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteDBParameterGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6165,17 +5874,30 @@ impl DeleteDBParameterGroupMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteDBParameterGroupResponse {}
+
+struct DeleteDBParameterGroupResponseDeserializer;
+impl DeleteDBParameterGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteDBParameterGroupResponse, XmlParseError> {
+        Ok(DeleteDBParameterGroupResponse::default())
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBSecurityGroupMessage {
+pub struct DeleteDBSecurityGroupRequest {
     /// <p><p>The name of the DB security group to delete.</p> <note> <p>You can&#39;t delete the default DB security group.</p> </note> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 letters, numbers, or hyphens.</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Can&#39;t end with a hyphen or contain two consecutive hyphens</p> </li> <li> <p>Must not be &quot;Default&quot;</p> </li> </ul></p>
     pub db_security_group_name: String,
 }
 
-/// Serialize `DeleteDBSecurityGroupMessage` contents to a `SignedRequest`.
-struct DeleteDBSecurityGroupMessageSerializer;
-impl DeleteDBSecurityGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBSecurityGroupMessage) {
+/// Serialize `DeleteDBSecurityGroupRequest` contents to a `SignedRequest`.
+struct DeleteDBSecurityGroupRequestSerializer;
+impl DeleteDBSecurityGroupRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteDBSecurityGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6188,17 +5910,30 @@ impl DeleteDBSecurityGroupMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteDBSecurityGroupResponse {}
+
+struct DeleteDBSecurityGroupResponseDeserializer;
+impl DeleteDBSecurityGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteDBSecurityGroupResponse, XmlParseError> {
+        Ok(DeleteDBSecurityGroupResponse::default())
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBSnapshotMessage {
+pub struct DeleteDBSnapshotRequest {
     /// <p>The DB snapshot identifier.</p> <p>Constraints: Must be the name of an existing DB snapshot in the <code>available</code> state.</p>
     pub db_snapshot_identifier: String,
 }
 
-/// Serialize `DeleteDBSnapshotMessage` contents to a `SignedRequest`.
-struct DeleteDBSnapshotMessageSerializer;
-impl DeleteDBSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBSnapshotMessage) {
+/// Serialize `DeleteDBSnapshotRequest` contents to a `SignedRequest`.
+struct DeleteDBSnapshotRequestSerializer;
+impl DeleteDBSnapshotRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteDBSnapshotRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6212,40 +5947,44 @@ impl DeleteDBSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBSnapshotResult {
+pub struct DeleteDBSnapshotResponse {
     pub db_snapshot: Option<DBSnapshot>,
 }
 
-struct DeleteDBSnapshotResultDeserializer;
-impl DeleteDBSnapshotResultDeserializer {
+struct DeleteDBSnapshotResponseDeserializer;
+impl DeleteDBSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteDBSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, DeleteDBSnapshotResult, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBSnapshot" => {
-                    obj.db_snapshot =
-                        Some(DBSnapshotDeserializer::deserialize("DBSnapshot", stack)?);
+    ) -> Result<DeleteDBSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, DeleteDBSnapshotResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBSnapshot" => {
+                        obj.db_snapshot =
+                            Some(DBSnapshotDeserializer::deserialize("DBSnapshot", stack)?);
+                    }
+                    _ => skip_tree(stack),
                 }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+                Ok(())
+            },
+        )
     }
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBSubnetGroupMessage {
+pub struct DeleteDBSubnetGroupRequest {
     /// <p>The name of the database subnet group to delete.</p> <note> <p>You can't delete the default subnet group.</p> </note> <p>Constraints:</p> <p>Constraints: Must match the name of an existing DBSubnetGroup. Must not be default.</p> <p>Example: <code>mySubnetgroup</code> </p>
     pub db_subnet_group_name: String,
 }
 
-/// Serialize `DeleteDBSubnetGroupMessage` contents to a `SignedRequest`.
-struct DeleteDBSubnetGroupMessageSerializer;
-impl DeleteDBSubnetGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBSubnetGroupMessage) {
+/// Serialize `DeleteDBSubnetGroupRequest` contents to a `SignedRequest`.
+struct DeleteDBSubnetGroupRequestSerializer;
+impl DeleteDBSubnetGroupRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteDBSubnetGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6258,17 +5997,34 @@ impl DeleteDBSubnetGroupMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteDBSubnetGroupResponse {}
+
+struct DeleteDBSubnetGroupResponseDeserializer;
+impl DeleteDBSubnetGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteDBSubnetGroupResponse, XmlParseError> {
+        Ok(DeleteDBSubnetGroupResponse::default())
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteEventSubscriptionMessage {
+pub struct DeleteEventSubscriptionRequest {
     /// <p>The name of the RDS event notification subscription you want to delete.</p>
     pub subscription_name: String,
 }
 
-/// Serialize `DeleteEventSubscriptionMessage` contents to a `SignedRequest`.
-struct DeleteEventSubscriptionMessageSerializer;
-impl DeleteEventSubscriptionMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteEventSubscriptionMessage) {
+/// Serialize `DeleteEventSubscriptionRequest` contents to a `SignedRequest`.
+struct DeleteEventSubscriptionRequestSerializer;
+impl DeleteEventSubscriptionRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DeleteEventSubscriptionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6282,18 +6038,18 @@ impl DeleteEventSubscriptionMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteEventSubscriptionResult {
+pub struct DeleteEventSubscriptionResponse {
     pub event_subscription: Option<EventSubscription>,
 }
 
-struct DeleteEventSubscriptionResultDeserializer;
-impl DeleteEventSubscriptionResultDeserializer {
+struct DeleteEventSubscriptionResponseDeserializer;
+impl DeleteEventSubscriptionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteEventSubscriptionResult, XmlParseError> {
-        deserialize_elements::<_, DeleteEventSubscriptionResult, _>(
+    ) -> Result<DeleteEventSubscriptionResponse, XmlParseError> {
+        deserialize_elements::<_, DeleteEventSubscriptionResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -6312,15 +6068,15 @@ impl DeleteEventSubscriptionResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteGlobalClusterMessage {
+pub struct DeleteGlobalClusterRequest {
     /// <p> The cluster identifier of the global database cluster being deleted. </p>
     pub global_cluster_identifier: String,
 }
 
-/// Serialize `DeleteGlobalClusterMessage` contents to a `SignedRequest`.
-struct DeleteGlobalClusterMessageSerializer;
-impl DeleteGlobalClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteGlobalClusterMessage) {
+/// Serialize `DeleteGlobalClusterRequest` contents to a `SignedRequest`.
+struct DeleteGlobalClusterRequestSerializer;
+impl DeleteGlobalClusterRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteGlobalClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6334,18 +6090,18 @@ impl DeleteGlobalClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteGlobalClusterResult {
+pub struct DeleteGlobalClusterResponse {
     pub global_cluster: Option<GlobalCluster>,
 }
 
-struct DeleteGlobalClusterResultDeserializer;
-impl DeleteGlobalClusterResultDeserializer {
+struct DeleteGlobalClusterResponseDeserializer;
+impl DeleteGlobalClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteGlobalClusterResult, XmlParseError> {
-        deserialize_elements::<_, DeleteGlobalClusterResult, _>(
+    ) -> Result<DeleteGlobalClusterResponse, XmlParseError> {
+        deserialize_elements::<_, DeleteGlobalClusterResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -6365,15 +6121,15 @@ impl DeleteGlobalClusterResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteOptionGroupMessage {
+pub struct DeleteOptionGroupRequest {
     /// <p><p>The name of the option group to be deleted.</p> <note> <p>You can&#39;t delete default option groups.</p> </note></p>
     pub option_group_name: String,
 }
 
-/// Serialize `DeleteOptionGroupMessage` contents to a `SignedRequest`.
-struct DeleteOptionGroupMessageSerializer;
-impl DeleteOptionGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteOptionGroupMessage) {
+/// Serialize `DeleteOptionGroupRequest` contents to a `SignedRequest`.
+struct DeleteOptionGroupRequestSerializer;
+impl DeleteOptionGroupRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteOptionGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6386,14 +6142,31 @@ impl DeleteOptionGroupMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteOptionGroupResponse {}
+
+struct DeleteOptionGroupResponseDeserializer;
+impl DeleteOptionGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteOptionGroupResponse, XmlParseError> {
+        Ok(DeleteOptionGroupResponse::default())
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeAccountAttributesMessage {}
+pub struct DescribeAccountAttributesRequest {}
 
-/// Serialize `DescribeAccountAttributesMessage` contents to a `SignedRequest`.
-struct DescribeAccountAttributesMessageSerializer;
-impl DescribeAccountAttributesMessageSerializer {
-    fn serialize(_params: &mut Params, name: &str, _obj: &DescribeAccountAttributesMessage) {
+/// Serialize `DescribeAccountAttributesRequest` contents to a `SignedRequest`.
+struct DescribeAccountAttributesRequestSerializer;
+impl DescribeAccountAttributesRequestSerializer {
+    fn serialize(
+        _params: &mut impl ServiceParams,
+        name: &str,
+        _obj: &DescribeAccountAttributesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6401,9 +6174,40 @@ impl DescribeAccountAttributesMessageSerializer {
     }
 }
 
+/// <p>Data returned by the <b>DescribeAccountAttributes</b> action.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeAccountAttributesResponse {
+    /// <p>A list of <code>AccountQuota</code> objects. Within this list, each quota has a name, a count of usage toward the quota maximum, and a maximum value for the quota.</p>
+    pub account_quotas: Option<Vec<AccountQuota>>,
+}
+
+struct DescribeAccountAttributesResponseDeserializer;
+impl DescribeAccountAttributesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeAccountAttributesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeAccountAttributesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "AccountQuotas" => {
+                        obj.account_quotas.get_or_insert(vec![]).extend(
+                            AccountQuotaListDeserializer::deserialize("AccountQuotas", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeCertificatesMessage {
+pub struct DescribeCertificatesRequest {
     /// <p><p>The user-supplied certificate identifier. If this parameter is specified, information for only the identified certificate is returned. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match an existing CertificateIdentifier.</p> </li> </ul></p>
     pub certificate_identifier: Option<String>,
     /// <p>This parameter is not currently supported.</p>
@@ -6414,10 +6218,10 @@ pub struct DescribeCertificatesMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeCertificatesMessage` contents to a `SignedRequest`.
-struct DescribeCertificatesMessageSerializer;
-impl DescribeCertificatesMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeCertificatesMessage) {
+/// Serialize `DescribeCertificatesRequest` contents to a `SignedRequest`.
+struct DescribeCertificatesRequestSerializer;
+impl DescribeCertificatesRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeCertificatesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6445,9 +6249,45 @@ impl DescribeCertificatesMessageSerializer {
     }
 }
 
+/// <p>Data returned by the <b>DescribeCertificates</b> action.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeCertificatesResponse {
+    /// <p>The list of <code>Certificate</code> objects for the AWS account.</p>
+    pub certificates: Option<Vec<Certificate>>,
+    /// <p> An optional pagination token provided by a previous <code>DescribeCertificates</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeCertificatesResponseDeserializer;
+impl DescribeCertificatesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeCertificatesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeCertificatesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Certificates" => {
+                        obj.certificates.get_or_insert(vec![]).extend(
+                            CertificateListDeserializer::deserialize("Certificates", stack)?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBClusterBacktracksMessage {
+pub struct DescribeDBClusterBacktracksRequest {
     /// <p>If specified, this value is the backtrack identifier of the backtrack to be described.</p> <p>Constraints:</p> <ul> <li> <p>Must contain a valid universally unique identifier (UUID). For more information about UUIDs, see <a href="http://www.ietf.org/rfc/rfc4122.txt">A Universally Unique Identifier (UUID) URN Namespace</a>.</p> </li> </ul> <p>Example: <code>123e4567-e89b-12d3-a456-426655440000</code> </p>
     pub backtrack_identifier: Option<String>,
     /// <p>The DB cluster identifier of the DB cluster to be described. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Can't end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>my-cluster1</code> </p>
@@ -6460,10 +6300,14 @@ pub struct DescribeDBClusterBacktracksMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeDBClusterBacktracksMessage` contents to a `SignedRequest`.
-struct DescribeDBClusterBacktracksMessageSerializer;
-impl DescribeDBClusterBacktracksMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterBacktracksMessage) {
+/// Serialize `DescribeDBClusterBacktracksRequest` contents to a `SignedRequest`.
+struct DescribeDBClusterBacktracksRequestSerializer;
+impl DescribeDBClusterBacktracksRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeDBClusterBacktracksRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6495,8 +6339,47 @@ impl DescribeDBClusterBacktracksMessageSerializer {
     }
 }
 
+/// <p>Contains the result of a successful invocation of the <code>DescribeDBClusterBacktracks</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBClusterEndpointsMessage {
+pub struct DescribeDBClusterBacktracksResponse {
+    /// <p>Contains a list of backtracks for the user.</p>
+    pub db_cluster_backtracks: Option<Vec<DBClusterBacktrack>>,
+    /// <p>A pagination token that can be used in a subsequent <code>DescribeDBClusterBacktracks</code> request.</p>
+    pub marker: Option<String>,
+}
+
+struct DescribeDBClusterBacktracksResponseDeserializer;
+impl DescribeDBClusterBacktracksResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBClusterBacktracksResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBClusterBacktracksResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBClusterBacktracks" => {
+                        obj.db_cluster_backtracks.get_or_insert(vec![]).extend(
+                            DBClusterBacktrackListDeserializer::deserialize(
+                                "DBClusterBacktracks",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBClusterEndpointsRequest {
     /// <p>The identifier of the endpoint to describe. This parameter is stored as a lowercase string.</p>
     pub db_cluster_endpoint_identifier: Option<String>,
     /// <p>The DB cluster identifier of the DB cluster associated with the endpoint. This parameter is stored as a lowercase string.</p>
@@ -6509,10 +6392,14 @@ pub struct DescribeDBClusterEndpointsMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeDBClusterEndpointsMessage` contents to a `SignedRequest`.
-struct DescribeDBClusterEndpointsMessageSerializer;
-impl DescribeDBClusterEndpointsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterEndpointsMessage) {
+/// Serialize `DescribeDBClusterEndpointsRequest` contents to a `SignedRequest`.
+struct DescribeDBClusterEndpointsRequestSerializer;
+impl DescribeDBClusterEndpointsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeDBClusterEndpointsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6546,9 +6433,47 @@ impl DescribeDBClusterEndpointsMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBClusterEndpointsResponse {
+    /// <p>Contains the details of the endpoints associated with the cluster and matching any filter conditions.</p>
+    pub db_cluster_endpoints: Option<Vec<DBClusterEndpoint>>,
+    /// <p> An optional pagination token provided by a previous <code>DescribeDBClusterEndpoints</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeDBClusterEndpointsResponseDeserializer;
+impl DescribeDBClusterEndpointsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBClusterEndpointsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBClusterEndpointsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBClusterEndpoints" => {
+                        obj.db_cluster_endpoints.get_or_insert(vec![]).extend(
+                            DBClusterEndpointListDeserializer::deserialize(
+                                "DBClusterEndpoints",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBClusterParameterGroupsMessage {
+pub struct DescribeDBClusterParameterGroupsRequest {
     /// <p><p>The name of a specific DB cluster parameter group to return details for.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBClusterParameterGroup.</p> </li> </ul></p>
     pub db_cluster_parameter_group_name: Option<String>,
     /// <p>This parameter is not currently supported.</p>
@@ -6559,10 +6484,14 @@ pub struct DescribeDBClusterParameterGroupsMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeDBClusterParameterGroupsMessage` contents to a `SignedRequest`.
-struct DescribeDBClusterParameterGroupsMessageSerializer;
-impl DescribeDBClusterParameterGroupsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterParameterGroupsMessage) {
+/// Serialize `DescribeDBClusterParameterGroupsRequest` contents to a `SignedRequest`.
+struct DescribeDBClusterParameterGroupsRequestSerializer;
+impl DescribeDBClusterParameterGroupsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeDBClusterParameterGroupsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6592,7 +6521,46 @@ impl DescribeDBClusterParameterGroupsMessageSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBClusterParametersMessage {
+pub struct DescribeDBClusterParameterGroupsResponse {
+    /// <p>A list of DB cluster parameter groups.</p>
+    pub db_cluster_parameter_groups: Option<Vec<DBClusterParameterGroup>>,
+    /// <p> An optional pagination token provided by a previous <code>DescribeDBClusterParameterGroups</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeDBClusterParameterGroupsResponseDeserializer;
+impl DescribeDBClusterParameterGroupsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBClusterParameterGroupsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBClusterParameterGroupsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBClusterParameterGroups" => {
+                        obj.db_cluster_parameter_groups
+                            .get_or_insert(vec![])
+                            .extend(DBClusterParameterGroupListDeserializer::deserialize(
+                                "DBClusterParameterGroups",
+                                stack,
+                            )?);
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBClusterParametersRequest {
     /// <p><p>The name of a specific DB cluster parameter group to return parameter details for.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBClusterParameterGroup.</p> </li> </ul></p>
     pub db_cluster_parameter_group_name: String,
     /// <p>This parameter is not currently supported.</p>
@@ -6605,10 +6573,14 @@ pub struct DescribeDBClusterParametersMessage {
     pub source: Option<String>,
 }
 
-/// Serialize `DescribeDBClusterParametersMessage` contents to a `SignedRequest`.
-struct DescribeDBClusterParametersMessageSerializer;
-impl DescribeDBClusterParametersMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterParametersMessage) {
+/// Serialize `DescribeDBClusterParametersRequest` contents to a `SignedRequest`.
+struct DescribeDBClusterParametersRequestSerializer;
+impl DescribeDBClusterParametersRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeDBClusterParametersRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6637,20 +6609,56 @@ impl DescribeDBClusterParametersMessageSerializer {
     }
 }
 
+/// <p>Provides details about a DB cluster parameter group including the parameters in the DB cluster parameter group.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBClusterParametersResponse {
+    /// <p> An optional pagination token provided by a previous DescribeDBClusterParameters request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
+    pub marker: Option<String>,
+    /// <p>Provides a list of parameters for the DB cluster parameter group.</p>
+    pub parameters: Option<Vec<Parameter>>,
+}
+
+struct DescribeDBClusterParametersResponseDeserializer;
+impl DescribeDBClusterParametersResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBClusterParametersResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBClusterParametersResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "Parameters" => {
+                        obj.parameters.get_or_insert(vec![]).extend(
+                            ParametersListDeserializer::deserialize("Parameters", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBClusterSnapshotAttributesMessage {
+pub struct DescribeDBClusterSnapshotAttributesRequest {
     /// <p>The identifier for the DB cluster snapshot to describe the attributes for.</p>
     pub db_cluster_snapshot_identifier: String,
 }
 
-/// Serialize `DescribeDBClusterSnapshotAttributesMessage` contents to a `SignedRequest`.
-struct DescribeDBClusterSnapshotAttributesMessageSerializer;
-impl DescribeDBClusterSnapshotAttributesMessageSerializer {
+/// Serialize `DescribeDBClusterSnapshotAttributesRequest` contents to a `SignedRequest`.
+struct DescribeDBClusterSnapshotAttributesRequestSerializer;
+impl DescribeDBClusterSnapshotAttributesRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
-        obj: &DescribeDBClusterSnapshotAttributesMessage,
+        obj: &DescribeDBClusterSnapshotAttributesRequest,
     ) {
         let mut prefix = name.to_string();
         if prefix != "" {
@@ -6665,18 +6673,18 @@ impl DescribeDBClusterSnapshotAttributesMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBClusterSnapshotAttributesResult {
+pub struct DescribeDBClusterSnapshotAttributesResponse {
     pub db_cluster_snapshot_attributes_result: Option<DBClusterSnapshotAttributesResult>,
 }
 
-struct DescribeDBClusterSnapshotAttributesResultDeserializer;
-impl DescribeDBClusterSnapshotAttributesResultDeserializer {
+struct DescribeDBClusterSnapshotAttributesResponseDeserializer;
+impl DescribeDBClusterSnapshotAttributesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeDBClusterSnapshotAttributesResult, XmlParseError> {
-        deserialize_elements::<_, DescribeDBClusterSnapshotAttributesResult, _>(
+    ) -> Result<DescribeDBClusterSnapshotAttributesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBClusterSnapshotAttributesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -6697,7 +6705,7 @@ impl DescribeDBClusterSnapshotAttributesResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBClusterSnapshotsMessage {
+pub struct DescribeDBClusterSnapshotsRequest {
     /// <p><p>The ID of the DB cluster to retrieve the list of DB cluster snapshots for. This parameter can&#39;t be used in conjunction with the <code>DBClusterSnapshotIdentifier</code> parameter. This parameter is not case-sensitive. </p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the identifier of an existing DBCluster.</p> </li> </ul></p>
     pub db_cluster_identifier: Option<String>,
     /// <p><p>A specific DB cluster snapshot identifier to describe. This parameter can&#39;t be used in conjunction with the <code>DBClusterIdentifier</code> parameter. This value is stored as a lowercase string. </p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the identifier of an existing DBClusterSnapshot.</p> </li> <li> <p>If this identifier is for an automated snapshot, the <code>SnapshotType</code> parameter must also be specified.</p> </li> </ul></p>
@@ -6716,10 +6724,14 @@ pub struct DescribeDBClusterSnapshotsMessage {
     pub snapshot_type: Option<String>,
 }
 
-/// Serialize `DescribeDBClusterSnapshotsMessage` contents to a `SignedRequest`.
-struct DescribeDBClusterSnapshotsMessageSerializer;
-impl DescribeDBClusterSnapshotsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterSnapshotsMessage) {
+/// Serialize `DescribeDBClusterSnapshotsRequest` contents to a `SignedRequest`.
+struct DescribeDBClusterSnapshotsRequestSerializer;
+impl DescribeDBClusterSnapshotsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeDBClusterSnapshotsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6762,9 +6774,48 @@ impl DescribeDBClusterSnapshotsMessageSerializer {
     }
 }
 
+/// <p> Provides a list of DB cluster snapshots for the user as the result of a call to the <code>DescribeDBClusterSnapshots</code> action. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBClusterSnapshotsResponse {
+    /// <p>Provides a list of DB cluster snapshots for the user.</p>
+    pub db_cluster_snapshots: Option<Vec<DBClusterSnapshot>>,
+    /// <p> An optional pagination token provided by a previous <code>DescribeDBClusterSnapshots</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeDBClusterSnapshotsResponseDeserializer;
+impl DescribeDBClusterSnapshotsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBClusterSnapshotsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBClusterSnapshotsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBClusterSnapshots" => {
+                        obj.db_cluster_snapshots.get_or_insert(vec![]).extend(
+                            DBClusterSnapshotListDeserializer::deserialize(
+                                "DBClusterSnapshots",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBClustersMessage {
+pub struct DescribeDBClustersRequest {
     /// <p><p>The user-supplied DB cluster identifier. If this parameter is specified, information from only the specific DB cluster is returned. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match an existing DBClusterIdentifier.</p> </li> </ul></p>
     pub db_cluster_identifier: Option<String>,
     /// <p><p>A filter that specifies one or more DB clusters to describe.</p> <p>Supported filters:</p> <ul> <li> <p> <code>db-cluster-id</code> - Accepts DB cluster identifiers and DB cluster Amazon Resource Names (ARNs). The results list will only include information about the DB clusters identified by these ARNs.</p> </li> </ul></p>
@@ -6775,10 +6826,10 @@ pub struct DescribeDBClustersMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeDBClustersMessage` contents to a `SignedRequest`.
-struct DescribeDBClustersMessageSerializer;
-impl DescribeDBClustersMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClustersMessage) {
+/// Serialize `DescribeDBClustersRequest` contents to a `SignedRequest`.
+struct DescribeDBClustersRequestSerializer;
+impl DescribeDBClustersRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeDBClustersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6806,8 +6857,44 @@ impl DescribeDBClustersMessageSerializer {
     }
 }
 
+/// <p>Contains the result of a successful invocation of the <code>DescribeDBClusters</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBEngineVersionsMessage {
+pub struct DescribeDBClustersResponse {
+    /// <p>Contains a list of DB clusters for the user.</p>
+    pub db_clusters: Option<Vec<DBCluster>>,
+    /// <p>A pagination token that can be used in a subsequent DescribeDBClusters request.</p>
+    pub marker: Option<String>,
+}
+
+struct DescribeDBClustersResponseDeserializer;
+impl DescribeDBClustersResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBClustersResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBClustersResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBClusters" => {
+                        obj.db_clusters
+                            .get_or_insert(vec![])
+                            .extend(DBClusterListDeserializer::deserialize("DBClusters", stack)?);
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBEngineVersionsRequest {
     /// <p><p>The name of a specific DB parameter group family to return details for.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match an existing DBParameterGroupFamily.</p> </li> </ul></p>
     pub db_parameter_group_family: Option<String>,
     /// <p>A value that indicates whether only the default version of the specified engine or engine and major version combination is returned.</p>
@@ -6828,10 +6915,14 @@ pub struct DescribeDBEngineVersionsMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeDBEngineVersionsMessage` contents to a `SignedRequest`.
-struct DescribeDBEngineVersionsMessageSerializer;
-impl DescribeDBEngineVersionsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBEngineVersionsMessage) {
+/// Serialize `DescribeDBEngineVersionsRequest` contents to a `SignedRequest`.
+struct DescribeDBEngineVersionsRequestSerializer;
+impl DescribeDBEngineVersionsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeDBEngineVersionsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6880,9 +6971,48 @@ impl DescribeDBEngineVersionsMessageSerializer {
     }
 }
 
+/// <p> Contains the result of a successful invocation of the <code>DescribeDBEngineVersions</code> action. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBEngineVersionsResponse {
+    /// <p> A list of <code>DBEngineVersion</code> elements. </p>
+    pub db_engine_versions: Option<Vec<DBEngineVersion>>,
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeDBEngineVersionsResponseDeserializer;
+impl DescribeDBEngineVersionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBEngineVersionsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBEngineVersionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBEngineVersions" => {
+                        obj.db_engine_versions.get_or_insert(vec![]).extend(
+                            DBEngineVersionListDeserializer::deserialize(
+                                "DBEngineVersions",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Parameter input for DescribeDBInstanceAutomatedBackups. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBInstanceAutomatedBackupsMessage {
+pub struct DescribeDBInstanceAutomatedBackupsRequest {
     /// <p>(Optional) The user-supplied instance identifier. If this parameter is specified, it must match the identifier of an existing DB instance. It returns information from the specific DB instance' automated backup. This parameter isn't case-sensitive. </p>
     pub db_instance_identifier: Option<String>,
     /// <p>The resource ID of the DB instance that is the source of the automated backup. This parameter isn't case-sensitive. </p>
@@ -6895,10 +7025,14 @@ pub struct DescribeDBInstanceAutomatedBackupsMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeDBInstanceAutomatedBackupsMessage` contents to a `SignedRequest`.
-struct DescribeDBInstanceAutomatedBackupsMessageSerializer;
-impl DescribeDBInstanceAutomatedBackupsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBInstanceAutomatedBackupsMessage) {
+/// Serialize `DescribeDBInstanceAutomatedBackupsRequest` contents to a `SignedRequest`.
+struct DescribeDBInstanceAutomatedBackupsRequestSerializer;
+impl DescribeDBInstanceAutomatedBackupsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeDBInstanceAutomatedBackupsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6929,9 +7063,48 @@ impl DescribeDBInstanceAutomatedBackupsMessageSerializer {
     }
 }
 
+/// <p> Contains the result of a successful invocation of the <code>DescribeDBInstanceAutomatedBackups</code> action. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBInstanceAutomatedBackupsResponse {
+    /// <p> A list of <code>DBInstanceAutomatedBackup</code> instances. </p>
+    pub db_instance_automated_backups: Option<Vec<DBInstanceAutomatedBackup>>,
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeDBInstanceAutomatedBackupsResponseDeserializer;
+impl DescribeDBInstanceAutomatedBackupsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBInstanceAutomatedBackupsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBInstanceAutomatedBackupsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBInstanceAutomatedBackups" => {
+                        obj.db_instance_automated_backups
+                            .get_or_insert(vec![])
+                            .extend(DBInstanceAutomatedBackupListDeserializer::deserialize(
+                                "DBInstanceAutomatedBackups",
+                                stack,
+                            )?);
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBInstancesMessage {
+pub struct DescribeDBInstancesRequest {
     /// <p><p>The user-supplied instance identifier. If this parameter is specified, information from only the specific DB instance is returned. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the identifier of an existing DBInstance.</p> </li> </ul></p>
     pub db_instance_identifier: Option<String>,
     /// <p><p>A filter that specifies one or more DB instances to describe.</p> <p>Supported filters:</p> <ul> <li> <p> <code>db-cluster-id</code> - Accepts DB cluster identifiers and DB cluster Amazon Resource Names (ARNs). The results list will only include information about the DB instances associated with the DB clusters identified by these ARNs.</p> </li> <li> <p> <code>db-instance-id</code> - Accepts DB instance identifiers and DB instance Amazon Resource Names (ARNs). The results list will only include information about the DB instances identified by these ARNs.</p> </li> </ul></p>
@@ -6942,10 +7115,10 @@ pub struct DescribeDBInstancesMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeDBInstancesMessage` contents to a `SignedRequest`.
-struct DescribeDBInstancesMessageSerializer;
-impl DescribeDBInstancesMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBInstancesMessage) {
+/// Serialize `DescribeDBInstancesRequest` contents to a `SignedRequest`.
+struct DescribeDBInstancesRequestSerializer;
+impl DescribeDBInstancesRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeDBInstancesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6973,6 +7146,42 @@ impl DescribeDBInstancesMessageSerializer {
     }
 }
 
+/// <p> Contains the result of a successful invocation of the <code>DescribeDBInstances</code> action. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBInstancesResponse {
+    /// <p> A list of <code>DBInstance</code> instances. </p>
+    pub db_instances: Option<Vec<DBInstance>>,
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeDBInstancesResponseDeserializer;
+impl DescribeDBInstancesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBInstancesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBInstancesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBInstances" => {
+                        obj.db_instances.get_or_insert(vec![]).extend(
+                            DBInstanceListDeserializer::deserialize("DBInstances", stack)?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>This data type is used as a response element to <code>DescribeDBLogFiles</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBLogFilesDetails {
@@ -7036,7 +7245,7 @@ impl DescribeDBLogFilesListDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBLogFilesMessage {
+pub struct DescribeDBLogFilesRequest {
     /// <p><p>The customer-assigned name of the DB instance that contains the log files you want to list.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBInstance.</p> </li> </ul></p>
     pub db_instance_identifier: String,
     /// <p>Filters the available log files for files written since the specified date, in POSIX timestamp format with milliseconds.</p>
@@ -7053,10 +7262,10 @@ pub struct DescribeDBLogFilesMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeDBLogFilesMessage` contents to a `SignedRequest`.
-struct DescribeDBLogFilesMessageSerializer;
-impl DescribeDBLogFilesMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBLogFilesMessage) {
+/// Serialize `DescribeDBLogFilesRequest` contents to a `SignedRequest`.
+struct DescribeDBLogFilesRequestSerializer;
+impl DescribeDBLogFilesRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeDBLogFilesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7132,7 +7341,7 @@ impl DescribeDBLogFilesResponseDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBParameterGroupsMessage {
+pub struct DescribeDBParameterGroupsRequest {
     /// <p><p>The name of a specific DB parameter group to return details for.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBClusterParameterGroup.</p> </li> </ul></p>
     pub db_parameter_group_name: Option<String>,
     /// <p>This parameter is not currently supported.</p>
@@ -7143,10 +7352,14 @@ pub struct DescribeDBParameterGroupsMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeDBParameterGroupsMessage` contents to a `SignedRequest`.
-struct DescribeDBParameterGroupsMessageSerializer;
-impl DescribeDBParameterGroupsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBParameterGroupsMessage) {
+/// Serialize `DescribeDBParameterGroupsRequest` contents to a `SignedRequest`.
+struct DescribeDBParameterGroupsRequestSerializer;
+impl DescribeDBParameterGroupsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeDBParameterGroupsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7174,8 +7387,47 @@ impl DescribeDBParameterGroupsMessageSerializer {
     }
 }
 
+/// <p> Contains the result of a successful invocation of the <code>DescribeDBParameterGroups</code> action. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBParametersMessage {
+pub struct DescribeDBParameterGroupsResponse {
+    /// <p> A list of <code>DBParameterGroup</code> instances. </p>
+    pub db_parameter_groups: Option<Vec<DBParameterGroup>>,
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeDBParameterGroupsResponseDeserializer;
+impl DescribeDBParameterGroupsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBParameterGroupsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBParameterGroupsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBParameterGroups" => {
+                        obj.db_parameter_groups.get_or_insert(vec![]).extend(
+                            DBParameterGroupListDeserializer::deserialize(
+                                "DBParameterGroups",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBParametersRequest {
     /// <p><p>The name of a specific DB parameter group to return details for.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBParameterGroup.</p> </li> </ul></p>
     pub db_parameter_group_name: String,
     /// <p>This parameter is not currently supported.</p>
@@ -7188,10 +7440,10 @@ pub struct DescribeDBParametersMessage {
     pub source: Option<String>,
 }
 
-/// Serialize `DescribeDBParametersMessage` contents to a `SignedRequest`.
-struct DescribeDBParametersMessageSerializer;
-impl DescribeDBParametersMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBParametersMessage) {
+/// Serialize `DescribeDBParametersRequest` contents to a `SignedRequest`.
+struct DescribeDBParametersRequestSerializer;
+impl DescribeDBParametersRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeDBParametersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7220,9 +7472,45 @@ impl DescribeDBParametersMessageSerializer {
     }
 }
 
+/// <p> Contains the result of a successful invocation of the <code>DescribeDBParameters</code> action. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBParametersResponse {
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    pub marker: Option<String>,
+    /// <p> A list of <code>Parameter</code> values. </p>
+    pub parameters: Option<Vec<Parameter>>,
+}
+
+struct DescribeDBParametersResponseDeserializer;
+impl DescribeDBParametersResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBParametersResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBParametersResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "Parameters" => {
+                        obj.parameters.get_or_insert(vec![]).extend(
+                            ParametersListDeserializer::deserialize("Parameters", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBSecurityGroupsMessage {
+pub struct DescribeDBSecurityGroupsRequest {
     /// <p>The name of the DB security group to return details for.</p>
     pub db_security_group_name: Option<String>,
     /// <p>This parameter is not currently supported.</p>
@@ -7233,10 +7521,14 @@ pub struct DescribeDBSecurityGroupsMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeDBSecurityGroupsMessage` contents to a `SignedRequest`.
-struct DescribeDBSecurityGroupsMessageSerializer;
-impl DescribeDBSecurityGroupsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBSecurityGroupsMessage) {
+/// Serialize `DescribeDBSecurityGroupsRequest` contents to a `SignedRequest`.
+struct DescribeDBSecurityGroupsRequestSerializer;
+impl DescribeDBSecurityGroupsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeDBSecurityGroupsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7264,17 +7556,57 @@ impl DescribeDBSecurityGroupsMessageSerializer {
     }
 }
 
+/// <p> Contains the result of a successful invocation of the <code>DescribeDBSecurityGroups</code> action. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBSecurityGroupsResponse {
+    /// <p> A list of <code>DBSecurityGroup</code> instances. </p>
+    pub db_security_groups: Option<Vec<DBSecurityGroup>>,
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeDBSecurityGroupsResponseDeserializer;
+impl DescribeDBSecurityGroupsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBSecurityGroupsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBSecurityGroupsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBSecurityGroups" => {
+                        obj.db_security_groups.get_or_insert(vec![]).extend(
+                            DBSecurityGroupsDeserializer::deserialize("DBSecurityGroups", stack)?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBSnapshotAttributesMessage {
+pub struct DescribeDBSnapshotAttributesRequest {
     /// <p>The identifier for the DB snapshot to describe the attributes for.</p>
     pub db_snapshot_identifier: String,
 }
 
-/// Serialize `DescribeDBSnapshotAttributesMessage` contents to a `SignedRequest`.
-struct DescribeDBSnapshotAttributesMessageSerializer;
-impl DescribeDBSnapshotAttributesMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBSnapshotAttributesMessage) {
+/// Serialize `DescribeDBSnapshotAttributesRequest` contents to a `SignedRequest`.
+struct DescribeDBSnapshotAttributesRequestSerializer;
+impl DescribeDBSnapshotAttributesRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeDBSnapshotAttributesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7288,18 +7620,18 @@ impl DescribeDBSnapshotAttributesMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBSnapshotAttributesResult {
+pub struct DescribeDBSnapshotAttributesResponse {
     pub db_snapshot_attributes_result: Option<DBSnapshotAttributesResult>,
 }
 
-struct DescribeDBSnapshotAttributesResultDeserializer;
-impl DescribeDBSnapshotAttributesResultDeserializer {
+struct DescribeDBSnapshotAttributesResponseDeserializer;
+impl DescribeDBSnapshotAttributesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeDBSnapshotAttributesResult, XmlParseError> {
-        deserialize_elements::<_, DescribeDBSnapshotAttributesResult, _>(
+    ) -> Result<DescribeDBSnapshotAttributesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBSnapshotAttributesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -7320,7 +7652,7 @@ impl DescribeDBSnapshotAttributesResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBSnapshotsMessage {
+pub struct DescribeDBSnapshotsRequest {
     /// <p><p>The ID of the DB instance to retrieve the list of DB snapshots for. This parameter can&#39;t be used in conjunction with <code>DBSnapshotIdentifier</code>. This parameter is not case-sensitive. </p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the identifier of an existing DBInstance.</p> </li> </ul></p>
     pub db_instance_identifier: Option<String>,
     /// <p><p> A specific DB snapshot identifier to describe. This parameter can&#39;t be used in conjunction with <code>DBInstanceIdentifier</code>. This value is stored as a lowercase string. </p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the identifier of an existing DBSnapshot.</p> </li> <li> <p>If this identifier is for an automated snapshot, the <code>SnapshotType</code> parameter must also be specified.</p> </li> </ul></p>
@@ -7341,10 +7673,10 @@ pub struct DescribeDBSnapshotsMessage {
     pub snapshot_type: Option<String>,
 }
 
-/// Serialize `DescribeDBSnapshotsMessage` contents to a `SignedRequest`.
-struct DescribeDBSnapshotsMessageSerializer;
-impl DescribeDBSnapshotsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBSnapshotsMessage) {
+/// Serialize `DescribeDBSnapshotsRequest` contents to a `SignedRequest`.
+struct DescribeDBSnapshotsRequestSerializer;
+impl DescribeDBSnapshotsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeDBSnapshotsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7390,9 +7722,45 @@ impl DescribeDBSnapshotsMessageSerializer {
     }
 }
 
+/// <p> Contains the result of a successful invocation of the <code>DescribeDBSnapshots</code> action. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBSnapshotsResponse {
+    /// <p> A list of <code>DBSnapshot</code> instances. </p>
+    pub db_snapshots: Option<Vec<DBSnapshot>>,
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeDBSnapshotsResponseDeserializer;
+impl DescribeDBSnapshotsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBSnapshotsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBSnapshotsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBSnapshots" => {
+                        obj.db_snapshots.get_or_insert(vec![]).extend(
+                            DBSnapshotListDeserializer::deserialize("DBSnapshots", stack)?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBSubnetGroupsMessage {
+pub struct DescribeDBSubnetGroupsRequest {
     /// <p>The name of the DB subnet group to return details for.</p>
     pub db_subnet_group_name: Option<String>,
     /// <p>This parameter is not currently supported.</p>
@@ -7403,10 +7771,10 @@ pub struct DescribeDBSubnetGroupsMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeDBSubnetGroupsMessage` contents to a `SignedRequest`.
-struct DescribeDBSubnetGroupsMessageSerializer;
-impl DescribeDBSubnetGroupsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBSubnetGroupsMessage) {
+/// Serialize `DescribeDBSubnetGroupsRequest` contents to a `SignedRequest`.
+struct DescribeDBSubnetGroupsRequestSerializer;
+impl DescribeDBSubnetGroupsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeDBSubnetGroupsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7431,9 +7799,45 @@ impl DescribeDBSubnetGroupsMessageSerializer {
     }
 }
 
+/// <p> Contains the result of a successful invocation of the <code>DescribeDBSubnetGroups</code> action. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBSubnetGroupsResponse {
+    /// <p> A list of <code>DBSubnetGroup</code> instances. </p>
+    pub db_subnet_groups: Option<Vec<DBSubnetGroup>>,
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeDBSubnetGroupsResponseDeserializer;
+impl DescribeDBSubnetGroupsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBSubnetGroupsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBSubnetGroupsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBSubnetGroups" => {
+                        obj.db_subnet_groups.get_or_insert(vec![]).extend(
+                            DBSubnetGroupsDeserializer::deserialize("DBSubnetGroups", stack)?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEngineDefaultClusterParametersMessage {
+pub struct DescribeEngineDefaultClusterParametersRequest {
     /// <p>The name of the DB cluster parameter group family to return engine parameter information for.</p>
     pub db_parameter_group_family: String,
     /// <p>This parameter is not currently supported.</p>
@@ -7444,13 +7848,13 @@ pub struct DescribeEngineDefaultClusterParametersMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeEngineDefaultClusterParametersMessage` contents to a `SignedRequest`.
-struct DescribeEngineDefaultClusterParametersMessageSerializer;
-impl DescribeEngineDefaultClusterParametersMessageSerializer {
+/// Serialize `DescribeEngineDefaultClusterParametersRequest` contents to a `SignedRequest`.
+struct DescribeEngineDefaultClusterParametersRequestSerializer;
+impl DescribeEngineDefaultClusterParametersRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
-        obj: &DescribeEngineDefaultClusterParametersMessage,
+        obj: &DescribeEngineDefaultClusterParametersRequest,
     ) {
         let mut prefix = name.to_string();
         if prefix != "" {
@@ -7478,18 +7882,18 @@ impl DescribeEngineDefaultClusterParametersMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEngineDefaultClusterParametersResult {
+pub struct DescribeEngineDefaultClusterParametersResponse {
     pub engine_defaults: Option<EngineDefaults>,
 }
 
-struct DescribeEngineDefaultClusterParametersResultDeserializer;
-impl DescribeEngineDefaultClusterParametersResultDeserializer {
+struct DescribeEngineDefaultClusterParametersResponseDeserializer;
+impl DescribeEngineDefaultClusterParametersResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeEngineDefaultClusterParametersResult, XmlParseError> {
-        deserialize_elements::<_, DescribeEngineDefaultClusterParametersResult, _>(
+    ) -> Result<DescribeEngineDefaultClusterParametersResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeEngineDefaultClusterParametersResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -7509,7 +7913,7 @@ impl DescribeEngineDefaultClusterParametersResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEngineDefaultParametersMessage {
+pub struct DescribeEngineDefaultParametersRequest {
     /// <p>The name of the DB parameter group family.</p>
     pub db_parameter_group_family: String,
     /// <p>This parameter is not currently supported.</p>
@@ -7520,10 +7924,14 @@ pub struct DescribeEngineDefaultParametersMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeEngineDefaultParametersMessage` contents to a `SignedRequest`.
-struct DescribeEngineDefaultParametersMessageSerializer;
-impl DescribeEngineDefaultParametersMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeEngineDefaultParametersMessage) {
+/// Serialize `DescribeEngineDefaultParametersRequest` contents to a `SignedRequest`.
+struct DescribeEngineDefaultParametersRequestSerializer;
+impl DescribeEngineDefaultParametersRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeEngineDefaultParametersRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7550,18 +7958,18 @@ impl DescribeEngineDefaultParametersMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEngineDefaultParametersResult {
+pub struct DescribeEngineDefaultParametersResponse {
     pub engine_defaults: Option<EngineDefaults>,
 }
 
-struct DescribeEngineDefaultParametersResultDeserializer;
-impl DescribeEngineDefaultParametersResultDeserializer {
+struct DescribeEngineDefaultParametersResponseDeserializer;
+impl DescribeEngineDefaultParametersResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeEngineDefaultParametersResult, XmlParseError> {
-        deserialize_elements::<_, DescribeEngineDefaultParametersResult, _>(
+    ) -> Result<DescribeEngineDefaultParametersResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeEngineDefaultParametersResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -7581,17 +7989,21 @@ impl DescribeEngineDefaultParametersResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEventCategoriesMessage {
+pub struct DescribeEventCategoriesRequest {
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The type of source that is generating the events.</p> <p>Valid values: db-instance | db-parameter-group | db-security-group | db-snapshot</p>
     pub source_type: Option<String>,
 }
 
-/// Serialize `DescribeEventCategoriesMessage` contents to a `SignedRequest`.
-struct DescribeEventCategoriesMessageSerializer;
-impl DescribeEventCategoriesMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeEventCategoriesMessage) {
+/// Serialize `DescribeEventCategoriesRequest` contents to a `SignedRequest`.
+struct DescribeEventCategoriesRequestSerializer;
+impl DescribeEventCategoriesRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeEventCategoriesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7610,9 +8022,43 @@ impl DescribeEventCategoriesMessageSerializer {
     }
 }
 
+/// <p>Data returned from the <b>DescribeEventCategories</b> action.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeEventCategoriesResponse {
+    /// <p>A list of EventCategoriesMap data types.</p>
+    pub event_categories_map_list: Option<Vec<EventCategoriesMap>>,
+}
+
+struct DescribeEventCategoriesResponseDeserializer;
+impl DescribeEventCategoriesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeEventCategoriesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeEventCategoriesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "EventCategoriesMapList" => {
+                        obj.event_categories_map_list.get_or_insert(vec![]).extend(
+                            EventCategoriesMapListDeserializer::deserialize(
+                                "EventCategoriesMapList",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEventSubscriptionsMessage {
+pub struct DescribeEventSubscriptionsRequest {
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
     /// <p> An optional pagination token provided by a previous DescribeOrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
@@ -7623,10 +8069,14 @@ pub struct DescribeEventSubscriptionsMessage {
     pub subscription_name: Option<String>,
 }
 
-/// Serialize `DescribeEventSubscriptionsMessage` contents to a `SignedRequest`.
-struct DescribeEventSubscriptionsMessageSerializer;
-impl DescribeEventSubscriptionsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeEventSubscriptionsMessage) {
+/// Serialize `DescribeEventSubscriptionsRequest` contents to a `SignedRequest`.
+struct DescribeEventSubscriptionsRequestSerializer;
+impl DescribeEventSubscriptionsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeEventSubscriptionsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7651,9 +8101,48 @@ impl DescribeEventSubscriptionsMessageSerializer {
     }
 }
 
+/// <p>Data returned by the <b>DescribeEventSubscriptions</b> action.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeEventSubscriptionsResponse {
+    /// <p>A list of EventSubscriptions data types.</p>
+    pub event_subscriptions_list: Option<Vec<EventSubscription>>,
+    /// <p> An optional pagination token provided by a previous DescribeOrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeEventSubscriptionsResponseDeserializer;
+impl DescribeEventSubscriptionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeEventSubscriptionsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeEventSubscriptionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "EventSubscriptionsList" => {
+                        obj.event_subscriptions_list.get_or_insert(vec![]).extend(
+                            EventSubscriptionsListDeserializer::deserialize(
+                                "EventSubscriptionsList",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEventsMessage {
+pub struct DescribeEventsRequest {
     /// <p>The number of minutes to retrieve events for.</p> <p>Default: 60</p>
     pub duration: Option<i64>,
     /// <p> The end of the time interval for which to retrieve events, specified in ISO 8601 format. For more information about ISO 8601, go to the <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO8601 Wikipedia page.</a> </p> <p>Example: 2009-07-08T18:00Z</p>
@@ -7674,10 +8163,10 @@ pub struct DescribeEventsMessage {
     pub start_time: Option<String>,
 }
 
-/// Serialize `DescribeEventsMessage` contents to a `SignedRequest`.
-struct DescribeEventsMessageSerializer;
-impl DescribeEventsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeEventsMessage) {
+/// Serialize `DescribeEventsRequest` contents to a `SignedRequest`.
+struct DescribeEventsRequestSerializer;
+impl DescribeEventsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeEventsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7721,8 +8210,40 @@ impl DescribeEventsMessageSerializer {
     }
 }
 
+/// <p> Contains the result of a successful invocation of the <code>DescribeEvents</code> action. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeGlobalClustersMessage {
+pub struct DescribeEventsResponse {
+    /// <p> A list of <code>Event</code> instances. </p>
+    pub events: Option<Vec<Event>>,
+    /// <p> An optional pagination token provided by a previous Events request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeEventsResponseDeserializer;
+impl DescribeEventsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeEventsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeEventsResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Events" => {
+                    obj.events
+                        .get_or_insert(vec![])
+                        .extend(EventListDeserializer::deserialize("Events", stack)?);
+                }
+                "Marker" => {
+                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeGlobalClustersRequest {
     /// <p><p>A filter that specifies one or more global DB clusters to describe.</p> <p>Supported filters:</p> <ul> <li> <p> <code>db-cluster-id</code> - Accepts DB cluster identifiers and DB cluster Amazon Resource Names (ARNs). The results list will only include information about the DB clusters identified by these ARNs.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p><p> The user-supplied DB cluster identifier. If this parameter is specified, information from only the specific DB cluster is returned. This parameter isn&#39;t case-sensitive. </p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match an existing DBClusterIdentifier.</p> </li> </ul></p>
@@ -7733,10 +8254,10 @@ pub struct DescribeGlobalClustersMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeGlobalClustersMessage` contents to a `SignedRequest`.
-struct DescribeGlobalClustersMessageSerializer;
-impl DescribeGlobalClustersMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeGlobalClustersMessage) {
+/// Serialize `DescribeGlobalClustersRequest` contents to a `SignedRequest`.
+struct DescribeGlobalClustersRequestSerializer;
+impl DescribeGlobalClustersRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeGlobalClustersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7764,9 +8285,44 @@ impl DescribeGlobalClustersMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeGlobalClustersResponse {
+    /// <p> The list of global clusters returned by this request. </p>
+    pub global_clusters: Option<Vec<GlobalCluster>>,
+    /// <p> An optional pagination token provided by a previous <code>DescribeGlobalClusters</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeGlobalClustersResponseDeserializer;
+impl DescribeGlobalClustersResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeGlobalClustersResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeGlobalClustersResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "GlobalClusters" => {
+                        obj.global_clusters.get_or_insert(vec![]).extend(
+                            GlobalClusterListDeserializer::deserialize("GlobalClusters", stack)?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeOptionGroupOptionsMessage {
+pub struct DescribeOptionGroupOptionsRequest {
     /// <p>A required parameter. Options available for the given engine name are described.</p>
     pub engine_name: String,
     /// <p>This parameter is not currently supported.</p>
@@ -7779,10 +8335,14 @@ pub struct DescribeOptionGroupOptionsMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeOptionGroupOptionsMessage` contents to a `SignedRequest`.
-struct DescribeOptionGroupOptionsMessageSerializer;
-impl DescribeOptionGroupOptionsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeOptionGroupOptionsMessage) {
+/// Serialize `DescribeOptionGroupOptionsRequest` contents to a `SignedRequest`.
+struct DescribeOptionGroupOptionsRequestSerializer;
+impl DescribeOptionGroupOptionsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeOptionGroupOptionsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7810,7 +8370,45 @@ impl DescribeOptionGroupOptionsMessageSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeOptionGroupsMessage {
+pub struct DescribeOptionGroupOptionsResponse {
+    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    pub marker: Option<String>,
+    pub option_group_options: Option<Vec<OptionGroupOption>>,
+}
+
+struct DescribeOptionGroupOptionsResponseDeserializer;
+impl DescribeOptionGroupOptionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeOptionGroupOptionsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeOptionGroupOptionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "OptionGroupOptions" => {
+                        obj.option_group_options.get_or_insert(vec![]).extend(
+                            OptionGroupOptionsListDeserializer::deserialize(
+                                "OptionGroupOptions",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeOptionGroupsRequest {
     /// <p>Filters the list of option groups to only include groups associated with a specific database engine.</p>
     pub engine_name: Option<String>,
     /// <p>This parameter is not currently supported.</p>
@@ -7825,10 +8423,10 @@ pub struct DescribeOptionGroupsMessage {
     pub option_group_name: Option<String>,
 }
 
-/// Serialize `DescribeOptionGroupsMessage` contents to a `SignedRequest`.
-struct DescribeOptionGroupsMessageSerializer;
-impl DescribeOptionGroupsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeOptionGroupsMessage) {
+/// Serialize `DescribeOptionGroupsRequest` contents to a `SignedRequest`.
+struct DescribeOptionGroupsRequestSerializer;
+impl DescribeOptionGroupsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeOptionGroupsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7859,9 +8457,45 @@ impl DescribeOptionGroupsMessageSerializer {
     }
 }
 
+/// <p>List of option groups.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeOptionGroupsResponse {
+    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    pub marker: Option<String>,
+    /// <p>List of option groups.</p>
+    pub option_groups_list: Option<Vec<OptionGroup>>,
+}
+
+struct DescribeOptionGroupsResponseDeserializer;
+impl DescribeOptionGroupsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeOptionGroupsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeOptionGroupsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "OptionGroupsList" => {
+                        obj.option_groups_list.get_or_insert(vec![]).extend(
+                            OptionGroupsListDeserializer::deserialize("OptionGroupsList", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeOrderableDBInstanceOptionsMessage {
+pub struct DescribeOrderableDBInstanceOptionsRequest {
     /// <p>The DB instance class filter value. Specify this parameter to show only the available offerings matching the specified DB instance class.</p>
     pub db_instance_class: Option<String>,
     /// <p>The name of the engine to retrieve DB instance options for.</p>
@@ -7880,10 +8514,14 @@ pub struct DescribeOrderableDBInstanceOptionsMessage {
     pub vpc: Option<bool>,
 }
 
-/// Serialize `DescribeOrderableDBInstanceOptionsMessage` contents to a `SignedRequest`.
-struct DescribeOrderableDBInstanceOptionsMessageSerializer;
-impl DescribeOrderableDBInstanceOptionsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeOrderableDBInstanceOptionsMessage) {
+/// Serialize `DescribeOrderableDBInstanceOptionsRequest` contents to a `SignedRequest`.
+struct DescribeOrderableDBInstanceOptionsRequestSerializer;
+impl DescribeOrderableDBInstanceOptionsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeOrderableDBInstanceOptionsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7918,9 +8556,48 @@ impl DescribeOrderableDBInstanceOptionsMessageSerializer {
     }
 }
 
+/// <p> Contains the result of a successful invocation of the <code>DescribeOrderableDBInstanceOptions</code> action. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeOrderableDBInstanceOptionsResponse {
+    /// <p> An optional pagination token provided by a previous OrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
+    pub marker: Option<String>,
+    /// <p>An <code>OrderableDBInstanceOption</code> structure containing information about orderable options for the DB instance.</p>
+    pub orderable_db_instance_options: Option<Vec<OrderableDBInstanceOption>>,
+}
+
+struct DescribeOrderableDBInstanceOptionsResponseDeserializer;
+impl DescribeOrderableDBInstanceOptionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeOrderableDBInstanceOptionsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeOrderableDBInstanceOptionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "OrderableDBInstanceOptions" => {
+                        obj.orderable_db_instance_options
+                            .get_or_insert(vec![])
+                            .extend(OrderableDBInstanceOptionsListDeserializer::deserialize(
+                                "OrderableDBInstanceOptions",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribePendingMaintenanceActionsMessage {
+pub struct DescribePendingMaintenanceActionsRequest {
     /// <p><p>A filter that specifies one or more resources to return pending maintenance actions for.</p> <p>Supported filters:</p> <ul> <li> <p> <code>db-cluster-id</code> - Accepts DB cluster identifiers and DB cluster Amazon Resource Names (ARNs). The results list will only include pending maintenance actions for the DB clusters identified by these ARNs.</p> </li> <li> <p> <code>db-instance-id</code> - Accepts DB instance identifiers and DB instance ARNs. The results list will only include pending maintenance actions for the DB instances identified by these ARNs.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p> An optional pagination token provided by a previous <code>DescribePendingMaintenanceActions</code> request. If this parameter is specified, the response includes only records beyond the marker, up to a number of records specified by <code>MaxRecords</code>. </p>
@@ -7931,10 +8608,14 @@ pub struct DescribePendingMaintenanceActionsMessage {
     pub resource_identifier: Option<String>,
 }
 
-/// Serialize `DescribePendingMaintenanceActionsMessage` contents to a `SignedRequest`.
-struct DescribePendingMaintenanceActionsMessageSerializer;
-impl DescribePendingMaintenanceActionsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribePendingMaintenanceActionsMessage) {
+/// Serialize `DescribePendingMaintenanceActionsRequest` contents to a `SignedRequest`.
+struct DescribePendingMaintenanceActionsRequestSerializer;
+impl DescribePendingMaintenanceActionsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribePendingMaintenanceActionsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7959,9 +8640,160 @@ impl DescribePendingMaintenanceActionsMessageSerializer {
     }
 }
 
+/// <p>Data returned from the <b>DescribePendingMaintenanceActions</b> action.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribePendingMaintenanceActionsResponse {
+    /// <p> An optional pagination token provided by a previous <code>DescribePendingMaintenanceActions</code> request. If this parameter is specified, the response includes only records beyond the marker, up to a number of records specified by <code>MaxRecords</code>. </p>
+    pub marker: Option<String>,
+    /// <p>A list of the pending maintenance actions for the resource.</p>
+    pub pending_maintenance_actions: Option<Vec<ResourcePendingMaintenanceActions>>,
+}
+
+struct DescribePendingMaintenanceActionsResponseDeserializer;
+impl DescribePendingMaintenanceActionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribePendingMaintenanceActionsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribePendingMaintenanceActionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "PendingMaintenanceActions" => {
+                        obj.pending_maintenance_actions
+                            .get_or_insert(vec![])
+                            .extend(PendingMaintenanceActionsDeserializer::deserialize(
+                                "PendingMaintenanceActions",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeReservedDBInstancesMessage {
+pub struct DescribeReservedDBInstancesOfferingsRequest {
+    /// <p>The DB instance class filter value. Specify this parameter to show only the available offerings matching the specified DB instance class.</p>
+    pub db_instance_class: Option<String>,
+    /// <p>Duration filter value, specified in years or seconds. Specify this parameter to show only reservations for this duration.</p> <p>Valid Values: <code>1 | 3 | 31536000 | 94608000</code> </p>
+    pub duration: Option<String>,
+    /// <p>This parameter is not currently supported.</p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    pub marker: Option<String>,
+    /// <p> The maximum number of records to include in the response. If more than the <code>MaxRecords</code> value is available, a pagination token called a marker is included in the response so that the following results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    pub max_records: Option<i64>,
+    /// <p>A value that indicates whether to show only those reservations that support Multi-AZ.</p>
+    pub multi_az: Option<bool>,
+    /// <p>The offering type filter value. Specify this parameter to show only the available offerings matching the specified offering type.</p> <p>Valid Values: <code>"Partial Upfront" | "All Upfront" | "No Upfront" </code> </p>
+    pub offering_type: Option<String>,
+    /// <p><p>Product description filter value. Specify this parameter to show only the available offerings that contain the specified product description.</p> <note> <p>The results show offerings that partially match the filter value.</p> </note></p>
+    pub product_description: Option<String>,
+    /// <p>The offering identifier filter value. Specify this parameter to show only the available offering that matches the specified reservation identifier.</p> <p>Example: <code>438012d3-4052-4cc7-b2e3-8d3372e0e706</code> </p>
+    pub reserved_db_instances_offering_id: Option<String>,
+}
+
+/// Serialize `DescribeReservedDBInstancesOfferingsRequest` contents to a `SignedRequest`.
+struct DescribeReservedDBInstancesOfferingsRequestSerializer;
+impl DescribeReservedDBInstancesOfferingsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeReservedDBInstancesOfferingsRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.db_instance_class {
+            params.put(&format!("{}{}", prefix, "DBInstanceClass"), &field_value);
+        }
+        if let Some(ref field_value) = obj.duration {
+            params.put(&format!("{}{}", prefix, "Duration"), &field_value);
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
+        }
+        if let Some(ref field_value) = obj.multi_az {
+            params.put(&format!("{}{}", prefix, "MultiAZ"), &field_value);
+        }
+        if let Some(ref field_value) = obj.offering_type {
+            params.put(&format!("{}{}", prefix, "OfferingType"), &field_value);
+        }
+        if let Some(ref field_value) = obj.product_description {
+            params.put(&format!("{}{}", prefix, "ProductDescription"), &field_value);
+        }
+        if let Some(ref field_value) = obj.reserved_db_instances_offering_id {
+            params.put(
+                &format!("{}{}", prefix, "ReservedDBInstancesOfferingId"),
+                &field_value,
+            );
+        }
+    }
+}
+
+/// <p> Contains the result of a successful invocation of the <code>DescribeReservedDBInstancesOfferings</code> action. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeReservedDBInstancesOfferingsResponse {
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    pub marker: Option<String>,
+    /// <p>A list of reserved DB instance offerings.</p>
+    pub reserved_db_instances_offerings: Option<Vec<ReservedDBInstancesOffering>>,
+}
+
+struct DescribeReservedDBInstancesOfferingsResponseDeserializer;
+impl DescribeReservedDBInstancesOfferingsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeReservedDBInstancesOfferingsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeReservedDBInstancesOfferingsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "ReservedDBInstancesOfferings" => {
+                        obj.reserved_db_instances_offerings
+                            .get_or_insert(vec![])
+                            .extend(ReservedDBInstancesOfferingListDeserializer::deserialize(
+                                "ReservedDBInstancesOfferings",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeReservedDBInstancesRequest {
     /// <p>The DB instance class filter value. Specify this parameter to show only those reservations matching the specified DB instances class.</p>
     pub db_instance_class: Option<String>,
     /// <p>The duration filter value, specified in years or seconds. Specify this parameter to show only reservations for this duration.</p> <p>Valid Values: <code>1 | 3 | 31536000 | 94608000</code> </p>
@@ -7984,10 +8816,14 @@ pub struct DescribeReservedDBInstancesMessage {
     pub reserved_db_instances_offering_id: Option<String>,
 }
 
-/// Serialize `DescribeReservedDBInstancesMessage` contents to a `SignedRequest`.
-struct DescribeReservedDBInstancesMessageSerializer;
-impl DescribeReservedDBInstancesMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeReservedDBInstancesMessage) {
+/// Serialize `DescribeReservedDBInstancesRequest` contents to a `SignedRequest`.
+struct DescribeReservedDBInstancesRequestSerializer;
+impl DescribeReservedDBInstancesRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeReservedDBInstancesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -8036,82 +8872,48 @@ impl DescribeReservedDBInstancesMessageSerializer {
     }
 }
 
-/// <p><p/></p>
+/// <p> Contains the result of a successful invocation of the <code>DescribeReservedDBInstances</code> action. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeReservedDBInstancesOfferingsMessage {
-    /// <p>The DB instance class filter value. Specify this parameter to show only the available offerings matching the specified DB instance class.</p>
-    pub db_instance_class: Option<String>,
-    /// <p>Duration filter value, specified in years or seconds. Specify this parameter to show only reservations for this duration.</p> <p>Valid Values: <code>1 | 3 | 31536000 | 94608000</code> </p>
-    pub duration: Option<String>,
-    /// <p>This parameter is not currently supported.</p>
-    pub filters: Option<Vec<Filter>>,
+pub struct DescribeReservedDBInstancesResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
-    /// <p> The maximum number of records to include in the response. If more than the <code>MaxRecords</code> value is available, a pagination token called a marker is included in the response so that the following results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
-    pub max_records: Option<i64>,
-    /// <p>A value that indicates whether to show only those reservations that support Multi-AZ.</p>
-    pub multi_az: Option<bool>,
-    /// <p>The offering type filter value. Specify this parameter to show only the available offerings matching the specified offering type.</p> <p>Valid Values: <code>"Partial Upfront" | "All Upfront" | "No Upfront" </code> </p>
-    pub offering_type: Option<String>,
-    /// <p><p>Product description filter value. Specify this parameter to show only the available offerings that contain the specified product description.</p> <note> <p>The results show offerings that partially match the filter value.</p> </note></p>
-    pub product_description: Option<String>,
-    /// <p>The offering identifier filter value. Specify this parameter to show only the available offering that matches the specified reservation identifier.</p> <p>Example: <code>438012d3-4052-4cc7-b2e3-8d3372e0e706</code> </p>
-    pub reserved_db_instances_offering_id: Option<String>,
+    /// <p>A list of reserved DB instances.</p>
+    pub reserved_db_instances: Option<Vec<ReservedDBInstance>>,
 }
 
-/// Serialize `DescribeReservedDBInstancesOfferingsMessage` contents to a `SignedRequest`.
-struct DescribeReservedDBInstancesOfferingsMessageSerializer;
-impl DescribeReservedDBInstancesOfferingsMessageSerializer {
-    fn serialize(
-        params: &mut Params,
-        name: &str,
-        obj: &DescribeReservedDBInstancesOfferingsMessage,
-    ) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        if let Some(ref field_value) = obj.db_instance_class {
-            params.put(&format!("{}{}", prefix, "DBInstanceClass"), &field_value);
-        }
-        if let Some(ref field_value) = obj.duration {
-            params.put(&format!("{}{}", prefix, "Duration"), &field_value);
-        }
-        if let Some(ref field_value) = obj.filters {
-            FilterListSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "Filter"),
-                field_value,
-            );
-        }
-        if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
-        }
-        if let Some(ref field_value) = obj.max_records {
-            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
-        }
-        if let Some(ref field_value) = obj.multi_az {
-            params.put(&format!("{}{}", prefix, "MultiAZ"), &field_value);
-        }
-        if let Some(ref field_value) = obj.offering_type {
-            params.put(&format!("{}{}", prefix, "OfferingType"), &field_value);
-        }
-        if let Some(ref field_value) = obj.product_description {
-            params.put(&format!("{}{}", prefix, "ProductDescription"), &field_value);
-        }
-        if let Some(ref field_value) = obj.reserved_db_instances_offering_id {
-            params.put(
-                &format!("{}{}", prefix, "ReservedDBInstancesOfferingId"),
-                &field_value,
-            );
-        }
+struct DescribeReservedDBInstancesResponseDeserializer;
+impl DescribeReservedDBInstancesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeReservedDBInstancesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeReservedDBInstancesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "ReservedDBInstances" => {
+                        obj.reserved_db_instances.get_or_insert(vec![]).extend(
+                            ReservedDBInstanceListDeserializer::deserialize(
+                                "ReservedDBInstances",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
-
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeSourceRegionsMessage {
+pub struct DescribeSourceRegionsRequest {
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
     /// <p>An optional pagination token provided by a previous <code>DescribeSourceRegions</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
@@ -8122,10 +8924,10 @@ pub struct DescribeSourceRegionsMessage {
     pub region_name: Option<String>,
 }
 
-/// Serialize `DescribeSourceRegionsMessage` contents to a `SignedRequest`.
-struct DescribeSourceRegionsMessageSerializer;
-impl DescribeSourceRegionsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeSourceRegionsMessage) {
+/// Serialize `DescribeSourceRegionsRequest` contents to a `SignedRequest`.
+struct DescribeSourceRegionsRequestSerializer;
+impl DescribeSourceRegionsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeSourceRegionsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -8150,20 +8952,56 @@ impl DescribeSourceRegionsMessageSerializer {
     }
 }
 
+/// <p>Contains the result of a successful invocation of the <code>DescribeSourceRegions</code> action.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeSourceRegionsResponse {
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    pub marker: Option<String>,
+    /// <p>A list of SourceRegion instances that contains each source AWS Region that the current AWS Region can get a Read Replica or a DB snapshot from.</p>
+    pub source_regions: Option<Vec<SourceRegion>>,
+}
+
+struct DescribeSourceRegionsResponseDeserializer;
+impl DescribeSourceRegionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeSourceRegionsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeSourceRegionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "SourceRegions" => {
+                        obj.source_regions.get_or_insert(vec![]).extend(
+                            SourceRegionListDeserializer::deserialize("SourceRegions", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeValidDBInstanceModificationsMessage {
+pub struct DescribeValidDBInstanceModificationsRequest {
     /// <p>The customer identifier or the ARN of your DB instance. </p>
     pub db_instance_identifier: String,
 }
 
-/// Serialize `DescribeValidDBInstanceModificationsMessage` contents to a `SignedRequest`.
-struct DescribeValidDBInstanceModificationsMessageSerializer;
-impl DescribeValidDBInstanceModificationsMessageSerializer {
+/// Serialize `DescribeValidDBInstanceModificationsRequest` contents to a `SignedRequest`.
+struct DescribeValidDBInstanceModificationsRequestSerializer;
+impl DescribeValidDBInstanceModificationsRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
-        obj: &DescribeValidDBInstanceModificationsMessage,
+        obj: &DescribeValidDBInstanceModificationsRequest,
     ) {
         let mut prefix = name.to_string();
         if prefix != "" {
@@ -8178,18 +9016,18 @@ impl DescribeValidDBInstanceModificationsMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeValidDBInstanceModificationsResult {
+pub struct DescribeValidDBInstanceModificationsResponse {
     pub valid_db_instance_modifications_message: Option<ValidDBInstanceModificationsMessage>,
 }
 
-struct DescribeValidDBInstanceModificationsResultDeserializer;
-impl DescribeValidDBInstanceModificationsResultDeserializer {
+struct DescribeValidDBInstanceModificationsResponseDeserializer;
+impl DescribeValidDBInstanceModificationsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeValidDBInstanceModificationsResult, XmlParseError> {
-        deserialize_elements::<_, DescribeValidDBInstanceModificationsResult, _>(
+    ) -> Result<DescribeValidDBInstanceModificationsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeValidDBInstanceModificationsResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -8339,9 +9177,49 @@ impl DoubleRangeListDeserializer {
         })
     }
 }
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DownloadDBLogFilePortionRequest {
+    /// <p><p>The customer-assigned name of the DB instance that contains the log files you want to list.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBInstance.</p> </li> </ul></p>
+    pub db_instance_identifier: String,
+    /// <p>The name of the log file to be downloaded.</p>
+    pub log_file_name: String,
+    /// <p>The pagination token provided in the previous request or "0". If the Marker parameter is specified the response includes only records beyond the marker until the end of the file or up to NumberOfLines.</p>
+    pub marker: Option<String>,
+    /// <p><p>The number of lines to download. If the number of lines specified results in a file over 1 MB in size, the file is truncated at 1 MB in size.</p> <p>If the NumberOfLines parameter is specified, then the block of lines returned can be from the beginning or the end of the log file, depending on the value of the Marker parameter.</p> <ul> <li> <p>If neither Marker or NumberOfLines are specified, the entire log file is returned up to a maximum of 10000 lines, starting with the most recent log entries first.</p> </li> <li> <p>If NumberOfLines is specified and Marker is not specified, then the most recent lines from the end of the log file are returned.</p> </li> <li> <p>If Marker is specified as &quot;0&quot;, then the specified number of lines from the beginning of the log file are returned.</p> </li> <li> <p>You can download the log file in blocks of lines by specifying the size of the block using the NumberOfLines parameter, and by specifying a value of &quot;0&quot; for the Marker parameter in your first request. Include the Marker value returned in the response as the Marker value for the next request, continuing until the AdditionalDataPending response element returns false.</p> </li> </ul></p>
+    pub number_of_lines: Option<i64>,
+}
+
+/// Serialize `DownloadDBLogFilePortionRequest` contents to a `SignedRequest`.
+struct DownloadDBLogFilePortionRequestSerializer;
+impl DownloadDBLogFilePortionRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DownloadDBLogFilePortionRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "DBInstanceIdentifier"),
+            &obj.db_instance_identifier,
+        );
+        params.put(&format!("{}{}", prefix, "LogFileName"), &obj.log_file_name);
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.number_of_lines {
+            params.put(&format!("{}{}", prefix, "NumberOfLines"), &field_value);
+        }
+    }
+}
+
 /// <p>This data type is used as a response element to <code>DownloadDBLogFilePortion</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DownloadDBLogFilePortionDetails {
+pub struct DownloadDBLogFilePortionResponse {
     /// <p>Boolean value that if true, indicates there is more data to be downloaded.</p>
     pub additional_data_pending: Option<bool>,
     /// <p>Entries from the specified log file.</p>
@@ -8350,14 +9228,14 @@ pub struct DownloadDBLogFilePortionDetails {
     pub marker: Option<String>,
 }
 
-struct DownloadDBLogFilePortionDetailsDeserializer;
-impl DownloadDBLogFilePortionDetailsDeserializer {
+struct DownloadDBLogFilePortionResponseDeserializer;
+impl DownloadDBLogFilePortionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DownloadDBLogFilePortionDetails, XmlParseError> {
-        deserialize_elements::<_, DownloadDBLogFilePortionDetails, _>(
+    ) -> Result<DownloadDBLogFilePortionResponse, XmlParseError> {
+        deserialize_elements::<_, DownloadDBLogFilePortionResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -8382,42 +9260,6 @@ impl DownloadDBLogFilePortionDetailsDeserializer {
         )
     }
 }
-/// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DownloadDBLogFilePortionMessage {
-    /// <p><p>The customer-assigned name of the DB instance that contains the log files you want to list.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBInstance.</p> </li> </ul></p>
-    pub db_instance_identifier: String,
-    /// <p>The name of the log file to be downloaded.</p>
-    pub log_file_name: String,
-    /// <p>The pagination token provided in the previous request or "0". If the Marker parameter is specified the response includes only records beyond the marker until the end of the file or up to NumberOfLines.</p>
-    pub marker: Option<String>,
-    /// <p><p>The number of lines to download. If the number of lines specified results in a file over 1 MB in size, the file is truncated at 1 MB in size.</p> <p>If the NumberOfLines parameter is specified, then the block of lines returned can be from the beginning or the end of the log file, depending on the value of the Marker parameter.</p> <ul> <li> <p>If neither Marker or NumberOfLines are specified, the entire log file is returned up to a maximum of 10000 lines, starting with the most recent log entries first.</p> </li> <li> <p>If NumberOfLines is specified and Marker is not specified, then the most recent lines from the end of the log file are returned.</p> </li> <li> <p>If Marker is specified as &quot;0&quot;, then the specified number of lines from the beginning of the log file are returned.</p> </li> <li> <p>You can download the log file in blocks of lines by specifying the size of the block using the NumberOfLines parameter, and by specifying a value of &quot;0&quot; for the Marker parameter in your first request. Include the Marker value returned in the response as the Marker value for the next request, continuing until the AdditionalDataPending response element returns false.</p> </li> </ul></p>
-    pub number_of_lines: Option<i64>,
-}
-
-/// Serialize `DownloadDBLogFilePortionMessage` contents to a `SignedRequest`.
-struct DownloadDBLogFilePortionMessageSerializer;
-impl DownloadDBLogFilePortionMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DownloadDBLogFilePortionMessage) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        params.put(
-            &format!("{}{}", prefix, "DBInstanceIdentifier"),
-            &obj.db_instance_identifier,
-        );
-        params.put(&format!("{}{}", prefix, "LogFileName"), &obj.log_file_name);
-        if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
-        }
-        if let Some(ref field_value) = obj.number_of_lines {
-            params.put(&format!("{}{}", prefix, "NumberOfLines"), &field_value);
-        }
-    }
-}
-
 /// <p><p>This data type is used as a response element in the following actions:</p> <ul> <li> <p> <code>AuthorizeDBSecurityGroupIngress</code> </p> </li> <li> <p> <code>DescribeDBSecurityGroups</code> </p> </li> <li> <p> <code>RevokeDBSecurityGroupIngress</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EC2SecurityGroup {
@@ -8584,7 +9426,7 @@ impl EngineModeListDeserializer {
 /// Serialize `EngineModeList` contents to a `SignedRequest`.
 struct EngineModeListSerializer;
 impl EngineModeListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -8664,7 +9506,7 @@ impl EventCategoriesListDeserializer {
 /// Serialize `EventCategoriesList` contents to a `SignedRequest`.
 struct EventCategoriesListSerializer;
 impl EventCategoriesListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -8719,36 +9561,6 @@ impl EventCategoriesMapListDeserializer {
                 )?);
             } else {
                 skip_tree(stack);
-            }
-            Ok(())
-        })
-    }
-}
-/// <p>Data returned from the <b>DescribeEventCategories</b> action.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct EventCategoriesMessage {
-    /// <p>A list of EventCategoriesMap data types.</p>
-    pub event_categories_map_list: Option<Vec<EventCategoriesMap>>,
-}
-
-struct EventCategoriesMessageDeserializer;
-impl EventCategoriesMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<EventCategoriesMessage, XmlParseError> {
-        deserialize_elements::<_, EventCategoriesMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "EventCategoriesMapList" => {
-                    obj.event_categories_map_list.get_or_insert(vec![]).extend(
-                        EventCategoriesMapListDeserializer::deserialize(
-                            "EventCategoriesMapList",
-                            stack,
-                        )?,
-                    );
-                }
-                _ => skip_tree(stack),
             }
             Ok(())
         })
@@ -8876,90 +9688,19 @@ impl EventSubscriptionsListDeserializer {
         })
     }
 }
-/// <p>Data returned by the <b>DescribeEventSubscriptions</b> action.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct EventSubscriptionsMessage {
-    /// <p>A list of EventSubscriptions data types.</p>
-    pub event_subscriptions_list: Option<Vec<EventSubscription>>,
-    /// <p> An optional pagination token provided by a previous DescribeOrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
-    pub marker: Option<String>,
-}
-
-struct EventSubscriptionsMessageDeserializer;
-impl EventSubscriptionsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<EventSubscriptionsMessage, XmlParseError> {
-        deserialize_elements::<_, EventSubscriptionsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "EventSubscriptionsList" => {
-                        obj.event_subscriptions_list.get_or_insert(vec![]).extend(
-                            EventSubscriptionsListDeserializer::deserialize(
-                                "EventSubscriptionsList",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
-/// <p> Contains the result of a successful invocation of the <code>DescribeEvents</code> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct EventsMessage {
-    /// <p> A list of <code>Event</code> instances. </p>
-    pub events: Option<Vec<Event>>,
-    /// <p> An optional pagination token provided by a previous Events request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
-    pub marker: Option<String>,
-}
-
-struct EventsMessageDeserializer;
-impl EventsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<EventsMessage, XmlParseError> {
-        deserialize_elements::<_, EventsMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "Events" => {
-                    obj.events
-                        .get_or_insert(vec![])
-                        .extend(EventListDeserializer::deserialize("Events", stack)?);
-                }
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct FailoverDBClusterMessage {
+pub struct FailoverDBClusterRequest {
     /// <p><p>A DB cluster identifier to force a failover for. This parameter is not case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBCluster.</p> </li> </ul></p>
     pub db_cluster_identifier: String,
     /// <p>The name of the instance to promote to the primary instance.</p> <p>You must specify the instance identifier for an Aurora Replica in the DB cluster. For example, <code>mydbcluster-replica1</code>.</p>
     pub target_db_instance_identifier: Option<String>,
 }
 
-/// Serialize `FailoverDBClusterMessage` contents to a `SignedRequest`.
-struct FailoverDBClusterMessageSerializer;
-impl FailoverDBClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &FailoverDBClusterMessage) {
+/// Serialize `FailoverDBClusterRequest` contents to a `SignedRequest`.
+struct FailoverDBClusterRequestSerializer;
+impl FailoverDBClusterRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &FailoverDBClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -8979,18 +9720,18 @@ impl FailoverDBClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct FailoverDBClusterResult {
+pub struct FailoverDBClusterResponse {
     pub db_cluster: Option<DBCluster>,
 }
 
-struct FailoverDBClusterResultDeserializer;
-impl FailoverDBClusterResultDeserializer {
+struct FailoverDBClusterResponseDeserializer;
+impl FailoverDBClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<FailoverDBClusterResult, XmlParseError> {
-        deserialize_elements::<_, FailoverDBClusterResult, _>(
+    ) -> Result<FailoverDBClusterResponse, XmlParseError> {
+        deserialize_elements::<_, FailoverDBClusterResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -9035,7 +9776,7 @@ pub struct Filter {
 /// Serialize `Filter` contents to a `SignedRequest`.
 struct FilterSerializer;
 impl FilterSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Filter) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Filter) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -9053,7 +9794,7 @@ impl FilterSerializer {
 /// Serialize `FilterList` contents to a `SignedRequest`.
 struct FilterListSerializer;
 impl FilterListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<Filter>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<Filter>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             FilterSerializer::serialize(params, &key, obj);
@@ -9064,7 +9805,7 @@ impl FilterListSerializer {
 /// Serialize `FilterValueList` contents to a `SignedRequest`.
 struct FilterValueListSerializer;
 impl FilterValueListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -9240,37 +9981,6 @@ impl GlobalClusterMemberListDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct GlobalClustersMessage {
-    /// <p> The list of global clusters returned by this request. </p>
-    pub global_clusters: Option<Vec<GlobalCluster>>,
-    /// <p> An optional pagination token provided by a previous <code>DescribeGlobalClusters</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
-    pub marker: Option<String>,
-}
-
-struct GlobalClustersMessageDeserializer;
-impl GlobalClustersMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<GlobalClustersMessage, XmlParseError> {
-        deserialize_elements::<_, GlobalClustersMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "GlobalClusters" => {
-                    obj.global_clusters.get_or_insert(vec![]).extend(
-                        GlobalClusterListDeserializer::deserialize("GlobalClusters", stack)?,
-                    );
-                }
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 /// <p> This data type is used as a response element in the <code>DescribeDBSecurityGroups</code> action. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct IPRange {
@@ -9344,7 +10054,7 @@ impl IntegerOptionalDeserializer {
 /// Serialize `KeyList` contents to a `SignedRequest`.
 struct KeyListSerializer;
 impl KeyListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -9354,17 +10064,17 @@ impl KeyListSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListTagsForResourceMessage {
+pub struct ListTagsForResourceRequest {
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The Amazon RDS resource with tags to be listed. This value is an Amazon Resource Name (ARN). For information about creating an ARN, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing"> Constructing an ARN for Amazon RDS</a> in the <i>Amazon RDS User Guide</i>.</p>
     pub resource_name: String,
 }
 
-/// Serialize `ListTagsForResourceMessage` contents to a `SignedRequest`.
-struct ListTagsForResourceMessageSerializer;
-impl ListTagsForResourceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListTagsForResourceMessage) {
+/// Serialize `ListTagsForResourceRequest` contents to a `SignedRequest`.
+struct ListTagsForResourceRequestSerializer;
+impl ListTagsForResourceRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ListTagsForResourceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -9381,6 +10091,37 @@ impl ListTagsForResourceMessageSerializer {
     }
 }
 
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ListTagsForResourceResponse {
+    /// <p>List of tags returned by the ListTagsForResource operation.</p>
+    pub tag_list: Option<Vec<Tag>>,
+}
+
+struct ListTagsForResourceResponseDeserializer;
+impl ListTagsForResourceResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListTagsForResourceResponse, XmlParseError> {
+        deserialize_elements::<_, ListTagsForResourceResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "TagList" => {
+                        obj.tag_list
+                            .get_or_insert(vec![])
+                            .extend(TagListDeserializer::deserialize("TagList", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 struct LogTypeListDeserializer;
 impl LogTypeListDeserializer {
     #[allow(unused_variables)]
@@ -9402,7 +10143,7 @@ impl LogTypeListDeserializer {
 /// Serialize `LogTypeList` contents to a `SignedRequest`.
 struct LogTypeListSerializer;
 impl LogTypeListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -9493,7 +10234,7 @@ impl MinimumEngineVersionPerAllowedValueListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyCurrentDBClusterCapacityMessage {
+pub struct ModifyCurrentDBClusterCapacityRequest {
     /// <p><p>The DB cluster capacity.</p> <p>When you change the capacity of a paused Aurora Serverless DB cluster, it automatically resumes.</p> <p>Constraints:</p> <ul> <li> <p>Value must be <code>1</code>, <code>2</code>, <code>4</code>, <code>8</code>, <code>16</code>, <code>32</code>, <code>64</code>, <code>128</code>, or <code>256</code>.</p> </li> </ul></p>
     pub capacity: Option<i64>,
     /// <p><p>The DB cluster identifier for the cluster being modified. This parameter is not case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DB cluster.</p> </li> </ul></p>
@@ -9504,10 +10245,14 @@ pub struct ModifyCurrentDBClusterCapacityMessage {
     pub timeout_action: Option<String>,
 }
 
-/// Serialize `ModifyCurrentDBClusterCapacityMessage` contents to a `SignedRequest`.
-struct ModifyCurrentDBClusterCapacityMessageSerializer;
-impl ModifyCurrentDBClusterCapacityMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyCurrentDBClusterCapacityMessage) {
+/// Serialize `ModifyCurrentDBClusterCapacityRequest` contents to a `SignedRequest`.
+struct ModifyCurrentDBClusterCapacityRequestSerializer;
+impl ModifyCurrentDBClusterCapacityRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ModifyCurrentDBClusterCapacityRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -9533,7 +10278,69 @@ impl ModifyCurrentDBClusterCapacityMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBClusterEndpointMessage {
+pub struct ModifyCurrentDBClusterCapacityResponse {
+    /// <p>The current capacity of the DB cluster.</p>
+    pub current_capacity: Option<i64>,
+    /// <p>A user-supplied DB cluster identifier. This identifier is the unique key that identifies a DB cluster. </p>
+    pub db_cluster_identifier: Option<String>,
+    /// <p>A value that specifies the capacity that the DB cluster scales to next.</p>
+    pub pending_capacity: Option<i64>,
+    /// <p>The number of seconds before a call to <code>ModifyCurrentDBClusterCapacity</code> times out.</p>
+    pub seconds_before_timeout: Option<i64>,
+    /// <p>The timeout action of a call to <code>ModifyCurrentDBClusterCapacity</code>, either <code>ForceApplyCapacityChange</code> or <code>RollbackCapacityChange</code>.</p>
+    pub timeout_action: Option<String>,
+}
+
+struct ModifyCurrentDBClusterCapacityResponseDeserializer;
+impl ModifyCurrentDBClusterCapacityResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyCurrentDBClusterCapacityResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyCurrentDBClusterCapacityResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CurrentCapacity" => {
+                        obj.current_capacity = Some(IntegerOptionalDeserializer::deserialize(
+                            "CurrentCapacity",
+                            stack,
+                        )?);
+                    }
+                    "DBClusterIdentifier" => {
+                        obj.db_cluster_identifier = Some(StringDeserializer::deserialize(
+                            "DBClusterIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "PendingCapacity" => {
+                        obj.pending_capacity = Some(IntegerOptionalDeserializer::deserialize(
+                            "PendingCapacity",
+                            stack,
+                        )?);
+                    }
+                    "SecondsBeforeTimeout" => {
+                        obj.seconds_before_timeout =
+                            Some(IntegerOptionalDeserializer::deserialize(
+                                "SecondsBeforeTimeout",
+                                stack,
+                            )?);
+                    }
+                    "TimeoutAction" => {
+                        obj.timeout_action =
+                            Some(StringDeserializer::deserialize("TimeoutAction", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyDBClusterEndpointRequest {
     /// <p>The identifier of the endpoint to modify. This parameter is stored as a lowercase string.</p>
     pub db_cluster_endpoint_identifier: String,
     /// <p>The type of the endpoint. One of: <code>READER</code>, <code>ANY</code>. </p>
@@ -9544,10 +10351,14 @@ pub struct ModifyDBClusterEndpointMessage {
     pub static_members: Option<Vec<String>>,
 }
 
-/// Serialize `ModifyDBClusterEndpointMessage` contents to a `SignedRequest`.
-struct ModifyDBClusterEndpointMessageSerializer;
-impl ModifyDBClusterEndpointMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterEndpointMessage) {
+/// Serialize `ModifyDBClusterEndpointRequest` contents to a `SignedRequest`.
+struct ModifyDBClusterEndpointRequestSerializer;
+impl ModifyDBClusterEndpointRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ModifyDBClusterEndpointRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -9577,9 +10388,169 @@ impl ModifyDBClusterEndpointMessageSerializer {
     }
 }
 
+/// <p>This data type represents the information you need to connect to an Amazon Aurora DB cluster. This data type is used as a response element in the following actions:</p> <ul> <li> <p> <code>CreateDBClusterEndpoint</code> </p> </li> <li> <p> <code>DescribeDBClusterEndpoints</code> </p> </li> <li> <p> <code>ModifyDBClusterEndpoint</code> </p> </li> <li> <p> <code>DeleteDBClusterEndpoint</code> </p> </li> </ul> <p>For the data structure that represents Amazon RDS DB instance endpoints, see <code>Endpoint</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyDBClusterEndpointResponse {
+    /// <p>The type associated with a custom endpoint. One of: <code>READER</code>, <code>ANY</code>.</p>
+    pub custom_endpoint_type: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for the endpoint.</p>
+    pub db_cluster_endpoint_arn: Option<String>,
+    /// <p>The identifier associated with the endpoint. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_endpoint_identifier: Option<String>,
+    /// <p>A unique system-generated identifier for an endpoint. It remains the same for the whole life of the endpoint.</p>
+    pub db_cluster_endpoint_resource_identifier: Option<String>,
+    /// <p>The DB cluster identifier of the DB cluster associated with the endpoint. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_identifier: Option<String>,
+    /// <p>The DNS address of the endpoint.</p>
+    pub endpoint: Option<String>,
+    /// <p>The type of the endpoint. One of: <code>READER</code>, <code>WRITER</code>, <code>CUSTOM</code>.</p>
+    pub endpoint_type: Option<String>,
+    /// <p>List of DB instance identifiers that aren't part of the custom endpoint group. All other eligible instances are reachable through the custom endpoint. Only relevant if the list of static members is empty.</p>
+    pub excluded_members: Option<Vec<String>>,
+    /// <p>List of DB instance identifiers that are part of the custom endpoint group.</p>
+    pub static_members: Option<Vec<String>>,
+    /// <p>The current status of the endpoint. One of: <code>creating</code>, <code>available</code>, <code>deleting</code>, <code>modifying</code>.</p>
+    pub status: Option<String>,
+}
+
+struct ModifyDBClusterEndpointResponseDeserializer;
+impl ModifyDBClusterEndpointResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyDBClusterEndpointResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyDBClusterEndpointResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CustomEndpointType" => {
+                        obj.custom_endpoint_type = Some(StringDeserializer::deserialize(
+                            "CustomEndpointType",
+                            stack,
+                        )?);
+                    }
+                    "DBClusterEndpointArn" => {
+                        obj.db_cluster_endpoint_arn = Some(StringDeserializer::deserialize(
+                            "DBClusterEndpointArn",
+                            stack,
+                        )?);
+                    }
+                    "DBClusterEndpointIdentifier" => {
+                        obj.db_cluster_endpoint_identifier = Some(StringDeserializer::deserialize(
+                            "DBClusterEndpointIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "DBClusterEndpointResourceIdentifier" => {
+                        obj.db_cluster_endpoint_resource_identifier =
+                            Some(StringDeserializer::deserialize(
+                                "DBClusterEndpointResourceIdentifier",
+                                stack,
+                            )?);
+                    }
+                    "DBClusterIdentifier" => {
+                        obj.db_cluster_identifier = Some(StringDeserializer::deserialize(
+                            "DBClusterIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "Endpoint" => {
+                        obj.endpoint = Some(StringDeserializer::deserialize("Endpoint", stack)?);
+                    }
+                    "EndpointType" => {
+                        obj.endpoint_type =
+                            Some(StringDeserializer::deserialize("EndpointType", stack)?);
+                    }
+                    "ExcludedMembers" => {
+                        obj.excluded_members.get_or_insert(vec![]).extend(
+                            StringListDeserializer::deserialize("ExcludedMembers", stack)?,
+                        );
+                    }
+                    "StaticMembers" => {
+                        obj.static_members
+                            .get_or_insert(vec![])
+                            .extend(StringListDeserializer::deserialize("StaticMembers", stack)?);
+                    }
+                    "Status" => {
+                        obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBClusterMessage {
+pub struct ModifyDBClusterParameterGroupRequest {
+    /// <p>The name of the DB cluster parameter group to modify.</p>
+    pub db_cluster_parameter_group_name: String,
+    /// <p>A list of parameters in the DB cluster parameter group to modify.</p>
+    pub parameters: Vec<Parameter>,
+}
+
+/// Serialize `ModifyDBClusterParameterGroupRequest` contents to a `SignedRequest`.
+struct ModifyDBClusterParameterGroupRequestSerializer;
+impl ModifyDBClusterParameterGroupRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ModifyDBClusterParameterGroupRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "DBClusterParameterGroupName"),
+            &obj.db_cluster_parameter_group_name,
+        );
+        ParametersListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Parameter"),
+            &obj.parameters,
+        );
+    }
+}
+
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyDBClusterParameterGroupResponse {
+    /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 letters or numbers.</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Can&#39;t end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <note> <p>This value is stored as a lowercase string.</p> </note></p>
+    pub db_cluster_parameter_group_name: Option<String>,
+}
+
+struct ModifyDBClusterParameterGroupResponseDeserializer;
+impl ModifyDBClusterParameterGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyDBClusterParameterGroupResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyDBClusterParameterGroupResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBClusterParameterGroupName" => {
+                        obj.db_cluster_parameter_group_name = Some(
+                            StringDeserializer::deserialize("DBClusterParameterGroupName", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyDBClusterRequest {
     /// <p>A value that indicates whether the modifications in this request and any pending modifications are asynchronously applied as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the DB cluster. If this parameter is disabled, changes to the DB cluster are applied during the next maintenance window.</p> <p>The <code>ApplyImmediately</code> parameter only affects the <code>EnableIAMDatabaseAuthentication</code>, <code>MasterUserPassword</code>, and <code>NewDBClusterIdentifier</code> values. If the <code>ApplyImmediately</code> parameter is disabled, then changes to the <code>EnableIAMDatabaseAuthentication</code>, <code>MasterUserPassword</code>, and <code>NewDBClusterIdentifier</code> values are applied during the next maintenance window. All other changes are applied immediately, regardless of the value of the <code>ApplyImmediately</code> parameter.</p> <p>By default, this parameter is disabled.</p>
     pub apply_immediately: Option<bool>,
     /// <p><p>The target backtrack window, in seconds. To disable backtracking, set this value to 0.</p> <p>Default: 0</p> <p>Constraints:</p> <ul> <li> <p>If specified, this value must be set to a number from 0 to 259,200 (72 hours).</p> </li> </ul></p>
@@ -9620,10 +10591,10 @@ pub struct ModifyDBClusterMessage {
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-/// Serialize `ModifyDBClusterMessage` contents to a `SignedRequest`.
-struct ModifyDBClusterMessageSerializer;
-impl ModifyDBClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterMessage) {
+/// Serialize `ModifyDBClusterRequest` contents to a `SignedRequest`.
+struct ModifyDBClusterRequestSerializer;
+impl ModifyDBClusterRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ModifyDBClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -9720,62 +10691,37 @@ impl ModifyDBClusterMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBClusterParameterGroupMessage {
-    /// <p>The name of the DB cluster parameter group to modify.</p>
-    pub db_cluster_parameter_group_name: String,
-    /// <p>A list of parameters in the DB cluster parameter group to modify.</p>
-    pub parameters: Vec<Parameter>,
-}
-
-/// Serialize `ModifyDBClusterParameterGroupMessage` contents to a `SignedRequest`.
-struct ModifyDBClusterParameterGroupMessageSerializer;
-impl ModifyDBClusterParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterParameterGroupMessage) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        params.put(
-            &format!("{}{}", prefix, "DBClusterParameterGroupName"),
-            &obj.db_cluster_parameter_group_name,
-        );
-        ParametersListSerializer::serialize(
-            params,
-            &format!("{}{}", prefix, "Parameter"),
-            &obj.parameters,
-        );
-    }
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBClusterResult {
+pub struct ModifyDBClusterResponse {
     pub db_cluster: Option<DBCluster>,
 }
 
-struct ModifyDBClusterResultDeserializer;
-impl ModifyDBClusterResultDeserializer {
+struct ModifyDBClusterResponseDeserializer;
+impl ModifyDBClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyDBClusterResult, XmlParseError> {
-        deserialize_elements::<_, ModifyDBClusterResult, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBCluster" => {
-                    obj.db_cluster = Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
+    ) -> Result<ModifyDBClusterResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyDBClusterResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBCluster" => {
+                        obj.db_cluster =
+                            Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
+                    }
+                    _ => skip_tree(stack),
                 }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+                Ok(())
+            },
+        )
     }
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBClusterSnapshotAttributeMessage {
+pub struct ModifyDBClusterSnapshotAttributeRequest {
     /// <p>The name of the DB cluster snapshot attribute to modify.</p> <p>To manage authorization for other AWS accounts to copy or restore a manual DB cluster snapshot, set this value to <code>restore</code>.</p>
     pub attribute_name: String,
     /// <p>The identifier for the DB cluster snapshot to modify the attributes for.</p>
@@ -9786,10 +10732,14 @@ pub struct ModifyDBClusterSnapshotAttributeMessage {
     pub values_to_remove: Option<Vec<String>>,
 }
 
-/// Serialize `ModifyDBClusterSnapshotAttributeMessage` contents to a `SignedRequest`.
-struct ModifyDBClusterSnapshotAttributeMessageSerializer;
-impl ModifyDBClusterSnapshotAttributeMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterSnapshotAttributeMessage) {
+/// Serialize `ModifyDBClusterSnapshotAttributeRequest` contents to a `SignedRequest`.
+struct ModifyDBClusterSnapshotAttributeRequestSerializer;
+impl ModifyDBClusterSnapshotAttributeRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ModifyDBClusterSnapshotAttributeRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -9821,18 +10771,18 @@ impl ModifyDBClusterSnapshotAttributeMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBClusterSnapshotAttributeResult {
+pub struct ModifyDBClusterSnapshotAttributeResponse {
     pub db_cluster_snapshot_attributes_result: Option<DBClusterSnapshotAttributesResult>,
 }
 
-struct ModifyDBClusterSnapshotAttributeResultDeserializer;
-impl ModifyDBClusterSnapshotAttributeResultDeserializer {
+struct ModifyDBClusterSnapshotAttributeResponseDeserializer;
+impl ModifyDBClusterSnapshotAttributeResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyDBClusterSnapshotAttributeResult, XmlParseError> {
-        deserialize_elements::<_, ModifyDBClusterSnapshotAttributeResult, _>(
+    ) -> Result<ModifyDBClusterSnapshotAttributeResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyDBClusterSnapshotAttributeResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -9853,7 +10803,7 @@ impl ModifyDBClusterSnapshotAttributeResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBInstanceMessage {
+pub struct ModifyDBInstanceRequest {
     /// <p>The new amount of storage (in gibibytes) to allocate for the DB instance. </p> <p>For MariaDB, MySQL, Oracle, and PostgreSQL, the value supplied must be at least 10% greater than the current value. Values that are not at least 10% greater than the existing value are rounded up so that they are 10% greater than the current value. </p> <p>For the valid values for allocated storage for each engine, see <code>CreateDBInstance</code>. </p>
     pub allocated_storage: Option<i64>,
     /// <p>A value that indicates whether major version upgrades are allowed. Changing this parameter doesn't result in an outage and the change is asynchronously applied as soon as possible.</p> <p>Constraints: Major version upgrades must be allowed when specifying a value for the EngineVersion parameter that is a different major version than the DB instance's current version.</p>
@@ -9936,10 +10886,10 @@ pub struct ModifyDBInstanceMessage {
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-/// Serialize `ModifyDBInstanceMessage` contents to a `SignedRequest`.
-struct ModifyDBInstanceMessageSerializer;
-impl ModifyDBInstanceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBInstanceMessage) {
+/// Serialize `ModifyDBInstanceRequest` contents to a `SignedRequest`.
+struct ModifyDBInstanceRequestSerializer;
+impl ModifyDBInstanceRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ModifyDBInstanceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -10128,42 +11078,46 @@ impl ModifyDBInstanceMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBInstanceResult {
+pub struct ModifyDBInstanceResponse {
     pub db_instance: Option<DBInstance>,
 }
 
-struct ModifyDBInstanceResultDeserializer;
-impl ModifyDBInstanceResultDeserializer {
+struct ModifyDBInstanceResponseDeserializer;
+impl ModifyDBInstanceResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyDBInstanceResult, XmlParseError> {
-        deserialize_elements::<_, ModifyDBInstanceResult, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBInstance" => {
-                    obj.db_instance =
-                        Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
+    ) -> Result<ModifyDBInstanceResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyDBInstanceResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBInstance" => {
+                        obj.db_instance =
+                            Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
+                    }
+                    _ => skip_tree(stack),
                 }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+                Ok(())
+            },
+        )
     }
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBParameterGroupMessage {
+pub struct ModifyDBParameterGroupRequest {
     /// <p><p>The name of the DB parameter group.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBParameterGroup.</p> </li> </ul></p>
     pub db_parameter_group_name: String,
     /// <p><p>An array of parameter names, values, and the apply method for the parameter update. At least one parameter name, value, and apply method must be supplied; subsequent arguments are optional. A maximum of 20 parameters can be modified in a single request.</p> <p>Valid Values (for the application method): <code>immediate | pending-reboot</code> </p> <note> <p>You can use the immediate value with dynamic parameters only. You can use the pending-reboot value for both dynamic and static parameters, and changes are applied when you reboot the DB instance without failover.</p> </note></p>
     pub parameters: Vec<Parameter>,
 }
 
-/// Serialize `ModifyDBParameterGroupMessage` contents to a `SignedRequest`.
-struct ModifyDBParameterGroupMessageSerializer;
-impl ModifyDBParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBParameterGroupMessage) {
+/// Serialize `ModifyDBParameterGroupRequest` contents to a `SignedRequest`.
+struct ModifyDBParameterGroupRequestSerializer;
+impl ModifyDBParameterGroupRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ModifyDBParameterGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -10181,9 +11135,41 @@ impl ModifyDBParameterGroupMessageSerializer {
     }
 }
 
+/// <p> Contains the result of a successful invocation of the <code>ModifyDBParameterGroup</code> or <code>ResetDBParameterGroup</code> action. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyDBParameterGroupResponse {
+    /// <p>Provides the name of the DB parameter group.</p>
+    pub db_parameter_group_name: Option<String>,
+}
+
+struct ModifyDBParameterGroupResponseDeserializer;
+impl ModifyDBParameterGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyDBParameterGroupResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyDBParameterGroupResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBParameterGroupName" => {
+                        obj.db_parameter_group_name = Some(StringDeserializer::deserialize(
+                            "DBParameterGroupName",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBSnapshotAttributeMessage {
+pub struct ModifyDBSnapshotAttributeRequest {
     /// <p>The name of the DB snapshot attribute to modify.</p> <p>To manage authorization for other AWS accounts to copy or restore a manual DB snapshot, set this value to <code>restore</code>.</p>
     pub attribute_name: String,
     /// <p>The identifier for the DB snapshot to modify the attributes for.</p>
@@ -10194,10 +11180,14 @@ pub struct ModifyDBSnapshotAttributeMessage {
     pub values_to_remove: Option<Vec<String>>,
 }
 
-/// Serialize `ModifyDBSnapshotAttributeMessage` contents to a `SignedRequest`.
-struct ModifyDBSnapshotAttributeMessageSerializer;
-impl ModifyDBSnapshotAttributeMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBSnapshotAttributeMessage) {
+/// Serialize `ModifyDBSnapshotAttributeRequest` contents to a `SignedRequest`.
+struct ModifyDBSnapshotAttributeRequestSerializer;
+impl ModifyDBSnapshotAttributeRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ModifyDBSnapshotAttributeRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -10229,18 +11219,18 @@ impl ModifyDBSnapshotAttributeMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBSnapshotAttributeResult {
+pub struct ModifyDBSnapshotAttributeResponse {
     pub db_snapshot_attributes_result: Option<DBSnapshotAttributesResult>,
 }
 
-struct ModifyDBSnapshotAttributeResultDeserializer;
-impl ModifyDBSnapshotAttributeResultDeserializer {
+struct ModifyDBSnapshotAttributeResponseDeserializer;
+impl ModifyDBSnapshotAttributeResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyDBSnapshotAttributeResult, XmlParseError> {
-        deserialize_elements::<_, ModifyDBSnapshotAttributeResult, _>(
+    ) -> Result<ModifyDBSnapshotAttributeResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyDBSnapshotAttributeResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -10260,7 +11250,7 @@ impl ModifyDBSnapshotAttributeResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBSnapshotMessage {
+pub struct ModifyDBSnapshotRequest {
     /// <p>The identifier of the DB snapshot to modify.</p>
     pub db_snapshot_identifier: String,
     /// <p><p>The engine version to upgrade the DB snapshot to. </p> <p>The following are the database engines and engine versions that are available when you upgrade a DB snapshot. </p> <p> <b>MySQL</b> </p> <ul> <li> <p> <code>5.5.46</code> (supported for 5.1 DB snapshots)</p> </li> </ul> <p> <b>Oracle</b> </p> <ul> <li> <p> <code>12.1.0.2.v8</code> (supported for 12.1.0.1 DB snapshots)</p> </li> <li> <p> <code>11.2.0.4.v12</code> (supported for 11.2.0.2 DB snapshots)</p> </li> <li> <p> <code>11.2.0.4.v11</code> (supported for 11.2.0.3 DB snapshots)</p> </li> </ul></p>
@@ -10269,10 +11259,10 @@ pub struct ModifyDBSnapshotMessage {
     pub option_group_name: Option<String>,
 }
 
-/// Serialize `ModifyDBSnapshotMessage` contents to a `SignedRequest`.
-struct ModifyDBSnapshotMessageSerializer;
-impl ModifyDBSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBSnapshotMessage) {
+/// Serialize `ModifyDBSnapshotRequest` contents to a `SignedRequest`.
+struct ModifyDBSnapshotRequestSerializer;
+impl ModifyDBSnapshotRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ModifyDBSnapshotRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -10292,32 +11282,36 @@ impl ModifyDBSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBSnapshotResult {
+pub struct ModifyDBSnapshotResponse {
     pub db_snapshot: Option<DBSnapshot>,
 }
 
-struct ModifyDBSnapshotResultDeserializer;
-impl ModifyDBSnapshotResultDeserializer {
+struct ModifyDBSnapshotResponseDeserializer;
+impl ModifyDBSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyDBSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, ModifyDBSnapshotResult, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBSnapshot" => {
-                    obj.db_snapshot =
-                        Some(DBSnapshotDeserializer::deserialize("DBSnapshot", stack)?);
+    ) -> Result<ModifyDBSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyDBSnapshotResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBSnapshot" => {
+                        obj.db_snapshot =
+                            Some(DBSnapshotDeserializer::deserialize("DBSnapshot", stack)?);
+                    }
+                    _ => skip_tree(stack),
                 }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+                Ok(())
+            },
+        )
     }
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBSubnetGroupMessage {
+pub struct ModifyDBSubnetGroupRequest {
     /// <p>The description for the DB subnet group.</p>
     pub db_subnet_group_description: Option<String>,
     /// <p>The name for the DB subnet group. This value is stored as a lowercase string. You can't modify the default subnet group. </p> <p>Constraints: Must match the name of an existing DBSubnetGroup. Must not be default.</p> <p>Example: <code>mySubnetgroup</code> </p>
@@ -10326,10 +11320,10 @@ pub struct ModifyDBSubnetGroupMessage {
     pub subnet_ids: Vec<String>,
 }
 
-/// Serialize `ModifyDBSubnetGroupMessage` contents to a `SignedRequest`.
-struct ModifyDBSubnetGroupMessageSerializer;
-impl ModifyDBSubnetGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBSubnetGroupMessage) {
+/// Serialize `ModifyDBSubnetGroupRequest` contents to a `SignedRequest`.
+struct ModifyDBSubnetGroupRequestSerializer;
+impl ModifyDBSubnetGroupRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ModifyDBSubnetGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -10354,18 +11348,18 @@ impl ModifyDBSubnetGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBSubnetGroupResult {
+pub struct ModifyDBSubnetGroupResponse {
     pub db_subnet_group: Option<DBSubnetGroup>,
 }
 
-struct ModifyDBSubnetGroupResultDeserializer;
-impl ModifyDBSubnetGroupResultDeserializer {
+struct ModifyDBSubnetGroupResponseDeserializer;
+impl ModifyDBSubnetGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyDBSubnetGroupResult, XmlParseError> {
-        deserialize_elements::<_, ModifyDBSubnetGroupResult, _>(
+    ) -> Result<ModifyDBSubnetGroupResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyDBSubnetGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -10385,7 +11379,7 @@ impl ModifyDBSubnetGroupResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyEventSubscriptionMessage {
+pub struct ModifyEventSubscriptionRequest {
     /// <p> A value that indicates whether to activate the subscription. </p>
     pub enabled: Option<bool>,
     /// <p> A list of event categories for a SourceType that you want to subscribe to. You can see a list of the categories for a given SourceType in the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html">Events</a> topic in the <i>Amazon RDS User Guide</i> or by using the <b>DescribeEventCategories</b> action. </p>
@@ -10398,10 +11392,14 @@ pub struct ModifyEventSubscriptionMessage {
     pub subscription_name: String,
 }
 
-/// Serialize `ModifyEventSubscriptionMessage` contents to a `SignedRequest`.
-struct ModifyEventSubscriptionMessageSerializer;
-impl ModifyEventSubscriptionMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyEventSubscriptionMessage) {
+/// Serialize `ModifyEventSubscriptionRequest` contents to a `SignedRequest`.
+struct ModifyEventSubscriptionRequestSerializer;
+impl ModifyEventSubscriptionRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ModifyEventSubscriptionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -10431,18 +11429,18 @@ impl ModifyEventSubscriptionMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyEventSubscriptionResult {
+pub struct ModifyEventSubscriptionResponse {
     pub event_subscription: Option<EventSubscription>,
 }
 
-struct ModifyEventSubscriptionResultDeserializer;
-impl ModifyEventSubscriptionResultDeserializer {
+struct ModifyEventSubscriptionResponseDeserializer;
+impl ModifyEventSubscriptionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyEventSubscriptionResult, XmlParseError> {
-        deserialize_elements::<_, ModifyEventSubscriptionResult, _>(
+    ) -> Result<ModifyEventSubscriptionResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyEventSubscriptionResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -10461,7 +11459,7 @@ impl ModifyEventSubscriptionResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyGlobalClusterMessage {
+pub struct ModifyGlobalClusterRequest {
     /// <p> Indicates if the global database cluster has deletion protection enabled. The global database cluster can't be deleted when deletion protection is enabled. </p>
     pub deletion_protection: Option<bool>,
     /// <p><p> The DB cluster identifier for the global cluster being modified. This parameter is not case-sensitive. </p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing global database cluster.</p> </li> </ul></p>
@@ -10470,10 +11468,10 @@ pub struct ModifyGlobalClusterMessage {
     pub new_global_cluster_identifier: Option<String>,
 }
 
-/// Serialize `ModifyGlobalClusterMessage` contents to a `SignedRequest`.
-struct ModifyGlobalClusterMessageSerializer;
-impl ModifyGlobalClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyGlobalClusterMessage) {
+/// Serialize `ModifyGlobalClusterRequest` contents to a `SignedRequest`.
+struct ModifyGlobalClusterRequestSerializer;
+impl ModifyGlobalClusterRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ModifyGlobalClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -10498,18 +11496,18 @@ impl ModifyGlobalClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyGlobalClusterResult {
+pub struct ModifyGlobalClusterResponse {
     pub global_cluster: Option<GlobalCluster>,
 }
 
-struct ModifyGlobalClusterResultDeserializer;
-impl ModifyGlobalClusterResultDeserializer {
+struct ModifyGlobalClusterResponseDeserializer;
+impl ModifyGlobalClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyGlobalClusterResult, XmlParseError> {
-        deserialize_elements::<_, ModifyGlobalClusterResult, _>(
+    ) -> Result<ModifyGlobalClusterResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyGlobalClusterResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -10529,7 +11527,7 @@ impl ModifyGlobalClusterResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyOptionGroupMessage {
+pub struct ModifyOptionGroupRequest {
     /// <p>A value that indicates whether to apply the change immediately or during the next maintenance window for each instance associated with the option group.</p>
     pub apply_immediately: Option<bool>,
     /// <p>The name of the option group to be modified.</p> <p>Permanent options, such as the TDE option for Oracle Advanced Security TDE, can't be removed from an option group, and that option group can't be removed from a DB instance once it is associated with a DB instance</p>
@@ -10540,10 +11538,10 @@ pub struct ModifyOptionGroupMessage {
     pub options_to_remove: Option<Vec<String>>,
 }
 
-/// Serialize `ModifyOptionGroupMessage` contents to a `SignedRequest`.
-struct ModifyOptionGroupMessageSerializer;
-impl ModifyOptionGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyOptionGroupMessage) {
+/// Serialize `ModifyOptionGroupRequest` contents to a `SignedRequest`.
+struct ModifyOptionGroupRequestSerializer;
+impl ModifyOptionGroupRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ModifyOptionGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -10574,18 +11572,18 @@ impl ModifyOptionGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyOptionGroupResult {
+pub struct ModifyOptionGroupResponse {
     pub option_group: Option<OptionGroup>,
 }
 
-struct ModifyOptionGroupResultDeserializer;
-impl ModifyOptionGroupResultDeserializer {
+struct ModifyOptionGroupResponseDeserializer;
+impl ModifyOptionGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyOptionGroupResult, XmlParseError> {
-        deserialize_elements::<_, ModifyOptionGroupResult, _>(
+    ) -> Result<ModifyOptionGroupResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyOptionGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -10703,7 +11701,7 @@ pub struct OptionConfiguration {
 /// Serialize `OptionConfiguration` contents to a `SignedRequest`.
 struct OptionConfigurationSerializer;
 impl OptionConfigurationSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &OptionConfiguration) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &OptionConfiguration) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -10743,7 +11741,7 @@ impl OptionConfigurationSerializer {
 /// Serialize `OptionConfigurationList` contents to a `SignedRequest`.
 struct OptionConfigurationListSerializer;
 impl OptionConfigurationListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<OptionConfiguration>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<OptionConfiguration>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             OptionConfigurationSerializer::serialize(params, &key, obj);
@@ -11151,76 +12149,6 @@ impl OptionGroupOptionsListDeserializer {
         })
     }
 }
-/// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct OptionGroupOptionsMessage {
-    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
-    pub marker: Option<String>,
-    pub option_group_options: Option<Vec<OptionGroupOption>>,
-}
-
-struct OptionGroupOptionsMessageDeserializer;
-impl OptionGroupOptionsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<OptionGroupOptionsMessage, XmlParseError> {
-        deserialize_elements::<_, OptionGroupOptionsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "OptionGroupOptions" => {
-                        obj.option_group_options.get_or_insert(vec![]).extend(
-                            OptionGroupOptionsListDeserializer::deserialize(
-                                "OptionGroupOptions",
-                                stack,
-                            )?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
-/// <p>List of option groups.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct OptionGroups {
-    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
-    pub marker: Option<String>,
-    /// <p>List of option groups.</p>
-    pub option_groups_list: Option<Vec<OptionGroup>>,
-}
-
-struct OptionGroupsDeserializer;
-impl OptionGroupsDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<OptionGroups, XmlParseError> {
-        deserialize_elements::<_, OptionGroups, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                "OptionGroupsList" => {
-                    obj.option_groups_list.get_or_insert(vec![]).extend(
-                        OptionGroupsListDeserializer::deserialize("OptionGroupsList", stack)?,
-                    );
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 struct OptionGroupsListDeserializer;
 impl OptionGroupsListDeserializer {
     #[allow(unused_variables)]
@@ -11242,7 +12170,7 @@ impl OptionGroupsListDeserializer {
 /// Serialize `OptionNamesList` contents to a `SignedRequest`.
 struct OptionNamesListSerializer;
 impl OptionNamesListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -11323,7 +12251,7 @@ impl OptionSettingDeserializer {
 /// Serialize `OptionSetting` contents to a `SignedRequest`.
 struct OptionSettingSerializer;
 impl OptionSettingSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &OptionSetting) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &OptionSetting) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -11383,7 +12311,7 @@ impl OptionSettingConfigurationListDeserializer {
 /// Serialize `OptionSettingsList` contents to a `SignedRequest`.
 struct OptionSettingsListSerializer;
 impl OptionSettingsListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<OptionSetting>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<OptionSetting>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             OptionSettingSerializer::serialize(params, &key, obj);
@@ -11683,45 +12611,6 @@ impl OrderableDBInstanceOptionsListDeserializer {
         })
     }
 }
-/// <p> Contains the result of a successful invocation of the <code>DescribeOrderableDBInstanceOptions</code> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct OrderableDBInstanceOptionsMessage {
-    /// <p> An optional pagination token provided by a previous OrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
-    pub marker: Option<String>,
-    /// <p>An <code>OrderableDBInstanceOption</code> structure containing information about orderable options for the DB instance.</p>
-    pub orderable_db_instance_options: Option<Vec<OrderableDBInstanceOption>>,
-}
-
-struct OrderableDBInstanceOptionsMessageDeserializer;
-impl OrderableDBInstanceOptionsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<OrderableDBInstanceOptionsMessage, XmlParseError> {
-        deserialize_elements::<_, OrderableDBInstanceOptionsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "OrderableDBInstanceOptions" => {
-                        obj.orderable_db_instance_options
-                            .get_or_insert(vec![])
-                            .extend(OrderableDBInstanceOptionsListDeserializer::deserialize(
-                                "OrderableDBInstanceOptions",
-                                stack,
-                            )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p> This data type is used as a request parameter in the <code>ModifyDBParameterGroup</code> and <code>ResetDBParameterGroup</code> actions. </p> <p>This data type is used as a response element in the <code>DescribeEngineDefaultParameters</code> and <code>DescribeDBParameters</code> actions.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Parameter {
@@ -11811,7 +12700,7 @@ impl ParameterDeserializer {
 /// Serialize `Parameter` contents to a `SignedRequest`.
 struct ParameterSerializer;
 impl ParameterSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Parameter) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Parameter) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -11881,7 +12770,7 @@ impl ParametersListDeserializer {
 /// Serialize `ParametersList` contents to a `SignedRequest`.
 struct ParametersListSerializer;
 impl ParametersListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<Parameter>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<Parameter>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             ParameterSerializer::serialize(params, &key, obj);
@@ -12026,45 +12915,6 @@ impl PendingMaintenanceActionsDeserializer {
             }
             Ok(())
         })
-    }
-}
-/// <p>Data returned from the <b>DescribePendingMaintenanceActions</b> action.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct PendingMaintenanceActionsMessage {
-    /// <p> An optional pagination token provided by a previous <code>DescribePendingMaintenanceActions</code> request. If this parameter is specified, the response includes only records beyond the marker, up to a number of records specified by <code>MaxRecords</code>. </p>
-    pub marker: Option<String>,
-    /// <p>A list of the pending maintenance actions for the resource.</p>
-    pub pending_maintenance_actions: Option<Vec<ResourcePendingMaintenanceActions>>,
-}
-
-struct PendingMaintenanceActionsMessageDeserializer;
-impl PendingMaintenanceActionsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<PendingMaintenanceActionsMessage, XmlParseError> {
-        deserialize_elements::<_, PendingMaintenanceActionsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "PendingMaintenanceActions" => {
-                        obj.pending_maintenance_actions
-                            .get_or_insert(vec![])
-                            .extend(PendingMaintenanceActionsDeserializer::deserialize(
-                                "PendingMaintenanceActions",
-                                stack,
-                            )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
     }
 }
 /// <p> This data type is used as a response element in the <code>ModifyDBInstance</code> action. </p>
@@ -12221,7 +13071,7 @@ impl ProcessorFeatureDeserializer {
 /// Serialize `ProcessorFeature` contents to a `SignedRequest`.
 struct ProcessorFeatureSerializer;
 impl ProcessorFeatureSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ProcessorFeature) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ProcessorFeature) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -12260,7 +13110,7 @@ impl ProcessorFeatureListDeserializer {
 /// Serialize `ProcessorFeatureList` contents to a `SignedRequest`.
 struct ProcessorFeatureListSerializer;
 impl ProcessorFeatureListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<ProcessorFeature>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<ProcessorFeature>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             ProcessorFeatureSerializer::serialize(params, &key, obj);
@@ -12270,15 +13120,19 @@ impl ProcessorFeatureListSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PromoteReadReplicaDBClusterMessage {
+pub struct PromoteReadReplicaDBClusterRequest {
     /// <p>The identifier of the DB cluster Read Replica to promote. This parameter is not case-sensitive. </p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBCluster Read Replica.</p> </li> </ul> <p>Example: <code>my-cluster-replica1</code> </p>
     pub db_cluster_identifier: String,
 }
 
-/// Serialize `PromoteReadReplicaDBClusterMessage` contents to a `SignedRequest`.
-struct PromoteReadReplicaDBClusterMessageSerializer;
-impl PromoteReadReplicaDBClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PromoteReadReplicaDBClusterMessage) {
+/// Serialize `PromoteReadReplicaDBClusterRequest` contents to a `SignedRequest`.
+struct PromoteReadReplicaDBClusterRequestSerializer;
+impl PromoteReadReplicaDBClusterRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &PromoteReadReplicaDBClusterRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -12292,18 +13146,18 @@ impl PromoteReadReplicaDBClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PromoteReadReplicaDBClusterResult {
+pub struct PromoteReadReplicaDBClusterResponse {
     pub db_cluster: Option<DBCluster>,
 }
 
-struct PromoteReadReplicaDBClusterResultDeserializer;
-impl PromoteReadReplicaDBClusterResultDeserializer {
+struct PromoteReadReplicaDBClusterResponseDeserializer;
+impl PromoteReadReplicaDBClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<PromoteReadReplicaDBClusterResult, XmlParseError> {
-        deserialize_elements::<_, PromoteReadReplicaDBClusterResult, _>(
+    ) -> Result<PromoteReadReplicaDBClusterResponse, XmlParseError> {
+        deserialize_elements::<_, PromoteReadReplicaDBClusterResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -12321,7 +13175,7 @@ impl PromoteReadReplicaDBClusterResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PromoteReadReplicaMessage {
+pub struct PromoteReadReplicaRequest {
     /// <p><p>The number of days to retain automated backups. Setting this parameter to a positive number enables backups. Setting this parameter to 0 disables automated backups.</p> <p>Default: 1</p> <p>Constraints:</p> <ul> <li> <p>Must be a value from 0 to 8</p> </li> </ul></p>
     pub backup_retention_period: Option<i64>,
     /// <p>The DB instance identifier. This value is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing Read Replica DB instance.</p> </li> </ul> <p>Example: <code>mydbinstance</code> </p>
@@ -12330,10 +13184,10 @@ pub struct PromoteReadReplicaMessage {
     pub preferred_backup_window: Option<String>,
 }
 
-/// Serialize `PromoteReadReplicaMessage` contents to a `SignedRequest`.
-struct PromoteReadReplicaMessageSerializer;
-impl PromoteReadReplicaMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PromoteReadReplicaMessage) {
+/// Serialize `PromoteReadReplicaRequest` contents to a `SignedRequest`.
+struct PromoteReadReplicaRequestSerializer;
+impl PromoteReadReplicaRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &PromoteReadReplicaRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -12359,18 +13213,18 @@ impl PromoteReadReplicaMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PromoteReadReplicaResult {
+pub struct PromoteReadReplicaResponse {
     pub db_instance: Option<DBInstance>,
 }
 
-struct PromoteReadReplicaResultDeserializer;
-impl PromoteReadReplicaResultDeserializer {
+struct PromoteReadReplicaResponseDeserializer;
+impl PromoteReadReplicaResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<PromoteReadReplicaResult, XmlParseError> {
-        deserialize_elements::<_, PromoteReadReplicaResult, _>(
+    ) -> Result<PromoteReadReplicaResponse, XmlParseError> {
+        deserialize_elements::<_, PromoteReadReplicaResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -12388,7 +13242,7 @@ impl PromoteReadReplicaResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PurchaseReservedDBInstancesOfferingMessage {
+pub struct PurchaseReservedDBInstancesOfferingRequest {
     /// <p>The number of instances to reserve.</p> <p>Default: <code>1</code> </p>
     pub db_instance_count: Option<i64>,
     /// <p>Customer-specified identifier to track this reservation.</p> <p>Example: myreservationID</p>
@@ -12398,13 +13252,13 @@ pub struct PurchaseReservedDBInstancesOfferingMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `PurchaseReservedDBInstancesOfferingMessage` contents to a `SignedRequest`.
-struct PurchaseReservedDBInstancesOfferingMessageSerializer;
-impl PurchaseReservedDBInstancesOfferingMessageSerializer {
+/// Serialize `PurchaseReservedDBInstancesOfferingRequest` contents to a `SignedRequest`.
+struct PurchaseReservedDBInstancesOfferingRequestSerializer;
+impl PurchaseReservedDBInstancesOfferingRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
-        obj: &PurchaseReservedDBInstancesOfferingMessage,
+        obj: &PurchaseReservedDBInstancesOfferingRequest,
     ) {
         let mut prefix = name.to_string();
         if prefix != "" {
@@ -12431,18 +13285,18 @@ impl PurchaseReservedDBInstancesOfferingMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PurchaseReservedDBInstancesOfferingResult {
+pub struct PurchaseReservedDBInstancesOfferingResponse {
     pub reserved_db_instance: Option<ReservedDBInstance>,
 }
 
-struct PurchaseReservedDBInstancesOfferingResultDeserializer;
-impl PurchaseReservedDBInstancesOfferingResultDeserializer {
+struct PurchaseReservedDBInstancesOfferingResponseDeserializer;
+impl PurchaseReservedDBInstancesOfferingResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<PurchaseReservedDBInstancesOfferingResult, XmlParseError> {
-        deserialize_elements::<_, PurchaseReservedDBInstancesOfferingResult, _>(
+    ) -> Result<PurchaseReservedDBInstancesOfferingResponse, XmlParseError> {
+        deserialize_elements::<_, PurchaseReservedDBInstancesOfferingResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -12589,17 +13443,17 @@ impl ReadersArnListDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RebootDBInstanceMessage {
+pub struct RebootDBInstanceRequest {
     /// <p><p>The DB instance identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBInstance.</p> </li> </ul></p>
     pub db_instance_identifier: String,
     /// <p> A value that indicates whether the reboot is conducted through a Multi-AZ failover. </p> <p>Constraint: You can't enable force failover if the instance is not configured for Multi-AZ.</p>
     pub force_failover: Option<bool>,
 }
 
-/// Serialize `RebootDBInstanceMessage` contents to a `SignedRequest`.
-struct RebootDBInstanceMessageSerializer;
-impl RebootDBInstanceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RebootDBInstanceMessage) {
+/// Serialize `RebootDBInstanceRequest` contents to a `SignedRequest`.
+struct RebootDBInstanceRequestSerializer;
+impl RebootDBInstanceRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &RebootDBInstanceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -12616,27 +13470,31 @@ impl RebootDBInstanceMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RebootDBInstanceResult {
+pub struct RebootDBInstanceResponse {
     pub db_instance: Option<DBInstance>,
 }
 
-struct RebootDBInstanceResultDeserializer;
-impl RebootDBInstanceResultDeserializer {
+struct RebootDBInstanceResponseDeserializer;
+impl RebootDBInstanceResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RebootDBInstanceResult, XmlParseError> {
-        deserialize_elements::<_, RebootDBInstanceResult, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBInstance" => {
-                    obj.db_instance =
-                        Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
+    ) -> Result<RebootDBInstanceResponse, XmlParseError> {
+        deserialize_elements::<_, RebootDBInstanceResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBInstance" => {
+                        obj.db_instance =
+                            Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
+                    }
+                    _ => skip_tree(stack),
                 }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+                Ok(())
+            },
+        )
     }
 }
 /// <p> This data type is used as a response element in the <code>DescribeReservedDBInstances</code> and <code>DescribeReservedDBInstancesOfferings</code> actions. </p>
@@ -12696,17 +13554,21 @@ impl RecurringChargeListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RemoveFromGlobalClusterMessage {
+pub struct RemoveFromGlobalClusterRequest {
     /// <p> The Amazon Resource Name (ARN) identifying the cluster that was detached from the Aurora global database cluster. </p>
     pub db_cluster_identifier: Option<String>,
     /// <p> The cluster identifier to detach from the Aurora global database cluster. </p>
     pub global_cluster_identifier: Option<String>,
 }
 
-/// Serialize `RemoveFromGlobalClusterMessage` contents to a `SignedRequest`.
-struct RemoveFromGlobalClusterMessageSerializer;
-impl RemoveFromGlobalClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RemoveFromGlobalClusterMessage) {
+/// Serialize `RemoveFromGlobalClusterRequest` contents to a `SignedRequest`.
+struct RemoveFromGlobalClusterRequestSerializer;
+impl RemoveFromGlobalClusterRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &RemoveFromGlobalClusterRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -12728,18 +13590,18 @@ impl RemoveFromGlobalClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RemoveFromGlobalClusterResult {
+pub struct RemoveFromGlobalClusterResponse {
     pub global_cluster: Option<GlobalCluster>,
 }
 
-struct RemoveFromGlobalClusterResultDeserializer;
-impl RemoveFromGlobalClusterResultDeserializer {
+struct RemoveFromGlobalClusterResponseDeserializer;
+impl RemoveFromGlobalClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RemoveFromGlobalClusterResult, XmlParseError> {
-        deserialize_elements::<_, RemoveFromGlobalClusterResult, _>(
+    ) -> Result<RemoveFromGlobalClusterResponse, XmlParseError> {
+        deserialize_elements::<_, RemoveFromGlobalClusterResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -12758,7 +13620,7 @@ impl RemoveFromGlobalClusterResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RemoveRoleFromDBClusterMessage {
+pub struct RemoveRoleFromDBClusterRequest {
     /// <p>The name of the DB cluster to disassociate the IAM role from.</p>
     pub db_cluster_identifier: String,
     /// <p>The name of the feature for the DB cluster that the IAM role is to be disassociated from. For the list of supported feature names, see <a>DBEngineVersion</a>.</p>
@@ -12767,10 +13629,14 @@ pub struct RemoveRoleFromDBClusterMessage {
     pub role_arn: String,
 }
 
-/// Serialize `RemoveRoleFromDBClusterMessage` contents to a `SignedRequest`.
-struct RemoveRoleFromDBClusterMessageSerializer;
-impl RemoveRoleFromDBClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RemoveRoleFromDBClusterMessage) {
+/// Serialize `RemoveRoleFromDBClusterRequest` contents to a `SignedRequest`.
+struct RemoveRoleFromDBClusterRequestSerializer;
+impl RemoveRoleFromDBClusterRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &RemoveRoleFromDBClusterRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -12788,7 +13654,20 @@ impl RemoveRoleFromDBClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RemoveRoleFromDBInstanceMessage {
+pub struct RemoveRoleFromDBClusterResponse {}
+
+struct RemoveRoleFromDBClusterResponseDeserializer;
+impl RemoveRoleFromDBClusterResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RemoveRoleFromDBClusterResponse, XmlParseError> {
+        Ok(RemoveRoleFromDBClusterResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RemoveRoleFromDBInstanceRequest {
     /// <p>The name of the DB instance to disassociate the IAM role from.</p>
     pub db_instance_identifier: String,
     /// <p>The name of the feature for the DB instance that the IAM role is to be disassociated from. For the list of supported feature names, see <code>DBEngineVersion</code>. </p>
@@ -12797,10 +13676,14 @@ pub struct RemoveRoleFromDBInstanceMessage {
     pub role_arn: String,
 }
 
-/// Serialize `RemoveRoleFromDBInstanceMessage` contents to a `SignedRequest`.
-struct RemoveRoleFromDBInstanceMessageSerializer;
-impl RemoveRoleFromDBInstanceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RemoveRoleFromDBInstanceMessage) {
+/// Serialize `RemoveRoleFromDBInstanceRequest` contents to a `SignedRequest`.
+struct RemoveRoleFromDBInstanceRequestSerializer;
+impl RemoveRoleFromDBInstanceRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &RemoveRoleFromDBInstanceRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -12815,22 +13698,35 @@ impl RemoveRoleFromDBInstanceMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RemoveRoleFromDBInstanceResponse {}
+
+struct RemoveRoleFromDBInstanceResponseDeserializer;
+impl RemoveRoleFromDBInstanceResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RemoveRoleFromDBInstanceResponse, XmlParseError> {
+        Ok(RemoveRoleFromDBInstanceResponse::default())
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RemoveSourceIdentifierFromSubscriptionMessage {
+pub struct RemoveSourceIdentifierFromSubscriptionRequest {
     /// <p> The source identifier to be removed from the subscription, such as the <b>DB instance identifier</b> for a DB instance or the name of a security group. </p>
     pub source_identifier: String,
     /// <p>The name of the RDS event notification subscription you want to remove a source identifier from.</p>
     pub subscription_name: String,
 }
 
-/// Serialize `RemoveSourceIdentifierFromSubscriptionMessage` contents to a `SignedRequest`.
-struct RemoveSourceIdentifierFromSubscriptionMessageSerializer;
-impl RemoveSourceIdentifierFromSubscriptionMessageSerializer {
+/// Serialize `RemoveSourceIdentifierFromSubscriptionRequest` contents to a `SignedRequest`.
+struct RemoveSourceIdentifierFromSubscriptionRequestSerializer;
+impl RemoveSourceIdentifierFromSubscriptionRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
-        obj: &RemoveSourceIdentifierFromSubscriptionMessage,
+        obj: &RemoveSourceIdentifierFromSubscriptionRequest,
     ) {
         let mut prefix = name.to_string();
         if prefix != "" {
@@ -12849,18 +13745,18 @@ impl RemoveSourceIdentifierFromSubscriptionMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RemoveSourceIdentifierFromSubscriptionResult {
+pub struct RemoveSourceIdentifierFromSubscriptionResponse {
     pub event_subscription: Option<EventSubscription>,
 }
 
-struct RemoveSourceIdentifierFromSubscriptionResultDeserializer;
-impl RemoveSourceIdentifierFromSubscriptionResultDeserializer {
+struct RemoveSourceIdentifierFromSubscriptionResponseDeserializer;
+impl RemoveSourceIdentifierFromSubscriptionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RemoveSourceIdentifierFromSubscriptionResult, XmlParseError> {
-        deserialize_elements::<_, RemoveSourceIdentifierFromSubscriptionResult, _>(
+    ) -> Result<RemoveSourceIdentifierFromSubscriptionResponse, XmlParseError> {
+        deserialize_elements::<_, RemoveSourceIdentifierFromSubscriptionResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -12880,17 +13776,17 @@ impl RemoveSourceIdentifierFromSubscriptionResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RemoveTagsFromResourceMessage {
+pub struct RemoveTagsFromResourceRequest {
     /// <p>The Amazon RDS resource that the tags are removed from. This value is an Amazon Resource Name (ARN). For information about creating an ARN, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing"> Constructing an ARN for Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     pub resource_name: String,
     /// <p>The tag key (name) of the tag to be removed.</p>
     pub tag_keys: Vec<String>,
 }
 
-/// Serialize `RemoveTagsFromResourceMessage` contents to a `SignedRequest`.
-struct RemoveTagsFromResourceMessageSerializer;
-impl RemoveTagsFromResourceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RemoveTagsFromResourceMessage) {
+/// Serialize `RemoveTagsFromResourceRequest` contents to a `SignedRequest`.
+struct RemoveTagsFromResourceRequestSerializer;
+impl RemoveTagsFromResourceRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &RemoveTagsFromResourceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -12901,6 +13797,19 @@ impl RemoveTagsFromResourceMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RemoveTagsFromResourceResponse {}
+
+struct RemoveTagsFromResourceResponseDeserializer;
+impl RemoveTagsFromResourceResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RemoveTagsFromResourceResponse, XmlParseError> {
+        Ok(RemoveTagsFromResourceResponse::default())
+    }
+}
 /// <p> This data type is used as a response element in the <code>DescribeReservedDBInstances</code> and <code>PurchaseReservedDBInstancesOffering</code> actions. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReservedDBInstance {
@@ -13034,45 +13943,6 @@ impl ReservedDBInstanceListDeserializer {
         })
     }
 }
-/// <p> Contains the result of a successful invocation of the <code>DescribeReservedDBInstances</code> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ReservedDBInstanceMessage {
-    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
-    pub marker: Option<String>,
-    /// <p>A list of reserved DB instances.</p>
-    pub reserved_db_instances: Option<Vec<ReservedDBInstance>>,
-}
-
-struct ReservedDBInstanceMessageDeserializer;
-impl ReservedDBInstanceMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ReservedDBInstanceMessage, XmlParseError> {
-        deserialize_elements::<_, ReservedDBInstanceMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "ReservedDBInstances" => {
-                        obj.reserved_db_instances.get_or_insert(vec![]).extend(
-                            ReservedDBInstanceListDeserializer::deserialize(
-                                "ReservedDBInstances",
-                                stack,
-                            )?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p> This data type is used as a response element in the <code>DescribeReservedDBInstancesOfferings</code> action. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReservedDBInstancesOffering {
@@ -13184,48 +14054,9 @@ impl ReservedDBInstancesOfferingListDeserializer {
         })
     }
 }
-/// <p> Contains the result of a successful invocation of the <code>DescribeReservedDBInstancesOfferings</code> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ReservedDBInstancesOfferingMessage {
-    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
-    pub marker: Option<String>,
-    /// <p>A list of reserved DB instance offerings.</p>
-    pub reserved_db_instances_offerings: Option<Vec<ReservedDBInstancesOffering>>,
-}
-
-struct ReservedDBInstancesOfferingMessageDeserializer;
-impl ReservedDBInstancesOfferingMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ReservedDBInstancesOfferingMessage, XmlParseError> {
-        deserialize_elements::<_, ReservedDBInstancesOfferingMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "ReservedDBInstancesOfferings" => {
-                        obj.reserved_db_instances_offerings
-                            .get_or_insert(vec![])
-                            .extend(ReservedDBInstancesOfferingListDeserializer::deserialize(
-                                "ReservedDBInstancesOfferings",
-                                stack,
-                            )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ResetDBClusterParameterGroupMessage {
+pub struct ResetDBClusterParameterGroupRequest {
     /// <p>The name of the DB cluster parameter group to reset.</p>
     pub db_cluster_parameter_group_name: String,
     /// <p>A list of parameter names in the DB cluster parameter group to reset to the default values. You can't use this parameter if the <code>ResetAllParameters</code> parameter is enabled.</p>
@@ -13234,10 +14065,14 @@ pub struct ResetDBClusterParameterGroupMessage {
     pub reset_all_parameters: Option<bool>,
 }
 
-/// Serialize `ResetDBClusterParameterGroupMessage` contents to a `SignedRequest`.
-struct ResetDBClusterParameterGroupMessageSerializer;
-impl ResetDBClusterParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ResetDBClusterParameterGroupMessage) {
+/// Serialize `ResetDBClusterParameterGroupRequest` contents to a `SignedRequest`.
+struct ResetDBClusterParameterGroupRequestSerializer;
+impl ResetDBClusterParameterGroupRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ResetDBClusterParameterGroupRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -13262,7 +14097,38 @@ impl ResetDBClusterParameterGroupMessageSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ResetDBParameterGroupMessage {
+pub struct ResetDBClusterParameterGroupResponse {
+    /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 letters or numbers.</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Can&#39;t end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <note> <p>This value is stored as a lowercase string.</p> </note></p>
+    pub db_cluster_parameter_group_name: Option<String>,
+}
+
+struct ResetDBClusterParameterGroupResponseDeserializer;
+impl ResetDBClusterParameterGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResetDBClusterParameterGroupResponse, XmlParseError> {
+        deserialize_elements::<_, ResetDBClusterParameterGroupResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBClusterParameterGroupName" => {
+                        obj.db_cluster_parameter_group_name = Some(
+                            StringDeserializer::deserialize("DBClusterParameterGroupName", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResetDBParameterGroupRequest {
     /// <p><p>The name of the DB parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must match the name of an existing DBParameterGroup.</p> </li> </ul></p>
     pub db_parameter_group_name: String,
     /// <p>To reset the entire DB parameter group, specify the <code>DBParameterGroup</code> name and <code>ResetAllParameters</code> parameters. To reset specific parameters, provide a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request.</p> <p> <b>MySQL</b> </p> <p>Valid Values (for Apply method): <code>immediate</code> | <code>pending-reboot</code> </p> <p>You can use the immediate value with dynamic parameters only. You can use the <code>pending-reboot</code> value for both dynamic and static parameters, and changes are applied when DB instance reboots.</p> <p> <b>MariaDB</b> </p> <p>Valid Values (for Apply method): <code>immediate</code> | <code>pending-reboot</code> </p> <p>You can use the immediate value with dynamic parameters only. You can use the <code>pending-reboot</code> value for both dynamic and static parameters, and changes are applied when DB instance reboots.</p> <p> <b>Oracle</b> </p> <p>Valid Values (for Apply method): <code>pending-reboot</code> </p>
@@ -13271,10 +14137,10 @@ pub struct ResetDBParameterGroupMessage {
     pub reset_all_parameters: Option<bool>,
 }
 
-/// Serialize `ResetDBParameterGroupMessage` contents to a `SignedRequest`.
-struct ResetDBParameterGroupMessageSerializer;
-impl ResetDBParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ResetDBParameterGroupMessage) {
+/// Serialize `ResetDBParameterGroupRequest` contents to a `SignedRequest`.
+struct ResetDBParameterGroupRequestSerializer;
+impl ResetDBParameterGroupRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ResetDBParameterGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -13297,6 +14163,38 @@ impl ResetDBParameterGroupMessageSerializer {
     }
 }
 
+/// <p> Contains the result of a successful invocation of the <code>ModifyDBParameterGroup</code> or <code>ResetDBParameterGroup</code> action. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResetDBParameterGroupResponse {
+    /// <p>Provides the name of the DB parameter group.</p>
+    pub db_parameter_group_name: Option<String>,
+}
+
+struct ResetDBParameterGroupResponseDeserializer;
+impl ResetDBParameterGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResetDBParameterGroupResponse, XmlParseError> {
+        deserialize_elements::<_, ResetDBParameterGroupResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBParameterGroupName" => {
+                        obj.db_parameter_group_name = Some(StringDeserializer::deserialize(
+                            "DBParameterGroupName",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Describes the pending maintenance actions for a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResourcePendingMaintenanceActions {
@@ -13340,7 +14238,7 @@ impl ResourcePendingMaintenanceActionsDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreDBClusterFromS3Message {
+pub struct RestoreDBClusterFromS3Request {
     /// <p>A list of Availability Zones (AZs) where instances in the restored DB cluster can be created.</p>
     pub availability_zones: Option<Vec<String>>,
     /// <p><p>The target backtrack window, in seconds. To disable backtracking, set this value to 0.</p> <p>Default: 0</p> <p>Constraints:</p> <ul> <li> <p>If specified, this value must be set to a number from 0 to 259,200 (72 hours).</p> </li> </ul></p>
@@ -13400,10 +14298,10 @@ pub struct RestoreDBClusterFromS3Message {
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-/// Serialize `RestoreDBClusterFromS3Message` contents to a `SignedRequest`.
-struct RestoreDBClusterFromS3MessageSerializer;
-impl RestoreDBClusterFromS3MessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RestoreDBClusterFromS3Message) {
+/// Serialize `RestoreDBClusterFromS3Request` contents to a `SignedRequest`.
+struct RestoreDBClusterFromS3RequestSerializer;
+impl RestoreDBClusterFromS3RequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &RestoreDBClusterFromS3Request) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -13529,18 +14427,18 @@ impl RestoreDBClusterFromS3MessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreDBClusterFromS3Result {
+pub struct RestoreDBClusterFromS3Response {
     pub db_cluster: Option<DBCluster>,
 }
 
-struct RestoreDBClusterFromS3ResultDeserializer;
-impl RestoreDBClusterFromS3ResultDeserializer {
+struct RestoreDBClusterFromS3ResponseDeserializer;
+impl RestoreDBClusterFromS3ResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RestoreDBClusterFromS3Result, XmlParseError> {
-        deserialize_elements::<_, RestoreDBClusterFromS3Result, _>(
+    ) -> Result<RestoreDBClusterFromS3Response, XmlParseError> {
+        deserialize_elements::<_, RestoreDBClusterFromS3Response, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -13558,7 +14456,7 @@ impl RestoreDBClusterFromS3ResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreDBClusterFromSnapshotMessage {
+pub struct RestoreDBClusterFromSnapshotRequest {
     /// <p>Provides the list of Availability Zones (AZs) where instances in the restored DB cluster can be created.</p>
     pub availability_zones: Option<Vec<String>>,
     /// <p><p>The target backtrack window, in seconds. To disable backtracking, set this value to 0.</p> <p>Default: 0</p> <p>Constraints:</p> <ul> <li> <p>If specified, this value must be set to a number from 0 to 259,200 (72 hours).</p> </li> </ul></p>
@@ -13601,10 +14499,14 @@ pub struct RestoreDBClusterFromSnapshotMessage {
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-/// Serialize `RestoreDBClusterFromSnapshotMessage` contents to a `SignedRequest`.
-struct RestoreDBClusterFromSnapshotMessageSerializer;
-impl RestoreDBClusterFromSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RestoreDBClusterFromSnapshotMessage) {
+/// Serialize `RestoreDBClusterFromSnapshotRequest` contents to a `SignedRequest`.
+struct RestoreDBClusterFromSnapshotRequestSerializer;
+impl RestoreDBClusterFromSnapshotRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &RestoreDBClusterFromSnapshotRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -13696,18 +14598,18 @@ impl RestoreDBClusterFromSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreDBClusterFromSnapshotResult {
+pub struct RestoreDBClusterFromSnapshotResponse {
     pub db_cluster: Option<DBCluster>,
 }
 
-struct RestoreDBClusterFromSnapshotResultDeserializer;
-impl RestoreDBClusterFromSnapshotResultDeserializer {
+struct RestoreDBClusterFromSnapshotResponseDeserializer;
+impl RestoreDBClusterFromSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RestoreDBClusterFromSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, RestoreDBClusterFromSnapshotResult, _>(
+    ) -> Result<RestoreDBClusterFromSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, RestoreDBClusterFromSnapshotResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -13725,7 +14627,7 @@ impl RestoreDBClusterFromSnapshotResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreDBClusterToPointInTimeMessage {
+pub struct RestoreDBClusterToPointInTimeRequest {
     /// <p><p>The target backtrack window, in seconds. To disable backtracking, set this value to 0.</p> <p>Default: 0</p> <p>Constraints:</p> <ul> <li> <p>If specified, this value must be set to a number from 0 to 259,200 (72 hours).</p> </li> </ul></p>
     pub backtrack_window: Option<i64>,
     /// <p>A value that indicates whether to copy all tags from the restored DB cluster to snapshots of the restored DB cluster. The default is not to copy them.</p>
@@ -13761,10 +14663,14 @@ pub struct RestoreDBClusterToPointInTimeMessage {
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-/// Serialize `RestoreDBClusterToPointInTimeMessage` contents to a `SignedRequest`.
-struct RestoreDBClusterToPointInTimeMessageSerializer;
-impl RestoreDBClusterToPointInTimeMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RestoreDBClusterToPointInTimeMessage) {
+/// Serialize `RestoreDBClusterToPointInTimeRequest` contents to a `SignedRequest`.
+struct RestoreDBClusterToPointInTimeRequestSerializer;
+impl RestoreDBClusterToPointInTimeRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &RestoreDBClusterToPointInTimeRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -13844,18 +14750,18 @@ impl RestoreDBClusterToPointInTimeMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreDBClusterToPointInTimeResult {
+pub struct RestoreDBClusterToPointInTimeResponse {
     pub db_cluster: Option<DBCluster>,
 }
 
-struct RestoreDBClusterToPointInTimeResultDeserializer;
-impl RestoreDBClusterToPointInTimeResultDeserializer {
+struct RestoreDBClusterToPointInTimeResponseDeserializer;
+impl RestoreDBClusterToPointInTimeResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RestoreDBClusterToPointInTimeResult, XmlParseError> {
-        deserialize_elements::<_, RestoreDBClusterToPointInTimeResult, _>(
+    ) -> Result<RestoreDBClusterToPointInTimeResponse, XmlParseError> {
+        deserialize_elements::<_, RestoreDBClusterToPointInTimeResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -13873,7 +14779,7 @@ impl RestoreDBClusterToPointInTimeResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreDBInstanceFromDBSnapshotMessage {
+pub struct RestoreDBInstanceFromDBSnapshotRequest {
     /// <p>A value that indicates whether minor version upgrades are applied automatically to the DB instance during the maintenance window.</p>
     pub auto_minor_version_upgrade: Option<bool>,
     /// <p>The Availability Zone (AZ) where the DB instance will be created.</p> <p>Default: A random, system-chosen Availability Zone.</p> <p>Constraint: You can't specify the <code>AvailabilityZone</code> parameter if the DB instance is a Multi-AZ deployment.</p> <p>Example: <code>us-east-1a</code> </p>
@@ -13931,10 +14837,14 @@ pub struct RestoreDBInstanceFromDBSnapshotMessage {
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-/// Serialize `RestoreDBInstanceFromDBSnapshotMessage` contents to a `SignedRequest`.
-struct RestoreDBInstanceFromDBSnapshotMessageSerializer;
-impl RestoreDBInstanceFromDBSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RestoreDBInstanceFromDBSnapshotMessage) {
+/// Serialize `RestoreDBInstanceFromDBSnapshotRequest` contents to a `SignedRequest`.
+struct RestoreDBInstanceFromDBSnapshotRequestSerializer;
+impl RestoreDBInstanceFromDBSnapshotRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &RestoreDBInstanceFromDBSnapshotRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -14057,18 +14967,18 @@ impl RestoreDBInstanceFromDBSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreDBInstanceFromDBSnapshotResult {
+pub struct RestoreDBInstanceFromDBSnapshotResponse {
     pub db_instance: Option<DBInstance>,
 }
 
-struct RestoreDBInstanceFromDBSnapshotResultDeserializer;
-impl RestoreDBInstanceFromDBSnapshotResultDeserializer {
+struct RestoreDBInstanceFromDBSnapshotResponseDeserializer;
+impl RestoreDBInstanceFromDBSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RestoreDBInstanceFromDBSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, RestoreDBInstanceFromDBSnapshotResult, _>(
+    ) -> Result<RestoreDBInstanceFromDBSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, RestoreDBInstanceFromDBSnapshotResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -14085,7 +14995,7 @@ impl RestoreDBInstanceFromDBSnapshotResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreDBInstanceFromS3Message {
+pub struct RestoreDBInstanceFromS3Request {
     /// <p><p>The amount of storage (in gigabytes) to allocate initially for the DB instance. Follow the allocation rules specified in <code>CreateDBInstance</code>. </p> <note> <p>Be sure to allocate enough memory for your new DB instance so that the restore operation can succeed. You can also allocate additional memory for future growth. </p> </note></p>
     pub allocated_storage: Option<i64>,
     /// <p>A value that indicates whether minor engine upgrades are applied automatically to the DB instance during the maintenance window. By default, minor engine upgrades are not applied automatically. </p>
@@ -14174,10 +15084,14 @@ pub struct RestoreDBInstanceFromS3Message {
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-/// Serialize `RestoreDBInstanceFromS3Message` contents to a `SignedRequest`.
-struct RestoreDBInstanceFromS3MessageSerializer;
-impl RestoreDBInstanceFromS3MessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RestoreDBInstanceFromS3Message) {
+/// Serialize `RestoreDBInstanceFromS3Request` contents to a `SignedRequest`.
+struct RestoreDBInstanceFromS3RequestSerializer;
+impl RestoreDBInstanceFromS3RequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &RestoreDBInstanceFromS3Request,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -14363,18 +15277,18 @@ impl RestoreDBInstanceFromS3MessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreDBInstanceFromS3Result {
+pub struct RestoreDBInstanceFromS3Response {
     pub db_instance: Option<DBInstance>,
 }
 
-struct RestoreDBInstanceFromS3ResultDeserializer;
-impl RestoreDBInstanceFromS3ResultDeserializer {
+struct RestoreDBInstanceFromS3ResponseDeserializer;
+impl RestoreDBInstanceFromS3ResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RestoreDBInstanceFromS3Result, XmlParseError> {
-        deserialize_elements::<_, RestoreDBInstanceFromS3Result, _>(
+    ) -> Result<RestoreDBInstanceFromS3Response, XmlParseError> {
+        deserialize_elements::<_, RestoreDBInstanceFromS3Response, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -14392,7 +15306,7 @@ impl RestoreDBInstanceFromS3ResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreDBInstanceToPointInTimeMessage {
+pub struct RestoreDBInstanceToPointInTimeRequest {
     /// <p>A value that indicates whether minor version upgrades are applied automatically to the DB instance during the maintenance window.</p>
     pub auto_minor_version_upgrade: Option<bool>,
     /// <p>The Availability Zone (AZ) where the DB instance will be created.</p> <p>Default: A random, system-chosen Availability Zone.</p> <p>Constraint: You can't specify the <code>AvailabilityZone</code> parameter if the DB instance is a Multi-AZ deployment.</p> <p>Example: <code>us-east-1a</code> </p>
@@ -14456,10 +15370,14 @@ pub struct RestoreDBInstanceToPointInTimeMessage {
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-/// Serialize `RestoreDBInstanceToPointInTimeMessage` contents to a `SignedRequest`.
-struct RestoreDBInstanceToPointInTimeMessageSerializer;
-impl RestoreDBInstanceToPointInTimeMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RestoreDBInstanceToPointInTimeMessage) {
+/// Serialize `RestoreDBInstanceToPointInTimeRequest` contents to a `SignedRequest`.
+struct RestoreDBInstanceToPointInTimeRequestSerializer;
+impl RestoreDBInstanceToPointInTimeRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &RestoreDBInstanceToPointInTimeRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -14599,18 +15517,18 @@ impl RestoreDBInstanceToPointInTimeMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreDBInstanceToPointInTimeResult {
+pub struct RestoreDBInstanceToPointInTimeResponse {
     pub db_instance: Option<DBInstance>,
 }
 
-struct RestoreDBInstanceToPointInTimeResultDeserializer;
-impl RestoreDBInstanceToPointInTimeResultDeserializer {
+struct RestoreDBInstanceToPointInTimeResponseDeserializer;
+impl RestoreDBInstanceToPointInTimeResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RestoreDBInstanceToPointInTimeResult, XmlParseError> {
-        deserialize_elements::<_, RestoreDBInstanceToPointInTimeResult, _>(
+    ) -> Result<RestoreDBInstanceToPointInTimeResponse, XmlParseError> {
+        deserialize_elements::<_, RestoreDBInstanceToPointInTimeResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -14659,7 +15577,7 @@ impl RestoreWindowDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RevokeDBSecurityGroupIngressMessage {
+pub struct RevokeDBSecurityGroupIngressRequest {
     /// <p> The IP range to revoke access from. Must be a valid CIDR range. If <code>CIDRIP</code> is specified, <code>EC2SecurityGroupName</code>, <code>EC2SecurityGroupId</code> and <code>EC2SecurityGroupOwnerId</code> can't be provided. </p>
     pub cidrip: Option<String>,
     /// <p>The name of the DB security group to revoke ingress from.</p>
@@ -14672,10 +15590,14 @@ pub struct RevokeDBSecurityGroupIngressMessage {
     pub ec2_security_group_owner_id: Option<String>,
 }
 
-/// Serialize `RevokeDBSecurityGroupIngressMessage` contents to a `SignedRequest`.
-struct RevokeDBSecurityGroupIngressMessageSerializer;
-impl RevokeDBSecurityGroupIngressMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RevokeDBSecurityGroupIngressMessage) {
+/// Serialize `RevokeDBSecurityGroupIngressRequest` contents to a `SignedRequest`.
+struct RevokeDBSecurityGroupIngressRequestSerializer;
+impl RevokeDBSecurityGroupIngressRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &RevokeDBSecurityGroupIngressRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -14707,18 +15629,18 @@ impl RevokeDBSecurityGroupIngressMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RevokeDBSecurityGroupIngressResult {
+pub struct RevokeDBSecurityGroupIngressResponse {
     pub db_security_group: Option<DBSecurityGroup>,
 }
 
-struct RevokeDBSecurityGroupIngressResultDeserializer;
-impl RevokeDBSecurityGroupIngressResultDeserializer {
+struct RevokeDBSecurityGroupIngressResponseDeserializer;
+impl RevokeDBSecurityGroupIngressResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RevokeDBSecurityGroupIngressResult, XmlParseError> {
-        deserialize_elements::<_, RevokeDBSecurityGroupIngressResult, _>(
+    ) -> Result<RevokeDBSecurityGroupIngressResponse, XmlParseError> {
+        deserialize_elements::<_, RevokeDBSecurityGroupIngressResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -14754,7 +15676,7 @@ pub struct ScalingConfiguration {
 /// Serialize `ScalingConfiguration` contents to a `SignedRequest`.
 struct ScalingConfigurationSerializer;
 impl ScalingConfigurationSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ScalingConfiguration) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ScalingConfiguration) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -14865,7 +15787,7 @@ impl SourceIdsListDeserializer {
 /// Serialize `SourceIdsList` contents to a `SignedRequest`.
 struct SourceIdsListSerializer;
 impl SourceIdsListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -14928,38 +15850,6 @@ impl SourceRegionListDeserializer {
         })
     }
 }
-/// <p>Contains the result of a successful invocation of the <code>DescribeSourceRegions</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct SourceRegionMessage {
-    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
-    pub marker: Option<String>,
-    /// <p>A list of SourceRegion instances that contains each source AWS Region that the current AWS Region can get a Read Replica or a DB snapshot from.</p>
-    pub source_regions: Option<Vec<SourceRegion>>,
-}
-
-struct SourceRegionMessageDeserializer;
-impl SourceRegionMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<SourceRegionMessage, XmlParseError> {
-        deserialize_elements::<_, SourceRegionMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                "SourceRegions" => {
-                    obj.source_regions.get_or_insert(vec![]).extend(
-                        SourceRegionListDeserializer::deserialize("SourceRegions", stack)?,
-                    );
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
     #[allow(unused_variables)]
@@ -14972,15 +15862,15 @@ impl SourceTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct StartDBClusterMessage {
+pub struct StartDBClusterRequest {
     /// <p>The DB cluster identifier of the Amazon Aurora DB cluster to be started. This parameter is stored as a lowercase string.</p>
     pub db_cluster_identifier: String,
 }
 
-/// Serialize `StartDBClusterMessage` contents to a `SignedRequest`.
-struct StartDBClusterMessageSerializer;
-impl StartDBClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &StartDBClusterMessage) {
+/// Serialize `StartDBClusterRequest` contents to a `SignedRequest`.
+struct StartDBClusterRequestSerializer;
+impl StartDBClusterRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &StartDBClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -14994,18 +15884,18 @@ impl StartDBClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct StartDBClusterResult {
+pub struct StartDBClusterResponse {
     pub db_cluster: Option<DBCluster>,
 }
 
-struct StartDBClusterResultDeserializer;
-impl StartDBClusterResultDeserializer {
+struct StartDBClusterResponseDeserializer;
+impl StartDBClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<StartDBClusterResult, XmlParseError> {
-        deserialize_elements::<_, StartDBClusterResult, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<StartDBClusterResponse, XmlParseError> {
+        deserialize_elements::<_, StartDBClusterResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBCluster" => {
                     obj.db_cluster = Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
@@ -15017,15 +15907,15 @@ impl StartDBClusterResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct StartDBInstanceMessage {
+pub struct StartDBInstanceRequest {
     /// <p> The user-supplied instance identifier. </p>
     pub db_instance_identifier: String,
 }
 
-/// Serialize `StartDBInstanceMessage` contents to a `SignedRequest`.
-struct StartDBInstanceMessageSerializer;
-impl StartDBInstanceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &StartDBInstanceMessage) {
+/// Serialize `StartDBInstanceRequest` contents to a `SignedRequest`.
+struct StartDBInstanceRequestSerializer;
+impl StartDBInstanceRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &StartDBInstanceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -15039,39 +15929,43 @@ impl StartDBInstanceMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct StartDBInstanceResult {
+pub struct StartDBInstanceResponse {
     pub db_instance: Option<DBInstance>,
 }
 
-struct StartDBInstanceResultDeserializer;
-impl StartDBInstanceResultDeserializer {
+struct StartDBInstanceResponseDeserializer;
+impl StartDBInstanceResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<StartDBInstanceResult, XmlParseError> {
-        deserialize_elements::<_, StartDBInstanceResult, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBInstance" => {
-                    obj.db_instance =
-                        Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
+    ) -> Result<StartDBInstanceResponse, XmlParseError> {
+        deserialize_elements::<_, StartDBInstanceResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBInstance" => {
+                        obj.db_instance =
+                            Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
+                    }
+                    _ => skip_tree(stack),
                 }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct StopDBClusterMessage {
+pub struct StopDBClusterRequest {
     /// <p>The DB cluster identifier of the Amazon Aurora DB cluster to be stopped. This parameter is stored as a lowercase string.</p>
     pub db_cluster_identifier: String,
 }
 
-/// Serialize `StopDBClusterMessage` contents to a `SignedRequest`.
-struct StopDBClusterMessageSerializer;
-impl StopDBClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &StopDBClusterMessage) {
+/// Serialize `StopDBClusterRequest` contents to a `SignedRequest`.
+struct StopDBClusterRequestSerializer;
+impl StopDBClusterRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &StopDBClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -15085,18 +15979,18 @@ impl StopDBClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct StopDBClusterResult {
+pub struct StopDBClusterResponse {
     pub db_cluster: Option<DBCluster>,
 }
 
-struct StopDBClusterResultDeserializer;
-impl StopDBClusterResultDeserializer {
+struct StopDBClusterResponseDeserializer;
+impl StopDBClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<StopDBClusterResult, XmlParseError> {
-        deserialize_elements::<_, StopDBClusterResult, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<StopDBClusterResponse, XmlParseError> {
+        deserialize_elements::<_, StopDBClusterResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBCluster" => {
                     obj.db_cluster = Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
@@ -15108,17 +16002,17 @@ impl StopDBClusterResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct StopDBInstanceMessage {
+pub struct StopDBInstanceRequest {
     /// <p> The user-supplied instance identifier. </p>
     pub db_instance_identifier: String,
     /// <p> The user-supplied instance identifier of the DB Snapshot created immediately before the DB instance is stopped. </p>
     pub db_snapshot_identifier: Option<String>,
 }
 
-/// Serialize `StopDBInstanceMessage` contents to a `SignedRequest`.
-struct StopDBInstanceMessageSerializer;
-impl StopDBInstanceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &StopDBInstanceMessage) {
+/// Serialize `StopDBInstanceRequest` contents to a `SignedRequest`.
+struct StopDBInstanceRequestSerializer;
+impl StopDBInstanceRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &StopDBInstanceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -15138,18 +16032,18 @@ impl StopDBInstanceMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct StopDBInstanceResult {
+pub struct StopDBInstanceResponse {
     pub db_instance: Option<DBInstance>,
 }
 
-struct StopDBInstanceResultDeserializer;
-impl StopDBInstanceResultDeserializer {
+struct StopDBInstanceResponseDeserializer;
+impl StopDBInstanceResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<StopDBInstanceResult, XmlParseError> {
-        deserialize_elements::<_, StopDBInstanceResult, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<StopDBInstanceResponse, XmlParseError> {
+        deserialize_elements::<_, StopDBInstanceResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBInstance" => {
                     obj.db_instance =
@@ -15193,7 +16087,7 @@ impl StringListDeserializer {
 /// Serialize `StringList` contents to a `SignedRequest`.
 struct StringListSerializer;
 impl StringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -15241,7 +16135,7 @@ impl SubnetDeserializer {
 /// Serialize `SubnetIdentifierList` contents to a `SignedRequest`.
 struct SubnetIdentifierListSerializer;
 impl SubnetIdentifierListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -15345,7 +16239,7 @@ impl TagDeserializer {
 /// Serialize `Tag` contents to a `SignedRequest`.
 struct TagSerializer;
 impl TagSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Tag) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Tag) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -15381,7 +16275,7 @@ impl TagListDeserializer {
 /// Serialize `TagList` contents to a `SignedRequest`.
 struct TagListSerializer;
 impl TagListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<Tag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             TagSerializer::serialize(params, &key, obj);
@@ -15389,33 +16283,6 @@ impl TagListSerializer {
     }
 }
 
-/// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct TagListMessage {
-    /// <p>List of tags returned by the ListTagsForResource operation.</p>
-    pub tag_list: Option<Vec<Tag>>,
-}
-
-struct TagListMessageDeserializer;
-impl TagListMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<TagListMessage, XmlParseError> {
-        deserialize_elements::<_, TagListMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "TagList" => {
-                    obj.tag_list
-                        .get_or_insert(vec![])
-                        .extend(TagListDeserializer::deserialize("TagList", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 /// <p>A time zone associated with a <code>DBInstance</code> or a <code>DBSnapshot</code>. This data type is an element in the response to the <code>DescribeDBInstances</code>, the <code>DescribeDBSnapshots</code>, and the <code>DescribeDBEngineVersions</code> actions. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Timezone {
@@ -15623,7 +16490,7 @@ impl ValidUpgradeTargetListDeserializer {
 /// Serialize `VpcSecurityGroupIdList` contents to a `SignedRequest`.
 struct VpcSecurityGroupIdListSerializer;
 impl VpcSecurityGroupIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -24051,671 +24918,623 @@ pub trait Rds {
     /// <p><p>Associates an Identity and Access Management (IAM) role from an Amazon Aurora DB cluster. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Integrating.Authorizing.html">Authorizing Amazon Aurora MySQL to Access Other AWS Services on Your Behalf</a> in the <i>Amazon Aurora User Guide</i>.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn add_role_to_db_cluster(
         &self,
-        input: AddRoleToDBClusterMessage,
-    ) -> RusotoFuture<(), AddRoleToDBClusterError>;
+        input: AddRoleToDBClusterRequest,
+    ) -> Request<AddRoleToDBClusterRequest>;
 
     /// <p><p>Associates an AWS Identity and Access Management (IAM) role with a DB instance.</p> <note> <p>To add a role to a DB instance, the status of the DB instance must be <code>available</code>.</p> </note></p>
     fn add_role_to_db_instance(
         &self,
-        input: AddRoleToDBInstanceMessage,
-    ) -> RusotoFuture<(), AddRoleToDBInstanceError>;
+        input: AddRoleToDBInstanceRequest,
+    ) -> Request<AddRoleToDBInstanceRequest>;
 
     /// <p>Adds a source identifier to an existing RDS event notification subscription.</p>
     fn add_source_identifier_to_subscription(
         &self,
-        input: AddSourceIdentifierToSubscriptionMessage,
-    ) -> RusotoFuture<AddSourceIdentifierToSubscriptionResult, AddSourceIdentifierToSubscriptionError>;
+        input: AddSourceIdentifierToSubscriptionRequest,
+    ) -> Request<AddSourceIdentifierToSubscriptionRequest>;
 
     /// <p>Adds metadata tags to an Amazon RDS resource. These tags can also be used with cost allocation reporting to track cost associated with Amazon RDS resources, or used in a Condition statement in an IAM policy for Amazon RDS.</p> <p>For an overview on tagging Amazon RDS resources, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html">Tagging Amazon RDS Resources</a>.</p>
     fn add_tags_to_resource(
         &self,
-        input: AddTagsToResourceMessage,
-    ) -> RusotoFuture<(), AddTagsToResourceError>;
+        input: AddTagsToResourceRequest,
+    ) -> Request<AddTagsToResourceRequest>;
 
     /// <p>Applies a pending maintenance action to a resource (for example, to a DB instance).</p>
     fn apply_pending_maintenance_action(
         &self,
-        input: ApplyPendingMaintenanceActionMessage,
-    ) -> RusotoFuture<ApplyPendingMaintenanceActionResult, ApplyPendingMaintenanceActionError>;
+        input: ApplyPendingMaintenanceActionRequest,
+    ) -> Request<ApplyPendingMaintenanceActionRequest>;
 
     /// <p>Enables ingress to a DBSecurityGroup using one of two forms of authorization. First, EC2 or VPC security groups can be added to the DBSecurityGroup if the application using the database is running on EC2 or VPC instances. Second, IP ranges are available if the application accessing your database is running on the Internet. Required parameters for this API are one of CIDR range, EC2SecurityGroupId for VPC, or (EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId for non-VPC).</p> <note> <p>You can't authorize ingress from an EC2 security group in one AWS Region to an Amazon RDS DB instance in another. You can't authorize ingress from a VPC security group in one VPC to an Amazon RDS DB instance in another.</p> </note> <p>For an overview of CIDR ranges, go to the <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Wikipedia Tutorial</a>. </p>
     fn authorize_db_security_group_ingress(
         &self,
-        input: AuthorizeDBSecurityGroupIngressMessage,
-    ) -> RusotoFuture<AuthorizeDBSecurityGroupIngressResult, AuthorizeDBSecurityGroupIngressError>;
+        input: AuthorizeDBSecurityGroupIngressRequest,
+    ) -> Request<AuthorizeDBSecurityGroupIngressRequest>;
 
     /// <p><p>Backtracks a DB cluster to a specific time, without creating a new DB cluster.</p> <p>For more information on backtracking, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Managing.Backtrack.html"> Backtracking an Aurora DB Cluster</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn backtrack_db_cluster(
         &self,
-        input: BacktrackDBClusterMessage,
-    ) -> RusotoFuture<DBClusterBacktrack, BacktrackDBClusterError>;
+        input: BacktrackDBClusterRequest,
+    ) -> Request<BacktrackDBClusterRequest>;
 
     /// <p><p>Copies the specified DB cluster parameter group.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn copy_db_cluster_parameter_group(
         &self,
-        input: CopyDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<CopyDBClusterParameterGroupResult, CopyDBClusterParameterGroupError>;
+        input: CopyDBClusterParameterGroupRequest,
+    ) -> Request<CopyDBClusterParameterGroupRequest>;
 
     /// <p><p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p> <p>You can copy an encrypted DB cluster snapshot from another AWS Region. In that case, the AWS Region where you call the <code>CopyDBClusterSnapshot</code> action is the destination AWS Region for the encrypted DB cluster snapshot to be copied to. To copy an encrypted DB cluster snapshot from another AWS Region, you must provide the following values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS Key Management System (AWS KMS) key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>PreSignedUrl</code> - A URL that contains a Signature Version 4 signed request for the <code>CopyDBClusterSnapshot</code> action to be called in the source AWS Region where the DB cluster snapshot is copied from. The pre-signed URL must be a valid request for the <code>CopyDBClusterSnapshot</code> API action that can be executed in the source AWS Region that contains the encrypted DB cluster snapshot to be copied.</p> <p>The pre-signed URL request must contain the following parameter values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The KMS key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region. This is the same identifier for both the <code>CopyDBClusterSnapshot</code> action that is called in the destination AWS Region, and the action contained in the pre-signed URL.</p> </li> <li> <p> <code>DestinationRegion</code> - The name of the AWS Region that the DB cluster snapshot will be created in.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are copying an encrypted DB cluster snapshot from the us-west-2 AWS Region, then your <code>SourceDBClusterSnapshotIdentifier</code> looks like the following example: <code>arn:aws:rds:us-west-2:123456789012:cluster-snapshot:aurora-cluster1-snapshot-20161115</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html"> Signature Version 4 Signing Process</a>.</p> </li> <li> <p> <code>TargetDBClusterSnapshotIdentifier</code> - The identifier for the new copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the ARN format for the source AWS Region and is the same value as the <code>SourceDBClusterSnapshotIdentifier</code> in the pre-signed URL. </p> </li> </ul> <p>To cancel the copy operation once it is in progress, delete the target DB cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while that DB cluster snapshot is in &quot;copying&quot; status.</p> <p>For more information on copying encrypted DB cluster snapshots from one AWS Region to another, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_CopySnapshot.html"> Copying a Snapshot</a> in the <i>Amazon Aurora User Guide.</i> </p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn copy_db_cluster_snapshot(
         &self,
-        input: CopyDBClusterSnapshotMessage,
-    ) -> RusotoFuture<CopyDBClusterSnapshotResult, CopyDBClusterSnapshotError>;
+        input: CopyDBClusterSnapshotRequest,
+    ) -> Request<CopyDBClusterSnapshotRequest>;
 
     /// <p>Copies the specified DB parameter group.</p>
     fn copy_db_parameter_group(
         &self,
-        input: CopyDBParameterGroupMessage,
-    ) -> RusotoFuture<CopyDBParameterGroupResult, CopyDBParameterGroupError>;
+        input: CopyDBParameterGroupRequest,
+    ) -> Request<CopyDBParameterGroupRequest>;
 
     /// <p>Copies the specified DB snapshot. The source DB snapshot must be in the "available" state.</p> <p>You can copy a snapshot from one AWS Region to another. In that case, the AWS Region where you call the <code>CopyDBSnapshot</code> action is the destination AWS Region for the DB snapshot copy. </p> <p>For more information about copying snapshots, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopyDBSnapshot.html">Copying a DB Snapshot</a> in the <i>Amazon RDS User Guide.</i> </p>
-    fn copy_db_snapshot(
-        &self,
-        input: CopyDBSnapshotMessage,
-    ) -> RusotoFuture<CopyDBSnapshotResult, CopyDBSnapshotError>;
+    fn copy_db_snapshot(&self, input: CopyDBSnapshotRequest) -> Request<CopyDBSnapshotRequest>;
 
     /// <p>Copies the specified option group.</p>
-    fn copy_option_group(
-        &self,
-        input: CopyOptionGroupMessage,
-    ) -> RusotoFuture<CopyOptionGroupResult, CopyOptionGroupError>;
+    fn copy_option_group(&self, input: CopyOptionGroupRequest) -> Request<CopyOptionGroupRequest>;
 
     /// <p><p>Creates a new Amazon Aurora DB cluster.</p> <p>You can use the <code>ReplicationSourceIdentifier</code> parameter to create the DB cluster as a Read Replica of another DB cluster or Amazon RDS MySQL DB instance. For cross-region replication where the DB cluster identified by <code>ReplicationSourceIdentifier</code> is encrypted, you must also specify the <code>PreSignedUrl</code> parameter.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn create_db_cluster(
-        &self,
-        input: CreateDBClusterMessage,
-    ) -> RusotoFuture<CreateDBClusterResult, CreateDBClusterError>;
+    fn create_db_cluster(&self, input: CreateDBClusterRequest) -> Request<CreateDBClusterRequest>;
 
     /// <p><p>Creates a new custom endpoint and associates it with an Amazon Aurora DB cluster.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn create_db_cluster_endpoint(
         &self,
-        input: CreateDBClusterEndpointMessage,
-    ) -> RusotoFuture<DBClusterEndpoint, CreateDBClusterEndpointError>;
+        input: CreateDBClusterEndpointRequest,
+    ) -> Request<CreateDBClusterEndpointRequest>;
 
     /// <p><p>Creates a new DB cluster parameter group.</p> <p>Parameters in a DB cluster parameter group apply to all of the instances in a DB cluster.</p> <p> A DB cluster parameter group is initially created with the default parameters for the database engine used by instances in the DB cluster. To provide custom values for any of the parameters, you must modify the group after creating it using <code>ModifyDBClusterParameterGroup</code>. Once you&#39;ve created a DB cluster parameter group, you need to associate it with your DB cluster using <code>ModifyDBCluster</code>. When you associate a new DB cluster parameter group with a running DB cluster, you need to reboot the DB instances in the DB cluster without failover for the new DB cluster parameter group and associated settings to take effect. </p> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the DB cluster parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon RDS console</a> or the <code>DescribeDBClusterParameters</code> action to verify that your DB cluster parameter group has been created or modified.</p> </important> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn create_db_cluster_parameter_group(
         &self,
-        input: CreateDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<CreateDBClusterParameterGroupResult, CreateDBClusterParameterGroupError>;
+        input: CreateDBClusterParameterGroupRequest,
+    ) -> Request<CreateDBClusterParameterGroupRequest>;
 
     /// <p><p>Creates a snapshot of a DB cluster. For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn create_db_cluster_snapshot(
         &self,
-        input: CreateDBClusterSnapshotMessage,
-    ) -> RusotoFuture<CreateDBClusterSnapshotResult, CreateDBClusterSnapshotError>;
+        input: CreateDBClusterSnapshotRequest,
+    ) -> Request<CreateDBClusterSnapshotRequest>;
 
     /// <p>Creates a new DB instance.</p>
     fn create_db_instance(
         &self,
-        input: CreateDBInstanceMessage,
-    ) -> RusotoFuture<CreateDBInstanceResult, CreateDBInstanceError>;
+        input: CreateDBInstanceRequest,
+    ) -> Request<CreateDBInstanceRequest>;
 
     /// <p><p>Creates a new DB instance that acts as a Read Replica for an existing source DB instance. You can create a Read Replica for a DB instance running MySQL, MariaDB, Oracle, or PostgreSQL. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html">Working with Read Replicas</a> in the <i>Amazon RDS User Guide</i>. </p> <p>Amazon Aurora doesn&#39;t support this action. You must call the <code>CreateDBInstance</code> action to create a DB instance for an Aurora DB cluster. </p> <p>All Read Replica DB instances are created with backups disabled. All other DB instance attributes (including DB security groups and DB parameter groups) are inherited from the source DB instance, except as specified following. </p> <important> <p>Your source DB instance must have backup retention enabled. </p> </important></p>
     fn create_db_instance_read_replica(
         &self,
-        input: CreateDBInstanceReadReplicaMessage,
-    ) -> RusotoFuture<CreateDBInstanceReadReplicaResult, CreateDBInstanceReadReplicaError>;
+        input: CreateDBInstanceReadReplicaRequest,
+    ) -> Request<CreateDBInstanceReadReplicaRequest>;
 
     /// <p><p>Creates a new DB parameter group.</p> <p> A DB parameter group is initially created with the default parameters for the database engine used by the DB instance. To provide custom values for any of the parameters, you must modify the group after creating it using <i>ModifyDBParameterGroup</i>. Once you&#39;ve created a DB parameter group, you need to associate it with your DB instance using <i>ModifyDBInstance</i>. When you associate a new DB parameter group with a running DB instance, you need to reboot the DB instance without failover for the new DB parameter group and associated settings to take effect. </p> <important> <p>After you create a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon RDS console</a> or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important></p>
     fn create_db_parameter_group(
         &self,
-        input: CreateDBParameterGroupMessage,
-    ) -> RusotoFuture<CreateDBParameterGroupResult, CreateDBParameterGroupError>;
+        input: CreateDBParameterGroupRequest,
+    ) -> Request<CreateDBParameterGroupRequest>;
 
     /// <p><p>Creates a new DB security group. DB security groups control access to a DB instance.</p> <note> <p>A DB security group controls access to EC2-Classic DB instances that are not in a VPC.</p> </note></p>
     fn create_db_security_group(
         &self,
-        input: CreateDBSecurityGroupMessage,
-    ) -> RusotoFuture<CreateDBSecurityGroupResult, CreateDBSecurityGroupError>;
+        input: CreateDBSecurityGroupRequest,
+    ) -> Request<CreateDBSecurityGroupRequest>;
 
     /// <p>Creates a DBSnapshot. The source DBInstance must be in "available" state.</p>
     fn create_db_snapshot(
         &self,
-        input: CreateDBSnapshotMessage,
-    ) -> RusotoFuture<CreateDBSnapshotResult, CreateDBSnapshotError>;
+        input: CreateDBSnapshotRequest,
+    ) -> Request<CreateDBSnapshotRequest>;
 
     /// <p>Creates a new DB subnet group. DB subnet groups must contain at least one subnet in at least two AZs in the AWS Region.</p>
     fn create_db_subnet_group(
         &self,
-        input: CreateDBSubnetGroupMessage,
-    ) -> RusotoFuture<CreateDBSubnetGroupResult, CreateDBSubnetGroupError>;
+        input: CreateDBSubnetGroupRequest,
+    ) -> Request<CreateDBSubnetGroupRequest>;
 
     /// <p>Creates an RDS event notification subscription. This action requires a topic ARN (Amazon Resource Name) created by either the RDS console, the SNS console, or the SNS API. To obtain an ARN with SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the type of source (SourceType) you want to be notified of, provide a list of RDS sources (SourceIds) that triggers the events, and provide a list of event categories (EventCategories) for events you want to be notified of. For example, you can specify SourceType = db-instance, SourceIds = mydbinstance1, mydbinstance2 and EventCategories = Availability, Backup.</p> <p>If you specify both the SourceType and SourceIds, such as SourceType = db-instance and SourceIdentifier = myDBInstance1, you are notified of all the db-instance events for the specified source. If you specify a SourceType but do not specify a SourceIdentifier, you receive notice of the events for that source type for all your RDS sources. If you do not specify either the SourceType nor the SourceIdentifier, you are notified of events generated from all RDS sources belonging to your customer account.</p>
     fn create_event_subscription(
         &self,
-        input: CreateEventSubscriptionMessage,
-    ) -> RusotoFuture<CreateEventSubscriptionResult, CreateEventSubscriptionError>;
+        input: CreateEventSubscriptionRequest,
+    ) -> Request<CreateEventSubscriptionRequest>;
 
     /// <p><p> </p> <p> Creates an Aurora global database spread across multiple regions. The global database contains a single primary cluster with read-write capability, and a read-only secondary cluster that receives data from the primary cluster through high-speed replication performed by the Aurora storage subsystem. </p> <p> You can create a global database that is initially empty, and then add a primary cluster and a secondary cluster to it. Or you can specify an existing Aurora cluster during the create operation, and this cluster becomes the primary cluster of the global database. </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn create_global_cluster(
         &self,
-        input: CreateGlobalClusterMessage,
-    ) -> RusotoFuture<CreateGlobalClusterResult, CreateGlobalClusterError>;
+        input: CreateGlobalClusterRequest,
+    ) -> Request<CreateGlobalClusterRequest>;
 
     /// <p>Creates a new option group. You can create up to 20 option groups.</p>
     fn create_option_group(
         &self,
-        input: CreateOptionGroupMessage,
-    ) -> RusotoFuture<CreateOptionGroupResult, CreateOptionGroupError>;
+        input: CreateOptionGroupRequest,
+    ) -> Request<CreateOptionGroupRequest>;
 
     /// <p><p>The DeleteDBCluster action deletes a previously provisioned DB cluster. When you delete a DB cluster, all automated backups for that DB cluster are deleted and can&#39;t be recovered. Manual DB cluster snapshots of the specified DB cluster are not deleted.</p> <p/> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn delete_db_cluster(
-        &self,
-        input: DeleteDBClusterMessage,
-    ) -> RusotoFuture<DeleteDBClusterResult, DeleteDBClusterError>;
+    fn delete_db_cluster(&self, input: DeleteDBClusterRequest) -> Request<DeleteDBClusterRequest>;
 
     /// <p><p>Deletes a custom endpoint and removes it from an Amazon Aurora DB cluster.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn delete_db_cluster_endpoint(
         &self,
-        input: DeleteDBClusterEndpointMessage,
-    ) -> RusotoFuture<DBClusterEndpoint, DeleteDBClusterEndpointError>;
+        input: DeleteDBClusterEndpointRequest,
+    ) -> Request<DeleteDBClusterEndpointRequest>;
 
     /// <p><p>Deletes a specified DB cluster parameter group. The DB cluster parameter group to be deleted can&#39;t be associated with any DB clusters.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn delete_db_cluster_parameter_group(
         &self,
-        input: DeleteDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<(), DeleteDBClusterParameterGroupError>;
+        input: DeleteDBClusterParameterGroupRequest,
+    ) -> Request<DeleteDBClusterParameterGroupRequest>;
 
     /// <p><p>Deletes a DB cluster snapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DB cluster snapshot must be in the <code>available</code> state to be deleted.</p> </note> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn delete_db_cluster_snapshot(
         &self,
-        input: DeleteDBClusterSnapshotMessage,
-    ) -> RusotoFuture<DeleteDBClusterSnapshotResult, DeleteDBClusterSnapshotError>;
+        input: DeleteDBClusterSnapshotRequest,
+    ) -> Request<DeleteDBClusterSnapshotRequest>;
 
     /// <p>The DeleteDBInstance action deletes a previously provisioned DB instance. When you delete a DB instance, all automated backups for that instance are deleted and can't be recovered. Manual DB snapshots of the DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p> <p> If you request a final DB snapshot the status of the Amazon RDS DB instance is <code>deleting</code> until the DB snapshot is created. The API action <code>DescribeDBInstance</code> is used to monitor the status of this operation. The action can't be canceled or reverted once submitted. </p> <p>Note that when a DB instance is in a failure state and has a status of <code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can only delete it when you skip creation of the final snapshot with the <code>SkipFinalSnapshot</code> parameter.</p> <p>If the specified DB instance is part of an Amazon Aurora DB cluster, you can't delete the DB instance if both of the following conditions are true:</p> <ul> <li> <p>The DB cluster is a Read Replica of another Amazon Aurora DB cluster.</p> </li> <li> <p>The DB instance is the only instance in the DB cluster.</p> </li> </ul> <p>To delete a DB instance in this case, first call the <code>PromoteReadReplicaDBCluster</code> API action to promote the DB cluster so it's no longer a Read Replica. After the promotion completes, then call the <code>DeleteDBInstance</code> API action to delete the final instance in the DB cluster.</p>
     fn delete_db_instance(
         &self,
-        input: DeleteDBInstanceMessage,
-    ) -> RusotoFuture<DeleteDBInstanceResult, DeleteDBInstanceError>;
+        input: DeleteDBInstanceRequest,
+    ) -> Request<DeleteDBInstanceRequest>;
 
     /// <p>Deletes automated backups based on the source instance's <code>DbiResourceId</code> value or the restorable instance's resource ID.</p>
     fn delete_db_instance_automated_backup(
         &self,
-        input: DeleteDBInstanceAutomatedBackupMessage,
-    ) -> RusotoFuture<DeleteDBInstanceAutomatedBackupResult, DeleteDBInstanceAutomatedBackupError>;
+        input: DeleteDBInstanceAutomatedBackupRequest,
+    ) -> Request<DeleteDBInstanceAutomatedBackupRequest>;
 
     /// <p>Deletes a specified DB parameter group. The DB parameter group to be deleted can't be associated with any DB instances.</p>
     fn delete_db_parameter_group(
         &self,
-        input: DeleteDBParameterGroupMessage,
-    ) -> RusotoFuture<(), DeleteDBParameterGroupError>;
+        input: DeleteDBParameterGroupRequest,
+    ) -> Request<DeleteDBParameterGroupRequest>;
 
     /// <p><p>Deletes a DB security group.</p> <note> <p>The specified DB security group must not be associated with any DB instances.</p> </note></p>
     fn delete_db_security_group(
         &self,
-        input: DeleteDBSecurityGroupMessage,
-    ) -> RusotoFuture<(), DeleteDBSecurityGroupError>;
+        input: DeleteDBSecurityGroupRequest,
+    ) -> Request<DeleteDBSecurityGroupRequest>;
 
     /// <p><p>Deletes a DB snapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DB snapshot must be in the <code>available</code> state to be deleted.</p> </note></p>
     fn delete_db_snapshot(
         &self,
-        input: DeleteDBSnapshotMessage,
-    ) -> RusotoFuture<DeleteDBSnapshotResult, DeleteDBSnapshotError>;
+        input: DeleteDBSnapshotRequest,
+    ) -> Request<DeleteDBSnapshotRequest>;
 
     /// <p><p>Deletes a DB subnet group.</p> <note> <p>The specified database subnet group must not be associated with any DB instances.</p> </note></p>
     fn delete_db_subnet_group(
         &self,
-        input: DeleteDBSubnetGroupMessage,
-    ) -> RusotoFuture<(), DeleteDBSubnetGroupError>;
+        input: DeleteDBSubnetGroupRequest,
+    ) -> Request<DeleteDBSubnetGroupRequest>;
 
     /// <p>Deletes an RDS event notification subscription.</p>
     fn delete_event_subscription(
         &self,
-        input: DeleteEventSubscriptionMessage,
-    ) -> RusotoFuture<DeleteEventSubscriptionResult, DeleteEventSubscriptionError>;
+        input: DeleteEventSubscriptionRequest,
+    ) -> Request<DeleteEventSubscriptionRequest>;
 
     /// <p><p> Deletes a global database cluster. The primary and secondary clusters must already be detached or destroyed first. </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn delete_global_cluster(
         &self,
-        input: DeleteGlobalClusterMessage,
-    ) -> RusotoFuture<DeleteGlobalClusterResult, DeleteGlobalClusterError>;
+        input: DeleteGlobalClusterRequest,
+    ) -> Request<DeleteGlobalClusterRequest>;
 
     /// <p>Deletes an existing option group.</p>
     fn delete_option_group(
         &self,
-        input: DeleteOptionGroupMessage,
-    ) -> RusotoFuture<(), DeleteOptionGroupError>;
+        input: DeleteOptionGroupRequest,
+    ) -> Request<DeleteOptionGroupRequest>;
 
     /// <p>Lists all of the attributes for a customer account. The attributes include Amazon RDS quotas for the account, such as the number of DB instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command doesn't take any parameters.</p>
-    fn describe_account_attributes(
-        &self,
-        input: DescribeAccountAttributesMessage,
-    ) -> RusotoFuture<AccountAttributesMessage, DescribeAccountAttributesError>;
+    fn describe_account_attributes(&self) -> Request<DescribeAccountAttributesRequest>;
 
     /// <p>Lists the set of CA certificates provided by Amazon RDS for this AWS account.</p>
     fn describe_certificates(
         &self,
-        input: DescribeCertificatesMessage,
-    ) -> RusotoFuture<CertificateMessage, DescribeCertificatesError>;
+        input: DescribeCertificatesRequest,
+    ) -> Request<DescribeCertificatesRequest>;
 
     /// <p><p>Returns information about backtracks for a DB cluster.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn describe_db_cluster_backtracks(
         &self,
-        input: DescribeDBClusterBacktracksMessage,
-    ) -> RusotoFuture<DBClusterBacktrackMessage, DescribeDBClusterBacktracksError>;
+        input: DescribeDBClusterBacktracksRequest,
+    ) -> Request<DescribeDBClusterBacktracksRequest>;
 
     /// <p><p>Returns information about endpoints for an Amazon Aurora DB cluster.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn describe_db_cluster_endpoints(
         &self,
-        input: DescribeDBClusterEndpointsMessage,
-    ) -> RusotoFuture<DBClusterEndpointMessage, DescribeDBClusterEndpointsError>;
+        input: DescribeDBClusterEndpointsRequest,
+    ) -> Request<DescribeDBClusterEndpointsRequest>;
 
     /// <p><p> Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list will contain only the description of the specified DB cluster parameter group. </p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn describe_db_cluster_parameter_groups(
         &self,
-        input: DescribeDBClusterParameterGroupsMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupsMessage, DescribeDBClusterParameterGroupsError>;
+        input: DescribeDBClusterParameterGroupsRequest,
+    ) -> Request<DescribeDBClusterParameterGroupsRequest>;
 
     /// <p><p>Returns the detailed parameter list for a particular DB cluster parameter group.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn describe_db_cluster_parameters(
         &self,
-        input: DescribeDBClusterParametersMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupDetails, DescribeDBClusterParametersError>;
+        input: DescribeDBClusterParametersRequest,
+    ) -> Request<DescribeDBClusterParametersRequest>;
 
     /// <p><p>Returns a list of DB cluster snapshot attribute names and values for a manual DB cluster snapshot.</p> <p>When sharing snapshots with other AWS accounts, <code>DescribeDBClusterSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB cluster snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB cluster snapshot is public and can be copied or restored by all AWS accounts.</p> <p>To add or remove access for an AWS account to copy or restore a manual DB cluster snapshot, or to make the manual DB cluster snapshot public or private, use the <code>ModifyDBClusterSnapshotAttribute</code> API action.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn describe_db_cluster_snapshot_attributes(
         &self,
-        input: DescribeDBClusterSnapshotAttributesMessage,
-    ) -> RusotoFuture<
-        DescribeDBClusterSnapshotAttributesResult,
-        DescribeDBClusterSnapshotAttributesError,
-    >;
+        input: DescribeDBClusterSnapshotAttributesRequest,
+    ) -> Request<DescribeDBClusterSnapshotAttributesRequest>;
 
     /// <p><p>Returns information about DB cluster snapshots. This API action supports pagination.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn describe_db_cluster_snapshots(
         &self,
-        input: DescribeDBClusterSnapshotsMessage,
-    ) -> RusotoFuture<DBClusterSnapshotMessage, DescribeDBClusterSnapshotsError>;
+        input: DescribeDBClusterSnapshotsRequest,
+    ) -> Request<DescribeDBClusterSnapshotsRequest>;
 
     /// <p><p>Returns information about provisioned Aurora DB clusters. This API supports pagination.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn describe_db_clusters(
         &self,
-        input: DescribeDBClustersMessage,
-    ) -> RusotoFuture<DBClusterMessage, DescribeDBClustersError>;
+        input: DescribeDBClustersRequest,
+    ) -> Request<DescribeDBClustersRequest>;
 
     /// <p>Returns a list of the available DB engines.</p>
     fn describe_db_engine_versions(
         &self,
-        input: DescribeDBEngineVersionsMessage,
-    ) -> RusotoFuture<DBEngineVersionMessage, DescribeDBEngineVersionsError>;
+        input: DescribeDBEngineVersionsRequest,
+    ) -> Request<DescribeDBEngineVersionsRequest>;
 
     /// <p>Displays backups for both current and deleted instances. For example, use this operation to find details about automated backups for previously deleted instances. Current instances with retention periods greater than zero (0) are returned for both the <code>DescribeDBInstanceAutomatedBackups</code> and <code>DescribeDBInstances</code> operations.</p> <p>All parameters are optional.</p>
     fn describe_db_instance_automated_backups(
         &self,
-        input: DescribeDBInstanceAutomatedBackupsMessage,
-    ) -> RusotoFuture<DBInstanceAutomatedBackupMessage, DescribeDBInstanceAutomatedBackupsError>;
+        input: DescribeDBInstanceAutomatedBackupsRequest,
+    ) -> Request<DescribeDBInstanceAutomatedBackupsRequest>;
 
     /// <p>Returns information about provisioned RDS instances. This API supports pagination.</p>
     fn describe_db_instances(
         &self,
-        input: DescribeDBInstancesMessage,
-    ) -> RusotoFuture<DBInstanceMessage, DescribeDBInstancesError>;
+        input: DescribeDBInstancesRequest,
+    ) -> Request<DescribeDBInstancesRequest>;
 
     /// <p>Returns a list of DB log files for the DB instance.</p>
     fn describe_db_log_files(
         &self,
-        input: DescribeDBLogFilesMessage,
-    ) -> RusotoFuture<DescribeDBLogFilesResponse, DescribeDBLogFilesError>;
+        input: DescribeDBLogFilesRequest,
+    ) -> Request<DescribeDBLogFilesRequest>;
 
     /// <p> Returns a list of <code>DBParameterGroup</code> descriptions. If a <code>DBParameterGroupName</code> is specified, the list will contain only the description of the specified DB parameter group. </p>
     fn describe_db_parameter_groups(
         &self,
-        input: DescribeDBParameterGroupsMessage,
-    ) -> RusotoFuture<DBParameterGroupsMessage, DescribeDBParameterGroupsError>;
+        input: DescribeDBParameterGroupsRequest,
+    ) -> Request<DescribeDBParameterGroupsRequest>;
 
     /// <p>Returns the detailed parameter list for a particular DB parameter group.</p>
     fn describe_db_parameters(
         &self,
-        input: DescribeDBParametersMessage,
-    ) -> RusotoFuture<DBParameterGroupDetails, DescribeDBParametersError>;
+        input: DescribeDBParametersRequest,
+    ) -> Request<DescribeDBParametersRequest>;
 
     /// <p> Returns a list of <code>DBSecurityGroup</code> descriptions. If a <code>DBSecurityGroupName</code> is specified, the list will contain only the descriptions of the specified DB security group. </p>
     fn describe_db_security_groups(
         &self,
-        input: DescribeDBSecurityGroupsMessage,
-    ) -> RusotoFuture<DBSecurityGroupMessage, DescribeDBSecurityGroupsError>;
+        input: DescribeDBSecurityGroupsRequest,
+    ) -> Request<DescribeDBSecurityGroupsRequest>;
 
     /// <p>Returns a list of DB snapshot attribute names and values for a manual DB snapshot.</p> <p>When sharing snapshots with other AWS accounts, <code>DescribeDBSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB snapshot is public and can be copied or restored by all AWS accounts.</p> <p>To add or remove access for an AWS account to copy or restore a manual DB snapshot, or to make the manual DB snapshot public or private, use the <code>ModifyDBSnapshotAttribute</code> API action.</p>
     fn describe_db_snapshot_attributes(
         &self,
-        input: DescribeDBSnapshotAttributesMessage,
-    ) -> RusotoFuture<DescribeDBSnapshotAttributesResult, DescribeDBSnapshotAttributesError>;
+        input: DescribeDBSnapshotAttributesRequest,
+    ) -> Request<DescribeDBSnapshotAttributesRequest>;
 
     /// <p>Returns information about DB snapshots. This API action supports pagination.</p>
     fn describe_db_snapshots(
         &self,
-        input: DescribeDBSnapshotsMessage,
-    ) -> RusotoFuture<DBSnapshotMessage, DescribeDBSnapshotsError>;
+        input: DescribeDBSnapshotsRequest,
+    ) -> Request<DescribeDBSnapshotsRequest>;
 
     /// <p>Returns a list of DBSubnetGroup descriptions. If a DBSubnetGroupName is specified, the list will contain only the descriptions of the specified DBSubnetGroup.</p> <p>For an overview of CIDR ranges, go to the <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Wikipedia Tutorial</a>. </p>
     fn describe_db_subnet_groups(
         &self,
-        input: DescribeDBSubnetGroupsMessage,
-    ) -> RusotoFuture<DBSubnetGroupMessage, DescribeDBSubnetGroupsError>;
+        input: DescribeDBSubnetGroupsRequest,
+    ) -> Request<DescribeDBSubnetGroupsRequest>;
 
     /// <p>Returns the default engine and system parameter information for the cluster database engine.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p>
     fn describe_engine_default_cluster_parameters(
         &self,
-        input: DescribeEngineDefaultClusterParametersMessage,
-    ) -> RusotoFuture<
-        DescribeEngineDefaultClusterParametersResult,
-        DescribeEngineDefaultClusterParametersError,
-    >;
+        input: DescribeEngineDefaultClusterParametersRequest,
+    ) -> Request<DescribeEngineDefaultClusterParametersRequest>;
 
     /// <p>Returns the default engine and system parameter information for the specified database engine.</p>
     fn describe_engine_default_parameters(
         &self,
-        input: DescribeEngineDefaultParametersMessage,
-    ) -> RusotoFuture<DescribeEngineDefaultParametersResult, DescribeEngineDefaultParametersError>;
+        input: DescribeEngineDefaultParametersRequest,
+    ) -> Request<DescribeEngineDefaultParametersRequest>;
 
     /// <p>Displays a list of categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html"> Events</a> topic in the <i>Amazon RDS User Guide.</i> </p>
     fn describe_event_categories(
         &self,
-        input: DescribeEventCategoriesMessage,
-    ) -> RusotoFuture<EventCategoriesMessage, DescribeEventCategoriesError>;
+        input: DescribeEventCategoriesRequest,
+    ) -> Request<DescribeEventCategoriesRequest>;
 
     /// <p>Lists all the subscription descriptions for a customer account. The description for a subscription includes SubscriptionName, SNSTopicARN, CustomerID, SourceType, SourceID, CreationTime, and Status.</p> <p>If you specify a SubscriptionName, lists the description for that subscription.</p>
     fn describe_event_subscriptions(
         &self,
-        input: DescribeEventSubscriptionsMessage,
-    ) -> RusotoFuture<EventSubscriptionsMessage, DescribeEventSubscriptionsError>;
+        input: DescribeEventSubscriptionsRequest,
+    ) -> Request<DescribeEventSubscriptionsRequest>;
 
     /// <p>Returns events related to DB instances, DB security groups, DB snapshots, and DB parameter groups for the past 14 days. Events specific to a particular DB instance, DB security group, database snapshot, or DB parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>
-    fn describe_events(
-        &self,
-        input: DescribeEventsMessage,
-    ) -> RusotoFuture<EventsMessage, DescribeEventsError>;
+    fn describe_events(&self, input: DescribeEventsRequest) -> Request<DescribeEventsRequest>;
 
     /// <p><p> Returns information about Aurora global database clusters. This API supports pagination. </p> <p> For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn describe_global_clusters(
         &self,
-        input: DescribeGlobalClustersMessage,
-    ) -> RusotoFuture<GlobalClustersMessage, DescribeGlobalClustersError>;
+        input: DescribeGlobalClustersRequest,
+    ) -> Request<DescribeGlobalClustersRequest>;
 
     /// <p>Describes all available options.</p>
     fn describe_option_group_options(
         &self,
-        input: DescribeOptionGroupOptionsMessage,
-    ) -> RusotoFuture<OptionGroupOptionsMessage, DescribeOptionGroupOptionsError>;
+        input: DescribeOptionGroupOptionsRequest,
+    ) -> Request<DescribeOptionGroupOptionsRequest>;
 
     /// <p>Describes the available option groups.</p>
     fn describe_option_groups(
         &self,
-        input: DescribeOptionGroupsMessage,
-    ) -> RusotoFuture<OptionGroups, DescribeOptionGroupsError>;
+        input: DescribeOptionGroupsRequest,
+    ) -> Request<DescribeOptionGroupsRequest>;
 
     /// <p>Returns a list of orderable DB instance options for the specified engine.</p>
     fn describe_orderable_db_instance_options(
         &self,
-        input: DescribeOrderableDBInstanceOptionsMessage,
-    ) -> RusotoFuture<OrderableDBInstanceOptionsMessage, DescribeOrderableDBInstanceOptionsError>;
+        input: DescribeOrderableDBInstanceOptionsRequest,
+    ) -> Request<DescribeOrderableDBInstanceOptionsRequest>;
 
     /// <p>Returns a list of resources (for example, DB instances) that have at least one pending maintenance action.</p>
     fn describe_pending_maintenance_actions(
         &self,
-        input: DescribePendingMaintenanceActionsMessage,
-    ) -> RusotoFuture<PendingMaintenanceActionsMessage, DescribePendingMaintenanceActionsError>;
+        input: DescribePendingMaintenanceActionsRequest,
+    ) -> Request<DescribePendingMaintenanceActionsRequest>;
 
     /// <p>Returns information about reserved DB instances for this account, or about a specified reserved DB instance.</p>
     fn describe_reserved_db_instances(
         &self,
-        input: DescribeReservedDBInstancesMessage,
-    ) -> RusotoFuture<ReservedDBInstanceMessage, DescribeReservedDBInstancesError>;
+        input: DescribeReservedDBInstancesRequest,
+    ) -> Request<DescribeReservedDBInstancesRequest>;
 
     /// <p>Lists available reserved DB instance offerings.</p>
     fn describe_reserved_db_instances_offerings(
         &self,
-        input: DescribeReservedDBInstancesOfferingsMessage,
-    ) -> RusotoFuture<ReservedDBInstancesOfferingMessage, DescribeReservedDBInstancesOfferingsError>;
+        input: DescribeReservedDBInstancesOfferingsRequest,
+    ) -> Request<DescribeReservedDBInstancesOfferingsRequest>;
 
     /// <p>Returns a list of the source AWS Regions where the current AWS Region can create a Read Replica or copy a DB snapshot from. This API action supports pagination.</p>
     fn describe_source_regions(
         &self,
-        input: DescribeSourceRegionsMessage,
-    ) -> RusotoFuture<SourceRegionMessage, DescribeSourceRegionsError>;
+        input: DescribeSourceRegionsRequest,
+    ) -> Request<DescribeSourceRegionsRequest>;
 
     /// <p>You can call <code>DescribeValidDBInstanceModifications</code> to learn what modifications you can make to your DB instance. You can use this information when you call <code>ModifyDBInstance</code>. </p>
     fn describe_valid_db_instance_modifications(
         &self,
-        input: DescribeValidDBInstanceModificationsMessage,
-    ) -> RusotoFuture<
-        DescribeValidDBInstanceModificationsResult,
-        DescribeValidDBInstanceModificationsError,
-    >;
+        input: DescribeValidDBInstanceModificationsRequest,
+    ) -> Request<DescribeValidDBInstanceModificationsRequest>;
 
     /// <p>Downloads all or a portion of the specified log file, up to 1 MB in size.</p>
     fn download_db_log_file_portion(
         &self,
-        input: DownloadDBLogFilePortionMessage,
-    ) -> RusotoFuture<DownloadDBLogFilePortionDetails, DownloadDBLogFilePortionError>;
+        input: DownloadDBLogFilePortionRequest,
+    ) -> Request<DownloadDBLogFilePortionRequest>;
 
     /// <p><p>Forces a failover for a DB cluster.</p> <p>A failover for a DB cluster promotes one of the Aurora Replicas (read-only instances) in the DB cluster to be the primary instance (the cluster writer).</p> <p>Amazon Aurora will automatically fail over to an Aurora Replica, if one exists, when the primary instance fails. You can force a failover when you want to simulate a failure of a primary instance for testing. Because each instance in a DB cluster has its own endpoint address, you will need to clean up and re-establish any existing connections that use those endpoint addresses when the failover is complete.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn failover_db_cluster(
         &self,
-        input: FailoverDBClusterMessage,
-    ) -> RusotoFuture<FailoverDBClusterResult, FailoverDBClusterError>;
+        input: FailoverDBClusterRequest,
+    ) -> Request<FailoverDBClusterRequest>;
 
     /// <p>Lists all tags on an Amazon RDS resource.</p> <p>For an overview on tagging an Amazon RDS resource, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html">Tagging Amazon RDS Resources</a> in the <i>Amazon RDS User Guide</i>.</p>
     fn list_tags_for_resource(
         &self,
-        input: ListTagsForResourceMessage,
-    ) -> RusotoFuture<TagListMessage, ListTagsForResourceError>;
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p><p>Set the capacity of an Aurora Serverless DB cluster to a specific value.</p> <p>Aurora Serverless scales seamlessly based on the workload on the DB cluster. In some cases, the capacity might not scale fast enough to meet a sudden change in workload, such as a large number of new transactions. Call <code>ModifyCurrentDBClusterCapacity</code> to set the capacity explicitly.</p> <p>After this call sets the DB cluster capacity, Aurora Serverless can automatically scale the DB cluster based on the cooldown period for scaling up and the cooldown period for scaling down.</p> <p>For more information about Aurora Serverless, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.html">Using Amazon Aurora Serverless</a> in the <i>Amazon Aurora User Guide</i>.</p> <important> <p>If you call <code>ModifyCurrentDBClusterCapacity</code> with the default <code>TimeoutAction</code>, connections that prevent Aurora Serverless from finding a scaling point might be dropped. For more information about scaling points, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.how-it-works.html#aurora-serverless.how-it-works.auto-scaling"> Autoscaling for Aurora Serverless</a> in the <i>Amazon Aurora User Guide</i>.</p> </important> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn modify_current_db_cluster_capacity(
         &self,
-        input: ModifyCurrentDBClusterCapacityMessage,
-    ) -> RusotoFuture<DBClusterCapacityInfo, ModifyCurrentDBClusterCapacityError>;
+        input: ModifyCurrentDBClusterCapacityRequest,
+    ) -> Request<ModifyCurrentDBClusterCapacityRequest>;
 
     /// <p><p>Modify a setting for an Amazon Aurora DB cluster. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn modify_db_cluster(
-        &self,
-        input: ModifyDBClusterMessage,
-    ) -> RusotoFuture<ModifyDBClusterResult, ModifyDBClusterError>;
+    fn modify_db_cluster(&self, input: ModifyDBClusterRequest) -> Request<ModifyDBClusterRequest>;
 
     /// <p><p>Modifies the properties of an endpoint in an Amazon Aurora DB cluster.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn modify_db_cluster_endpoint(
         &self,
-        input: ModifyDBClusterEndpointMessage,
-    ) -> RusotoFuture<DBClusterEndpoint, ModifyDBClusterEndpointError>;
+        input: ModifyDBClusterEndpointRequest,
+    ) -> Request<ModifyDBClusterEndpointRequest>;
 
     /// <p><p> Modifies the parameters of a DB cluster parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB cluster associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon RDS console</a> or the <code>DescribeDBClusterParameters</code> action to verify that your DB cluster parameter group has been created or modified.</p> </important> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn modify_db_cluster_parameter_group(
         &self,
-        input: ModifyDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupNameMessage, ModifyDBClusterParameterGroupError>;
+        input: ModifyDBClusterParameterGroupRequest,
+    ) -> Request<ModifyDBClusterParameterGroupRequest>;
 
     /// <p><p>Adds an attribute and values to, or removes an attribute and values from, a manual DB cluster snapshot.</p> <p>To share a manual DB cluster snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB cluster snapshot. Use the value <code>all</code> to make the manual DB cluster snapshot public, which means that it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB cluster snapshots that contain private information that you don&#39;t want available to all AWS accounts. If a manual DB cluster snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can&#39;t use <code>all</code> as a value for that parameter in this case.</p> <p>To view which AWS accounts have access to copy or restore a manual DB cluster snapshot, or whether a manual DB cluster snapshot public or private, use the <code>DescribeDBClusterSnapshotAttributes</code> API action.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn modify_db_cluster_snapshot_attribute(
         &self,
-        input: ModifyDBClusterSnapshotAttributeMessage,
-    ) -> RusotoFuture<ModifyDBClusterSnapshotAttributeResult, ModifyDBClusterSnapshotAttributeError>;
+        input: ModifyDBClusterSnapshotAttributeRequest,
+    ) -> Request<ModifyDBClusterSnapshotAttributeRequest>;
 
     /// <p>Modifies settings for a DB instance. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. To learn what modifications you can make to your DB instance, call <code>DescribeValidDBInstanceModifications</code> before you call <code>ModifyDBInstance</code>. </p>
     fn modify_db_instance(
         &self,
-        input: ModifyDBInstanceMessage,
-    ) -> RusotoFuture<ModifyDBInstanceResult, ModifyDBInstanceError>;
+        input: ModifyDBInstanceRequest,
+    ) -> Request<ModifyDBInstanceRequest>;
 
     /// <p><p> Modifies the parameters of a DB parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB instance associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you modify a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon RDS to fully complete the modify action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon RDS console</a> or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important></p>
     fn modify_db_parameter_group(
         &self,
-        input: ModifyDBParameterGroupMessage,
-    ) -> RusotoFuture<DBParameterGroupNameMessage, ModifyDBParameterGroupError>;
+        input: ModifyDBParameterGroupRequest,
+    ) -> Request<ModifyDBParameterGroupRequest>;
 
     /// <p>Updates a manual DB snapshot, which can be encrypted or not encrypted, with a new engine version. </p> <p>Amazon RDS supports upgrading DB snapshots for MySQL and Oracle. </p>
     fn modify_db_snapshot(
         &self,
-        input: ModifyDBSnapshotMessage,
-    ) -> RusotoFuture<ModifyDBSnapshotResult, ModifyDBSnapshotError>;
+        input: ModifyDBSnapshotRequest,
+    ) -> Request<ModifyDBSnapshotRequest>;
 
     /// <p>Adds an attribute and values to, or removes an attribute and values from, a manual DB snapshot.</p> <p>To share a manual DB snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB snapshot. Uses the value <code>all</code> to make the manual DB snapshot public, which means it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB snapshots that contain private information that you don't want available to all AWS accounts. If the manual DB snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can't use <code>all</code> as a value for that parameter in this case.</p> <p>To view which AWS accounts have access to copy or restore a manual DB snapshot, or whether a manual DB snapshot public or private, use the <code>DescribeDBSnapshotAttributes</code> API action.</p>
     fn modify_db_snapshot_attribute(
         &self,
-        input: ModifyDBSnapshotAttributeMessage,
-    ) -> RusotoFuture<ModifyDBSnapshotAttributeResult, ModifyDBSnapshotAttributeError>;
+        input: ModifyDBSnapshotAttributeRequest,
+    ) -> Request<ModifyDBSnapshotAttributeRequest>;
 
     /// <p>Modifies an existing DB subnet group. DB subnet groups must contain at least one subnet in at least two AZs in the AWS Region.</p>
     fn modify_db_subnet_group(
         &self,
-        input: ModifyDBSubnetGroupMessage,
-    ) -> RusotoFuture<ModifyDBSubnetGroupResult, ModifyDBSubnetGroupError>;
+        input: ModifyDBSubnetGroupRequest,
+    ) -> Request<ModifyDBSubnetGroupRequest>;
 
     /// <p>Modifies an existing RDS event notification subscription. Note that you can't modify the source identifiers using this call; to change source identifiers for a subscription, use the <code>AddSourceIdentifierToSubscription</code> and <code>RemoveSourceIdentifierFromSubscription</code> calls.</p> <p>You can see a list of the event categories for a given SourceType in the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html">Events</a> topic in the <i>Amazon RDS User Guide</i> or by using the <b>DescribeEventCategories</b> action.</p>
     fn modify_event_subscription(
         &self,
-        input: ModifyEventSubscriptionMessage,
-    ) -> RusotoFuture<ModifyEventSubscriptionResult, ModifyEventSubscriptionError>;
+        input: ModifyEventSubscriptionRequest,
+    ) -> Request<ModifyEventSubscriptionRequest>;
 
     /// <p><p> Modify a setting for an Amazon Aurora global cluster. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn modify_global_cluster(
         &self,
-        input: ModifyGlobalClusterMessage,
-    ) -> RusotoFuture<ModifyGlobalClusterResult, ModifyGlobalClusterError>;
+        input: ModifyGlobalClusterRequest,
+    ) -> Request<ModifyGlobalClusterRequest>;
 
     /// <p>Modifies an existing option group.</p>
     fn modify_option_group(
         &self,
-        input: ModifyOptionGroupMessage,
-    ) -> RusotoFuture<ModifyOptionGroupResult, ModifyOptionGroupError>;
+        input: ModifyOptionGroupRequest,
+    ) -> Request<ModifyOptionGroupRequest>;
 
     /// <p><p>Promotes a Read Replica DB instance to a standalone DB instance.</p> <note> <ul> <li> <p>Backup duration is a function of the amount of changes to the database since the previous backup. If you plan to promote a Read Replica to a standalone instance, we recommend that you enable backups and complete at least one backup prior to promotion. In addition, a Read Replica cannot be promoted to a standalone instance when it is in the <code>backing-up</code> status. If you have enabled backups on your Read Replica, configure the automated backup window so that daily backups do not interfere with Read Replica promotion.</p> </li> <li> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL.</p> </li> </ul> </note></p>
     fn promote_read_replica(
         &self,
-        input: PromoteReadReplicaMessage,
-    ) -> RusotoFuture<PromoteReadReplicaResult, PromoteReadReplicaError>;
+        input: PromoteReadReplicaRequest,
+    ) -> Request<PromoteReadReplicaRequest>;
 
     /// <p><p>Promotes a Read Replica DB cluster to a standalone DB cluster.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn promote_read_replica_db_cluster(
         &self,
-        input: PromoteReadReplicaDBClusterMessage,
-    ) -> RusotoFuture<PromoteReadReplicaDBClusterResult, PromoteReadReplicaDBClusterError>;
+        input: PromoteReadReplicaDBClusterRequest,
+    ) -> Request<PromoteReadReplicaDBClusterRequest>;
 
     /// <p>Purchases a reserved DB instance offering.</p>
     fn purchase_reserved_db_instances_offering(
         &self,
-        input: PurchaseReservedDBInstancesOfferingMessage,
-    ) -> RusotoFuture<
-        PurchaseReservedDBInstancesOfferingResult,
-        PurchaseReservedDBInstancesOfferingError,
-    >;
+        input: PurchaseReservedDBInstancesOfferingRequest,
+    ) -> Request<PurchaseReservedDBInstancesOfferingRequest>;
 
     /// <p>You might need to reboot your DB instance, usually for maintenance reasons. For example, if you make certain modifications, or if you change the DB parameter group associated with the DB instance, you must reboot the instance for the changes to take effect. </p> <p>Rebooting a DB instance restarts the database engine service. Rebooting a DB instance results in a momentary outage, during which the DB instance status is set to rebooting. </p> <p>For more information about rebooting, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_RebootInstance.html">Rebooting a DB Instance</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn reboot_db_instance(
         &self,
-        input: RebootDBInstanceMessage,
-    ) -> RusotoFuture<RebootDBInstanceResult, RebootDBInstanceError>;
+        input: RebootDBInstanceRequest,
+    ) -> Request<RebootDBInstanceRequest>;
 
     /// <p><p> Detaches an Aurora secondary cluster from an Aurora global database cluster. The cluster becomes a standalone cluster with read-write capability instead of being read-only and receiving data from a primary cluster in a different region. </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn remove_from_global_cluster(
         &self,
-        input: RemoveFromGlobalClusterMessage,
-    ) -> RusotoFuture<RemoveFromGlobalClusterResult, RemoveFromGlobalClusterError>;
+        input: RemoveFromGlobalClusterRequest,
+    ) -> Request<RemoveFromGlobalClusterRequest>;
 
     /// <p><p>Disassociates an AWS Identity and Access Management (IAM) role from an Amazon Aurora DB cluster. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Integrating.Authorizing.html">Authorizing Amazon Aurora MySQL to Access Other AWS Services on Your Behalf </a> in the <i>Amazon Aurora User Guide</i>.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn remove_role_from_db_cluster(
         &self,
-        input: RemoveRoleFromDBClusterMessage,
-    ) -> RusotoFuture<(), RemoveRoleFromDBClusterError>;
+        input: RemoveRoleFromDBClusterRequest,
+    ) -> Request<RemoveRoleFromDBClusterRequest>;
 
     /// <p>Disassociates an AWS Identity and Access Management (IAM) role from a DB instance.</p>
     fn remove_role_from_db_instance(
         &self,
-        input: RemoveRoleFromDBInstanceMessage,
-    ) -> RusotoFuture<(), RemoveRoleFromDBInstanceError>;
+        input: RemoveRoleFromDBInstanceRequest,
+    ) -> Request<RemoveRoleFromDBInstanceRequest>;
 
     /// <p>Removes a source identifier from an existing RDS event notification subscription.</p>
     fn remove_source_identifier_from_subscription(
         &self,
-        input: RemoveSourceIdentifierFromSubscriptionMessage,
-    ) -> RusotoFuture<
-        RemoveSourceIdentifierFromSubscriptionResult,
-        RemoveSourceIdentifierFromSubscriptionError,
-    >;
+        input: RemoveSourceIdentifierFromSubscriptionRequest,
+    ) -> Request<RemoveSourceIdentifierFromSubscriptionRequest>;
 
     /// <p>Removes metadata tags from an Amazon RDS resource.</p> <p>For an overview on tagging an Amazon RDS resource, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html">Tagging Amazon RDS Resources</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn remove_tags_from_resource(
         &self,
-        input: RemoveTagsFromResourceMessage,
-    ) -> RusotoFuture<(), RemoveTagsFromResourceError>;
+        input: RemoveTagsFromResourceRequest,
+    ) -> Request<RemoveTagsFromResourceRequest>;
 
     /// <p><p> Modifies the parameters of a DB cluster parameter group to the default value. To reset specific parameters submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB cluster parameter group, specify the <code>DBClusterParameterGroupName</code> and <code>ResetAllParameters</code> parameters. </p> <p> When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <code>RebootDBInstance</code> request. You must call <code>RebootDBInstance</code> for every DB instance in your DB cluster that you want the updated static parameter to apply to.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn reset_db_cluster_parameter_group(
         &self,
-        input: ResetDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupNameMessage, ResetDBClusterParameterGroupError>;
+        input: ResetDBClusterParameterGroupRequest,
+    ) -> Request<ResetDBClusterParameterGroupRequest>;
 
     /// <p>Modifies the parameters of a DB parameter group to the engine/system default value. To reset specific parameters, provide a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB parameter group, specify the <code>DBParameterGroup</code> name and <code>ResetAllParameters</code> parameters. When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <code>RebootDBInstance</code> request. </p>
     fn reset_db_parameter_group(
         &self,
-        input: ResetDBParameterGroupMessage,
-    ) -> RusotoFuture<DBParameterGroupNameMessage, ResetDBParameterGroupError>;
+        input: ResetDBParameterGroupRequest,
+    ) -> Request<ResetDBParameterGroupRequest>;
 
     /// <p><p>Creates an Amazon Aurora DB cluster from data stored in an Amazon S3 bucket. Amazon RDS must be authorized to access the Amazon S3 bucket and the data must be created using the Percona XtraBackup utility as described in <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Migrating.html"> Migrating Data to an Amazon Aurora MySQL DB Cluster</a> in the <i>Amazon Aurora User Guide</i>.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn restore_db_cluster_from_s3(
         &self,
-        input: RestoreDBClusterFromS3Message,
-    ) -> RusotoFuture<RestoreDBClusterFromS3Result, RestoreDBClusterFromS3Error>;
+        input: RestoreDBClusterFromS3Request,
+    ) -> Request<RestoreDBClusterFromS3Request>;
 
     /// <p><p>Creates a new DB cluster from a DB snapshot or DB cluster snapshot.</p> <p>If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group.</p> <p>If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn restore_db_cluster_from_snapshot(
         &self,
-        input: RestoreDBClusterFromSnapshotMessage,
-    ) -> RusotoFuture<RestoreDBClusterFromSnapshotResult, RestoreDBClusterFromSnapshotError>;
+        input: RestoreDBClusterFromSnapshotRequest,
+    ) -> Request<RestoreDBClusterFromSnapshotRequest>;
 
     /// <p><p>Restores a DB cluster to an arbitrary point in time. Users can restore to any point in time before <code>LatestRestorableTime</code> for up to <code>BackupRetentionPeriod</code> days. The target DB cluster is created from the source DB cluster with the same configuration as the original DB cluster, except that the new DB cluster is created with the default DB security group. </p> <note> <p>This action only restores the DB cluster, not the DB instances for that DB cluster. You must invoke the <code>CreateDBInstance</code> action to create DB instances for the restored DB cluster, specifying the identifier of the restored DB cluster in <code>DBClusterIdentifier</code>. You can create DB instances only after the <code>RestoreDBClusterToPointInTime</code> action has completed and the DB cluster is available.</p> </note> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn restore_db_cluster_to_point_in_time(
         &self,
-        input: RestoreDBClusterToPointInTimeMessage,
-    ) -> RusotoFuture<RestoreDBClusterToPointInTimeResult, RestoreDBClusterToPointInTimeError>;
+        input: RestoreDBClusterToPointInTimeRequest,
+    ) -> Request<RestoreDBClusterToPointInTimeRequest>;
 
     /// <p><p>Creates a new DB instance from a DB snapshot. The target database is created from the source database restore point with the most of original configuration with the default security group and the default DB parameter group. By default, the new DB instance is created as a single-AZ deployment except when the instance is a SQL Server instance that has an option group that is associated with mirroring; in this case, the instance becomes a mirrored AZ deployment and not a single-AZ deployment.</p> <p>If your intent is to replace your original DB instance with the new, restored DB instance, then rename your original DB instance before you call the RestoreDBInstanceFromDBSnapshot action. RDS doesn&#39;t allow two DB instances with the same name. Once you have renamed your original DB instance with a different identifier, then you can pass the original name of the DB instance as the DBInstanceIdentifier in the call to the RestoreDBInstanceFromDBSnapshot action. The result is that you will replace the original DB instance with the DB instance created from the snapshot.</p> <p>If you are restoring from a shared manual DB snapshot, the <code>DBSnapshotIdentifier</code> must be the ARN of the shared DB snapshot.</p> <note> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL. For Aurora, use <code>RestoreDBClusterFromSnapshot</code>.</p> </note></p>
     fn restore_db_instance_from_db_snapshot(
         &self,
-        input: RestoreDBInstanceFromDBSnapshotMessage,
-    ) -> RusotoFuture<RestoreDBInstanceFromDBSnapshotResult, RestoreDBInstanceFromDBSnapshotError>;
+        input: RestoreDBInstanceFromDBSnapshotRequest,
+    ) -> Request<RestoreDBInstanceFromDBSnapshotRequest>;
 
     /// <p>Amazon Relational Database Service (Amazon RDS) supports importing MySQL databases by using backup files. You can create a backup of your on-premises database, store it on Amazon Simple Storage Service (Amazon S3), and then restore the backup file onto a new Amazon RDS DB instance running MySQL. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/MySQL.Procedural.Importing.html">Importing Data into an Amazon RDS MySQL DB Instance</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn restore_db_instance_from_s3(
         &self,
-        input: RestoreDBInstanceFromS3Message,
-    ) -> RusotoFuture<RestoreDBInstanceFromS3Result, RestoreDBInstanceFromS3Error>;
+        input: RestoreDBInstanceFromS3Request,
+    ) -> Request<RestoreDBInstanceFromS3Request>;
 
     /// <p><p>Restores a DB instance to an arbitrary point in time. You can restore to any point in time before the time identified by the LatestRestorableTime property. You can restore to a point up to the number of days specified by the BackupRetentionPeriod property.</p> <p>The target database is created with most of the original configuration, but in a system-selected Availability Zone, with the default security group, the default subnet group, and the default DB parameter group. By default, the new DB instance is created as a single-AZ deployment except when the instance is a SQL Server instance that has an option group that is associated with mirroring; in this case, the instance becomes a mirrored deployment and not a single-AZ deployment.</p> <note> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL. For Aurora, use <code>RestoreDBClusterToPointInTime</code>.</p> </note></p>
     fn restore_db_instance_to_point_in_time(
         &self,
-        input: RestoreDBInstanceToPointInTimeMessage,
-    ) -> RusotoFuture<RestoreDBInstanceToPointInTimeResult, RestoreDBInstanceToPointInTimeError>;
+        input: RestoreDBInstanceToPointInTimeRequest,
+    ) -> Request<RestoreDBInstanceToPointInTimeRequest>;
 
     /// <p>Revokes ingress from a DBSecurityGroup for previously authorized IP ranges or EC2 or VPC Security Groups. Required parameters for this API are one of CIDRIP, EC2SecurityGroupId for VPC, or (EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId).</p>
     fn revoke_db_security_group_ingress(
         &self,
-        input: RevokeDBSecurityGroupIngressMessage,
-    ) -> RusotoFuture<RevokeDBSecurityGroupIngressResult, RevokeDBSecurityGroupIngressError>;
+        input: RevokeDBSecurityGroupIngressRequest,
+    ) -> Request<RevokeDBSecurityGroupIngressRequest>;
 
     /// <p><p>Starts an Amazon Aurora DB cluster that was stopped using the AWS console, the stop-db-cluster AWS CLI command, or the StopDBCluster action.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-cluster-stop-start.html"> Stopping and Starting an Aurora Cluster</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn start_db_cluster(
-        &self,
-        input: StartDBClusterMessage,
-    ) -> RusotoFuture<StartDBClusterResult, StartDBClusterError>;
+    fn start_db_cluster(&self, input: StartDBClusterRequest) -> Request<StartDBClusterRequest>;
 
     /// <p><p> Starts an Amazon RDS DB instance that was stopped using the AWS console, the stop-db-instance AWS CLI command, or the StopDBInstance action. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_StartInstance.html"> Starting an Amazon RDS DB instance That Was Previously Stopped</a> in the <i>Amazon RDS User Guide.</i> </p> <note> <p> This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL. For Aurora DB clusters, use <code>StartDBCluster</code> instead. </p> </note></p>
-    fn start_db_instance(
-        &self,
-        input: StartDBInstanceMessage,
-    ) -> RusotoFuture<StartDBInstanceResult, StartDBInstanceError>;
+    fn start_db_instance(&self, input: StartDBInstanceRequest) -> Request<StartDBInstanceRequest>;
 
     /// <p><p> Stops an Amazon Aurora DB cluster. When you stop a DB cluster, Aurora retains the DB cluster&#39;s metadata, including its endpoints and DB parameter groups. Aurora also retains the transaction logs so you can do a point-in-time restore if necessary. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-cluster-stop-start.html"> Stopping and Starting an Aurora Cluster</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn stop_db_cluster(
-        &self,
-        input: StopDBClusterMessage,
-    ) -> RusotoFuture<StopDBClusterResult, StopDBClusterError>;
+    fn stop_db_cluster(&self, input: StopDBClusterRequest) -> Request<StopDBClusterRequest>;
 
     /// <p><p> Stops an Amazon RDS DB instance. When you stop a DB instance, Amazon RDS retains the DB instance&#39;s metadata, including its endpoint, DB parameter group, and option group membership. Amazon RDS also retains the transaction logs so you can do a point-in-time restore if necessary. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_StopInstance.html"> Stopping an Amazon RDS DB Instance Temporarily</a> in the <i>Amazon RDS User Guide.</i> </p> <note> <p> This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL. For Aurora clusters, use <code>StopDBCluster</code> instead. </p> </note></p>
-    fn stop_db_instance(
-        &self,
-        input: StopDBInstanceMessage,
-    ) -> RusotoFuture<StopDBInstanceResult, StopDBInstanceError>;
+    fn stop_db_instance(&self, input: StopDBInstanceRequest) -> Request<StopDBInstanceRequest>;
 }
 /// A client for the Amazon RDS API.
 #[derive(Clone)]
@@ -24757,18 +25576,866 @@ impl Rds for RdsClient {
     /// <p><p>Associates an Identity and Access Management (IAM) role from an Amazon Aurora DB cluster. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Integrating.Authorizing.html">Authorizing Amazon Aurora MySQL to Access Other AWS Services on Your Behalf</a> in the <i>Amazon Aurora User Guide</i>.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn add_role_to_db_cluster(
         &self,
-        input: AddRoleToDBClusterMessage,
-    ) -> RusotoFuture<(), AddRoleToDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        input: AddRoleToDBClusterRequest,
+    ) -> Request<AddRoleToDBClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Associates an AWS Identity and Access Management (IAM) role with a DB instance.</p> <note> <p>To add a role to a DB instance, the status of the DB instance must be <code>available</code>.</p> </note></p>
+    fn add_role_to_db_instance(
+        &self,
+        input: AddRoleToDBInstanceRequest,
+    ) -> Request<AddRoleToDBInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds a source identifier to an existing RDS event notification subscription.</p>
+    fn add_source_identifier_to_subscription(
+        &self,
+        input: AddSourceIdentifierToSubscriptionRequest,
+    ) -> Request<AddSourceIdentifierToSubscriptionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds metadata tags to an Amazon RDS resource. These tags can also be used with cost allocation reporting to track cost associated with Amazon RDS resources, or used in a Condition statement in an IAM policy for Amazon RDS.</p> <p>For an overview on tagging Amazon RDS resources, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html">Tagging Amazon RDS Resources</a>.</p>
+    fn add_tags_to_resource(
+        &self,
+        input: AddTagsToResourceRequest,
+    ) -> Request<AddTagsToResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Applies a pending maintenance action to a resource (for example, to a DB instance).</p>
+    fn apply_pending_maintenance_action(
+        &self,
+        input: ApplyPendingMaintenanceActionRequest,
+    ) -> Request<ApplyPendingMaintenanceActionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Enables ingress to a DBSecurityGroup using one of two forms of authorization. First, EC2 or VPC security groups can be added to the DBSecurityGroup if the application using the database is running on EC2 or VPC instances. Second, IP ranges are available if the application accessing your database is running on the Internet. Required parameters for this API are one of CIDR range, EC2SecurityGroupId for VPC, or (EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId for non-VPC).</p> <note> <p>You can't authorize ingress from an EC2 security group in one AWS Region to an Amazon RDS DB instance in another. You can't authorize ingress from a VPC security group in one VPC to an Amazon RDS DB instance in another.</p> </note> <p>For an overview of CIDR ranges, go to the <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Wikipedia Tutorial</a>. </p>
+    fn authorize_db_security_group_ingress(
+        &self,
+        input: AuthorizeDBSecurityGroupIngressRequest,
+    ) -> Request<AuthorizeDBSecurityGroupIngressRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Backtracks a DB cluster to a specific time, without creating a new DB cluster.</p> <p>For more information on backtracking, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Managing.Backtrack.html"> Backtracking an Aurora DB Cluster</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn backtrack_db_cluster(
+        &self,
+        input: BacktrackDBClusterRequest,
+    ) -> Request<BacktrackDBClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Copies the specified DB cluster parameter group.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn copy_db_cluster_parameter_group(
+        &self,
+        input: CopyDBClusterParameterGroupRequest,
+    ) -> Request<CopyDBClusterParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p> <p>You can copy an encrypted DB cluster snapshot from another AWS Region. In that case, the AWS Region where you call the <code>CopyDBClusterSnapshot</code> action is the destination AWS Region for the encrypted DB cluster snapshot to be copied to. To copy an encrypted DB cluster snapshot from another AWS Region, you must provide the following values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS Key Management System (AWS KMS) key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>PreSignedUrl</code> - A URL that contains a Signature Version 4 signed request for the <code>CopyDBClusterSnapshot</code> action to be called in the source AWS Region where the DB cluster snapshot is copied from. The pre-signed URL must be a valid request for the <code>CopyDBClusterSnapshot</code> API action that can be executed in the source AWS Region that contains the encrypted DB cluster snapshot to be copied.</p> <p>The pre-signed URL request must contain the following parameter values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The KMS key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region. This is the same identifier for both the <code>CopyDBClusterSnapshot</code> action that is called in the destination AWS Region, and the action contained in the pre-signed URL.</p> </li> <li> <p> <code>DestinationRegion</code> - The name of the AWS Region that the DB cluster snapshot will be created in.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are copying an encrypted DB cluster snapshot from the us-west-2 AWS Region, then your <code>SourceDBClusterSnapshotIdentifier</code> looks like the following example: <code>arn:aws:rds:us-west-2:123456789012:cluster-snapshot:aurora-cluster1-snapshot-20161115</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html"> Signature Version 4 Signing Process</a>.</p> </li> <li> <p> <code>TargetDBClusterSnapshotIdentifier</code> - The identifier for the new copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the ARN format for the source AWS Region and is the same value as the <code>SourceDBClusterSnapshotIdentifier</code> in the pre-signed URL. </p> </li> </ul> <p>To cancel the copy operation once it is in progress, delete the target DB cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while that DB cluster snapshot is in &quot;copying&quot; status.</p> <p>For more information on copying encrypted DB cluster snapshots from one AWS Region to another, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_CopySnapshot.html"> Copying a Snapshot</a> in the <i>Amazon Aurora User Guide.</i> </p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn copy_db_cluster_snapshot(
+        &self,
+        input: CopyDBClusterSnapshotRequest,
+    ) -> Request<CopyDBClusterSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Copies the specified DB parameter group.</p>
+    fn copy_db_parameter_group(
+        &self,
+        input: CopyDBParameterGroupRequest,
+    ) -> Request<CopyDBParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Copies the specified DB snapshot. The source DB snapshot must be in the "available" state.</p> <p>You can copy a snapshot from one AWS Region to another. In that case, the AWS Region where you call the <code>CopyDBSnapshot</code> action is the destination AWS Region for the DB snapshot copy. </p> <p>For more information about copying snapshots, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopyDBSnapshot.html">Copying a DB Snapshot</a> in the <i>Amazon RDS User Guide.</i> </p>
+    fn copy_db_snapshot(&self, input: CopyDBSnapshotRequest) -> Request<CopyDBSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Copies the specified option group.</p>
+    fn copy_option_group(&self, input: CopyOptionGroupRequest) -> Request<CopyOptionGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a new Amazon Aurora DB cluster.</p> <p>You can use the <code>ReplicationSourceIdentifier</code> parameter to create the DB cluster as a Read Replica of another DB cluster or Amazon RDS MySQL DB instance. For cross-region replication where the DB cluster identified by <code>ReplicationSourceIdentifier</code> is encrypted, you must also specify the <code>PreSignedUrl</code> parameter.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn create_db_cluster(&self, input: CreateDBClusterRequest) -> Request<CreateDBClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a new custom endpoint and associates it with an Amazon Aurora DB cluster.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn create_db_cluster_endpoint(
+        &self,
+        input: CreateDBClusterEndpointRequest,
+    ) -> Request<CreateDBClusterEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a new DB cluster parameter group.</p> <p>Parameters in a DB cluster parameter group apply to all of the instances in a DB cluster.</p> <p> A DB cluster parameter group is initially created with the default parameters for the database engine used by instances in the DB cluster. To provide custom values for any of the parameters, you must modify the group after creating it using <code>ModifyDBClusterParameterGroup</code>. Once you&#39;ve created a DB cluster parameter group, you need to associate it with your DB cluster using <code>ModifyDBCluster</code>. When you associate a new DB cluster parameter group with a running DB cluster, you need to reboot the DB instances in the DB cluster without failover for the new DB cluster parameter group and associated settings to take effect. </p> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the DB cluster parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon RDS console</a> or the <code>DescribeDBClusterParameters</code> action to verify that your DB cluster parameter group has been created or modified.</p> </important> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn create_db_cluster_parameter_group(
+        &self,
+        input: CreateDBClusterParameterGroupRequest,
+    ) -> Request<CreateDBClusterParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a snapshot of a DB cluster. For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn create_db_cluster_snapshot(
+        &self,
+        input: CreateDBClusterSnapshotRequest,
+    ) -> Request<CreateDBClusterSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new DB instance.</p>
+    fn create_db_instance(
+        &self,
+        input: CreateDBInstanceRequest,
+    ) -> Request<CreateDBInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a new DB instance that acts as a Read Replica for an existing source DB instance. You can create a Read Replica for a DB instance running MySQL, MariaDB, Oracle, or PostgreSQL. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html">Working with Read Replicas</a> in the <i>Amazon RDS User Guide</i>. </p> <p>Amazon Aurora doesn&#39;t support this action. You must call the <code>CreateDBInstance</code> action to create a DB instance for an Aurora DB cluster. </p> <p>All Read Replica DB instances are created with backups disabled. All other DB instance attributes (including DB security groups and DB parameter groups) are inherited from the source DB instance, except as specified following. </p> <important> <p>Your source DB instance must have backup retention enabled. </p> </important></p>
+    fn create_db_instance_read_replica(
+        &self,
+        input: CreateDBInstanceReadReplicaRequest,
+    ) -> Request<CreateDBInstanceReadReplicaRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a new DB parameter group.</p> <p> A DB parameter group is initially created with the default parameters for the database engine used by the DB instance. To provide custom values for any of the parameters, you must modify the group after creating it using <i>ModifyDBParameterGroup</i>. Once you&#39;ve created a DB parameter group, you need to associate it with your DB instance using <i>ModifyDBInstance</i>. When you associate a new DB parameter group with a running DB instance, you need to reboot the DB instance without failover for the new DB parameter group and associated settings to take effect. </p> <important> <p>After you create a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon RDS console</a> or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important></p>
+    fn create_db_parameter_group(
+        &self,
+        input: CreateDBParameterGroupRequest,
+    ) -> Request<CreateDBParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a new DB security group. DB security groups control access to a DB instance.</p> <note> <p>A DB security group controls access to EC2-Classic DB instances that are not in a VPC.</p> </note></p>
+    fn create_db_security_group(
+        &self,
+        input: CreateDBSecurityGroupRequest,
+    ) -> Request<CreateDBSecurityGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a DBSnapshot. The source DBInstance must be in "available" state.</p>
+    fn create_db_snapshot(
+        &self,
+        input: CreateDBSnapshotRequest,
+    ) -> Request<CreateDBSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new DB subnet group. DB subnet groups must contain at least one subnet in at least two AZs in the AWS Region.</p>
+    fn create_db_subnet_group(
+        &self,
+        input: CreateDBSubnetGroupRequest,
+    ) -> Request<CreateDBSubnetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an RDS event notification subscription. This action requires a topic ARN (Amazon Resource Name) created by either the RDS console, the SNS console, or the SNS API. To obtain an ARN with SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the type of source (SourceType) you want to be notified of, provide a list of RDS sources (SourceIds) that triggers the events, and provide a list of event categories (EventCategories) for events you want to be notified of. For example, you can specify SourceType = db-instance, SourceIds = mydbinstance1, mydbinstance2 and EventCategories = Availability, Backup.</p> <p>If you specify both the SourceType and SourceIds, such as SourceType = db-instance and SourceIdentifier = myDBInstance1, you are notified of all the db-instance events for the specified source. If you specify a SourceType but do not specify a SourceIdentifier, you receive notice of the events for that source type for all your RDS sources. If you do not specify either the SourceType nor the SourceIdentifier, you are notified of events generated from all RDS sources belonging to your customer account.</p>
+    fn create_event_subscription(
+        &self,
+        input: CreateEventSubscriptionRequest,
+    ) -> Request<CreateEventSubscriptionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p> </p> <p> Creates an Aurora global database spread across multiple regions. The global database contains a single primary cluster with read-write capability, and a read-only secondary cluster that receives data from the primary cluster through high-speed replication performed by the Aurora storage subsystem. </p> <p> You can create a global database that is initially empty, and then add a primary cluster and a secondary cluster to it. Or you can specify an existing Aurora cluster during the create operation, and this cluster becomes the primary cluster of the global database. </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn create_global_cluster(
+        &self,
+        input: CreateGlobalClusterRequest,
+    ) -> Request<CreateGlobalClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new option group. You can create up to 20 option groups.</p>
+    fn create_option_group(
+        &self,
+        input: CreateOptionGroupRequest,
+    ) -> Request<CreateOptionGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>The DeleteDBCluster action deletes a previously provisioned DB cluster. When you delete a DB cluster, all automated backups for that DB cluster are deleted and can&#39;t be recovered. Manual DB cluster snapshots of the specified DB cluster are not deleted.</p> <p/> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn delete_db_cluster(&self, input: DeleteDBClusterRequest) -> Request<DeleteDBClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a custom endpoint and removes it from an Amazon Aurora DB cluster.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn delete_db_cluster_endpoint(
+        &self,
+        input: DeleteDBClusterEndpointRequest,
+    ) -> Request<DeleteDBClusterEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a specified DB cluster parameter group. The DB cluster parameter group to be deleted can&#39;t be associated with any DB clusters.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn delete_db_cluster_parameter_group(
+        &self,
+        input: DeleteDBClusterParameterGroupRequest,
+    ) -> Request<DeleteDBClusterParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a DB cluster snapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DB cluster snapshot must be in the <code>available</code> state to be deleted.</p> </note> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn delete_db_cluster_snapshot(
+        &self,
+        input: DeleteDBClusterSnapshotRequest,
+    ) -> Request<DeleteDBClusterSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>The DeleteDBInstance action deletes a previously provisioned DB instance. When you delete a DB instance, all automated backups for that instance are deleted and can't be recovered. Manual DB snapshots of the DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p> <p> If you request a final DB snapshot the status of the Amazon RDS DB instance is <code>deleting</code> until the DB snapshot is created. The API action <code>DescribeDBInstance</code> is used to monitor the status of this operation. The action can't be canceled or reverted once submitted. </p> <p>Note that when a DB instance is in a failure state and has a status of <code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can only delete it when you skip creation of the final snapshot with the <code>SkipFinalSnapshot</code> parameter.</p> <p>If the specified DB instance is part of an Amazon Aurora DB cluster, you can't delete the DB instance if both of the following conditions are true:</p> <ul> <li> <p>The DB cluster is a Read Replica of another Amazon Aurora DB cluster.</p> </li> <li> <p>The DB instance is the only instance in the DB cluster.</p> </li> </ul> <p>To delete a DB instance in this case, first call the <code>PromoteReadReplicaDBCluster</code> API action to promote the DB cluster so it's no longer a Read Replica. After the promotion completes, then call the <code>DeleteDBInstance</code> API action to delete the final instance in the DB cluster.</p>
+    fn delete_db_instance(
+        &self,
+        input: DeleteDBInstanceRequest,
+    ) -> Request<DeleteDBInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes automated backups based on the source instance's <code>DbiResourceId</code> value or the restorable instance's resource ID.</p>
+    fn delete_db_instance_automated_backup(
+        &self,
+        input: DeleteDBInstanceAutomatedBackupRequest,
+    ) -> Request<DeleteDBInstanceAutomatedBackupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specified DB parameter group. The DB parameter group to be deleted can't be associated with any DB instances.</p>
+    fn delete_db_parameter_group(
+        &self,
+        input: DeleteDBParameterGroupRequest,
+    ) -> Request<DeleteDBParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a DB security group.</p> <note> <p>The specified DB security group must not be associated with any DB instances.</p> </note></p>
+    fn delete_db_security_group(
+        &self,
+        input: DeleteDBSecurityGroupRequest,
+    ) -> Request<DeleteDBSecurityGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a DB snapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DB snapshot must be in the <code>available</code> state to be deleted.</p> </note></p>
+    fn delete_db_snapshot(
+        &self,
+        input: DeleteDBSnapshotRequest,
+    ) -> Request<DeleteDBSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a DB subnet group.</p> <note> <p>The specified database subnet group must not be associated with any DB instances.</p> </note></p>
+    fn delete_db_subnet_group(
+        &self,
+        input: DeleteDBSubnetGroupRequest,
+    ) -> Request<DeleteDBSubnetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an RDS event notification subscription.</p>
+    fn delete_event_subscription(
+        &self,
+        input: DeleteEventSubscriptionRequest,
+    ) -> Request<DeleteEventSubscriptionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p> Deletes a global database cluster. The primary and secondary clusters must already be detached or destroyed first. </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn delete_global_cluster(
+        &self,
+        input: DeleteGlobalClusterRequest,
+    ) -> Request<DeleteGlobalClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an existing option group.</p>
+    fn delete_option_group(
+        &self,
+        input: DeleteOptionGroupRequest,
+    ) -> Request<DeleteOptionGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all of the attributes for a customer account. The attributes include Amazon RDS quotas for the account, such as the number of DB instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command doesn't take any parameters.</p>
+    fn describe_account_attributes(&self) -> Request<DescribeAccountAttributesRequest> {
+        Request::new(
+            DescribeAccountAttributesRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Lists the set of CA certificates provided by Amazon RDS for this AWS account.</p>
+    fn describe_certificates(
+        &self,
+        input: DescribeCertificatesRequest,
+    ) -> Request<DescribeCertificatesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Returns information about backtracks for a DB cluster.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn describe_db_cluster_backtracks(
+        &self,
+        input: DescribeDBClusterBacktracksRequest,
+    ) -> Request<DescribeDBClusterBacktracksRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Returns information about endpoints for an Amazon Aurora DB cluster.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn describe_db_cluster_endpoints(
+        &self,
+        input: DescribeDBClusterEndpointsRequest,
+    ) -> Request<DescribeDBClusterEndpointsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p> Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list will contain only the description of the specified DB cluster parameter group. </p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn describe_db_cluster_parameter_groups(
+        &self,
+        input: DescribeDBClusterParameterGroupsRequest,
+    ) -> Request<DescribeDBClusterParameterGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Returns the detailed parameter list for a particular DB cluster parameter group.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn describe_db_cluster_parameters(
+        &self,
+        input: DescribeDBClusterParametersRequest,
+    ) -> Request<DescribeDBClusterParametersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Returns a list of DB cluster snapshot attribute names and values for a manual DB cluster snapshot.</p> <p>When sharing snapshots with other AWS accounts, <code>DescribeDBClusterSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB cluster snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB cluster snapshot is public and can be copied or restored by all AWS accounts.</p> <p>To add or remove access for an AWS account to copy or restore a manual DB cluster snapshot, or to make the manual DB cluster snapshot public or private, use the <code>ModifyDBClusterSnapshotAttribute</code> API action.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn describe_db_cluster_snapshot_attributes(
+        &self,
+        input: DescribeDBClusterSnapshotAttributesRequest,
+    ) -> Request<DescribeDBClusterSnapshotAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Returns information about DB cluster snapshots. This API action supports pagination.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn describe_db_cluster_snapshots(
+        &self,
+        input: DescribeDBClusterSnapshotsRequest,
+    ) -> Request<DescribeDBClusterSnapshotsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Returns information about provisioned Aurora DB clusters. This API supports pagination.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn describe_db_clusters(
+        &self,
+        input: DescribeDBClustersRequest,
+    ) -> Request<DescribeDBClustersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of the available DB engines.</p>
+    fn describe_db_engine_versions(
+        &self,
+        input: DescribeDBEngineVersionsRequest,
+    ) -> Request<DescribeDBEngineVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Displays backups for both current and deleted instances. For example, use this operation to find details about automated backups for previously deleted instances. Current instances with retention periods greater than zero (0) are returned for both the <code>DescribeDBInstanceAutomatedBackups</code> and <code>DescribeDBInstances</code> operations.</p> <p>All parameters are optional.</p>
+    fn describe_db_instance_automated_backups(
+        &self,
+        input: DescribeDBInstanceAutomatedBackupsRequest,
+    ) -> Request<DescribeDBInstanceAutomatedBackupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about provisioned RDS instances. This API supports pagination.</p>
+    fn describe_db_instances(
+        &self,
+        input: DescribeDBInstancesRequest,
+    ) -> Request<DescribeDBInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of DB log files for the DB instance.</p>
+    fn describe_db_log_files(
+        &self,
+        input: DescribeDBLogFilesRequest,
+    ) -> Request<DescribeDBLogFilesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Returns a list of <code>DBParameterGroup</code> descriptions. If a <code>DBParameterGroupName</code> is specified, the list will contain only the description of the specified DB parameter group. </p>
+    fn describe_db_parameter_groups(
+        &self,
+        input: DescribeDBParameterGroupsRequest,
+    ) -> Request<DescribeDBParameterGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the detailed parameter list for a particular DB parameter group.</p>
+    fn describe_db_parameters(
+        &self,
+        input: DescribeDBParametersRequest,
+    ) -> Request<DescribeDBParametersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Returns a list of <code>DBSecurityGroup</code> descriptions. If a <code>DBSecurityGroupName</code> is specified, the list will contain only the descriptions of the specified DB security group. </p>
+    fn describe_db_security_groups(
+        &self,
+        input: DescribeDBSecurityGroupsRequest,
+    ) -> Request<DescribeDBSecurityGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of DB snapshot attribute names and values for a manual DB snapshot.</p> <p>When sharing snapshots with other AWS accounts, <code>DescribeDBSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB snapshot is public and can be copied or restored by all AWS accounts.</p> <p>To add or remove access for an AWS account to copy or restore a manual DB snapshot, or to make the manual DB snapshot public or private, use the <code>ModifyDBSnapshotAttribute</code> API action.</p>
+    fn describe_db_snapshot_attributes(
+        &self,
+        input: DescribeDBSnapshotAttributesRequest,
+    ) -> Request<DescribeDBSnapshotAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about DB snapshots. This API action supports pagination.</p>
+    fn describe_db_snapshots(
+        &self,
+        input: DescribeDBSnapshotsRequest,
+    ) -> Request<DescribeDBSnapshotsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of DBSubnetGroup descriptions. If a DBSubnetGroupName is specified, the list will contain only the descriptions of the specified DBSubnetGroup.</p> <p>For an overview of CIDR ranges, go to the <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Wikipedia Tutorial</a>. </p>
+    fn describe_db_subnet_groups(
+        &self,
+        input: DescribeDBSubnetGroupsRequest,
+    ) -> Request<DescribeDBSubnetGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the default engine and system parameter information for the cluster database engine.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p>
+    fn describe_engine_default_cluster_parameters(
+        &self,
+        input: DescribeEngineDefaultClusterParametersRequest,
+    ) -> Request<DescribeEngineDefaultClusterParametersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the default engine and system parameter information for the specified database engine.</p>
+    fn describe_engine_default_parameters(
+        &self,
+        input: DescribeEngineDefaultParametersRequest,
+    ) -> Request<DescribeEngineDefaultParametersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Displays a list of categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html"> Events</a> topic in the <i>Amazon RDS User Guide.</i> </p>
+    fn describe_event_categories(
+        &self,
+        input: DescribeEventCategoriesRequest,
+    ) -> Request<DescribeEventCategoriesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all the subscription descriptions for a customer account. The description for a subscription includes SubscriptionName, SNSTopicARN, CustomerID, SourceType, SourceID, CreationTime, and Status.</p> <p>If you specify a SubscriptionName, lists the description for that subscription.</p>
+    fn describe_event_subscriptions(
+        &self,
+        input: DescribeEventSubscriptionsRequest,
+    ) -> Request<DescribeEventSubscriptionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns events related to DB instances, DB security groups, DB snapshots, and DB parameter groups for the past 14 days. Events specific to a particular DB instance, DB security group, database snapshot, or DB parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>
+    fn describe_events(&self, input: DescribeEventsRequest) -> Request<DescribeEventsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p> Returns information about Aurora global database clusters. This API supports pagination. </p> <p> For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn describe_global_clusters(
+        &self,
+        input: DescribeGlobalClustersRequest,
+    ) -> Request<DescribeGlobalClustersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes all available options.</p>
+    fn describe_option_group_options(
+        &self,
+        input: DescribeOptionGroupOptionsRequest,
+    ) -> Request<DescribeOptionGroupOptionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the available option groups.</p>
+    fn describe_option_groups(
+        &self,
+        input: DescribeOptionGroupsRequest,
+    ) -> Request<DescribeOptionGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of orderable DB instance options for the specified engine.</p>
+    fn describe_orderable_db_instance_options(
+        &self,
+        input: DescribeOrderableDBInstanceOptionsRequest,
+    ) -> Request<DescribeOrderableDBInstanceOptionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of resources (for example, DB instances) that have at least one pending maintenance action.</p>
+    fn describe_pending_maintenance_actions(
+        &self,
+        input: DescribePendingMaintenanceActionsRequest,
+    ) -> Request<DescribePendingMaintenanceActionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about reserved DB instances for this account, or about a specified reserved DB instance.</p>
+    fn describe_reserved_db_instances(
+        &self,
+        input: DescribeReservedDBInstancesRequest,
+    ) -> Request<DescribeReservedDBInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists available reserved DB instance offerings.</p>
+    fn describe_reserved_db_instances_offerings(
+        &self,
+        input: DescribeReservedDBInstancesOfferingsRequest,
+    ) -> Request<DescribeReservedDBInstancesOfferingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of the source AWS Regions where the current AWS Region can create a Read Replica or copy a DB snapshot from. This API action supports pagination.</p>
+    fn describe_source_regions(
+        &self,
+        input: DescribeSourceRegionsRequest,
+    ) -> Request<DescribeSourceRegionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>You can call <code>DescribeValidDBInstanceModifications</code> to learn what modifications you can make to your DB instance. You can use this information when you call <code>ModifyDBInstance</code>. </p>
+    fn describe_valid_db_instance_modifications(
+        &self,
+        input: DescribeValidDBInstanceModificationsRequest,
+    ) -> Request<DescribeValidDBInstanceModificationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Downloads all or a portion of the specified log file, up to 1 MB in size.</p>
+    fn download_db_log_file_portion(
+        &self,
+        input: DownloadDBLogFilePortionRequest,
+    ) -> Request<DownloadDBLogFilePortionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Forces a failover for a DB cluster.</p> <p>A failover for a DB cluster promotes one of the Aurora Replicas (read-only instances) in the DB cluster to be the primary instance (the cluster writer).</p> <p>Amazon Aurora will automatically fail over to an Aurora Replica, if one exists, when the primary instance fails. You can force a failover when you want to simulate a failure of a primary instance for testing. Because each instance in a DB cluster has its own endpoint address, you will need to clean up and re-establish any existing connections that use those endpoint addresses when the failover is complete.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn failover_db_cluster(
+        &self,
+        input: FailoverDBClusterRequest,
+    ) -> Request<FailoverDBClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all tags on an Amazon RDS resource.</p> <p>For an overview on tagging an Amazon RDS resource, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html">Tagging Amazon RDS Resources</a> in the <i>Amazon RDS User Guide</i>.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Set the capacity of an Aurora Serverless DB cluster to a specific value.</p> <p>Aurora Serverless scales seamlessly based on the workload on the DB cluster. In some cases, the capacity might not scale fast enough to meet a sudden change in workload, such as a large number of new transactions. Call <code>ModifyCurrentDBClusterCapacity</code> to set the capacity explicitly.</p> <p>After this call sets the DB cluster capacity, Aurora Serverless can automatically scale the DB cluster based on the cooldown period for scaling up and the cooldown period for scaling down.</p> <p>For more information about Aurora Serverless, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.html">Using Amazon Aurora Serverless</a> in the <i>Amazon Aurora User Guide</i>.</p> <important> <p>If you call <code>ModifyCurrentDBClusterCapacity</code> with the default <code>TimeoutAction</code>, connections that prevent Aurora Serverless from finding a scaling point might be dropped. For more information about scaling points, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.how-it-works.html#aurora-serverless.how-it-works.auto-scaling"> Autoscaling for Aurora Serverless</a> in the <i>Amazon Aurora User Guide</i>.</p> </important> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn modify_current_db_cluster_capacity(
+        &self,
+        input: ModifyCurrentDBClusterCapacityRequest,
+    ) -> Request<ModifyCurrentDBClusterCapacityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Modify a setting for an Amazon Aurora DB cluster. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn modify_db_cluster(&self, input: ModifyDBClusterRequest) -> Request<ModifyDBClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Modifies the properties of an endpoint in an Amazon Aurora DB cluster.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn modify_db_cluster_endpoint(
+        &self,
+        input: ModifyDBClusterEndpointRequest,
+    ) -> Request<ModifyDBClusterEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p> Modifies the parameters of a DB cluster parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB cluster associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon RDS console</a> or the <code>DescribeDBClusterParameters</code> action to verify that your DB cluster parameter group has been created or modified.</p> </important> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn modify_db_cluster_parameter_group(
+        &self,
+        input: ModifyDBClusterParameterGroupRequest,
+    ) -> Request<ModifyDBClusterParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Adds an attribute and values to, or removes an attribute and values from, a manual DB cluster snapshot.</p> <p>To share a manual DB cluster snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB cluster snapshot. Use the value <code>all</code> to make the manual DB cluster snapshot public, which means that it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB cluster snapshots that contain private information that you don&#39;t want available to all AWS accounts. If a manual DB cluster snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can&#39;t use <code>all</code> as a value for that parameter in this case.</p> <p>To view which AWS accounts have access to copy or restore a manual DB cluster snapshot, or whether a manual DB cluster snapshot public or private, use the <code>DescribeDBClusterSnapshotAttributes</code> API action.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn modify_db_cluster_snapshot_attribute(
+        &self,
+        input: ModifyDBClusterSnapshotAttributeRequest,
+    ) -> Request<ModifyDBClusterSnapshotAttributeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies settings for a DB instance. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. To learn what modifications you can make to your DB instance, call <code>DescribeValidDBInstanceModifications</code> before you call <code>ModifyDBInstance</code>. </p>
+    fn modify_db_instance(
+        &self,
+        input: ModifyDBInstanceRequest,
+    ) -> Request<ModifyDBInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p> Modifies the parameters of a DB parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB instance associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you modify a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon RDS to fully complete the modify action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon RDS console</a> or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important></p>
+    fn modify_db_parameter_group(
+        &self,
+        input: ModifyDBParameterGroupRequest,
+    ) -> Request<ModifyDBParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a manual DB snapshot, which can be encrypted or not encrypted, with a new engine version. </p> <p>Amazon RDS supports upgrading DB snapshots for MySQL and Oracle. </p>
+    fn modify_db_snapshot(
+        &self,
+        input: ModifyDBSnapshotRequest,
+    ) -> Request<ModifyDBSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds an attribute and values to, or removes an attribute and values from, a manual DB snapshot.</p> <p>To share a manual DB snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB snapshot. Uses the value <code>all</code> to make the manual DB snapshot public, which means it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB snapshots that contain private information that you don't want available to all AWS accounts. If the manual DB snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can't use <code>all</code> as a value for that parameter in this case.</p> <p>To view which AWS accounts have access to copy or restore a manual DB snapshot, or whether a manual DB snapshot public or private, use the <code>DescribeDBSnapshotAttributes</code> API action.</p>
+    fn modify_db_snapshot_attribute(
+        &self,
+        input: ModifyDBSnapshotAttributeRequest,
+    ) -> Request<ModifyDBSnapshotAttributeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies an existing DB subnet group. DB subnet groups must contain at least one subnet in at least two AZs in the AWS Region.</p>
+    fn modify_db_subnet_group(
+        &self,
+        input: ModifyDBSubnetGroupRequest,
+    ) -> Request<ModifyDBSubnetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies an existing RDS event notification subscription. Note that you can't modify the source identifiers using this call; to change source identifiers for a subscription, use the <code>AddSourceIdentifierToSubscription</code> and <code>RemoveSourceIdentifierFromSubscription</code> calls.</p> <p>You can see a list of the event categories for a given SourceType in the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html">Events</a> topic in the <i>Amazon RDS User Guide</i> or by using the <b>DescribeEventCategories</b> action.</p>
+    fn modify_event_subscription(
+        &self,
+        input: ModifyEventSubscriptionRequest,
+    ) -> Request<ModifyEventSubscriptionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p> Modify a setting for an Amazon Aurora global cluster. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn modify_global_cluster(
+        &self,
+        input: ModifyGlobalClusterRequest,
+    ) -> Request<ModifyGlobalClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies an existing option group.</p>
+    fn modify_option_group(
+        &self,
+        input: ModifyOptionGroupRequest,
+    ) -> Request<ModifyOptionGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Promotes a Read Replica DB instance to a standalone DB instance.</p> <note> <ul> <li> <p>Backup duration is a function of the amount of changes to the database since the previous backup. If you plan to promote a Read Replica to a standalone instance, we recommend that you enable backups and complete at least one backup prior to promotion. In addition, a Read Replica cannot be promoted to a standalone instance when it is in the <code>backing-up</code> status. If you have enabled backups on your Read Replica, configure the automated backup window so that daily backups do not interfere with Read Replica promotion.</p> </li> <li> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL.</p> </li> </ul> </note></p>
+    fn promote_read_replica(
+        &self,
+        input: PromoteReadReplicaRequest,
+    ) -> Request<PromoteReadReplicaRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Promotes a Read Replica DB cluster to a standalone DB cluster.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn promote_read_replica_db_cluster(
+        &self,
+        input: PromoteReadReplicaDBClusterRequest,
+    ) -> Request<PromoteReadReplicaDBClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Purchases a reserved DB instance offering.</p>
+    fn purchase_reserved_db_instances_offering(
+        &self,
+        input: PurchaseReservedDBInstancesOfferingRequest,
+    ) -> Request<PurchaseReservedDBInstancesOfferingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>You might need to reboot your DB instance, usually for maintenance reasons. For example, if you make certain modifications, or if you change the DB parameter group associated with the DB instance, you must reboot the instance for the changes to take effect. </p> <p>Rebooting a DB instance restarts the database engine service. Rebooting a DB instance results in a momentary outage, during which the DB instance status is set to rebooting. </p> <p>For more information about rebooting, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_RebootInstance.html">Rebooting a DB Instance</a> in the <i>Amazon RDS User Guide.</i> </p>
+    fn reboot_db_instance(
+        &self,
+        input: RebootDBInstanceRequest,
+    ) -> Request<RebootDBInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p> Detaches an Aurora secondary cluster from an Aurora global database cluster. The cluster becomes a standalone cluster with read-write capability instead of being read-only and receiving data from a primary cluster in a different region. </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn remove_from_global_cluster(
+        &self,
+        input: RemoveFromGlobalClusterRequest,
+    ) -> Request<RemoveFromGlobalClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Disassociates an AWS Identity and Access Management (IAM) role from an Amazon Aurora DB cluster. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Integrating.Authorizing.html">Authorizing Amazon Aurora MySQL to Access Other AWS Services on Your Behalf </a> in the <i>Amazon Aurora User Guide</i>.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn remove_role_from_db_cluster(
+        &self,
+        input: RemoveRoleFromDBClusterRequest,
+    ) -> Request<RemoveRoleFromDBClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disassociates an AWS Identity and Access Management (IAM) role from a DB instance.</p>
+    fn remove_role_from_db_instance(
+        &self,
+        input: RemoveRoleFromDBInstanceRequest,
+    ) -> Request<RemoveRoleFromDBInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes a source identifier from an existing RDS event notification subscription.</p>
+    fn remove_source_identifier_from_subscription(
+        &self,
+        input: RemoveSourceIdentifierFromSubscriptionRequest,
+    ) -> Request<RemoveSourceIdentifierFromSubscriptionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes metadata tags from an Amazon RDS resource.</p> <p>For an overview on tagging an Amazon RDS resource, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html">Tagging Amazon RDS Resources</a> in the <i>Amazon RDS User Guide.</i> </p>
+    fn remove_tags_from_resource(
+        &self,
+        input: RemoveTagsFromResourceRequest,
+    ) -> Request<RemoveTagsFromResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p> Modifies the parameters of a DB cluster parameter group to the default value. To reset specific parameters submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB cluster parameter group, specify the <code>DBClusterParameterGroupName</code> and <code>ResetAllParameters</code> parameters. </p> <p> When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <code>RebootDBInstance</code> request. You must call <code>RebootDBInstance</code> for every DB instance in your DB cluster that you want the updated static parameter to apply to.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn reset_db_cluster_parameter_group(
+        &self,
+        input: ResetDBClusterParameterGroupRequest,
+    ) -> Request<ResetDBClusterParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the parameters of a DB parameter group to the engine/system default value. To reset specific parameters, provide a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB parameter group, specify the <code>DBParameterGroup</code> name and <code>ResetAllParameters</code> parameters. When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <code>RebootDBInstance</code> request. </p>
+    fn reset_db_parameter_group(
+        &self,
+        input: ResetDBParameterGroupRequest,
+    ) -> Request<ResetDBParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates an Amazon Aurora DB cluster from data stored in an Amazon S3 bucket. Amazon RDS must be authorized to access the Amazon S3 bucket and the data must be created using the Percona XtraBackup utility as described in <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Migrating.html"> Migrating Data to an Amazon Aurora MySQL DB Cluster</a> in the <i>Amazon Aurora User Guide</i>.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn restore_db_cluster_from_s3(
+        &self,
+        input: RestoreDBClusterFromS3Request,
+    ) -> Request<RestoreDBClusterFromS3Request> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a new DB cluster from a DB snapshot or DB cluster snapshot.</p> <p>If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group.</p> <p>If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn restore_db_cluster_from_snapshot(
+        &self,
+        input: RestoreDBClusterFromSnapshotRequest,
+    ) -> Request<RestoreDBClusterFromSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Restores a DB cluster to an arbitrary point in time. Users can restore to any point in time before <code>LatestRestorableTime</code> for up to <code>BackupRetentionPeriod</code> days. The target DB cluster is created from the source DB cluster with the same configuration as the original DB cluster, except that the new DB cluster is created with the default DB security group. </p> <note> <p>This action only restores the DB cluster, not the DB instances for that DB cluster. You must invoke the <code>CreateDBInstance</code> action to create DB instances for the restored DB cluster, specifying the identifier of the restored DB cluster in <code>DBClusterIdentifier</code>. You can create DB instances only after the <code>RestoreDBClusterToPointInTime</code> action has completed and the DB cluster is available.</p> </note> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn restore_db_cluster_to_point_in_time(
+        &self,
+        input: RestoreDBClusterToPointInTimeRequest,
+    ) -> Request<RestoreDBClusterToPointInTimeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a new DB instance from a DB snapshot. The target database is created from the source database restore point with the most of original configuration with the default security group and the default DB parameter group. By default, the new DB instance is created as a single-AZ deployment except when the instance is a SQL Server instance that has an option group that is associated with mirroring; in this case, the instance becomes a mirrored AZ deployment and not a single-AZ deployment.</p> <p>If your intent is to replace your original DB instance with the new, restored DB instance, then rename your original DB instance before you call the RestoreDBInstanceFromDBSnapshot action. RDS doesn&#39;t allow two DB instances with the same name. Once you have renamed your original DB instance with a different identifier, then you can pass the original name of the DB instance as the DBInstanceIdentifier in the call to the RestoreDBInstanceFromDBSnapshot action. The result is that you will replace the original DB instance with the DB instance created from the snapshot.</p> <p>If you are restoring from a shared manual DB snapshot, the <code>DBSnapshotIdentifier</code> must be the ARN of the shared DB snapshot.</p> <note> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL. For Aurora, use <code>RestoreDBClusterFromSnapshot</code>.</p> </note></p>
+    fn restore_db_instance_from_db_snapshot(
+        &self,
+        input: RestoreDBInstanceFromDBSnapshotRequest,
+    ) -> Request<RestoreDBInstanceFromDBSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Amazon Relational Database Service (Amazon RDS) supports importing MySQL databases by using backup files. You can create a backup of your on-premises database, store it on Amazon Simple Storage Service (Amazon S3), and then restore the backup file onto a new Amazon RDS DB instance running MySQL. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/MySQL.Procedural.Importing.html">Importing Data into an Amazon RDS MySQL DB Instance</a> in the <i>Amazon RDS User Guide.</i> </p>
+    fn restore_db_instance_from_s3(
+        &self,
+        input: RestoreDBInstanceFromS3Request,
+    ) -> Request<RestoreDBInstanceFromS3Request> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Restores a DB instance to an arbitrary point in time. You can restore to any point in time before the time identified by the LatestRestorableTime property. You can restore to a point up to the number of days specified by the BackupRetentionPeriod property.</p> <p>The target database is created with most of the original configuration, but in a system-selected Availability Zone, with the default security group, the default subnet group, and the default DB parameter group. By default, the new DB instance is created as a single-AZ deployment except when the instance is a SQL Server instance that has an option group that is associated with mirroring; in this case, the instance becomes a mirrored deployment and not a single-AZ deployment.</p> <note> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL. For Aurora, use <code>RestoreDBClusterToPointInTime</code>.</p> </note></p>
+    fn restore_db_instance_to_point_in_time(
+        &self,
+        input: RestoreDBInstanceToPointInTimeRequest,
+    ) -> Request<RestoreDBInstanceToPointInTimeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Revokes ingress from a DBSecurityGroup for previously authorized IP ranges or EC2 or VPC Security Groups. Required parameters for this API are one of CIDRIP, EC2SecurityGroupId for VPC, or (EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId).</p>
+    fn revoke_db_security_group_ingress(
+        &self,
+        input: RevokeDBSecurityGroupIngressRequest,
+    ) -> Request<RevokeDBSecurityGroupIngressRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Starts an Amazon Aurora DB cluster that was stopped using the AWS console, the stop-db-cluster AWS CLI command, or the StopDBCluster action.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-cluster-stop-start.html"> Stopping and Starting an Aurora Cluster</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn start_db_cluster(&self, input: StartDBClusterRequest) -> Request<StartDBClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p> Starts an Amazon RDS DB instance that was stopped using the AWS console, the stop-db-instance AWS CLI command, or the StopDBInstance action. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_StartInstance.html"> Starting an Amazon RDS DB instance That Was Previously Stopped</a> in the <i>Amazon RDS User Guide.</i> </p> <note> <p> This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL. For Aurora DB clusters, use <code>StartDBCluster</code> instead. </p> </note></p>
+    fn start_db_instance(&self, input: StartDBInstanceRequest) -> Request<StartDBInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p> Stops an Amazon Aurora DB cluster. When you stop a DB cluster, Aurora retains the DB cluster&#39;s metadata, including its endpoints and DB parameter groups. Aurora also retains the transaction logs so you can do a point-in-time restore if necessary. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-cluster-stop-start.html"> Stopping and Starting an Aurora Cluster</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    fn stop_db_cluster(&self, input: StopDBClusterRequest) -> Request<StopDBClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p> Stops an Amazon RDS DB instance. When you stop a DB instance, Amazon RDS retains the DB instance&#39;s metadata, including its endpoint, DB parameter group, and option group membership. Amazon RDS also retains the transaction logs so you can do a point-in-time restore if necessary. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_StopInstance.html"> Stopping an Amazon RDS DB Instance Temporarily</a> in the <i>Amazon RDS User Guide.</i> </p> <note> <p> This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL. For Aurora clusters, use <code>StopDBCluster</code> instead. </p> </note></p>
+    fn stop_db_instance(&self, input: StopDBInstanceRequest) -> Request<StopDBInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AddRoleToDBClusterRequest {
+    type Output = AddRoleToDBClusterResponse;
+    type Error = AddRoleToDBClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AddRoleToDBCluster");
         params.put("Version", "2014-10-31");
-        AddRoleToDBClusterMessageSerializer::serialize(&mut params, "", &input);
+        AddRoleToDBClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -24778,25 +26445,50 @@ impl Rds for RdsClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = AddRoleToDBClusterResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = AddRoleToDBClusterResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Associates an AWS Identity and Access Management (IAM) role with a DB instance.</p> <note> <p>To add a role to a DB instance, the status of the DB instance must be <code>available</code>.</p> </note></p>
-    fn add_role_to_db_instance(
-        &self,
-        input: AddRoleToDBInstanceMessage,
-    ) -> RusotoFuture<(), AddRoleToDBInstanceError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for AddRoleToDBInstanceRequest {
+    type Output = AddRoleToDBInstanceResponse;
+    type Error = AddRoleToDBInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AddRoleToDBInstance");
         params.put("Version", "2014-10-31");
-        AddRoleToDBInstanceMessageSerializer::serialize(&mut params, "", &input);
+        AddRoleToDBInstanceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -24805,26 +26497,50 @@ impl Rds for RdsClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = AddRoleToDBInstanceResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = AddRoleToDBInstanceResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Adds a source identifier to an existing RDS event notification subscription.</p>
-    fn add_source_identifier_to_subscription(
-        &self,
-        input: AddSourceIdentifierToSubscriptionMessage,
-    ) -> RusotoFuture<AddSourceIdentifierToSubscriptionResult, AddSourceIdentifierToSubscriptionError>
-    {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for AddSourceIdentifierToSubscriptionRequest {
+    type Output = AddSourceIdentifierToSubscriptionResponse;
+    type Error = AddSourceIdentifierToSubscriptionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AddSourceIdentifierToSubscription");
         params.put("Version", "2014-10-31");
-        AddSourceIdentifierToSubscriptionMessageSerializer::serialize(&mut params, "", &input);
+        AddSourceIdentifierToSubscriptionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AddSourceIdentifierToSubscriptionError::from_response(
@@ -24837,7 +26553,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = AddSourceIdentifierToSubscriptionResult::default();
+                    result = AddSourceIdentifierToSubscriptionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -24847,7 +26563,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = AddSourceIdentifierToSubscriptionResultDeserializer::deserialize(
+                    result = AddSourceIdentifierToSubscriptionResponseDeserializer::deserialize(
                         "AddSourceIdentifierToSubscriptionResult",
                         &mut stack,
                     )?;
@@ -24859,22 +26575,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Adds metadata tags to an Amazon RDS resource. These tags can also be used with cost allocation reporting to track cost associated with Amazon RDS resources, or used in a Condition statement in an IAM policy for Amazon RDS.</p> <p>For an overview on tagging Amazon RDS resources, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html">Tagging Amazon RDS Resources</a>.</p>
-    fn add_tags_to_resource(
-        &self,
-        input: AddTagsToResourceMessage,
-    ) -> RusotoFuture<(), AddTagsToResourceError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for AddTagsToResourceRequest {
+    type Output = AddTagsToResourceResponse;
+    type Error = AddTagsToResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AddTagsToResource");
         params.put("Version", "2014-10-31");
-        AddTagsToResourceMessageSerializer::serialize(&mut params, "", &input);
+        AddTagsToResourceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -24884,25 +26605,50 @@ impl Rds for RdsClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = AddTagsToResourceResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = AddTagsToResourceResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Applies a pending maintenance action to a resource (for example, to a DB instance).</p>
-    fn apply_pending_maintenance_action(
-        &self,
-        input: ApplyPendingMaintenanceActionMessage,
-    ) -> RusotoFuture<ApplyPendingMaintenanceActionResult, ApplyPendingMaintenanceActionError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ApplyPendingMaintenanceActionRequest {
+    type Output = ApplyPendingMaintenanceActionResponse;
+    type Error = ApplyPendingMaintenanceActionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ApplyPendingMaintenanceAction");
         params.put("Version", "2014-10-31");
-        ApplyPendingMaintenanceActionMessageSerializer::serialize(&mut params, "", &input);
+        ApplyPendingMaintenanceActionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ApplyPendingMaintenanceActionError::from_response(response))
@@ -24913,7 +26659,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ApplyPendingMaintenanceActionResult::default();
+                    result = ApplyPendingMaintenanceActionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -24923,7 +26669,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ApplyPendingMaintenanceActionResultDeserializer::deserialize(
+                    result = ApplyPendingMaintenanceActionResponseDeserializer::deserialize(
                         "ApplyPendingMaintenanceActionResult",
                         &mut stack,
                     )?;
@@ -24935,23 +26681,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Enables ingress to a DBSecurityGroup using one of two forms of authorization. First, EC2 or VPC security groups can be added to the DBSecurityGroup if the application using the database is running on EC2 or VPC instances. Second, IP ranges are available if the application accessing your database is running on the Internet. Required parameters for this API are one of CIDR range, EC2SecurityGroupId for VPC, or (EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId for non-VPC).</p> <note> <p>You can't authorize ingress from an EC2 security group in one AWS Region to an Amazon RDS DB instance in another. You can't authorize ingress from a VPC security group in one VPC to an Amazon RDS DB instance in another.</p> </note> <p>For an overview of CIDR ranges, go to the <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Wikipedia Tutorial</a>. </p>
-    fn authorize_db_security_group_ingress(
-        &self,
-        input: AuthorizeDBSecurityGroupIngressMessage,
-    ) -> RusotoFuture<AuthorizeDBSecurityGroupIngressResult, AuthorizeDBSecurityGroupIngressError>
-    {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for AuthorizeDBSecurityGroupIngressRequest {
+    type Output = AuthorizeDBSecurityGroupIngressResponse;
+    type Error = AuthorizeDBSecurityGroupIngressError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AuthorizeDBSecurityGroupIngress");
         params.put("Version", "2014-10-31");
-        AuthorizeDBSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
+        AuthorizeDBSecurityGroupIngressRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AuthorizeDBSecurityGroupIngressError::from_response(
@@ -24964,7 +26714,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = AuthorizeDBSecurityGroupIngressResult::default();
+                    result = AuthorizeDBSecurityGroupIngressResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -24974,7 +26724,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = AuthorizeDBSecurityGroupIngressResultDeserializer::deserialize(
+                    result = AuthorizeDBSecurityGroupIngressResponseDeserializer::deserialize(
                         "AuthorizeDBSecurityGroupIngressResult",
                         &mut stack,
                     )?;
@@ -24986,22 +26736,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Backtracks a DB cluster to a specific time, without creating a new DB cluster.</p> <p>For more information on backtracking, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Managing.Backtrack.html"> Backtracking an Aurora DB Cluster</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn backtrack_db_cluster(
-        &self,
-        input: BacktrackDBClusterMessage,
-    ) -> RusotoFuture<DBClusterBacktrack, BacktrackDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for BacktrackDBClusterRequest {
+    type Output = BacktrackDBClusterResponse;
+    type Error = BacktrackDBClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "BacktrackDBCluster");
         params.put("Version", "2014-10-31");
-        BacktrackDBClusterMessageSerializer::serialize(&mut params, "", &input);
+        BacktrackDBClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25015,7 +26770,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBClusterBacktrack::default();
+                    result = BacktrackDBClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25025,7 +26780,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterBacktrackDeserializer::deserialize(
+                    result = BacktrackDBClusterResponseDeserializer::deserialize(
                         "BacktrackDBClusterResult",
                         &mut stack,
                     )?;
@@ -25037,22 +26792,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Copies the specified DB cluster parameter group.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn copy_db_cluster_parameter_group(
-        &self,
-        input: CopyDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<CopyDBClusterParameterGroupResult, CopyDBClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CopyDBClusterParameterGroupRequest {
+    type Output = CopyDBClusterParameterGroupResponse;
+    type Error = CopyDBClusterParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CopyDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
-        CopyDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        CopyDBClusterParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CopyDBClusterParameterGroupError::from_response(response))
@@ -25063,7 +26823,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CopyDBClusterParameterGroupResult::default();
+                    result = CopyDBClusterParameterGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25073,7 +26833,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CopyDBClusterParameterGroupResultDeserializer::deserialize(
+                    result = CopyDBClusterParameterGroupResponseDeserializer::deserialize(
                         "CopyDBClusterParameterGroupResult",
                         &mut stack,
                     )?;
@@ -25085,22 +26845,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p> <p>You can copy an encrypted DB cluster snapshot from another AWS Region. In that case, the AWS Region where you call the <code>CopyDBClusterSnapshot</code> action is the destination AWS Region for the encrypted DB cluster snapshot to be copied to. To copy an encrypted DB cluster snapshot from another AWS Region, you must provide the following values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS Key Management System (AWS KMS) key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>PreSignedUrl</code> - A URL that contains a Signature Version 4 signed request for the <code>CopyDBClusterSnapshot</code> action to be called in the source AWS Region where the DB cluster snapshot is copied from. The pre-signed URL must be a valid request for the <code>CopyDBClusterSnapshot</code> API action that can be executed in the source AWS Region that contains the encrypted DB cluster snapshot to be copied.</p> <p>The pre-signed URL request must contain the following parameter values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The KMS key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region. This is the same identifier for both the <code>CopyDBClusterSnapshot</code> action that is called in the destination AWS Region, and the action contained in the pre-signed URL.</p> </li> <li> <p> <code>DestinationRegion</code> - The name of the AWS Region that the DB cluster snapshot will be created in.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are copying an encrypted DB cluster snapshot from the us-west-2 AWS Region, then your <code>SourceDBClusterSnapshotIdentifier</code> looks like the following example: <code>arn:aws:rds:us-west-2:123456789012:cluster-snapshot:aurora-cluster1-snapshot-20161115</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html"> Signature Version 4 Signing Process</a>.</p> </li> <li> <p> <code>TargetDBClusterSnapshotIdentifier</code> - The identifier for the new copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the ARN format for the source AWS Region and is the same value as the <code>SourceDBClusterSnapshotIdentifier</code> in the pre-signed URL. </p> </li> </ul> <p>To cancel the copy operation once it is in progress, delete the target DB cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while that DB cluster snapshot is in &quot;copying&quot; status.</p> <p>For more information on copying encrypted DB cluster snapshots from one AWS Region to another, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_CopySnapshot.html"> Copying a Snapshot</a> in the <i>Amazon Aurora User Guide.</i> </p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn copy_db_cluster_snapshot(
-        &self,
-        input: CopyDBClusterSnapshotMessage,
-    ) -> RusotoFuture<CopyDBClusterSnapshotResult, CopyDBClusterSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CopyDBClusterSnapshotRequest {
+    type Output = CopyDBClusterSnapshotResponse;
+    type Error = CopyDBClusterSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CopyDBClusterSnapshot");
         params.put("Version", "2014-10-31");
-        CopyDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        CopyDBClusterSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CopyDBClusterSnapshotError::from_response(response))
@@ -25111,7 +26876,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CopyDBClusterSnapshotResult::default();
+                    result = CopyDBClusterSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25121,7 +26886,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CopyDBClusterSnapshotResultDeserializer::deserialize(
+                    result = CopyDBClusterSnapshotResponseDeserializer::deserialize(
                         "CopyDBClusterSnapshotResult",
                         &mut stack,
                     )?;
@@ -25133,22 +26898,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Copies the specified DB parameter group.</p>
-    fn copy_db_parameter_group(
-        &self,
-        input: CopyDBParameterGroupMessage,
-    ) -> RusotoFuture<CopyDBParameterGroupResult, CopyDBParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CopyDBParameterGroupRequest {
+    type Output = CopyDBParameterGroupResponse;
+    type Error = CopyDBParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CopyDBParameterGroup");
         params.put("Version", "2014-10-31");
-        CopyDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        CopyDBParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -25161,7 +26931,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CopyDBParameterGroupResult::default();
+                    result = CopyDBParameterGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25171,7 +26941,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CopyDBParameterGroupResultDeserializer::deserialize(
+                    result = CopyDBParameterGroupResponseDeserializer::deserialize(
                         "CopyDBParameterGroupResult",
                         &mut stack,
                     )?;
@@ -25183,22 +26953,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Copies the specified DB snapshot. The source DB snapshot must be in the "available" state.</p> <p>You can copy a snapshot from one AWS Region to another. In that case, the AWS Region where you call the <code>CopyDBSnapshot</code> action is the destination AWS Region for the DB snapshot copy. </p> <p>For more information about copying snapshots, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopyDBSnapshot.html">Copying a DB Snapshot</a> in the <i>Amazon RDS User Guide.</i> </p>
-    fn copy_db_snapshot(
-        &self,
-        input: CopyDBSnapshotMessage,
-    ) -> RusotoFuture<CopyDBSnapshotResult, CopyDBSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CopyDBSnapshotRequest {
+    type Output = CopyDBSnapshotResponse;
+    type Error = CopyDBSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CopyDBSnapshot");
         params.put("Version", "2014-10-31");
-        CopyDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        CopyDBSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25212,7 +26987,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CopyDBSnapshotResult::default();
+                    result = CopyDBSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25222,7 +26997,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CopyDBSnapshotResultDeserializer::deserialize(
+                    result = CopyDBSnapshotResponseDeserializer::deserialize(
                         "CopyDBSnapshotResult",
                         &mut stack,
                     )?;
@@ -25234,22 +27009,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Copies the specified option group.</p>
-    fn copy_option_group(
-        &self,
-        input: CopyOptionGroupMessage,
-    ) -> RusotoFuture<CopyOptionGroupResult, CopyOptionGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CopyOptionGroupRequest {
+    type Output = CopyOptionGroupResponse;
+    type Error = CopyOptionGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CopyOptionGroup");
         params.put("Version", "2014-10-31");
-        CopyOptionGroupMessageSerializer::serialize(&mut params, "", &input);
+        CopyOptionGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25263,7 +27043,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CopyOptionGroupResult::default();
+                    result = CopyOptionGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25273,7 +27053,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CopyOptionGroupResultDeserializer::deserialize(
+                    result = CopyOptionGroupResponseDeserializer::deserialize(
                         "CopyOptionGroupResult",
                         &mut stack,
                     )?;
@@ -25285,22 +27065,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Creates a new Amazon Aurora DB cluster.</p> <p>You can use the <code>ReplicationSourceIdentifier</code> parameter to create the DB cluster as a Read Replica of another DB cluster or Amazon RDS MySQL DB instance. For cross-region replication where the DB cluster identified by <code>ReplicationSourceIdentifier</code> is encrypted, you must also specify the <code>PreSignedUrl</code> parameter.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn create_db_cluster(
-        &self,
-        input: CreateDBClusterMessage,
-    ) -> RusotoFuture<CreateDBClusterResult, CreateDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CreateDBClusterRequest {
+    type Output = CreateDBClusterResponse;
+    type Error = CreateDBClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBCluster");
         params.put("Version", "2014-10-31");
-        CreateDBClusterMessageSerializer::serialize(&mut params, "", &input);
+        CreateDBClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25314,7 +27099,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateDBClusterResult::default();
+                    result = CreateDBClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25324,7 +27109,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBClusterResultDeserializer::deserialize(
+                    result = CreateDBClusterResponseDeserializer::deserialize(
                         "CreateDBClusterResult",
                         &mut stack,
                     )?;
@@ -25336,22 +27121,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Creates a new custom endpoint and associates it with an Amazon Aurora DB cluster.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn create_db_cluster_endpoint(
-        &self,
-        input: CreateDBClusterEndpointMessage,
-    ) -> RusotoFuture<DBClusterEndpoint, CreateDBClusterEndpointError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CreateDBClusterEndpointRequest {
+    type Output = CreateDBClusterEndpointResponse;
+    type Error = CreateDBClusterEndpointError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBClusterEndpoint");
         params.put("Version", "2014-10-31");
-        CreateDBClusterEndpointMessageSerializer::serialize(&mut params, "", &input);
+        CreateDBClusterEndpointRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateDBClusterEndpointError::from_response(response))
@@ -25362,7 +27152,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBClusterEndpoint::default();
+                    result = CreateDBClusterEndpointResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25372,7 +27162,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterEndpointDeserializer::deserialize(
+                    result = CreateDBClusterEndpointResponseDeserializer::deserialize(
                         "CreateDBClusterEndpointResult",
                         &mut stack,
                     )?;
@@ -25384,22 +27174,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Creates a new DB cluster parameter group.</p> <p>Parameters in a DB cluster parameter group apply to all of the instances in a DB cluster.</p> <p> A DB cluster parameter group is initially created with the default parameters for the database engine used by instances in the DB cluster. To provide custom values for any of the parameters, you must modify the group after creating it using <code>ModifyDBClusterParameterGroup</code>. Once you&#39;ve created a DB cluster parameter group, you need to associate it with your DB cluster using <code>ModifyDBCluster</code>. When you associate a new DB cluster parameter group with a running DB cluster, you need to reboot the DB instances in the DB cluster without failover for the new DB cluster parameter group and associated settings to take effect. </p> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the DB cluster parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon RDS console</a> or the <code>DescribeDBClusterParameters</code> action to verify that your DB cluster parameter group has been created or modified.</p> </important> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn create_db_cluster_parameter_group(
-        &self,
-        input: CreateDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<CreateDBClusterParameterGroupResult, CreateDBClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CreateDBClusterParameterGroupRequest {
+    type Output = CreateDBClusterParameterGroupResponse;
+    type Error = CreateDBClusterParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
-        CreateDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        CreateDBClusterParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateDBClusterParameterGroupError::from_response(response))
@@ -25410,7 +27205,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateDBClusterParameterGroupResult::default();
+                    result = CreateDBClusterParameterGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25420,7 +27215,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBClusterParameterGroupResultDeserializer::deserialize(
+                    result = CreateDBClusterParameterGroupResponseDeserializer::deserialize(
                         "CreateDBClusterParameterGroupResult",
                         &mut stack,
                     )?;
@@ -25432,22 +27227,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Creates a snapshot of a DB cluster. For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn create_db_cluster_snapshot(
-        &self,
-        input: CreateDBClusterSnapshotMessage,
-    ) -> RusotoFuture<CreateDBClusterSnapshotResult, CreateDBClusterSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CreateDBClusterSnapshotRequest {
+    type Output = CreateDBClusterSnapshotResponse;
+    type Error = CreateDBClusterSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBClusterSnapshot");
         params.put("Version", "2014-10-31");
-        CreateDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        CreateDBClusterSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateDBClusterSnapshotError::from_response(response))
@@ -25458,7 +27258,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateDBClusterSnapshotResult::default();
+                    result = CreateDBClusterSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25468,7 +27268,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBClusterSnapshotResultDeserializer::deserialize(
+                    result = CreateDBClusterSnapshotResponseDeserializer::deserialize(
                         "CreateDBClusterSnapshotResult",
                         &mut stack,
                     )?;
@@ -25480,22 +27280,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new DB instance.</p>
-    fn create_db_instance(
-        &self,
-        input: CreateDBInstanceMessage,
-    ) -> RusotoFuture<CreateDBInstanceResult, CreateDBInstanceError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CreateDBInstanceRequest {
+    type Output = CreateDBInstanceResponse;
+    type Error = CreateDBInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBInstance");
         params.put("Version", "2014-10-31");
-        CreateDBInstanceMessageSerializer::serialize(&mut params, "", &input);
+        CreateDBInstanceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25509,7 +27314,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateDBInstanceResult::default();
+                    result = CreateDBInstanceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25519,7 +27324,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBInstanceResultDeserializer::deserialize(
+                    result = CreateDBInstanceResponseDeserializer::deserialize(
                         "CreateDBInstanceResult",
                         &mut stack,
                     )?;
@@ -25531,22 +27336,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Creates a new DB instance that acts as a Read Replica for an existing source DB instance. You can create a Read Replica for a DB instance running MySQL, MariaDB, Oracle, or PostgreSQL. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html">Working with Read Replicas</a> in the <i>Amazon RDS User Guide</i>. </p> <p>Amazon Aurora doesn&#39;t support this action. You must call the <code>CreateDBInstance</code> action to create a DB instance for an Aurora DB cluster. </p> <p>All Read Replica DB instances are created with backups disabled. All other DB instance attributes (including DB security groups and DB parameter groups) are inherited from the source DB instance, except as specified following. </p> <important> <p>Your source DB instance must have backup retention enabled. </p> </important></p>
-    fn create_db_instance_read_replica(
-        &self,
-        input: CreateDBInstanceReadReplicaMessage,
-    ) -> RusotoFuture<CreateDBInstanceReadReplicaResult, CreateDBInstanceReadReplicaError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CreateDBInstanceReadReplicaRequest {
+    type Output = CreateDBInstanceReadReplicaResponse;
+    type Error = CreateDBInstanceReadReplicaError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBInstanceReadReplica");
         params.put("Version", "2014-10-31");
-        CreateDBInstanceReadReplicaMessageSerializer::serialize(&mut params, "", &input);
+        CreateDBInstanceReadReplicaRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateDBInstanceReadReplicaError::from_response(response))
@@ -25557,7 +27367,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateDBInstanceReadReplicaResult::default();
+                    result = CreateDBInstanceReadReplicaResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25567,7 +27377,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBInstanceReadReplicaResultDeserializer::deserialize(
+                    result = CreateDBInstanceReadReplicaResponseDeserializer::deserialize(
                         "CreateDBInstanceReadReplicaResult",
                         &mut stack,
                     )?;
@@ -25579,22 +27389,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Creates a new DB parameter group.</p> <p> A DB parameter group is initially created with the default parameters for the database engine used by the DB instance. To provide custom values for any of the parameters, you must modify the group after creating it using <i>ModifyDBParameterGroup</i>. Once you&#39;ve created a DB parameter group, you need to associate it with your DB instance using <i>ModifyDBInstance</i>. When you associate a new DB parameter group with a running DB instance, you need to reboot the DB instance without failover for the new DB parameter group and associated settings to take effect. </p> <important> <p>After you create a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon RDS console</a> or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important></p>
-    fn create_db_parameter_group(
-        &self,
-        input: CreateDBParameterGroupMessage,
-    ) -> RusotoFuture<CreateDBParameterGroupResult, CreateDBParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CreateDBParameterGroupRequest {
+    type Output = CreateDBParameterGroupResponse;
+    type Error = CreateDBParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBParameterGroup");
         params.put("Version", "2014-10-31");
-        CreateDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        CreateDBParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateDBParameterGroupError::from_response(response))
@@ -25605,7 +27420,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateDBParameterGroupResult::default();
+                    result = CreateDBParameterGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25615,7 +27430,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBParameterGroupResultDeserializer::deserialize(
+                    result = CreateDBParameterGroupResponseDeserializer::deserialize(
                         "CreateDBParameterGroupResult",
                         &mut stack,
                     )?;
@@ -25627,22 +27442,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Creates a new DB security group. DB security groups control access to a DB instance.</p> <note> <p>A DB security group controls access to EC2-Classic DB instances that are not in a VPC.</p> </note></p>
-    fn create_db_security_group(
-        &self,
-        input: CreateDBSecurityGroupMessage,
-    ) -> RusotoFuture<CreateDBSecurityGroupResult, CreateDBSecurityGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CreateDBSecurityGroupRequest {
+    type Output = CreateDBSecurityGroupResponse;
+    type Error = CreateDBSecurityGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBSecurityGroup");
         params.put("Version", "2014-10-31");
-        CreateDBSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
+        CreateDBSecurityGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateDBSecurityGroupError::from_response(response))
@@ -25653,7 +27473,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateDBSecurityGroupResult::default();
+                    result = CreateDBSecurityGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25663,7 +27483,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBSecurityGroupResultDeserializer::deserialize(
+                    result = CreateDBSecurityGroupResponseDeserializer::deserialize(
                         "CreateDBSecurityGroupResult",
                         &mut stack,
                     )?;
@@ -25675,22 +27495,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a DBSnapshot. The source DBInstance must be in "available" state.</p>
-    fn create_db_snapshot(
-        &self,
-        input: CreateDBSnapshotMessage,
-    ) -> RusotoFuture<CreateDBSnapshotResult, CreateDBSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CreateDBSnapshotRequest {
+    type Output = CreateDBSnapshotResponse;
+    type Error = CreateDBSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBSnapshot");
         params.put("Version", "2014-10-31");
-        CreateDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        CreateDBSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25704,7 +27529,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateDBSnapshotResult::default();
+                    result = CreateDBSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25714,7 +27539,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBSnapshotResultDeserializer::deserialize(
+                    result = CreateDBSnapshotResponseDeserializer::deserialize(
                         "CreateDBSnapshotResult",
                         &mut stack,
                     )?;
@@ -25726,22 +27551,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new DB subnet group. DB subnet groups must contain at least one subnet in at least two AZs in the AWS Region.</p>
-    fn create_db_subnet_group(
-        &self,
-        input: CreateDBSubnetGroupMessage,
-    ) -> RusotoFuture<CreateDBSubnetGroupResult, CreateDBSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CreateDBSubnetGroupRequest {
+    type Output = CreateDBSubnetGroupResponse;
+    type Error = CreateDBSubnetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBSubnetGroup");
         params.put("Version", "2014-10-31");
-        CreateDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
+        CreateDBSubnetGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -25754,7 +27584,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateDBSubnetGroupResult::default();
+                    result = CreateDBSubnetGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25764,7 +27594,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBSubnetGroupResultDeserializer::deserialize(
+                    result = CreateDBSubnetGroupResponseDeserializer::deserialize(
                         "CreateDBSubnetGroupResult",
                         &mut stack,
                     )?;
@@ -25776,22 +27606,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Creates an RDS event notification subscription. This action requires a topic ARN (Amazon Resource Name) created by either the RDS console, the SNS console, or the SNS API. To obtain an ARN with SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the type of source (SourceType) you want to be notified of, provide a list of RDS sources (SourceIds) that triggers the events, and provide a list of event categories (EventCategories) for events you want to be notified of. For example, you can specify SourceType = db-instance, SourceIds = mydbinstance1, mydbinstance2 and EventCategories = Availability, Backup.</p> <p>If you specify both the SourceType and SourceIds, such as SourceType = db-instance and SourceIdentifier = myDBInstance1, you are notified of all the db-instance events for the specified source. If you specify a SourceType but do not specify a SourceIdentifier, you receive notice of the events for that source type for all your RDS sources. If you do not specify either the SourceType nor the SourceIdentifier, you are notified of events generated from all RDS sources belonging to your customer account.</p>
-    fn create_event_subscription(
-        &self,
-        input: CreateEventSubscriptionMessage,
-    ) -> RusotoFuture<CreateEventSubscriptionResult, CreateEventSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CreateEventSubscriptionRequest {
+    type Output = CreateEventSubscriptionResponse;
+    type Error = CreateEventSubscriptionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateEventSubscription");
         params.put("Version", "2014-10-31");
-        CreateEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
+        CreateEventSubscriptionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateEventSubscriptionError::from_response(response))
@@ -25802,7 +27637,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateEventSubscriptionResult::default();
+                    result = CreateEventSubscriptionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25812,7 +27647,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateEventSubscriptionResultDeserializer::deserialize(
+                    result = CreateEventSubscriptionResponseDeserializer::deserialize(
                         "CreateEventSubscriptionResult",
                         &mut stack,
                     )?;
@@ -25824,22 +27659,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p> </p> <p> Creates an Aurora global database spread across multiple regions. The global database contains a single primary cluster with read-write capability, and a read-only secondary cluster that receives data from the primary cluster through high-speed replication performed by the Aurora storage subsystem. </p> <p> You can create a global database that is initially empty, and then add a primary cluster and a secondary cluster to it. Or you can specify an existing Aurora cluster during the create operation, and this cluster becomes the primary cluster of the global database. </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn create_global_cluster(
-        &self,
-        input: CreateGlobalClusterMessage,
-    ) -> RusotoFuture<CreateGlobalClusterResult, CreateGlobalClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CreateGlobalClusterRequest {
+    type Output = CreateGlobalClusterResponse;
+    type Error = CreateGlobalClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateGlobalCluster");
         params.put("Version", "2014-10-31");
-        CreateGlobalClusterMessageSerializer::serialize(&mut params, "", &input);
+        CreateGlobalClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -25852,7 +27692,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateGlobalClusterResult::default();
+                    result = CreateGlobalClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25862,7 +27702,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateGlobalClusterResultDeserializer::deserialize(
+                    result = CreateGlobalClusterResponseDeserializer::deserialize(
                         "CreateGlobalClusterResult",
                         &mut stack,
                     )?;
@@ -25874,22 +27714,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new option group. You can create up to 20 option groups.</p>
-    fn create_option_group(
-        &self,
-        input: CreateOptionGroupMessage,
-    ) -> RusotoFuture<CreateOptionGroupResult, CreateOptionGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CreateOptionGroupRequest {
+    type Output = CreateOptionGroupResponse;
+    type Error = CreateOptionGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateOptionGroup");
         params.put("Version", "2014-10-31");
-        CreateOptionGroupMessageSerializer::serialize(&mut params, "", &input);
+        CreateOptionGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25903,7 +27748,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateOptionGroupResult::default();
+                    result = CreateOptionGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25913,7 +27758,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateOptionGroupResultDeserializer::deserialize(
+                    result = CreateOptionGroupResponseDeserializer::deserialize(
                         "CreateOptionGroupResult",
                         &mut stack,
                     )?;
@@ -25925,22 +27770,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>The DeleteDBCluster action deletes a previously provisioned DB cluster. When you delete a DB cluster, all automated backups for that DB cluster are deleted and can&#39;t be recovered. Manual DB cluster snapshots of the specified DB cluster are not deleted.</p> <p/> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn delete_db_cluster(
-        &self,
-        input: DeleteDBClusterMessage,
-    ) -> RusotoFuture<DeleteDBClusterResult, DeleteDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DeleteDBClusterRequest {
+    type Output = DeleteDBClusterResponse;
+    type Error = DeleteDBClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBCluster");
         params.put("Version", "2014-10-31");
-        DeleteDBClusterMessageSerializer::serialize(&mut params, "", &input);
+        DeleteDBClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25954,7 +27804,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteDBClusterResult::default();
+                    result = DeleteDBClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25964,7 +27814,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteDBClusterResultDeserializer::deserialize(
+                    result = DeleteDBClusterResponseDeserializer::deserialize(
                         "DeleteDBClusterResult",
                         &mut stack,
                     )?;
@@ -25976,22 +27826,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Deletes a custom endpoint and removes it from an Amazon Aurora DB cluster.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn delete_db_cluster_endpoint(
-        &self,
-        input: DeleteDBClusterEndpointMessage,
-    ) -> RusotoFuture<DBClusterEndpoint, DeleteDBClusterEndpointError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DeleteDBClusterEndpointRequest {
+    type Output = DeleteDBClusterEndpointResponse;
+    type Error = DeleteDBClusterEndpointError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBClusterEndpoint");
         params.put("Version", "2014-10-31");
-        DeleteDBClusterEndpointMessageSerializer::serialize(&mut params, "", &input);
+        DeleteDBClusterEndpointRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDBClusterEndpointError::from_response(response))
@@ -26002,7 +27857,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBClusterEndpoint::default();
+                    result = DeleteDBClusterEndpointResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -26012,7 +27867,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterEndpointDeserializer::deserialize(
+                    result = DeleteDBClusterEndpointResponseDeserializer::deserialize(
                         "DeleteDBClusterEndpointResult",
                         &mut stack,
                     )?;
@@ -26024,47 +27879,77 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Deletes a specified DB cluster parameter group. The DB cluster parameter group to be deleted can&#39;t be associated with any DB clusters.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn delete_db_cluster_parameter_group(
-        &self,
-        input: DeleteDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<(), DeleteDBClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DeleteDBClusterParameterGroupRequest {
+    type Output = DeleteDBClusterParameterGroupResponse;
+    type Error = DeleteDBClusterParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
-        DeleteDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        DeleteDBClusterParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDBClusterParameterGroupError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteDBClusterParameterGroupResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteDBClusterParameterGroupResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Deletes a DB cluster snapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DB cluster snapshot must be in the <code>available</code> state to be deleted.</p> </note> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn delete_db_cluster_snapshot(
-        &self,
-        input: DeleteDBClusterSnapshotMessage,
-    ) -> RusotoFuture<DeleteDBClusterSnapshotResult, DeleteDBClusterSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DeleteDBClusterSnapshotRequest {
+    type Output = DeleteDBClusterSnapshotResponse;
+    type Error = DeleteDBClusterSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBClusterSnapshot");
         params.put("Version", "2014-10-31");
-        DeleteDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        DeleteDBClusterSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDBClusterSnapshotError::from_response(response))
@@ -26075,7 +27960,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteDBClusterSnapshotResult::default();
+                    result = DeleteDBClusterSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -26085,7 +27970,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteDBClusterSnapshotResultDeserializer::deserialize(
+                    result = DeleteDBClusterSnapshotResponseDeserializer::deserialize(
                         "DeleteDBClusterSnapshotResult",
                         &mut stack,
                     )?;
@@ -26097,22 +27982,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>The DeleteDBInstance action deletes a previously provisioned DB instance. When you delete a DB instance, all automated backups for that instance are deleted and can't be recovered. Manual DB snapshots of the DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p> <p> If you request a final DB snapshot the status of the Amazon RDS DB instance is <code>deleting</code> until the DB snapshot is created. The API action <code>DescribeDBInstance</code> is used to monitor the status of this operation. The action can't be canceled or reverted once submitted. </p> <p>Note that when a DB instance is in a failure state and has a status of <code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can only delete it when you skip creation of the final snapshot with the <code>SkipFinalSnapshot</code> parameter.</p> <p>If the specified DB instance is part of an Amazon Aurora DB cluster, you can't delete the DB instance if both of the following conditions are true:</p> <ul> <li> <p>The DB cluster is a Read Replica of another Amazon Aurora DB cluster.</p> </li> <li> <p>The DB instance is the only instance in the DB cluster.</p> </li> </ul> <p>To delete a DB instance in this case, first call the <code>PromoteReadReplicaDBCluster</code> API action to promote the DB cluster so it's no longer a Read Replica. After the promotion completes, then call the <code>DeleteDBInstance</code> API action to delete the final instance in the DB cluster.</p>
-    fn delete_db_instance(
-        &self,
-        input: DeleteDBInstanceMessage,
-    ) -> RusotoFuture<DeleteDBInstanceResult, DeleteDBInstanceError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DeleteDBInstanceRequest {
+    type Output = DeleteDBInstanceResponse;
+    type Error = DeleteDBInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBInstance");
         params.put("Version", "2014-10-31");
-        DeleteDBInstanceMessageSerializer::serialize(&mut params, "", &input);
+        DeleteDBInstanceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -26126,7 +28016,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteDBInstanceResult::default();
+                    result = DeleteDBInstanceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -26136,7 +28026,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteDBInstanceResultDeserializer::deserialize(
+                    result = DeleteDBInstanceResponseDeserializer::deserialize(
                         "DeleteDBInstanceResult",
                         &mut stack,
                     )?;
@@ -26148,23 +28038,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes automated backups based on the source instance's <code>DbiResourceId</code> value or the restorable instance's resource ID.</p>
-    fn delete_db_instance_automated_backup(
-        &self,
-        input: DeleteDBInstanceAutomatedBackupMessage,
-    ) -> RusotoFuture<DeleteDBInstanceAutomatedBackupResult, DeleteDBInstanceAutomatedBackupError>
-    {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DeleteDBInstanceAutomatedBackupRequest {
+    type Output = DeleteDBInstanceAutomatedBackupResponse;
+    type Error = DeleteDBInstanceAutomatedBackupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBInstanceAutomatedBackup");
         params.put("Version", "2014-10-31");
-        DeleteDBInstanceAutomatedBackupMessageSerializer::serialize(&mut params, "", &input);
+        DeleteDBInstanceAutomatedBackupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDBInstanceAutomatedBackupError::from_response(
@@ -26177,7 +28071,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteDBInstanceAutomatedBackupResult::default();
+                    result = DeleteDBInstanceAutomatedBackupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -26187,7 +28081,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteDBInstanceAutomatedBackupResultDeserializer::deserialize(
+                    result = DeleteDBInstanceAutomatedBackupResponseDeserializer::deserialize(
                         "DeleteDBInstanceAutomatedBackupResult",
                         &mut stack,
                     )?;
@@ -26199,72 +28093,127 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes a specified DB parameter group. The DB parameter group to be deleted can't be associated with any DB instances.</p>
-    fn delete_db_parameter_group(
-        &self,
-        input: DeleteDBParameterGroupMessage,
-    ) -> RusotoFuture<(), DeleteDBParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DeleteDBParameterGroupRequest {
+    type Output = DeleteDBParameterGroupResponse;
+    type Error = DeleteDBParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBParameterGroup");
         params.put("Version", "2014-10-31");
-        DeleteDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        DeleteDBParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDBParameterGroupError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteDBParameterGroupResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteDBParameterGroupResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Deletes a DB security group.</p> <note> <p>The specified DB security group must not be associated with any DB instances.</p> </note></p>
-    fn delete_db_security_group(
-        &self,
-        input: DeleteDBSecurityGroupMessage,
-    ) -> RusotoFuture<(), DeleteDBSecurityGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DeleteDBSecurityGroupRequest {
+    type Output = DeleteDBSecurityGroupResponse;
+    type Error = DeleteDBSecurityGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBSecurityGroup");
         params.put("Version", "2014-10-31");
-        DeleteDBSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
+        DeleteDBSecurityGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDBSecurityGroupError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteDBSecurityGroupResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteDBSecurityGroupResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Deletes a DB snapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DB snapshot must be in the <code>available</code> state to be deleted.</p> </note></p>
-    fn delete_db_snapshot(
-        &self,
-        input: DeleteDBSnapshotMessage,
-    ) -> RusotoFuture<DeleteDBSnapshotResult, DeleteDBSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DeleteDBSnapshotRequest {
+    type Output = DeleteDBSnapshotResponse;
+    type Error = DeleteDBSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBSnapshot");
         params.put("Version", "2014-10-31");
-        DeleteDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        DeleteDBSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -26278,7 +28227,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteDBSnapshotResult::default();
+                    result = DeleteDBSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -26288,7 +28237,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteDBSnapshotResultDeserializer::deserialize(
+                    result = DeleteDBSnapshotResponseDeserializer::deserialize(
                         "DeleteDBSnapshotResult",
                         &mut stack,
                     )?;
@@ -26300,22 +28249,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Deletes a DB subnet group.</p> <note> <p>The specified database subnet group must not be associated with any DB instances.</p> </note></p>
-    fn delete_db_subnet_group(
-        &self,
-        input: DeleteDBSubnetGroupMessage,
-    ) -> RusotoFuture<(), DeleteDBSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DeleteDBSubnetGroupRequest {
+    type Output = DeleteDBSubnetGroupResponse;
+    type Error = DeleteDBSubnetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBSubnetGroup");
         params.put("Version", "2014-10-31");
-        DeleteDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
+        DeleteDBSubnetGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -26324,25 +28278,50 @@ impl Rds for RdsClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteDBSubnetGroupResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteDBSubnetGroupResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes an RDS event notification subscription.</p>
-    fn delete_event_subscription(
-        &self,
-        input: DeleteEventSubscriptionMessage,
-    ) -> RusotoFuture<DeleteEventSubscriptionResult, DeleteEventSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DeleteEventSubscriptionRequest {
+    type Output = DeleteEventSubscriptionResponse;
+    type Error = DeleteEventSubscriptionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteEventSubscription");
         params.put("Version", "2014-10-31");
-        DeleteEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
+        DeleteEventSubscriptionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteEventSubscriptionError::from_response(response))
@@ -26353,7 +28332,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteEventSubscriptionResult::default();
+                    result = DeleteEventSubscriptionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -26363,7 +28342,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteEventSubscriptionResultDeserializer::deserialize(
+                    result = DeleteEventSubscriptionResponseDeserializer::deserialize(
                         "DeleteEventSubscriptionResult",
                         &mut stack,
                     )?;
@@ -26375,22 +28354,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p> Deletes a global database cluster. The primary and secondary clusters must already be detached or destroyed first. </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn delete_global_cluster(
-        &self,
-        input: DeleteGlobalClusterMessage,
-    ) -> RusotoFuture<DeleteGlobalClusterResult, DeleteGlobalClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DeleteGlobalClusterRequest {
+    type Output = DeleteGlobalClusterResponse;
+    type Error = DeleteGlobalClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteGlobalCluster");
         params.put("Version", "2014-10-31");
-        DeleteGlobalClusterMessageSerializer::serialize(&mut params, "", &input);
+        DeleteGlobalClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -26403,7 +28387,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteGlobalClusterResult::default();
+                    result = DeleteGlobalClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -26413,7 +28397,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteGlobalClusterResultDeserializer::deserialize(
+                    result = DeleteGlobalClusterResponseDeserializer::deserialize(
                         "DeleteGlobalClusterResult",
                         &mut stack,
                     )?;
@@ -26425,22 +28409,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes an existing option group.</p>
-    fn delete_option_group(
-        &self,
-        input: DeleteOptionGroupMessage,
-    ) -> RusotoFuture<(), DeleteOptionGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DeleteOptionGroupRequest {
+    type Output = DeleteOptionGroupResponse;
+    type Error = DeleteOptionGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteOptionGroup");
         params.put("Version", "2014-10-31");
-        DeleteOptionGroupMessageSerializer::serialize(&mut params, "", &input);
+        DeleteOptionGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -26450,25 +28439,50 @@ impl Rds for RdsClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteOptionGroupResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteOptionGroupResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Lists all of the attributes for a customer account. The attributes include Amazon RDS quotas for the account, such as the number of DB instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command doesn't take any parameters.</p>
-    fn describe_account_attributes(
-        &self,
-        input: DescribeAccountAttributesMessage,
-    ) -> RusotoFuture<AccountAttributesMessage, DescribeAccountAttributesError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeAccountAttributesRequest {
+    type Output = DescribeAccountAttributesResponse;
+    type Error = DescribeAccountAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAccountAttributes");
         params.put("Version", "2014-10-31");
-        DescribeAccountAttributesMessageSerializer::serialize(&mut params, "", &input);
+        DescribeAccountAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAccountAttributesError::from_response(response))
@@ -26479,7 +28493,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = AccountAttributesMessage::default();
+                    result = DescribeAccountAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -26489,7 +28503,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = AccountAttributesMessageDeserializer::deserialize(
+                    result = DescribeAccountAttributesResponseDeserializer::deserialize(
                         "DescribeAccountAttributesResult",
                         &mut stack,
                     )?;
@@ -26501,22 +28515,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the set of CA certificates provided by Amazon RDS for this AWS account.</p>
-    fn describe_certificates(
-        &self,
-        input: DescribeCertificatesMessage,
-    ) -> RusotoFuture<CertificateMessage, DescribeCertificatesError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeCertificatesRequest {
+    type Output = DescribeCertificatesResponse;
+    type Error = DescribeCertificatesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeCertificates");
         params.put("Version", "2014-10-31");
-        DescribeCertificatesMessageSerializer::serialize(&mut params, "", &input);
+        DescribeCertificatesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -26529,7 +28548,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CertificateMessage::default();
+                    result = DescribeCertificatesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -26539,7 +28558,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CertificateMessageDeserializer::deserialize(
+                    result = DescribeCertificatesResponseDeserializer::deserialize(
                         "DescribeCertificatesResult",
                         &mut stack,
                     )?;
@@ -26551,22 +28570,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Returns information about backtracks for a DB cluster.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn describe_db_cluster_backtracks(
-        &self,
-        input: DescribeDBClusterBacktracksMessage,
-    ) -> RusotoFuture<DBClusterBacktrackMessage, DescribeDBClusterBacktracksError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBClusterBacktracksRequest {
+    type Output = DescribeDBClusterBacktracksResponse;
+    type Error = DescribeDBClusterBacktracksError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBClusterBacktracks");
         params.put("Version", "2014-10-31");
-        DescribeDBClusterBacktracksMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBClusterBacktracksRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBClusterBacktracksError::from_response(response))
@@ -26577,7 +28601,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBClusterBacktrackMessage::default();
+                    result = DescribeDBClusterBacktracksResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -26587,7 +28611,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterBacktrackMessageDeserializer::deserialize(
+                    result = DescribeDBClusterBacktracksResponseDeserializer::deserialize(
                         "DescribeDBClusterBacktracksResult",
                         &mut stack,
                     )?;
@@ -26599,22 +28623,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Returns information about endpoints for an Amazon Aurora DB cluster.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn describe_db_cluster_endpoints(
-        &self,
-        input: DescribeDBClusterEndpointsMessage,
-    ) -> RusotoFuture<DBClusterEndpointMessage, DescribeDBClusterEndpointsError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBClusterEndpointsRequest {
+    type Output = DescribeDBClusterEndpointsResponse;
+    type Error = DescribeDBClusterEndpointsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBClusterEndpoints");
         params.put("Version", "2014-10-31");
-        DescribeDBClusterEndpointsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBClusterEndpointsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBClusterEndpointsError::from_response(response))
@@ -26625,7 +28654,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBClusterEndpointMessage::default();
+                    result = DescribeDBClusterEndpointsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -26635,7 +28664,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterEndpointMessageDeserializer::deserialize(
+                    result = DescribeDBClusterEndpointsResponseDeserializer::deserialize(
                         "DescribeDBClusterEndpointsResult",
                         &mut stack,
                     )?;
@@ -26647,22 +28676,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p> Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list will contain only the description of the specified DB cluster parameter group. </p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn describe_db_cluster_parameter_groups(
-        &self,
-        input: DescribeDBClusterParameterGroupsMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupsMessage, DescribeDBClusterParameterGroupsError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBClusterParameterGroupsRequest {
+    type Output = DescribeDBClusterParameterGroupsResponse;
+    type Error = DescribeDBClusterParameterGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBClusterParameterGroups");
         params.put("Version", "2014-10-31");
-        DescribeDBClusterParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBClusterParameterGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBClusterParameterGroupsError::from_response(
@@ -26675,7 +28709,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBClusterParameterGroupsMessage::default();
+                    result = DescribeDBClusterParameterGroupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -26685,7 +28719,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterParameterGroupsMessageDeserializer::deserialize(
+                    result = DescribeDBClusterParameterGroupsResponseDeserializer::deserialize(
                         "DescribeDBClusterParameterGroupsResult",
                         &mut stack,
                     )?;
@@ -26697,22 +28731,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Returns the detailed parameter list for a particular DB cluster parameter group.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn describe_db_cluster_parameters(
-        &self,
-        input: DescribeDBClusterParametersMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupDetails, DescribeDBClusterParametersError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBClusterParametersRequest {
+    type Output = DescribeDBClusterParametersResponse;
+    type Error = DescribeDBClusterParametersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBClusterParameters");
         params.put("Version", "2014-10-31");
-        DescribeDBClusterParametersMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBClusterParametersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBClusterParametersError::from_response(response))
@@ -26723,7 +28762,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBClusterParameterGroupDetails::default();
+                    result = DescribeDBClusterParametersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -26733,7 +28772,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterParameterGroupDetailsDeserializer::deserialize(
+                    result = DescribeDBClusterParametersResponseDeserializer::deserialize(
                         "DescribeDBClusterParametersResult",
                         &mut stack,
                     )?;
@@ -26745,25 +28784,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Returns a list of DB cluster snapshot attribute names and values for a manual DB cluster snapshot.</p> <p>When sharing snapshots with other AWS accounts, <code>DescribeDBClusterSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB cluster snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB cluster snapshot is public and can be copied or restored by all AWS accounts.</p> <p>To add or remove access for an AWS account to copy or restore a manual DB cluster snapshot, or to make the manual DB cluster snapshot public or private, use the <code>ModifyDBClusterSnapshotAttribute</code> API action.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn describe_db_cluster_snapshot_attributes(
-        &self,
-        input: DescribeDBClusterSnapshotAttributesMessage,
-    ) -> RusotoFuture<
-        DescribeDBClusterSnapshotAttributesResult,
-        DescribeDBClusterSnapshotAttributesError,
-    > {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBClusterSnapshotAttributesRequest {
+    type Output = DescribeDBClusterSnapshotAttributesResponse;
+    type Error = DescribeDBClusterSnapshotAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBClusterSnapshotAttributes");
         params.put("Version", "2014-10-31");
-        DescribeDBClusterSnapshotAttributesMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBClusterSnapshotAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBClusterSnapshotAttributesError::from_response(
@@ -26776,7 +28817,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeDBClusterSnapshotAttributesResult::default();
+                    result = DescribeDBClusterSnapshotAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -26786,7 +28827,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeDBClusterSnapshotAttributesResultDeserializer::deserialize(
+                    result = DescribeDBClusterSnapshotAttributesResponseDeserializer::deserialize(
                         "DescribeDBClusterSnapshotAttributesResult",
                         &mut stack,
                     )?;
@@ -26798,22 +28839,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Returns information about DB cluster snapshots. This API action supports pagination.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn describe_db_cluster_snapshots(
-        &self,
-        input: DescribeDBClusterSnapshotsMessage,
-    ) -> RusotoFuture<DBClusterSnapshotMessage, DescribeDBClusterSnapshotsError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBClusterSnapshotsRequest {
+    type Output = DescribeDBClusterSnapshotsResponse;
+    type Error = DescribeDBClusterSnapshotsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBClusterSnapshots");
         params.put("Version", "2014-10-31");
-        DescribeDBClusterSnapshotsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBClusterSnapshotsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBClusterSnapshotsError::from_response(response))
@@ -26824,7 +28870,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBClusterSnapshotMessage::default();
+                    result = DescribeDBClusterSnapshotsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -26834,7 +28880,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterSnapshotMessageDeserializer::deserialize(
+                    result = DescribeDBClusterSnapshotsResponseDeserializer::deserialize(
                         "DescribeDBClusterSnapshotsResult",
                         &mut stack,
                     )?;
@@ -26846,22 +28892,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Returns information about provisioned Aurora DB clusters. This API supports pagination.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn describe_db_clusters(
-        &self,
-        input: DescribeDBClustersMessage,
-    ) -> RusotoFuture<DBClusterMessage, DescribeDBClustersError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBClustersRequest {
+    type Output = DescribeDBClustersResponse;
+    type Error = DescribeDBClustersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBClusters");
         params.put("Version", "2014-10-31");
-        DescribeDBClustersMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBClustersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -26875,7 +28926,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBClusterMessage::default();
+                    result = DescribeDBClustersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -26885,7 +28936,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterMessageDeserializer::deserialize(
+                    result = DescribeDBClustersResponseDeserializer::deserialize(
                         "DescribeDBClustersResult",
                         &mut stack,
                     )?;
@@ -26897,22 +28948,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of the available DB engines.</p>
-    fn describe_db_engine_versions(
-        &self,
-        input: DescribeDBEngineVersionsMessage,
-    ) -> RusotoFuture<DBEngineVersionMessage, DescribeDBEngineVersionsError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBEngineVersionsRequest {
+    type Output = DescribeDBEngineVersionsResponse;
+    type Error = DescribeDBEngineVersionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBEngineVersions");
         params.put("Version", "2014-10-31");
-        DescribeDBEngineVersionsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBEngineVersionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBEngineVersionsError::from_response(response))
@@ -26923,7 +28979,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBEngineVersionMessage::default();
+                    result = DescribeDBEngineVersionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -26933,7 +28989,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBEngineVersionMessageDeserializer::deserialize(
+                    result = DescribeDBEngineVersionsResponseDeserializer::deserialize(
                         "DescribeDBEngineVersionsResult",
                         &mut stack,
                     )?;
@@ -26945,23 +29001,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Displays backups for both current and deleted instances. For example, use this operation to find details about automated backups for previously deleted instances. Current instances with retention periods greater than zero (0) are returned for both the <code>DescribeDBInstanceAutomatedBackups</code> and <code>DescribeDBInstances</code> operations.</p> <p>All parameters are optional.</p>
-    fn describe_db_instance_automated_backups(
-        &self,
-        input: DescribeDBInstanceAutomatedBackupsMessage,
-    ) -> RusotoFuture<DBInstanceAutomatedBackupMessage, DescribeDBInstanceAutomatedBackupsError>
-    {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBInstanceAutomatedBackupsRequest {
+    type Output = DescribeDBInstanceAutomatedBackupsResponse;
+    type Error = DescribeDBInstanceAutomatedBackupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBInstanceAutomatedBackups");
         params.put("Version", "2014-10-31");
-        DescribeDBInstanceAutomatedBackupsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBInstanceAutomatedBackupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBInstanceAutomatedBackupsError::from_response(
@@ -26974,7 +29034,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBInstanceAutomatedBackupMessage::default();
+                    result = DescribeDBInstanceAutomatedBackupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -26984,7 +29044,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBInstanceAutomatedBackupMessageDeserializer::deserialize(
+                    result = DescribeDBInstanceAutomatedBackupsResponseDeserializer::deserialize(
                         "DescribeDBInstanceAutomatedBackupsResult",
                         &mut stack,
                     )?;
@@ -26996,22 +29056,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns information about provisioned RDS instances. This API supports pagination.</p>
-    fn describe_db_instances(
-        &self,
-        input: DescribeDBInstancesMessage,
-    ) -> RusotoFuture<DBInstanceMessage, DescribeDBInstancesError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBInstancesRequest {
+    type Output = DescribeDBInstancesResponse;
+    type Error = DescribeDBInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBInstances");
         params.put("Version", "2014-10-31");
-        DescribeDBInstancesMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBInstancesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -27024,7 +29089,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBInstanceMessage::default();
+                    result = DescribeDBInstancesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -27034,7 +29099,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBInstanceMessageDeserializer::deserialize(
+                    result = DescribeDBInstancesResponseDeserializer::deserialize(
                         "DescribeDBInstancesResult",
                         &mut stack,
                     )?;
@@ -27046,22 +29111,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of DB log files for the DB instance.</p>
-    fn describe_db_log_files(
-        &self,
-        input: DescribeDBLogFilesMessage,
-    ) -> RusotoFuture<DescribeDBLogFilesResponse, DescribeDBLogFilesError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBLogFilesRequest {
+    type Output = DescribeDBLogFilesResponse;
+    type Error = DescribeDBLogFilesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBLogFiles");
         params.put("Version", "2014-10-31");
-        DescribeDBLogFilesMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBLogFilesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -27097,22 +29167,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p> Returns a list of <code>DBParameterGroup</code> descriptions. If a <code>DBParameterGroupName</code> is specified, the list will contain only the description of the specified DB parameter group. </p>
-    fn describe_db_parameter_groups(
-        &self,
-        input: DescribeDBParameterGroupsMessage,
-    ) -> RusotoFuture<DBParameterGroupsMessage, DescribeDBParameterGroupsError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBParameterGroupsRequest {
+    type Output = DescribeDBParameterGroupsResponse;
+    type Error = DescribeDBParameterGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBParameterGroups");
         params.put("Version", "2014-10-31");
-        DescribeDBParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBParameterGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBParameterGroupsError::from_response(response))
@@ -27123,7 +29198,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBParameterGroupsMessage::default();
+                    result = DescribeDBParameterGroupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -27133,7 +29208,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBParameterGroupsMessageDeserializer::deserialize(
+                    result = DescribeDBParameterGroupsResponseDeserializer::deserialize(
                         "DescribeDBParameterGroupsResult",
                         &mut stack,
                     )?;
@@ -27145,22 +29220,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns the detailed parameter list for a particular DB parameter group.</p>
-    fn describe_db_parameters(
-        &self,
-        input: DescribeDBParametersMessage,
-    ) -> RusotoFuture<DBParameterGroupDetails, DescribeDBParametersError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBParametersRequest {
+    type Output = DescribeDBParametersResponse;
+    type Error = DescribeDBParametersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBParameters");
         params.put("Version", "2014-10-31");
-        DescribeDBParametersMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBParametersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -27173,7 +29253,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBParameterGroupDetails::default();
+                    result = DescribeDBParametersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -27183,7 +29263,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBParameterGroupDetailsDeserializer::deserialize(
+                    result = DescribeDBParametersResponseDeserializer::deserialize(
                         "DescribeDBParametersResult",
                         &mut stack,
                     )?;
@@ -27195,22 +29275,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p> Returns a list of <code>DBSecurityGroup</code> descriptions. If a <code>DBSecurityGroupName</code> is specified, the list will contain only the descriptions of the specified DB security group. </p>
-    fn describe_db_security_groups(
-        &self,
-        input: DescribeDBSecurityGroupsMessage,
-    ) -> RusotoFuture<DBSecurityGroupMessage, DescribeDBSecurityGroupsError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBSecurityGroupsRequest {
+    type Output = DescribeDBSecurityGroupsResponse;
+    type Error = DescribeDBSecurityGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBSecurityGroups");
         params.put("Version", "2014-10-31");
-        DescribeDBSecurityGroupsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBSecurityGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBSecurityGroupsError::from_response(response))
@@ -27221,7 +29306,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBSecurityGroupMessage::default();
+                    result = DescribeDBSecurityGroupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -27231,7 +29316,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBSecurityGroupMessageDeserializer::deserialize(
+                    result = DescribeDBSecurityGroupsResponseDeserializer::deserialize(
                         "DescribeDBSecurityGroupsResult",
                         &mut stack,
                     )?;
@@ -27243,22 +29328,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of DB snapshot attribute names and values for a manual DB snapshot.</p> <p>When sharing snapshots with other AWS accounts, <code>DescribeDBSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB snapshot is public and can be copied or restored by all AWS accounts.</p> <p>To add or remove access for an AWS account to copy or restore a manual DB snapshot, or to make the manual DB snapshot public or private, use the <code>ModifyDBSnapshotAttribute</code> API action.</p>
-    fn describe_db_snapshot_attributes(
-        &self,
-        input: DescribeDBSnapshotAttributesMessage,
-    ) -> RusotoFuture<DescribeDBSnapshotAttributesResult, DescribeDBSnapshotAttributesError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBSnapshotAttributesRequest {
+    type Output = DescribeDBSnapshotAttributesResponse;
+    type Error = DescribeDBSnapshotAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBSnapshotAttributes");
         params.put("Version", "2014-10-31");
-        DescribeDBSnapshotAttributesMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBSnapshotAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBSnapshotAttributesError::from_response(response))
@@ -27269,7 +29359,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeDBSnapshotAttributesResult::default();
+                    result = DescribeDBSnapshotAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -27279,7 +29369,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeDBSnapshotAttributesResultDeserializer::deserialize(
+                    result = DescribeDBSnapshotAttributesResponseDeserializer::deserialize(
                         "DescribeDBSnapshotAttributesResult",
                         &mut stack,
                     )?;
@@ -27291,22 +29381,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns information about DB snapshots. This API action supports pagination.</p>
-    fn describe_db_snapshots(
-        &self,
-        input: DescribeDBSnapshotsMessage,
-    ) -> RusotoFuture<DBSnapshotMessage, DescribeDBSnapshotsError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBSnapshotsRequest {
+    type Output = DescribeDBSnapshotsResponse;
+    type Error = DescribeDBSnapshotsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBSnapshots");
         params.put("Version", "2014-10-31");
-        DescribeDBSnapshotsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBSnapshotsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -27319,7 +29414,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBSnapshotMessage::default();
+                    result = DescribeDBSnapshotsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -27329,7 +29424,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBSnapshotMessageDeserializer::deserialize(
+                    result = DescribeDBSnapshotsResponseDeserializer::deserialize(
                         "DescribeDBSnapshotsResult",
                         &mut stack,
                     )?;
@@ -27341,22 +29436,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of DBSubnetGroup descriptions. If a DBSubnetGroupName is specified, the list will contain only the descriptions of the specified DBSubnetGroup.</p> <p>For an overview of CIDR ranges, go to the <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Wikipedia Tutorial</a>. </p>
-    fn describe_db_subnet_groups(
-        &self,
-        input: DescribeDBSubnetGroupsMessage,
-    ) -> RusotoFuture<DBSubnetGroupMessage, DescribeDBSubnetGroupsError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBSubnetGroupsRequest {
+    type Output = DescribeDBSubnetGroupsResponse;
+    type Error = DescribeDBSubnetGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBSubnetGroups");
         params.put("Version", "2014-10-31");
-        DescribeDBSubnetGroupsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBSubnetGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBSubnetGroupsError::from_response(response))
@@ -27367,7 +29467,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBSubnetGroupMessage::default();
+                    result = DescribeDBSubnetGroupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -27377,7 +29477,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBSubnetGroupMessageDeserializer::deserialize(
+                    result = DescribeDBSubnetGroupsResponseDeserializer::deserialize(
                         "DescribeDBSubnetGroupsResult",
                         &mut stack,
                     )?;
@@ -27389,25 +29489,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns the default engine and system parameter information for the cluster database engine.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p>
-    fn describe_engine_default_cluster_parameters(
-        &self,
-        input: DescribeEngineDefaultClusterParametersMessage,
-    ) -> RusotoFuture<
-        DescribeEngineDefaultClusterParametersResult,
-        DescribeEngineDefaultClusterParametersError,
-    > {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeEngineDefaultClusterParametersRequest {
+    type Output = DescribeEngineDefaultClusterParametersResponse;
+    type Error = DescribeEngineDefaultClusterParametersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEngineDefaultClusterParameters");
         params.put("Version", "2014-10-31");
-        DescribeEngineDefaultClusterParametersMessageSerializer::serialize(&mut params, "", &input);
+        DescribeEngineDefaultClusterParametersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEngineDefaultClusterParametersError::from_response(
@@ -27420,7 +29522,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeEngineDefaultClusterParametersResult::default();
+                    result = DescribeEngineDefaultClusterParametersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -27430,10 +29532,11 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeEngineDefaultClusterParametersResultDeserializer::deserialize(
-                        "DescribeEngineDefaultClusterParametersResult",
-                        &mut stack,
-                    )?;
+                    result =
+                        DescribeEngineDefaultClusterParametersResponseDeserializer::deserialize(
+                            "DescribeEngineDefaultClusterParametersResult",
+                            &mut stack,
+                        )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -27442,23 +29545,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns the default engine and system parameter information for the specified database engine.</p>
-    fn describe_engine_default_parameters(
-        &self,
-        input: DescribeEngineDefaultParametersMessage,
-    ) -> RusotoFuture<DescribeEngineDefaultParametersResult, DescribeEngineDefaultParametersError>
-    {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeEngineDefaultParametersRequest {
+    type Output = DescribeEngineDefaultParametersResponse;
+    type Error = DescribeEngineDefaultParametersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEngineDefaultParameters");
         params.put("Version", "2014-10-31");
-        DescribeEngineDefaultParametersMessageSerializer::serialize(&mut params, "", &input);
+        DescribeEngineDefaultParametersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEngineDefaultParametersError::from_response(
@@ -27471,7 +29578,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeEngineDefaultParametersResult::default();
+                    result = DescribeEngineDefaultParametersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -27481,7 +29588,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeEngineDefaultParametersResultDeserializer::deserialize(
+                    result = DescribeEngineDefaultParametersResponseDeserializer::deserialize(
                         "DescribeEngineDefaultParametersResult",
                         &mut stack,
                     )?;
@@ -27493,22 +29600,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Displays a list of categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html"> Events</a> topic in the <i>Amazon RDS User Guide.</i> </p>
-    fn describe_event_categories(
-        &self,
-        input: DescribeEventCategoriesMessage,
-    ) -> RusotoFuture<EventCategoriesMessage, DescribeEventCategoriesError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeEventCategoriesRequest {
+    type Output = DescribeEventCategoriesResponse;
+    type Error = DescribeEventCategoriesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEventCategories");
         params.put("Version", "2014-10-31");
-        DescribeEventCategoriesMessageSerializer::serialize(&mut params, "", &input);
+        DescribeEventCategoriesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEventCategoriesError::from_response(response))
@@ -27519,7 +29631,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = EventCategoriesMessage::default();
+                    result = DescribeEventCategoriesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -27529,7 +29641,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = EventCategoriesMessageDeserializer::deserialize(
+                    result = DescribeEventCategoriesResponseDeserializer::deserialize(
                         "DescribeEventCategoriesResult",
                         &mut stack,
                     )?;
@@ -27541,22 +29653,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Lists all the subscription descriptions for a customer account. The description for a subscription includes SubscriptionName, SNSTopicARN, CustomerID, SourceType, SourceID, CreationTime, and Status.</p> <p>If you specify a SubscriptionName, lists the description for that subscription.</p>
-    fn describe_event_subscriptions(
-        &self,
-        input: DescribeEventSubscriptionsMessage,
-    ) -> RusotoFuture<EventSubscriptionsMessage, DescribeEventSubscriptionsError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeEventSubscriptionsRequest {
+    type Output = DescribeEventSubscriptionsResponse;
+    type Error = DescribeEventSubscriptionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEventSubscriptions");
         params.put("Version", "2014-10-31");
-        DescribeEventSubscriptionsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeEventSubscriptionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEventSubscriptionsError::from_response(response))
@@ -27567,7 +29684,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = EventSubscriptionsMessage::default();
+                    result = DescribeEventSubscriptionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -27577,7 +29694,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = EventSubscriptionsMessageDeserializer::deserialize(
+                    result = DescribeEventSubscriptionsResponseDeserializer::deserialize(
                         "DescribeEventSubscriptionsResult",
                         &mut stack,
                     )?;
@@ -27589,22 +29706,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns events related to DB instances, DB security groups, DB snapshots, and DB parameter groups for the past 14 days. Events specific to a particular DB instance, DB security group, database snapshot, or DB parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>
-    fn describe_events(
-        &self,
-        input: DescribeEventsMessage,
-    ) -> RusotoFuture<EventsMessage, DescribeEventsError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeEventsRequest {
+    type Output = DescribeEventsResponse;
+    type Error = DescribeEventsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEvents");
         params.put("Version", "2014-10-31");
-        DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeEventsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -27618,7 +29740,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = EventsMessage::default();
+                    result = DescribeEventsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -27628,8 +29750,10 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        EventsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack)?;
+                    result = DescribeEventsResponseDeserializer::deserialize(
+                        "DescribeEventsResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -27638,22 +29762,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p> Returns information about Aurora global database clusters. This API supports pagination. </p> <p> For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn describe_global_clusters(
-        &self,
-        input: DescribeGlobalClustersMessage,
-    ) -> RusotoFuture<GlobalClustersMessage, DescribeGlobalClustersError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeGlobalClustersRequest {
+    type Output = DescribeGlobalClustersResponse;
+    type Error = DescribeGlobalClustersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeGlobalClusters");
         params.put("Version", "2014-10-31");
-        DescribeGlobalClustersMessageSerializer::serialize(&mut params, "", &input);
+        DescribeGlobalClustersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeGlobalClustersError::from_response(response))
@@ -27664,7 +29793,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = GlobalClustersMessage::default();
+                    result = DescribeGlobalClustersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -27674,7 +29803,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = GlobalClustersMessageDeserializer::deserialize(
+                    result = DescribeGlobalClustersResponseDeserializer::deserialize(
                         "DescribeGlobalClustersResult",
                         &mut stack,
                     )?;
@@ -27686,22 +29815,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Describes all available options.</p>
-    fn describe_option_group_options(
-        &self,
-        input: DescribeOptionGroupOptionsMessage,
-    ) -> RusotoFuture<OptionGroupOptionsMessage, DescribeOptionGroupOptionsError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeOptionGroupOptionsRequest {
+    type Output = DescribeOptionGroupOptionsResponse;
+    type Error = DescribeOptionGroupOptionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeOptionGroupOptions");
         params.put("Version", "2014-10-31");
-        DescribeOptionGroupOptionsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeOptionGroupOptionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeOptionGroupOptionsError::from_response(response))
@@ -27712,7 +29846,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = OptionGroupOptionsMessage::default();
+                    result = DescribeOptionGroupOptionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -27722,7 +29856,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = OptionGroupOptionsMessageDeserializer::deserialize(
+                    result = DescribeOptionGroupOptionsResponseDeserializer::deserialize(
                         "DescribeOptionGroupOptionsResult",
                         &mut stack,
                     )?;
@@ -27734,22 +29868,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the available option groups.</p>
-    fn describe_option_groups(
-        &self,
-        input: DescribeOptionGroupsMessage,
-    ) -> RusotoFuture<OptionGroups, DescribeOptionGroupsError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeOptionGroupsRequest {
+    type Output = DescribeOptionGroupsResponse;
+    type Error = DescribeOptionGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeOptionGroups");
         params.put("Version", "2014-10-31");
-        DescribeOptionGroupsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeOptionGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -27762,7 +29901,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = OptionGroups::default();
+                    result = DescribeOptionGroupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -27772,7 +29911,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = OptionGroupsDeserializer::deserialize(
+                    result = DescribeOptionGroupsResponseDeserializer::deserialize(
                         "DescribeOptionGroupsResult",
                         &mut stack,
                     )?;
@@ -27784,23 +29923,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of orderable DB instance options for the specified engine.</p>
-    fn describe_orderable_db_instance_options(
-        &self,
-        input: DescribeOrderableDBInstanceOptionsMessage,
-    ) -> RusotoFuture<OrderableDBInstanceOptionsMessage, DescribeOrderableDBInstanceOptionsError>
-    {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeOrderableDBInstanceOptionsRequest {
+    type Output = DescribeOrderableDBInstanceOptionsResponse;
+    type Error = DescribeOrderableDBInstanceOptionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeOrderableDBInstanceOptions");
         params.put("Version", "2014-10-31");
-        DescribeOrderableDBInstanceOptionsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeOrderableDBInstanceOptionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeOrderableDBInstanceOptionsError::from_response(
@@ -27813,7 +29956,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = OrderableDBInstanceOptionsMessage::default();
+                    result = DescribeOrderableDBInstanceOptionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -27823,7 +29966,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = OrderableDBInstanceOptionsMessageDeserializer::deserialize(
+                    result = DescribeOrderableDBInstanceOptionsResponseDeserializer::deserialize(
                         "DescribeOrderableDBInstanceOptionsResult",
                         &mut stack,
                     )?;
@@ -27835,23 +29978,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of resources (for example, DB instances) that have at least one pending maintenance action.</p>
-    fn describe_pending_maintenance_actions(
-        &self,
-        input: DescribePendingMaintenanceActionsMessage,
-    ) -> RusotoFuture<PendingMaintenanceActionsMessage, DescribePendingMaintenanceActionsError>
-    {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribePendingMaintenanceActionsRequest {
+    type Output = DescribePendingMaintenanceActionsResponse;
+    type Error = DescribePendingMaintenanceActionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribePendingMaintenanceActions");
         params.put("Version", "2014-10-31");
-        DescribePendingMaintenanceActionsMessageSerializer::serialize(&mut params, "", &input);
+        DescribePendingMaintenanceActionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribePendingMaintenanceActionsError::from_response(
@@ -27864,7 +30011,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = PendingMaintenanceActionsMessage::default();
+                    result = DescribePendingMaintenanceActionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -27874,7 +30021,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = PendingMaintenanceActionsMessageDeserializer::deserialize(
+                    result = DescribePendingMaintenanceActionsResponseDeserializer::deserialize(
                         "DescribePendingMaintenanceActionsResult",
                         &mut stack,
                     )?;
@@ -27886,22 +30033,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns information about reserved DB instances for this account, or about a specified reserved DB instance.</p>
-    fn describe_reserved_db_instances(
-        &self,
-        input: DescribeReservedDBInstancesMessage,
-    ) -> RusotoFuture<ReservedDBInstanceMessage, DescribeReservedDBInstancesError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeReservedDBInstancesRequest {
+    type Output = DescribeReservedDBInstancesResponse;
+    type Error = DescribeReservedDBInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeReservedDBInstances");
         params.put("Version", "2014-10-31");
-        DescribeReservedDBInstancesMessageSerializer::serialize(&mut params, "", &input);
+        DescribeReservedDBInstancesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReservedDBInstancesError::from_response(response))
@@ -27912,7 +30064,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ReservedDBInstanceMessage::default();
+                    result = DescribeReservedDBInstancesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -27922,7 +30074,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ReservedDBInstanceMessageDeserializer::deserialize(
+                    result = DescribeReservedDBInstancesResponseDeserializer::deserialize(
                         "DescribeReservedDBInstancesResult",
                         &mut stack,
                     )?;
@@ -27934,23 +30086,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Lists available reserved DB instance offerings.</p>
-    fn describe_reserved_db_instances_offerings(
-        &self,
-        input: DescribeReservedDBInstancesOfferingsMessage,
-    ) -> RusotoFuture<ReservedDBInstancesOfferingMessage, DescribeReservedDBInstancesOfferingsError>
-    {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeReservedDBInstancesOfferingsRequest {
+    type Output = DescribeReservedDBInstancesOfferingsResponse;
+    type Error = DescribeReservedDBInstancesOfferingsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeReservedDBInstancesOfferings");
         params.put("Version", "2014-10-31");
-        DescribeReservedDBInstancesOfferingsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeReservedDBInstancesOfferingsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReservedDBInstancesOfferingsError::from_response(
@@ -27963,7 +30119,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ReservedDBInstancesOfferingMessage::default();
+                    result = DescribeReservedDBInstancesOfferingsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -27973,7 +30129,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ReservedDBInstancesOfferingMessageDeserializer::deserialize(
+                    result = DescribeReservedDBInstancesOfferingsResponseDeserializer::deserialize(
                         "DescribeReservedDBInstancesOfferingsResult",
                         &mut stack,
                     )?;
@@ -27985,22 +30141,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of the source AWS Regions where the current AWS Region can create a Read Replica or copy a DB snapshot from. This API action supports pagination.</p>
-    fn describe_source_regions(
-        &self,
-        input: DescribeSourceRegionsMessage,
-    ) -> RusotoFuture<SourceRegionMessage, DescribeSourceRegionsError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeSourceRegionsRequest {
+    type Output = DescribeSourceRegionsResponse;
+    type Error = DescribeSourceRegionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeSourceRegions");
         params.put("Version", "2014-10-31");
-        DescribeSourceRegionsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeSourceRegionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSourceRegionsError::from_response(response))
@@ -28011,7 +30172,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = SourceRegionMessage::default();
+                    result = DescribeSourceRegionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -28021,7 +30182,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = SourceRegionMessageDeserializer::deserialize(
+                    result = DescribeSourceRegionsResponseDeserializer::deserialize(
                         "DescribeSourceRegionsResult",
                         &mut stack,
                     )?;
@@ -28033,25 +30194,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>You can call <code>DescribeValidDBInstanceModifications</code> to learn what modifications you can make to your DB instance. You can use this information when you call <code>ModifyDBInstance</code>. </p>
-    fn describe_valid_db_instance_modifications(
-        &self,
-        input: DescribeValidDBInstanceModificationsMessage,
-    ) -> RusotoFuture<
-        DescribeValidDBInstanceModificationsResult,
-        DescribeValidDBInstanceModificationsError,
-    > {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeValidDBInstanceModificationsRequest {
+    type Output = DescribeValidDBInstanceModificationsResponse;
+    type Error = DescribeValidDBInstanceModificationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeValidDBInstanceModifications");
         params.put("Version", "2014-10-31");
-        DescribeValidDBInstanceModificationsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeValidDBInstanceModificationsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeValidDBInstanceModificationsError::from_response(
@@ -28064,7 +30227,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeValidDBInstanceModificationsResult::default();
+                    result = DescribeValidDBInstanceModificationsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -28074,7 +30237,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeValidDBInstanceModificationsResultDeserializer::deserialize(
+                    result = DescribeValidDBInstanceModificationsResponseDeserializer::deserialize(
                         "DescribeValidDBInstanceModificationsResult",
                         &mut stack,
                     )?;
@@ -28086,22 +30249,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Downloads all or a portion of the specified log file, up to 1 MB in size.</p>
-    fn download_db_log_file_portion(
-        &self,
-        input: DownloadDBLogFilePortionMessage,
-    ) -> RusotoFuture<DownloadDBLogFilePortionDetails, DownloadDBLogFilePortionError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DownloadDBLogFilePortionRequest {
+    type Output = DownloadDBLogFilePortionResponse;
+    type Error = DownloadDBLogFilePortionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DownloadDBLogFilePortion");
         params.put("Version", "2014-10-31");
-        DownloadDBLogFilePortionMessageSerializer::serialize(&mut params, "", &input);
+        DownloadDBLogFilePortionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DownloadDBLogFilePortionError::from_response(response))
@@ -28112,7 +30280,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DownloadDBLogFilePortionDetails::default();
+                    result = DownloadDBLogFilePortionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -28122,7 +30290,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DownloadDBLogFilePortionDetailsDeserializer::deserialize(
+                    result = DownloadDBLogFilePortionResponseDeserializer::deserialize(
                         "DownloadDBLogFilePortionResult",
                         &mut stack,
                     )?;
@@ -28134,22 +30302,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Forces a failover for a DB cluster.</p> <p>A failover for a DB cluster promotes one of the Aurora Replicas (read-only instances) in the DB cluster to be the primary instance (the cluster writer).</p> <p>Amazon Aurora will automatically fail over to an Aurora Replica, if one exists, when the primary instance fails. You can force a failover when you want to simulate a failure of a primary instance for testing. Because each instance in a DB cluster has its own endpoint address, you will need to clean up and re-establish any existing connections that use those endpoint addresses when the failover is complete.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn failover_db_cluster(
-        &self,
-        input: FailoverDBClusterMessage,
-    ) -> RusotoFuture<FailoverDBClusterResult, FailoverDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for FailoverDBClusterRequest {
+    type Output = FailoverDBClusterResponse;
+    type Error = FailoverDBClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "FailoverDBCluster");
         params.put("Version", "2014-10-31");
-        FailoverDBClusterMessageSerializer::serialize(&mut params, "", &input);
+        FailoverDBClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -28163,7 +30336,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = FailoverDBClusterResult::default();
+                    result = FailoverDBClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -28173,7 +30346,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = FailoverDBClusterResultDeserializer::deserialize(
+                    result = FailoverDBClusterResponseDeserializer::deserialize(
                         "FailoverDBClusterResult",
                         &mut stack,
                     )?;
@@ -28185,22 +30358,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Lists all tags on an Amazon RDS resource.</p> <p>For an overview on tagging an Amazon RDS resource, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html">Tagging Amazon RDS Resources</a> in the <i>Amazon RDS User Guide</i>.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceMessage,
-    ) -> RusotoFuture<TagListMessage, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListTagsForResource");
         params.put("Version", "2014-10-31");
-        ListTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
+        ListTagsForResourceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -28213,7 +30391,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = TagListMessage::default();
+                    result = ListTagsForResourceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -28223,7 +30401,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = TagListMessageDeserializer::deserialize(
+                    result = ListTagsForResourceResponseDeserializer::deserialize(
                         "ListTagsForResourceResult",
                         &mut stack,
                     )?;
@@ -28235,22 +30413,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Set the capacity of an Aurora Serverless DB cluster to a specific value.</p> <p>Aurora Serverless scales seamlessly based on the workload on the DB cluster. In some cases, the capacity might not scale fast enough to meet a sudden change in workload, such as a large number of new transactions. Call <code>ModifyCurrentDBClusterCapacity</code> to set the capacity explicitly.</p> <p>After this call sets the DB cluster capacity, Aurora Serverless can automatically scale the DB cluster based on the cooldown period for scaling up and the cooldown period for scaling down.</p> <p>For more information about Aurora Serverless, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.html">Using Amazon Aurora Serverless</a> in the <i>Amazon Aurora User Guide</i>.</p> <important> <p>If you call <code>ModifyCurrentDBClusterCapacity</code> with the default <code>TimeoutAction</code>, connections that prevent Aurora Serverless from finding a scaling point might be dropped. For more information about scaling points, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.how-it-works.html#aurora-serverless.how-it-works.auto-scaling"> Autoscaling for Aurora Serverless</a> in the <i>Amazon Aurora User Guide</i>.</p> </important> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn modify_current_db_cluster_capacity(
-        &self,
-        input: ModifyCurrentDBClusterCapacityMessage,
-    ) -> RusotoFuture<DBClusterCapacityInfo, ModifyCurrentDBClusterCapacityError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ModifyCurrentDBClusterCapacityRequest {
+    type Output = ModifyCurrentDBClusterCapacityResponse;
+    type Error = ModifyCurrentDBClusterCapacityError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyCurrentDBClusterCapacity");
         params.put("Version", "2014-10-31");
-        ModifyCurrentDBClusterCapacityMessageSerializer::serialize(&mut params, "", &input);
+        ModifyCurrentDBClusterCapacityRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyCurrentDBClusterCapacityError::from_response(response))
@@ -28261,7 +30444,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBClusterCapacityInfo::default();
+                    result = ModifyCurrentDBClusterCapacityResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -28271,7 +30454,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterCapacityInfoDeserializer::deserialize(
+                    result = ModifyCurrentDBClusterCapacityResponseDeserializer::deserialize(
                         "ModifyCurrentDBClusterCapacityResult",
                         &mut stack,
                     )?;
@@ -28283,22 +30466,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Modify a setting for an Amazon Aurora DB cluster. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn modify_db_cluster(
-        &self,
-        input: ModifyDBClusterMessage,
-    ) -> RusotoFuture<ModifyDBClusterResult, ModifyDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ModifyDBClusterRequest {
+    type Output = ModifyDBClusterResponse;
+    type Error = ModifyDBClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBCluster");
         params.put("Version", "2014-10-31");
-        ModifyDBClusterMessageSerializer::serialize(&mut params, "", &input);
+        ModifyDBClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -28312,7 +30500,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyDBClusterResult::default();
+                    result = ModifyDBClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -28322,7 +30510,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyDBClusterResultDeserializer::deserialize(
+                    result = ModifyDBClusterResponseDeserializer::deserialize(
                         "ModifyDBClusterResult",
                         &mut stack,
                     )?;
@@ -28334,22 +30522,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Modifies the properties of an endpoint in an Amazon Aurora DB cluster.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn modify_db_cluster_endpoint(
-        &self,
-        input: ModifyDBClusterEndpointMessage,
-    ) -> RusotoFuture<DBClusterEndpoint, ModifyDBClusterEndpointError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ModifyDBClusterEndpointRequest {
+    type Output = ModifyDBClusterEndpointResponse;
+    type Error = ModifyDBClusterEndpointError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBClusterEndpoint");
         params.put("Version", "2014-10-31");
-        ModifyDBClusterEndpointMessageSerializer::serialize(&mut params, "", &input);
+        ModifyDBClusterEndpointRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyDBClusterEndpointError::from_response(response))
@@ -28360,7 +30553,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBClusterEndpoint::default();
+                    result = ModifyDBClusterEndpointResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -28370,7 +30563,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterEndpointDeserializer::deserialize(
+                    result = ModifyDBClusterEndpointResponseDeserializer::deserialize(
                         "ModifyDBClusterEndpointResult",
                         &mut stack,
                     )?;
@@ -28382,22 +30575,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p> Modifies the parameters of a DB cluster parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB cluster associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon RDS console</a> or the <code>DescribeDBClusterParameters</code> action to verify that your DB cluster parameter group has been created or modified.</p> </important> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn modify_db_cluster_parameter_group(
-        &self,
-        input: ModifyDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupNameMessage, ModifyDBClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ModifyDBClusterParameterGroupRequest {
+    type Output = ModifyDBClusterParameterGroupResponse;
+    type Error = ModifyDBClusterParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
-        ModifyDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        ModifyDBClusterParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyDBClusterParameterGroupError::from_response(response))
@@ -28408,7 +30606,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBClusterParameterGroupNameMessage::default();
+                    result = ModifyDBClusterParameterGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -28418,7 +30616,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
+                    result = ModifyDBClusterParameterGroupResponseDeserializer::deserialize(
                         "ModifyDBClusterParameterGroupResult",
                         &mut stack,
                     )?;
@@ -28430,23 +30628,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Adds an attribute and values to, or removes an attribute and values from, a manual DB cluster snapshot.</p> <p>To share a manual DB cluster snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB cluster snapshot. Use the value <code>all</code> to make the manual DB cluster snapshot public, which means that it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB cluster snapshots that contain private information that you don&#39;t want available to all AWS accounts. If a manual DB cluster snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can&#39;t use <code>all</code> as a value for that parameter in this case.</p> <p>To view which AWS accounts have access to copy or restore a manual DB cluster snapshot, or whether a manual DB cluster snapshot public or private, use the <code>DescribeDBClusterSnapshotAttributes</code> API action.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn modify_db_cluster_snapshot_attribute(
-        &self,
-        input: ModifyDBClusterSnapshotAttributeMessage,
-    ) -> RusotoFuture<ModifyDBClusterSnapshotAttributeResult, ModifyDBClusterSnapshotAttributeError>
-    {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ModifyDBClusterSnapshotAttributeRequest {
+    type Output = ModifyDBClusterSnapshotAttributeResponse;
+    type Error = ModifyDBClusterSnapshotAttributeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBClusterSnapshotAttribute");
         params.put("Version", "2014-10-31");
-        ModifyDBClusterSnapshotAttributeMessageSerializer::serialize(&mut params, "", &input);
+        ModifyDBClusterSnapshotAttributeRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyDBClusterSnapshotAttributeError::from_response(
@@ -28459,7 +30661,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyDBClusterSnapshotAttributeResult::default();
+                    result = ModifyDBClusterSnapshotAttributeResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -28469,7 +30671,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyDBClusterSnapshotAttributeResultDeserializer::deserialize(
+                    result = ModifyDBClusterSnapshotAttributeResponseDeserializer::deserialize(
                         "ModifyDBClusterSnapshotAttributeResult",
                         &mut stack,
                     )?;
@@ -28481,22 +30683,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies settings for a DB instance. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. To learn what modifications you can make to your DB instance, call <code>DescribeValidDBInstanceModifications</code> before you call <code>ModifyDBInstance</code>. </p>
-    fn modify_db_instance(
-        &self,
-        input: ModifyDBInstanceMessage,
-    ) -> RusotoFuture<ModifyDBInstanceResult, ModifyDBInstanceError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ModifyDBInstanceRequest {
+    type Output = ModifyDBInstanceResponse;
+    type Error = ModifyDBInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBInstance");
         params.put("Version", "2014-10-31");
-        ModifyDBInstanceMessageSerializer::serialize(&mut params, "", &input);
+        ModifyDBInstanceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -28510,7 +30717,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyDBInstanceResult::default();
+                    result = ModifyDBInstanceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -28520,7 +30727,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyDBInstanceResultDeserializer::deserialize(
+                    result = ModifyDBInstanceResponseDeserializer::deserialize(
                         "ModifyDBInstanceResult",
                         &mut stack,
                     )?;
@@ -28532,22 +30739,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p> Modifies the parameters of a DB parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB instance associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you modify a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon RDS to fully complete the modify action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon RDS console</a> or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important></p>
-    fn modify_db_parameter_group(
-        &self,
-        input: ModifyDBParameterGroupMessage,
-    ) -> RusotoFuture<DBParameterGroupNameMessage, ModifyDBParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ModifyDBParameterGroupRequest {
+    type Output = ModifyDBParameterGroupResponse;
+    type Error = ModifyDBParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBParameterGroup");
         params.put("Version", "2014-10-31");
-        ModifyDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        ModifyDBParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyDBParameterGroupError::from_response(response))
@@ -28558,7 +30770,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBParameterGroupNameMessage::default();
+                    result = ModifyDBParameterGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -28568,7 +30780,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBParameterGroupNameMessageDeserializer::deserialize(
+                    result = ModifyDBParameterGroupResponseDeserializer::deserialize(
                         "ModifyDBParameterGroupResult",
                         &mut stack,
                     )?;
@@ -28580,22 +30792,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Updates a manual DB snapshot, which can be encrypted or not encrypted, with a new engine version. </p> <p>Amazon RDS supports upgrading DB snapshots for MySQL and Oracle. </p>
-    fn modify_db_snapshot(
-        &self,
-        input: ModifyDBSnapshotMessage,
-    ) -> RusotoFuture<ModifyDBSnapshotResult, ModifyDBSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ModifyDBSnapshotRequest {
+    type Output = ModifyDBSnapshotResponse;
+    type Error = ModifyDBSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBSnapshot");
         params.put("Version", "2014-10-31");
-        ModifyDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        ModifyDBSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -28609,7 +30826,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyDBSnapshotResult::default();
+                    result = ModifyDBSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -28619,7 +30836,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyDBSnapshotResultDeserializer::deserialize(
+                    result = ModifyDBSnapshotResponseDeserializer::deserialize(
                         "ModifyDBSnapshotResult",
                         &mut stack,
                     )?;
@@ -28631,22 +30848,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Adds an attribute and values to, or removes an attribute and values from, a manual DB snapshot.</p> <p>To share a manual DB snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB snapshot. Uses the value <code>all</code> to make the manual DB snapshot public, which means it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB snapshots that contain private information that you don't want available to all AWS accounts. If the manual DB snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can't use <code>all</code> as a value for that parameter in this case.</p> <p>To view which AWS accounts have access to copy or restore a manual DB snapshot, or whether a manual DB snapshot public or private, use the <code>DescribeDBSnapshotAttributes</code> API action.</p>
-    fn modify_db_snapshot_attribute(
-        &self,
-        input: ModifyDBSnapshotAttributeMessage,
-    ) -> RusotoFuture<ModifyDBSnapshotAttributeResult, ModifyDBSnapshotAttributeError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ModifyDBSnapshotAttributeRequest {
+    type Output = ModifyDBSnapshotAttributeResponse;
+    type Error = ModifyDBSnapshotAttributeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBSnapshotAttribute");
         params.put("Version", "2014-10-31");
-        ModifyDBSnapshotAttributeMessageSerializer::serialize(&mut params, "", &input);
+        ModifyDBSnapshotAttributeRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyDBSnapshotAttributeError::from_response(response))
@@ -28657,7 +30879,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyDBSnapshotAttributeResult::default();
+                    result = ModifyDBSnapshotAttributeResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -28667,7 +30889,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyDBSnapshotAttributeResultDeserializer::deserialize(
+                    result = ModifyDBSnapshotAttributeResponseDeserializer::deserialize(
                         "ModifyDBSnapshotAttributeResult",
                         &mut stack,
                     )?;
@@ -28679,22 +30901,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies an existing DB subnet group. DB subnet groups must contain at least one subnet in at least two AZs in the AWS Region.</p>
-    fn modify_db_subnet_group(
-        &self,
-        input: ModifyDBSubnetGroupMessage,
-    ) -> RusotoFuture<ModifyDBSubnetGroupResult, ModifyDBSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ModifyDBSubnetGroupRequest {
+    type Output = ModifyDBSubnetGroupResponse;
+    type Error = ModifyDBSubnetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBSubnetGroup");
         params.put("Version", "2014-10-31");
-        ModifyDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
+        ModifyDBSubnetGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -28707,7 +30934,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyDBSubnetGroupResult::default();
+                    result = ModifyDBSubnetGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -28717,7 +30944,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyDBSubnetGroupResultDeserializer::deserialize(
+                    result = ModifyDBSubnetGroupResponseDeserializer::deserialize(
                         "ModifyDBSubnetGroupResult",
                         &mut stack,
                     )?;
@@ -28729,22 +30956,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies an existing RDS event notification subscription. Note that you can't modify the source identifiers using this call; to change source identifiers for a subscription, use the <code>AddSourceIdentifierToSubscription</code> and <code>RemoveSourceIdentifierFromSubscription</code> calls.</p> <p>You can see a list of the event categories for a given SourceType in the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html">Events</a> topic in the <i>Amazon RDS User Guide</i> or by using the <b>DescribeEventCategories</b> action.</p>
-    fn modify_event_subscription(
-        &self,
-        input: ModifyEventSubscriptionMessage,
-    ) -> RusotoFuture<ModifyEventSubscriptionResult, ModifyEventSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ModifyEventSubscriptionRequest {
+    type Output = ModifyEventSubscriptionResponse;
+    type Error = ModifyEventSubscriptionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyEventSubscription");
         params.put("Version", "2014-10-31");
-        ModifyEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
+        ModifyEventSubscriptionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyEventSubscriptionError::from_response(response))
@@ -28755,7 +30987,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyEventSubscriptionResult::default();
+                    result = ModifyEventSubscriptionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -28765,7 +30997,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyEventSubscriptionResultDeserializer::deserialize(
+                    result = ModifyEventSubscriptionResponseDeserializer::deserialize(
                         "ModifyEventSubscriptionResult",
                         &mut stack,
                     )?;
@@ -28777,22 +31009,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p> Modify a setting for an Amazon Aurora global cluster. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn modify_global_cluster(
-        &self,
-        input: ModifyGlobalClusterMessage,
-    ) -> RusotoFuture<ModifyGlobalClusterResult, ModifyGlobalClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ModifyGlobalClusterRequest {
+    type Output = ModifyGlobalClusterResponse;
+    type Error = ModifyGlobalClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyGlobalCluster");
         params.put("Version", "2014-10-31");
-        ModifyGlobalClusterMessageSerializer::serialize(&mut params, "", &input);
+        ModifyGlobalClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -28805,7 +31042,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyGlobalClusterResult::default();
+                    result = ModifyGlobalClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -28815,7 +31052,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyGlobalClusterResultDeserializer::deserialize(
+                    result = ModifyGlobalClusterResponseDeserializer::deserialize(
                         "ModifyGlobalClusterResult",
                         &mut stack,
                     )?;
@@ -28827,22 +31064,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies an existing option group.</p>
-    fn modify_option_group(
-        &self,
-        input: ModifyOptionGroupMessage,
-    ) -> RusotoFuture<ModifyOptionGroupResult, ModifyOptionGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ModifyOptionGroupRequest {
+    type Output = ModifyOptionGroupResponse;
+    type Error = ModifyOptionGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyOptionGroup");
         params.put("Version", "2014-10-31");
-        ModifyOptionGroupMessageSerializer::serialize(&mut params, "", &input);
+        ModifyOptionGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -28856,7 +31098,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyOptionGroupResult::default();
+                    result = ModifyOptionGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -28866,7 +31108,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyOptionGroupResultDeserializer::deserialize(
+                    result = ModifyOptionGroupResponseDeserializer::deserialize(
                         "ModifyOptionGroupResult",
                         &mut stack,
                     )?;
@@ -28878,22 +31120,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Promotes a Read Replica DB instance to a standalone DB instance.</p> <note> <ul> <li> <p>Backup duration is a function of the amount of changes to the database since the previous backup. If you plan to promote a Read Replica to a standalone instance, we recommend that you enable backups and complete at least one backup prior to promotion. In addition, a Read Replica cannot be promoted to a standalone instance when it is in the <code>backing-up</code> status. If you have enabled backups on your Read Replica, configure the automated backup window so that daily backups do not interfere with Read Replica promotion.</p> </li> <li> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL.</p> </li> </ul> </note></p>
-    fn promote_read_replica(
-        &self,
-        input: PromoteReadReplicaMessage,
-    ) -> RusotoFuture<PromoteReadReplicaResult, PromoteReadReplicaError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for PromoteReadReplicaRequest {
+    type Output = PromoteReadReplicaResponse;
+    type Error = PromoteReadReplicaError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PromoteReadReplica");
         params.put("Version", "2014-10-31");
-        PromoteReadReplicaMessageSerializer::serialize(&mut params, "", &input);
+        PromoteReadReplicaRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -28907,7 +31154,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = PromoteReadReplicaResult::default();
+                    result = PromoteReadReplicaResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -28917,7 +31164,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = PromoteReadReplicaResultDeserializer::deserialize(
+                    result = PromoteReadReplicaResponseDeserializer::deserialize(
                         "PromoteReadReplicaResult",
                         &mut stack,
                     )?;
@@ -28929,22 +31176,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Promotes a Read Replica DB cluster to a standalone DB cluster.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn promote_read_replica_db_cluster(
-        &self,
-        input: PromoteReadReplicaDBClusterMessage,
-    ) -> RusotoFuture<PromoteReadReplicaDBClusterResult, PromoteReadReplicaDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for PromoteReadReplicaDBClusterRequest {
+    type Output = PromoteReadReplicaDBClusterResponse;
+    type Error = PromoteReadReplicaDBClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PromoteReadReplicaDBCluster");
         params.put("Version", "2014-10-31");
-        PromoteReadReplicaDBClusterMessageSerializer::serialize(&mut params, "", &input);
+        PromoteReadReplicaDBClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PromoteReadReplicaDBClusterError::from_response(response))
@@ -28955,7 +31207,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = PromoteReadReplicaDBClusterResult::default();
+                    result = PromoteReadReplicaDBClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -28965,7 +31217,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = PromoteReadReplicaDBClusterResultDeserializer::deserialize(
+                    result = PromoteReadReplicaDBClusterResponseDeserializer::deserialize(
                         "PromoteReadReplicaDBClusterResult",
                         &mut stack,
                     )?;
@@ -28977,25 +31229,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Purchases a reserved DB instance offering.</p>
-    fn purchase_reserved_db_instances_offering(
-        &self,
-        input: PurchaseReservedDBInstancesOfferingMessage,
-    ) -> RusotoFuture<
-        PurchaseReservedDBInstancesOfferingResult,
-        PurchaseReservedDBInstancesOfferingError,
-    > {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for PurchaseReservedDBInstancesOfferingRequest {
+    type Output = PurchaseReservedDBInstancesOfferingResponse;
+    type Error = PurchaseReservedDBInstancesOfferingError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PurchaseReservedDBInstancesOffering");
         params.put("Version", "2014-10-31");
-        PurchaseReservedDBInstancesOfferingMessageSerializer::serialize(&mut params, "", &input);
+        PurchaseReservedDBInstancesOfferingRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PurchaseReservedDBInstancesOfferingError::from_response(
@@ -29008,7 +31262,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = PurchaseReservedDBInstancesOfferingResult::default();
+                    result = PurchaseReservedDBInstancesOfferingResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -29018,7 +31272,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = PurchaseReservedDBInstancesOfferingResultDeserializer::deserialize(
+                    result = PurchaseReservedDBInstancesOfferingResponseDeserializer::deserialize(
                         "PurchaseReservedDBInstancesOfferingResult",
                         &mut stack,
                     )?;
@@ -29030,22 +31284,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>You might need to reboot your DB instance, usually for maintenance reasons. For example, if you make certain modifications, or if you change the DB parameter group associated with the DB instance, you must reboot the instance for the changes to take effect. </p> <p>Rebooting a DB instance restarts the database engine service. Rebooting a DB instance results in a momentary outage, during which the DB instance status is set to rebooting. </p> <p>For more information about rebooting, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_RebootInstance.html">Rebooting a DB Instance</a> in the <i>Amazon RDS User Guide.</i> </p>
-    fn reboot_db_instance(
-        &self,
-        input: RebootDBInstanceMessage,
-    ) -> RusotoFuture<RebootDBInstanceResult, RebootDBInstanceError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for RebootDBInstanceRequest {
+    type Output = RebootDBInstanceResponse;
+    type Error = RebootDBInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RebootDBInstance");
         params.put("Version", "2014-10-31");
-        RebootDBInstanceMessageSerializer::serialize(&mut params, "", &input);
+        RebootDBInstanceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -29059,7 +31318,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RebootDBInstanceResult::default();
+                    result = RebootDBInstanceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -29069,7 +31328,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RebootDBInstanceResultDeserializer::deserialize(
+                    result = RebootDBInstanceResponseDeserializer::deserialize(
                         "RebootDBInstanceResult",
                         &mut stack,
                     )?;
@@ -29081,22 +31340,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p> Detaches an Aurora secondary cluster from an Aurora global database cluster. The cluster becomes a standalone cluster with read-write capability instead of being read-only and receiving data from a primary cluster in a different region. </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn remove_from_global_cluster(
-        &self,
-        input: RemoveFromGlobalClusterMessage,
-    ) -> RusotoFuture<RemoveFromGlobalClusterResult, RemoveFromGlobalClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for RemoveFromGlobalClusterRequest {
+    type Output = RemoveFromGlobalClusterResponse;
+    type Error = RemoveFromGlobalClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RemoveFromGlobalCluster");
         params.put("Version", "2014-10-31");
-        RemoveFromGlobalClusterMessageSerializer::serialize(&mut params, "", &input);
+        RemoveFromGlobalClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RemoveFromGlobalClusterError::from_response(response))
@@ -29107,7 +31371,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RemoveFromGlobalClusterResult::default();
+                    result = RemoveFromGlobalClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -29117,7 +31381,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RemoveFromGlobalClusterResultDeserializer::deserialize(
+                    result = RemoveFromGlobalClusterResponseDeserializer::deserialize(
                         "RemoveFromGlobalClusterResult",
                         &mut stack,
                     )?;
@@ -29129,75 +31393,127 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Disassociates an AWS Identity and Access Management (IAM) role from an Amazon Aurora DB cluster. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Integrating.Authorizing.html">Authorizing Amazon Aurora MySQL to Access Other AWS Services on Your Behalf </a> in the <i>Amazon Aurora User Guide</i>.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn remove_role_from_db_cluster(
-        &self,
-        input: RemoveRoleFromDBClusterMessage,
-    ) -> RusotoFuture<(), RemoveRoleFromDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for RemoveRoleFromDBClusterRequest {
+    type Output = RemoveRoleFromDBClusterResponse;
+    type Error = RemoveRoleFromDBClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RemoveRoleFromDBCluster");
         params.put("Version", "2014-10-31");
-        RemoveRoleFromDBClusterMessageSerializer::serialize(&mut params, "", &input);
+        RemoveRoleFromDBClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RemoveRoleFromDBClusterError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = RemoveRoleFromDBClusterResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = RemoveRoleFromDBClusterResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Disassociates an AWS Identity and Access Management (IAM) role from a DB instance.</p>
-    fn remove_role_from_db_instance(
-        &self,
-        input: RemoveRoleFromDBInstanceMessage,
-    ) -> RusotoFuture<(), RemoveRoleFromDBInstanceError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for RemoveRoleFromDBInstanceRequest {
+    type Output = RemoveRoleFromDBInstanceResponse;
+    type Error = RemoveRoleFromDBInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RemoveRoleFromDBInstance");
         params.put("Version", "2014-10-31");
-        RemoveRoleFromDBInstanceMessageSerializer::serialize(&mut params, "", &input);
+        RemoveRoleFromDBInstanceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RemoveRoleFromDBInstanceError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = RemoveRoleFromDBInstanceResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = RemoveRoleFromDBInstanceResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Removes a source identifier from an existing RDS event notification subscription.</p>
-    fn remove_source_identifier_from_subscription(
-        &self,
-        input: RemoveSourceIdentifierFromSubscriptionMessage,
-    ) -> RusotoFuture<
-        RemoveSourceIdentifierFromSubscriptionResult,
-        RemoveSourceIdentifierFromSubscriptionError,
-    > {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for RemoveSourceIdentifierFromSubscriptionRequest {
+    type Output = RemoveSourceIdentifierFromSubscriptionResponse;
+    type Error = RemoveSourceIdentifierFromSubscriptionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RemoveSourceIdentifierFromSubscription");
         params.put("Version", "2014-10-31");
-        RemoveSourceIdentifierFromSubscriptionMessageSerializer::serialize(&mut params, "", &input);
+        RemoveSourceIdentifierFromSubscriptionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RemoveSourceIdentifierFromSubscriptionError::from_response(
@@ -29210,7 +31526,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RemoveSourceIdentifierFromSubscriptionResult::default();
+                    result = RemoveSourceIdentifierFromSubscriptionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -29220,10 +31536,11 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RemoveSourceIdentifierFromSubscriptionResultDeserializer::deserialize(
-                        "RemoveSourceIdentifierFromSubscriptionResult",
-                        &mut stack,
-                    )?;
+                    result =
+                        RemoveSourceIdentifierFromSubscriptionResponseDeserializer::deserialize(
+                            "RemoveSourceIdentifierFromSubscriptionResult",
+                            &mut stack,
+                        )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -29232,47 +31549,77 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Removes metadata tags from an Amazon RDS resource.</p> <p>For an overview on tagging an Amazon RDS resource, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html">Tagging Amazon RDS Resources</a> in the <i>Amazon RDS User Guide.</i> </p>
-    fn remove_tags_from_resource(
-        &self,
-        input: RemoveTagsFromResourceMessage,
-    ) -> RusotoFuture<(), RemoveTagsFromResourceError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for RemoveTagsFromResourceRequest {
+    type Output = RemoveTagsFromResourceResponse;
+    type Error = RemoveTagsFromResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RemoveTagsFromResource");
         params.put("Version", "2014-10-31");
-        RemoveTagsFromResourceMessageSerializer::serialize(&mut params, "", &input);
+        RemoveTagsFromResourceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RemoveTagsFromResourceError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = RemoveTagsFromResourceResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = RemoveTagsFromResourceResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p> Modifies the parameters of a DB cluster parameter group to the default value. To reset specific parameters submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB cluster parameter group, specify the <code>DBClusterParameterGroupName</code> and <code>ResetAllParameters</code> parameters. </p> <p> When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <code>RebootDBInstance</code> request. You must call <code>RebootDBInstance</code> for every DB instance in your DB cluster that you want the updated static parameter to apply to.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn reset_db_cluster_parameter_group(
-        &self,
-        input: ResetDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupNameMessage, ResetDBClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ResetDBClusterParameterGroupRequest {
+    type Output = ResetDBClusterParameterGroupResponse;
+    type Error = ResetDBClusterParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ResetDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
-        ResetDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        ResetDBClusterParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ResetDBClusterParameterGroupError::from_response(response))
@@ -29283,7 +31630,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBClusterParameterGroupNameMessage::default();
+                    result = ResetDBClusterParameterGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -29293,7 +31640,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
+                    result = ResetDBClusterParameterGroupResponseDeserializer::deserialize(
                         "ResetDBClusterParameterGroupResult",
                         &mut stack,
                     )?;
@@ -29305,22 +31652,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies the parameters of a DB parameter group to the engine/system default value. To reset specific parameters, provide a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB parameter group, specify the <code>DBParameterGroup</code> name and <code>ResetAllParameters</code> parameters. When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <code>RebootDBInstance</code> request. </p>
-    fn reset_db_parameter_group(
-        &self,
-        input: ResetDBParameterGroupMessage,
-    ) -> RusotoFuture<DBParameterGroupNameMessage, ResetDBParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ResetDBParameterGroupRequest {
+    type Output = ResetDBParameterGroupResponse;
+    type Error = ResetDBParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ResetDBParameterGroup");
         params.put("Version", "2014-10-31");
-        ResetDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        ResetDBParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ResetDBParameterGroupError::from_response(response))
@@ -29331,7 +31683,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBParameterGroupNameMessage::default();
+                    result = ResetDBParameterGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -29341,7 +31693,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBParameterGroupNameMessageDeserializer::deserialize(
+                    result = ResetDBParameterGroupResponseDeserializer::deserialize(
                         "ResetDBParameterGroupResult",
                         &mut stack,
                     )?;
@@ -29353,22 +31705,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Creates an Amazon Aurora DB cluster from data stored in an Amazon S3 bucket. Amazon RDS must be authorized to access the Amazon S3 bucket and the data must be created using the Percona XtraBackup utility as described in <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Migrating.html"> Migrating Data to an Amazon Aurora MySQL DB Cluster</a> in the <i>Amazon Aurora User Guide</i>.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn restore_db_cluster_from_s3(
-        &self,
-        input: RestoreDBClusterFromS3Message,
-    ) -> RusotoFuture<RestoreDBClusterFromS3Result, RestoreDBClusterFromS3Error> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for RestoreDBClusterFromS3Request {
+    type Output = RestoreDBClusterFromS3Response;
+    type Error = RestoreDBClusterFromS3Error;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RestoreDBClusterFromS3");
         params.put("Version", "2014-10-31");
-        RestoreDBClusterFromS3MessageSerializer::serialize(&mut params, "", &input);
+        RestoreDBClusterFromS3RequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RestoreDBClusterFromS3Error::from_response(response))
@@ -29379,7 +31736,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RestoreDBClusterFromS3Result::default();
+                    result = RestoreDBClusterFromS3Response::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -29389,7 +31746,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RestoreDBClusterFromS3ResultDeserializer::deserialize(
+                    result = RestoreDBClusterFromS3ResponseDeserializer::deserialize(
                         "RestoreDBClusterFromS3Result",
                         &mut stack,
                     )?;
@@ -29401,22 +31758,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Creates a new DB cluster from a DB snapshot or DB cluster snapshot.</p> <p>If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group.</p> <p>If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn restore_db_cluster_from_snapshot(
-        &self,
-        input: RestoreDBClusterFromSnapshotMessage,
-    ) -> RusotoFuture<RestoreDBClusterFromSnapshotResult, RestoreDBClusterFromSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for RestoreDBClusterFromSnapshotRequest {
+    type Output = RestoreDBClusterFromSnapshotResponse;
+    type Error = RestoreDBClusterFromSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RestoreDBClusterFromSnapshot");
         params.put("Version", "2014-10-31");
-        RestoreDBClusterFromSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        RestoreDBClusterFromSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RestoreDBClusterFromSnapshotError::from_response(response))
@@ -29427,7 +31789,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RestoreDBClusterFromSnapshotResult::default();
+                    result = RestoreDBClusterFromSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -29437,7 +31799,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RestoreDBClusterFromSnapshotResultDeserializer::deserialize(
+                    result = RestoreDBClusterFromSnapshotResponseDeserializer::deserialize(
                         "RestoreDBClusterFromSnapshotResult",
                         &mut stack,
                     )?;
@@ -29449,22 +31811,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Restores a DB cluster to an arbitrary point in time. Users can restore to any point in time before <code>LatestRestorableTime</code> for up to <code>BackupRetentionPeriod</code> days. The target DB cluster is created from the source DB cluster with the same configuration as the original DB cluster, except that the new DB cluster is created with the default DB security group. </p> <note> <p>This action only restores the DB cluster, not the DB instances for that DB cluster. You must invoke the <code>CreateDBInstance</code> action to create DB instances for the restored DB cluster, specifying the identifier of the restored DB cluster in <code>DBClusterIdentifier</code>. You can create DB instances only after the <code>RestoreDBClusterToPointInTime</code> action has completed and the DB cluster is available.</p> </note> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn restore_db_cluster_to_point_in_time(
-        &self,
-        input: RestoreDBClusterToPointInTimeMessage,
-    ) -> RusotoFuture<RestoreDBClusterToPointInTimeResult, RestoreDBClusterToPointInTimeError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for RestoreDBClusterToPointInTimeRequest {
+    type Output = RestoreDBClusterToPointInTimeResponse;
+    type Error = RestoreDBClusterToPointInTimeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RestoreDBClusterToPointInTime");
         params.put("Version", "2014-10-31");
-        RestoreDBClusterToPointInTimeMessageSerializer::serialize(&mut params, "", &input);
+        RestoreDBClusterToPointInTimeRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RestoreDBClusterToPointInTimeError::from_response(response))
@@ -29475,7 +31842,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RestoreDBClusterToPointInTimeResult::default();
+                    result = RestoreDBClusterToPointInTimeResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -29485,7 +31852,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RestoreDBClusterToPointInTimeResultDeserializer::deserialize(
+                    result = RestoreDBClusterToPointInTimeResponseDeserializer::deserialize(
                         "RestoreDBClusterToPointInTimeResult",
                         &mut stack,
                     )?;
@@ -29497,23 +31864,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Creates a new DB instance from a DB snapshot. The target database is created from the source database restore point with the most of original configuration with the default security group and the default DB parameter group. By default, the new DB instance is created as a single-AZ deployment except when the instance is a SQL Server instance that has an option group that is associated with mirroring; in this case, the instance becomes a mirrored AZ deployment and not a single-AZ deployment.</p> <p>If your intent is to replace your original DB instance with the new, restored DB instance, then rename your original DB instance before you call the RestoreDBInstanceFromDBSnapshot action. RDS doesn&#39;t allow two DB instances with the same name. Once you have renamed your original DB instance with a different identifier, then you can pass the original name of the DB instance as the DBInstanceIdentifier in the call to the RestoreDBInstanceFromDBSnapshot action. The result is that you will replace the original DB instance with the DB instance created from the snapshot.</p> <p>If you are restoring from a shared manual DB snapshot, the <code>DBSnapshotIdentifier</code> must be the ARN of the shared DB snapshot.</p> <note> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL. For Aurora, use <code>RestoreDBClusterFromSnapshot</code>.</p> </note></p>
-    fn restore_db_instance_from_db_snapshot(
-        &self,
-        input: RestoreDBInstanceFromDBSnapshotMessage,
-    ) -> RusotoFuture<RestoreDBInstanceFromDBSnapshotResult, RestoreDBInstanceFromDBSnapshotError>
-    {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for RestoreDBInstanceFromDBSnapshotRequest {
+    type Output = RestoreDBInstanceFromDBSnapshotResponse;
+    type Error = RestoreDBInstanceFromDBSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RestoreDBInstanceFromDBSnapshot");
         params.put("Version", "2014-10-31");
-        RestoreDBInstanceFromDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        RestoreDBInstanceFromDBSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RestoreDBInstanceFromDBSnapshotError::from_response(
@@ -29526,7 +31897,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RestoreDBInstanceFromDBSnapshotResult::default();
+                    result = RestoreDBInstanceFromDBSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -29536,7 +31907,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RestoreDBInstanceFromDBSnapshotResultDeserializer::deserialize(
+                    result = RestoreDBInstanceFromDBSnapshotResponseDeserializer::deserialize(
                         "RestoreDBInstanceFromDBSnapshotResult",
                         &mut stack,
                     )?;
@@ -29548,22 +31919,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Amazon Relational Database Service (Amazon RDS) supports importing MySQL databases by using backup files. You can create a backup of your on-premises database, store it on Amazon Simple Storage Service (Amazon S3), and then restore the backup file onto a new Amazon RDS DB instance running MySQL. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/MySQL.Procedural.Importing.html">Importing Data into an Amazon RDS MySQL DB Instance</a> in the <i>Amazon RDS User Guide.</i> </p>
-    fn restore_db_instance_from_s3(
-        &self,
-        input: RestoreDBInstanceFromS3Message,
-    ) -> RusotoFuture<RestoreDBInstanceFromS3Result, RestoreDBInstanceFromS3Error> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for RestoreDBInstanceFromS3Request {
+    type Output = RestoreDBInstanceFromS3Response;
+    type Error = RestoreDBInstanceFromS3Error;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RestoreDBInstanceFromS3");
         params.put("Version", "2014-10-31");
-        RestoreDBInstanceFromS3MessageSerializer::serialize(&mut params, "", &input);
+        RestoreDBInstanceFromS3RequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RestoreDBInstanceFromS3Error::from_response(response))
@@ -29574,7 +31950,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RestoreDBInstanceFromS3Result::default();
+                    result = RestoreDBInstanceFromS3Response::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -29584,7 +31960,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RestoreDBInstanceFromS3ResultDeserializer::deserialize(
+                    result = RestoreDBInstanceFromS3ResponseDeserializer::deserialize(
                         "RestoreDBInstanceFromS3Result",
                         &mut stack,
                     )?;
@@ -29596,23 +31972,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Restores a DB instance to an arbitrary point in time. You can restore to any point in time before the time identified by the LatestRestorableTime property. You can restore to a point up to the number of days specified by the BackupRetentionPeriod property.</p> <p>The target database is created with most of the original configuration, but in a system-selected Availability Zone, with the default security group, the default subnet group, and the default DB parameter group. By default, the new DB instance is created as a single-AZ deployment except when the instance is a SQL Server instance that has an option group that is associated with mirroring; in this case, the instance becomes a mirrored deployment and not a single-AZ deployment.</p> <note> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL. For Aurora, use <code>RestoreDBClusterToPointInTime</code>.</p> </note></p>
-    fn restore_db_instance_to_point_in_time(
-        &self,
-        input: RestoreDBInstanceToPointInTimeMessage,
-    ) -> RusotoFuture<RestoreDBInstanceToPointInTimeResult, RestoreDBInstanceToPointInTimeError>
-    {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for RestoreDBInstanceToPointInTimeRequest {
+    type Output = RestoreDBInstanceToPointInTimeResponse;
+    type Error = RestoreDBInstanceToPointInTimeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RestoreDBInstanceToPointInTime");
         params.put("Version", "2014-10-31");
-        RestoreDBInstanceToPointInTimeMessageSerializer::serialize(&mut params, "", &input);
+        RestoreDBInstanceToPointInTimeRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RestoreDBInstanceToPointInTimeError::from_response(response))
@@ -29623,7 +32003,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RestoreDBInstanceToPointInTimeResult::default();
+                    result = RestoreDBInstanceToPointInTimeResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -29633,7 +32013,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RestoreDBInstanceToPointInTimeResultDeserializer::deserialize(
+                    result = RestoreDBInstanceToPointInTimeResponseDeserializer::deserialize(
                         "RestoreDBInstanceToPointInTimeResult",
                         &mut stack,
                     )?;
@@ -29645,22 +32025,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p>Revokes ingress from a DBSecurityGroup for previously authorized IP ranges or EC2 or VPC Security Groups. Required parameters for this API are one of CIDRIP, EC2SecurityGroupId for VPC, or (EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId).</p>
-    fn revoke_db_security_group_ingress(
-        &self,
-        input: RevokeDBSecurityGroupIngressMessage,
-    ) -> RusotoFuture<RevokeDBSecurityGroupIngressResult, RevokeDBSecurityGroupIngressError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for RevokeDBSecurityGroupIngressRequest {
+    type Output = RevokeDBSecurityGroupIngressResponse;
+    type Error = RevokeDBSecurityGroupIngressError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RevokeDBSecurityGroupIngress");
         params.put("Version", "2014-10-31");
-        RevokeDBSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
+        RevokeDBSecurityGroupIngressRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RevokeDBSecurityGroupIngressError::from_response(response))
@@ -29671,7 +32056,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RevokeDBSecurityGroupIngressResult::default();
+                    result = RevokeDBSecurityGroupIngressResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -29681,7 +32066,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RevokeDBSecurityGroupIngressResultDeserializer::deserialize(
+                    result = RevokeDBSecurityGroupIngressResponseDeserializer::deserialize(
                         "RevokeDBSecurityGroupIngressResult",
                         &mut stack,
                     )?;
@@ -29693,22 +32078,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p>Starts an Amazon Aurora DB cluster that was stopped using the AWS console, the stop-db-cluster AWS CLI command, or the StopDBCluster action.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-cluster-stop-start.html"> Stopping and Starting an Aurora Cluster</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn start_db_cluster(
-        &self,
-        input: StartDBClusterMessage,
-    ) -> RusotoFuture<StartDBClusterResult, StartDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for StartDBClusterRequest {
+    type Output = StartDBClusterResponse;
+    type Error = StartDBClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "StartDBCluster");
         params.put("Version", "2014-10-31");
-        StartDBClusterMessageSerializer::serialize(&mut params, "", &input);
+        StartDBClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -29722,7 +32112,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = StartDBClusterResult::default();
+                    result = StartDBClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -29732,7 +32122,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = StartDBClusterResultDeserializer::deserialize(
+                    result = StartDBClusterResponseDeserializer::deserialize(
                         "StartDBClusterResult",
                         &mut stack,
                     )?;
@@ -29744,22 +32134,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p> Starts an Amazon RDS DB instance that was stopped using the AWS console, the stop-db-instance AWS CLI command, or the StopDBInstance action. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_StartInstance.html"> Starting an Amazon RDS DB instance That Was Previously Stopped</a> in the <i>Amazon RDS User Guide.</i> </p> <note> <p> This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL. For Aurora DB clusters, use <code>StartDBCluster</code> instead. </p> </note></p>
-    fn start_db_instance(
-        &self,
-        input: StartDBInstanceMessage,
-    ) -> RusotoFuture<StartDBInstanceResult, StartDBInstanceError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for StartDBInstanceRequest {
+    type Output = StartDBInstanceResponse;
+    type Error = StartDBInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "StartDBInstance");
         params.put("Version", "2014-10-31");
-        StartDBInstanceMessageSerializer::serialize(&mut params, "", &input);
+        StartDBInstanceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -29773,7 +32168,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = StartDBInstanceResult::default();
+                    result = StartDBInstanceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -29783,7 +32178,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = StartDBInstanceResultDeserializer::deserialize(
+                    result = StartDBInstanceResponseDeserializer::deserialize(
                         "StartDBInstanceResult",
                         &mut stack,
                     )?;
@@ -29795,22 +32190,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p> Stops an Amazon Aurora DB cluster. When you stop a DB cluster, Aurora retains the DB cluster&#39;s metadata, including its endpoints and DB parameter groups. Aurora also retains the transaction logs so you can do a point-in-time restore if necessary. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-cluster-stop-start.html"> Stopping and Starting an Aurora Cluster</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
-    fn stop_db_cluster(
-        &self,
-        input: StopDBClusterMessage,
-    ) -> RusotoFuture<StopDBClusterResult, StopDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for StopDBClusterRequest {
+    type Output = StopDBClusterResponse;
+    type Error = StopDBClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "StopDBCluster");
         params.put("Version", "2014-10-31");
-        StopDBClusterMessageSerializer::serialize(&mut params, "", &input);
+        StopDBClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -29824,7 +32224,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = StopDBClusterResult::default();
+                    result = StopDBClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -29834,7 +32234,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = StopDBClusterResultDeserializer::deserialize(
+                    result = StopDBClusterResponseDeserializer::deserialize(
                         "StopDBClusterResult",
                         &mut stack,
                     )?;
@@ -29846,22 +32246,27 @@ impl Rds for RdsClient {
             }))
         })
     }
+}
 
-    /// <p><p> Stops an Amazon RDS DB instance. When you stop a DB instance, Amazon RDS retains the DB instance&#39;s metadata, including its endpoint, DB parameter group, and option group membership. Amazon RDS also retains the transaction logs so you can do a point-in-time restore if necessary. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_StopInstance.html"> Stopping an Amazon RDS DB Instance Temporarily</a> in the <i>Amazon RDS User Guide.</i> </p> <note> <p> This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL. For Aurora clusters, use <code>StopDBCluster</code> instead. </p> </note></p>
-    fn stop_db_instance(
-        &self,
-        input: StopDBInstanceMessage,
-    ) -> RusotoFuture<StopDBInstanceResult, StopDBInstanceError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for StopDBInstanceRequest {
+    type Output = StopDBInstanceResponse;
+    type Error = StopDBInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "StopDBInstance");
         params.put("Version", "2014-10-31");
-        StopDBInstanceMessageSerializer::serialize(&mut params, "", &input);
+        StopDBInstanceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -29875,7 +32280,7 @@ impl Rds for RdsClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = StopDBInstanceResult::default();
+                    result = StopDBInstanceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -29885,7 +32290,7 @@ impl Rds for RdsClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = StopDBInstanceResultDeserializer::deserialize(
+                    result = StopDBInstanceResponseDeserializer::deserialize(
                         "StopDBInstanceResult",
                         &mut stack,
                     )?;
@@ -29916,7 +32321,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = RdsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeDBInstancesMessage::default();
+        let request = DescribeDBInstancesRequest::default();
         let result = client.describe_db_instances(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
@@ -29929,7 +32334,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeDBEngineVersionsMessage::default();
+        let request = DescribeDBEngineVersionsRequest::default();
         let result = client.describe_db_engine_versions(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -29942,7 +32347,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeDBInstancesMessage::default();
+        let request = DescribeDBInstancesRequest::default();
         let result = client.describe_db_instances(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -29955,7 +32360,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeDBParameterGroupsMessage::default();
+        let request = DescribeDBParameterGroupsRequest::default();
         let result = client.describe_db_parameter_groups(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -29968,7 +32373,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeDBSecurityGroupsMessage::default();
+        let request = DescribeDBSecurityGroupsRequest::default();
         let result = client.describe_db_security_groups(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -29981,7 +32386,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeDBSnapshotsMessage::default();
+        let request = DescribeDBSnapshotsRequest::default();
         let result = client.describe_db_snapshots(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -29994,7 +32399,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeDBSubnetGroupsMessage::default();
+        let request = DescribeDBSubnetGroupsRequest::default();
         let result = client.describe_db_subnet_groups(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -30007,7 +32412,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeEventCategoriesMessage::default();
+        let request = DescribeEventCategoriesRequest::default();
         let result = client.describe_event_categories(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -30020,7 +32425,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeEventSubscriptionsMessage::default();
+        let request = DescribeEventSubscriptionsRequest::default();
         let result = client.describe_event_subscriptions(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -30033,7 +32438,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeEventsMessage::default();
+        let request = DescribeEventsRequest::default();
         let result = client.describe_events(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -30046,7 +32451,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeOptionGroupsMessage::default();
+        let request = DescribeOptionGroupsRequest::default();
         let result = client.describe_option_groups(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -30059,7 +32464,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeReservedDBInstancesOfferingsMessage::default();
+        let request = DescribeReservedDBInstancesOfferingsRequest::default();
         let result = client
             .describe_reserved_db_instances_offerings(request)
             .sync();
@@ -30074,7 +32479,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeReservedDBInstancesMessage::default();
+        let request = DescribeReservedDBInstancesRequest::default();
         let result = client.describe_reserved_db_instances(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }

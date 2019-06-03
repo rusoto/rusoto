@@ -30,38 +30,63 @@ impl GenerateProtocol for RestXmlGenerator {
 
     fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         for (operation_name, operation) in service.operations().iter() {
+            let input = match service.has_non_empty_input_shape(operation) {
+                true => "input".to_owned(),
+                false => format!("{} {{}}", operation.input_shape())
+            };
+
+            writeln!(writer,
+                     "{documentation}
+                    {method_signature} {{
+                        Request::new({input}, self.region.clone(), self.client.clone())
+                    }}
+                    ",
+                     documentation = generate_documentation(operation, service),
+                     method_signature = generate_method_signature(operation_name, operation, service),
+                     input = input)?;
+        }
+        Ok(())
+    }
+
+    fn generate_operations(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
+        for (operation_name, operation) in service.operations().iter() {
             let (request_uri, _) =
                 rest_request_generator::parse_query_string(&operation.http.request_uri);
             let parse_non_payload =
                 rest_response_parser::generate_response_headers_parser(service, operation)
                     .unwrap_or_else(|| "".to_owned());
             writeln!(writer,
-                     "{documentation}
-                    #[allow(unused_variables, warnings)]
-                    {method_signature} {{
-                        {modify_uri}
+                     "
+                    impl ServiceRequest for {input_type} {{
+                        type Output = {output_type};
+                        type Error = {error_type};
 
-                        let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", &self.region, &request_uri);
+                        #[allow(unused_variables, warnings)]
+                        fn dispatch(self, region: &region::Region, dispatcher: &impl Dispatcher) -> RusotoFuture<Self::Output, Self::Error> {{
+                            {modify_uri}
 
-                        {set_headers}
-                        {set_parameters}
-                        {build_payload}
+                            let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", region, &request_uri);
 
-                        self.client.sign_and_dispatch(request, |response| {{
-                            if !response.status.is_success() {{
-                                return Box::new(response.buffer().from_err().and_then(|response| {{
-                                    Err({error_type}::from_response(response))
-                                }}));
-                            }}
+                            {set_headers}
+                            {set_parameters}
+                            {build_payload}
 
-                            {parse_response_body}
-                        }})
+                            dispatcher.dispatch(request, |response| {{
+                                if !response.status.is_success() {{
+                                    return Box::new(response.buffer().from_err().and_then(|response| {{
+                                        Err({error_type}::from_response(response))
+                                    }}));
+                                }}
+
+                                {parse_response_body}
+                            }})
+                        }}
                     }}
                     ",
-                     documentation = generate_documentation(operation, service),
+                     input_type = operation.input_shape_or("()"),
+                     output_type = operation.output_shape_or("()"),
                      http_method = &operation.http.method,
                      endpoint_prefix = service.endpoint_prefix(),
-                     method_signature = generate_method_signature(operation_name, operation, service),
                      error_type = error_type_name(service, operation_name),
                      build_payload = generate_payload_serialization(service, operation)
                          .unwrap_or_else(|| "".to_string()),
@@ -164,12 +189,12 @@ fn generate_documentation(operation: &Operation, service: &Service<'_>) -> Strin
 
 fn generate_payload_serialization(service: &Service<'_>, operation: &Operation) -> Option<String> {
     // nothing to do if there's no input type
-    if operation.input.is_none() {
+    if !service.has_non_empty_input_shape(operation) {
         return None;
     }
 
-    let input = operation.input.as_ref().unwrap();
-    let input_shape = service.get_shape(&input.shape).unwrap();
+    let input = operation.input.as_ref().expect("no input");
+    let input_shape = service.get_shape(&input.shape).expect("input shape not found");
 
     let mut parts: Vec<String> = Vec::new();
 
@@ -183,10 +208,13 @@ fn generate_payload_serialization(service: &Service<'_>, operation: &Operation) 
         // In Route 53, no operation has "payload" parameter but some API actually requires
         // payload. In that case, the payload should include members whose "location" parameter is
         // missing.
-        let xmlns = input.xml_namespace.as_ref().unwrap();
+        let xmlns = match input.xml_namespace.as_ref() {
+            Some(ns) => ns,
+            None => panic!("input {:?} does not have namespace", input)
+        };
         parts.push("let mut writer = EventWriter::new(Vec::new());".to_owned());
         parts.push(format!(
-            "{name}Serializer::serialize(&mut writer, \"{name}\", &input, \"{xmlns}\");",
+            "{name}Serializer::serialize(&mut writer, \"{name}\", &self, \"{xmlns}\");",
             name = input.shape,
             xmlns = xmlns.uri
         ));
@@ -223,7 +251,7 @@ fn generate_payload_member_serialization(shape: &Shape) -> String {
     // if the member is 'streaming', it's a boxed stream that should just be delivered as the body
     if payload_member.streaming() {
         format!(
-            "if let Some(__body) = input.{} {{
+            "if let Some(__body) = self.{} {{
                      request.set_payload_stream(__body);
                  }}",
             payload_field.to_snake_case()
@@ -233,14 +261,14 @@ fn generate_payload_member_serialization(shape: &Shape) -> String {
     else if shape.required(payload_field) {
         // some payload types are not required members of their shape
         format!("let mut writer = EventWriter::new(Vec::new());
-                 {xml_type}Serializer::serialize(&mut writer, \"{xml_type}\", &input.{payload_field});
+                 {xml_type}Serializer::serialize(&mut writer, \"{xml_type}\", &self.{payload_field});
                  request.set_payload(Some(writer.into_inner()));",
                 payload_field = payload_field.to_snake_case(),
                 xml_type = payload_member.shape)
     } else {
-        format!("if input.{payload_field}.is_some() {{
+        format!("if self.{payload_field}.is_some() {{
                     let mut writer = EventWriter::new(Vec::new());
-                    {xml_type}Serializer::serialize(&mut writer, \"{location_name}\", input.{payload_field}.as_ref().unwrap());
+                    {xml_type}Serializer::serialize(&mut writer, \"{location_name}\", self.{payload_field}.as_ref().unwrap());
                     request.set_payload(Some(writer.into_inner()));
                 }} else {{
                     request.set_payload(Some(Vec::new()));
@@ -256,20 +284,17 @@ fn generate_method_signature(
     operation: &Operation,
     service: &Service<'_>,
 ) -> String {
-    if operation.input.is_some() {
+    if service.has_non_empty_input_shape(operation) {
         format!(
-            "fn {operation_name}(&self, input: {input_type}) -> RusotoFuture<{output_type}, {error_type}>",
-            input_type = operation.input.as_ref().unwrap().shape,
-            operation_name = operation_name.to_snake_case(),
-            output_type = &operation.output_shape_or("()"),
-            error_type = error_type_name(service,  operation_name),
+            "fn {method_name}(&self, input: {input_type}) -> Request<{input_type}>",
+            input_type = operation.input_shape(),
+            method_name = operation_name.to_snake_case()
         )
     } else {
         format!(
-            "fn {operation_name}(&self) -> RusotoFuture<{output_type}, {error_type}>",
-            operation_name = operation_name.to_snake_case(),
-            error_type = error_type_name(service, operation_name),
-            output_type = &operation.output_shape_or("()"),
+            "fn {method_name}(&self) -> Request<{input_type}>",
+            input_type = operation.input_shape(),
+            method_name = operation_name.to_snake_case()
         )
     }
 }

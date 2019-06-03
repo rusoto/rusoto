@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -108,7 +109,7 @@ impl ActionDeserializer {
 /// Serialize `Action` contents to a `SignedRequest`.
 struct ActionSerializer;
 impl ActionSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Action) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Action) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -195,7 +196,7 @@ impl ActionsDeserializer {
 /// Serialize `Actions` contents to a `SignedRequest`.
 struct ActionsSerializer;
 impl ActionsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<Action>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<Action>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             ActionSerializer::serialize(params, &key, obj);
@@ -204,17 +205,21 @@ impl ActionsSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AddListenerCertificatesInput {
+pub struct AddListenerCertificatesRequest {
     /// <p>The certificate to add. You can specify one certificate per call. Set <code>CertificateArn</code> to the certificate ARN but do not set <code>IsDefault</code>.</p>
     pub certificates: Vec<Certificate>,
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     pub listener_arn: String,
 }
 
-/// Serialize `AddListenerCertificatesInput` contents to a `SignedRequest`.
-struct AddListenerCertificatesInputSerializer;
-impl AddListenerCertificatesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AddListenerCertificatesInput) {
+/// Serialize `AddListenerCertificatesRequest` contents to a `SignedRequest`.
+struct AddListenerCertificatesRequestSerializer;
+impl AddListenerCertificatesRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &AddListenerCertificatesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -230,19 +235,19 @@ impl AddListenerCertificatesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AddListenerCertificatesOutput {
+pub struct AddListenerCertificatesResponse {
     /// <p>Information about the certificates.</p>
     pub certificates: Option<Vec<Certificate>>,
 }
 
-struct AddListenerCertificatesOutputDeserializer;
-impl AddListenerCertificatesOutputDeserializer {
+struct AddListenerCertificatesResponseDeserializer;
+impl AddListenerCertificatesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<AddListenerCertificatesOutput, XmlParseError> {
-        deserialize_elements::<_, AddListenerCertificatesOutput, _>(
+    ) -> Result<AddListenerCertificatesResponse, XmlParseError> {
+        deserialize_elements::<_, AddListenerCertificatesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -260,17 +265,17 @@ impl AddListenerCertificatesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AddTagsInput {
+pub struct AddTagsRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     pub resource_arns: Vec<String>,
     /// <p>The tags. Each resource can have a maximum of 10 tags.</p>
     pub tags: Vec<Tag>,
 }
 
-/// Serialize `AddTagsInput` contents to a `SignedRequest`.
-struct AddTagsInputSerializer;
-impl AddTagsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AddTagsInput) {
+/// Serialize `AddTagsRequest` contents to a `SignedRequest`.
+struct AddTagsRequestSerializer;
+impl AddTagsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &AddTagsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -286,18 +291,18 @@ impl AddTagsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AddTagsOutput {}
+pub struct AddTagsResponse {}
 
-struct AddTagsOutputDeserializer;
-impl AddTagsOutputDeserializer {
+struct AddTagsResponseDeserializer;
+impl AddTagsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<AddTagsOutput, XmlParseError> {
+    ) -> Result<AddTagsResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = AddTagsOutput::default();
+        let obj = AddTagsResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -349,7 +354,7 @@ impl AuthenticateCognitoActionAuthenticationRequestExtraParamsDeserializer {
 struct AuthenticateCognitoActionAuthenticationRequestExtraParamsSerializer;
 impl AuthenticateCognitoActionAuthenticationRequestExtraParamsSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &::std::collections::HashMap<String, String>,
     ) {
@@ -486,7 +491,11 @@ impl AuthenticateCognitoActionConfigDeserializer {
 /// Serialize `AuthenticateCognitoActionConfig` contents to a `SignedRequest`.
 struct AuthenticateCognitoActionConfigSerializer;
 impl AuthenticateCognitoActionConfigSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AuthenticateCognitoActionConfig) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &AuthenticateCognitoActionConfig,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -626,7 +635,7 @@ impl AuthenticateOidcActionAuthenticationRequestExtraParamsDeserializer {
 struct AuthenticateOidcActionAuthenticationRequestExtraParamsSerializer;
 impl AuthenticateOidcActionAuthenticationRequestExtraParamsSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &::std::collections::HashMap<String, String>,
     ) {
@@ -833,7 +842,7 @@ impl AuthenticateOidcActionConfigDeserializer {
 /// Serialize `AuthenticateOidcActionConfig` contents to a `SignedRequest`.
 struct AuthenticateOidcActionConfigSerializer;
 impl AuthenticateOidcActionConfigSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AuthenticateOidcActionConfig) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &AuthenticateOidcActionConfig) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1069,7 +1078,7 @@ impl CertificateDeserializer {
 /// Serialize `Certificate` contents to a `SignedRequest`.
 struct CertificateSerializer;
 impl CertificateSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Certificate) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Certificate) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1116,7 +1125,7 @@ impl CertificateListDeserializer {
 /// Serialize `CertificateList` contents to a `SignedRequest`.
 struct CertificateListSerializer;
 impl CertificateListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<Certificate>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<Certificate>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             CertificateSerializer::serialize(params, &key, obj);
@@ -1203,7 +1212,7 @@ impl ConditionFieldNameDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateListenerInput {
+pub struct CreateListenerRequest {
     /// <p>[HTTPS and TLS listeners] The default SSL server certificate. You must provide exactly one certificate. Set <code>CertificateArn</code> to the certificate ARN but do not set <code>IsDefault</code>.</p> <p>To create a certificate list, use <a>AddListenerCertificates</a>.</p>
     pub certificates: Option<Vec<Certificate>>,
     /// <p>The actions for the default rule. The rule must include one forward action or one or more fixed-response actions.</p> <p>If the action type is <code>forward</code>, you specify a target group. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer. The protocol of the target group must be TCP or TLS for a Network Load Balancer.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you authenticate users through an identity provider that is OpenID Connect (OIDC) compliant.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you authenticate users through the user pools supported by Amazon Cognito.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you redirect specified client requests from one URL to another.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you drop specified client requests and return a custom HTTP response.</p>
@@ -1218,10 +1227,10 @@ pub struct CreateListenerInput {
     pub ssl_policy: Option<String>,
 }
 
-/// Serialize `CreateListenerInput` contents to a `SignedRequest`.
-struct CreateListenerInputSerializer;
-impl CreateListenerInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateListenerInput) {
+/// Serialize `CreateListenerRequest` contents to a `SignedRequest`.
+struct CreateListenerRequestSerializer;
+impl CreateListenerRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateListenerRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1252,19 +1261,19 @@ impl CreateListenerInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateListenerOutput {
+pub struct CreateListenerResponse {
     /// <p>Information about the listener.</p>
     pub listeners: Option<Vec<Listener>>,
 }
 
-struct CreateListenerOutputDeserializer;
-impl CreateListenerOutputDeserializer {
+struct CreateListenerResponseDeserializer;
+impl CreateListenerResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateListenerOutput, XmlParseError> {
-        deserialize_elements::<_, CreateListenerOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<CreateListenerResponse, XmlParseError> {
+        deserialize_elements::<_, CreateListenerResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Listeners" => {
                     obj.listeners
@@ -1278,7 +1287,7 @@ impl CreateListenerOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateLoadBalancerInput {
+pub struct CreateLoadBalancerRequest {
     /// <p>[Application Load Balancers] The type of IP addresses used by the subnets for your load balancer. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses). Internal load balancers must use <code>ipv4</code>.</p>
     pub ip_address_type: Option<String>,
     /// <p>The name of the load balancer.</p> <p>This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, must not begin or end with a hyphen, and must not begin with "internal-".</p>
@@ -1297,10 +1306,10 @@ pub struct CreateLoadBalancerInput {
     pub type_: Option<String>,
 }
 
-/// Serialize `CreateLoadBalancerInput` contents to a `SignedRequest`.
-struct CreateLoadBalancerInputSerializer;
-impl CreateLoadBalancerInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateLoadBalancerInput) {
+/// Serialize `CreateLoadBalancerRequest` contents to a `SignedRequest`.
+struct CreateLoadBalancerRequestSerializer;
+impl CreateLoadBalancerRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateLoadBalancerRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1340,19 +1349,19 @@ impl CreateLoadBalancerInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateLoadBalancerOutput {
+pub struct CreateLoadBalancerResponse {
     /// <p>Information about the load balancer.</p>
     pub load_balancers: Option<Vec<LoadBalancer>>,
 }
 
-struct CreateLoadBalancerOutputDeserializer;
-impl CreateLoadBalancerOutputDeserializer {
+struct CreateLoadBalancerResponseDeserializer;
+impl CreateLoadBalancerResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateLoadBalancerOutput, XmlParseError> {
-        deserialize_elements::<_, CreateLoadBalancerOutput, _>(
+    ) -> Result<CreateLoadBalancerResponse, XmlParseError> {
+        deserialize_elements::<_, CreateLoadBalancerResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1370,7 +1379,7 @@ impl CreateLoadBalancerOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateRuleInput {
+pub struct CreateRuleRequest {
     /// <p>The actions. Each rule must include exactly one of the following types of actions: <code>forward</code>, <code>fixed-response</code>, or <code>redirect</code>.</p> <p>If the action type is <code>forward</code>, you specify a target group. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer. The protocol of the target group must be TCP or TLS for a Network Load Balancer.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you authenticate users through an identity provider that is OpenID Connect (OIDC) compliant.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you authenticate users through the user pools supported by Amazon Cognito.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you redirect specified client requests from one URL to another.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you drop specified client requests and return a custom HTTP response.</p>
     pub actions: Vec<Action>,
     /// <p><p>The conditions. Each condition specifies a field name and a single value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. You can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern. A path pattern is case-sensitive, can be up to 128 characters in length, and can contain any of the following characters. You can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ &quot; &#39; @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul></p>
@@ -1381,10 +1390,10 @@ pub struct CreateRuleInput {
     pub priority: i64,
 }
 
-/// Serialize `CreateRuleInput` contents to a `SignedRequest`.
-struct CreateRuleInputSerializer;
-impl CreateRuleInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateRuleInput) {
+/// Serialize `CreateRuleRequest` contents to a `SignedRequest`.
+struct CreateRuleRequestSerializer;
+impl CreateRuleRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateRuleRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1402,19 +1411,19 @@ impl CreateRuleInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateRuleOutput {
+pub struct CreateRuleResponse {
     /// <p>Information about the rule.</p>
     pub rules: Option<Vec<Rule>>,
 }
 
-struct CreateRuleOutputDeserializer;
-impl CreateRuleOutputDeserializer {
+struct CreateRuleResponseDeserializer;
+impl CreateRuleResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateRuleOutput, XmlParseError> {
-        deserialize_elements::<_, CreateRuleOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<CreateRuleResponse, XmlParseError> {
+        deserialize_elements::<_, CreateRuleResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Rules" => {
                     obj.rules
@@ -1428,7 +1437,7 @@ impl CreateRuleOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateTargetGroupInput {
+pub struct CreateTargetGroupRequest {
     /// <p>Indicates whether health checks are enabled. If the target type is <code>instance</code> or <code>ip</code>, the default is <code>true</code>. If the target type is <code>lambda</code>, the default is <code>false</code>.</p>
     pub health_check_enabled: Option<bool>,
     /// <p>The approximate amount of time, in seconds, between health checks of an individual target. For Application Load Balancers, the range is 5–300 seconds. For Network Load Balancers, the supported values are 10 or 30 seconds. If the target type is <code>instance</code> or <code>ip</code>, the default is 30 seconds. If the target type is <code>lambda</code>, the default is 35 seconds.</p>
@@ -1459,10 +1468,10 @@ pub struct CreateTargetGroupInput {
     pub vpc_id: Option<String>,
 }
 
-/// Serialize `CreateTargetGroupInput` contents to a `SignedRequest`.
-struct CreateTargetGroupInputSerializer;
-impl CreateTargetGroupInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateTargetGroupInput) {
+/// Serialize `CreateTargetGroupRequest` contents to a `SignedRequest`.
+struct CreateTargetGroupRequestSerializer;
+impl CreateTargetGroupRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateTargetGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1527,19 +1536,19 @@ impl CreateTargetGroupInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateTargetGroupOutput {
+pub struct CreateTargetGroupResponse {
     /// <p>Information about the target group.</p>
     pub target_groups: Option<Vec<TargetGroup>>,
 }
 
-struct CreateTargetGroupOutputDeserializer;
-impl CreateTargetGroupOutputDeserializer {
+struct CreateTargetGroupResponseDeserializer;
+impl CreateTargetGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateTargetGroupOutput, XmlParseError> {
-        deserialize_elements::<_, CreateTargetGroupOutput, _>(
+    ) -> Result<CreateTargetGroupResponse, XmlParseError> {
+        deserialize_elements::<_, CreateTargetGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1590,15 +1599,15 @@ impl DefaultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteListenerInput {
+pub struct DeleteListenerRequest {
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     pub listener_arn: String,
 }
 
-/// Serialize `DeleteListenerInput` contents to a `SignedRequest`.
-struct DeleteListenerInputSerializer;
-impl DeleteListenerInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteListenerInput) {
+/// Serialize `DeleteListenerRequest` contents to a `SignedRequest`.
+struct DeleteListenerRequestSerializer;
+impl DeleteListenerRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteListenerRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1609,18 +1618,18 @@ impl DeleteListenerInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteListenerOutput {}
+pub struct DeleteListenerResponse {}
 
-struct DeleteListenerOutputDeserializer;
-impl DeleteListenerOutputDeserializer {
+struct DeleteListenerResponseDeserializer;
+impl DeleteListenerResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteListenerOutput, XmlParseError> {
+    ) -> Result<DeleteListenerResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = DeleteListenerOutput::default();
+        let obj = DeleteListenerResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -1628,15 +1637,15 @@ impl DeleteListenerOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteLoadBalancerInput {
+pub struct DeleteLoadBalancerRequest {
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
 }
 
-/// Serialize `DeleteLoadBalancerInput` contents to a `SignedRequest`.
-struct DeleteLoadBalancerInputSerializer;
-impl DeleteLoadBalancerInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteLoadBalancerInput) {
+/// Serialize `DeleteLoadBalancerRequest` contents to a `SignedRequest`.
+struct DeleteLoadBalancerRequestSerializer;
+impl DeleteLoadBalancerRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteLoadBalancerRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1650,18 +1659,18 @@ impl DeleteLoadBalancerInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteLoadBalancerOutput {}
+pub struct DeleteLoadBalancerResponse {}
 
-struct DeleteLoadBalancerOutputDeserializer;
-impl DeleteLoadBalancerOutputDeserializer {
+struct DeleteLoadBalancerResponseDeserializer;
+impl DeleteLoadBalancerResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteLoadBalancerOutput, XmlParseError> {
+    ) -> Result<DeleteLoadBalancerResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = DeleteLoadBalancerOutput::default();
+        let obj = DeleteLoadBalancerResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -1669,15 +1678,15 @@ impl DeleteLoadBalancerOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteRuleInput {
+pub struct DeleteRuleRequest {
     /// <p>The Amazon Resource Name (ARN) of the rule.</p>
     pub rule_arn: String,
 }
 
-/// Serialize `DeleteRuleInput` contents to a `SignedRequest`.
-struct DeleteRuleInputSerializer;
-impl DeleteRuleInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteRuleInput) {
+/// Serialize `DeleteRuleRequest` contents to a `SignedRequest`.
+struct DeleteRuleRequestSerializer;
+impl DeleteRuleRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteRuleRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1688,18 +1697,18 @@ impl DeleteRuleInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteRuleOutput {}
+pub struct DeleteRuleResponse {}
 
-struct DeleteRuleOutputDeserializer;
-impl DeleteRuleOutputDeserializer {
+struct DeleteRuleResponseDeserializer;
+impl DeleteRuleResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteRuleOutput, XmlParseError> {
+    ) -> Result<DeleteRuleResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = DeleteRuleOutput::default();
+        let obj = DeleteRuleResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -1707,15 +1716,15 @@ impl DeleteRuleOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteTargetGroupInput {
+pub struct DeleteTargetGroupRequest {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
 }
 
-/// Serialize `DeleteTargetGroupInput` contents to a `SignedRequest`.
-struct DeleteTargetGroupInputSerializer;
-impl DeleteTargetGroupInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteTargetGroupInput) {
+/// Serialize `DeleteTargetGroupRequest` contents to a `SignedRequest`.
+struct DeleteTargetGroupRequestSerializer;
+impl DeleteTargetGroupRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteTargetGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1729,18 +1738,18 @@ impl DeleteTargetGroupInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteTargetGroupOutput {}
+pub struct DeleteTargetGroupResponse {}
 
-struct DeleteTargetGroupOutputDeserializer;
-impl DeleteTargetGroupOutputDeserializer {
+struct DeleteTargetGroupResponseDeserializer;
+impl DeleteTargetGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteTargetGroupOutput, XmlParseError> {
+    ) -> Result<DeleteTargetGroupResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = DeleteTargetGroupOutput::default();
+        let obj = DeleteTargetGroupResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -1748,17 +1757,17 @@ impl DeleteTargetGroupOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeregisterTargetsInput {
+pub struct DeregisterTargetsRequest {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
     /// <p>The targets. If you specified a port override when you registered a target, you must specify both the target ID and the port when you deregister it.</p>
     pub targets: Vec<TargetDescription>,
 }
 
-/// Serialize `DeregisterTargetsInput` contents to a `SignedRequest`.
-struct DeregisterTargetsInputSerializer;
-impl DeregisterTargetsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeregisterTargetsInput) {
+/// Serialize `DeregisterTargetsRequest` contents to a `SignedRequest`.
+struct DeregisterTargetsRequestSerializer;
+impl DeregisterTargetsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeregisterTargetsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1777,18 +1786,18 @@ impl DeregisterTargetsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeregisterTargetsOutput {}
+pub struct DeregisterTargetsResponse {}
 
-struct DeregisterTargetsOutputDeserializer;
-impl DeregisterTargetsOutputDeserializer {
+struct DeregisterTargetsResponseDeserializer;
+impl DeregisterTargetsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeregisterTargetsOutput, XmlParseError> {
+    ) -> Result<DeregisterTargetsResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = DeregisterTargetsOutput::default();
+        let obj = DeregisterTargetsResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -1796,17 +1805,17 @@ impl DeregisterTargetsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeAccountLimitsInput {
+pub struct DescribeAccountLimitsRequest {
     /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
     pub marker: Option<String>,
     /// <p>The maximum number of results to return with this call.</p>
     pub page_size: Option<i64>,
 }
 
-/// Serialize `DescribeAccountLimitsInput` contents to a `SignedRequest`.
-struct DescribeAccountLimitsInputSerializer;
-impl DescribeAccountLimitsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeAccountLimitsInput) {
+/// Serialize `DescribeAccountLimitsRequest` contents to a `SignedRequest`.
+struct DescribeAccountLimitsRequestSerializer;
+impl DescribeAccountLimitsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeAccountLimitsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1822,21 +1831,21 @@ impl DescribeAccountLimitsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeAccountLimitsOutput {
+pub struct DescribeAccountLimitsResponse {
     /// <p>Information about the limits.</p>
     pub limits: Option<Vec<Limit>>,
     /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
 }
 
-struct DescribeAccountLimitsOutputDeserializer;
-impl DescribeAccountLimitsOutputDeserializer {
+struct DescribeAccountLimitsResponseDeserializer;
+impl DescribeAccountLimitsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeAccountLimitsOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeAccountLimitsOutput, _>(
+    ) -> Result<DescribeAccountLimitsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeAccountLimitsResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1858,7 +1867,7 @@ impl DescribeAccountLimitsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeListenerCertificatesInput {
+pub struct DescribeListenerCertificatesRequest {
     /// <p>The Amazon Resource Names (ARN) of the listener.</p>
     pub listener_arn: String,
     /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
@@ -1867,10 +1876,14 @@ pub struct DescribeListenerCertificatesInput {
     pub page_size: Option<i64>,
 }
 
-/// Serialize `DescribeListenerCertificatesInput` contents to a `SignedRequest`.
-struct DescribeListenerCertificatesInputSerializer;
-impl DescribeListenerCertificatesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeListenerCertificatesInput) {
+/// Serialize `DescribeListenerCertificatesRequest` contents to a `SignedRequest`.
+struct DescribeListenerCertificatesRequestSerializer;
+impl DescribeListenerCertificatesRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeListenerCertificatesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1887,21 +1900,21 @@ impl DescribeListenerCertificatesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeListenerCertificatesOutput {
+pub struct DescribeListenerCertificatesResponse {
     /// <p>Information about the certificates.</p>
     pub certificates: Option<Vec<Certificate>>,
     /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
 }
 
-struct DescribeListenerCertificatesOutputDeserializer;
-impl DescribeListenerCertificatesOutputDeserializer {
+struct DescribeListenerCertificatesResponseDeserializer;
+impl DescribeListenerCertificatesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeListenerCertificatesOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeListenerCertificatesOutput, _>(
+    ) -> Result<DescribeListenerCertificatesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeListenerCertificatesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1923,7 +1936,7 @@ impl DescribeListenerCertificatesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeListenersInput {
+pub struct DescribeListenersRequest {
     /// <p>The Amazon Resource Names (ARN) of the listeners.</p>
     pub listener_arns: Option<Vec<String>>,
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
@@ -1934,10 +1947,10 @@ pub struct DescribeListenersInput {
     pub page_size: Option<i64>,
 }
 
-/// Serialize `DescribeListenersInput` contents to a `SignedRequest`.
-struct DescribeListenersInputSerializer;
-impl DescribeListenersInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeListenersInput) {
+/// Serialize `DescribeListenersRequest` contents to a `SignedRequest`.
+struct DescribeListenersRequestSerializer;
+impl DescribeListenersRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeListenersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1963,21 +1976,21 @@ impl DescribeListenersInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeListenersOutput {
+pub struct DescribeListenersResponse {
     /// <p>Information about the listeners.</p>
     pub listeners: Option<Vec<Listener>>,
     /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
 }
 
-struct DescribeListenersOutputDeserializer;
-impl DescribeListenersOutputDeserializer {
+struct DescribeListenersResponseDeserializer;
+impl DescribeListenersResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeListenersOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeListenersOutput, _>(
+    ) -> Result<DescribeListenersResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeListenersResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1999,15 +2012,19 @@ impl DescribeListenersOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeLoadBalancerAttributesInput {
+pub struct DescribeLoadBalancerAttributesRequest {
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
 }
 
-/// Serialize `DescribeLoadBalancerAttributesInput` contents to a `SignedRequest`.
-struct DescribeLoadBalancerAttributesInputSerializer;
-impl DescribeLoadBalancerAttributesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeLoadBalancerAttributesInput) {
+/// Serialize `DescribeLoadBalancerAttributesRequest` contents to a `SignedRequest`.
+struct DescribeLoadBalancerAttributesRequestSerializer;
+impl DescribeLoadBalancerAttributesRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeLoadBalancerAttributesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2021,19 +2038,19 @@ impl DescribeLoadBalancerAttributesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeLoadBalancerAttributesOutput {
+pub struct DescribeLoadBalancerAttributesResponse {
     /// <p>Information about the load balancer attributes.</p>
     pub attributes: Option<Vec<LoadBalancerAttribute>>,
 }
 
-struct DescribeLoadBalancerAttributesOutputDeserializer;
-impl DescribeLoadBalancerAttributesOutputDeserializer {
+struct DescribeLoadBalancerAttributesResponseDeserializer;
+impl DescribeLoadBalancerAttributesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeLoadBalancerAttributesOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeLoadBalancerAttributesOutput, _>(
+    ) -> Result<DescribeLoadBalancerAttributesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeLoadBalancerAttributesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2051,7 +2068,7 @@ impl DescribeLoadBalancerAttributesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeLoadBalancersInput {
+pub struct DescribeLoadBalancersRequest {
     /// <p>The Amazon Resource Names (ARN) of the load balancers. You can specify up to 20 load balancers in a single call.</p>
     pub load_balancer_arns: Option<Vec<String>>,
     /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
@@ -2062,10 +2079,10 @@ pub struct DescribeLoadBalancersInput {
     pub page_size: Option<i64>,
 }
 
-/// Serialize `DescribeLoadBalancersInput` contents to a `SignedRequest`.
-struct DescribeLoadBalancersInputSerializer;
-impl DescribeLoadBalancersInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeLoadBalancersInput) {
+/// Serialize `DescribeLoadBalancersRequest` contents to a `SignedRequest`.
+struct DescribeLoadBalancersRequestSerializer;
+impl DescribeLoadBalancersRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeLoadBalancersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2095,21 +2112,21 @@ impl DescribeLoadBalancersInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeLoadBalancersOutput {
+pub struct DescribeLoadBalancersResponse {
     /// <p>Information about the load balancers.</p>
     pub load_balancers: Option<Vec<LoadBalancer>>,
     /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
 }
 
-struct DescribeLoadBalancersOutputDeserializer;
-impl DescribeLoadBalancersOutputDeserializer {
+struct DescribeLoadBalancersResponseDeserializer;
+impl DescribeLoadBalancersResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeLoadBalancersOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeLoadBalancersOutput, _>(
+    ) -> Result<DescribeLoadBalancersResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeLoadBalancersResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2131,7 +2148,7 @@ impl DescribeLoadBalancersOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeRulesInput {
+pub struct DescribeRulesRequest {
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     pub listener_arn: Option<String>,
     /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
@@ -2142,10 +2159,10 @@ pub struct DescribeRulesInput {
     pub rule_arns: Option<Vec<String>>,
 }
 
-/// Serialize `DescribeRulesInput` contents to a `SignedRequest`.
-struct DescribeRulesInputSerializer;
-impl DescribeRulesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeRulesInput) {
+/// Serialize `DescribeRulesRequest` contents to a `SignedRequest`.
+struct DescribeRulesRequestSerializer;
+impl DescribeRulesRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeRulesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2171,21 +2188,21 @@ impl DescribeRulesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeRulesOutput {
+pub struct DescribeRulesResponse {
     /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
     /// <p>Information about the rules.</p>
     pub rules: Option<Vec<Rule>>,
 }
 
-struct DescribeRulesOutputDeserializer;
-impl DescribeRulesOutputDeserializer {
+struct DescribeRulesResponseDeserializer;
+impl DescribeRulesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeRulesOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeRulesOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<DescribeRulesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeRulesResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "NextMarker" => {
                     obj.next_marker = Some(MarkerDeserializer::deserialize("NextMarker", stack)?);
@@ -2202,7 +2219,7 @@ impl DescribeRulesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeSSLPoliciesInput {
+pub struct DescribeSSLPoliciesRequest {
     /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
     pub marker: Option<String>,
     /// <p>The names of the policies.</p>
@@ -2211,10 +2228,10 @@ pub struct DescribeSSLPoliciesInput {
     pub page_size: Option<i64>,
 }
 
-/// Serialize `DescribeSSLPoliciesInput` contents to a `SignedRequest`.
-struct DescribeSSLPoliciesInputSerializer;
-impl DescribeSSLPoliciesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeSSLPoliciesInput) {
+/// Serialize `DescribeSSLPoliciesRequest` contents to a `SignedRequest`.
+struct DescribeSSLPoliciesRequestSerializer;
+impl DescribeSSLPoliciesRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeSSLPoliciesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2237,21 +2254,21 @@ impl DescribeSSLPoliciesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeSSLPoliciesOutput {
+pub struct DescribeSSLPoliciesResponse {
     /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
     /// <p>Information about the policies.</p>
     pub ssl_policies: Option<Vec<SslPolicy>>,
 }
 
-struct DescribeSSLPoliciesOutputDeserializer;
-impl DescribeSSLPoliciesOutputDeserializer {
+struct DescribeSSLPoliciesResponseDeserializer;
+impl DescribeSSLPoliciesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeSSLPoliciesOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeSSLPoliciesOutput, _>(
+    ) -> Result<DescribeSSLPoliciesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeSSLPoliciesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2273,15 +2290,15 @@ impl DescribeSSLPoliciesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeTagsInput {
+pub struct DescribeTagsRequest {
     /// <p>The Amazon Resource Names (ARN) of the resources.</p>
     pub resource_arns: Vec<String>,
 }
 
-/// Serialize `DescribeTagsInput` contents to a `SignedRequest`.
-struct DescribeTagsInputSerializer;
-impl DescribeTagsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeTagsInput) {
+/// Serialize `DescribeTagsRequest` contents to a `SignedRequest`.
+struct DescribeTagsRequestSerializer;
+impl DescribeTagsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeTagsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2296,19 +2313,19 @@ impl DescribeTagsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeTagsOutput {
+pub struct DescribeTagsResponse {
     /// <p>Information about the tags.</p>
     pub tag_descriptions: Option<Vec<TagDescription>>,
 }
 
-struct DescribeTagsOutputDeserializer;
-impl DescribeTagsOutputDeserializer {
+struct DescribeTagsResponseDeserializer;
+impl DescribeTagsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeTagsOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeTagsOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<DescribeTagsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeTagsResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "TagDescriptions" => {
                     obj.tag_descriptions.get_or_insert(vec![]).extend(
@@ -2322,15 +2339,19 @@ impl DescribeTagsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeTargetGroupAttributesInput {
+pub struct DescribeTargetGroupAttributesRequest {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
 }
 
-/// Serialize `DescribeTargetGroupAttributesInput` contents to a `SignedRequest`.
-struct DescribeTargetGroupAttributesInputSerializer;
-impl DescribeTargetGroupAttributesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeTargetGroupAttributesInput) {
+/// Serialize `DescribeTargetGroupAttributesRequest` contents to a `SignedRequest`.
+struct DescribeTargetGroupAttributesRequestSerializer;
+impl DescribeTargetGroupAttributesRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeTargetGroupAttributesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2344,19 +2365,19 @@ impl DescribeTargetGroupAttributesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeTargetGroupAttributesOutput {
+pub struct DescribeTargetGroupAttributesResponse {
     /// <p>Information about the target group attributes</p>
     pub attributes: Option<Vec<TargetGroupAttribute>>,
 }
 
-struct DescribeTargetGroupAttributesOutputDeserializer;
-impl DescribeTargetGroupAttributesOutputDeserializer {
+struct DescribeTargetGroupAttributesResponseDeserializer;
+impl DescribeTargetGroupAttributesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeTargetGroupAttributesOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeTargetGroupAttributesOutput, _>(
+    ) -> Result<DescribeTargetGroupAttributesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeTargetGroupAttributesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2374,7 +2395,7 @@ impl DescribeTargetGroupAttributesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeTargetGroupsInput {
+pub struct DescribeTargetGroupsRequest {
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: Option<String>,
     /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
@@ -2387,10 +2408,10 @@ pub struct DescribeTargetGroupsInput {
     pub target_group_arns: Option<Vec<String>>,
 }
 
-/// Serialize `DescribeTargetGroupsInput` contents to a `SignedRequest`.
-struct DescribeTargetGroupsInputSerializer;
-impl DescribeTargetGroupsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeTargetGroupsInput) {
+/// Serialize `DescribeTargetGroupsRequest` contents to a `SignedRequest`.
+struct DescribeTargetGroupsRequestSerializer;
+impl DescribeTargetGroupsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeTargetGroupsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2423,21 +2444,21 @@ impl DescribeTargetGroupsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeTargetGroupsOutput {
+pub struct DescribeTargetGroupsResponse {
     /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
     /// <p>Information about the target groups.</p>
     pub target_groups: Option<Vec<TargetGroup>>,
 }
 
-struct DescribeTargetGroupsOutputDeserializer;
-impl DescribeTargetGroupsOutputDeserializer {
+struct DescribeTargetGroupsResponseDeserializer;
+impl DescribeTargetGroupsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeTargetGroupsOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeTargetGroupsOutput, _>(
+    ) -> Result<DescribeTargetGroupsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeTargetGroupsResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2459,17 +2480,17 @@ impl DescribeTargetGroupsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeTargetHealthInput {
+pub struct DescribeTargetHealthRequest {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
     /// <p>The targets.</p>
     pub targets: Option<Vec<TargetDescription>>,
 }
 
-/// Serialize `DescribeTargetHealthInput` contents to a `SignedRequest`.
-struct DescribeTargetHealthInputSerializer;
-impl DescribeTargetHealthInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeTargetHealthInput) {
+/// Serialize `DescribeTargetHealthRequest` contents to a `SignedRequest`.
+struct DescribeTargetHealthRequestSerializer;
+impl DescribeTargetHealthRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeTargetHealthRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2490,19 +2511,19 @@ impl DescribeTargetHealthInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeTargetHealthOutput {
+pub struct DescribeTargetHealthResponse {
     /// <p>Information about the health of the targets.</p>
     pub target_health_descriptions: Option<Vec<TargetHealthDescription>>,
 }
 
-struct DescribeTargetHealthOutputDeserializer;
-impl DescribeTargetHealthOutputDeserializer {
+struct DescribeTargetHealthResponseDeserializer;
+impl DescribeTargetHealthResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeTargetHealthOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeTargetHealthOutput, _>(
+    ) -> Result<DescribeTargetHealthResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeTargetHealthResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2587,7 +2608,7 @@ impl FixedResponseActionConfigDeserializer {
 /// Serialize `FixedResponseActionConfig` contents to a `SignedRequest`.
 struct FixedResponseActionConfigSerializer;
 impl FixedResponseActionConfigSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &FixedResponseActionConfig) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &FixedResponseActionConfig) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2724,7 +2745,7 @@ impl HostHeaderConditionConfigDeserializer {
 /// Serialize `HostHeaderConditionConfig` contents to a `SignedRequest`.
 struct HostHeaderConditionConfigSerializer;
 impl HostHeaderConditionConfigSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &HostHeaderConditionConfig) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &HostHeaderConditionConfig) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2792,7 +2813,7 @@ impl HttpHeaderConditionConfigDeserializer {
 /// Serialize `HttpHeaderConditionConfig` contents to a `SignedRequest`.
 struct HttpHeaderConditionConfigSerializer;
 impl HttpHeaderConditionConfigSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &HttpHeaderConditionConfig) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &HttpHeaderConditionConfig) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2855,7 +2876,11 @@ impl HttpRequestMethodConditionConfigDeserializer {
 /// Serialize `HttpRequestMethodConditionConfig` contents to a `SignedRequest`.
 struct HttpRequestMethodConditionConfigSerializer;
 impl HttpRequestMethodConditionConfigSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &HttpRequestMethodConditionConfig) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &HttpRequestMethodConditionConfig,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2969,7 +2994,7 @@ impl ListOfStringDeserializer {
 /// Serialize `ListOfString` contents to a `SignedRequest`.
 struct ListOfStringSerializer;
 impl ListOfStringSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -3056,7 +3081,7 @@ impl ListenerArnDeserializer {
 /// Serialize `ListenerArns` contents to a `SignedRequest`.
 struct ListenerArnsSerializer;
 impl ListenerArnsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -3267,7 +3292,7 @@ impl LoadBalancerArnsDeserializer {
 /// Serialize `LoadBalancerArns` contents to a `SignedRequest`.
 struct LoadBalancerArnsSerializer;
 impl LoadBalancerArnsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -3313,7 +3338,7 @@ impl LoadBalancerAttributeDeserializer {
 /// Serialize `LoadBalancerAttribute` contents to a `SignedRequest`.
 struct LoadBalancerAttributeSerializer;
 impl LoadBalancerAttributeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &LoadBalancerAttribute) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &LoadBalancerAttribute) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3373,7 +3398,7 @@ impl LoadBalancerAttributesDeserializer {
 /// Serialize `LoadBalancerAttributes` contents to a `SignedRequest`.
 struct LoadBalancerAttributesSerializer;
 impl LoadBalancerAttributesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<LoadBalancerAttribute>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<LoadBalancerAttribute>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             LoadBalancerAttributeSerializer::serialize(params, &key, obj);
@@ -3396,7 +3421,7 @@ impl LoadBalancerNameDeserializer {
 /// Serialize `LoadBalancerNames` contents to a `SignedRequest`.
 struct LoadBalancerNamesSerializer;
 impl LoadBalancerNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -3526,7 +3551,7 @@ impl MatcherDeserializer {
 /// Serialize `Matcher` contents to a `SignedRequest`.
 struct MatcherSerializer;
 impl MatcherSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Matcher) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Matcher) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3548,7 +3573,7 @@ impl MaxDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyListenerInput {
+pub struct ModifyListenerRequest {
     /// <p>[HTTPS and TLS listeners] The default SSL server certificate. You must provide exactly one certificate. Set <code>CertificateArn</code> to the certificate ARN but do not set <code>IsDefault</code>.</p> <p>To create a certificate list, use <a>AddListenerCertificates</a>.</p>
     pub certificates: Option<Vec<Certificate>>,
     /// <p>The actions for the default rule. The rule must include one forward action or one or more fixed-response actions.</p> <p>If the action type is <code>forward</code>, you specify a target group. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer. The protocol of the target group must be TCP or TLS for a Network Load Balancer.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you authenticate users through an identity provider that is OpenID Connect (OIDC) compliant.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you authenticate users through the user pools supported by Amazon Cognito.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you redirect specified client requests from one URL to another.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you drop specified client requests and return a custom HTTP response.</p>
@@ -3563,10 +3588,10 @@ pub struct ModifyListenerInput {
     pub ssl_policy: Option<String>,
 }
 
-/// Serialize `ModifyListenerInput` contents to a `SignedRequest`.
-struct ModifyListenerInputSerializer;
-impl ModifyListenerInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyListenerInput) {
+/// Serialize `ModifyListenerRequest` contents to a `SignedRequest`.
+struct ModifyListenerRequestSerializer;
+impl ModifyListenerRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ModifyListenerRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3600,19 +3625,19 @@ impl ModifyListenerInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyListenerOutput {
+pub struct ModifyListenerResponse {
     /// <p>Information about the modified listener.</p>
     pub listeners: Option<Vec<Listener>>,
 }
 
-struct ModifyListenerOutputDeserializer;
-impl ModifyListenerOutputDeserializer {
+struct ModifyListenerResponseDeserializer;
+impl ModifyListenerResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyListenerOutput, XmlParseError> {
-        deserialize_elements::<_, ModifyListenerOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<ModifyListenerResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyListenerResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Listeners" => {
                     obj.listeners
@@ -3626,17 +3651,21 @@ impl ModifyListenerOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyLoadBalancerAttributesInput {
+pub struct ModifyLoadBalancerAttributesRequest {
     /// <p>The load balancer attributes.</p>
     pub attributes: Vec<LoadBalancerAttribute>,
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
 }
 
-/// Serialize `ModifyLoadBalancerAttributesInput` contents to a `SignedRequest`.
-struct ModifyLoadBalancerAttributesInputSerializer;
-impl ModifyLoadBalancerAttributesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyLoadBalancerAttributesInput) {
+/// Serialize `ModifyLoadBalancerAttributesRequest` contents to a `SignedRequest`.
+struct ModifyLoadBalancerAttributesRequestSerializer;
+impl ModifyLoadBalancerAttributesRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ModifyLoadBalancerAttributesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3655,19 +3684,19 @@ impl ModifyLoadBalancerAttributesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyLoadBalancerAttributesOutput {
+pub struct ModifyLoadBalancerAttributesResponse {
     /// <p>Information about the load balancer attributes.</p>
     pub attributes: Option<Vec<LoadBalancerAttribute>>,
 }
 
-struct ModifyLoadBalancerAttributesOutputDeserializer;
-impl ModifyLoadBalancerAttributesOutputDeserializer {
+struct ModifyLoadBalancerAttributesResponseDeserializer;
+impl ModifyLoadBalancerAttributesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyLoadBalancerAttributesOutput, XmlParseError> {
-        deserialize_elements::<_, ModifyLoadBalancerAttributesOutput, _>(
+    ) -> Result<ModifyLoadBalancerAttributesResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyLoadBalancerAttributesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -3685,7 +3714,7 @@ impl ModifyLoadBalancerAttributesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyRuleInput {
+pub struct ModifyRuleRequest {
     /// <p>The actions.</p> <p>If the action type is <code>forward</code>, you specify a target group. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer. The protocol of the target group must be TCP or TLS for a Network Load Balancer.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you authenticate users through an identity provider that is OpenID Connect (OIDC) compliant.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you authenticate users through the user pools supported by Amazon Cognito.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you redirect specified client requests from one URL to another.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you drop specified client requests and return a custom HTTP response.</p>
     pub actions: Option<Vec<Action>>,
     /// <p><p>The conditions. Each condition specifies a field name and a single value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. You can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern. A path pattern is case-sensitive, can be up to 128 characters in length, and can contain any of the following characters. You can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ &quot; &#39; @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul></p>
@@ -3694,10 +3723,10 @@ pub struct ModifyRuleInput {
     pub rule_arn: String,
 }
 
-/// Serialize `ModifyRuleInput` contents to a `SignedRequest`.
-struct ModifyRuleInputSerializer;
-impl ModifyRuleInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyRuleInput) {
+/// Serialize `ModifyRuleRequest` contents to a `SignedRequest`.
+struct ModifyRuleRequestSerializer;
+impl ModifyRuleRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ModifyRuleRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3718,19 +3747,19 @@ impl ModifyRuleInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyRuleOutput {
+pub struct ModifyRuleResponse {
     /// <p>Information about the modified rule.</p>
     pub rules: Option<Vec<Rule>>,
 }
 
-struct ModifyRuleOutputDeserializer;
-impl ModifyRuleOutputDeserializer {
+struct ModifyRuleResponseDeserializer;
+impl ModifyRuleResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyRuleOutput, XmlParseError> {
-        deserialize_elements::<_, ModifyRuleOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<ModifyRuleResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyRuleResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Rules" => {
                     obj.rules
@@ -3744,17 +3773,21 @@ impl ModifyRuleOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyTargetGroupAttributesInput {
+pub struct ModifyTargetGroupAttributesRequest {
     /// <p>The attributes.</p>
     pub attributes: Vec<TargetGroupAttribute>,
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
 }
 
-/// Serialize `ModifyTargetGroupAttributesInput` contents to a `SignedRequest`.
-struct ModifyTargetGroupAttributesInputSerializer;
-impl ModifyTargetGroupAttributesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyTargetGroupAttributesInput) {
+/// Serialize `ModifyTargetGroupAttributesRequest` contents to a `SignedRequest`.
+struct ModifyTargetGroupAttributesRequestSerializer;
+impl ModifyTargetGroupAttributesRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ModifyTargetGroupAttributesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3773,19 +3806,19 @@ impl ModifyTargetGroupAttributesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyTargetGroupAttributesOutput {
+pub struct ModifyTargetGroupAttributesResponse {
     /// <p>Information about the attributes.</p>
     pub attributes: Option<Vec<TargetGroupAttribute>>,
 }
 
-struct ModifyTargetGroupAttributesOutputDeserializer;
-impl ModifyTargetGroupAttributesOutputDeserializer {
+struct ModifyTargetGroupAttributesResponseDeserializer;
+impl ModifyTargetGroupAttributesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyTargetGroupAttributesOutput, XmlParseError> {
-        deserialize_elements::<_, ModifyTargetGroupAttributesOutput, _>(
+    ) -> Result<ModifyTargetGroupAttributesResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyTargetGroupAttributesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -3803,7 +3836,7 @@ impl ModifyTargetGroupAttributesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyTargetGroupInput {
+pub struct ModifyTargetGroupRequest {
     /// <p>Indicates whether health checks are enabled.</p>
     pub health_check_enabled: Option<bool>,
     /// <p>The approximate amount of time, in seconds, between health checks of an individual target. For Application Load Balancers, the range is 5–300 seconds. For Network Load Balancers, the supported values are 10 or 30 seconds.</p> <p>If the protocol of the target group is TCP, you can't modify this setting.</p>
@@ -3826,10 +3859,10 @@ pub struct ModifyTargetGroupInput {
     pub unhealthy_threshold_count: Option<i64>,
 }
 
-/// Serialize `ModifyTargetGroupInput` contents to a `SignedRequest`.
-struct ModifyTargetGroupInputSerializer;
-impl ModifyTargetGroupInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyTargetGroupInput) {
+/// Serialize `ModifyTargetGroupRequest` contents to a `SignedRequest`.
+struct ModifyTargetGroupRequestSerializer;
+impl ModifyTargetGroupRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ModifyTargetGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3885,19 +3918,19 @@ impl ModifyTargetGroupInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyTargetGroupOutput {
+pub struct ModifyTargetGroupResponse {
     /// <p>Information about the modified target group.</p>
     pub target_groups: Option<Vec<TargetGroup>>,
 }
 
-struct ModifyTargetGroupOutputDeserializer;
-impl ModifyTargetGroupOutputDeserializer {
+struct ModifyTargetGroupResponseDeserializer;
+impl ModifyTargetGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyTargetGroupOutput, XmlParseError> {
-        deserialize_elements::<_, ModifyTargetGroupOutput, _>(
+    ) -> Result<ModifyTargetGroupResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyTargetGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -3969,7 +4002,7 @@ impl PathPatternConditionConfigDeserializer {
 /// Serialize `PathPatternConditionConfig` contents to a `SignedRequest`.
 struct PathPatternConditionConfigSerializer;
 impl PathPatternConditionConfigSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PathPatternConditionConfig) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &PathPatternConditionConfig) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4040,7 +4073,7 @@ impl QueryStringConditionConfigDeserializer {
 /// Serialize `QueryStringConditionConfig` contents to a `SignedRequest`.
 struct QueryStringConditionConfigSerializer;
 impl QueryStringConditionConfigSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &QueryStringConditionConfig) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &QueryStringConditionConfig) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4091,7 +4124,7 @@ impl QueryStringKeyValuePairDeserializer {
 /// Serialize `QueryStringKeyValuePair` contents to a `SignedRequest`.
 struct QueryStringKeyValuePairSerializer;
 impl QueryStringKeyValuePairSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &QueryStringKeyValuePair) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &QueryStringKeyValuePair) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4129,7 +4162,7 @@ impl QueryStringKeyValuePairListDeserializer {
 /// Serialize `QueryStringKeyValuePairList` contents to a `SignedRequest`.
 struct QueryStringKeyValuePairListSerializer;
 impl QueryStringKeyValuePairListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<QueryStringKeyValuePair>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<QueryStringKeyValuePair>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             QueryStringKeyValuePairSerializer::serialize(params, &key, obj);
@@ -4196,7 +4229,7 @@ impl RedirectActionConfigDeserializer {
 /// Serialize `RedirectActionConfig` contents to a `SignedRequest`.
 struct RedirectActionConfigSerializer;
 impl RedirectActionConfigSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RedirectActionConfig) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &RedirectActionConfig) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4288,17 +4321,17 @@ impl RedirectActionStatusCodeEnumDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RegisterTargetsInput {
+pub struct RegisterTargetsRequest {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
     /// <p>The targets.</p> <p>To register a target by instance ID, specify the instance ID. To register a target by IP address, specify the IP address. To register a Lambda function, specify the ARN of the Lambda function.</p>
     pub targets: Vec<TargetDescription>,
 }
 
-/// Serialize `RegisterTargetsInput` contents to a `SignedRequest`.
-struct RegisterTargetsInputSerializer;
-impl RegisterTargetsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RegisterTargetsInput) {
+/// Serialize `RegisterTargetsRequest` contents to a `SignedRequest`.
+struct RegisterTargetsRequestSerializer;
+impl RegisterTargetsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &RegisterTargetsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4317,18 +4350,18 @@ impl RegisterTargetsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RegisterTargetsOutput {}
+pub struct RegisterTargetsResponse {}
 
-struct RegisterTargetsOutputDeserializer;
-impl RegisterTargetsOutputDeserializer {
+struct RegisterTargetsResponseDeserializer;
+impl RegisterTargetsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RegisterTargetsOutput, XmlParseError> {
+    ) -> Result<RegisterTargetsResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = RegisterTargetsOutput::default();
+        let obj = RegisterTargetsResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -4336,17 +4369,21 @@ impl RegisterTargetsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RemoveListenerCertificatesInput {
+pub struct RemoveListenerCertificatesRequest {
     /// <p>The certificate to remove. You can specify one certificate per call. Set <code>CertificateArn</code> to the certificate ARN but do not set <code>IsDefault</code>.</p>
     pub certificates: Vec<Certificate>,
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     pub listener_arn: String,
 }
 
-/// Serialize `RemoveListenerCertificatesInput` contents to a `SignedRequest`.
-struct RemoveListenerCertificatesInputSerializer;
-impl RemoveListenerCertificatesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RemoveListenerCertificatesInput) {
+/// Serialize `RemoveListenerCertificatesRequest` contents to a `SignedRequest`.
+struct RemoveListenerCertificatesRequestSerializer;
+impl RemoveListenerCertificatesRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &RemoveListenerCertificatesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4362,18 +4399,18 @@ impl RemoveListenerCertificatesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RemoveListenerCertificatesOutput {}
+pub struct RemoveListenerCertificatesResponse {}
 
-struct RemoveListenerCertificatesOutputDeserializer;
-impl RemoveListenerCertificatesOutputDeserializer {
+struct RemoveListenerCertificatesResponseDeserializer;
+impl RemoveListenerCertificatesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RemoveListenerCertificatesOutput, XmlParseError> {
+    ) -> Result<RemoveListenerCertificatesResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = RemoveListenerCertificatesOutput::default();
+        let obj = RemoveListenerCertificatesResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -4381,17 +4418,17 @@ impl RemoveListenerCertificatesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RemoveTagsInput {
+pub struct RemoveTagsRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     pub resource_arns: Vec<String>,
     /// <p>The tag keys for the tags to remove.</p>
     pub tag_keys: Vec<String>,
 }
 
-/// Serialize `RemoveTagsInput` contents to a `SignedRequest`.
-struct RemoveTagsInputSerializer;
-impl RemoveTagsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RemoveTagsInput) {
+/// Serialize `RemoveTagsRequest` contents to a `SignedRequest`.
+struct RemoveTagsRequestSerializer;
+impl RemoveTagsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &RemoveTagsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4407,18 +4444,18 @@ impl RemoveTagsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RemoveTagsOutput {}
+pub struct RemoveTagsResponse {}
 
-struct RemoveTagsOutputDeserializer;
-impl RemoveTagsOutputDeserializer {
+struct RemoveTagsResponseDeserializer;
+impl RemoveTagsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RemoveTagsOutput, XmlParseError> {
+    ) -> Result<RemoveTagsResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = RemoveTagsOutput::default();
+        let obj = RemoveTagsResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -4440,7 +4477,7 @@ impl ResourceArnDeserializer {
 /// Serialize `ResourceArns` contents to a `SignedRequest`.
 struct ResourceArnsSerializer;
 impl ResourceArnsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4509,7 +4546,7 @@ impl RuleArnDeserializer {
 /// Serialize `RuleArns` contents to a `SignedRequest`.
 struct RuleArnsSerializer;
 impl RuleArnsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4600,7 +4637,7 @@ impl RuleConditionDeserializer {
 /// Serialize `RuleCondition` contents to a `SignedRequest`.
 struct RuleConditionSerializer;
 impl RuleConditionSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RuleCondition) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &RuleCondition) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4682,7 +4719,7 @@ impl RuleConditionListDeserializer {
 /// Serialize `RuleConditionList` contents to a `SignedRequest`.
 struct RuleConditionListSerializer;
 impl RuleConditionListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<RuleCondition>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<RuleCondition>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             RuleConditionSerializer::serialize(params, &key, obj);
@@ -4693,7 +4730,7 @@ impl RuleConditionListSerializer {
 /// Serialize `RulePriorityList` contents to a `SignedRequest`.
 struct RulePriorityListSerializer;
 impl RulePriorityListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<RulePriorityPair>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<RulePriorityPair>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             RulePriorityPairSerializer::serialize(params, &key, obj);
@@ -4713,7 +4750,7 @@ pub struct RulePriorityPair {
 /// Serialize `RulePriorityPair` contents to a `SignedRequest`.
 struct RulePriorityPairSerializer;
 impl RulePriorityPairSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RulePriorityPair) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &RulePriorityPair) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4777,7 +4814,7 @@ impl SecurityGroupsDeserializer {
 /// Serialize `SecurityGroups` contents to a `SignedRequest`.
 struct SecurityGroupsSerializer;
 impl SecurityGroupsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4786,17 +4823,17 @@ impl SecurityGroupsSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetIpAddressTypeInput {
+pub struct SetIpAddressTypeRequest {
     /// <p>The IP address type. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses). Internal load balancers must use <code>ipv4</code>.</p>
     pub ip_address_type: String,
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
 }
 
-/// Serialize `SetIpAddressTypeInput` contents to a `SignedRequest`.
-struct SetIpAddressTypeInputSerializer;
-impl SetIpAddressTypeInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetIpAddressTypeInput) {
+/// Serialize `SetIpAddressTypeRequest` contents to a `SignedRequest`.
+struct SetIpAddressTypeRequestSerializer;
+impl SetIpAddressTypeRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SetIpAddressTypeRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4814,42 +4851,46 @@ impl SetIpAddressTypeInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetIpAddressTypeOutput {
+pub struct SetIpAddressTypeResponse {
     /// <p>The IP address type.</p>
     pub ip_address_type: Option<String>,
 }
 
-struct SetIpAddressTypeOutputDeserializer;
-impl SetIpAddressTypeOutputDeserializer {
+struct SetIpAddressTypeResponseDeserializer;
+impl SetIpAddressTypeResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<SetIpAddressTypeOutput, XmlParseError> {
-        deserialize_elements::<_, SetIpAddressTypeOutput, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "IpAddressType" => {
-                    obj.ip_address_type = Some(IpAddressTypeDeserializer::deserialize(
-                        "IpAddressType",
-                        stack,
-                    )?);
+    ) -> Result<SetIpAddressTypeResponse, XmlParseError> {
+        deserialize_elements::<_, SetIpAddressTypeResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "IpAddressType" => {
+                        obj.ip_address_type = Some(IpAddressTypeDeserializer::deserialize(
+                            "IpAddressType",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
                 }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetRulePrioritiesInput {
+pub struct SetRulePrioritiesRequest {
     /// <p>The rule priorities.</p>
     pub rule_priorities: Vec<RulePriorityPair>,
 }
 
-/// Serialize `SetRulePrioritiesInput` contents to a `SignedRequest`.
-struct SetRulePrioritiesInputSerializer;
-impl SetRulePrioritiesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetRulePrioritiesInput) {
+/// Serialize `SetRulePrioritiesRequest` contents to a `SignedRequest`.
+struct SetRulePrioritiesRequestSerializer;
+impl SetRulePrioritiesRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SetRulePrioritiesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4864,19 +4905,19 @@ impl SetRulePrioritiesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetRulePrioritiesOutput {
+pub struct SetRulePrioritiesResponse {
     /// <p>Information about the rules.</p>
     pub rules: Option<Vec<Rule>>,
 }
 
-struct SetRulePrioritiesOutputDeserializer;
-impl SetRulePrioritiesOutputDeserializer {
+struct SetRulePrioritiesResponseDeserializer;
+impl SetRulePrioritiesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<SetRulePrioritiesOutput, XmlParseError> {
-        deserialize_elements::<_, SetRulePrioritiesOutput, _>(
+    ) -> Result<SetRulePrioritiesResponse, XmlParseError> {
+        deserialize_elements::<_, SetRulePrioritiesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -4894,17 +4935,17 @@ impl SetRulePrioritiesOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetSecurityGroupsInput {
+pub struct SetSecurityGroupsRequest {
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
     /// <p>The IDs of the security groups.</p>
     pub security_groups: Vec<String>,
 }
 
-/// Serialize `SetSecurityGroupsInput` contents to a `SignedRequest`.
-struct SetSecurityGroupsInputSerializer;
-impl SetSecurityGroupsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetSecurityGroupsInput) {
+/// Serialize `SetSecurityGroupsRequest` contents to a `SignedRequest`.
+struct SetSecurityGroupsRequestSerializer;
+impl SetSecurityGroupsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SetSecurityGroupsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4923,19 +4964,19 @@ impl SetSecurityGroupsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetSecurityGroupsOutput {
+pub struct SetSecurityGroupsResponse {
     /// <p>The IDs of the security groups associated with the load balancer.</p>
     pub security_group_ids: Option<Vec<String>>,
 }
 
-struct SetSecurityGroupsOutputDeserializer;
-impl SetSecurityGroupsOutputDeserializer {
+struct SetSecurityGroupsResponseDeserializer;
+impl SetSecurityGroupsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<SetSecurityGroupsOutput, XmlParseError> {
-        deserialize_elements::<_, SetSecurityGroupsOutput, _>(
+    ) -> Result<SetSecurityGroupsResponse, XmlParseError> {
+        deserialize_elements::<_, SetSecurityGroupsResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -4953,7 +4994,7 @@ impl SetSecurityGroupsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetSubnetsInput {
+pub struct SetSubnetsRequest {
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
     /// <p>The IDs of the public subnets. You must specify subnets from at least two Availability Zones. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>You cannot specify Elastic IP addresses for your subnets.</p>
@@ -4962,10 +5003,10 @@ pub struct SetSubnetsInput {
     pub subnets: Option<Vec<String>>,
 }
 
-/// Serialize `SetSubnetsInput` contents to a `SignedRequest`.
-struct SetSubnetsInputSerializer;
-impl SetSubnetsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetSubnetsInput) {
+/// Serialize `SetSubnetsRequest` contents to a `SignedRequest`.
+struct SetSubnetsRequestSerializer;
+impl SetSubnetsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SetSubnetsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4989,19 +5030,19 @@ impl SetSubnetsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetSubnetsOutput {
+pub struct SetSubnetsResponse {
     /// <p>Information about the subnet and Availability Zone.</p>
     pub availability_zones: Option<Vec<AvailabilityZone>>,
 }
 
-struct SetSubnetsOutputDeserializer;
-impl SetSubnetsOutputDeserializer {
+struct SetSubnetsResponseDeserializer;
+impl SetSubnetsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<SetSubnetsOutput, XmlParseError> {
-        deserialize_elements::<_, SetSubnetsOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<SetSubnetsResponse, XmlParseError> {
+        deserialize_elements::<_, SetSubnetsResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AvailabilityZones" => {
                     obj.availability_zones.get_or_insert(vec![]).extend(
@@ -5047,7 +5088,7 @@ impl SourceIpConditionConfigDeserializer {
 /// Serialize `SourceIpConditionConfig` contents to a `SignedRequest`.
 struct SourceIpConditionConfigSerializer;
 impl SourceIpConditionConfigSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SourceIpConditionConfig) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SourceIpConditionConfig) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5134,7 +5175,7 @@ impl SslPolicyNameDeserializer {
 /// Serialize `SslPolicyNames` contents to a `SignedRequest`.
 struct SslPolicyNamesSerializer;
 impl SslPolicyNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5226,7 +5267,7 @@ pub struct SubnetMapping {
 /// Serialize `SubnetMapping` contents to a `SignedRequest`.
 struct SubnetMappingSerializer;
 impl SubnetMappingSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SubnetMapping) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SubnetMapping) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5244,7 +5285,7 @@ impl SubnetMappingSerializer {
 /// Serialize `SubnetMappings` contents to a `SignedRequest`.
 struct SubnetMappingsSerializer;
 impl SubnetMappingsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<SubnetMapping>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<SubnetMapping>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             SubnetMappingSerializer::serialize(params, &key, obj);
@@ -5255,7 +5296,7 @@ impl SubnetMappingsSerializer {
 /// Serialize `Subnets` contents to a `SignedRequest`.
 struct SubnetsSerializer;
 impl SubnetsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5294,7 +5335,7 @@ impl TagDeserializer {
 /// Serialize `Tag` contents to a `SignedRequest`.
 struct TagSerializer;
 impl TagSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Tag) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Tag) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5372,7 +5413,7 @@ impl TagKeyDeserializer {
 /// Serialize `TagKeys` contents to a `SignedRequest`.
 struct TagKeysSerializer;
 impl TagKeysSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5401,7 +5442,7 @@ impl TagListDeserializer {
 /// Serialize `TagList` contents to a `SignedRequest`.
 struct TagListSerializer;
 impl TagListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<Tag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             TagSerializer::serialize(params, &key, obj);
@@ -5462,7 +5503,7 @@ impl TargetDescriptionDeserializer {
 /// Serialize `TargetDescription` contents to a `SignedRequest`.
 struct TargetDescriptionSerializer;
 impl TargetDescriptionSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TargetDescription) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &TargetDescription) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5481,7 +5522,7 @@ impl TargetDescriptionSerializer {
 /// Serialize `TargetDescriptions` contents to a `SignedRequest`.
 struct TargetDescriptionsSerializer;
 impl TargetDescriptionsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<TargetDescription>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<TargetDescription>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             TargetDescriptionSerializer::serialize(params, &key, obj);
@@ -5641,7 +5682,7 @@ impl TargetGroupArnDeserializer {
 /// Serialize `TargetGroupArns` contents to a `SignedRequest`.
 struct TargetGroupArnsSerializer;
 impl TargetGroupArnsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5687,7 +5728,7 @@ impl TargetGroupAttributeDeserializer {
 /// Serialize `TargetGroupAttribute` contents to a `SignedRequest`.
 struct TargetGroupAttributeSerializer;
 impl TargetGroupAttributeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TargetGroupAttribute) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &TargetGroupAttribute) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5747,7 +5788,7 @@ impl TargetGroupAttributesDeserializer {
 /// Serialize `TargetGroupAttributes` contents to a `SignedRequest`.
 struct TargetGroupAttributesSerializer;
 impl TargetGroupAttributesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<TargetGroupAttribute>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<TargetGroupAttribute>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             TargetGroupAttributeSerializer::serialize(params, &key, obj);
@@ -5770,7 +5811,7 @@ impl TargetGroupNameDeserializer {
 /// Serialize `TargetGroupNames` contents to a `SignedRequest`.
 struct TargetGroupNamesSerializer;
 impl TargetGroupNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -8439,203 +8480,170 @@ pub trait Elb {
     /// <p>Adds the specified certificate to the specified HTTPS listener.</p> <p>If the certificate was already added, the call is successful but the certificate is not added again.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>. To remove certificates from your listener, use <a>RemoveListenerCertificates</a>. To specify the default SSL server certificate, use <a>ModifyListener</a>.</p>
     fn add_listener_certificates(
         &self,
-        input: AddListenerCertificatesInput,
-    ) -> RusotoFuture<AddListenerCertificatesOutput, AddListenerCertificatesError>;
+        input: AddListenerCertificatesRequest,
+    ) -> Request<AddListenerCertificatesRequest>;
 
     /// <p>Adds the specified tags to the specified Elastic Load Balancing resource. You can tag your Application Load Balancers, Network Load Balancers, and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
-    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError>;
+    fn add_tags(&self, input: AddTagsRequest) -> Request<AddTagsRequest>;
 
     /// <p>Creates a listener for the specified Application Load Balancer or Network Load Balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple listeners with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-listeners.html">Listeners for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn create_listener(
-        &self,
-        input: CreateListenerInput,
-    ) -> RusotoFuture<CreateListenerOutput, CreateListenerError>;
+    fn create_listener(&self, input: CreateListenerRequest) -> Request<CreateListenerRequest>;
 
     /// <p>Creates an Application Load Balancer or a Network Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, public subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>For limit information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancer</a> in the <i>Network Load Balancers Guide</i>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple load balancers with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html">Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_load_balancer(
         &self,
-        input: CreateLoadBalancerInput,
-    ) -> RusotoFuture<CreateLoadBalancerOutput, CreateLoadBalancerError>;
+        input: CreateLoadBalancerRequest,
+    ) -> Request<CreateLoadBalancerRequest>;
 
     /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the conditions for a rule are met, its actions are performed. If the conditions for no rules are met, the actions for the default rule are performed. For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
-    fn create_rule(
-        &self,
-        input: CreateRuleInput,
-    ) -> RusotoFuture<CreateRuleOutput, CreateRuleError>;
+    fn create_rule(&self, input: CreateRuleRequest) -> Request<CreateRuleRequest>;
 
     /// <p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple target groups with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html">Target Groups for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_target_group(
         &self,
-        input: CreateTargetGroupInput,
-    ) -> RusotoFuture<CreateTargetGroupOutput, CreateTargetGroupError>;
+        input: CreateTargetGroupRequest,
+    ) -> Request<CreateTargetGroupRequest>;
 
     /// <p>Deletes the specified listener.</p> <p>Alternatively, your listener is deleted when you delete the load balancer to which it is attached, using <a>DeleteLoadBalancer</a>.</p>
-    fn delete_listener(
-        &self,
-        input: DeleteListenerInput,
-    ) -> RusotoFuture<DeleteListenerOutput, DeleteListenerError>;
+    fn delete_listener(&self, input: DeleteListenerRequest) -> Request<DeleteListenerRequest>;
 
     /// <p>Deletes the specified Application Load Balancer or Network Load Balancer and its attached listeners.</p> <p>You can't delete a load balancer if deletion protection is enabled. If the load balancer does not exist or has already been deleted, the call succeeds.</p> <p>Deleting a load balancer does not affect its registered targets. For example, your EC2 instances continue to run and are still registered to their target groups. If you no longer need these EC2 instances, you can stop or terminate them.</p>
     fn delete_load_balancer(
         &self,
-        input: DeleteLoadBalancerInput,
-    ) -> RusotoFuture<DeleteLoadBalancerOutput, DeleteLoadBalancerError>;
+        input: DeleteLoadBalancerRequest,
+    ) -> Request<DeleteLoadBalancerRequest>;
 
     /// <p>Deletes the specified rule.</p>
-    fn delete_rule(
-        &self,
-        input: DeleteRuleInput,
-    ) -> RusotoFuture<DeleteRuleOutput, DeleteRuleError>;
+    fn delete_rule(&self, input: DeleteRuleRequest) -> Request<DeleteRuleRequest>;
 
     /// <p>Deletes the specified target group.</p> <p>You can delete a target group if it is not referenced by any actions. Deleting a target group also deletes any associated health checks.</p>
     fn delete_target_group(
         &self,
-        input: DeleteTargetGroupInput,
-    ) -> RusotoFuture<DeleteTargetGroupOutput, DeleteTargetGroupError>;
+        input: DeleteTargetGroupRequest,
+    ) -> Request<DeleteTargetGroupRequest>;
 
     /// <p>Deregisters the specified targets from the specified target group. After the targets are deregistered, they no longer receive traffic from the load balancer.</p>
     fn deregister_targets(
         &self,
-        input: DeregisterTargetsInput,
-    ) -> RusotoFuture<DeregisterTargetsOutput, DeregisterTargetsError>;
+        input: DeregisterTargetsRequest,
+    ) -> Request<DeregisterTargetsRequest>;
 
     /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancers</a> in the <i>Application Load Balancer Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn describe_account_limits(
         &self,
-        input: DescribeAccountLimitsInput,
-    ) -> RusotoFuture<DescribeAccountLimitsOutput, DescribeAccountLimitsError>;
+        input: DescribeAccountLimitsRequest,
+    ) -> Request<DescribeAccountLimitsRequest>;
 
     /// <p>Describes the certificates for the specified HTTPS listener.</p>
     fn describe_listener_certificates(
         &self,
-        input: DescribeListenerCertificatesInput,
-    ) -> RusotoFuture<DescribeListenerCertificatesOutput, DescribeListenerCertificatesError>;
+        input: DescribeListenerCertificatesRequest,
+    ) -> Request<DescribeListenerCertificatesRequest>;
 
     /// <p>Describes the specified listeners or the listeners for the specified Application Load Balancer or Network Load Balancer. You must specify either a load balancer or one or more listeners.</p>
     fn describe_listeners(
         &self,
-        input: DescribeListenersInput,
-    ) -> RusotoFuture<DescribeListenersOutput, DescribeListenersError>;
+        input: DescribeListenersRequest,
+    ) -> Request<DescribeListenersRequest>;
 
     /// <p>Describes the attributes for the specified Application Load Balancer or Network Load Balancer.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn describe_load_balancer_attributes(
         &self,
-        input: DescribeLoadBalancerAttributesInput,
-    ) -> RusotoFuture<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError>;
+        input: DescribeLoadBalancerAttributesRequest,
+    ) -> Request<DescribeLoadBalancerAttributesRequest>;
 
     /// <p>Describes the specified load balancers or all of your load balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>
     fn describe_load_balancers(
         &self,
-        input: DescribeLoadBalancersInput,
-    ) -> RusotoFuture<DescribeLoadBalancersOutput, DescribeLoadBalancersError>;
+        input: DescribeLoadBalancersRequest,
+    ) -> Request<DescribeLoadBalancersRequest>;
 
     /// <p>Describes the specified rules or the rules for the specified listener. You must specify either a listener or one or more rules.</p>
-    fn describe_rules(
-        &self,
-        input: DescribeRulesInput,
-    ) -> RusotoFuture<DescribeRulesOutput, DescribeRulesError>;
+    fn describe_rules(&self, input: DescribeRulesRequest) -> Request<DescribeRulesRequest>;
 
     /// <p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
     fn describe_ssl_policies(
         &self,
-        input: DescribeSSLPoliciesInput,
-    ) -> RusotoFuture<DescribeSSLPoliciesOutput, DescribeSSLPoliciesError>;
+        input: DescribeSSLPoliciesRequest,
+    ) -> Request<DescribeSSLPoliciesRequest>;
 
     /// <p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers, Network Load Balancers, and target groups.</p>
-    fn describe_tags(
-        &self,
-        input: DescribeTagsInput,
-    ) -> RusotoFuture<DescribeTagsOutput, DescribeTagsError>;
+    fn describe_tags(&self, input: DescribeTagsRequest) -> Request<DescribeTagsRequest>;
 
     /// <p>Describes the attributes for the specified target group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn describe_target_group_attributes(
         &self,
-        input: DescribeTargetGroupAttributesInput,
-    ) -> RusotoFuture<DescribeTargetGroupAttributesOutput, DescribeTargetGroupAttributesError>;
+        input: DescribeTargetGroupAttributesRequest,
+    ) -> Request<DescribeTargetGroupAttributesRequest>;
 
     /// <p>Describes the specified target groups or all of your target groups. By default, all target groups are described. Alternatively, you can specify one of the following to filter the results: the ARN of the load balancer, the names of one or more target groups, or the ARNs of one or more target groups.</p> <p>To describe the targets for a target group, use <a>DescribeTargetHealth</a>. To describe the attributes of a target group, use <a>DescribeTargetGroupAttributes</a>.</p>
     fn describe_target_groups(
         &self,
-        input: DescribeTargetGroupsInput,
-    ) -> RusotoFuture<DescribeTargetGroupsOutput, DescribeTargetGroupsError>;
+        input: DescribeTargetGroupsRequest,
+    ) -> Request<DescribeTargetGroupsRequest>;
 
     /// <p>Describes the health of the specified targets or all of your targets.</p>
     fn describe_target_health(
         &self,
-        input: DescribeTargetHealthInput,
-    ) -> RusotoFuture<DescribeTargetHealthOutput, DescribeTargetHealthError>;
+        input: DescribeTargetHealthRequest,
+    ) -> Request<DescribeTargetHealthRequest>;
 
     /// <p>Modifies the specified properties of the specified listener.</p> <p>Any properties that you do not specify retain their current values. However, changing the protocol from HTTPS to HTTP, or from TLS to TCP, removes the security policy and server certificate properties. If you change the protocol from HTTP to HTTPS, or from TCP to TLS, you must add the security policy and server certificate properties.</p>
-    fn modify_listener(
-        &self,
-        input: ModifyListenerInput,
-    ) -> RusotoFuture<ModifyListenerOutput, ModifyListenerError>;
+    fn modify_listener(&self, input: ModifyListenerRequest) -> Request<ModifyListenerRequest>;
 
     /// <p>Modifies the specified attributes of the specified Application Load Balancer or Network Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>
     fn modify_load_balancer_attributes(
         &self,
-        input: ModifyLoadBalancerAttributesInput,
-    ) -> RusotoFuture<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError>;
+        input: ModifyLoadBalancerAttributesRequest,
+    ) -> Request<ModifyLoadBalancerAttributesRequest>;
 
     /// <p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the actions for the default rule, use <a>ModifyListener</a>.</p>
-    fn modify_rule(
-        &self,
-        input: ModifyRuleInput,
-    ) -> RusotoFuture<ModifyRuleOutput, ModifyRuleError>;
+    fn modify_rule(&self, input: ModifyRuleRequest) -> Request<ModifyRuleRequest>;
 
     /// <p>Modifies the health checks used when evaluating the health state of the targets in the specified target group.</p> <p>To monitor the health of the targets, use <a>DescribeTargetHealth</a>.</p>
     fn modify_target_group(
         &self,
-        input: ModifyTargetGroupInput,
-    ) -> RusotoFuture<ModifyTargetGroupOutput, ModifyTargetGroupError>;
+        input: ModifyTargetGroupRequest,
+    ) -> Request<ModifyTargetGroupRequest>;
 
     /// <p>Modifies the specified attributes of the specified target group.</p>
     fn modify_target_group_attributes(
         &self,
-        input: ModifyTargetGroupAttributesInput,
-    ) -> RusotoFuture<ModifyTargetGroupAttributesOutput, ModifyTargetGroupAttributesError>;
+        input: ModifyTargetGroupAttributesRequest,
+    ) -> Request<ModifyTargetGroupAttributesRequest>;
 
     /// <p>Registers the specified targets with the specified target group.</p> <p>If the target is an EC2 instance, it must be in the <code>running</code> state when you register it.</p> <p>By default, the load balancer routes requests to registered targets using the protocol and port for the target group. Alternatively, you can override the port for a target when you register it. You can register each EC2 instance or IP address with the same target group multiple times using different ports.</p> <p>With a Network Load Balancer, you cannot register instances by instance ID if they have the following instance types: C1, CC1, CC2, CG1, CG2, CR1, CS1, G1, G2, HI1, HS1, M1, M2, M3, and T1. You can register instances of these types by IP address.</p> <p>To remove a target from a target group, use <a>DeregisterTargets</a>.</p>
-    fn register_targets(
-        &self,
-        input: RegisterTargetsInput,
-    ) -> RusotoFuture<RegisterTargetsOutput, RegisterTargetsError>;
+    fn register_targets(&self, input: RegisterTargetsRequest) -> Request<RegisterTargetsRequest>;
 
     /// <p>Removes the specified certificate from the specified HTTPS listener.</p> <p>You can't remove the default certificate for a listener. To replace the default certificate, call <a>ModifyListener</a>.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>.</p>
     fn remove_listener_certificates(
         &self,
-        input: RemoveListenerCertificatesInput,
-    ) -> RusotoFuture<RemoveListenerCertificatesOutput, RemoveListenerCertificatesError>;
+        input: RemoveListenerCertificatesRequest,
+    ) -> Request<RemoveListenerCertificatesRequest>;
 
     /// <p>Removes the specified tags from the specified Elastic Load Balancing resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>
-    fn remove_tags(
-        &self,
-        input: RemoveTagsInput,
-    ) -> RusotoFuture<RemoveTagsOutput, RemoveTagsError>;
+    fn remove_tags(&self, input: RemoveTagsRequest) -> Request<RemoveTagsRequest>;
 
     /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer or Network Load Balancer.</p> <p>Network Load Balancers must use <code>ipv4</code>.</p>
     fn set_ip_address_type(
         &self,
-        input: SetIpAddressTypeInput,
-    ) -> RusotoFuture<SetIpAddressTypeOutput, SetIpAddressTypeError>;
+        input: SetIpAddressTypeRequest,
+    ) -> Request<SetIpAddressTypeRequest>;
 
     /// <p>Sets the priorities of the specified rules.</p> <p>You can reorder the rules as long as there are no priority conflicts in the new order. Any existing rules that you do not specify retain their current priority.</p>
     fn set_rule_priorities(
         &self,
-        input: SetRulePrioritiesInput,
-    ) -> RusotoFuture<SetRulePrioritiesOutput, SetRulePrioritiesError>;
+        input: SetRulePrioritiesRequest,
+    ) -> Request<SetRulePrioritiesRequest>;
 
     /// <p>Associates the specified security groups with the specified Application Load Balancer. The specified security groups override the previously associated security groups.</p> <p>You can't specify a security group for a Network Load Balancer.</p>
     fn set_security_groups(
         &self,
-        input: SetSecurityGroupsInput,
-    ) -> RusotoFuture<SetSecurityGroupsOutput, SetSecurityGroupsError>;
+        input: SetSecurityGroupsRequest,
+    ) -> Request<SetSecurityGroupsRequest>;
 
     /// <p>Enables the Availability Zone for the specified public subnets for the specified Application Load Balancer. The specified subnets replace the previously enabled subnets.</p> <p>You can't change the subnets for a Network Load Balancer.</p>
-    fn set_subnets(
-        &self,
-        input: SetSubnetsInput,
-    ) -> RusotoFuture<SetSubnetsOutput, SetSubnetsError>;
+    fn set_subnets(&self, input: SetSubnetsRequest) -> Request<SetSubnetsRequest>;
 }
 /// A client for the Elastic Load Balancing v2 API.
 #[derive(Clone)]
@@ -8677,18 +8685,259 @@ impl Elb for ElbClient {
     /// <p>Adds the specified certificate to the specified HTTPS listener.</p> <p>If the certificate was already added, the call is successful but the certificate is not added again.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>. To remove certificates from your listener, use <a>RemoveListenerCertificates</a>. To specify the default SSL server certificate, use <a>ModifyListener</a>.</p>
     fn add_listener_certificates(
         &self,
-        input: AddListenerCertificatesInput,
-    ) -> RusotoFuture<AddListenerCertificatesOutput, AddListenerCertificatesError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+        input: AddListenerCertificatesRequest,
+    ) -> Request<AddListenerCertificatesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds the specified tags to the specified Elastic Load Balancing resource. You can tag your Application Load Balancers, Network Load Balancers, and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
+    fn add_tags(&self, input: AddTagsRequest) -> Request<AddTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a listener for the specified Application Load Balancer or Network Load Balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple listeners with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-listeners.html">Listeners for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
+    fn create_listener(&self, input: CreateListenerRequest) -> Request<CreateListenerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an Application Load Balancer or a Network Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, public subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>For limit information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancer</a> in the <i>Network Load Balancers Guide</i>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple load balancers with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html">Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
+    fn create_load_balancer(
+        &self,
+        input: CreateLoadBalancerRequest,
+    ) -> Request<CreateLoadBalancerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the conditions for a rule are met, its actions are performed. If the conditions for no rules are met, the actions for the default rule are performed. For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
+    fn create_rule(&self, input: CreateRuleRequest) -> Request<CreateRuleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple target groups with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html">Target Groups for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
+    fn create_target_group(
+        &self,
+        input: CreateTargetGroupRequest,
+    ) -> Request<CreateTargetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified listener.</p> <p>Alternatively, your listener is deleted when you delete the load balancer to which it is attached, using <a>DeleteLoadBalancer</a>.</p>
+    fn delete_listener(&self, input: DeleteListenerRequest) -> Request<DeleteListenerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified Application Load Balancer or Network Load Balancer and its attached listeners.</p> <p>You can't delete a load balancer if deletion protection is enabled. If the load balancer does not exist or has already been deleted, the call succeeds.</p> <p>Deleting a load balancer does not affect its registered targets. For example, your EC2 instances continue to run and are still registered to their target groups. If you no longer need these EC2 instances, you can stop or terminate them.</p>
+    fn delete_load_balancer(
+        &self,
+        input: DeleteLoadBalancerRequest,
+    ) -> Request<DeleteLoadBalancerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified rule.</p>
+    fn delete_rule(&self, input: DeleteRuleRequest) -> Request<DeleteRuleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified target group.</p> <p>You can delete a target group if it is not referenced by any actions. Deleting a target group also deletes any associated health checks.</p>
+    fn delete_target_group(
+        &self,
+        input: DeleteTargetGroupRequest,
+    ) -> Request<DeleteTargetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deregisters the specified targets from the specified target group. After the targets are deregistered, they no longer receive traffic from the load balancer.</p>
+    fn deregister_targets(
+        &self,
+        input: DeregisterTargetsRequest,
+    ) -> Request<DeregisterTargetsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancers</a> in the <i>Application Load Balancer Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
+    fn describe_account_limits(
+        &self,
+        input: DescribeAccountLimitsRequest,
+    ) -> Request<DescribeAccountLimitsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the certificates for the specified HTTPS listener.</p>
+    fn describe_listener_certificates(
+        &self,
+        input: DescribeListenerCertificatesRequest,
+    ) -> Request<DescribeListenerCertificatesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the specified listeners or the listeners for the specified Application Load Balancer or Network Load Balancer. You must specify either a load balancer or one or more listeners.</p>
+    fn describe_listeners(
+        &self,
+        input: DescribeListenersRequest,
+    ) -> Request<DescribeListenersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the attributes for the specified Application Load Balancer or Network Load Balancer.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
+    fn describe_load_balancer_attributes(
+        &self,
+        input: DescribeLoadBalancerAttributesRequest,
+    ) -> Request<DescribeLoadBalancerAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the specified load balancers or all of your load balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>
+    fn describe_load_balancers(
+        &self,
+        input: DescribeLoadBalancersRequest,
+    ) -> Request<DescribeLoadBalancersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the specified rules or the rules for the specified listener. You must specify either a listener or one or more rules.</p>
+    fn describe_rules(&self, input: DescribeRulesRequest) -> Request<DescribeRulesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
+    fn describe_ssl_policies(
+        &self,
+        input: DescribeSSLPoliciesRequest,
+    ) -> Request<DescribeSSLPoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers, Network Load Balancers, and target groups.</p>
+    fn describe_tags(&self, input: DescribeTagsRequest) -> Request<DescribeTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the attributes for the specified target group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
+    fn describe_target_group_attributes(
+        &self,
+        input: DescribeTargetGroupAttributesRequest,
+    ) -> Request<DescribeTargetGroupAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the specified target groups or all of your target groups. By default, all target groups are described. Alternatively, you can specify one of the following to filter the results: the ARN of the load balancer, the names of one or more target groups, or the ARNs of one or more target groups.</p> <p>To describe the targets for a target group, use <a>DescribeTargetHealth</a>. To describe the attributes of a target group, use <a>DescribeTargetGroupAttributes</a>.</p>
+    fn describe_target_groups(
+        &self,
+        input: DescribeTargetGroupsRequest,
+    ) -> Request<DescribeTargetGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the health of the specified targets or all of your targets.</p>
+    fn describe_target_health(
+        &self,
+        input: DescribeTargetHealthRequest,
+    ) -> Request<DescribeTargetHealthRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the specified properties of the specified listener.</p> <p>Any properties that you do not specify retain their current values. However, changing the protocol from HTTPS to HTTP, or from TLS to TCP, removes the security policy and server certificate properties. If you change the protocol from HTTP to HTTPS, or from TCP to TLS, you must add the security policy and server certificate properties.</p>
+    fn modify_listener(&self, input: ModifyListenerRequest) -> Request<ModifyListenerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the specified attributes of the specified Application Load Balancer or Network Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>
+    fn modify_load_balancer_attributes(
+        &self,
+        input: ModifyLoadBalancerAttributesRequest,
+    ) -> Request<ModifyLoadBalancerAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the actions for the default rule, use <a>ModifyListener</a>.</p>
+    fn modify_rule(&self, input: ModifyRuleRequest) -> Request<ModifyRuleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the health checks used when evaluating the health state of the targets in the specified target group.</p> <p>To monitor the health of the targets, use <a>DescribeTargetHealth</a>.</p>
+    fn modify_target_group(
+        &self,
+        input: ModifyTargetGroupRequest,
+    ) -> Request<ModifyTargetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the specified attributes of the specified target group.</p>
+    fn modify_target_group_attributes(
+        &self,
+        input: ModifyTargetGroupAttributesRequest,
+    ) -> Request<ModifyTargetGroupAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Registers the specified targets with the specified target group.</p> <p>If the target is an EC2 instance, it must be in the <code>running</code> state when you register it.</p> <p>By default, the load balancer routes requests to registered targets using the protocol and port for the target group. Alternatively, you can override the port for a target when you register it. You can register each EC2 instance or IP address with the same target group multiple times using different ports.</p> <p>With a Network Load Balancer, you cannot register instances by instance ID if they have the following instance types: C1, CC1, CC2, CG1, CG2, CR1, CS1, G1, G2, HI1, HS1, M1, M2, M3, and T1. You can register instances of these types by IP address.</p> <p>To remove a target from a target group, use <a>DeregisterTargets</a>.</p>
+    fn register_targets(&self, input: RegisterTargetsRequest) -> Request<RegisterTargetsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified certificate from the specified HTTPS listener.</p> <p>You can't remove the default certificate for a listener. To replace the default certificate, call <a>ModifyListener</a>.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>.</p>
+    fn remove_listener_certificates(
+        &self,
+        input: RemoveListenerCertificatesRequest,
+    ) -> Request<RemoveListenerCertificatesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified tags from the specified Elastic Load Balancing resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>
+    fn remove_tags(&self, input: RemoveTagsRequest) -> Request<RemoveTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer or Network Load Balancer.</p> <p>Network Load Balancers must use <code>ipv4</code>.</p>
+    fn set_ip_address_type(
+        &self,
+        input: SetIpAddressTypeRequest,
+    ) -> Request<SetIpAddressTypeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the priorities of the specified rules.</p> <p>You can reorder the rules as long as there are no priority conflicts in the new order. Any existing rules that you do not specify retain their current priority.</p>
+    fn set_rule_priorities(
+        &self,
+        input: SetRulePrioritiesRequest,
+    ) -> Request<SetRulePrioritiesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Associates the specified security groups with the specified Application Load Balancer. The specified security groups override the previously associated security groups.</p> <p>You can't specify a security group for a Network Load Balancer.</p>
+    fn set_security_groups(
+        &self,
+        input: SetSecurityGroupsRequest,
+    ) -> Request<SetSecurityGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Enables the Availability Zone for the specified public subnets for the specified Application Load Balancer. The specified subnets replace the previously enabled subnets.</p> <p>You can't change the subnets for a Network Load Balancer.</p>
+    fn set_subnets(&self, input: SetSubnetsRequest) -> Request<SetSubnetsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AddListenerCertificatesRequest {
+    type Output = AddListenerCertificatesResponse;
+    type Error = AddListenerCertificatesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AddListenerCertificates");
         params.put("Version", "2015-12-01");
-        AddListenerCertificatesInputSerializer::serialize(&mut params, "", &input);
+        AddListenerCertificatesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AddListenerCertificatesError::from_response(response))
@@ -8699,7 +8948,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = AddListenerCertificatesOutput::default();
+                    result = AddListenerCertificatesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -8709,7 +8958,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = AddListenerCertificatesOutputDeserializer::deserialize(
+                    result = AddListenerCertificatesResponseDeserializer::deserialize(
                         "AddListenerCertificatesResult",
                         &mut stack,
                     )?;
@@ -8721,19 +8970,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Adds the specified tags to the specified Elastic Load Balancing resource. You can tag your Application Load Balancers, Network Load Balancers, and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
-    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for AddTagsRequest {
+    type Output = AddTagsResponse;
+    type Error = AddTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AddTags");
         params.put("Version", "2015-12-01");
-        AddTagsInputSerializer::serialize(&mut params, "", &input);
+        AddTagsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -8747,7 +9004,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = AddTagsOutput::default();
+                    result = AddTagsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -8757,7 +9014,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = AddTagsOutputDeserializer::deserialize("AddTagsResult", &mut stack)?;
+                    result = AddTagsResponseDeserializer::deserialize("AddTagsResult", &mut stack)?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -8766,22 +9023,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a listener for the specified Application Load Balancer or Network Load Balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple listeners with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-listeners.html">Listeners for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn create_listener(
-        &self,
-        input: CreateListenerInput,
-    ) -> RusotoFuture<CreateListenerOutput, CreateListenerError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for CreateListenerRequest {
+    type Output = CreateListenerResponse;
+    type Error = CreateListenerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateListener");
         params.put("Version", "2015-12-01");
-        CreateListenerInputSerializer::serialize(&mut params, "", &input);
+        CreateListenerRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -8795,7 +9057,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateListenerOutput::default();
+                    result = CreateListenerResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -8805,7 +9067,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateListenerOutputDeserializer::deserialize(
+                    result = CreateListenerResponseDeserializer::deserialize(
                         "CreateListenerResult",
                         &mut stack,
                     )?;
@@ -8817,22 +9079,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Creates an Application Load Balancer or a Network Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, public subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>For limit information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancer</a> in the <i>Network Load Balancers Guide</i>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple load balancers with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html">Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn create_load_balancer(
-        &self,
-        input: CreateLoadBalancerInput,
-    ) -> RusotoFuture<CreateLoadBalancerOutput, CreateLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for CreateLoadBalancerRequest {
+    type Output = CreateLoadBalancerResponse;
+    type Error = CreateLoadBalancerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateLoadBalancer");
         params.put("Version", "2015-12-01");
-        CreateLoadBalancerInputSerializer::serialize(&mut params, "", &input);
+        CreateLoadBalancerRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -8846,7 +9113,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateLoadBalancerOutput::default();
+                    result = CreateLoadBalancerResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -8856,7 +9123,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateLoadBalancerOutputDeserializer::deserialize(
+                    result = CreateLoadBalancerResponseDeserializer::deserialize(
                         "CreateLoadBalancerResult",
                         &mut stack,
                     )?;
@@ -8868,22 +9135,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the conditions for a rule are met, its actions are performed. If the conditions for no rules are met, the actions for the default rule are performed. For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
-    fn create_rule(
-        &self,
-        input: CreateRuleInput,
-    ) -> RusotoFuture<CreateRuleOutput, CreateRuleError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for CreateRuleRequest {
+    type Output = CreateRuleResponse;
+    type Error = CreateRuleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateRule");
         params.put("Version", "2015-12-01");
-        CreateRuleInputSerializer::serialize(&mut params, "", &input);
+        CreateRuleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -8897,7 +9169,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateRuleOutput::default();
+                    result = CreateRuleResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -8907,8 +9179,10 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        CreateRuleOutputDeserializer::deserialize("CreateRuleResult", &mut stack)?;
+                    result = CreateRuleResponseDeserializer::deserialize(
+                        "CreateRuleResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -8917,22 +9191,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple target groups with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html">Target Groups for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn create_target_group(
-        &self,
-        input: CreateTargetGroupInput,
-    ) -> RusotoFuture<CreateTargetGroupOutput, CreateTargetGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for CreateTargetGroupRequest {
+    type Output = CreateTargetGroupResponse;
+    type Error = CreateTargetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateTargetGroup");
         params.put("Version", "2015-12-01");
-        CreateTargetGroupInputSerializer::serialize(&mut params, "", &input);
+        CreateTargetGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -8946,7 +9225,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateTargetGroupOutput::default();
+                    result = CreateTargetGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -8956,7 +9235,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateTargetGroupOutputDeserializer::deserialize(
+                    result = CreateTargetGroupResponseDeserializer::deserialize(
                         "CreateTargetGroupResult",
                         &mut stack,
                     )?;
@@ -8968,22 +9247,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes the specified listener.</p> <p>Alternatively, your listener is deleted when you delete the load balancer to which it is attached, using <a>DeleteLoadBalancer</a>.</p>
-    fn delete_listener(
-        &self,
-        input: DeleteListenerInput,
-    ) -> RusotoFuture<DeleteListenerOutput, DeleteListenerError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DeleteListenerRequest {
+    type Output = DeleteListenerResponse;
+    type Error = DeleteListenerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteListener");
         params.put("Version", "2015-12-01");
-        DeleteListenerInputSerializer::serialize(&mut params, "", &input);
+        DeleteListenerRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -8997,7 +9281,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteListenerOutput::default();
+                    result = DeleteListenerResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9007,7 +9291,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteListenerOutputDeserializer::deserialize(
+                    result = DeleteListenerResponseDeserializer::deserialize(
                         "DeleteListenerResult",
                         &mut stack,
                     )?;
@@ -9019,22 +9303,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes the specified Application Load Balancer or Network Load Balancer and its attached listeners.</p> <p>You can't delete a load balancer if deletion protection is enabled. If the load balancer does not exist or has already been deleted, the call succeeds.</p> <p>Deleting a load balancer does not affect its registered targets. For example, your EC2 instances continue to run and are still registered to their target groups. If you no longer need these EC2 instances, you can stop or terminate them.</p>
-    fn delete_load_balancer(
-        &self,
-        input: DeleteLoadBalancerInput,
-    ) -> RusotoFuture<DeleteLoadBalancerOutput, DeleteLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DeleteLoadBalancerRequest {
+    type Output = DeleteLoadBalancerResponse;
+    type Error = DeleteLoadBalancerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteLoadBalancer");
         params.put("Version", "2015-12-01");
-        DeleteLoadBalancerInputSerializer::serialize(&mut params, "", &input);
+        DeleteLoadBalancerRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9048,7 +9337,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteLoadBalancerOutput::default();
+                    result = DeleteLoadBalancerResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9058,7 +9347,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteLoadBalancerOutputDeserializer::deserialize(
+                    result = DeleteLoadBalancerResponseDeserializer::deserialize(
                         "DeleteLoadBalancerResult",
                         &mut stack,
                     )?;
@@ -9070,22 +9359,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes the specified rule.</p>
-    fn delete_rule(
-        &self,
-        input: DeleteRuleInput,
-    ) -> RusotoFuture<DeleteRuleOutput, DeleteRuleError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DeleteRuleRequest {
+    type Output = DeleteRuleResponse;
+    type Error = DeleteRuleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteRule");
         params.put("Version", "2015-12-01");
-        DeleteRuleInputSerializer::serialize(&mut params, "", &input);
+        DeleteRuleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9099,7 +9393,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteRuleOutput::default();
+                    result = DeleteRuleResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9109,8 +9403,10 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        DeleteRuleOutputDeserializer::deserialize("DeleteRuleResult", &mut stack)?;
+                    result = DeleteRuleResponseDeserializer::deserialize(
+                        "DeleteRuleResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -9119,22 +9415,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes the specified target group.</p> <p>You can delete a target group if it is not referenced by any actions. Deleting a target group also deletes any associated health checks.</p>
-    fn delete_target_group(
-        &self,
-        input: DeleteTargetGroupInput,
-    ) -> RusotoFuture<DeleteTargetGroupOutput, DeleteTargetGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DeleteTargetGroupRequest {
+    type Output = DeleteTargetGroupResponse;
+    type Error = DeleteTargetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteTargetGroup");
         params.put("Version", "2015-12-01");
-        DeleteTargetGroupInputSerializer::serialize(&mut params, "", &input);
+        DeleteTargetGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9148,7 +9449,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteTargetGroupOutput::default();
+                    result = DeleteTargetGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9158,7 +9459,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteTargetGroupOutputDeserializer::deserialize(
+                    result = DeleteTargetGroupResponseDeserializer::deserialize(
                         "DeleteTargetGroupResult",
                         &mut stack,
                     )?;
@@ -9170,22 +9471,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Deregisters the specified targets from the specified target group. After the targets are deregistered, they no longer receive traffic from the load balancer.</p>
-    fn deregister_targets(
-        &self,
-        input: DeregisterTargetsInput,
-    ) -> RusotoFuture<DeregisterTargetsOutput, DeregisterTargetsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DeregisterTargetsRequest {
+    type Output = DeregisterTargetsResponse;
+    type Error = DeregisterTargetsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeregisterTargets");
         params.put("Version", "2015-12-01");
-        DeregisterTargetsInputSerializer::serialize(&mut params, "", &input);
+        DeregisterTargetsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9199,7 +9505,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeregisterTargetsOutput::default();
+                    result = DeregisterTargetsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9209,7 +9515,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeregisterTargetsOutputDeserializer::deserialize(
+                    result = DeregisterTargetsResponseDeserializer::deserialize(
                         "DeregisterTargetsResult",
                         &mut stack,
                     )?;
@@ -9221,22 +9527,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancers</a> in the <i>Application Load Balancer Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn describe_account_limits(
-        &self,
-        input: DescribeAccountLimitsInput,
-    ) -> RusotoFuture<DescribeAccountLimitsOutput, DescribeAccountLimitsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DescribeAccountLimitsRequest {
+    type Output = DescribeAccountLimitsResponse;
+    type Error = DescribeAccountLimitsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAccountLimits");
         params.put("Version", "2015-12-01");
-        DescribeAccountLimitsInputSerializer::serialize(&mut params, "", &input);
+        DescribeAccountLimitsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAccountLimitsError::from_response(response))
@@ -9247,7 +9558,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeAccountLimitsOutput::default();
+                    result = DescribeAccountLimitsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9257,7 +9568,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeAccountLimitsOutputDeserializer::deserialize(
+                    result = DescribeAccountLimitsResponseDeserializer::deserialize(
                         "DescribeAccountLimitsResult",
                         &mut stack,
                     )?;
@@ -9269,22 +9580,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the certificates for the specified HTTPS listener.</p>
-    fn describe_listener_certificates(
-        &self,
-        input: DescribeListenerCertificatesInput,
-    ) -> RusotoFuture<DescribeListenerCertificatesOutput, DescribeListenerCertificatesError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DescribeListenerCertificatesRequest {
+    type Output = DescribeListenerCertificatesResponse;
+    type Error = DescribeListenerCertificatesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeListenerCertificates");
         params.put("Version", "2015-12-01");
-        DescribeListenerCertificatesInputSerializer::serialize(&mut params, "", &input);
+        DescribeListenerCertificatesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeListenerCertificatesError::from_response(response))
@@ -9295,7 +9611,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeListenerCertificatesOutput::default();
+                    result = DescribeListenerCertificatesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9305,7 +9621,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeListenerCertificatesOutputDeserializer::deserialize(
+                    result = DescribeListenerCertificatesResponseDeserializer::deserialize(
                         "DescribeListenerCertificatesResult",
                         &mut stack,
                     )?;
@@ -9317,22 +9633,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the specified listeners or the listeners for the specified Application Load Balancer or Network Load Balancer. You must specify either a load balancer or one or more listeners.</p>
-    fn describe_listeners(
-        &self,
-        input: DescribeListenersInput,
-    ) -> RusotoFuture<DescribeListenersOutput, DescribeListenersError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DescribeListenersRequest {
+    type Output = DescribeListenersResponse;
+    type Error = DescribeListenersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeListeners");
         params.put("Version", "2015-12-01");
-        DescribeListenersInputSerializer::serialize(&mut params, "", &input);
+        DescribeListenersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9346,7 +9667,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeListenersOutput::default();
+                    result = DescribeListenersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9356,7 +9677,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeListenersOutputDeserializer::deserialize(
+                    result = DescribeListenersResponseDeserializer::deserialize(
                         "DescribeListenersResult",
                         &mut stack,
                     )?;
@@ -9368,23 +9689,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the attributes for the specified Application Load Balancer or Network Load Balancer.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn describe_load_balancer_attributes(
-        &self,
-        input: DescribeLoadBalancerAttributesInput,
-    ) -> RusotoFuture<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError>
-    {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DescribeLoadBalancerAttributesRequest {
+    type Output = DescribeLoadBalancerAttributesResponse;
+    type Error = DescribeLoadBalancerAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLoadBalancerAttributes");
         params.put("Version", "2015-12-01");
-        DescribeLoadBalancerAttributesInputSerializer::serialize(&mut params, "", &input);
+        DescribeLoadBalancerAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLoadBalancerAttributesError::from_response(response))
@@ -9395,7 +9720,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeLoadBalancerAttributesOutput::default();
+                    result = DescribeLoadBalancerAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9405,7 +9730,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeLoadBalancerAttributesOutputDeserializer::deserialize(
+                    result = DescribeLoadBalancerAttributesResponseDeserializer::deserialize(
                         "DescribeLoadBalancerAttributesResult",
                         &mut stack,
                     )?;
@@ -9417,22 +9742,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the specified load balancers or all of your load balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>
-    fn describe_load_balancers(
-        &self,
-        input: DescribeLoadBalancersInput,
-    ) -> RusotoFuture<DescribeLoadBalancersOutput, DescribeLoadBalancersError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DescribeLoadBalancersRequest {
+    type Output = DescribeLoadBalancersResponse;
+    type Error = DescribeLoadBalancersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLoadBalancers");
         params.put("Version", "2015-12-01");
-        DescribeLoadBalancersInputSerializer::serialize(&mut params, "", &input);
+        DescribeLoadBalancersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLoadBalancersError::from_response(response))
@@ -9443,7 +9773,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeLoadBalancersOutput::default();
+                    result = DescribeLoadBalancersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9453,7 +9783,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeLoadBalancersOutputDeserializer::deserialize(
+                    result = DescribeLoadBalancersResponseDeserializer::deserialize(
                         "DescribeLoadBalancersResult",
                         &mut stack,
                     )?;
@@ -9465,22 +9795,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the specified rules or the rules for the specified listener. You must specify either a listener or one or more rules.</p>
-    fn describe_rules(
-        &self,
-        input: DescribeRulesInput,
-    ) -> RusotoFuture<DescribeRulesOutput, DescribeRulesError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DescribeRulesRequest {
+    type Output = DescribeRulesResponse;
+    type Error = DescribeRulesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeRules");
         params.put("Version", "2015-12-01");
-        DescribeRulesInputSerializer::serialize(&mut params, "", &input);
+        DescribeRulesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9494,7 +9829,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeRulesOutput::default();
+                    result = DescribeRulesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9504,7 +9839,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeRulesOutputDeserializer::deserialize(
+                    result = DescribeRulesResponseDeserializer::deserialize(
                         "DescribeRulesResult",
                         &mut stack,
                     )?;
@@ -9516,22 +9851,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
-    fn describe_ssl_policies(
-        &self,
-        input: DescribeSSLPoliciesInput,
-    ) -> RusotoFuture<DescribeSSLPoliciesOutput, DescribeSSLPoliciesError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DescribeSSLPoliciesRequest {
+    type Output = DescribeSSLPoliciesResponse;
+    type Error = DescribeSSLPoliciesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeSSLPolicies");
         params.put("Version", "2015-12-01");
-        DescribeSSLPoliciesInputSerializer::serialize(&mut params, "", &input);
+        DescribeSSLPoliciesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -9544,7 +9884,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeSSLPoliciesOutput::default();
+                    result = DescribeSSLPoliciesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9554,7 +9894,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeSSLPoliciesOutputDeserializer::deserialize(
+                    result = DescribeSSLPoliciesResponseDeserializer::deserialize(
                         "DescribeSSLPoliciesResult",
                         &mut stack,
                     )?;
@@ -9566,22 +9906,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers, Network Load Balancers, and target groups.</p>
-    fn describe_tags(
-        &self,
-        input: DescribeTagsInput,
-    ) -> RusotoFuture<DescribeTagsOutput, DescribeTagsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DescribeTagsRequest {
+    type Output = DescribeTagsResponse;
+    type Error = DescribeTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeTags");
         params.put("Version", "2015-12-01");
-        DescribeTagsInputSerializer::serialize(&mut params, "", &input);
+        DescribeTagsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9595,7 +9940,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeTagsOutput::default();
+                    result = DescribeTagsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9605,7 +9950,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeTagsOutputDeserializer::deserialize(
+                    result = DescribeTagsResponseDeserializer::deserialize(
                         "DescribeTagsResult",
                         &mut stack,
                     )?;
@@ -9617,22 +9962,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the attributes for the specified target group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn describe_target_group_attributes(
-        &self,
-        input: DescribeTargetGroupAttributesInput,
-    ) -> RusotoFuture<DescribeTargetGroupAttributesOutput, DescribeTargetGroupAttributesError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DescribeTargetGroupAttributesRequest {
+    type Output = DescribeTargetGroupAttributesResponse;
+    type Error = DescribeTargetGroupAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeTargetGroupAttributes");
         params.put("Version", "2015-12-01");
-        DescribeTargetGroupAttributesInputSerializer::serialize(&mut params, "", &input);
+        DescribeTargetGroupAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeTargetGroupAttributesError::from_response(response))
@@ -9643,7 +9993,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeTargetGroupAttributesOutput::default();
+                    result = DescribeTargetGroupAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9653,7 +10003,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeTargetGroupAttributesOutputDeserializer::deserialize(
+                    result = DescribeTargetGroupAttributesResponseDeserializer::deserialize(
                         "DescribeTargetGroupAttributesResult",
                         &mut stack,
                     )?;
@@ -9665,22 +10015,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the specified target groups or all of your target groups. By default, all target groups are described. Alternatively, you can specify one of the following to filter the results: the ARN of the load balancer, the names of one or more target groups, or the ARNs of one or more target groups.</p> <p>To describe the targets for a target group, use <a>DescribeTargetHealth</a>. To describe the attributes of a target group, use <a>DescribeTargetGroupAttributes</a>.</p>
-    fn describe_target_groups(
-        &self,
-        input: DescribeTargetGroupsInput,
-    ) -> RusotoFuture<DescribeTargetGroupsOutput, DescribeTargetGroupsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DescribeTargetGroupsRequest {
+    type Output = DescribeTargetGroupsResponse;
+    type Error = DescribeTargetGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeTargetGroups");
         params.put("Version", "2015-12-01");
-        DescribeTargetGroupsInputSerializer::serialize(&mut params, "", &input);
+        DescribeTargetGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -9693,7 +10048,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeTargetGroupsOutput::default();
+                    result = DescribeTargetGroupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9703,7 +10058,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeTargetGroupsOutputDeserializer::deserialize(
+                    result = DescribeTargetGroupsResponseDeserializer::deserialize(
                         "DescribeTargetGroupsResult",
                         &mut stack,
                     )?;
@@ -9715,22 +10070,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the health of the specified targets or all of your targets.</p>
-    fn describe_target_health(
-        &self,
-        input: DescribeTargetHealthInput,
-    ) -> RusotoFuture<DescribeTargetHealthOutput, DescribeTargetHealthError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DescribeTargetHealthRequest {
+    type Output = DescribeTargetHealthResponse;
+    type Error = DescribeTargetHealthError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeTargetHealth");
         params.put("Version", "2015-12-01");
-        DescribeTargetHealthInputSerializer::serialize(&mut params, "", &input);
+        DescribeTargetHealthRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -9743,7 +10103,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeTargetHealthOutput::default();
+                    result = DescribeTargetHealthResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9753,7 +10113,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeTargetHealthOutputDeserializer::deserialize(
+                    result = DescribeTargetHealthResponseDeserializer::deserialize(
                         "DescribeTargetHealthResult",
                         &mut stack,
                     )?;
@@ -9765,22 +10125,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies the specified properties of the specified listener.</p> <p>Any properties that you do not specify retain their current values. However, changing the protocol from HTTPS to HTTP, or from TLS to TCP, removes the security policy and server certificate properties. If you change the protocol from HTTP to HTTPS, or from TCP to TLS, you must add the security policy and server certificate properties.</p>
-    fn modify_listener(
-        &self,
-        input: ModifyListenerInput,
-    ) -> RusotoFuture<ModifyListenerOutput, ModifyListenerError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for ModifyListenerRequest {
+    type Output = ModifyListenerResponse;
+    type Error = ModifyListenerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyListener");
         params.put("Version", "2015-12-01");
-        ModifyListenerInputSerializer::serialize(&mut params, "", &input);
+        ModifyListenerRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9794,7 +10159,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyListenerOutput::default();
+                    result = ModifyListenerResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9804,7 +10169,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyListenerOutputDeserializer::deserialize(
+                    result = ModifyListenerResponseDeserializer::deserialize(
                         "ModifyListenerResult",
                         &mut stack,
                     )?;
@@ -9816,22 +10181,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies the specified attributes of the specified Application Load Balancer or Network Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>
-    fn modify_load_balancer_attributes(
-        &self,
-        input: ModifyLoadBalancerAttributesInput,
-    ) -> RusotoFuture<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for ModifyLoadBalancerAttributesRequest {
+    type Output = ModifyLoadBalancerAttributesResponse;
+    type Error = ModifyLoadBalancerAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyLoadBalancerAttributes");
         params.put("Version", "2015-12-01");
-        ModifyLoadBalancerAttributesInputSerializer::serialize(&mut params, "", &input);
+        ModifyLoadBalancerAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyLoadBalancerAttributesError::from_response(response))
@@ -9842,7 +10212,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyLoadBalancerAttributesOutput::default();
+                    result = ModifyLoadBalancerAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9852,7 +10222,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyLoadBalancerAttributesOutputDeserializer::deserialize(
+                    result = ModifyLoadBalancerAttributesResponseDeserializer::deserialize(
                         "ModifyLoadBalancerAttributesResult",
                         &mut stack,
                     )?;
@@ -9864,22 +10234,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the actions for the default rule, use <a>ModifyListener</a>.</p>
-    fn modify_rule(
-        &self,
-        input: ModifyRuleInput,
-    ) -> RusotoFuture<ModifyRuleOutput, ModifyRuleError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for ModifyRuleRequest {
+    type Output = ModifyRuleResponse;
+    type Error = ModifyRuleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyRule");
         params.put("Version", "2015-12-01");
-        ModifyRuleInputSerializer::serialize(&mut params, "", &input);
+        ModifyRuleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9893,7 +10268,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyRuleOutput::default();
+                    result = ModifyRuleResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9903,8 +10278,10 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        ModifyRuleOutputDeserializer::deserialize("ModifyRuleResult", &mut stack)?;
+                    result = ModifyRuleResponseDeserializer::deserialize(
+                        "ModifyRuleResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -9913,22 +10290,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies the health checks used when evaluating the health state of the targets in the specified target group.</p> <p>To monitor the health of the targets, use <a>DescribeTargetHealth</a>.</p>
-    fn modify_target_group(
-        &self,
-        input: ModifyTargetGroupInput,
-    ) -> RusotoFuture<ModifyTargetGroupOutput, ModifyTargetGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for ModifyTargetGroupRequest {
+    type Output = ModifyTargetGroupResponse;
+    type Error = ModifyTargetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyTargetGroup");
         params.put("Version", "2015-12-01");
-        ModifyTargetGroupInputSerializer::serialize(&mut params, "", &input);
+        ModifyTargetGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9942,7 +10324,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyTargetGroupOutput::default();
+                    result = ModifyTargetGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9952,7 +10334,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyTargetGroupOutputDeserializer::deserialize(
+                    result = ModifyTargetGroupResponseDeserializer::deserialize(
                         "ModifyTargetGroupResult",
                         &mut stack,
                     )?;
@@ -9964,22 +10346,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies the specified attributes of the specified target group.</p>
-    fn modify_target_group_attributes(
-        &self,
-        input: ModifyTargetGroupAttributesInput,
-    ) -> RusotoFuture<ModifyTargetGroupAttributesOutput, ModifyTargetGroupAttributesError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for ModifyTargetGroupAttributesRequest {
+    type Output = ModifyTargetGroupAttributesResponse;
+    type Error = ModifyTargetGroupAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyTargetGroupAttributes");
         params.put("Version", "2015-12-01");
-        ModifyTargetGroupAttributesInputSerializer::serialize(&mut params, "", &input);
+        ModifyTargetGroupAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyTargetGroupAttributesError::from_response(response))
@@ -9990,7 +10377,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyTargetGroupAttributesOutput::default();
+                    result = ModifyTargetGroupAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10000,7 +10387,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyTargetGroupAttributesOutputDeserializer::deserialize(
+                    result = ModifyTargetGroupAttributesResponseDeserializer::deserialize(
                         "ModifyTargetGroupAttributesResult",
                         &mut stack,
                     )?;
@@ -10012,22 +10399,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Registers the specified targets with the specified target group.</p> <p>If the target is an EC2 instance, it must be in the <code>running</code> state when you register it.</p> <p>By default, the load balancer routes requests to registered targets using the protocol and port for the target group. Alternatively, you can override the port for a target when you register it. You can register each EC2 instance or IP address with the same target group multiple times using different ports.</p> <p>With a Network Load Balancer, you cannot register instances by instance ID if they have the following instance types: C1, CC1, CC2, CG1, CG2, CR1, CS1, G1, G2, HI1, HS1, M1, M2, M3, and T1. You can register instances of these types by IP address.</p> <p>To remove a target from a target group, use <a>DeregisterTargets</a>.</p>
-    fn register_targets(
-        &self,
-        input: RegisterTargetsInput,
-    ) -> RusotoFuture<RegisterTargetsOutput, RegisterTargetsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for RegisterTargetsRequest {
+    type Output = RegisterTargetsResponse;
+    type Error = RegisterTargetsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RegisterTargets");
         params.put("Version", "2015-12-01");
-        RegisterTargetsInputSerializer::serialize(&mut params, "", &input);
+        RegisterTargetsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10041,7 +10433,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RegisterTargetsOutput::default();
+                    result = RegisterTargetsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10051,7 +10443,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RegisterTargetsOutputDeserializer::deserialize(
+                    result = RegisterTargetsResponseDeserializer::deserialize(
                         "RegisterTargetsResult",
                         &mut stack,
                     )?;
@@ -10063,22 +10455,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Removes the specified certificate from the specified HTTPS listener.</p> <p>You can't remove the default certificate for a listener. To replace the default certificate, call <a>ModifyListener</a>.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>.</p>
-    fn remove_listener_certificates(
-        &self,
-        input: RemoveListenerCertificatesInput,
-    ) -> RusotoFuture<RemoveListenerCertificatesOutput, RemoveListenerCertificatesError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for RemoveListenerCertificatesRequest {
+    type Output = RemoveListenerCertificatesResponse;
+    type Error = RemoveListenerCertificatesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RemoveListenerCertificates");
         params.put("Version", "2015-12-01");
-        RemoveListenerCertificatesInputSerializer::serialize(&mut params, "", &input);
+        RemoveListenerCertificatesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RemoveListenerCertificatesError::from_response(response))
@@ -10089,7 +10486,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RemoveListenerCertificatesOutput::default();
+                    result = RemoveListenerCertificatesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10099,7 +10496,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RemoveListenerCertificatesOutputDeserializer::deserialize(
+                    result = RemoveListenerCertificatesResponseDeserializer::deserialize(
                         "RemoveListenerCertificatesResult",
                         &mut stack,
                     )?;
@@ -10111,22 +10508,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Removes the specified tags from the specified Elastic Load Balancing resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>
-    fn remove_tags(
-        &self,
-        input: RemoveTagsInput,
-    ) -> RusotoFuture<RemoveTagsOutput, RemoveTagsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for RemoveTagsRequest {
+    type Output = RemoveTagsResponse;
+    type Error = RemoveTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RemoveTags");
         params.put("Version", "2015-12-01");
-        RemoveTagsInputSerializer::serialize(&mut params, "", &input);
+        RemoveTagsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10140,7 +10542,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RemoveTagsOutput::default();
+                    result = RemoveTagsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10150,8 +10552,10 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        RemoveTagsOutputDeserializer::deserialize("RemoveTagsResult", &mut stack)?;
+                    result = RemoveTagsResponseDeserializer::deserialize(
+                        "RemoveTagsResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -10160,22 +10564,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer or Network Load Balancer.</p> <p>Network Load Balancers must use <code>ipv4</code>.</p>
-    fn set_ip_address_type(
-        &self,
-        input: SetIpAddressTypeInput,
-    ) -> RusotoFuture<SetIpAddressTypeOutput, SetIpAddressTypeError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for SetIpAddressTypeRequest {
+    type Output = SetIpAddressTypeResponse;
+    type Error = SetIpAddressTypeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetIpAddressType");
         params.put("Version", "2015-12-01");
-        SetIpAddressTypeInputSerializer::serialize(&mut params, "", &input);
+        SetIpAddressTypeRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10189,7 +10598,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = SetIpAddressTypeOutput::default();
+                    result = SetIpAddressTypeResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10199,7 +10608,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = SetIpAddressTypeOutputDeserializer::deserialize(
+                    result = SetIpAddressTypeResponseDeserializer::deserialize(
                         "SetIpAddressTypeResult",
                         &mut stack,
                     )?;
@@ -10211,22 +10620,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Sets the priorities of the specified rules.</p> <p>You can reorder the rules as long as there are no priority conflicts in the new order. Any existing rules that you do not specify retain their current priority.</p>
-    fn set_rule_priorities(
-        &self,
-        input: SetRulePrioritiesInput,
-    ) -> RusotoFuture<SetRulePrioritiesOutput, SetRulePrioritiesError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for SetRulePrioritiesRequest {
+    type Output = SetRulePrioritiesResponse;
+    type Error = SetRulePrioritiesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetRulePriorities");
         params.put("Version", "2015-12-01");
-        SetRulePrioritiesInputSerializer::serialize(&mut params, "", &input);
+        SetRulePrioritiesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10240,7 +10654,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = SetRulePrioritiesOutput::default();
+                    result = SetRulePrioritiesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10250,7 +10664,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = SetRulePrioritiesOutputDeserializer::deserialize(
+                    result = SetRulePrioritiesResponseDeserializer::deserialize(
                         "SetRulePrioritiesResult",
                         &mut stack,
                     )?;
@@ -10262,22 +10676,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Associates the specified security groups with the specified Application Load Balancer. The specified security groups override the previously associated security groups.</p> <p>You can't specify a security group for a Network Load Balancer.</p>
-    fn set_security_groups(
-        &self,
-        input: SetSecurityGroupsInput,
-    ) -> RusotoFuture<SetSecurityGroupsOutput, SetSecurityGroupsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for SetSecurityGroupsRequest {
+    type Output = SetSecurityGroupsResponse;
+    type Error = SetSecurityGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetSecurityGroups");
         params.put("Version", "2015-12-01");
-        SetSecurityGroupsInputSerializer::serialize(&mut params, "", &input);
+        SetSecurityGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10291,7 +10710,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = SetSecurityGroupsOutput::default();
+                    result = SetSecurityGroupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10301,7 +10720,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = SetSecurityGroupsOutputDeserializer::deserialize(
+                    result = SetSecurityGroupsResponseDeserializer::deserialize(
                         "SetSecurityGroupsResult",
                         &mut stack,
                     )?;
@@ -10313,22 +10732,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Enables the Availability Zone for the specified public subnets for the specified Application Load Balancer. The specified subnets replace the previously enabled subnets.</p> <p>You can't change the subnets for a Network Load Balancer.</p>
-    fn set_subnets(
-        &self,
-        input: SetSubnetsInput,
-    ) -> RusotoFuture<SetSubnetsOutput, SetSubnetsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for SetSubnetsRequest {
+    type Output = SetSubnetsResponse;
+    type Error = SetSubnetsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetSubnets");
         params.put("Version", "2015-12-01");
-        SetSubnetsInputSerializer::serialize(&mut params, "", &input);
+        SetSubnetsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10342,7 +10766,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = SetSubnetsOutput::default();
+                    result = SetSubnetsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10352,8 +10776,10 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        SetSubnetsOutputDeserializer::deserialize("SetSubnetsResult", &mut stack)?;
+                    result = SetSubnetsResponseDeserializer::deserialize(
+                        "SetSubnetsResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -10381,7 +10807,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = ElbClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeLoadBalancersInput::default();
+        let request = DescribeLoadBalancersRequest::default();
         let result = client.describe_load_balancers(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
@@ -10394,7 +10820,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = ElbClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeLoadBalancersInput::default();
+        let request = DescribeLoadBalancersRequest::default();
         let result = client.describe_load_balancers(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }

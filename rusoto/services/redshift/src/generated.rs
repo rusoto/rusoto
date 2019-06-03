@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -35,17 +36,21 @@ use xml::reader::ParserConfig;
 use xml::EventReader;
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AcceptReservedNodeExchangeInputMessage {
+pub struct AcceptReservedNodeExchangeRequest {
     /// <p>A string representing the node identifier of the DC1 Reserved Node to be exchanged.</p>
     pub reserved_node_id: String,
     /// <p>The unique identifier of the DC2 Reserved Node offering to be used for the exchange. You can obtain the value for the parameter by calling <a>GetReservedNodeExchangeOfferings</a> </p>
     pub target_reserved_node_offering_id: String,
 }
 
-/// Serialize `AcceptReservedNodeExchangeInputMessage` contents to a `SignedRequest`.
-struct AcceptReservedNodeExchangeInputMessageSerializer;
-impl AcceptReservedNodeExchangeInputMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AcceptReservedNodeExchangeInputMessage) {
+/// Serialize `AcceptReservedNodeExchangeRequest` contents to a `SignedRequest`.
+struct AcceptReservedNodeExchangeRequestSerializer;
+impl AcceptReservedNodeExchangeRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &AcceptReservedNodeExchangeRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -63,19 +68,19 @@ impl AcceptReservedNodeExchangeInputMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AcceptReservedNodeExchangeOutputMessage {
+pub struct AcceptReservedNodeExchangeResponse {
     /// <p><p/></p>
     pub exchanged_reserved_node: Option<ReservedNode>,
 }
 
-struct AcceptReservedNodeExchangeOutputMessageDeserializer;
-impl AcceptReservedNodeExchangeOutputMessageDeserializer {
+struct AcceptReservedNodeExchangeResponseDeserializer;
+impl AcceptReservedNodeExchangeResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<AcceptReservedNodeExchangeOutputMessage, XmlParseError> {
-        deserialize_elements::<_, AcceptReservedNodeExchangeOutputMessage, _>(
+    ) -> Result<AcceptReservedNodeExchangeResponse, XmlParseError> {
+        deserialize_elements::<_, AcceptReservedNodeExchangeResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -118,32 +123,6 @@ impl AccountAttributeDeserializer {
                 "AttributeValues" => {
                     obj.attribute_values.get_or_insert(vec![]).extend(
                         AttributeValueListDeserializer::deserialize("AttributeValues", stack)?,
-                    );
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct AccountAttributeList {
-    /// <p>A list of attributes assigned to an account.</p>
-    pub account_attributes: Option<Vec<AccountAttribute>>,
-}
-
-struct AccountAttributeListDeserializer;
-impl AccountAttributeListDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<AccountAttributeList, XmlParseError> {
-        deserialize_elements::<_, AccountAttributeList, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "AccountAttributes" => {
-                    obj.account_attributes.get_or_insert(vec![]).extend(
-                        AttributeListDeserializer::deserialize("AccountAttributes", stack)?,
                     );
                 }
                 _ => skip_tree(stack),
@@ -251,7 +230,7 @@ impl AttributeListDeserializer {
 /// Serialize `AttributeNameList` contents to a `SignedRequest`.
 struct AttributeNameListSerializer;
 impl AttributeNameListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -307,7 +286,7 @@ impl AttributeValueTargetDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AuthorizeClusterSecurityGroupIngressMessage {
+pub struct AuthorizeClusterSecurityGroupIngressRequest {
     /// <p>The IP range to be added the Amazon Redshift security group.</p>
     pub cidrip: Option<String>,
     /// <p>The name of the security group to which the ingress rule is added.</p>
@@ -318,13 +297,13 @@ pub struct AuthorizeClusterSecurityGroupIngressMessage {
     pub ec2_security_group_owner_id: Option<String>,
 }
 
-/// Serialize `AuthorizeClusterSecurityGroupIngressMessage` contents to a `SignedRequest`.
-struct AuthorizeClusterSecurityGroupIngressMessageSerializer;
-impl AuthorizeClusterSecurityGroupIngressMessageSerializer {
+/// Serialize `AuthorizeClusterSecurityGroupIngressRequest` contents to a `SignedRequest`.
+struct AuthorizeClusterSecurityGroupIngressRequestSerializer;
+impl AuthorizeClusterSecurityGroupIngressRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
-        obj: &AuthorizeClusterSecurityGroupIngressMessage,
+        obj: &AuthorizeClusterSecurityGroupIngressRequest,
     ) {
         let mut prefix = name.to_string();
         if prefix != "" {
@@ -354,18 +333,18 @@ impl AuthorizeClusterSecurityGroupIngressMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AuthorizeClusterSecurityGroupIngressResult {
+pub struct AuthorizeClusterSecurityGroupIngressResponse {
     pub cluster_security_group: Option<ClusterSecurityGroup>,
 }
 
-struct AuthorizeClusterSecurityGroupIngressResultDeserializer;
-impl AuthorizeClusterSecurityGroupIngressResultDeserializer {
+struct AuthorizeClusterSecurityGroupIngressResponseDeserializer;
+impl AuthorizeClusterSecurityGroupIngressResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<AuthorizeClusterSecurityGroupIngressResult, XmlParseError> {
-        deserialize_elements::<_, AuthorizeClusterSecurityGroupIngressResult, _>(
+    ) -> Result<AuthorizeClusterSecurityGroupIngressResponse, XmlParseError> {
+        deserialize_elements::<_, AuthorizeClusterSecurityGroupIngressResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -386,7 +365,7 @@ impl AuthorizeClusterSecurityGroupIngressResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AuthorizeSnapshotAccessMessage {
+pub struct AuthorizeSnapshotAccessRequest {
     /// <p>The identifier of the AWS customer account authorized to restore the specified snapshot.</p> <p>To share a snapshot with AWS support, specify amazon-redshift-support.</p>
     pub account_with_restore_access: String,
     /// <p>The identifier of the cluster the snapshot was created from. This parameter is required if your IAM user has a policy containing a snapshot resource element that specifies anything other than * for the cluster name.</p>
@@ -395,10 +374,14 @@ pub struct AuthorizeSnapshotAccessMessage {
     pub snapshot_identifier: String,
 }
 
-/// Serialize `AuthorizeSnapshotAccessMessage` contents to a `SignedRequest`.
-struct AuthorizeSnapshotAccessMessageSerializer;
-impl AuthorizeSnapshotAccessMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AuthorizeSnapshotAccessMessage) {
+/// Serialize `AuthorizeSnapshotAccessRequest` contents to a `SignedRequest`.
+struct AuthorizeSnapshotAccessRequestSerializer;
+impl AuthorizeSnapshotAccessRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &AuthorizeSnapshotAccessRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -422,18 +405,18 @@ impl AuthorizeSnapshotAccessMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AuthorizeSnapshotAccessResult {
+pub struct AuthorizeSnapshotAccessResponse {
     pub snapshot: Option<Snapshot>,
 }
 
-struct AuthorizeSnapshotAccessResultDeserializer;
-impl AuthorizeSnapshotAccessResultDeserializer {
+struct AuthorizeSnapshotAccessResponseDeserializer;
+impl AuthorizeSnapshotAccessResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<AuthorizeSnapshotAccessResult, XmlParseError> {
-        deserialize_elements::<_, AuthorizeSnapshotAccessResult, _>(
+    ) -> Result<AuthorizeSnapshotAccessResponse, XmlParseError> {
+        deserialize_elements::<_, AuthorizeSnapshotAccessResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -512,7 +495,11 @@ pub struct BatchDeleteClusterSnapshotsRequest {
 /// Serialize `BatchDeleteClusterSnapshotsRequest` contents to a `SignedRequest`.
 struct BatchDeleteClusterSnapshotsRequestSerializer;
 impl BatchDeleteClusterSnapshotsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &BatchDeleteClusterSnapshotsRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &BatchDeleteClusterSnapshotsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -527,21 +514,21 @@ impl BatchDeleteClusterSnapshotsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct BatchDeleteClusterSnapshotsResult {
+pub struct BatchDeleteClusterSnapshotsResponse {
     /// <p>A list of any errors returned.</p>
     pub errors: Option<Vec<SnapshotErrorMessage>>,
     /// <p>A list of the snapshot identifiers that were deleted. </p>
     pub resources: Option<Vec<String>>,
 }
 
-struct BatchDeleteClusterSnapshotsResultDeserializer;
-impl BatchDeleteClusterSnapshotsResultDeserializer {
+struct BatchDeleteClusterSnapshotsResponseDeserializer;
+impl BatchDeleteClusterSnapshotsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<BatchDeleteClusterSnapshotsResult, XmlParseError> {
-        deserialize_elements::<_, BatchDeleteClusterSnapshotsResult, _>(
+    ) -> Result<BatchDeleteClusterSnapshotsResponse, XmlParseError> {
+        deserialize_elements::<_, BatchDeleteClusterSnapshotsResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -566,7 +553,7 @@ impl BatchDeleteClusterSnapshotsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct BatchModifyClusterSnapshotsMessage {
+pub struct BatchModifyClusterSnapshotsRequest {
     /// <p>A boolean value indicating whether to override an exception if the retention period has passed. </p>
     pub force: Option<bool>,
     /// <p>The number of days that a manual snapshot is retained. If you specify the value -1, the manual snapshot is retained indefinitely.</p> <p>The number must be either -1 or an integer between 1 and 3,653.</p> <p>If you decrease the manual snapshot retention period from its current value, existing manual snapshots that fall outside of the new retention period will return an error. If you want to suppress the errors and delete the snapshots, use the force option. </p>
@@ -575,10 +562,14 @@ pub struct BatchModifyClusterSnapshotsMessage {
     pub snapshot_identifier_list: Vec<String>,
 }
 
-/// Serialize `BatchModifyClusterSnapshotsMessage` contents to a `SignedRequest`.
-struct BatchModifyClusterSnapshotsMessageSerializer;
-impl BatchModifyClusterSnapshotsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &BatchModifyClusterSnapshotsMessage) {
+/// Serialize `BatchModifyClusterSnapshotsRequest` contents to a `SignedRequest`.
+struct BatchModifyClusterSnapshotsRequestSerializer;
+impl BatchModifyClusterSnapshotsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &BatchModifyClusterSnapshotsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -602,21 +593,21 @@ impl BatchModifyClusterSnapshotsMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct BatchModifyClusterSnapshotsOutputMessage {
+pub struct BatchModifyClusterSnapshotsResponse {
     /// <p>A list of any errors returned.</p>
     pub errors: Option<Vec<SnapshotErrorMessage>>,
     /// <p>A list of the snapshots that were modified.</p>
     pub resources: Option<Vec<String>>,
 }
 
-struct BatchModifyClusterSnapshotsOutputMessageDeserializer;
-impl BatchModifyClusterSnapshotsOutputMessageDeserializer {
+struct BatchModifyClusterSnapshotsResponseDeserializer;
+impl BatchModifyClusterSnapshotsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<BatchModifyClusterSnapshotsOutputMessage, XmlParseError> {
-        deserialize_elements::<_, BatchModifyClusterSnapshotsOutputMessage, _>(
+    ) -> Result<BatchModifyClusterSnapshotsResponse, XmlParseError> {
+        deserialize_elements::<_, BatchModifyClusterSnapshotsResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -701,15 +692,15 @@ impl BooleanOptionalDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CancelResizeMessage {
+pub struct CancelResizeRequest {
     /// <p>The unique identifier for the cluster that you want to cancel a resize operation for.</p>
     pub cluster_identifier: String,
 }
 
-/// Serialize `CancelResizeMessage` contents to a `SignedRequest`.
-struct CancelResizeMessageSerializer;
-impl CancelResizeMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CancelResizeMessage) {
+/// Serialize `CancelResizeRequest` contents to a `SignedRequest`.
+struct CancelResizeRequestSerializer;
+impl CancelResizeRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CancelResizeRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -722,6 +713,149 @@ impl CancelResizeMessageSerializer {
     }
 }
 
+/// <p>Describes the result of a cluster resize operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CancelResizeResponse {
+    /// <p>The average rate of the resize operation over the last few minutes, measured in megabytes per second. After the resize operation completes, this value shows the average rate of the entire resize operation.</p>
+    pub avg_resize_rate_in_mega_bytes_per_second: Option<f64>,
+    /// <p>The percent of data transferred from source cluster to target cluster.</p>
+    pub data_transfer_progress_percent: Option<f64>,
+    /// <p>The amount of seconds that have elapsed since the resize operation began. After the resize operation completes, this value shows the total actual time, in seconds, for the resize operation.</p>
+    pub elapsed_time_in_seconds: Option<i64>,
+    /// <p>The estimated time remaining, in seconds, until the resize operation is complete. This value is calculated based on the average resize rate and the estimated amount of data remaining to be processed. Once the resize operation is complete, this value will be 0.</p>
+    pub estimated_time_to_completion_in_seconds: Option<i64>,
+    /// <p>The names of tables that have been completely imported .</p> <p>Valid Values: List of table names.</p>
+    pub import_tables_completed: Option<Vec<String>>,
+    /// <p>The names of tables that are being currently imported.</p> <p>Valid Values: List of table names.</p>
+    pub import_tables_in_progress: Option<Vec<String>>,
+    /// <p>The names of tables that have not been yet imported.</p> <p>Valid Values: List of table names</p>
+    pub import_tables_not_started: Option<Vec<String>>,
+    /// <p>An optional string to provide additional details about the resize action.</p>
+    pub message: Option<String>,
+    /// <p>While the resize operation is in progress, this value shows the current amount of data, in megabytes, that has been processed so far. When the resize operation is complete, this value shows the total amount of data, in megabytes, on the cluster, which may be more or less than TotalResizeDataInMegaBytes (the estimated total amount of data before resize).</p>
+    pub progress_in_mega_bytes: Option<i64>,
+    /// <p>An enum with possible values of <code>ClassicResize</code> and <code>ElasticResize</code>. These values describe the type of resize operation being performed. </p>
+    pub resize_type: Option<String>,
+    /// <p>The status of the resize operation.</p> <p>Valid Values: <code>NONE</code> | <code>IN_PROGRESS</code> | <code>FAILED</code> | <code>SUCCEEDED</code> | <code>CANCELLING</code> </p>
+    pub status: Option<String>,
+    /// <p>The cluster type after the resize operation is complete.</p> <p>Valid Values: <code>multi-node</code> | <code>single-node</code> </p>
+    pub target_cluster_type: Option<String>,
+    /// <p>The type of encryption for the cluster after the resize is complete.</p> <p>Possible values are <code>KMS</code> and <code>None</code>. In the China region possible values are: <code>Legacy</code> and <code>None</code>.</p>
+    pub target_encryption_type: Option<String>,
+    /// <p>The node type that the cluster will have after the resize operation is complete.</p>
+    pub target_node_type: Option<String>,
+    /// <p>The number of nodes that the cluster will have after the resize operation is complete.</p>
+    pub target_number_of_nodes: Option<i64>,
+    /// <p>The estimated total amount of data, in megabytes, on the cluster before the resize operation began.</p>
+    pub total_resize_data_in_mega_bytes: Option<i64>,
+}
+
+struct CancelResizeResponseDeserializer;
+impl CancelResizeResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CancelResizeResponse, XmlParseError> {
+        deserialize_elements::<_, CancelResizeResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "AvgResizeRateInMegaBytesPerSecond" => {
+                    obj.avg_resize_rate_in_mega_bytes_per_second =
+                        Some(DoubleOptionalDeserializer::deserialize(
+                            "AvgResizeRateInMegaBytesPerSecond",
+                            stack,
+                        )?);
+                }
+                "DataTransferProgressPercent" => {
+                    obj.data_transfer_progress_percent =
+                        Some(DoubleOptionalDeserializer::deserialize(
+                            "DataTransferProgressPercent",
+                            stack,
+                        )?);
+                }
+                "ElapsedTimeInSeconds" => {
+                    obj.elapsed_time_in_seconds = Some(LongOptionalDeserializer::deserialize(
+                        "ElapsedTimeInSeconds",
+                        stack,
+                    )?);
+                }
+                "EstimatedTimeToCompletionInSeconds" => {
+                    obj.estimated_time_to_completion_in_seconds =
+                        Some(LongOptionalDeserializer::deserialize(
+                            "EstimatedTimeToCompletionInSeconds",
+                            stack,
+                        )?);
+                }
+                "ImportTablesCompleted" => {
+                    obj.import_tables_completed.get_or_insert(vec![]).extend(
+                        ImportTablesCompletedDeserializer::deserialize(
+                            "ImportTablesCompleted",
+                            stack,
+                        )?,
+                    );
+                }
+                "ImportTablesInProgress" => {
+                    obj.import_tables_in_progress.get_or_insert(vec![]).extend(
+                        ImportTablesInProgressDeserializer::deserialize(
+                            "ImportTablesInProgress",
+                            stack,
+                        )?,
+                    );
+                }
+                "ImportTablesNotStarted" => {
+                    obj.import_tables_not_started.get_or_insert(vec![]).extend(
+                        ImportTablesNotStartedDeserializer::deserialize(
+                            "ImportTablesNotStarted",
+                            stack,
+                        )?,
+                    );
+                }
+                "Message" => {
+                    obj.message = Some(StringDeserializer::deserialize("Message", stack)?);
+                }
+                "ProgressInMegaBytes" => {
+                    obj.progress_in_mega_bytes = Some(LongOptionalDeserializer::deserialize(
+                        "ProgressInMegaBytes",
+                        stack,
+                    )?);
+                }
+                "ResizeType" => {
+                    obj.resize_type = Some(StringDeserializer::deserialize("ResizeType", stack)?);
+                }
+                "Status" => {
+                    obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
+                }
+                "TargetClusterType" => {
+                    obj.target_cluster_type =
+                        Some(StringDeserializer::deserialize("TargetClusterType", stack)?);
+                }
+                "TargetEncryptionType" => {
+                    obj.target_encryption_type = Some(StringDeserializer::deserialize(
+                        "TargetEncryptionType",
+                        stack,
+                    )?);
+                }
+                "TargetNodeType" => {
+                    obj.target_node_type =
+                        Some(StringDeserializer::deserialize("TargetNodeType", stack)?);
+                }
+                "TargetNumberOfNodes" => {
+                    obj.target_number_of_nodes = Some(IntegerOptionalDeserializer::deserialize(
+                        "TargetNumberOfNodes",
+                        stack,
+                    )?);
+                }
+                "TotalResizeDataInMegaBytes" => {
+                    obj.total_resize_data_in_mega_bytes = Some(
+                        LongOptionalDeserializer::deserialize("TotalResizeDataInMegaBytes", stack)?,
+                    );
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>Describes a cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Cluster {
@@ -1083,44 +1217,6 @@ impl ClusterAssociatedToScheduleDeserializer {
         )
     }
 }
-/// <p>Temporary credentials with authorization to log on to an Amazon Redshift database. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ClusterCredentials {
-    /// <p>A temporary password that authorizes the user name returned by <code>DbUser</code> to log on to the database <code>DbName</code>. </p>
-    pub db_password: Option<String>,
-    /// <p>A database user name that is authorized to log on to the database <code>DbName</code> using the password <code>DbPassword</code>. If the specified DbUser exists in the database, the new user name has the same database privileges as the the user named in DbUser. By default, the user is added to PUBLIC. If the <code>DbGroups</code> parameter is specifed, <code>DbUser</code> is added to the listed groups for any sessions created using these credentials.</p>
-    pub db_user: Option<String>,
-    /// <p>The date and time the password in <code>DbPassword</code> expires.</p>
-    pub expiration: Option<String>,
-}
-
-struct ClusterCredentialsDeserializer;
-impl ClusterCredentialsDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ClusterCredentials, XmlParseError> {
-        deserialize_elements::<_, ClusterCredentials, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DbPassword" => {
-                    obj.db_password = Some(SensitiveStringDeserializer::deserialize(
-                        "DbPassword",
-                        stack,
-                    )?);
-                }
-                "DbUser" => {
-                    obj.db_user = Some(StringDeserializer::deserialize("DbUser", stack)?);
-                }
-                "Expiration" => {
-                    obj.expiration = Some(TStampDeserializer::deserialize("Expiration", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 /// <p>Describes a <code>ClusterDbRevision</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ClusterDbRevision {
@@ -1188,44 +1284,6 @@ impl ClusterDbRevisionsListDeserializer {
             }
             Ok(())
         })
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ClusterDbRevisionsMessage {
-    /// <p>A list of revisions.</p>
-    pub cluster_db_revisions: Option<Vec<ClusterDbRevision>>,
-    /// <p>A string representing the starting point for the next set of revisions. If a value is returned in a response, you can retrieve the next set of revisions by providing the value in the <code>marker</code> parameter and retrying the command. If the <code>marker</code> field is empty, all revisions have already been returned.</p>
-    pub marker: Option<String>,
-}
-
-struct ClusterDbRevisionsMessageDeserializer;
-impl ClusterDbRevisionsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ClusterDbRevisionsMessage, XmlParseError> {
-        deserialize_elements::<_, ClusterDbRevisionsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ClusterDbRevisions" => {
-                        obj.cluster_db_revisions.get_or_insert(vec![]).extend(
-                            ClusterDbRevisionsListDeserializer::deserialize(
-                                "ClusterDbRevisions",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
     }
 }
 /// <p>An AWS Identity and Access Management (IAM) role that can be used by the associated Amazon Redshift cluster to access other AWS services.</p>
@@ -1397,82 +1455,6 @@ impl ClusterParameterGroupDeserializer {
         })
     }
 }
-/// <p>Contains the output from the <a>DescribeClusterParameters</a> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ClusterParameterGroupDetails {
-    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
-    pub marker: Option<String>,
-    /// <p>A list of <a>Parameter</a> instances. Each instance lists the parameters of one cluster parameter group. </p>
-    pub parameters: Option<Vec<Parameter>>,
-}
-
-struct ClusterParameterGroupDetailsDeserializer;
-impl ClusterParameterGroupDetailsDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ClusterParameterGroupDetails, XmlParseError> {
-        deserialize_elements::<_, ClusterParameterGroupDetails, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "Parameters" => {
-                        obj.parameters.get_or_insert(vec![]).extend(
-                            ParametersListDeserializer::deserialize("Parameters", stack)?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
-/// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ClusterParameterGroupNameMessage {
-    /// <p>The name of the cluster parameter group.</p>
-    pub parameter_group_name: Option<String>,
-    /// <p>The status of the parameter group. For example, if you made a change to a parameter group name-value pair, then the change could be pending a reboot of an associated cluster.</p>
-    pub parameter_group_status: Option<String>,
-}
-
-struct ClusterParameterGroupNameMessageDeserializer;
-impl ClusterParameterGroupNameMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ClusterParameterGroupNameMessage, XmlParseError> {
-        deserialize_elements::<_, ClusterParameterGroupNameMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ParameterGroupName" => {
-                        obj.parameter_group_name = Some(StringDeserializer::deserialize(
-                            "ParameterGroupName",
-                            stack,
-                        )?);
-                    }
-                    "ParameterGroupStatus" => {
-                        obj.parameter_group_status = Some(StringDeserializer::deserialize(
-                            "ParameterGroupStatus",
-                            stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p>Describes the status of a parameter group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ClusterParameterGroupStatus {
@@ -1541,42 +1523,6 @@ impl ClusterParameterGroupStatusListDeserializer {
             }
             Ok(())
         })
-    }
-}
-/// <p>Contains the output from the <a>DescribeClusterParameterGroups</a> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ClusterParameterGroupsMessage {
-    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
-    pub marker: Option<String>,
-    /// <p>A list of <a>ClusterParameterGroup</a> instances. Each instance describes one cluster parameter group. </p>
-    pub parameter_groups: Option<Vec<ClusterParameterGroup>>,
-}
-
-struct ClusterParameterGroupsMessageDeserializer;
-impl ClusterParameterGroupsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ClusterParameterGroupsMessage, XmlParseError> {
-        deserialize_elements::<_, ClusterParameterGroupsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "ParameterGroups" => {
-                        obj.parameter_groups.get_or_insert(vec![]).extend(
-                            ParameterGroupListDeserializer::deserialize("ParameterGroups", stack)?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
     }
 }
 /// <p>Describes the status of a parameter group.</p>
@@ -1751,50 +1697,11 @@ impl ClusterSecurityGroupMembershipListDeserializer {
         })
     }
 }
-/// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ClusterSecurityGroupMessage {
-    /// <p>A list of <a>ClusterSecurityGroup</a> instances. </p>
-    pub cluster_security_groups: Option<Vec<ClusterSecurityGroup>>,
-    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
-    pub marker: Option<String>,
-}
-
-struct ClusterSecurityGroupMessageDeserializer;
-impl ClusterSecurityGroupMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ClusterSecurityGroupMessage, XmlParseError> {
-        deserialize_elements::<_, ClusterSecurityGroupMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ClusterSecurityGroups" => {
-                        obj.cluster_security_groups.get_or_insert(vec![]).extend(
-                            ClusterSecurityGroupsDeserializer::deserialize(
-                                "ClusterSecurityGroups",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 
 /// Serialize `ClusterSecurityGroupNameList` contents to a `SignedRequest`.
 struct ClusterSecurityGroupNameListSerializer;
 impl ClusterSecurityGroupNameListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -1933,45 +1840,6 @@ impl ClusterSubnetGroupDeserializer {
         })
     }
 }
-/// <p>Contains the output from the <a>DescribeClusterSubnetGroups</a> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ClusterSubnetGroupMessage {
-    /// <p>A list of <a>ClusterSubnetGroup</a> instances. </p>
-    pub cluster_subnet_groups: Option<Vec<ClusterSubnetGroup>>,
-    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
-    pub marker: Option<String>,
-}
-
-struct ClusterSubnetGroupMessageDeserializer;
-impl ClusterSubnetGroupMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ClusterSubnetGroupMessage, XmlParseError> {
-        deserialize_elements::<_, ClusterSubnetGroupMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ClusterSubnetGroups" => {
-                        obj.cluster_subnet_groups.get_or_insert(vec![]).extend(
-                            ClusterSubnetGroupsDeserializer::deserialize(
-                                "ClusterSubnetGroups",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 struct ClusterSubnetGroupsDeserializer;
 impl ClusterSubnetGroupsDeserializer {
     #[allow(unused_variables)]
@@ -2051,73 +1919,9 @@ impl ClusterVersionListDeserializer {
         })
     }
 }
-/// <p>Contains the output from the <a>DescribeClusterVersions</a> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ClusterVersionsMessage {
-    /// <p>A list of <code>Version</code> elements. </p>
-    pub cluster_versions: Option<Vec<ClusterVersion>>,
-    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
-    pub marker: Option<String>,
-}
-
-struct ClusterVersionsMessageDeserializer;
-impl ClusterVersionsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ClusterVersionsMessage, XmlParseError> {
-        deserialize_elements::<_, ClusterVersionsMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "ClusterVersions" => {
-                    obj.cluster_versions.get_or_insert(vec![]).extend(
-                        ClusterVersionListDeserializer::deserialize("ClusterVersions", stack)?,
-                    );
-                }
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
-/// <p>Contains the output from the <a>DescribeClusters</a> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ClustersMessage {
-    /// <p>A list of <code>Cluster</code> objects, where each object describes one cluster. </p>
-    pub clusters: Option<Vec<Cluster>>,
-    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
-    pub marker: Option<String>,
-}
-
-struct ClustersMessageDeserializer;
-impl ClustersMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ClustersMessage, XmlParseError> {
-        deserialize_elements::<_, ClustersMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "Clusters" => {
-                    obj.clusters
-                        .get_or_insert(vec![])
-                        .extend(ClusterListDeserializer::deserialize("Clusters", stack)?);
-                }
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CopyClusterSnapshotMessage {
+pub struct CopyClusterSnapshotRequest {
     /// <p>The number of days that a manual snapshot is retained. If the value is -1, the manual snapshot is retained indefinitely. </p> <p>The value must be either -1 or an integer between 1 and 3,653.</p> <p>The default value is -1.</p>
     pub manual_snapshot_retention_period: Option<i64>,
     /// <p><p>The identifier of the cluster the source snapshot was created from. This parameter is required if your IAM user has a policy containing a snapshot resource element that specifies anything other than * for the cluster name.</p> <p>Constraints:</p> <ul> <li> <p>Must be the identifier for a valid cluster.</p> </li> </ul></p>
@@ -2128,10 +1932,10 @@ pub struct CopyClusterSnapshotMessage {
     pub target_snapshot_identifier: String,
 }
 
-/// Serialize `CopyClusterSnapshotMessage` contents to a `SignedRequest`.
-struct CopyClusterSnapshotMessageSerializer;
-impl CopyClusterSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CopyClusterSnapshotMessage) {
+/// Serialize `CopyClusterSnapshotRequest` contents to a `SignedRequest`.
+struct CopyClusterSnapshotRequestSerializer;
+impl CopyClusterSnapshotRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CopyClusterSnapshotRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2161,18 +1965,18 @@ impl CopyClusterSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CopyClusterSnapshotResult {
+pub struct CopyClusterSnapshotResponse {
     pub snapshot: Option<Snapshot>,
 }
 
-struct CopyClusterSnapshotResultDeserializer;
-impl CopyClusterSnapshotResultDeserializer {
+struct CopyClusterSnapshotResponseDeserializer;
+impl CopyClusterSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CopyClusterSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, CopyClusterSnapshotResult, _>(
+    ) -> Result<CopyClusterSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, CopyClusterSnapshotResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2189,7 +1993,79 @@ impl CopyClusterSnapshotResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateClusterMessage {
+pub struct CreateClusterParameterGroupRequest {
+    /// <p>A description of the parameter group.</p>
+    pub description: String,
+    /// <p>The Amazon Redshift engine version to which the cluster parameter group applies. The cluster engine version determines the set of parameters.</p> <p>To get a list of valid parameter group family names, you can call <a>DescribeClusterParameterGroups</a>. By default, Amazon Redshift returns a list of all the parameter groups that are owned by your AWS account, including the default parameter groups for each Amazon Redshift engine version. The parameter group family names associated with the default parameter groups provide you the valid values. For example, a valid family name is "redshift-1.0". </p>
+    pub parameter_group_family: String,
+    /// <p><p>The name of the cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique withing your AWS account.</p> </li> </ul> <note> <p>This value is stored as a lower-case string.</p> </note></p>
+    pub parameter_group_name: String,
+    /// <p>A list of tag instances.</p>
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// Serialize `CreateClusterParameterGroupRequest` contents to a `SignedRequest`.
+struct CreateClusterParameterGroupRequestSerializer;
+impl CreateClusterParameterGroupRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CreateClusterParameterGroupRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
+        params.put(
+            &format!("{}{}", prefix, "ParameterGroupFamily"),
+            &obj.parameter_group_family,
+        );
+        params.put(
+            &format!("{}{}", prefix, "ParameterGroupName"),
+            &obj.parameter_group_name,
+        );
+        if let Some(ref field_value) = obj.tags {
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateClusterParameterGroupResponse {
+    pub cluster_parameter_group: Option<ClusterParameterGroup>,
+}
+
+struct CreateClusterParameterGroupResponseDeserializer;
+impl CreateClusterParameterGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateClusterParameterGroupResponse, XmlParseError> {
+        deserialize_elements::<_, CreateClusterParameterGroupResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ClusterParameterGroup" => {
+                        obj.cluster_parameter_group =
+                            Some(ClusterParameterGroupDeserializer::deserialize(
+                                "ClusterParameterGroup",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateClusterRequest {
     /// <p>Reserved.</p>
     pub additional_info: Option<String>,
     /// <p>If <code>true</code>, major version upgrades can be applied during the maintenance window to the Amazon Redshift engine that is running on the cluster.</p> <p>When a new major version of the Amazon Redshift engine is released, you can request that the service automatically apply upgrades during the maintenance window to the Amazon Redshift engine that is running on your cluster.</p> <p>Default: <code>true</code> </p>
@@ -2252,10 +2128,10 @@ pub struct CreateClusterMessage {
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-/// Serialize `CreateClusterMessage` contents to a `SignedRequest`.
-struct CreateClusterMessageSerializer;
-impl CreateClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateClusterMessage) {
+/// Serialize `CreateClusterRequest` contents to a `SignedRequest`.
+struct CreateClusterRequestSerializer;
+impl CreateClusterRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2397,87 +2273,19 @@ impl CreateClusterMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateClusterParameterGroupMessage {
-    /// <p>A description of the parameter group.</p>
-    pub description: String,
-    /// <p>The Amazon Redshift engine version to which the cluster parameter group applies. The cluster engine version determines the set of parameters.</p> <p>To get a list of valid parameter group family names, you can call <a>DescribeClusterParameterGroups</a>. By default, Amazon Redshift returns a list of all the parameter groups that are owned by your AWS account, including the default parameter groups for each Amazon Redshift engine version. The parameter group family names associated with the default parameter groups provide you the valid values. For example, a valid family name is "redshift-1.0". </p>
-    pub parameter_group_family: String,
-    /// <p><p>The name of the cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique withing your AWS account.</p> </li> </ul> <note> <p>This value is stored as a lower-case string.</p> </note></p>
-    pub parameter_group_name: String,
-    /// <p>A list of tag instances.</p>
-    pub tags: Option<Vec<Tag>>,
-}
-
-/// Serialize `CreateClusterParameterGroupMessage` contents to a `SignedRequest`.
-struct CreateClusterParameterGroupMessageSerializer;
-impl CreateClusterParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateClusterParameterGroupMessage) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
-        params.put(
-            &format!("{}{}", prefix, "ParameterGroupFamily"),
-            &obj.parameter_group_family,
-        );
-        params.put(
-            &format!("{}{}", prefix, "ParameterGroupName"),
-            &obj.parameter_group_name,
-        );
-        if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
-        }
-    }
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateClusterParameterGroupResult {
-    pub cluster_parameter_group: Option<ClusterParameterGroup>,
-}
-
-struct CreateClusterParameterGroupResultDeserializer;
-impl CreateClusterParameterGroupResultDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CreateClusterParameterGroupResult, XmlParseError> {
-        deserialize_elements::<_, CreateClusterParameterGroupResult, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ClusterParameterGroup" => {
-                        obj.cluster_parameter_group =
-                            Some(ClusterParameterGroupDeserializer::deserialize(
-                                "ClusterParameterGroup",
-                                stack,
-                            )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateClusterResult {
+pub struct CreateClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
-struct CreateClusterResultDeserializer;
-impl CreateClusterResultDeserializer {
+struct CreateClusterResponseDeserializer;
+impl CreateClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateClusterResult, XmlParseError> {
-        deserialize_elements::<_, CreateClusterResult, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<CreateClusterResponse, XmlParseError> {
+        deserialize_elements::<_, CreateClusterResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Cluster" => {
                     obj.cluster = Some(ClusterDeserializer::deserialize("Cluster", stack)?);
@@ -2490,7 +2298,7 @@ impl CreateClusterResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateClusterSecurityGroupMessage {
+pub struct CreateClusterSecurityGroupRequest {
     /// <p>The name for the security group. Amazon Redshift stores the value as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain no more than 255 alphanumeric characters or hyphens.</p> </li> <li> <p>Must not be "Default".</p> </li> <li> <p>Must be unique for all security groups that are created by your AWS account.</p> </li> </ul> <p>Example: <code>examplesecuritygroup</code> </p>
     pub cluster_security_group_name: String,
     /// <p>A description for the security group.</p>
@@ -2499,10 +2307,14 @@ pub struct CreateClusterSecurityGroupMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateClusterSecurityGroupMessage` contents to a `SignedRequest`.
-struct CreateClusterSecurityGroupMessageSerializer;
-impl CreateClusterSecurityGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateClusterSecurityGroupMessage) {
+/// Serialize `CreateClusterSecurityGroupRequest` contents to a `SignedRequest`.
+struct CreateClusterSecurityGroupRequestSerializer;
+impl CreateClusterSecurityGroupRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CreateClusterSecurityGroupRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2520,18 +2332,18 @@ impl CreateClusterSecurityGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateClusterSecurityGroupResult {
+pub struct CreateClusterSecurityGroupResponse {
     pub cluster_security_group: Option<ClusterSecurityGroup>,
 }
 
-struct CreateClusterSecurityGroupResultDeserializer;
-impl CreateClusterSecurityGroupResultDeserializer {
+struct CreateClusterSecurityGroupResponseDeserializer;
+impl CreateClusterSecurityGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateClusterSecurityGroupResult, XmlParseError> {
-        deserialize_elements::<_, CreateClusterSecurityGroupResult, _>(
+    ) -> Result<CreateClusterSecurityGroupResponse, XmlParseError> {
+        deserialize_elements::<_, CreateClusterSecurityGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2552,7 +2364,7 @@ impl CreateClusterSecurityGroupResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateClusterSnapshotMessage {
+pub struct CreateClusterSnapshotRequest {
     /// <p>The cluster identifier for which you want a snapshot.</p>
     pub cluster_identifier: String,
     /// <p>The number of days that a manual snapshot is retained. If the value is -1, the manual snapshot is retained indefinitely. </p> <p>The value must be either -1 or an integer between 1 and 3,653.</p> <p>The default value is -1.</p>
@@ -2563,10 +2375,10 @@ pub struct CreateClusterSnapshotMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateClusterSnapshotMessage` contents to a `SignedRequest`.
-struct CreateClusterSnapshotMessageSerializer;
-impl CreateClusterSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateClusterSnapshotMessage) {
+/// Serialize `CreateClusterSnapshotRequest` contents to a `SignedRequest`.
+struct CreateClusterSnapshotRequestSerializer;
+impl CreateClusterSnapshotRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateClusterSnapshotRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2593,18 +2405,18 @@ impl CreateClusterSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateClusterSnapshotResult {
+pub struct CreateClusterSnapshotResponse {
     pub snapshot: Option<Snapshot>,
 }
 
-struct CreateClusterSnapshotResultDeserializer;
-impl CreateClusterSnapshotResultDeserializer {
+struct CreateClusterSnapshotResponseDeserializer;
+impl CreateClusterSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateClusterSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, CreateClusterSnapshotResult, _>(
+    ) -> Result<CreateClusterSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, CreateClusterSnapshotResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2621,7 +2433,7 @@ impl CreateClusterSnapshotResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateClusterSubnetGroupMessage {
+pub struct CreateClusterSubnetGroupRequest {
     /// <p>The name for the subnet group. Amazon Redshift stores the value as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain no more than 255 alphanumeric characters or hyphens.</p> </li> <li> <p>Must not be "Default".</p> </li> <li> <p>Must be unique for all subnet groups that are created by your AWS account.</p> </li> </ul> <p>Example: <code>examplesubnetgroup</code> </p>
     pub cluster_subnet_group_name: String,
     /// <p>A description for the subnet group.</p>
@@ -2632,10 +2444,14 @@ pub struct CreateClusterSubnetGroupMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateClusterSubnetGroupMessage` contents to a `SignedRequest`.
-struct CreateClusterSubnetGroupMessageSerializer;
-impl CreateClusterSubnetGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateClusterSubnetGroupMessage) {
+/// Serialize `CreateClusterSubnetGroupRequest` contents to a `SignedRequest`.
+struct CreateClusterSubnetGroupRequestSerializer;
+impl CreateClusterSubnetGroupRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CreateClusterSubnetGroupRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2658,18 +2474,18 @@ impl CreateClusterSubnetGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateClusterSubnetGroupResult {
+pub struct CreateClusterSubnetGroupResponse {
     pub cluster_subnet_group: Option<ClusterSubnetGroup>,
 }
 
-struct CreateClusterSubnetGroupResultDeserializer;
-impl CreateClusterSubnetGroupResultDeserializer {
+struct CreateClusterSubnetGroupResponseDeserializer;
+impl CreateClusterSubnetGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateClusterSubnetGroupResult, XmlParseError> {
-        deserialize_elements::<_, CreateClusterSubnetGroupResult, _>(
+    ) -> Result<CreateClusterSubnetGroupResponse, XmlParseError> {
+        deserialize_elements::<_, CreateClusterSubnetGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2690,7 +2506,7 @@ impl CreateClusterSubnetGroupResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateEventSubscriptionMessage {
+pub struct CreateEventSubscriptionRequest {
     /// <p>A boolean value; set to <code>true</code> to activate the subscription, and set to <code>false</code> to create the subscription but not activate it. </p>
     pub enabled: Option<bool>,
     /// <p>Specifies the Amazon Redshift event categories to be published by the event notification subscription.</p> <p>Values: configuration, management, monitoring, security</p>
@@ -2709,10 +2525,14 @@ pub struct CreateEventSubscriptionMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateEventSubscriptionMessage` contents to a `SignedRequest`.
-struct CreateEventSubscriptionMessageSerializer;
-impl CreateEventSubscriptionMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateEventSubscriptionMessage) {
+/// Serialize `CreateEventSubscriptionRequest` contents to a `SignedRequest`.
+struct CreateEventSubscriptionRequestSerializer;
+impl CreateEventSubscriptionRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CreateEventSubscriptionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2753,18 +2573,18 @@ impl CreateEventSubscriptionMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateEventSubscriptionResult {
+pub struct CreateEventSubscriptionResponse {
     pub event_subscription: Option<EventSubscription>,
 }
 
-struct CreateEventSubscriptionResultDeserializer;
-impl CreateEventSubscriptionResultDeserializer {
+struct CreateEventSubscriptionResponseDeserializer;
+impl CreateEventSubscriptionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateEventSubscriptionResult, XmlParseError> {
-        deserialize_elements::<_, CreateEventSubscriptionResult, _>(
+    ) -> Result<CreateEventSubscriptionResponse, XmlParseError> {
+        deserialize_elements::<_, CreateEventSubscriptionResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2784,17 +2604,21 @@ impl CreateEventSubscriptionResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateHsmClientCertificateMessage {
+pub struct CreateHsmClientCertificateRequest {
     /// <p>The identifier to be assigned to the new HSM client certificate that the cluster will use to connect to the HSM to use the database encryption keys.</p>
     pub hsm_client_certificate_identifier: String,
     /// <p>A list of tag instances.</p>
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateHsmClientCertificateMessage` contents to a `SignedRequest`.
-struct CreateHsmClientCertificateMessageSerializer;
-impl CreateHsmClientCertificateMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateHsmClientCertificateMessage) {
+/// Serialize `CreateHsmClientCertificateRequest` contents to a `SignedRequest`.
+struct CreateHsmClientCertificateRequestSerializer;
+impl CreateHsmClientCertificateRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CreateHsmClientCertificateRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2811,18 +2635,18 @@ impl CreateHsmClientCertificateMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateHsmClientCertificateResult {
+pub struct CreateHsmClientCertificateResponse {
     pub hsm_client_certificate: Option<HsmClientCertificate>,
 }
 
-struct CreateHsmClientCertificateResultDeserializer;
-impl CreateHsmClientCertificateResultDeserializer {
+struct CreateHsmClientCertificateResponseDeserializer;
+impl CreateHsmClientCertificateResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateHsmClientCertificateResult, XmlParseError> {
-        deserialize_elements::<_, CreateHsmClientCertificateResult, _>(
+    ) -> Result<CreateHsmClientCertificateResponse, XmlParseError> {
+        deserialize_elements::<_, CreateHsmClientCertificateResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2843,7 +2667,7 @@ impl CreateHsmClientCertificateResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateHsmConfigurationMessage {
+pub struct CreateHsmConfigurationRequest {
     /// <p>A text description of the HSM configuration to be created.</p>
     pub description: String,
     /// <p>The identifier to be assigned to the new Amazon Redshift HSM configuration.</p>
@@ -2860,10 +2684,10 @@ pub struct CreateHsmConfigurationMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateHsmConfigurationMessage` contents to a `SignedRequest`.
-struct CreateHsmConfigurationMessageSerializer;
-impl CreateHsmConfigurationMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateHsmConfigurationMessage) {
+/// Serialize `CreateHsmConfigurationRequest` contents to a `SignedRequest`.
+struct CreateHsmConfigurationRequestSerializer;
+impl CreateHsmConfigurationRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateHsmConfigurationRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2897,18 +2721,18 @@ impl CreateHsmConfigurationMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateHsmConfigurationResult {
+pub struct CreateHsmConfigurationResponse {
     pub hsm_configuration: Option<HsmConfiguration>,
 }
 
-struct CreateHsmConfigurationResultDeserializer;
-impl CreateHsmConfigurationResultDeserializer {
+struct CreateHsmConfigurationResponseDeserializer;
+impl CreateHsmConfigurationResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateHsmConfigurationResult, XmlParseError> {
-        deserialize_elements::<_, CreateHsmConfigurationResult, _>(
+    ) -> Result<CreateHsmConfigurationResponse, XmlParseError> {
+        deserialize_elements::<_, CreateHsmConfigurationResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2928,7 +2752,7 @@ impl CreateHsmConfigurationResultDeserializer {
 }
 /// <p>The result of the <code>CreateSnapshotCopyGrant</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateSnapshotCopyGrantMessage {
+pub struct CreateSnapshotCopyGrantRequest {
     /// <p>The unique identifier of the customer master key (CMK) to which to grant Amazon Redshift permission. If no key is specified, the default key is used.</p>
     pub kms_key_id: Option<String>,
     /// <p><p>The name of the snapshot copy grant. This name must be unique in the region for the AWS account.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul></p>
@@ -2937,10 +2761,14 @@ pub struct CreateSnapshotCopyGrantMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateSnapshotCopyGrantMessage` contents to a `SignedRequest`.
-struct CreateSnapshotCopyGrantMessageSerializer;
-impl CreateSnapshotCopyGrantMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateSnapshotCopyGrantMessage) {
+/// Serialize `CreateSnapshotCopyGrantRequest` contents to a `SignedRequest`.
+struct CreateSnapshotCopyGrantRequestSerializer;
+impl CreateSnapshotCopyGrantRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CreateSnapshotCopyGrantRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2960,18 +2788,18 @@ impl CreateSnapshotCopyGrantMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateSnapshotCopyGrantResult {
+pub struct CreateSnapshotCopyGrantResponse {
     pub snapshot_copy_grant: Option<SnapshotCopyGrant>,
 }
 
-struct CreateSnapshotCopyGrantResultDeserializer;
-impl CreateSnapshotCopyGrantResultDeserializer {
+struct CreateSnapshotCopyGrantResponseDeserializer;
+impl CreateSnapshotCopyGrantResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateSnapshotCopyGrantResult, XmlParseError> {
-        deserialize_elements::<_, CreateSnapshotCopyGrantResult, _>(
+    ) -> Result<CreateSnapshotCopyGrantResponse, XmlParseError> {
+        deserialize_elements::<_, CreateSnapshotCopyGrantResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2990,7 +2818,7 @@ impl CreateSnapshotCopyGrantResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateSnapshotScheduleMessage {
+pub struct CreateSnapshotScheduleRequest {
     /// <p><p/></p>
     pub dry_run: Option<bool>,
     /// <p><p/></p>
@@ -3005,10 +2833,10 @@ pub struct CreateSnapshotScheduleMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateSnapshotScheduleMessage` contents to a `SignedRequest`.
-struct CreateSnapshotScheduleMessageSerializer;
-impl CreateSnapshotScheduleMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateSnapshotScheduleMessage) {
+/// Serialize `CreateSnapshotScheduleRequest` contents to a `SignedRequest`.
+struct CreateSnapshotScheduleRequestSerializer;
+impl CreateSnapshotScheduleRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateSnapshotScheduleRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3042,19 +2870,105 @@ impl CreateSnapshotScheduleMessageSerializer {
     }
 }
 
+/// <p>Describes a snapshot schedule. You can set a regular interval for creating snapshots of a cluster. You can also schedule snapshots for specific dates. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateSnapshotScheduleResponse {
+    /// <p>The number of clusters associated with the schedule.</p>
+    pub associated_cluster_count: Option<i64>,
+    /// <p>A list of clusters associated with the schedule. A maximum of 100 clusters is returned.</p>
+    pub associated_clusters: Option<Vec<ClusterAssociatedToSchedule>>,
+    /// <p><p/></p>
+    pub next_invocations: Option<Vec<String>>,
+    /// <p>A list of ScheduleDefinitions.</p>
+    pub schedule_definitions: Option<Vec<String>>,
+    /// <p>The description of the schedule.</p>
+    pub schedule_description: Option<String>,
+    /// <p>A unique identifier for the schedule.</p>
+    pub schedule_identifier: Option<String>,
+    /// <p>An optional set of tags describing the schedule.</p>
+    pub tags: Option<Vec<Tag>>,
+}
+
+struct CreateSnapshotScheduleResponseDeserializer;
+impl CreateSnapshotScheduleResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateSnapshotScheduleResponse, XmlParseError> {
+        deserialize_elements::<_, CreateSnapshotScheduleResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "AssociatedClusterCount" => {
+                        obj.associated_cluster_count =
+                            Some(IntegerOptionalDeserializer::deserialize(
+                                "AssociatedClusterCount",
+                                stack,
+                            )?);
+                    }
+                    "AssociatedClusters" => {
+                        obj.associated_clusters.get_or_insert(vec![]).extend(
+                            AssociatedClusterListDeserializer::deserialize(
+                                "AssociatedClusters",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "NextInvocations" => {
+                        obj.next_invocations.get_or_insert(vec![]).extend(
+                            ScheduledSnapshotTimeListDeserializer::deserialize(
+                                "NextInvocations",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "ScheduleDefinitions" => {
+                        obj.schedule_definitions.get_or_insert(vec![]).extend(
+                            ScheduleDefinitionListDeserializer::deserialize(
+                                "ScheduleDefinitions",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "ScheduleDescription" => {
+                        obj.schedule_description = Some(StringDeserializer::deserialize(
+                            "ScheduleDescription",
+                            stack,
+                        )?);
+                    }
+                    "ScheduleIdentifier" => {
+                        obj.schedule_identifier = Some(StringDeserializer::deserialize(
+                            "ScheduleIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "Tags" => {
+                        obj.tags
+                            .get_or_insert(vec![])
+                            .extend(TagListDeserializer::deserialize("Tags", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Contains the output from the <code>CreateTags</code> action. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateTagsMessage {
+pub struct CreateTagsRequest {
     /// <p>The Amazon Resource Name (ARN) to which you want to add the tag or tags. For example, <code>arn:aws:redshift:us-east-1:123456789:cluster:t1</code>. </p>
     pub resource_name: String,
     /// <p>One or more name/value pairs to add as tags to the specified resource. Each tag name is passed in with the parameter <code>Key</code> and the corresponding value is passed in with the parameter <code>Value</code>. The <code>Key</code> and <code>Value</code> parameters are separated by a comma (,). Separate multiple tags with a space. For example, <code>--tags "Key"="owner","Value"="admin" "Key"="environment","Value"="test" "Key"="version","Value"="1.0"</code>. </p>
     pub tags: Vec<Tag>,
 }
 
-/// Serialize `CreateTagsMessage` contents to a `SignedRequest`.
-struct CreateTagsMessageSerializer;
-impl CreateTagsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateTagsMessage) {
+/// Serialize `CreateTagsRequest` contents to a `SignedRequest`.
+struct CreateTagsRequestSerializer;
+impl CreateTagsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateTagsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3066,39 +2980,16 @@ impl CreateTagsMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CustomerStorageMessage {
-    /// <p>The total amount of storage currently used for snapshots.</p>
-    pub total_backup_size_in_mega_bytes: Option<f64>,
-    /// <p>The total amount of storage currently provisioned.</p>
-    pub total_provisioned_storage_in_mega_bytes: Option<f64>,
-}
+pub struct CreateTagsResponse {}
 
-struct CustomerStorageMessageDeserializer;
-impl CustomerStorageMessageDeserializer {
+struct CreateTagsResponseDeserializer;
+impl CreateTagsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CustomerStorageMessage, XmlParseError> {
-        deserialize_elements::<_, CustomerStorageMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "TotalBackupSizeInMegaBytes" => {
-                    obj.total_backup_size_in_mega_bytes = Some(DoubleDeserializer::deserialize(
-                        "TotalBackupSizeInMegaBytes",
-                        stack,
-                    )?);
-                }
-                "TotalProvisionedStorageInMegaBytes" => {
-                    obj.total_provisioned_storage_in_mega_bytes =
-                        Some(DoubleDeserializer::deserialize(
-                            "TotalProvisionedStorageInMegaBytes",
-                            stack,
-                        )?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+    ) -> Result<CreateTagsResponse, XmlParseError> {
+        Ok(CreateTagsResponse::default())
     }
 }
 /// <p>Describes the status of a cluster while it is in the process of resizing with an incremental resize.</p>
@@ -3172,7 +3063,7 @@ impl DataTransferProgressDeserializer {
 /// Serialize `DbGroupList` contents to a `SignedRequest`.
 struct DbGroupListSerializer;
 impl DbGroupListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -3294,7 +3185,47 @@ impl DeferredMaintenanceWindowsListDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteClusterMessage {
+pub struct DeleteClusterParameterGroupRequest {
+    /// <p><p>The name of the parameter group to be deleted.</p> <p>Constraints:</p> <ul> <li> <p>Must be the name of an existing cluster parameter group.</p> </li> <li> <p>Cannot delete a default cluster parameter group.</p> </li> </ul></p>
+    pub parameter_group_name: String,
+}
+
+/// Serialize `DeleteClusterParameterGroupRequest` contents to a `SignedRequest`.
+struct DeleteClusterParameterGroupRequestSerializer;
+impl DeleteClusterParameterGroupRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DeleteClusterParameterGroupRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ParameterGroupName"),
+            &obj.parameter_group_name,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteClusterParameterGroupResponse {}
+
+struct DeleteClusterParameterGroupResponseDeserializer;
+impl DeleteClusterParameterGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteClusterParameterGroupResponse, XmlParseError> {
+        Ok(DeleteClusterParameterGroupResponse::default())
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteClusterRequest {
     /// <p><p>The identifier of the cluster to be deleted.</p> <p>Constraints:</p> <ul> <li> <p>Must contain lowercase characters.</p> </li> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     pub cluster_identifier: String,
     /// <p><p>The identifier of the final snapshot that is to be created immediately before deleting the cluster. If this parameter is provided, <i>SkipFinalClusterSnapshot</i> must be <code>false</code>. </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
@@ -3305,10 +3236,10 @@ pub struct DeleteClusterMessage {
     pub skip_final_cluster_snapshot: Option<bool>,
 }
 
-/// Serialize `DeleteClusterMessage` contents to a `SignedRequest`.
-struct DeleteClusterMessageSerializer;
-impl DeleteClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteClusterMessage) {
+/// Serialize `DeleteClusterRequest` contents to a `SignedRequest`.
+struct DeleteClusterRequestSerializer;
+impl DeleteClusterRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3339,42 +3270,19 @@ impl DeleteClusterMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteClusterParameterGroupMessage {
-    /// <p><p>The name of the parameter group to be deleted.</p> <p>Constraints:</p> <ul> <li> <p>Must be the name of an existing cluster parameter group.</p> </li> <li> <p>Cannot delete a default cluster parameter group.</p> </li> </ul></p>
-    pub parameter_group_name: String,
-}
-
-/// Serialize `DeleteClusterParameterGroupMessage` contents to a `SignedRequest`.
-struct DeleteClusterParameterGroupMessageSerializer;
-impl DeleteClusterParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteClusterParameterGroupMessage) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        params.put(
-            &format!("{}{}", prefix, "ParameterGroupName"),
-            &obj.parameter_group_name,
-        );
-    }
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteClusterResult {
+pub struct DeleteClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
-struct DeleteClusterResultDeserializer;
-impl DeleteClusterResultDeserializer {
+struct DeleteClusterResponseDeserializer;
+impl DeleteClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteClusterResult, XmlParseError> {
-        deserialize_elements::<_, DeleteClusterResult, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<DeleteClusterResponse, XmlParseError> {
+        deserialize_elements::<_, DeleteClusterResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Cluster" => {
                     obj.cluster = Some(ClusterDeserializer::deserialize("Cluster", stack)?);
@@ -3387,15 +3295,19 @@ impl DeleteClusterResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteClusterSecurityGroupMessage {
+pub struct DeleteClusterSecurityGroupRequest {
     /// <p>The name of the cluster security group to be deleted.</p>
     pub cluster_security_group_name: String,
 }
 
-/// Serialize `DeleteClusterSecurityGroupMessage` contents to a `SignedRequest`.
-struct DeleteClusterSecurityGroupMessageSerializer;
-impl DeleteClusterSecurityGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteClusterSecurityGroupMessage) {
+/// Serialize `DeleteClusterSecurityGroupRequest` contents to a `SignedRequest`.
+struct DeleteClusterSecurityGroupRequestSerializer;
+impl DeleteClusterSecurityGroupRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DeleteClusterSecurityGroupRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3408,6 +3320,19 @@ impl DeleteClusterSecurityGroupMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteClusterSecurityGroupResponse {}
+
+struct DeleteClusterSecurityGroupResponseDeserializer;
+impl DeleteClusterSecurityGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteClusterSecurityGroupResponse, XmlParseError> {
+        Ok(DeleteClusterSecurityGroupResponse::default())
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteClusterSnapshotMessage {
@@ -3420,7 +3345,7 @@ pub struct DeleteClusterSnapshotMessage {
 /// Serialize `DeleteClusterSnapshotMessage` contents to a `SignedRequest`.
 struct DeleteClusterSnapshotMessageSerializer;
 impl DeleteClusterSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteClusterSnapshotMessage) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteClusterSnapshotMessage) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3442,7 +3367,11 @@ impl DeleteClusterSnapshotMessageSerializer {
 /// Serialize `DeleteClusterSnapshotMessageList` contents to a `SignedRequest`.
 struct DeleteClusterSnapshotMessageListSerializer;
 impl DeleteClusterSnapshotMessageListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<DeleteClusterSnapshotMessage>) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &Vec<DeleteClusterSnapshotMessage>,
+    ) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             DeleteClusterSnapshotMessageSerializer::serialize(params, &key, obj);
@@ -3450,19 +3379,50 @@ impl DeleteClusterSnapshotMessageListSerializer {
     }
 }
 
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteClusterSnapshotResult {
+pub struct DeleteClusterSnapshotRequest {
+    /// <p>The unique identifier of the cluster the snapshot was created from. This parameter is required if your IAM user has a policy containing a snapshot resource element that specifies anything other than * for the cluster name.</p> <p>Constraints: Must be the name of valid cluster.</p>
+    pub snapshot_cluster_identifier: Option<String>,
+    /// <p>The unique identifier of the manual snapshot to be deleted.</p> <p>Constraints: Must be the name of an existing snapshot that is in the <code>available</code>, <code>failed</code>, or <code>cancelled</code> state.</p>
+    pub snapshot_identifier: String,
+}
+
+/// Serialize `DeleteClusterSnapshotRequest` contents to a `SignedRequest`.
+struct DeleteClusterSnapshotRequestSerializer;
+impl DeleteClusterSnapshotRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteClusterSnapshotRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.snapshot_cluster_identifier {
+            params.put(
+                &format!("{}{}", prefix, "SnapshotClusterIdentifier"),
+                &field_value,
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "SnapshotIdentifier"),
+            &obj.snapshot_identifier,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteClusterSnapshotResponse {
     pub snapshot: Option<Snapshot>,
 }
 
-struct DeleteClusterSnapshotResultDeserializer;
-impl DeleteClusterSnapshotResultDeserializer {
+struct DeleteClusterSnapshotResponseDeserializer;
+impl DeleteClusterSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteClusterSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, DeleteClusterSnapshotResult, _>(
+    ) -> Result<DeleteClusterSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, DeleteClusterSnapshotResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -3479,15 +3439,19 @@ impl DeleteClusterSnapshotResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteClusterSubnetGroupMessage {
+pub struct DeleteClusterSubnetGroupRequest {
     /// <p>The name of the cluster subnet group name to be deleted.</p>
     pub cluster_subnet_group_name: String,
 }
 
-/// Serialize `DeleteClusterSubnetGroupMessage` contents to a `SignedRequest`.
-struct DeleteClusterSubnetGroupMessageSerializer;
-impl DeleteClusterSubnetGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteClusterSubnetGroupMessage) {
+/// Serialize `DeleteClusterSubnetGroupRequest` contents to a `SignedRequest`.
+struct DeleteClusterSubnetGroupRequestSerializer;
+impl DeleteClusterSubnetGroupRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DeleteClusterSubnetGroupRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3500,17 +3464,34 @@ impl DeleteClusterSubnetGroupMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteClusterSubnetGroupResponse {}
+
+struct DeleteClusterSubnetGroupResponseDeserializer;
+impl DeleteClusterSubnetGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteClusterSubnetGroupResponse, XmlParseError> {
+        Ok(DeleteClusterSubnetGroupResponse::default())
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteEventSubscriptionMessage {
+pub struct DeleteEventSubscriptionRequest {
     /// <p>The name of the Amazon Redshift event notification subscription to be deleted.</p>
     pub subscription_name: String,
 }
 
-/// Serialize `DeleteEventSubscriptionMessage` contents to a `SignedRequest`.
-struct DeleteEventSubscriptionMessageSerializer;
-impl DeleteEventSubscriptionMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteEventSubscriptionMessage) {
+/// Serialize `DeleteEventSubscriptionRequest` contents to a `SignedRequest`.
+struct DeleteEventSubscriptionRequestSerializer;
+impl DeleteEventSubscriptionRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DeleteEventSubscriptionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3523,17 +3504,34 @@ impl DeleteEventSubscriptionMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteEventSubscriptionResponse {}
+
+struct DeleteEventSubscriptionResponseDeserializer;
+impl DeleteEventSubscriptionResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteEventSubscriptionResponse, XmlParseError> {
+        Ok(DeleteEventSubscriptionResponse::default())
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteHsmClientCertificateMessage {
+pub struct DeleteHsmClientCertificateRequest {
     /// <p>The identifier of the HSM client certificate to be deleted.</p>
     pub hsm_client_certificate_identifier: String,
 }
 
-/// Serialize `DeleteHsmClientCertificateMessage` contents to a `SignedRequest`.
-struct DeleteHsmClientCertificateMessageSerializer;
-impl DeleteHsmClientCertificateMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteHsmClientCertificateMessage) {
+/// Serialize `DeleteHsmClientCertificateRequest` contents to a `SignedRequest`.
+struct DeleteHsmClientCertificateRequestSerializer;
+impl DeleteHsmClientCertificateRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DeleteHsmClientCertificateRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3546,17 +3544,30 @@ impl DeleteHsmClientCertificateMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteHsmClientCertificateResponse {}
+
+struct DeleteHsmClientCertificateResponseDeserializer;
+impl DeleteHsmClientCertificateResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteHsmClientCertificateResponse, XmlParseError> {
+        Ok(DeleteHsmClientCertificateResponse::default())
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteHsmConfigurationMessage {
+pub struct DeleteHsmConfigurationRequest {
     /// <p>The identifier of the Amazon Redshift HSM configuration to be deleted.</p>
     pub hsm_configuration_identifier: String,
 }
 
-/// Serialize `DeleteHsmConfigurationMessage` contents to a `SignedRequest`.
-struct DeleteHsmConfigurationMessageSerializer;
-impl DeleteHsmConfigurationMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteHsmConfigurationMessage) {
+/// Serialize `DeleteHsmConfigurationRequest` contents to a `SignedRequest`.
+struct DeleteHsmConfigurationRequestSerializer;
+impl DeleteHsmConfigurationRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteHsmConfigurationRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3569,17 +3580,34 @@ impl DeleteHsmConfigurationMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteHsmConfigurationResponse {}
+
+struct DeleteHsmConfigurationResponseDeserializer;
+impl DeleteHsmConfigurationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteHsmConfigurationResponse, XmlParseError> {
+        Ok(DeleteHsmConfigurationResponse::default())
+    }
+}
 /// <p>The result of the <code>DeleteSnapshotCopyGrant</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteSnapshotCopyGrantMessage {
+pub struct DeleteSnapshotCopyGrantRequest {
     /// <p>The name of the snapshot copy grant to delete.</p>
     pub snapshot_copy_grant_name: String,
 }
 
-/// Serialize `DeleteSnapshotCopyGrantMessage` contents to a `SignedRequest`.
-struct DeleteSnapshotCopyGrantMessageSerializer;
-impl DeleteSnapshotCopyGrantMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteSnapshotCopyGrantMessage) {
+/// Serialize `DeleteSnapshotCopyGrantRequest` contents to a `SignedRequest`.
+struct DeleteSnapshotCopyGrantRequestSerializer;
+impl DeleteSnapshotCopyGrantRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DeleteSnapshotCopyGrantRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3593,15 +3621,28 @@ impl DeleteSnapshotCopyGrantMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteSnapshotScheduleMessage {
+pub struct DeleteSnapshotCopyGrantResponse {}
+
+struct DeleteSnapshotCopyGrantResponseDeserializer;
+impl DeleteSnapshotCopyGrantResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteSnapshotCopyGrantResponse, XmlParseError> {
+        Ok(DeleteSnapshotCopyGrantResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteSnapshotScheduleRequest {
     /// <p>A unique identifier of the snapshot schedule to delete.</p>
     pub schedule_identifier: String,
 }
 
-/// Serialize `DeleteSnapshotScheduleMessage` contents to a `SignedRequest`.
-struct DeleteSnapshotScheduleMessageSerializer;
-impl DeleteSnapshotScheduleMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteSnapshotScheduleMessage) {
+/// Serialize `DeleteSnapshotScheduleRequest` contents to a `SignedRequest`.
+struct DeleteSnapshotScheduleRequestSerializer;
+impl DeleteSnapshotScheduleRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteSnapshotScheduleRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3614,19 +3655,32 @@ impl DeleteSnapshotScheduleMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteSnapshotScheduleResponse {}
+
+struct DeleteSnapshotScheduleResponseDeserializer;
+impl DeleteSnapshotScheduleResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteSnapshotScheduleResponse, XmlParseError> {
+        Ok(DeleteSnapshotScheduleResponse::default())
+    }
+}
 /// <p>Contains the output from the <code>DeleteTags</code> action. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteTagsMessage {
+pub struct DeleteTagsRequest {
     /// <p>The Amazon Resource Name (ARN) from which you want to remove the tag or tags. For example, <code>arn:aws:redshift:us-east-1:123456789:cluster:t1</code>. </p>
     pub resource_name: String,
     /// <p>The tag key that you want to delete.</p>
     pub tag_keys: Vec<String>,
 }
 
-/// Serialize `DeleteTagsMessage` contents to a `SignedRequest`.
-struct DeleteTagsMessageSerializer;
-impl DeleteTagsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteTagsMessage) {
+/// Serialize `DeleteTagsRequest` contents to a `SignedRequest`.
+struct DeleteTagsRequestSerializer;
+impl DeleteTagsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteTagsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3638,15 +3692,32 @@ impl DeleteTagsMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeAccountAttributesMessage {
+pub struct DeleteTagsResponse {}
+
+struct DeleteTagsResponseDeserializer;
+impl DeleteTagsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteTagsResponse, XmlParseError> {
+        Ok(DeleteTagsResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeAccountAttributesRequest {
     /// <p>A list of attribute names.</p>
     pub attribute_names: Option<Vec<String>>,
 }
 
-/// Serialize `DescribeAccountAttributesMessage` contents to a `SignedRequest`.
-struct DescribeAccountAttributesMessageSerializer;
-impl DescribeAccountAttributesMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeAccountAttributesMessage) {
+/// Serialize `DescribeAccountAttributesRequest` contents to a `SignedRequest`.
+struct DescribeAccountAttributesRequestSerializer;
+impl DescribeAccountAttributesRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeAccountAttributesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3663,7 +3734,37 @@ impl DescribeAccountAttributesMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeClusterDbRevisionsMessage {
+pub struct DescribeAccountAttributesResponse {
+    /// <p>A list of attributes assigned to an account.</p>
+    pub account_attributes: Option<Vec<AccountAttribute>>,
+}
+
+struct DescribeAccountAttributesResponseDeserializer;
+impl DescribeAccountAttributesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeAccountAttributesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeAccountAttributesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "AccountAttributes" => {
+                        obj.account_attributes.get_or_insert(vec![]).extend(
+                            AttributeListDeserializer::deserialize("AccountAttributes", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeClusterDbRevisionsRequest {
     /// <p>A unique identifier for a cluster whose <code>ClusterDbRevisions</code> you are requesting. This parameter is case sensitive. All clusters defined for an account are returned by default.</p>
     pub cluster_identifier: Option<String>,
     /// <p>An optional parameter that specifies the starting point for returning a set of response records. When the results of a <code>DescribeClusterDbRevisions</code> request exceed the value specified in <code>MaxRecords</code>, Amazon Redshift returns a value in the <code>marker</code> field of the response. You can retrieve the next set of response records by providing the returned <code>marker</code> value in the <code>marker</code> parameter and retrying the request. </p> <p>Constraints: You can specify either the <code>ClusterIdentifier</code> parameter, or the <code>marker</code> parameter, but not both.</p>
@@ -3672,10 +3773,14 @@ pub struct DescribeClusterDbRevisionsMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeClusterDbRevisionsMessage` contents to a `SignedRequest`.
-struct DescribeClusterDbRevisionsMessageSerializer;
-impl DescribeClusterDbRevisionsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeClusterDbRevisionsMessage) {
+/// Serialize `DescribeClusterDbRevisionsRequest` contents to a `SignedRequest`.
+struct DescribeClusterDbRevisionsRequestSerializer;
+impl DescribeClusterDbRevisionsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeClusterDbRevisionsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3693,9 +3798,47 @@ impl DescribeClusterDbRevisionsMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeClusterDbRevisionsResponse {
+    /// <p>A list of revisions.</p>
+    pub cluster_db_revisions: Option<Vec<ClusterDbRevision>>,
+    /// <p>A string representing the starting point for the next set of revisions. If a value is returned in a response, you can retrieve the next set of revisions by providing the value in the <code>marker</code> parameter and retrying the command. If the <code>marker</code> field is empty, all revisions have already been returned.</p>
+    pub marker: Option<String>,
+}
+
+struct DescribeClusterDbRevisionsResponseDeserializer;
+impl DescribeClusterDbRevisionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeClusterDbRevisionsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeClusterDbRevisionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ClusterDbRevisions" => {
+                        obj.cluster_db_revisions.get_or_insert(vec![]).extend(
+                            ClusterDbRevisionsListDeserializer::deserialize(
+                                "ClusterDbRevisions",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeClusterParameterGroupsMessage {
+pub struct DescribeClusterParameterGroupsRequest {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterParameterGroups</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
     pub marker: Option<String>,
     /// <p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>
@@ -3708,10 +3851,14 @@ pub struct DescribeClusterParameterGroupsMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-/// Serialize `DescribeClusterParameterGroupsMessage` contents to a `SignedRequest`.
-struct DescribeClusterParameterGroupsMessageSerializer;
-impl DescribeClusterParameterGroupsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeClusterParameterGroupsMessage) {
+/// Serialize `DescribeClusterParameterGroupsRequest` contents to a `SignedRequest`.
+struct DescribeClusterParameterGroupsRequestSerializer;
+impl DescribeClusterParameterGroupsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeClusterParameterGroupsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3743,9 +3890,45 @@ impl DescribeClusterParameterGroupsMessageSerializer {
     }
 }
 
+/// <p>Contains the output from the <a>DescribeClusterParameterGroups</a> action. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeClusterParameterGroupsResponse {
+    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
+    pub marker: Option<String>,
+    /// <p>A list of <a>ClusterParameterGroup</a> instances. Each instance describes one cluster parameter group. </p>
+    pub parameter_groups: Option<Vec<ClusterParameterGroup>>,
+}
+
+struct DescribeClusterParameterGroupsResponseDeserializer;
+impl DescribeClusterParameterGroupsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeClusterParameterGroupsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeClusterParameterGroupsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "ParameterGroups" => {
+                        obj.parameter_groups.get_or_insert(vec![]).extend(
+                            ParameterGroupListDeserializer::deserialize("ParameterGroups", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeClusterParametersMessage {
+pub struct DescribeClusterParametersRequest {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterParameters</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
     pub marker: Option<String>,
     /// <p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>
@@ -3756,10 +3939,14 @@ pub struct DescribeClusterParametersMessage {
     pub source: Option<String>,
 }
 
-/// Serialize `DescribeClusterParametersMessage` contents to a `SignedRequest`.
-struct DescribeClusterParametersMessageSerializer;
-impl DescribeClusterParametersMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeClusterParametersMessage) {
+/// Serialize `DescribeClusterParametersRequest` contents to a `SignedRequest`.
+struct DescribeClusterParametersRequestSerializer;
+impl DescribeClusterParametersRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeClusterParametersRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3781,9 +3968,45 @@ impl DescribeClusterParametersMessageSerializer {
     }
 }
 
+/// <p>Contains the output from the <a>DescribeClusterParameters</a> action. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeClusterParametersResponse {
+    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
+    pub marker: Option<String>,
+    /// <p>A list of <a>Parameter</a> instances. Each instance lists the parameters of one cluster parameter group. </p>
+    pub parameters: Option<Vec<Parameter>>,
+}
+
+struct DescribeClusterParametersResponseDeserializer;
+impl DescribeClusterParametersResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeClusterParametersResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeClusterParametersResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "Parameters" => {
+                        obj.parameters.get_or_insert(vec![]).extend(
+                            ParametersListDeserializer::deserialize("Parameters", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeClusterSecurityGroupsMessage {
+pub struct DescribeClusterSecurityGroupsRequest {
     /// <p>The name of a cluster security group for which you are requesting details. You can specify either the <b>Marker</b> parameter or a <b>ClusterSecurityGroupName</b> parameter, but not both. </p> <p> Example: <code>securitygroup1</code> </p>
     pub cluster_security_group_name: Option<String>,
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterSecurityGroups</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p> <p>Constraints: You can specify either the <b>ClusterSecurityGroupName</b> parameter or the <b>Marker</b> parameter, but not both. </p>
@@ -3796,10 +4019,14 @@ pub struct DescribeClusterSecurityGroupsMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-/// Serialize `DescribeClusterSecurityGroupsMessage` contents to a `SignedRequest`.
-struct DescribeClusterSecurityGroupsMessageSerializer;
-impl DescribeClusterSecurityGroupsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeClusterSecurityGroupsMessage) {
+/// Serialize `DescribeClusterSecurityGroupsRequest` contents to a `SignedRequest`.
+struct DescribeClusterSecurityGroupsRequestSerializer;
+impl DescribeClusterSecurityGroupsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeClusterSecurityGroupsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3836,7 +4063,46 @@ impl DescribeClusterSecurityGroupsMessageSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeClusterSnapshotsMessage {
+pub struct DescribeClusterSecurityGroupsResponse {
+    /// <p>A list of <a>ClusterSecurityGroup</a> instances. </p>
+    pub cluster_security_groups: Option<Vec<ClusterSecurityGroup>>,
+    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeClusterSecurityGroupsResponseDeserializer;
+impl DescribeClusterSecurityGroupsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeClusterSecurityGroupsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeClusterSecurityGroupsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ClusterSecurityGroups" => {
+                        obj.cluster_security_groups.get_or_insert(vec![]).extend(
+                            ClusterSecurityGroupsDeserializer::deserialize(
+                                "ClusterSecurityGroups",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeClusterSnapshotsRequest {
     /// <p><p>A value that indicates whether to return snapshots only for an existing cluster. You can perform table-level restore only by using a snapshot of an existing cluster, that is, a cluster that has not been deleted. Values for this parameter work as follows: </p> <ul> <li> <p>If <code>ClusterExists</code> is set to <code>true</code>, <code>ClusterIdentifier</code> is required.</p> </li> <li> <p>If <code>ClusterExists</code> is set to <code>false</code> and <code>ClusterIdentifier</code> isn&#39;t specified, all snapshots associated with deleted clusters (orphaned snapshots) are returned. </p> </li> <li> <p>If <code>ClusterExists</code> is set to <code>false</code> and <code>ClusterIdentifier</code> is specified for a deleted cluster, snapshots associated with that cluster are returned.</p> </li> <li> <p>If <code>ClusterExists</code> is set to <code>false</code> and <code>ClusterIdentifier</code> is specified for an existing cluster, no snapshots are returned. </p> </li> </ul></p>
     pub cluster_exists: Option<bool>,
     /// <p>The identifier of the cluster which generated the requested snapshots.</p>
@@ -3863,10 +4129,14 @@ pub struct DescribeClusterSnapshotsMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-/// Serialize `DescribeClusterSnapshotsMessage` contents to a `SignedRequest`.
-struct DescribeClusterSnapshotsMessageSerializer;
-impl DescribeClusterSnapshotsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeClusterSnapshotsMessage) {
+/// Serialize `DescribeClusterSnapshotsRequest` contents to a `SignedRequest`.
+struct DescribeClusterSnapshotsRequestSerializer;
+impl DescribeClusterSnapshotsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeClusterSnapshotsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3923,9 +4193,45 @@ impl DescribeClusterSnapshotsMessageSerializer {
     }
 }
 
+/// <p>Contains the output from the <a>DescribeClusterSnapshots</a> action. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeClusterSnapshotsResponse {
+    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
+    pub marker: Option<String>,
+    /// <p>A list of <a>Snapshot</a> instances. </p>
+    pub snapshots: Option<Vec<Snapshot>>,
+}
+
+struct DescribeClusterSnapshotsResponseDeserializer;
+impl DescribeClusterSnapshotsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeClusterSnapshotsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeClusterSnapshotsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "Snapshots" => {
+                        obj.snapshots
+                            .get_or_insert(vec![])
+                            .extend(SnapshotListDeserializer::deserialize("Snapshots", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeClusterSubnetGroupsMessage {
+pub struct DescribeClusterSubnetGroupsRequest {
     /// <p>The name of the cluster subnet group for which information is requested.</p>
     pub cluster_subnet_group_name: Option<String>,
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterSubnetGroups</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
@@ -3938,10 +4244,14 @@ pub struct DescribeClusterSubnetGroupsMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-/// Serialize `DescribeClusterSubnetGroupsMessage` contents to a `SignedRequest`.
-struct DescribeClusterSubnetGroupsMessageSerializer;
-impl DescribeClusterSubnetGroupsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeClusterSubnetGroupsMessage) {
+/// Serialize `DescribeClusterSubnetGroupsRequest` contents to a `SignedRequest`.
+struct DescribeClusterSubnetGroupsRequestSerializer;
+impl DescribeClusterSubnetGroupsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeClusterSubnetGroupsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3976,8 +4286,47 @@ impl DescribeClusterSubnetGroupsMessageSerializer {
     }
 }
 
+/// <p>Contains the output from the <a>DescribeClusterSubnetGroups</a> action. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeClusterTracksMessage {
+pub struct DescribeClusterSubnetGroupsResponse {
+    /// <p>A list of <a>ClusterSubnetGroup</a> instances. </p>
+    pub cluster_subnet_groups: Option<Vec<ClusterSubnetGroup>>,
+    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeClusterSubnetGroupsResponseDeserializer;
+impl DescribeClusterSubnetGroupsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeClusterSubnetGroupsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeClusterSubnetGroupsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ClusterSubnetGroups" => {
+                        obj.cluster_subnet_groups.get_or_insert(vec![]).extend(
+                            ClusterSubnetGroupsDeserializer::deserialize(
+                                "ClusterSubnetGroups",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeClusterTracksRequest {
     /// <p>The name of the maintenance track. </p>
     pub maintenance_track_name: Option<String>,
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <code>DescribeClusterTracks</code> request exceed the value specified in <code>MaxRecords</code>, Amazon Redshift returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
@@ -3986,10 +4335,10 @@ pub struct DescribeClusterTracksMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeClusterTracksMessage` contents to a `SignedRequest`.
-struct DescribeClusterTracksMessageSerializer;
-impl DescribeClusterTracksMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeClusterTracksMessage) {
+/// Serialize `DescribeClusterTracksRequest` contents to a `SignedRequest`.
+struct DescribeClusterTracksRequestSerializer;
+impl DescribeClusterTracksRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeClusterTracksRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4010,9 +4359,44 @@ impl DescribeClusterTracksMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeClusterTracksResponse {
+    /// <p>A list of maintenance tracks output by the <code>DescribeClusterTracks</code> operation. </p>
+    pub maintenance_tracks: Option<Vec<MaintenanceTrack>>,
+    /// <p>The starting point to return a set of response tracklist records. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request.</p>
+    pub marker: Option<String>,
+}
+
+struct DescribeClusterTracksResponseDeserializer;
+impl DescribeClusterTracksResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeClusterTracksResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeClusterTracksResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "MaintenanceTracks" => {
+                        obj.maintenance_tracks.get_or_insert(vec![]).extend(
+                            TrackListDeserializer::deserialize("MaintenanceTracks", stack)?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeClusterVersionsMessage {
+pub struct DescribeClusterVersionsRequest {
     /// <p><p>The name of a specific cluster parameter group family to return details for.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul></p>
     pub cluster_parameter_group_family: Option<String>,
     /// <p>The specific cluster version to return.</p> <p>Example: <code>1.0</code> </p>
@@ -4023,10 +4407,14 @@ pub struct DescribeClusterVersionsMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeClusterVersionsMessage` contents to a `SignedRequest`.
-struct DescribeClusterVersionsMessageSerializer;
-impl DescribeClusterVersionsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeClusterVersionsMessage) {
+/// Serialize `DescribeClusterVersionsRequest` contents to a `SignedRequest`.
+struct DescribeClusterVersionsRequestSerializer;
+impl DescribeClusterVersionsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeClusterVersionsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4050,9 +4438,45 @@ impl DescribeClusterVersionsMessageSerializer {
     }
 }
 
+/// <p>Contains the output from the <a>DescribeClusterVersions</a> action. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeClusterVersionsResponse {
+    /// <p>A list of <code>Version</code> elements. </p>
+    pub cluster_versions: Option<Vec<ClusterVersion>>,
+    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeClusterVersionsResponseDeserializer;
+impl DescribeClusterVersionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeClusterVersionsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeClusterVersionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ClusterVersions" => {
+                        obj.cluster_versions.get_or_insert(vec![]).extend(
+                            ClusterVersionListDeserializer::deserialize("ClusterVersions", stack)?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeClustersMessage {
+pub struct DescribeClustersRequest {
     /// <p>The unique identifier of a cluster whose properties you are requesting. This parameter is case sensitive.</p> <p>The default is that all clusters defined for an account are returned.</p>
     pub cluster_identifier: Option<String>,
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusters</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p> <p>Constraints: You can specify either the <b>ClusterIdentifier</b> parameter or the <b>Marker</b> parameter, but not both. </p>
@@ -4065,10 +4489,10 @@ pub struct DescribeClustersMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-/// Serialize `DescribeClustersMessage` contents to a `SignedRequest`.
-struct DescribeClustersMessageSerializer;
-impl DescribeClustersMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeClustersMessage) {
+/// Serialize `DescribeClustersRequest` contents to a `SignedRequest`.
+struct DescribeClustersRequestSerializer;
+impl DescribeClustersRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeClustersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4100,9 +4524,45 @@ impl DescribeClustersMessageSerializer {
     }
 }
 
+/// <p>Contains the output from the <a>DescribeClusters</a> action. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeClustersResponse {
+    /// <p>A list of <code>Cluster</code> objects, where each object describes one cluster. </p>
+    pub clusters: Option<Vec<Cluster>>,
+    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeClustersResponseDeserializer;
+impl DescribeClustersResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeClustersResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeClustersResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Clusters" => {
+                        obj.clusters
+                            .get_or_insert(vec![])
+                            .extend(ClusterListDeserializer::deserialize("Clusters", stack)?);
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDefaultClusterParametersMessage {
+pub struct DescribeDefaultClusterParametersRequest {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeDefaultClusterParameters</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
     pub marker: Option<String>,
     /// <p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>
@@ -4111,10 +4571,14 @@ pub struct DescribeDefaultClusterParametersMessage {
     pub parameter_group_family: String,
 }
 
-/// Serialize `DescribeDefaultClusterParametersMessage` contents to a `SignedRequest`.
-struct DescribeDefaultClusterParametersMessageSerializer;
-impl DescribeDefaultClusterParametersMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDefaultClusterParametersMessage) {
+/// Serialize `DescribeDefaultClusterParametersRequest` contents to a `SignedRequest`.
+struct DescribeDefaultClusterParametersRequestSerializer;
+impl DescribeDefaultClusterParametersRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeDefaultClusterParametersRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4134,18 +4598,18 @@ impl DescribeDefaultClusterParametersMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDefaultClusterParametersResult {
+pub struct DescribeDefaultClusterParametersResponse {
     pub default_cluster_parameters: Option<DefaultClusterParameters>,
 }
 
-struct DescribeDefaultClusterParametersResultDeserializer;
-impl DescribeDefaultClusterParametersResultDeserializer {
+struct DescribeDefaultClusterParametersResponseDeserializer;
+impl DescribeDefaultClusterParametersResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeDefaultClusterParametersResult, XmlParseError> {
-        deserialize_elements::<_, DescribeDefaultClusterParametersResult, _>(
+    ) -> Result<DescribeDefaultClusterParametersResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDefaultClusterParametersResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -4166,15 +4630,19 @@ impl DescribeDefaultClusterParametersResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEventCategoriesMessage {
+pub struct DescribeEventCategoriesRequest {
     /// <p>The source type, such as cluster or parameter group, to which the described event categories apply.</p> <p>Valid values: cluster, cluster-snapshot, cluster-parameter-group, and cluster-security-group.</p>
     pub source_type: Option<String>,
 }
 
-/// Serialize `DescribeEventCategoriesMessage` contents to a `SignedRequest`.
-struct DescribeEventCategoriesMessageSerializer;
-impl DescribeEventCategoriesMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeEventCategoriesMessage) {
+/// Serialize `DescribeEventCategoriesRequest` contents to a `SignedRequest`.
+struct DescribeEventCategoriesRequestSerializer;
+impl DescribeEventCategoriesRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeEventCategoriesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4188,7 +4656,41 @@ impl DescribeEventCategoriesMessageSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEventSubscriptionsMessage {
+pub struct DescribeEventCategoriesResponse {
+    /// <p>A list of event categories descriptions.</p>
+    pub event_categories_map_list: Option<Vec<EventCategoriesMap>>,
+}
+
+struct DescribeEventCategoriesResponseDeserializer;
+impl DescribeEventCategoriesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeEventCategoriesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeEventCategoriesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "EventCategoriesMapList" => {
+                        obj.event_categories_map_list.get_or_insert(vec![]).extend(
+                            EventCategoriesMapListDeserializer::deserialize(
+                                "EventCategoriesMapList",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeEventSubscriptionsRequest {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a DescribeEventSubscriptions request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
     pub marker: Option<String>,
     /// <p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>
@@ -4201,10 +4703,14 @@ pub struct DescribeEventSubscriptionsMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-/// Serialize `DescribeEventSubscriptionsMessage` contents to a `SignedRequest`.
-struct DescribeEventSubscriptionsMessageSerializer;
-impl DescribeEventSubscriptionsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeEventSubscriptionsMessage) {
+/// Serialize `DescribeEventSubscriptionsRequest` contents to a `SignedRequest`.
+struct DescribeEventSubscriptionsRequestSerializer;
+impl DescribeEventSubscriptionsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeEventSubscriptionsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4238,7 +4744,46 @@ impl DescribeEventSubscriptionsMessageSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEventsMessage {
+pub struct DescribeEventSubscriptionsResponse {
+    /// <p>A list of event subscriptions.</p>
+    pub event_subscriptions_list: Option<Vec<EventSubscription>>,
+    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeEventSubscriptionsResponseDeserializer;
+impl DescribeEventSubscriptionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeEventSubscriptionsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeEventSubscriptionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "EventSubscriptionsList" => {
+                        obj.event_subscriptions_list.get_or_insert(vec![]).extend(
+                            EventSubscriptionsListDeserializer::deserialize(
+                                "EventSubscriptionsList",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeEventsRequest {
     /// <p>The number of minutes prior to the time of the request for which to retrieve events. For example, if the request is sent at 18:00 and you specify a duration of 60, then only events which have occurred after 17:00 will be returned.</p> <p>Default: <code>60</code> </p>
     pub duration: Option<i64>,
     /// <p>The end of the time interval for which to retrieve events, specified in ISO 8601 format. For more information about ISO 8601, go to the <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO8601 Wikipedia page.</a> </p> <p>Example: <code>2009-07-08T18:00Z</code> </p>
@@ -4255,10 +4800,10 @@ pub struct DescribeEventsMessage {
     pub start_time: Option<String>,
 }
 
-/// Serialize `DescribeEventsMessage` contents to a `SignedRequest`.
-struct DescribeEventsMessageSerializer;
-impl DescribeEventsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeEventsMessage) {
+/// Serialize `DescribeEventsRequest` contents to a `SignedRequest`.
+struct DescribeEventsRequestSerializer;
+impl DescribeEventsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeEventsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4290,7 +4835,39 @@ impl DescribeEventsMessageSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeHsmClientCertificatesMessage {
+pub struct DescribeEventsResponse {
+    /// <p>A list of <code>Event</code> instances. </p>
+    pub events: Option<Vec<Event>>,
+    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeEventsResponseDeserializer;
+impl DescribeEventsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeEventsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeEventsResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Events" => {
+                    obj.events
+                        .get_or_insert(vec![])
+                        .extend(EventListDeserializer::deserialize("Events", stack)?);
+                }
+                "Marker" => {
+                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeHsmClientCertificatesRequest {
     /// <p>The identifier of a specific HSM client certificate for which you want information. If no identifier is specified, information is returned for all HSM client certificates owned by your AWS customer account.</p>
     pub hsm_client_certificate_identifier: Option<String>,
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeHsmClientCertificates</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
@@ -4303,10 +4880,14 @@ pub struct DescribeHsmClientCertificatesMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-/// Serialize `DescribeHsmClientCertificatesMessage` contents to a `SignedRequest`.
-struct DescribeHsmClientCertificatesMessageSerializer;
-impl DescribeHsmClientCertificatesMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeHsmClientCertificatesMessage) {
+/// Serialize `DescribeHsmClientCertificatesRequest` contents to a `SignedRequest`.
+struct DescribeHsmClientCertificatesRequestSerializer;
+impl DescribeHsmClientCertificatesRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeHsmClientCertificatesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4343,7 +4924,46 @@ impl DescribeHsmClientCertificatesMessageSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeHsmConfigurationsMessage {
+pub struct DescribeHsmClientCertificatesResponse {
+    /// <p>A list of the identifiers for one or more HSM client certificates used by Amazon Redshift clusters to store and retrieve database encryption keys in an HSM.</p>
+    pub hsm_client_certificates: Option<Vec<HsmClientCertificate>>,
+    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeHsmClientCertificatesResponseDeserializer;
+impl DescribeHsmClientCertificatesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeHsmClientCertificatesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeHsmClientCertificatesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "HsmClientCertificates" => {
+                        obj.hsm_client_certificates.get_or_insert(vec![]).extend(
+                            HsmClientCertificateListDeserializer::deserialize(
+                                "HsmClientCertificates",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeHsmConfigurationsRequest {
     /// <p>The identifier of a specific Amazon Redshift HSM configuration to be described. If no identifier is specified, information is returned for all HSM configurations owned by your AWS customer account.</p>
     pub hsm_configuration_identifier: Option<String>,
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeHsmConfigurations</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
@@ -4356,10 +4976,14 @@ pub struct DescribeHsmConfigurationsMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-/// Serialize `DescribeHsmConfigurationsMessage` contents to a `SignedRequest`.
-struct DescribeHsmConfigurationsMessageSerializer;
-impl DescribeHsmConfigurationsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeHsmConfigurationsMessage) {
+/// Serialize `DescribeHsmConfigurationsRequest` contents to a `SignedRequest`.
+struct DescribeHsmConfigurationsRequestSerializer;
+impl DescribeHsmConfigurationsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeHsmConfigurationsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4396,15 +5020,54 @@ impl DescribeHsmConfigurationsMessageSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeLoggingStatusMessage {
+pub struct DescribeHsmConfigurationsResponse {
+    /// <p>A list of <code>HsmConfiguration</code> objects.</p>
+    pub hsm_configurations: Option<Vec<HsmConfiguration>>,
+    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
+    pub marker: Option<String>,
+}
+
+struct DescribeHsmConfigurationsResponseDeserializer;
+impl DescribeHsmConfigurationsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeHsmConfigurationsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeHsmConfigurationsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "HsmConfigurations" => {
+                        obj.hsm_configurations.get_or_insert(vec![]).extend(
+                            HsmConfigurationListDeserializer::deserialize(
+                                "HsmConfigurations",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeLoggingStatusRequest {
     /// <p>The identifier of the cluster from which to get the logging status.</p> <p>Example: <code>examplecluster</code> </p>
     pub cluster_identifier: String,
 }
 
-/// Serialize `DescribeLoggingStatusMessage` contents to a `SignedRequest`.
-struct DescribeLoggingStatusMessageSerializer;
-impl DescribeLoggingStatusMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeLoggingStatusMessage) {
+/// Serialize `DescribeLoggingStatusRequest` contents to a `SignedRequest`.
+struct DescribeLoggingStatusRequestSerializer;
+impl DescribeLoggingStatusRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeLoggingStatusRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4417,9 +5080,73 @@ impl DescribeLoggingStatusMessageSerializer {
     }
 }
 
+/// <p>Describes the status of logging for a cluster.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeLoggingStatusResponse {
+    /// <p>The name of the S3 bucket where the log files are stored.</p>
+    pub bucket_name: Option<String>,
+    /// <p>The message indicating that logs failed to be delivered.</p>
+    pub last_failure_message: Option<String>,
+    /// <p>The last time when logs failed to be delivered.</p>
+    pub last_failure_time: Option<String>,
+    /// <p>The last time that logs were delivered.</p>
+    pub last_successful_delivery_time: Option<String>,
+    /// <p> <code>true</code> if logging is on, <code>false</code> if logging is off.</p>
+    pub logging_enabled: Option<bool>,
+    /// <p>The prefix applied to the log file names.</p>
+    pub s3_key_prefix: Option<String>,
+}
+
+struct DescribeLoggingStatusResponseDeserializer;
+impl DescribeLoggingStatusResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeLoggingStatusResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeLoggingStatusResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "BucketName" => {
+                        obj.bucket_name =
+                            Some(StringDeserializer::deserialize("BucketName", stack)?);
+                    }
+                    "LastFailureMessage" => {
+                        obj.last_failure_message = Some(StringDeserializer::deserialize(
+                            "LastFailureMessage",
+                            stack,
+                        )?);
+                    }
+                    "LastFailureTime" => {
+                        obj.last_failure_time =
+                            Some(TStampDeserializer::deserialize("LastFailureTime", stack)?);
+                    }
+                    "LastSuccessfulDeliveryTime" => {
+                        obj.last_successful_delivery_time = Some(TStampDeserializer::deserialize(
+                            "LastSuccessfulDeliveryTime",
+                            stack,
+                        )?);
+                    }
+                    "LoggingEnabled" => {
+                        obj.logging_enabled =
+                            Some(BooleanDeserializer::deserialize("LoggingEnabled", stack)?);
+                    }
+                    "S3KeyPrefix" => {
+                        obj.s3_key_prefix =
+                            Some(StringDeserializer::deserialize("S3KeyPrefix", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeOrderableClusterOptionsMessage {
+pub struct DescribeOrderableClusterOptionsRequest {
     /// <p>The version filter value. Specify this parameter to show only the available offerings matching the specified version.</p> <p>Default: All versions.</p> <p>Constraints: Must be one of the version returned from <a>DescribeClusterVersions</a>.</p>
     pub cluster_version: Option<String>,
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeOrderableClusterOptions</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
@@ -4430,10 +5157,14 @@ pub struct DescribeOrderableClusterOptionsMessage {
     pub node_type: Option<String>,
 }
 
-/// Serialize `DescribeOrderableClusterOptionsMessage` contents to a `SignedRequest`.
-struct DescribeOrderableClusterOptionsMessageSerializer;
-impl DescribeOrderableClusterOptionsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeOrderableClusterOptionsMessage) {
+/// Serialize `DescribeOrderableClusterOptionsRequest` contents to a `SignedRequest`.
+struct DescribeOrderableClusterOptionsRequestSerializer;
+impl DescribeOrderableClusterOptionsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeOrderableClusterOptionsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4454,9 +5185,48 @@ impl DescribeOrderableClusterOptionsMessageSerializer {
     }
 }
 
+/// <p>Contains the output from the <a>DescribeOrderableClusterOptions</a> action. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeOrderableClusterOptionsResponse {
+    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
+    pub marker: Option<String>,
+    /// <p>An <code>OrderableClusterOption</code> structure containing information about orderable options for the cluster.</p>
+    pub orderable_cluster_options: Option<Vec<OrderableClusterOption>>,
+}
+
+struct DescribeOrderableClusterOptionsResponseDeserializer;
+impl DescribeOrderableClusterOptionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeOrderableClusterOptionsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeOrderableClusterOptionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "OrderableClusterOptions" => {
+                        obj.orderable_cluster_options.get_or_insert(vec![]).extend(
+                            OrderableClusterOptionsListDeserializer::deserialize(
+                                "OrderableClusterOptions",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeReservedNodeOfferingsMessage {
+pub struct DescribeReservedNodeOfferingsRequest {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeReservedNodeOfferings</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
     pub marker: Option<String>,
     /// <p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>
@@ -4465,10 +5235,14 @@ pub struct DescribeReservedNodeOfferingsMessage {
     pub reserved_node_offering_id: Option<String>,
 }
 
-/// Serialize `DescribeReservedNodeOfferingsMessage` contents to a `SignedRequest`.
-struct DescribeReservedNodeOfferingsMessageSerializer;
-impl DescribeReservedNodeOfferingsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeReservedNodeOfferingsMessage) {
+/// Serialize `DescribeReservedNodeOfferingsRequest` contents to a `SignedRequest`.
+struct DescribeReservedNodeOfferingsRequestSerializer;
+impl DescribeReservedNodeOfferingsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeReservedNodeOfferingsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4491,7 +5265,46 @@ impl DescribeReservedNodeOfferingsMessageSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeReservedNodesMessage {
+pub struct DescribeReservedNodeOfferingsResponse {
+    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
+    pub marker: Option<String>,
+    /// <p>A list of <code>ReservedNodeOffering</code> objects.</p>
+    pub reserved_node_offerings: Option<Vec<ReservedNodeOffering>>,
+}
+
+struct DescribeReservedNodeOfferingsResponseDeserializer;
+impl DescribeReservedNodeOfferingsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeReservedNodeOfferingsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeReservedNodeOfferingsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "ReservedNodeOfferings" => {
+                        obj.reserved_node_offerings.get_or_insert(vec![]).extend(
+                            ReservedNodeOfferingListDeserializer::deserialize(
+                                "ReservedNodeOfferings",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeReservedNodesRequest {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeReservedNodes</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
     pub marker: Option<String>,
     /// <p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>
@@ -4500,10 +5313,10 @@ pub struct DescribeReservedNodesMessage {
     pub reserved_node_id: Option<String>,
 }
 
-/// Serialize `DescribeReservedNodesMessage` contents to a `SignedRequest`.
-struct DescribeReservedNodesMessageSerializer;
-impl DescribeReservedNodesMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeReservedNodesMessage) {
+/// Serialize `DescribeReservedNodesRequest` contents to a `SignedRequest`.
+struct DescribeReservedNodesRequestSerializer;
+impl DescribeReservedNodesRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeReservedNodesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4523,15 +5336,51 @@ impl DescribeReservedNodesMessageSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeResizeMessage {
+pub struct DescribeReservedNodesResponse {
+    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
+    pub marker: Option<String>,
+    /// <p>The list of <code>ReservedNode</code> objects.</p>
+    pub reserved_nodes: Option<Vec<ReservedNode>>,
+}
+
+struct DescribeReservedNodesResponseDeserializer;
+impl DescribeReservedNodesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeReservedNodesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeReservedNodesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "ReservedNodes" => {
+                        obj.reserved_nodes.get_or_insert(vec![]).extend(
+                            ReservedNodeListDeserializer::deserialize("ReservedNodes", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeResizeRequest {
     /// <p>The unique identifier of a cluster whose resize progress you are requesting. This parameter is case-sensitive.</p> <p>By default, resize operations for all clusters defined for an AWS account are returned.</p>
     pub cluster_identifier: String,
 }
 
-/// Serialize `DescribeResizeMessage` contents to a `SignedRequest`.
-struct DescribeResizeMessageSerializer;
-impl DescribeResizeMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeResizeMessage) {
+/// Serialize `DescribeResizeRequest` contents to a `SignedRequest`.
+struct DescribeResizeRequestSerializer;
+impl DescribeResizeRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeResizeRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4544,9 +5393,152 @@ impl DescribeResizeMessageSerializer {
     }
 }
 
+/// <p>Describes the result of a cluster resize operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeResizeResponse {
+    /// <p>The average rate of the resize operation over the last few minutes, measured in megabytes per second. After the resize operation completes, this value shows the average rate of the entire resize operation.</p>
+    pub avg_resize_rate_in_mega_bytes_per_second: Option<f64>,
+    /// <p>The percent of data transferred from source cluster to target cluster.</p>
+    pub data_transfer_progress_percent: Option<f64>,
+    /// <p>The amount of seconds that have elapsed since the resize operation began. After the resize operation completes, this value shows the total actual time, in seconds, for the resize operation.</p>
+    pub elapsed_time_in_seconds: Option<i64>,
+    /// <p>The estimated time remaining, in seconds, until the resize operation is complete. This value is calculated based on the average resize rate and the estimated amount of data remaining to be processed. Once the resize operation is complete, this value will be 0.</p>
+    pub estimated_time_to_completion_in_seconds: Option<i64>,
+    /// <p>The names of tables that have been completely imported .</p> <p>Valid Values: List of table names.</p>
+    pub import_tables_completed: Option<Vec<String>>,
+    /// <p>The names of tables that are being currently imported.</p> <p>Valid Values: List of table names.</p>
+    pub import_tables_in_progress: Option<Vec<String>>,
+    /// <p>The names of tables that have not been yet imported.</p> <p>Valid Values: List of table names</p>
+    pub import_tables_not_started: Option<Vec<String>>,
+    /// <p>An optional string to provide additional details about the resize action.</p>
+    pub message: Option<String>,
+    /// <p>While the resize operation is in progress, this value shows the current amount of data, in megabytes, that has been processed so far. When the resize operation is complete, this value shows the total amount of data, in megabytes, on the cluster, which may be more or less than TotalResizeDataInMegaBytes (the estimated total amount of data before resize).</p>
+    pub progress_in_mega_bytes: Option<i64>,
+    /// <p>An enum with possible values of <code>ClassicResize</code> and <code>ElasticResize</code>. These values describe the type of resize operation being performed. </p>
+    pub resize_type: Option<String>,
+    /// <p>The status of the resize operation.</p> <p>Valid Values: <code>NONE</code> | <code>IN_PROGRESS</code> | <code>FAILED</code> | <code>SUCCEEDED</code> | <code>CANCELLING</code> </p>
+    pub status: Option<String>,
+    /// <p>The cluster type after the resize operation is complete.</p> <p>Valid Values: <code>multi-node</code> | <code>single-node</code> </p>
+    pub target_cluster_type: Option<String>,
+    /// <p>The type of encryption for the cluster after the resize is complete.</p> <p>Possible values are <code>KMS</code> and <code>None</code>. In the China region possible values are: <code>Legacy</code> and <code>None</code>.</p>
+    pub target_encryption_type: Option<String>,
+    /// <p>The node type that the cluster will have after the resize operation is complete.</p>
+    pub target_node_type: Option<String>,
+    /// <p>The number of nodes that the cluster will have after the resize operation is complete.</p>
+    pub target_number_of_nodes: Option<i64>,
+    /// <p>The estimated total amount of data, in megabytes, on the cluster before the resize operation began.</p>
+    pub total_resize_data_in_mega_bytes: Option<i64>,
+}
+
+struct DescribeResizeResponseDeserializer;
+impl DescribeResizeResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeResizeResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeResizeResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "AvgResizeRateInMegaBytesPerSecond" => {
+                    obj.avg_resize_rate_in_mega_bytes_per_second =
+                        Some(DoubleOptionalDeserializer::deserialize(
+                            "AvgResizeRateInMegaBytesPerSecond",
+                            stack,
+                        )?);
+                }
+                "DataTransferProgressPercent" => {
+                    obj.data_transfer_progress_percent =
+                        Some(DoubleOptionalDeserializer::deserialize(
+                            "DataTransferProgressPercent",
+                            stack,
+                        )?);
+                }
+                "ElapsedTimeInSeconds" => {
+                    obj.elapsed_time_in_seconds = Some(LongOptionalDeserializer::deserialize(
+                        "ElapsedTimeInSeconds",
+                        stack,
+                    )?);
+                }
+                "EstimatedTimeToCompletionInSeconds" => {
+                    obj.estimated_time_to_completion_in_seconds =
+                        Some(LongOptionalDeserializer::deserialize(
+                            "EstimatedTimeToCompletionInSeconds",
+                            stack,
+                        )?);
+                }
+                "ImportTablesCompleted" => {
+                    obj.import_tables_completed.get_or_insert(vec![]).extend(
+                        ImportTablesCompletedDeserializer::deserialize(
+                            "ImportTablesCompleted",
+                            stack,
+                        )?,
+                    );
+                }
+                "ImportTablesInProgress" => {
+                    obj.import_tables_in_progress.get_or_insert(vec![]).extend(
+                        ImportTablesInProgressDeserializer::deserialize(
+                            "ImportTablesInProgress",
+                            stack,
+                        )?,
+                    );
+                }
+                "ImportTablesNotStarted" => {
+                    obj.import_tables_not_started.get_or_insert(vec![]).extend(
+                        ImportTablesNotStartedDeserializer::deserialize(
+                            "ImportTablesNotStarted",
+                            stack,
+                        )?,
+                    );
+                }
+                "Message" => {
+                    obj.message = Some(StringDeserializer::deserialize("Message", stack)?);
+                }
+                "ProgressInMegaBytes" => {
+                    obj.progress_in_mega_bytes = Some(LongOptionalDeserializer::deserialize(
+                        "ProgressInMegaBytes",
+                        stack,
+                    )?);
+                }
+                "ResizeType" => {
+                    obj.resize_type = Some(StringDeserializer::deserialize("ResizeType", stack)?);
+                }
+                "Status" => {
+                    obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
+                }
+                "TargetClusterType" => {
+                    obj.target_cluster_type =
+                        Some(StringDeserializer::deserialize("TargetClusterType", stack)?);
+                }
+                "TargetEncryptionType" => {
+                    obj.target_encryption_type = Some(StringDeserializer::deserialize(
+                        "TargetEncryptionType",
+                        stack,
+                    )?);
+                }
+                "TargetNodeType" => {
+                    obj.target_node_type =
+                        Some(StringDeserializer::deserialize("TargetNodeType", stack)?);
+                }
+                "TargetNumberOfNodes" => {
+                    obj.target_number_of_nodes = Some(IntegerOptionalDeserializer::deserialize(
+                        "TargetNumberOfNodes",
+                        stack,
+                    )?);
+                }
+                "TotalResizeDataInMegaBytes" => {
+                    obj.total_resize_data_in_mega_bytes = Some(
+                        LongOptionalDeserializer::deserialize("TotalResizeDataInMegaBytes", stack)?,
+                    );
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>The result of the <code>DescribeSnapshotCopyGrants</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeSnapshotCopyGrantsMessage {
+pub struct DescribeSnapshotCopyGrantsRequest {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <code>DescribeSnapshotCopyGrant</code> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p> <p>Constraints: You can specify either the <b>SnapshotCopyGrantName</b> parameter or the <b>Marker</b> parameter, but not both. </p>
     pub marker: Option<String>,
     /// <p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>
@@ -4559,10 +5551,14 @@ pub struct DescribeSnapshotCopyGrantsMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-/// Serialize `DescribeSnapshotCopyGrantsMessage` contents to a `SignedRequest`.
-struct DescribeSnapshotCopyGrantsMessageSerializer;
-impl DescribeSnapshotCopyGrantsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeSnapshotCopyGrantsMessage) {
+/// Serialize `DescribeSnapshotCopyGrantsRequest` contents to a `SignedRequest`.
+struct DescribeSnapshotCopyGrantsRequestSerializer;
+impl DescribeSnapshotCopyGrantsRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeSnapshotCopyGrantsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4597,8 +5593,47 @@ impl DescribeSnapshotCopyGrantsMessageSerializer {
     }
 }
 
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeSnapshotSchedulesMessage {
+pub struct DescribeSnapshotCopyGrantsResponse {
+    /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <code>DescribeSnapshotCopyGrant</code> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p> <p>Constraints: You can specify either the <b>SnapshotCopyGrantName</b> parameter or the <b>Marker</b> parameter, but not both. </p>
+    pub marker: Option<String>,
+    /// <p>The list of <code>SnapshotCopyGrant</code> objects.</p>
+    pub snapshot_copy_grants: Option<Vec<SnapshotCopyGrant>>,
+}
+
+struct DescribeSnapshotCopyGrantsResponseDeserializer;
+impl DescribeSnapshotCopyGrantsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeSnapshotCopyGrantsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeSnapshotCopyGrantsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "SnapshotCopyGrants" => {
+                        obj.snapshot_copy_grants.get_or_insert(vec![]).extend(
+                            SnapshotCopyGrantListDeserializer::deserialize(
+                                "SnapshotCopyGrants",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeSnapshotSchedulesRequest {
     /// <p>The unique identifier for the cluster whose snapshot schedules you want to view.</p>
     pub cluster_identifier: Option<String>,
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>marker</code> parameter and retrying the command. If the <code>marker</code> field is empty, all response records have been retrieved for the request.</p>
@@ -4613,10 +5648,14 @@ pub struct DescribeSnapshotSchedulesMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-/// Serialize `DescribeSnapshotSchedulesMessage` contents to a `SignedRequest`.
-struct DescribeSnapshotSchedulesMessageSerializer;
-impl DescribeSnapshotSchedulesMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeSnapshotSchedulesMessage) {
+/// Serialize `DescribeSnapshotSchedulesRequest` contents to a `SignedRequest`.
+struct DescribeSnapshotSchedulesRequestSerializer;
+impl DescribeSnapshotSchedulesRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeSnapshotSchedulesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4652,21 +5691,21 @@ impl DescribeSnapshotSchedulesMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeSnapshotSchedulesOutputMessage {
+pub struct DescribeSnapshotSchedulesResponse {
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>marker</code> parameter and retrying the command. If the <code>marker</code> field is empty, all response records have been retrieved for the request.</p>
     pub marker: Option<String>,
     /// <p>A list of SnapshotSchedules.</p>
     pub snapshot_schedules: Option<Vec<SnapshotSchedule>>,
 }
 
-struct DescribeSnapshotSchedulesOutputMessageDeserializer;
-impl DescribeSnapshotSchedulesOutputMessageDeserializer {
+struct DescribeSnapshotSchedulesResponseDeserializer;
+impl DescribeSnapshotSchedulesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeSnapshotSchedulesOutputMessage, XmlParseError> {
-        deserialize_elements::<_, DescribeSnapshotSchedulesOutputMessage, _>(
+    ) -> Result<DescribeSnapshotSchedulesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeSnapshotSchedulesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -4689,9 +5728,62 @@ impl DescribeSnapshotSchedulesOutputMessageDeserializer {
         )
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeStorageRequest {}
+
+/// Serialize `DescribeStorageRequest` contents to a `SignedRequest`.
+struct DescribeStorageRequestSerializer;
+impl DescribeStorageRequestSerializer {
+    fn serialize(_params: &mut impl ServiceParams, name: &str, _obj: &DescribeStorageRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeStorageResponse {
+    /// <p>The total amount of storage currently used for snapshots.</p>
+    pub total_backup_size_in_mega_bytes: Option<f64>,
+    /// <p>The total amount of storage currently provisioned.</p>
+    pub total_provisioned_storage_in_mega_bytes: Option<f64>,
+}
+
+struct DescribeStorageResponseDeserializer;
+impl DescribeStorageResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeStorageResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeStorageResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "TotalBackupSizeInMegaBytes" => {
+                        obj.total_backup_size_in_mega_bytes = Some(
+                            DoubleDeserializer::deserialize("TotalBackupSizeInMegaBytes", stack)?,
+                        );
+                    }
+                    "TotalProvisionedStorageInMegaBytes" => {
+                        obj.total_provisioned_storage_in_mega_bytes =
+                            Some(DoubleDeserializer::deserialize(
+                                "TotalProvisionedStorageInMegaBytes",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeTableRestoreStatusMessage {
+pub struct DescribeTableRestoreStatusRequest {
     /// <p>The Amazon Redshift cluster that the table is being restored to.</p>
     pub cluster_identifier: Option<String>,
     /// <p>An optional pagination token provided by a previous <code>DescribeTableRestoreStatus</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by the <code>MaxRecords</code> parameter.</p>
@@ -4702,10 +5794,14 @@ pub struct DescribeTableRestoreStatusMessage {
     pub table_restore_request_id: Option<String>,
 }
 
-/// Serialize `DescribeTableRestoreStatusMessage` contents to a `SignedRequest`.
-struct DescribeTableRestoreStatusMessageSerializer;
-impl DescribeTableRestoreStatusMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeTableRestoreStatusMessage) {
+/// Serialize `DescribeTableRestoreStatusRequest` contents to a `SignedRequest`.
+struct DescribeTableRestoreStatusRequestSerializer;
+impl DescribeTableRestoreStatusRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeTableRestoreStatusRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4731,7 +5827,46 @@ impl DescribeTableRestoreStatusMessageSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeTagsMessage {
+pub struct DescribeTableRestoreStatusResponse {
+    /// <p>A pagination token that can be used in a subsequent <a>DescribeTableRestoreStatus</a> request.</p>
+    pub marker: Option<String>,
+    /// <p>A list of status details for one or more table restore requests.</p>
+    pub table_restore_status_details: Option<Vec<TableRestoreStatus>>,
+}
+
+struct DescribeTableRestoreStatusResponseDeserializer;
+impl DescribeTableRestoreStatusResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeTableRestoreStatusResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeTableRestoreStatusResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "TableRestoreStatusDetails" => {
+                        obj.table_restore_status_details
+                            .get_or_insert(vec![])
+                            .extend(TableRestoreStatusListDeserializer::deserialize(
+                                "TableRestoreStatusDetails",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeTagsRequest {
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>marker</code> parameter and retrying the command. If the <code>marker</code> field is empty, all response records have been retrieved for the request. </p>
     pub marker: Option<String>,
     /// <p>The maximum number or response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned <code>marker</code> value. </p>
@@ -4746,10 +5881,10 @@ pub struct DescribeTagsMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-/// Serialize `DescribeTagsMessage` contents to a `SignedRequest`.
-struct DescribeTagsMessageSerializer;
-impl DescribeTagsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeTagsMessage) {
+/// Serialize `DescribeTagsRequest` contents to a `SignedRequest`.
+struct DescribeTagsRequestSerializer;
+impl DescribeTagsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeTagsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4786,63 +5921,154 @@ impl DescribeTagsMessageSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DisableLoggingMessage {
-    /// <p>The identifier of the cluster on which logging is to be stopped.</p> <p>Example: <code>examplecluster</code> </p>
-    pub cluster_identifier: String,
+pub struct DescribeTagsResponse {
+    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
+    pub marker: Option<String>,
+    /// <p>A list of tags with their associated resources.</p>
+    pub tagged_resources: Option<Vec<TaggedResource>>,
 }
 
-/// Serialize `DisableLoggingMessage` contents to a `SignedRequest`.
-struct DisableLoggingMessageSerializer;
-impl DisableLoggingMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DisableLoggingMessage) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        params.put(
-            &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
-        );
-    }
-}
-
-/// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DisableSnapshotCopyMessage {
-    /// <p>The unique identifier of the source cluster that you want to disable copying of snapshots to a destination region.</p> <p>Constraints: Must be the valid name of an existing cluster that has cross-region snapshot copy enabled.</p>
-    pub cluster_identifier: String,
-}
-
-/// Serialize `DisableSnapshotCopyMessage` contents to a `SignedRequest`.
-struct DisableSnapshotCopyMessageSerializer;
-impl DisableSnapshotCopyMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DisableSnapshotCopyMessage) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        params.put(
-            &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
-        );
-    }
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DisableSnapshotCopyResult {
-    pub cluster: Option<Cluster>,
-}
-
-struct DisableSnapshotCopyResultDeserializer;
-impl DisableSnapshotCopyResultDeserializer {
+struct DescribeTagsResponseDeserializer;
+impl DescribeTagsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DisableSnapshotCopyResult, XmlParseError> {
-        deserialize_elements::<_, DisableSnapshotCopyResult, _>(
+    ) -> Result<DescribeTagsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeTagsResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Marker" => {
+                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                }
+                "TaggedResources" => {
+                    obj.tagged_resources.get_or_insert(vec![]).extend(
+                        TaggedResourceListDeserializer::deserialize("TaggedResources", stack)?,
+                    );
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DisableLoggingRequest {
+    /// <p>The identifier of the cluster on which logging is to be stopped.</p> <p>Example: <code>examplecluster</code> </p>
+    pub cluster_identifier: String,
+}
+
+/// Serialize `DisableLoggingRequest` contents to a `SignedRequest`.
+struct DisableLoggingRequestSerializer;
+impl DisableLoggingRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DisableLoggingRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ClusterIdentifier"),
+            &obj.cluster_identifier,
+        );
+    }
+}
+
+/// <p>Describes the status of logging for a cluster.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DisableLoggingResponse {
+    /// <p>The name of the S3 bucket where the log files are stored.</p>
+    pub bucket_name: Option<String>,
+    /// <p>The message indicating that logs failed to be delivered.</p>
+    pub last_failure_message: Option<String>,
+    /// <p>The last time when logs failed to be delivered.</p>
+    pub last_failure_time: Option<String>,
+    /// <p>The last time that logs were delivered.</p>
+    pub last_successful_delivery_time: Option<String>,
+    /// <p> <code>true</code> if logging is on, <code>false</code> if logging is off.</p>
+    pub logging_enabled: Option<bool>,
+    /// <p>The prefix applied to the log file names.</p>
+    pub s3_key_prefix: Option<String>,
+}
+
+struct DisableLoggingResponseDeserializer;
+impl DisableLoggingResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DisableLoggingResponse, XmlParseError> {
+        deserialize_elements::<_, DisableLoggingResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "BucketName" => {
+                    obj.bucket_name = Some(StringDeserializer::deserialize("BucketName", stack)?);
+                }
+                "LastFailureMessage" => {
+                    obj.last_failure_message = Some(StringDeserializer::deserialize(
+                        "LastFailureMessage",
+                        stack,
+                    )?);
+                }
+                "LastFailureTime" => {
+                    obj.last_failure_time =
+                        Some(TStampDeserializer::deserialize("LastFailureTime", stack)?);
+                }
+                "LastSuccessfulDeliveryTime" => {
+                    obj.last_successful_delivery_time = Some(TStampDeserializer::deserialize(
+                        "LastSuccessfulDeliveryTime",
+                        stack,
+                    )?);
+                }
+                "LoggingEnabled" => {
+                    obj.logging_enabled =
+                        Some(BooleanDeserializer::deserialize("LoggingEnabled", stack)?);
+                }
+                "S3KeyPrefix" => {
+                    obj.s3_key_prefix =
+                        Some(StringDeserializer::deserialize("S3KeyPrefix", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DisableSnapshotCopyRequest {
+    /// <p>The unique identifier of the source cluster that you want to disable copying of snapshots to a destination region.</p> <p>Constraints: Must be the valid name of an existing cluster that has cross-region snapshot copy enabled.</p>
+    pub cluster_identifier: String,
+}
+
+/// Serialize `DisableSnapshotCopyRequest` contents to a `SignedRequest`.
+struct DisableSnapshotCopyRequestSerializer;
+impl DisableSnapshotCopyRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DisableSnapshotCopyRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ClusterIdentifier"),
+            &obj.cluster_identifier,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DisableSnapshotCopyResponse {
+    pub cluster: Option<Cluster>,
+}
+
+struct DisableSnapshotCopyResponseDeserializer;
+impl DisableSnapshotCopyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DisableSnapshotCopyResponse, XmlParseError> {
+        deserialize_elements::<_, DisableSnapshotCopyResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -4999,7 +6225,7 @@ impl EligibleTracksToUpdateListDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct EnableLoggingMessage {
+pub struct EnableLoggingRequest {
     /// <p><p>The name of an existing S3 bucket where the log files are to be stored.</p> <p>Constraints:</p> <ul> <li> <p>Must be in the same region as the cluster</p> </li> <li> <p>The cluster must have read bucket and put object permissions</p> </li> </ul></p>
     pub bucket_name: String,
     /// <p>The identifier of the cluster on which logging is to be started.</p> <p>Example: <code>examplecluster</code> </p>
@@ -5008,10 +6234,10 @@ pub struct EnableLoggingMessage {
     pub s3_key_prefix: Option<String>,
 }
 
-/// Serialize `EnableLoggingMessage` contents to a `SignedRequest`.
-struct EnableLoggingMessageSerializer;
-impl EnableLoggingMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &EnableLoggingMessage) {
+/// Serialize `EnableLoggingRequest` contents to a `SignedRequest`.
+struct EnableLoggingRequestSerializer;
+impl EnableLoggingRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &EnableLoggingRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5028,9 +6254,68 @@ impl EnableLoggingMessageSerializer {
     }
 }
 
+/// <p>Describes the status of logging for a cluster.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EnableLoggingResponse {
+    /// <p>The name of the S3 bucket where the log files are stored.</p>
+    pub bucket_name: Option<String>,
+    /// <p>The message indicating that logs failed to be delivered.</p>
+    pub last_failure_message: Option<String>,
+    /// <p>The last time when logs failed to be delivered.</p>
+    pub last_failure_time: Option<String>,
+    /// <p>The last time that logs were delivered.</p>
+    pub last_successful_delivery_time: Option<String>,
+    /// <p> <code>true</code> if logging is on, <code>false</code> if logging is off.</p>
+    pub logging_enabled: Option<bool>,
+    /// <p>The prefix applied to the log file names.</p>
+    pub s3_key_prefix: Option<String>,
+}
+
+struct EnableLoggingResponseDeserializer;
+impl EnableLoggingResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EnableLoggingResponse, XmlParseError> {
+        deserialize_elements::<_, EnableLoggingResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "BucketName" => {
+                    obj.bucket_name = Some(StringDeserializer::deserialize("BucketName", stack)?);
+                }
+                "LastFailureMessage" => {
+                    obj.last_failure_message = Some(StringDeserializer::deserialize(
+                        "LastFailureMessage",
+                        stack,
+                    )?);
+                }
+                "LastFailureTime" => {
+                    obj.last_failure_time =
+                        Some(TStampDeserializer::deserialize("LastFailureTime", stack)?);
+                }
+                "LastSuccessfulDeliveryTime" => {
+                    obj.last_successful_delivery_time = Some(TStampDeserializer::deserialize(
+                        "LastSuccessfulDeliveryTime",
+                        stack,
+                    )?);
+                }
+                "LoggingEnabled" => {
+                    obj.logging_enabled =
+                        Some(BooleanDeserializer::deserialize("LoggingEnabled", stack)?);
+                }
+                "S3KeyPrefix" => {
+                    obj.s3_key_prefix =
+                        Some(StringDeserializer::deserialize("S3KeyPrefix", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct EnableSnapshotCopyMessage {
+pub struct EnableSnapshotCopyRequest {
     /// <p>The unique identifier of the source cluster to copy snapshots from.</p> <p>Constraints: Must be the valid name of an existing cluster that does not already have cross-region snapshot copy enabled.</p>
     pub cluster_identifier: String,
     /// <p>The destination AWS Region that you want to copy snapshots to.</p> <p>Constraints: Must be the name of a valid AWS Region. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#redshift_region">Regions and Endpoints</a> in the Amazon Web Services General Reference. </p>
@@ -5043,10 +6328,10 @@ pub struct EnableSnapshotCopyMessage {
     pub snapshot_copy_grant_name: Option<String>,
 }
 
-/// Serialize `EnableSnapshotCopyMessage` contents to a `SignedRequest`.
-struct EnableSnapshotCopyMessageSerializer;
-impl EnableSnapshotCopyMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &EnableSnapshotCopyMessage) {
+/// Serialize `EnableSnapshotCopyRequest` contents to a `SignedRequest`.
+struct EnableSnapshotCopyRequestSerializer;
+impl EnableSnapshotCopyRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &EnableSnapshotCopyRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5079,18 +6364,18 @@ impl EnableSnapshotCopyMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct EnableSnapshotCopyResult {
+pub struct EnableSnapshotCopyResponse {
     pub cluster: Option<Cluster>,
 }
 
-struct EnableSnapshotCopyResultDeserializer;
-impl EnableSnapshotCopyResultDeserializer {
+struct EnableSnapshotCopyResponseDeserializer;
+impl EnableSnapshotCopyResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<EnableSnapshotCopyResult, XmlParseError> {
-        deserialize_elements::<_, EnableSnapshotCopyResult, _>(
+    ) -> Result<EnableSnapshotCopyResponse, XmlParseError> {
+        deserialize_elements::<_, EnableSnapshotCopyResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -5212,7 +6497,7 @@ impl EventCategoriesListDeserializer {
 /// Serialize `EventCategoriesList` contents to a `SignedRequest`.
 struct EventCategoriesListSerializer;
 impl EventCategoriesListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5267,36 +6552,6 @@ impl EventCategoriesMapListDeserializer {
                 )?);
             } else {
                 skip_tree(stack);
-            }
-            Ok(())
-        })
-    }
-}
-/// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct EventCategoriesMessage {
-    /// <p>A list of event categories descriptions.</p>
-    pub event_categories_map_list: Option<Vec<EventCategoriesMap>>,
-}
-
-struct EventCategoriesMessageDeserializer;
-impl EventCategoriesMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<EventCategoriesMessage, XmlParseError> {
-        deserialize_elements::<_, EventCategoriesMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "EventCategoriesMapList" => {
-                    obj.event_categories_map_list.get_or_insert(vec![]).extend(
-                        EventCategoriesMapListDeserializer::deserialize(
-                            "EventCategoriesMapList",
-                            stack,
-                        )?,
-                    );
-                }
-                _ => skip_tree(stack),
             }
             Ok(())
         })
@@ -5491,80 +6746,9 @@ impl EventSubscriptionsListDeserializer {
         })
     }
 }
-/// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct EventSubscriptionsMessage {
-    /// <p>A list of event subscriptions.</p>
-    pub event_subscriptions_list: Option<Vec<EventSubscription>>,
-    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
-    pub marker: Option<String>,
-}
-
-struct EventSubscriptionsMessageDeserializer;
-impl EventSubscriptionsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<EventSubscriptionsMessage, XmlParseError> {
-        deserialize_elements::<_, EventSubscriptionsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "EventSubscriptionsList" => {
-                        obj.event_subscriptions_list.get_or_insert(vec![]).extend(
-                            EventSubscriptionsListDeserializer::deserialize(
-                                "EventSubscriptionsList",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
-/// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct EventsMessage {
-    /// <p>A list of <code>Event</code> instances. </p>
-    pub events: Option<Vec<Event>>,
-    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
-    pub marker: Option<String>,
-}
-
-struct EventsMessageDeserializer;
-impl EventsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<EventsMessage, XmlParseError> {
-        deserialize_elements::<_, EventsMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "Events" => {
-                    obj.events
-                        .get_or_insert(vec![])
-                        .extend(EventListDeserializer::deserialize("Events", stack)?);
-                }
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 /// <p>The request parameters to get cluster credentials.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetClusterCredentialsMessage {
+pub struct GetClusterCredentialsRequest {
     /// <p>Create a database user with the name specified for the user named in <code>DbUser</code> if one does not exist.</p>
     pub auto_create: Option<bool>,
     /// <p>The unique identifier of the cluster that contains the database for which your are requesting credentials. This parameter is case sensitive.</p>
@@ -5579,10 +6763,10 @@ pub struct GetClusterCredentialsMessage {
     pub duration_seconds: Option<i64>,
 }
 
-/// Serialize `GetClusterCredentialsMessage` contents to a `SignedRequest`.
-struct GetClusterCredentialsMessageSerializer;
-impl GetClusterCredentialsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GetClusterCredentialsMessage) {
+/// Serialize `GetClusterCredentialsRequest` contents to a `SignedRequest`.
+struct GetClusterCredentialsRequestSerializer;
+impl GetClusterCredentialsRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &GetClusterCredentialsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5612,9 +6796,52 @@ impl GetClusterCredentialsMessageSerializer {
     }
 }
 
+/// <p>Temporary credentials with authorization to log on to an Amazon Redshift database. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetClusterCredentialsResponse {
+    /// <p>A temporary password that authorizes the user name returned by <code>DbUser</code> to log on to the database <code>DbName</code>. </p>
+    pub db_password: Option<String>,
+    /// <p>A database user name that is authorized to log on to the database <code>DbName</code> using the password <code>DbPassword</code>. If the specified DbUser exists in the database, the new user name has the same database privileges as the the user named in DbUser. By default, the user is added to PUBLIC. If the <code>DbGroups</code> parameter is specifed, <code>DbUser</code> is added to the listed groups for any sessions created using these credentials.</p>
+    pub db_user: Option<String>,
+    /// <p>The date and time the password in <code>DbPassword</code> expires.</p>
+    pub expiration: Option<String>,
+}
+
+struct GetClusterCredentialsResponseDeserializer;
+impl GetClusterCredentialsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetClusterCredentialsResponse, XmlParseError> {
+        deserialize_elements::<_, GetClusterCredentialsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DbPassword" => {
+                        obj.db_password = Some(SensitiveStringDeserializer::deserialize(
+                            "DbPassword",
+                            stack,
+                        )?);
+                    }
+                    "DbUser" => {
+                        obj.db_user = Some(StringDeserializer::deserialize("DbUser", stack)?);
+                    }
+                    "Expiration" => {
+                        obj.expiration =
+                            Some(TStampDeserializer::deserialize("Expiration", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetReservedNodeExchangeOfferingsInputMessage {
+pub struct GetReservedNodeExchangeOfferingsRequest {
     /// <p>A value that indicates the starting point for the next set of ReservedNodeOfferings.</p>
     pub marker: Option<String>,
     /// <p>An integer setting the maximum number of ReservedNodeOfferings to retrieve.</p>
@@ -5623,13 +6850,13 @@ pub struct GetReservedNodeExchangeOfferingsInputMessage {
     pub reserved_node_id: String,
 }
 
-/// Serialize `GetReservedNodeExchangeOfferingsInputMessage` contents to a `SignedRequest`.
-struct GetReservedNodeExchangeOfferingsInputMessageSerializer;
-impl GetReservedNodeExchangeOfferingsInputMessageSerializer {
+/// Serialize `GetReservedNodeExchangeOfferingsRequest` contents to a `SignedRequest`.
+struct GetReservedNodeExchangeOfferingsRequestSerializer;
+impl GetReservedNodeExchangeOfferingsRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
-        obj: &GetReservedNodeExchangeOfferingsInputMessage,
+        obj: &GetReservedNodeExchangeOfferingsRequest,
     ) {
         let mut prefix = name.to_string();
         if prefix != "" {
@@ -5650,21 +6877,21 @@ impl GetReservedNodeExchangeOfferingsInputMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetReservedNodeExchangeOfferingsOutputMessage {
+pub struct GetReservedNodeExchangeOfferingsResponse {
     /// <p>An optional parameter that specifies the starting point for returning a set of response records. When the results of a <code>GetReservedNodeExchangeOfferings</code> request exceed the value specified in MaxRecords, Amazon Redshift returns a value in the marker field of the response. You can retrieve the next set of response records by providing the returned marker value in the marker parameter and retrying the request. </p>
     pub marker: Option<String>,
     /// <p>Returns an array of <a>ReservedNodeOffering</a> objects.</p>
     pub reserved_node_offerings: Option<Vec<ReservedNodeOffering>>,
 }
 
-struct GetReservedNodeExchangeOfferingsOutputMessageDeserializer;
-impl GetReservedNodeExchangeOfferingsOutputMessageDeserializer {
+struct GetReservedNodeExchangeOfferingsResponseDeserializer;
+impl GetReservedNodeExchangeOfferingsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetReservedNodeExchangeOfferingsOutputMessage, XmlParseError> {
-        deserialize_elements::<_, GetReservedNodeExchangeOfferingsOutputMessage, _>(
+    ) -> Result<GetReservedNodeExchangeOfferingsResponse, XmlParseError> {
+        deserialize_elements::<_, GetReservedNodeExchangeOfferingsResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -5750,45 +6977,6 @@ impl HsmClientCertificateListDeserializer {
         })
     }
 }
-/// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct HsmClientCertificateMessage {
-    /// <p>A list of the identifiers for one or more HSM client certificates used by Amazon Redshift clusters to store and retrieve database encryption keys in an HSM.</p>
-    pub hsm_client_certificates: Option<Vec<HsmClientCertificate>>,
-    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
-    pub marker: Option<String>,
-}
-
-struct HsmClientCertificateMessageDeserializer;
-impl HsmClientCertificateMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<HsmClientCertificateMessage, XmlParseError> {
-        deserialize_elements::<_, HsmClientCertificateMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "HsmClientCertificates" => {
-                        obj.hsm_client_certificates.get_or_insert(vec![]).extend(
-                            HsmClientCertificateListDeserializer::deserialize(
-                                "HsmClientCertificates",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p>Returns information about an HSM configuration, which is an object that describes to Amazon Redshift clusters the information they require to connect to an HSM where they can store database encryption keys.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct HsmConfiguration {
@@ -5859,45 +7047,6 @@ impl HsmConfigurationListDeserializer {
             }
             Ok(())
         })
-    }
-}
-/// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct HsmConfigurationMessage {
-    /// <p>A list of <code>HsmConfiguration</code> objects.</p>
-    pub hsm_configurations: Option<Vec<HsmConfiguration>>,
-    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
-    pub marker: Option<String>,
-}
-
-struct HsmConfigurationMessageDeserializer;
-impl HsmConfigurationMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<HsmConfigurationMessage, XmlParseError> {
-        deserialize_elements::<_, HsmConfigurationMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "HsmConfigurations" => {
-                        obj.hsm_configurations.get_or_insert(vec![]).extend(
-                            HsmConfigurationListDeserializer::deserialize(
-                                "HsmConfigurations",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
     }
 }
 /// <p>Describes the status of changes to HSM settings.</p>
@@ -5999,7 +7148,7 @@ impl IPRangeListDeserializer {
 /// Serialize `IamRoleArnList` contents to a `SignedRequest`.
 struct IamRoleArnListSerializer;
 impl IamRoleArnListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -6080,65 +7229,6 @@ impl IntegerOptionalDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes the status of logging for a cluster.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct LoggingStatus {
-    /// <p>The name of the S3 bucket where the log files are stored.</p>
-    pub bucket_name: Option<String>,
-    /// <p>The message indicating that logs failed to be delivered.</p>
-    pub last_failure_message: Option<String>,
-    /// <p>The last time when logs failed to be delivered.</p>
-    pub last_failure_time: Option<String>,
-    /// <p>The last time that logs were delivered.</p>
-    pub last_successful_delivery_time: Option<String>,
-    /// <p> <code>true</code> if logging is on, <code>false</code> if logging is off.</p>
-    pub logging_enabled: Option<bool>,
-    /// <p>The prefix applied to the log file names.</p>
-    pub s3_key_prefix: Option<String>,
-}
-
-struct LoggingStatusDeserializer;
-impl LoggingStatusDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<LoggingStatus, XmlParseError> {
-        deserialize_elements::<_, LoggingStatus, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "BucketName" => {
-                    obj.bucket_name = Some(StringDeserializer::deserialize("BucketName", stack)?);
-                }
-                "LastFailureMessage" => {
-                    obj.last_failure_message = Some(StringDeserializer::deserialize(
-                        "LastFailureMessage",
-                        stack,
-                    )?);
-                }
-                "LastFailureTime" => {
-                    obj.last_failure_time =
-                        Some(TStampDeserializer::deserialize("LastFailureTime", stack)?);
-                }
-                "LastSuccessfulDeliveryTime" => {
-                    obj.last_successful_delivery_time = Some(TStampDeserializer::deserialize(
-                        "LastSuccessfulDeliveryTime",
-                        stack,
-                    )?);
-                }
-                "LoggingEnabled" => {
-                    obj.logging_enabled =
-                        Some(BooleanDeserializer::deserialize("LoggingEnabled", stack)?);
-                }
-                "S3KeyPrefix" => {
-                    obj.s3_key_prefix =
-                        Some(StringDeserializer::deserialize("S3KeyPrefix", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 struct LongDeserializer;
 impl LongDeserializer {
     #[allow(unused_variables)]
@@ -6206,17 +7296,21 @@ impl MaintenanceTrackDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyClusterDbRevisionMessage {
+pub struct ModifyClusterDbRevisionRequest {
     /// <p>The unique identifier of a cluster whose database revision you want to modify. </p> <p>Example: <code>examplecluster</code> </p>
     pub cluster_identifier: String,
     /// <p>The identifier of the database revision. You can retrieve this value from the response to the <a>DescribeClusterDbRevisions</a> request.</p>
     pub revision_target: String,
 }
 
-/// Serialize `ModifyClusterDbRevisionMessage` contents to a `SignedRequest`.
-struct ModifyClusterDbRevisionMessageSerializer;
-impl ModifyClusterDbRevisionMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyClusterDbRevisionMessage) {
+/// Serialize `ModifyClusterDbRevisionRequest` contents to a `SignedRequest`.
+struct ModifyClusterDbRevisionRequestSerializer;
+impl ModifyClusterDbRevisionRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ModifyClusterDbRevisionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6234,18 +7328,18 @@ impl ModifyClusterDbRevisionMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyClusterDbRevisionResult {
+pub struct ModifyClusterDbRevisionResponse {
     pub cluster: Option<Cluster>,
 }
 
-struct ModifyClusterDbRevisionResultDeserializer;
-impl ModifyClusterDbRevisionResultDeserializer {
+struct ModifyClusterDbRevisionResponseDeserializer;
+impl ModifyClusterDbRevisionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyClusterDbRevisionResult, XmlParseError> {
-        deserialize_elements::<_, ModifyClusterDbRevisionResult, _>(
+    ) -> Result<ModifyClusterDbRevisionResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyClusterDbRevisionResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -6262,7 +7356,7 @@ impl ModifyClusterDbRevisionResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyClusterIamRolesMessage {
+pub struct ModifyClusterIamRolesRequest {
     /// <p>Zero or more IAM roles to associate with the cluster. The roles must be in their Amazon Resource Name (ARN) format. You can associate up to 10 IAM roles with a single cluster in a single request.</p>
     pub add_iam_roles: Option<Vec<String>>,
     /// <p>The unique identifier of the cluster for which you want to associate or disassociate IAM roles.</p>
@@ -6271,10 +7365,10 @@ pub struct ModifyClusterIamRolesMessage {
     pub remove_iam_roles: Option<Vec<String>>,
 }
 
-/// Serialize `ModifyClusterIamRolesMessage` contents to a `SignedRequest`.
-struct ModifyClusterIamRolesMessageSerializer;
-impl ModifyClusterIamRolesMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyClusterIamRolesMessage) {
+/// Serialize `ModifyClusterIamRolesRequest` contents to a `SignedRequest`.
+struct ModifyClusterIamRolesRequestSerializer;
+impl ModifyClusterIamRolesRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ModifyClusterIamRolesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6302,18 +7396,18 @@ impl ModifyClusterIamRolesMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyClusterIamRolesResult {
+pub struct ModifyClusterIamRolesResponse {
     pub cluster: Option<Cluster>,
 }
 
-struct ModifyClusterIamRolesResultDeserializer;
-impl ModifyClusterIamRolesResultDeserializer {
+struct ModifyClusterIamRolesResponseDeserializer;
+impl ModifyClusterIamRolesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyClusterIamRolesResult, XmlParseError> {
-        deserialize_elements::<_, ModifyClusterIamRolesResult, _>(
+    ) -> Result<ModifyClusterIamRolesResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyClusterIamRolesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -6329,7 +7423,7 @@ impl ModifyClusterIamRolesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyClusterMaintenanceMessage {
+pub struct ModifyClusterMaintenanceRequest {
     /// <p>A unique identifier for the cluster.</p>
     pub cluster_identifier: String,
     /// <p>A boolean indicating whether to enable the deferred maintenance window. </p>
@@ -6344,10 +7438,14 @@ pub struct ModifyClusterMaintenanceMessage {
     pub defer_maintenance_start_time: Option<String>,
 }
 
-/// Serialize `ModifyClusterMaintenanceMessage` contents to a `SignedRequest`.
-struct ModifyClusterMaintenanceMessageSerializer;
-impl ModifyClusterMaintenanceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyClusterMaintenanceMessage) {
+/// Serialize `ModifyClusterMaintenanceRequest` contents to a `SignedRequest`.
+struct ModifyClusterMaintenanceRequestSerializer;
+impl ModifyClusterMaintenanceRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ModifyClusterMaintenanceRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6388,18 +7486,18 @@ impl ModifyClusterMaintenanceMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyClusterMaintenanceResult {
+pub struct ModifyClusterMaintenanceResponse {
     pub cluster: Option<Cluster>,
 }
 
-struct ModifyClusterMaintenanceResultDeserializer;
-impl ModifyClusterMaintenanceResultDeserializer {
+struct ModifyClusterMaintenanceResponseDeserializer;
+impl ModifyClusterMaintenanceResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyClusterMaintenanceResult, XmlParseError> {
-        deserialize_elements::<_, ModifyClusterMaintenanceResult, _>(
+    ) -> Result<ModifyClusterMaintenanceResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyClusterMaintenanceResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -6416,7 +7514,81 @@ impl ModifyClusterMaintenanceResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyClusterMessage {
+pub struct ModifyClusterParameterGroupRequest {
+    /// <p>The name of the parameter group to be modified.</p>
+    pub parameter_group_name: String,
+    /// <p>An array of parameters to be modified. A maximum of 20 parameters can be modified in a single request.</p> <p>For each parameter to be modified, you must supply at least the parameter name and parameter value; other name-value pairs of the parameter are optional.</p> <p>For the workload management (WLM) configuration, you must supply all the name-value pairs in the wlm_json_configuration parameter.</p>
+    pub parameters: Vec<Parameter>,
+}
+
+/// Serialize `ModifyClusterParameterGroupRequest` contents to a `SignedRequest`.
+struct ModifyClusterParameterGroupRequestSerializer;
+impl ModifyClusterParameterGroupRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ModifyClusterParameterGroupRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ParameterGroupName"),
+            &obj.parameter_group_name,
+        );
+        ParametersListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Parameter"),
+            &obj.parameters,
+        );
+    }
+}
+
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyClusterParameterGroupResponse {
+    /// <p>The name of the cluster parameter group.</p>
+    pub parameter_group_name: Option<String>,
+    /// <p>The status of the parameter group. For example, if you made a change to a parameter group name-value pair, then the change could be pending a reboot of an associated cluster.</p>
+    pub parameter_group_status: Option<String>,
+}
+
+struct ModifyClusterParameterGroupResponseDeserializer;
+impl ModifyClusterParameterGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyClusterParameterGroupResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyClusterParameterGroupResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ParameterGroupName" => {
+                        obj.parameter_group_name = Some(StringDeserializer::deserialize(
+                            "ParameterGroupName",
+                            stack,
+                        )?);
+                    }
+                    "ParameterGroupStatus" => {
+                        obj.parameter_group_status = Some(StringDeserializer::deserialize(
+                            "ParameterGroupStatus",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyClusterRequest {
     /// <p>If <code>true</code>, major version upgrades will be applied automatically to the cluster during the maintenance window. </p> <p>Default: <code>false</code> </p>
     pub allow_version_upgrade: Option<bool>,
     /// <p>The number of days that automated snapshots are retained. If the value is 0, automated snapshots are disabled. Even if automated snapshots are disabled, you can still create manual snapshots when you want with <a>CreateClusterSnapshot</a>. </p> <p>If you decrease the automated snapshot retention period from its current value, existing automated snapshots that fall outside of the new retention period will be immediately deleted.</p> <p>Default: Uses existing setting.</p> <p>Constraints: Must be a value from 0 to 35.</p>
@@ -6463,10 +7635,10 @@ pub struct ModifyClusterMessage {
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-/// Serialize `ModifyClusterMessage` contents to a `SignedRequest`.
-struct ModifyClusterMessageSerializer;
-impl ModifyClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyClusterMessage) {
+/// Serialize `ModifyClusterRequest` contents to a `SignedRequest`.
+struct ModifyClusterRequestSerializer;
+impl ModifyClusterRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ModifyClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6577,49 +7749,19 @@ impl ModifyClusterMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyClusterParameterGroupMessage {
-    /// <p>The name of the parameter group to be modified.</p>
-    pub parameter_group_name: String,
-    /// <p>An array of parameters to be modified. A maximum of 20 parameters can be modified in a single request.</p> <p>For each parameter to be modified, you must supply at least the parameter name and parameter value; other name-value pairs of the parameter are optional.</p> <p>For the workload management (WLM) configuration, you must supply all the name-value pairs in the wlm_json_configuration parameter.</p>
-    pub parameters: Vec<Parameter>,
-}
-
-/// Serialize `ModifyClusterParameterGroupMessage` contents to a `SignedRequest`.
-struct ModifyClusterParameterGroupMessageSerializer;
-impl ModifyClusterParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyClusterParameterGroupMessage) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        params.put(
-            &format!("{}{}", prefix, "ParameterGroupName"),
-            &obj.parameter_group_name,
-        );
-        ParametersListSerializer::serialize(
-            params,
-            &format!("{}{}", prefix, "Parameter"),
-            &obj.parameters,
-        );
-    }
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyClusterResult {
+pub struct ModifyClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
-struct ModifyClusterResultDeserializer;
-impl ModifyClusterResultDeserializer {
+struct ModifyClusterResponseDeserializer;
+impl ModifyClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyClusterResult, XmlParseError> {
-        deserialize_elements::<_, ModifyClusterResult, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<ModifyClusterResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyClusterResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Cluster" => {
                     obj.cluster = Some(ClusterDeserializer::deserialize("Cluster", stack)?);
@@ -6631,7 +7773,7 @@ impl ModifyClusterResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyClusterSnapshotMessage {
+pub struct ModifyClusterSnapshotRequest {
     /// <p>A Boolean option to override an exception if the retention period has already passed.</p>
     pub force: Option<bool>,
     /// <p>The number of days that a manual snapshot is retained. If the value is -1, the manual snapshot is retained indefinitely.</p> <p>If the manual snapshot falls outside of the new retention period, you can specify the force option to immediately delete the snapshot.</p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
@@ -6640,10 +7782,10 @@ pub struct ModifyClusterSnapshotMessage {
     pub snapshot_identifier: String,
 }
 
-/// Serialize `ModifyClusterSnapshotMessage` contents to a `SignedRequest`.
-struct ModifyClusterSnapshotMessageSerializer;
-impl ModifyClusterSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyClusterSnapshotMessage) {
+/// Serialize `ModifyClusterSnapshotRequest` contents to a `SignedRequest`.
+struct ModifyClusterSnapshotRequestSerializer;
+impl ModifyClusterSnapshotRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ModifyClusterSnapshotRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6666,18 +7808,18 @@ impl ModifyClusterSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyClusterSnapshotResult {
+pub struct ModifyClusterSnapshotResponse {
     pub snapshot: Option<Snapshot>,
 }
 
-struct ModifyClusterSnapshotResultDeserializer;
-impl ModifyClusterSnapshotResultDeserializer {
+struct ModifyClusterSnapshotResponseDeserializer;
+impl ModifyClusterSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyClusterSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, ModifyClusterSnapshotResult, _>(
+    ) -> Result<ModifyClusterSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyClusterSnapshotResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -6693,7 +7835,7 @@ impl ModifyClusterSnapshotResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyClusterSnapshotScheduleMessage {
+pub struct ModifyClusterSnapshotScheduleRequest {
     /// <p>A unique identifier for the cluster whose snapshot schedule you want to modify. </p>
     pub cluster_identifier: String,
     /// <p>A boolean to indicate whether to remove the assoiciation between the cluster and the schedule.</p>
@@ -6702,10 +7844,14 @@ pub struct ModifyClusterSnapshotScheduleMessage {
     pub schedule_identifier: Option<String>,
 }
 
-/// Serialize `ModifyClusterSnapshotScheduleMessage` contents to a `SignedRequest`.
-struct ModifyClusterSnapshotScheduleMessageSerializer;
-impl ModifyClusterSnapshotScheduleMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyClusterSnapshotScheduleMessage) {
+/// Serialize `ModifyClusterSnapshotScheduleRequest` contents to a `SignedRequest`.
+struct ModifyClusterSnapshotScheduleRequestSerializer;
+impl ModifyClusterSnapshotScheduleRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ModifyClusterSnapshotScheduleRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6727,9 +7873,22 @@ impl ModifyClusterSnapshotScheduleMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyClusterSnapshotScheduleResponse {}
+
+struct ModifyClusterSnapshotScheduleResponseDeserializer;
+impl ModifyClusterSnapshotScheduleResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyClusterSnapshotScheduleResponse, XmlParseError> {
+        Ok(ModifyClusterSnapshotScheduleResponse::default())
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyClusterSubnetGroupMessage {
+pub struct ModifyClusterSubnetGroupRequest {
     /// <p>The name of the subnet group to be modified.</p>
     pub cluster_subnet_group_name: String,
     /// <p>A text description of the subnet group to be modified.</p>
@@ -6738,10 +7897,14 @@ pub struct ModifyClusterSubnetGroupMessage {
     pub subnet_ids: Vec<String>,
 }
 
-/// Serialize `ModifyClusterSubnetGroupMessage` contents to a `SignedRequest`.
-struct ModifyClusterSubnetGroupMessageSerializer;
-impl ModifyClusterSubnetGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyClusterSubnetGroupMessage) {
+/// Serialize `ModifyClusterSubnetGroupRequest` contents to a `SignedRequest`.
+struct ModifyClusterSubnetGroupRequestSerializer;
+impl ModifyClusterSubnetGroupRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ModifyClusterSubnetGroupRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6763,18 +7926,18 @@ impl ModifyClusterSubnetGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyClusterSubnetGroupResult {
+pub struct ModifyClusterSubnetGroupResponse {
     pub cluster_subnet_group: Option<ClusterSubnetGroup>,
 }
 
-struct ModifyClusterSubnetGroupResultDeserializer;
-impl ModifyClusterSubnetGroupResultDeserializer {
+struct ModifyClusterSubnetGroupResponseDeserializer;
+impl ModifyClusterSubnetGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyClusterSubnetGroupResult, XmlParseError> {
-        deserialize_elements::<_, ModifyClusterSubnetGroupResult, _>(
+    ) -> Result<ModifyClusterSubnetGroupResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyClusterSubnetGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -6795,7 +7958,7 @@ impl ModifyClusterSubnetGroupResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyEventSubscriptionMessage {
+pub struct ModifyEventSubscriptionRequest {
     /// <p>A Boolean value indicating if the subscription is enabled. <code>true</code> indicates the subscription is enabled </p>
     pub enabled: Option<bool>,
     /// <p>Specifies the Amazon Redshift event categories to be published by the event notification subscription.</p> <p>Values: configuration, management, monitoring, security</p>
@@ -6812,10 +7975,14 @@ pub struct ModifyEventSubscriptionMessage {
     pub subscription_name: String,
 }
 
-/// Serialize `ModifyEventSubscriptionMessage` contents to a `SignedRequest`.
-struct ModifyEventSubscriptionMessageSerializer;
-impl ModifyEventSubscriptionMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyEventSubscriptionMessage) {
+/// Serialize `ModifyEventSubscriptionRequest` contents to a `SignedRequest`.
+struct ModifyEventSubscriptionRequestSerializer;
+impl ModifyEventSubscriptionRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ModifyEventSubscriptionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6855,18 +8022,18 @@ impl ModifyEventSubscriptionMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyEventSubscriptionResult {
+pub struct ModifyEventSubscriptionResponse {
     pub event_subscription: Option<EventSubscription>,
 }
 
-struct ModifyEventSubscriptionResultDeserializer;
-impl ModifyEventSubscriptionResultDeserializer {
+struct ModifyEventSubscriptionResponseDeserializer;
+impl ModifyEventSubscriptionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyEventSubscriptionResult, XmlParseError> {
-        deserialize_elements::<_, ModifyEventSubscriptionResult, _>(
+    ) -> Result<ModifyEventSubscriptionResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyEventSubscriptionResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -6886,7 +8053,7 @@ impl ModifyEventSubscriptionResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifySnapshotCopyRetentionPeriodMessage {
+pub struct ModifySnapshotCopyRetentionPeriodRequest {
     /// <p>The unique identifier of the cluster for which you want to change the retention period for either automated or manual snapshots that are copied to a destination AWS Region.</p> <p>Constraints: Must be the valid name of an existing cluster that has cross-region snapshot copy enabled.</p>
     pub cluster_identifier: String,
     /// <p>Indicates whether to apply the snapshot retention period to newly copied manual snapshots instead of automated snapshots.</p>
@@ -6895,10 +8062,14 @@ pub struct ModifySnapshotCopyRetentionPeriodMessage {
     pub retention_period: i64,
 }
 
-/// Serialize `ModifySnapshotCopyRetentionPeriodMessage` contents to a `SignedRequest`.
-struct ModifySnapshotCopyRetentionPeriodMessageSerializer;
-impl ModifySnapshotCopyRetentionPeriodMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifySnapshotCopyRetentionPeriodMessage) {
+/// Serialize `ModifySnapshotCopyRetentionPeriodRequest` contents to a `SignedRequest`.
+struct ModifySnapshotCopyRetentionPeriodRequestSerializer;
+impl ModifySnapshotCopyRetentionPeriodRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ModifySnapshotCopyRetentionPeriodRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6919,18 +8090,18 @@ impl ModifySnapshotCopyRetentionPeriodMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifySnapshotCopyRetentionPeriodResult {
+pub struct ModifySnapshotCopyRetentionPeriodResponse {
     pub cluster: Option<Cluster>,
 }
 
-struct ModifySnapshotCopyRetentionPeriodResultDeserializer;
-impl ModifySnapshotCopyRetentionPeriodResultDeserializer {
+struct ModifySnapshotCopyRetentionPeriodResponseDeserializer;
+impl ModifySnapshotCopyRetentionPeriodResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifySnapshotCopyRetentionPeriodResult, XmlParseError> {
-        deserialize_elements::<_, ModifySnapshotCopyRetentionPeriodResult, _>(
+    ) -> Result<ModifySnapshotCopyRetentionPeriodResponse, XmlParseError> {
+        deserialize_elements::<_, ModifySnapshotCopyRetentionPeriodResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -6946,17 +8117,17 @@ impl ModifySnapshotCopyRetentionPeriodResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifySnapshotScheduleMessage {
+pub struct ModifySnapshotScheduleRequest {
     /// <p>An updated list of schedule definitions. A schedule definition is made up of schedule expressions, for example, "cron(30 12 *)" or "rate(12 hours)".</p>
     pub schedule_definitions: Vec<String>,
     /// <p>A unique alphanumeric identifier of the schedule to modify.</p>
     pub schedule_identifier: String,
 }
 
-/// Serialize `ModifySnapshotScheduleMessage` contents to a `SignedRequest`.
-struct ModifySnapshotScheduleMessageSerializer;
-impl ModifySnapshotScheduleMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifySnapshotScheduleMessage) {
+/// Serialize `ModifySnapshotScheduleRequest` contents to a `SignedRequest`.
+struct ModifySnapshotScheduleRequestSerializer;
+impl ModifySnapshotScheduleRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ModifySnapshotScheduleRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6974,6 +8145,92 @@ impl ModifySnapshotScheduleMessageSerializer {
     }
 }
 
+/// <p>Describes a snapshot schedule. You can set a regular interval for creating snapshots of a cluster. You can also schedule snapshots for specific dates. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifySnapshotScheduleResponse {
+    /// <p>The number of clusters associated with the schedule.</p>
+    pub associated_cluster_count: Option<i64>,
+    /// <p>A list of clusters associated with the schedule. A maximum of 100 clusters is returned.</p>
+    pub associated_clusters: Option<Vec<ClusterAssociatedToSchedule>>,
+    /// <p><p/></p>
+    pub next_invocations: Option<Vec<String>>,
+    /// <p>A list of ScheduleDefinitions.</p>
+    pub schedule_definitions: Option<Vec<String>>,
+    /// <p>The description of the schedule.</p>
+    pub schedule_description: Option<String>,
+    /// <p>A unique identifier for the schedule.</p>
+    pub schedule_identifier: Option<String>,
+    /// <p>An optional set of tags describing the schedule.</p>
+    pub tags: Option<Vec<Tag>>,
+}
+
+struct ModifySnapshotScheduleResponseDeserializer;
+impl ModifySnapshotScheduleResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifySnapshotScheduleResponse, XmlParseError> {
+        deserialize_elements::<_, ModifySnapshotScheduleResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "AssociatedClusterCount" => {
+                        obj.associated_cluster_count =
+                            Some(IntegerOptionalDeserializer::deserialize(
+                                "AssociatedClusterCount",
+                                stack,
+                            )?);
+                    }
+                    "AssociatedClusters" => {
+                        obj.associated_clusters.get_or_insert(vec![]).extend(
+                            AssociatedClusterListDeserializer::deserialize(
+                                "AssociatedClusters",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "NextInvocations" => {
+                        obj.next_invocations.get_or_insert(vec![]).extend(
+                            ScheduledSnapshotTimeListDeserializer::deserialize(
+                                "NextInvocations",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "ScheduleDefinitions" => {
+                        obj.schedule_definitions.get_or_insert(vec![]).extend(
+                            ScheduleDefinitionListDeserializer::deserialize(
+                                "ScheduleDefinitions",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "ScheduleDescription" => {
+                        obj.schedule_description = Some(StringDeserializer::deserialize(
+                            "ScheduleDescription",
+                            stack,
+                        )?);
+                    }
+                    "ScheduleIdentifier" => {
+                        obj.schedule_identifier = Some(StringDeserializer::deserialize(
+                            "ScheduleIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "Tags" => {
+                        obj.tags
+                            .get_or_insert(vec![])
+                            .extend(TagListDeserializer::deserialize("Tags", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Describes an orderable cluster option.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct OrderableClusterOption {
@@ -7035,45 +8292,6 @@ impl OrderableClusterOptionsListDeserializer {
             }
             Ok(())
         })
-    }
-}
-/// <p>Contains the output from the <a>DescribeOrderableClusterOptions</a> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct OrderableClusterOptionsMessage {
-    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
-    pub marker: Option<String>,
-    /// <p>An <code>OrderableClusterOption</code> structure containing information about orderable options for the cluster.</p>
-    pub orderable_cluster_options: Option<Vec<OrderableClusterOption>>,
-}
-
-struct OrderableClusterOptionsMessageDeserializer;
-impl OrderableClusterOptionsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<OrderableClusterOptionsMessage, XmlParseError> {
-        deserialize_elements::<_, OrderableClusterOptionsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "OrderableClusterOptions" => {
-                        obj.orderable_cluster_options.get_or_insert(vec![]).extend(
-                            OrderableClusterOptionsListDeserializer::deserialize(
-                                "OrderableClusterOptions",
-                                stack,
-                            )?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
     }
 }
 /// <p>Describes a parameter in a cluster parameter group.</p>
@@ -7155,7 +8373,7 @@ impl ParameterDeserializer {
 /// Serialize `Parameter` contents to a `SignedRequest`.
 struct ParameterSerializer;
 impl ParameterSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Parameter) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Parameter) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7246,7 +8464,7 @@ impl ParametersListDeserializer {
 /// Serialize `ParametersList` contents to a `SignedRequest`.
 struct ParametersListSerializer;
 impl ParametersListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<Parameter>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<Parameter>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             ParameterSerializer::serialize(params, &key, obj);
@@ -7370,17 +8588,21 @@ impl PendingModifiedValuesDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PurchaseReservedNodeOfferingMessage {
+pub struct PurchaseReservedNodeOfferingRequest {
     /// <p>The number of reserved nodes that you want to purchase.</p> <p>Default: <code>1</code> </p>
     pub node_count: Option<i64>,
     /// <p>The unique identifier of the reserved node offering you want to purchase.</p>
     pub reserved_node_offering_id: String,
 }
 
-/// Serialize `PurchaseReservedNodeOfferingMessage` contents to a `SignedRequest`.
-struct PurchaseReservedNodeOfferingMessageSerializer;
-impl PurchaseReservedNodeOfferingMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PurchaseReservedNodeOfferingMessage) {
+/// Serialize `PurchaseReservedNodeOfferingRequest` contents to a `SignedRequest`.
+struct PurchaseReservedNodeOfferingRequestSerializer;
+impl PurchaseReservedNodeOfferingRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &PurchaseReservedNodeOfferingRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7397,18 +8619,18 @@ impl PurchaseReservedNodeOfferingMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PurchaseReservedNodeOfferingResult {
+pub struct PurchaseReservedNodeOfferingResponse {
     pub reserved_node: Option<ReservedNode>,
 }
 
-struct PurchaseReservedNodeOfferingResultDeserializer;
-impl PurchaseReservedNodeOfferingResultDeserializer {
+struct PurchaseReservedNodeOfferingResponseDeserializer;
+impl PurchaseReservedNodeOfferingResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<PurchaseReservedNodeOfferingResult, XmlParseError> {
-        deserialize_elements::<_, PurchaseReservedNodeOfferingResult, _>(
+    ) -> Result<PurchaseReservedNodeOfferingResponse, XmlParseError> {
+        deserialize_elements::<_, PurchaseReservedNodeOfferingResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -7428,15 +8650,15 @@ impl PurchaseReservedNodeOfferingResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RebootClusterMessage {
+pub struct RebootClusterRequest {
     /// <p>The cluster identifier.</p>
     pub cluster_identifier: String,
 }
 
-/// Serialize `RebootClusterMessage` contents to a `SignedRequest`.
-struct RebootClusterMessageSerializer;
-impl RebootClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RebootClusterMessage) {
+/// Serialize `RebootClusterRequest` contents to a `SignedRequest`.
+struct RebootClusterRequestSerializer;
+impl RebootClusterRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &RebootClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7450,18 +8672,18 @@ impl RebootClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RebootClusterResult {
+pub struct RebootClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
-struct RebootClusterResultDeserializer;
-impl RebootClusterResultDeserializer {
+struct RebootClusterResponseDeserializer;
+impl RebootClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RebootClusterResult, XmlParseError> {
-        deserialize_elements::<_, RebootClusterResult, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<RebootClusterResponse, XmlParseError> {
+        deserialize_elements::<_, RebootClusterResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Cluster" => {
                     obj.cluster = Some(ClusterDeserializer::deserialize("Cluster", stack)?);
@@ -7754,78 +8976,7 @@ impl ReservedNodeOfferingTypeDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ReservedNodeOfferingsMessage {
-    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
-    pub marker: Option<String>,
-    /// <p>A list of <code>ReservedNodeOffering</code> objects.</p>
-    pub reserved_node_offerings: Option<Vec<ReservedNodeOffering>>,
-}
-
-struct ReservedNodeOfferingsMessageDeserializer;
-impl ReservedNodeOfferingsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ReservedNodeOfferingsMessage, XmlParseError> {
-        deserialize_elements::<_, ReservedNodeOfferingsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "ReservedNodeOfferings" => {
-                        obj.reserved_node_offerings.get_or_insert(vec![]).extend(
-                            ReservedNodeOfferingListDeserializer::deserialize(
-                                "ReservedNodeOfferings",
-                                stack,
-                            )?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
-/// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ReservedNodesMessage {
-    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
-    pub marker: Option<String>,
-    /// <p>The list of <code>ReservedNode</code> objects.</p>
-    pub reserved_nodes: Option<Vec<ReservedNode>>,
-}
-
-struct ReservedNodesMessageDeserializer;
-impl ReservedNodesMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ReservedNodesMessage, XmlParseError> {
-        deserialize_elements::<_, ReservedNodesMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                "ReservedNodes" => {
-                    obj.reserved_nodes.get_or_insert(vec![]).extend(
-                        ReservedNodeListDeserializer::deserialize("ReservedNodes", stack)?,
-                    );
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
-/// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ResetClusterParameterGroupMessage {
+pub struct ResetClusterParameterGroupRequest {
     /// <p>The name of the cluster parameter group to be reset.</p>
     pub parameter_group_name: String,
     /// <p>An array of names of parameters to be reset. If <i>ResetAllParameters</i> option is not used, then at least one parameter name must be supplied. </p> <p>Constraints: A maximum of 20 parameters can be reset in a single request.</p>
@@ -7834,10 +8985,14 @@ pub struct ResetClusterParameterGroupMessage {
     pub reset_all_parameters: Option<bool>,
 }
 
-/// Serialize `ResetClusterParameterGroupMessage` contents to a `SignedRequest`.
-struct ResetClusterParameterGroupMessageSerializer;
-impl ResetClusterParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ResetClusterParameterGroupMessage) {
+/// Serialize `ResetClusterParameterGroupRequest` contents to a `SignedRequest`.
+struct ResetClusterParameterGroupRequestSerializer;
+impl ResetClusterParameterGroupRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ResetClusterParameterGroupRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7860,8 +9015,48 @@ impl ResetClusterParameterGroupMessageSerializer {
     }
 }
 
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ResizeClusterMessage {
+pub struct ResetClusterParameterGroupResponse {
+    /// <p>The name of the cluster parameter group.</p>
+    pub parameter_group_name: Option<String>,
+    /// <p>The status of the parameter group. For example, if you made a change to a parameter group name-value pair, then the change could be pending a reboot of an associated cluster.</p>
+    pub parameter_group_status: Option<String>,
+}
+
+struct ResetClusterParameterGroupResponseDeserializer;
+impl ResetClusterParameterGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResetClusterParameterGroupResponse, XmlParseError> {
+        deserialize_elements::<_, ResetClusterParameterGroupResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ParameterGroupName" => {
+                        obj.parameter_group_name = Some(StringDeserializer::deserialize(
+                            "ParameterGroupName",
+                            stack,
+                        )?);
+                    }
+                    "ParameterGroupStatus" => {
+                        obj.parameter_group_status = Some(StringDeserializer::deserialize(
+                            "ParameterGroupStatus",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResizeClusterRequest {
     /// <p>A boolean value indicating whether the resize operation is using the classic resize process. If you don't provide this parameter or set the value to <code>false</code>, the resize type is elastic. </p>
     pub classic: Option<bool>,
     /// <p>The unique identifier for the cluster to resize.</p>
@@ -7874,10 +9069,10 @@ pub struct ResizeClusterMessage {
     pub number_of_nodes: i64,
 }
 
-/// Serialize `ResizeClusterMessage` contents to a `SignedRequest`.
-struct ResizeClusterMessageSerializer;
-impl ResizeClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ResizeClusterMessage) {
+/// Serialize `ResizeClusterRequest` contents to a `SignedRequest`.
+struct ResizeClusterRequestSerializer;
+impl ResizeClusterRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ResizeClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7904,18 +9099,18 @@ impl ResizeClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ResizeClusterResult {
+pub struct ResizeClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
-struct ResizeClusterResultDeserializer;
-impl ResizeClusterResultDeserializer {
+struct ResizeClusterResponseDeserializer;
+impl ResizeClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ResizeClusterResult, XmlParseError> {
-        deserialize_elements::<_, ResizeClusterResult, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<ResizeClusterResponse, XmlParseError> {
+        deserialize_elements::<_, ResizeClusterResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Cluster" => {
                     obj.cluster = Some(ClusterDeserializer::deserialize("Cluster", stack)?);
@@ -7959,149 +9154,6 @@ impl ResizeInfoDeserializer {
         })
     }
 }
-/// <p>Describes the result of a cluster resize operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ResizeProgressMessage {
-    /// <p>The average rate of the resize operation over the last few minutes, measured in megabytes per second. After the resize operation completes, this value shows the average rate of the entire resize operation.</p>
-    pub avg_resize_rate_in_mega_bytes_per_second: Option<f64>,
-    /// <p>The percent of data transferred from source cluster to target cluster.</p>
-    pub data_transfer_progress_percent: Option<f64>,
-    /// <p>The amount of seconds that have elapsed since the resize operation began. After the resize operation completes, this value shows the total actual time, in seconds, for the resize operation.</p>
-    pub elapsed_time_in_seconds: Option<i64>,
-    /// <p>The estimated time remaining, in seconds, until the resize operation is complete. This value is calculated based on the average resize rate and the estimated amount of data remaining to be processed. Once the resize operation is complete, this value will be 0.</p>
-    pub estimated_time_to_completion_in_seconds: Option<i64>,
-    /// <p>The names of tables that have been completely imported .</p> <p>Valid Values: List of table names.</p>
-    pub import_tables_completed: Option<Vec<String>>,
-    /// <p>The names of tables that are being currently imported.</p> <p>Valid Values: List of table names.</p>
-    pub import_tables_in_progress: Option<Vec<String>>,
-    /// <p>The names of tables that have not been yet imported.</p> <p>Valid Values: List of table names</p>
-    pub import_tables_not_started: Option<Vec<String>>,
-    /// <p>An optional string to provide additional details about the resize action.</p>
-    pub message: Option<String>,
-    /// <p>While the resize operation is in progress, this value shows the current amount of data, in megabytes, that has been processed so far. When the resize operation is complete, this value shows the total amount of data, in megabytes, on the cluster, which may be more or less than TotalResizeDataInMegaBytes (the estimated total amount of data before resize).</p>
-    pub progress_in_mega_bytes: Option<i64>,
-    /// <p>An enum with possible values of <code>ClassicResize</code> and <code>ElasticResize</code>. These values describe the type of resize operation being performed. </p>
-    pub resize_type: Option<String>,
-    /// <p>The status of the resize operation.</p> <p>Valid Values: <code>NONE</code> | <code>IN_PROGRESS</code> | <code>FAILED</code> | <code>SUCCEEDED</code> | <code>CANCELLING</code> </p>
-    pub status: Option<String>,
-    /// <p>The cluster type after the resize operation is complete.</p> <p>Valid Values: <code>multi-node</code> | <code>single-node</code> </p>
-    pub target_cluster_type: Option<String>,
-    /// <p>The type of encryption for the cluster after the resize is complete.</p> <p>Possible values are <code>KMS</code> and <code>None</code>. In the China region possible values are: <code>Legacy</code> and <code>None</code>.</p>
-    pub target_encryption_type: Option<String>,
-    /// <p>The node type that the cluster will have after the resize operation is complete.</p>
-    pub target_node_type: Option<String>,
-    /// <p>The number of nodes that the cluster will have after the resize operation is complete.</p>
-    pub target_number_of_nodes: Option<i64>,
-    /// <p>The estimated total amount of data, in megabytes, on the cluster before the resize operation began.</p>
-    pub total_resize_data_in_mega_bytes: Option<i64>,
-}
-
-struct ResizeProgressMessageDeserializer;
-impl ResizeProgressMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ResizeProgressMessage, XmlParseError> {
-        deserialize_elements::<_, ResizeProgressMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "AvgResizeRateInMegaBytesPerSecond" => {
-                    obj.avg_resize_rate_in_mega_bytes_per_second =
-                        Some(DoubleOptionalDeserializer::deserialize(
-                            "AvgResizeRateInMegaBytesPerSecond",
-                            stack,
-                        )?);
-                }
-                "DataTransferProgressPercent" => {
-                    obj.data_transfer_progress_percent =
-                        Some(DoubleOptionalDeserializer::deserialize(
-                            "DataTransferProgressPercent",
-                            stack,
-                        )?);
-                }
-                "ElapsedTimeInSeconds" => {
-                    obj.elapsed_time_in_seconds = Some(LongOptionalDeserializer::deserialize(
-                        "ElapsedTimeInSeconds",
-                        stack,
-                    )?);
-                }
-                "EstimatedTimeToCompletionInSeconds" => {
-                    obj.estimated_time_to_completion_in_seconds =
-                        Some(LongOptionalDeserializer::deserialize(
-                            "EstimatedTimeToCompletionInSeconds",
-                            stack,
-                        )?);
-                }
-                "ImportTablesCompleted" => {
-                    obj.import_tables_completed.get_or_insert(vec![]).extend(
-                        ImportTablesCompletedDeserializer::deserialize(
-                            "ImportTablesCompleted",
-                            stack,
-                        )?,
-                    );
-                }
-                "ImportTablesInProgress" => {
-                    obj.import_tables_in_progress.get_or_insert(vec![]).extend(
-                        ImportTablesInProgressDeserializer::deserialize(
-                            "ImportTablesInProgress",
-                            stack,
-                        )?,
-                    );
-                }
-                "ImportTablesNotStarted" => {
-                    obj.import_tables_not_started.get_or_insert(vec![]).extend(
-                        ImportTablesNotStartedDeserializer::deserialize(
-                            "ImportTablesNotStarted",
-                            stack,
-                        )?,
-                    );
-                }
-                "Message" => {
-                    obj.message = Some(StringDeserializer::deserialize("Message", stack)?);
-                }
-                "ProgressInMegaBytes" => {
-                    obj.progress_in_mega_bytes = Some(LongOptionalDeserializer::deserialize(
-                        "ProgressInMegaBytes",
-                        stack,
-                    )?);
-                }
-                "ResizeType" => {
-                    obj.resize_type = Some(StringDeserializer::deserialize("ResizeType", stack)?);
-                }
-                "Status" => {
-                    obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
-                }
-                "TargetClusterType" => {
-                    obj.target_cluster_type =
-                        Some(StringDeserializer::deserialize("TargetClusterType", stack)?);
-                }
-                "TargetEncryptionType" => {
-                    obj.target_encryption_type = Some(StringDeserializer::deserialize(
-                        "TargetEncryptionType",
-                        stack,
-                    )?);
-                }
-                "TargetNodeType" => {
-                    obj.target_node_type =
-                        Some(StringDeserializer::deserialize("TargetNodeType", stack)?);
-                }
-                "TargetNumberOfNodes" => {
-                    obj.target_number_of_nodes = Some(IntegerOptionalDeserializer::deserialize(
-                        "TargetNumberOfNodes",
-                        stack,
-                    )?);
-                }
-                "TotalResizeDataInMegaBytes" => {
-                    obj.total_resize_data_in_mega_bytes = Some(
-                        LongOptionalDeserializer::deserialize("TotalResizeDataInMegaBytes", stack)?,
-                    );
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 struct RestorableNodeTypeListDeserializer;
 impl RestorableNodeTypeListDeserializer {
     #[allow(unused_variables)]
@@ -8121,7 +9173,7 @@ impl RestorableNodeTypeListDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreFromClusterSnapshotMessage {
+pub struct RestoreFromClusterSnapshotRequest {
     /// <p>Reserved.</p>
     pub additional_info: Option<String>,
     /// <p>If <code>true</code>, major version upgrades can be applied during the maintenance window to the Amazon Redshift engine that is running on the cluster. </p> <p>Default: <code>true</code> </p>
@@ -8174,10 +9226,14 @@ pub struct RestoreFromClusterSnapshotMessage {
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-/// Serialize `RestoreFromClusterSnapshotMessage` contents to a `SignedRequest`.
-struct RestoreFromClusterSnapshotMessageSerializer;
-impl RestoreFromClusterSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RestoreFromClusterSnapshotMessage) {
+/// Serialize `RestoreFromClusterSnapshotRequest` contents to a `SignedRequest`.
+struct RestoreFromClusterSnapshotRequestSerializer;
+impl RestoreFromClusterSnapshotRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &RestoreFromClusterSnapshotRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -8309,18 +9365,18 @@ impl RestoreFromClusterSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreFromClusterSnapshotResult {
+pub struct RestoreFromClusterSnapshotResponse {
     pub cluster: Option<Cluster>,
 }
 
-struct RestoreFromClusterSnapshotResultDeserializer;
-impl RestoreFromClusterSnapshotResultDeserializer {
+struct RestoreFromClusterSnapshotResponseDeserializer;
+impl RestoreFromClusterSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RestoreFromClusterSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, RestoreFromClusterSnapshotResult, _>(
+    ) -> Result<RestoreFromClusterSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, RestoreFromClusterSnapshotResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -8400,7 +9456,7 @@ impl RestoreStatusDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreTableFromClusterSnapshotMessage {
+pub struct RestoreTableFromClusterSnapshotRequest {
     /// <p>The identifier of the Amazon Redshift cluster to restore the table to.</p>
     pub cluster_identifier: String,
     /// <p>The name of the table to create as a result of the current request.</p>
@@ -8419,10 +9475,14 @@ pub struct RestoreTableFromClusterSnapshotMessage {
     pub target_schema_name: Option<String>,
 }
 
-/// Serialize `RestoreTableFromClusterSnapshotMessage` contents to a `SignedRequest`.
-struct RestoreTableFromClusterSnapshotMessageSerializer;
-impl RestoreTableFromClusterSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RestoreTableFromClusterSnapshotMessage) {
+/// Serialize `RestoreTableFromClusterSnapshotRequest` contents to a `SignedRequest`.
+struct RestoreTableFromClusterSnapshotRequestSerializer;
+impl RestoreTableFromClusterSnapshotRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &RestoreTableFromClusterSnapshotRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -8461,18 +9521,18 @@ impl RestoreTableFromClusterSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreTableFromClusterSnapshotResult {
+pub struct RestoreTableFromClusterSnapshotResponse {
     pub table_restore_status: Option<TableRestoreStatus>,
 }
 
-struct RestoreTableFromClusterSnapshotResultDeserializer;
-impl RestoreTableFromClusterSnapshotResultDeserializer {
+struct RestoreTableFromClusterSnapshotResponseDeserializer;
+impl RestoreTableFromClusterSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RestoreTableFromClusterSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, RestoreTableFromClusterSnapshotResult, _>(
+    ) -> Result<RestoreTableFromClusterSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, RestoreTableFromClusterSnapshotResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -8552,7 +9612,7 @@ impl RevisionTargetsListDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RevokeClusterSecurityGroupIngressMessage {
+pub struct RevokeClusterSecurityGroupIngressRequest {
     /// <p>The IP range for which to revoke access. This range must be a valid Classless Inter-Domain Routing (CIDR) block of IP addresses. If <code>CIDRIP</code> is specified, <code>EC2SecurityGroupName</code> and <code>EC2SecurityGroupOwnerId</code> cannot be provided. </p>
     pub cidrip: Option<String>,
     /// <p>The name of the security Group from which to revoke the ingress rule.</p>
@@ -8563,10 +9623,14 @@ pub struct RevokeClusterSecurityGroupIngressMessage {
     pub ec2_security_group_owner_id: Option<String>,
 }
 
-/// Serialize `RevokeClusterSecurityGroupIngressMessage` contents to a `SignedRequest`.
-struct RevokeClusterSecurityGroupIngressMessageSerializer;
-impl RevokeClusterSecurityGroupIngressMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RevokeClusterSecurityGroupIngressMessage) {
+/// Serialize `RevokeClusterSecurityGroupIngressRequest` contents to a `SignedRequest`.
+struct RevokeClusterSecurityGroupIngressRequestSerializer;
+impl RevokeClusterSecurityGroupIngressRequestSerializer {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &RevokeClusterSecurityGroupIngressRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -8595,18 +9659,18 @@ impl RevokeClusterSecurityGroupIngressMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RevokeClusterSecurityGroupIngressResult {
+pub struct RevokeClusterSecurityGroupIngressResponse {
     pub cluster_security_group: Option<ClusterSecurityGroup>,
 }
 
-struct RevokeClusterSecurityGroupIngressResultDeserializer;
-impl RevokeClusterSecurityGroupIngressResultDeserializer {
+struct RevokeClusterSecurityGroupIngressResponseDeserializer;
+impl RevokeClusterSecurityGroupIngressResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RevokeClusterSecurityGroupIngressResult, XmlParseError> {
-        deserialize_elements::<_, RevokeClusterSecurityGroupIngressResult, _>(
+    ) -> Result<RevokeClusterSecurityGroupIngressResponse, XmlParseError> {
+        deserialize_elements::<_, RevokeClusterSecurityGroupIngressResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -8627,7 +9691,7 @@ impl RevokeClusterSecurityGroupIngressResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RevokeSnapshotAccessMessage {
+pub struct RevokeSnapshotAccessRequest {
     /// <p>The identifier of the AWS customer account that can no longer restore the specified snapshot.</p>
     pub account_with_restore_access: String,
     /// <p>The identifier of the cluster the snapshot was created from. This parameter is required if your IAM user has a policy containing a snapshot resource element that specifies anything other than * for the cluster name.</p>
@@ -8636,10 +9700,10 @@ pub struct RevokeSnapshotAccessMessage {
     pub snapshot_identifier: String,
 }
 
-/// Serialize `RevokeSnapshotAccessMessage` contents to a `SignedRequest`.
-struct RevokeSnapshotAccessMessageSerializer;
-impl RevokeSnapshotAccessMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RevokeSnapshotAccessMessage) {
+/// Serialize `RevokeSnapshotAccessRequest` contents to a `SignedRequest`.
+struct RevokeSnapshotAccessRequestSerializer;
+impl RevokeSnapshotAccessRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &RevokeSnapshotAccessRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -8663,18 +9727,18 @@ impl RevokeSnapshotAccessMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RevokeSnapshotAccessResult {
+pub struct RevokeSnapshotAccessResponse {
     pub snapshot: Option<Snapshot>,
 }
 
-struct RevokeSnapshotAccessResultDeserializer;
-impl RevokeSnapshotAccessResultDeserializer {
+struct RevokeSnapshotAccessResponseDeserializer;
+impl RevokeSnapshotAccessResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RevokeSnapshotAccessResult, XmlParseError> {
-        deserialize_elements::<_, RevokeSnapshotAccessResult, _>(
+    ) -> Result<RevokeSnapshotAccessResponse, XmlParseError> {
+        deserialize_elements::<_, RevokeSnapshotAccessResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -8691,15 +9755,15 @@ impl RevokeSnapshotAccessResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RotateEncryptionKeyMessage {
+pub struct RotateEncryptionKeyRequest {
     /// <p>The unique identifier of the cluster that you want to rotate the encryption keys for.</p> <p>Constraints: Must be the name of valid cluster that has encryption enabled.</p>
     pub cluster_identifier: String,
 }
 
-/// Serialize `RotateEncryptionKeyMessage` contents to a `SignedRequest`.
-struct RotateEncryptionKeyMessageSerializer;
-impl RotateEncryptionKeyMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RotateEncryptionKeyMessage) {
+/// Serialize `RotateEncryptionKeyRequest` contents to a `SignedRequest`.
+struct RotateEncryptionKeyRequestSerializer;
+impl RotateEncryptionKeyRequestSerializer {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &RotateEncryptionKeyRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -8713,18 +9777,18 @@ impl RotateEncryptionKeyMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RotateEncryptionKeyResult {
+pub struct RotateEncryptionKeyResponse {
     pub cluster: Option<Cluster>,
 }
 
-struct RotateEncryptionKeyResultDeserializer;
-impl RotateEncryptionKeyResultDeserializer {
+struct RotateEncryptionKeyResponseDeserializer;
+impl RotateEncryptionKeyResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RotateEncryptionKeyResult, XmlParseError> {
-        deserialize_elements::<_, RotateEncryptionKeyResult, _>(
+    ) -> Result<RotateEncryptionKeyResponse, XmlParseError> {
+        deserialize_elements::<_, RotateEncryptionKeyResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -8763,7 +9827,7 @@ impl ScheduleDefinitionListDeserializer {
 /// Serialize `ScheduleDefinitionList` contents to a `SignedRequest`.
 struct ScheduleDefinitionListSerializer;
 impl ScheduleDefinitionListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -9120,45 +10184,6 @@ impl SnapshotCopyGrantListDeserializer {
         })
     }
 }
-/// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct SnapshotCopyGrantMessage {
-    /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <code>DescribeSnapshotCopyGrant</code> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p> <p>Constraints: You can specify either the <b>SnapshotCopyGrantName</b> parameter or the <b>Marker</b> parameter, but not both. </p>
-    pub marker: Option<String>,
-    /// <p>The list of <code>SnapshotCopyGrant</code> objects.</p>
-    pub snapshot_copy_grants: Option<Vec<SnapshotCopyGrant>>,
-}
-
-struct SnapshotCopyGrantMessageDeserializer;
-impl SnapshotCopyGrantMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<SnapshotCopyGrantMessage, XmlParseError> {
-        deserialize_elements::<_, SnapshotCopyGrantMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "SnapshotCopyGrants" => {
-                        obj.snapshot_copy_grants.get_or_insert(vec![]).extend(
-                            SnapshotCopyGrantListDeserializer::deserialize(
-                                "SnapshotCopyGrants",
-                                stack,
-                            )?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p>Describes the errors returned by a snapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SnapshotErrorMessage {
@@ -9227,7 +10252,7 @@ impl SnapshotIdentifierListDeserializer {
 /// Serialize `SnapshotIdentifierList` contents to a `SignedRequest`.
 struct SnapshotIdentifierListSerializer;
 impl SnapshotIdentifierListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -9247,38 +10272,6 @@ impl SnapshotListDeserializer {
                 obj.push(SnapshotDeserializer::deserialize("Snapshot", stack)?);
             } else {
                 skip_tree(stack);
-            }
-            Ok(())
-        })
-    }
-}
-/// <p>Contains the output from the <a>DescribeClusterSnapshots</a> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct SnapshotMessage {
-    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
-    pub marker: Option<String>,
-    /// <p>A list of <a>Snapshot</a> instances. </p>
-    pub snapshots: Option<Vec<Snapshot>>,
-}
-
-struct SnapshotMessageDeserializer;
-impl SnapshotMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<SnapshotMessage, XmlParseError> {
-        deserialize_elements::<_, SnapshotMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                "Snapshots" => {
-                    obj.snapshots
-                        .get_or_insert(vec![])
-                        .extend(SnapshotListDeserializer::deserialize("Snapshots", stack)?);
-                }
-                _ => skip_tree(stack),
             }
             Ok(())
         })
@@ -9397,7 +10390,7 @@ pub struct SnapshotSortingEntity {
 /// Serialize `SnapshotSortingEntity` contents to a `SignedRequest`.
 struct SnapshotSortingEntitySerializer;
 impl SnapshotSortingEntitySerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SnapshotSortingEntity) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SnapshotSortingEntity) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -9413,7 +10406,7 @@ impl SnapshotSortingEntitySerializer {
 /// Serialize `SnapshotSortingEntityList` contents to a `SignedRequest`.
 struct SnapshotSortingEntityListSerializer;
 impl SnapshotSortingEntityListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<SnapshotSortingEntity>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<SnapshotSortingEntity>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             SnapshotSortingEntitySerializer::serialize(params, &key, obj);
@@ -9442,7 +10435,7 @@ impl SourceIdsListDeserializer {
 /// Serialize `SourceIdsList` contents to a `SignedRequest`.
 struct SourceIdsListSerializer;
 impl SourceIdsListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -9513,7 +10506,7 @@ impl SubnetDeserializer {
 /// Serialize `SubnetIdentifierList` contents to a `SignedRequest`.
 struct SubnetIdentifierListSerializer;
 impl SubnetIdentifierListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -9775,45 +10768,6 @@ impl TableRestoreStatusListDeserializer {
         })
     }
 }
-/// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct TableRestoreStatusMessage {
-    /// <p>A pagination token that can be used in a subsequent <a>DescribeTableRestoreStatus</a> request.</p>
-    pub marker: Option<String>,
-    /// <p>A list of status details for one or more table restore requests.</p>
-    pub table_restore_status_details: Option<Vec<TableRestoreStatus>>,
-}
-
-struct TableRestoreStatusMessageDeserializer;
-impl TableRestoreStatusMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<TableRestoreStatusMessage, XmlParseError> {
-        deserialize_elements::<_, TableRestoreStatusMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "TableRestoreStatusDetails" => {
-                        obj.table_restore_status_details
-                            .get_or_insert(vec![])
-                            .extend(TableRestoreStatusListDeserializer::deserialize(
-                                "TableRestoreStatusDetails",
-                                stack,
-                            )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 struct TableRestoreStatusTypeDeserializer;
 impl TableRestoreStatusTypeDeserializer {
     #[allow(unused_variables)]
@@ -9856,7 +10810,7 @@ impl TagDeserializer {
 /// Serialize `Tag` contents to a `SignedRequest`.
 struct TagSerializer;
 impl TagSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Tag) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Tag) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -9874,7 +10828,7 @@ impl TagSerializer {
 /// Serialize `TagKeyList` contents to a `SignedRequest`.
 struct TagKeyListSerializer;
 impl TagKeyListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -9903,7 +10857,7 @@ impl TagListDeserializer {
 /// Serialize `TagList` contents to a `SignedRequest`.
 struct TagListSerializer;
 impl TagListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<Tag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             TagSerializer::serialize(params, &key, obj);
@@ -9914,7 +10868,7 @@ impl TagListSerializer {
 /// Serialize `TagValueList` contents to a `SignedRequest`.
 struct TagValueListSerializer;
 impl TagValueListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -9979,42 +10933,6 @@ impl TaggedResourceListDeserializer {
         })
     }
 }
-/// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct TaggedResourceListMessage {
-    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
-    pub marker: Option<String>,
-    /// <p>A list of tags with their associated resources.</p>
-    pub tagged_resources: Option<Vec<TaggedResource>>,
-}
-
-struct TaggedResourceListMessageDeserializer;
-impl TaggedResourceListMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<TaggedResourceListMessage, XmlParseError> {
-        deserialize_elements::<_, TaggedResourceListMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "TaggedResources" => {
-                        obj.tagged_resources.get_or_insert(vec![]).extend(
-                            TaggedResourceListDeserializer::deserialize("TaggedResources", stack)?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 struct TrackListDeserializer;
 impl TrackListDeserializer {
     #[allow(unused_variables)]
@@ -10030,37 +10948,6 @@ impl TrackListDeserializer {
                 )?);
             } else {
                 skip_tree(stack);
-            }
-            Ok(())
-        })
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct TrackListMessage {
-    /// <p>A list of maintenance tracks output by the <code>DescribeClusterTracks</code> operation. </p>
-    pub maintenance_tracks: Option<Vec<MaintenanceTrack>>,
-    /// <p>The starting point to return a set of response tracklist records. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request.</p>
-    pub marker: Option<String>,
-}
-
-struct TrackListMessageDeserializer;
-impl TrackListMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<TrackListMessage, XmlParseError> {
-        deserialize_elements::<_, TrackListMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "MaintenanceTracks" => {
-                    obj.maintenance_tracks.get_or_insert(vec![]).extend(
-                        TrackListDeserializer::deserialize("MaintenanceTracks", stack)?,
-                    );
-                }
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                _ => skip_tree(stack),
             }
             Ok(())
         })
@@ -10114,7 +11001,7 @@ impl UpdateTargetDeserializer {
 /// Serialize `VpcSecurityGroupIdList` contents to a `SignedRequest`.
 struct VpcSecurityGroupIdListSerializer;
 impl VpcSecurityGroupIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -16246,485 +17133,444 @@ pub trait Redshift {
     /// <p>Exchanges a DC1 Reserved Node for a DC2 Reserved Node with no changes to the configuration (term, payment type, or number of nodes) and no additional costs. </p>
     fn accept_reserved_node_exchange(
         &self,
-        input: AcceptReservedNodeExchangeInputMessage,
-    ) -> RusotoFuture<AcceptReservedNodeExchangeOutputMessage, AcceptReservedNodeExchangeError>;
+        input: AcceptReservedNodeExchangeRequest,
+    ) -> Request<AcceptReservedNodeExchangeRequest>;
 
     /// <p>Adds an inbound (ingress) rule to an Amazon Redshift security group. Depending on whether the application accessing your cluster is running on the Internet or an Amazon EC2 instance, you can authorize inbound access to either a Classless Interdomain Routing (CIDR)/Internet Protocol (IP) range or to an Amazon EC2 security group. You can add as many as 20 ingress rules to an Amazon Redshift security group.</p> <p>If you authorize access to an Amazon EC2 security group, specify <i>EC2SecurityGroupName</i> and <i>EC2SecurityGroupOwnerId</i>. The Amazon EC2 security group and Amazon Redshift cluster must be in the same AWS Region. </p> <p>If you authorize access to a CIDR/IP address range, specify <i>CIDRIP</i>. For an overview of CIDR blocks, see the Wikipedia article on <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Classless Inter-Domain Routing</a>. </p> <p>You must also associate the security group with a cluster so that clients running on these IP addresses or the EC2 instance are authorized to connect to the cluster. For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Working with Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn authorize_cluster_security_group_ingress(
         &self,
-        input: AuthorizeClusterSecurityGroupIngressMessage,
-    ) -> RusotoFuture<
-        AuthorizeClusterSecurityGroupIngressResult,
-        AuthorizeClusterSecurityGroupIngressError,
-    >;
+        input: AuthorizeClusterSecurityGroupIngressRequest,
+    ) -> Request<AuthorizeClusterSecurityGroupIngressRequest>;
 
     /// <p>Authorizes the specified AWS customer account to restore the specified snapshot.</p> <p> For more information about working with snapshots, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn authorize_snapshot_access(
         &self,
-        input: AuthorizeSnapshotAccessMessage,
-    ) -> RusotoFuture<AuthorizeSnapshotAccessResult, AuthorizeSnapshotAccessError>;
+        input: AuthorizeSnapshotAccessRequest,
+    ) -> Request<AuthorizeSnapshotAccessRequest>;
 
     /// <p>Deletes a set of cluster snapshots.</p>
     fn batch_delete_cluster_snapshots(
         &self,
         input: BatchDeleteClusterSnapshotsRequest,
-    ) -> RusotoFuture<BatchDeleteClusterSnapshotsResult, BatchDeleteClusterSnapshotsError>;
+    ) -> Request<BatchDeleteClusterSnapshotsRequest>;
 
     /// <p>Modifies the settings for a list of snapshots.</p>
     fn batch_modify_cluster_snapshots(
         &self,
-        input: BatchModifyClusterSnapshotsMessage,
-    ) -> RusotoFuture<BatchModifyClusterSnapshotsOutputMessage, BatchModifyClusterSnapshotsError>;
+        input: BatchModifyClusterSnapshotsRequest,
+    ) -> Request<BatchModifyClusterSnapshotsRequest>;
 
     /// <p>Cancels a resize operation.</p>
-    fn cancel_resize(
-        &self,
-        input: CancelResizeMessage,
-    ) -> RusotoFuture<ResizeProgressMessage, CancelResizeError>;
+    fn cancel_resize(&self, input: CancelResizeRequest) -> Request<CancelResizeRequest>;
 
     /// <p>Copies the specified automated cluster snapshot to a new manual cluster snapshot. The source must be an automated snapshot and it must be in the available state.</p> <p>When you delete a cluster, Amazon Redshift deletes any automated snapshots of the cluster. Also, when the retention period of the snapshot expires, Amazon Redshift automatically deletes it. If you want to keep an automated snapshot for a longer period, you can make a manual copy of the snapshot. Manual snapshots are retained until you delete them.</p> <p> For more information about working with snapshots, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn copy_cluster_snapshot(
         &self,
-        input: CopyClusterSnapshotMessage,
-    ) -> RusotoFuture<CopyClusterSnapshotResult, CopyClusterSnapshotError>;
+        input: CopyClusterSnapshotRequest,
+    ) -> Request<CopyClusterSnapshotRequest>;
 
     /// <p>Creates a new cluster.</p> <p>To create a cluster in Virtual Private Cloud (VPC), you must provide a cluster subnet group name. The cluster subnet group identifies the subnets of your VPC that Amazon Redshift uses when creating the cluster. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn create_cluster(
-        &self,
-        input: CreateClusterMessage,
-    ) -> RusotoFuture<CreateClusterResult, CreateClusterError>;
+    fn create_cluster(&self, input: CreateClusterRequest) -> Request<CreateClusterRequest>;
 
     /// <p>Creates an Amazon Redshift parameter group.</p> <p>Creating parameter groups is independent of creating clusters. You can associate a cluster with a parameter group when you create the cluster. You can also associate an existing cluster with a parameter group after the cluster is created by using <a>ModifyCluster</a>. </p> <p>Parameters in the parameter group define specific behavior that applies to the databases you create on the cluster. For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster_parameter_group(
         &self,
-        input: CreateClusterParameterGroupMessage,
-    ) -> RusotoFuture<CreateClusterParameterGroupResult, CreateClusterParameterGroupError>;
+        input: CreateClusterParameterGroupRequest,
+    ) -> Request<CreateClusterParameterGroupRequest>;
 
     /// <p>Creates a new Amazon Redshift security group. You use security groups to control access to non-VPC clusters.</p> <p> For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster_security_group(
         &self,
-        input: CreateClusterSecurityGroupMessage,
-    ) -> RusotoFuture<CreateClusterSecurityGroupResult, CreateClusterSecurityGroupError>;
+        input: CreateClusterSecurityGroupRequest,
+    ) -> Request<CreateClusterSecurityGroupRequest>;
 
     /// <p>Creates a manual snapshot of the specified cluster. The cluster must be in the <code>available</code> state. </p> <p> For more information about working with snapshots, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster_snapshot(
         &self,
-        input: CreateClusterSnapshotMessage,
-    ) -> RusotoFuture<CreateClusterSnapshotResult, CreateClusterSnapshotError>;
+        input: CreateClusterSnapshotRequest,
+    ) -> Request<CreateClusterSnapshotRequest>;
 
     /// <p>Creates a new Amazon Redshift subnet group. You must provide a list of one or more subnets in your existing Amazon Virtual Private Cloud (Amazon VPC) when creating Amazon Redshift subnet group.</p> <p> For information about subnet groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-cluster-subnet-groups.html">Amazon Redshift Cluster Subnet Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster_subnet_group(
         &self,
-        input: CreateClusterSubnetGroupMessage,
-    ) -> RusotoFuture<CreateClusterSubnetGroupResult, CreateClusterSubnetGroupError>;
+        input: CreateClusterSubnetGroupRequest,
+    ) -> Request<CreateClusterSubnetGroupRequest>;
 
     /// <p>Creates an Amazon Redshift event notification subscription. This action requires an ARN (Amazon Resource Name) of an Amazon SNS topic created by either the Amazon Redshift console, the Amazon SNS console, or the Amazon SNS API. To obtain an ARN with Amazon SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the source type, and lists of Amazon Redshift source IDs, event categories, and event severities. Notifications will be sent for all events you want that match those criteria. For example, you can specify source type = cluster, source ID = my-cluster-1 and mycluster2, event categories = Availability, Backup, and severity = ERROR. The subscription will only send notifications for those ERROR events in the Availability and Backup categories for the specified clusters.</p> <p>If you specify both the source type and source IDs, such as source type = cluster and source identifier = my-cluster-1, notifications will be sent for all the cluster events for my-cluster-1. If you specify a source type but do not specify a source identifier, you will receive notice of the events for the objects of that type in your AWS account. If you do not specify either the SourceType nor the SourceIdentifier, you will be notified of events generated from all Amazon Redshift sources belonging to your AWS account. You must specify a source type if you specify a source ID.</p>
     fn create_event_subscription(
         &self,
-        input: CreateEventSubscriptionMessage,
-    ) -> RusotoFuture<CreateEventSubscriptionResult, CreateEventSubscriptionError>;
+        input: CreateEventSubscriptionRequest,
+    ) -> Request<CreateEventSubscriptionRequest>;
 
     /// <p>Creates an HSM client certificate that an Amazon Redshift cluster will use to connect to the client's HSM in order to store and retrieve the keys used to encrypt the cluster databases.</p> <p>The command returns a public key, which you must store in the HSM. In addition to creating the HSM certificate, you must create an Amazon Redshift HSM configuration that provides a cluster the information needed to store and use encryption keys in the HSM. For more information, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>
     fn create_hsm_client_certificate(
         &self,
-        input: CreateHsmClientCertificateMessage,
-    ) -> RusotoFuture<CreateHsmClientCertificateResult, CreateHsmClientCertificateError>;
+        input: CreateHsmClientCertificateRequest,
+    ) -> Request<CreateHsmClientCertificateRequest>;
 
     /// <p>Creates an HSM configuration that contains the information required by an Amazon Redshift cluster to store and use database encryption keys in a Hardware Security Module (HSM). After creating the HSM configuration, you can specify it as a parameter when creating a cluster. The cluster will then store its encryption keys in the HSM.</p> <p>In addition to creating an HSM configuration, you must also create an HSM client certificate. For more information, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>
     fn create_hsm_configuration(
         &self,
-        input: CreateHsmConfigurationMessage,
-    ) -> RusotoFuture<CreateHsmConfigurationResult, CreateHsmConfigurationError>;
+        input: CreateHsmConfigurationRequest,
+    ) -> Request<CreateHsmConfigurationRequest>;
 
     /// <p>Creates a snapshot copy grant that permits Amazon Redshift to use a customer master key (CMK) from AWS Key Management Service (AWS KMS) to encrypt copied snapshots in a destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn create_snapshot_copy_grant(
         &self,
-        input: CreateSnapshotCopyGrantMessage,
-    ) -> RusotoFuture<CreateSnapshotCopyGrantResult, CreateSnapshotCopyGrantError>;
+        input: CreateSnapshotCopyGrantRequest,
+    ) -> Request<CreateSnapshotCopyGrantRequest>;
 
     /// <p>Creates a new snapshot schedule.</p>
     fn create_snapshot_schedule(
         &self,
-        input: CreateSnapshotScheduleMessage,
-    ) -> RusotoFuture<SnapshotSchedule, CreateSnapshotScheduleError>;
+        input: CreateSnapshotScheduleRequest,
+    ) -> Request<CreateSnapshotScheduleRequest>;
 
     /// <p>Adds one or more tags to a specified resource.</p> <p>A resource can have up to 50 tags. If you try to create more than 50 tags for a resource, you will receive an error and the attempt will fail.</p> <p>If you specify a key that already exists for the resource, the value for that key will be updated with the new value.</p>
-    fn create_tags(&self, input: CreateTagsMessage) -> RusotoFuture<(), CreateTagsError>;
+    fn create_tags(&self, input: CreateTagsRequest) -> Request<CreateTagsRequest>;
 
     /// <p>Deletes a previously provisioned cluster. A successful response from the web service indicates that the request was received correctly. Use <a>DescribeClusters</a> to monitor the status of the deletion. The delete operation cannot be canceled or reverted once submitted. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you want to shut down the cluster and retain it for future use, set <i>SkipFinalClusterSnapshot</i> to <code>false</code> and specify a name for <i>FinalClusterSnapshotIdentifier</i>. You can later restore this snapshot to resume using the cluster. If a final cluster snapshot is requested, the status of the cluster will be "final-snapshot" while the snapshot is being taken, then it's "deleting" once Amazon Redshift begins deleting the cluster. </p> <p> For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn delete_cluster(
-        &self,
-        input: DeleteClusterMessage,
-    ) -> RusotoFuture<DeleteClusterResult, DeleteClusterError>;
+    fn delete_cluster(&self, input: DeleteClusterRequest) -> Request<DeleteClusterRequest>;
 
     /// <p><p>Deletes a specified Amazon Redshift parameter group.</p> <note> <p>You cannot delete a parameter group if it is associated with a cluster.</p> </note></p>
     fn delete_cluster_parameter_group(
         &self,
-        input: DeleteClusterParameterGroupMessage,
-    ) -> RusotoFuture<(), DeleteClusterParameterGroupError>;
+        input: DeleteClusterParameterGroupRequest,
+    ) -> Request<DeleteClusterParameterGroupRequest>;
 
     /// <p>Deletes an Amazon Redshift security group.</p> <note> <p>You cannot delete a security group that is associated with any clusters. You cannot delete the default security group.</p> </note> <p> For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn delete_cluster_security_group(
         &self,
-        input: DeleteClusterSecurityGroupMessage,
-    ) -> RusotoFuture<(), DeleteClusterSecurityGroupError>;
+        input: DeleteClusterSecurityGroupRequest,
+    ) -> Request<DeleteClusterSecurityGroupRequest>;
 
     /// <p>Deletes the specified manual snapshot. The snapshot must be in the <code>available</code> state, with no other users authorized to access the snapshot. </p> <p>Unlike automated snapshots, manual snapshots are retained even after you delete your cluster. Amazon Redshift does not delete your manual snapshots. You must delete manual snapshot explicitly to avoid getting charged. If other accounts are authorized to access the snapshot, you must revoke all of the authorizations before you can delete the snapshot.</p>
     fn delete_cluster_snapshot(
         &self,
-        input: DeleteClusterSnapshotMessage,
-    ) -> RusotoFuture<DeleteClusterSnapshotResult, DeleteClusterSnapshotError>;
+        input: DeleteClusterSnapshotRequest,
+    ) -> Request<DeleteClusterSnapshotRequest>;
 
     /// <p>Deletes the specified cluster subnet group.</p>
     fn delete_cluster_subnet_group(
         &self,
-        input: DeleteClusterSubnetGroupMessage,
-    ) -> RusotoFuture<(), DeleteClusterSubnetGroupError>;
+        input: DeleteClusterSubnetGroupRequest,
+    ) -> Request<DeleteClusterSubnetGroupRequest>;
 
     /// <p>Deletes an Amazon Redshift event notification subscription.</p>
     fn delete_event_subscription(
         &self,
-        input: DeleteEventSubscriptionMessage,
-    ) -> RusotoFuture<(), DeleteEventSubscriptionError>;
+        input: DeleteEventSubscriptionRequest,
+    ) -> Request<DeleteEventSubscriptionRequest>;
 
     /// <p>Deletes the specified HSM client certificate.</p>
     fn delete_hsm_client_certificate(
         &self,
-        input: DeleteHsmClientCertificateMessage,
-    ) -> RusotoFuture<(), DeleteHsmClientCertificateError>;
+        input: DeleteHsmClientCertificateRequest,
+    ) -> Request<DeleteHsmClientCertificateRequest>;
 
     /// <p>Deletes the specified Amazon Redshift HSM configuration.</p>
     fn delete_hsm_configuration(
         &self,
-        input: DeleteHsmConfigurationMessage,
-    ) -> RusotoFuture<(), DeleteHsmConfigurationError>;
+        input: DeleteHsmConfigurationRequest,
+    ) -> Request<DeleteHsmConfigurationRequest>;
 
     /// <p>Deletes the specified snapshot copy grant.</p>
     fn delete_snapshot_copy_grant(
         &self,
-        input: DeleteSnapshotCopyGrantMessage,
-    ) -> RusotoFuture<(), DeleteSnapshotCopyGrantError>;
+        input: DeleteSnapshotCopyGrantRequest,
+    ) -> Request<DeleteSnapshotCopyGrantRequest>;
 
     /// <p>Deletes a snapshot schedule.</p>
     fn delete_snapshot_schedule(
         &self,
-        input: DeleteSnapshotScheduleMessage,
-    ) -> RusotoFuture<(), DeleteSnapshotScheduleError>;
+        input: DeleteSnapshotScheduleRequest,
+    ) -> Request<DeleteSnapshotScheduleRequest>;
 
     /// <p>Deletes a tag or tags from a resource. You must provide the ARN of the resource from which you want to delete the tag or tags.</p>
-    fn delete_tags(&self, input: DeleteTagsMessage) -> RusotoFuture<(), DeleteTagsError>;
+    fn delete_tags(&self, input: DeleteTagsRequest) -> Request<DeleteTagsRequest>;
 
     /// <p>Returns a list of attributes attached to an account</p>
     fn describe_account_attributes(
         &self,
-        input: DescribeAccountAttributesMessage,
-    ) -> RusotoFuture<AccountAttributeList, DescribeAccountAttributesError>;
+        input: DescribeAccountAttributesRequest,
+    ) -> Request<DescribeAccountAttributesRequest>;
 
     /// <p>Returns an array of <code>ClusterDbRevision</code> objects.</p>
     fn describe_cluster_db_revisions(
         &self,
-        input: DescribeClusterDbRevisionsMessage,
-    ) -> RusotoFuture<ClusterDbRevisionsMessage, DescribeClusterDbRevisionsError>;
+        input: DescribeClusterDbRevisionsRequest,
+    ) -> Request<DescribeClusterDbRevisionsRequest>;
 
     /// <p>Returns a list of Amazon Redshift parameter groups, including parameter groups you created and the default parameter group. For each parameter group, the response includes the parameter group name, description, and parameter group family name. You can optionally specify a name to retrieve the description of a specific parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all parameter groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all parameter groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, parameter groups are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_parameter_groups(
         &self,
-        input: DescribeClusterParameterGroupsMessage,
-    ) -> RusotoFuture<ClusterParameterGroupsMessage, DescribeClusterParameterGroupsError>;
+        input: DescribeClusterParameterGroupsRequest,
+    ) -> Request<DescribeClusterParameterGroupsRequest>;
 
     /// <p>Returns a detailed list of parameters contained within the specified Amazon Redshift parameter group. For each parameter the response includes information such as parameter name, description, data type, value, whether the parameter value is modifiable, and so on.</p> <p>You can specify <i>source</i> filter to retrieve parameters of only specific type. For example, to retrieve parameters that were modified by a user action such as from <a>ModifyClusterParameterGroup</a>, you can specify <i>source</i> equal to <i>user</i>.</p> <p> For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_cluster_parameters(
         &self,
-        input: DescribeClusterParametersMessage,
-    ) -> RusotoFuture<ClusterParameterGroupDetails, DescribeClusterParametersError>;
+        input: DescribeClusterParametersRequest,
+    ) -> Request<DescribeClusterParametersRequest>;
 
     /// <p>Returns information about Amazon Redshift security groups. If the name of a security group is specified, the response will contain only information about only that security group.</p> <p> For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all security groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all security groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, security groups are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_security_groups(
         &self,
-        input: DescribeClusterSecurityGroupsMessage,
-    ) -> RusotoFuture<ClusterSecurityGroupMessage, DescribeClusterSecurityGroupsError>;
+        input: DescribeClusterSecurityGroupsRequest,
+    ) -> Request<DescribeClusterSecurityGroupsRequest>;
 
     /// <p>Returns one or more snapshot objects, which contain metadata about your cluster snapshots. By default, this operation returns information about all snapshots of all clusters that are owned by you AWS customer account. No information is returned for snapshots owned by inactive AWS customer accounts.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all snapshots that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all snapshots that have any combination of those values are returned. Only snapshots that you own are returned in the response; shared snapshots are not returned with the tag key and tag value request parameters.</p> <p>If both tag keys and values are omitted from the request, snapshots are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_snapshots(
         &self,
-        input: DescribeClusterSnapshotsMessage,
-    ) -> RusotoFuture<SnapshotMessage, DescribeClusterSnapshotsError>;
+        input: DescribeClusterSnapshotsRequest,
+    ) -> Request<DescribeClusterSnapshotsRequest>;
 
     /// <p>Returns one or more cluster subnet group objects, which contain metadata about your cluster subnet groups. By default, this operation returns information about all cluster subnet groups that are defined in you AWS account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all subnet groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all subnet groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, subnet groups are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_subnet_groups(
         &self,
-        input: DescribeClusterSubnetGroupsMessage,
-    ) -> RusotoFuture<ClusterSubnetGroupMessage, DescribeClusterSubnetGroupsError>;
+        input: DescribeClusterSubnetGroupsRequest,
+    ) -> Request<DescribeClusterSubnetGroupsRequest>;
 
     /// <p>Returns a list of all the available maintenance tracks.</p>
     fn describe_cluster_tracks(
         &self,
-        input: DescribeClusterTracksMessage,
-    ) -> RusotoFuture<TrackListMessage, DescribeClusterTracksError>;
+        input: DescribeClusterTracksRequest,
+    ) -> Request<DescribeClusterTracksRequest>;
 
     /// <p>Returns descriptions of the available Amazon Redshift cluster versions. You can call this operation even before creating any clusters to learn more about the Amazon Redshift versions. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_cluster_versions(
         &self,
-        input: DescribeClusterVersionsMessage,
-    ) -> RusotoFuture<ClusterVersionsMessage, DescribeClusterVersionsError>;
+        input: DescribeClusterVersionsRequest,
+    ) -> Request<DescribeClusterVersionsRequest>;
 
     /// <p>Returns properties of provisioned clusters including general cluster properties, cluster database properties, maintenance and backup properties, and security and access properties. This operation supports pagination. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all clusters that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all clusters that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, clusters are returned regardless of whether they have tag keys or values associated with them.</p>
-    fn describe_clusters(
-        &self,
-        input: DescribeClustersMessage,
-    ) -> RusotoFuture<ClustersMessage, DescribeClustersError>;
+    fn describe_clusters(&self, input: DescribeClustersRequest)
+        -> Request<DescribeClustersRequest>;
 
     /// <p>Returns a list of parameter settings for the specified parameter group family.</p> <p> For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_default_cluster_parameters(
         &self,
-        input: DescribeDefaultClusterParametersMessage,
-    ) -> RusotoFuture<DescribeDefaultClusterParametersResult, DescribeDefaultClusterParametersError>;
+        input: DescribeDefaultClusterParametersRequest,
+    ) -> Request<DescribeDefaultClusterParametersRequest>;
 
     /// <p>Displays a list of event categories for all event source types, or for a specified source type. For a list of the event categories and source types, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-event-notifications.html">Amazon Redshift Event Notifications</a>.</p>
     fn describe_event_categories(
         &self,
-        input: DescribeEventCategoriesMessage,
-    ) -> RusotoFuture<EventCategoriesMessage, DescribeEventCategoriesError>;
+        input: DescribeEventCategoriesRequest,
+    ) -> Request<DescribeEventCategoriesRequest>;
 
     /// <p>Lists descriptions of all the Amazon Redshift event notification subscriptions for a customer account. If you specify a subscription name, lists the description for that subscription.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all event notification subscriptions that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all subscriptions that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, subscriptions are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_event_subscriptions(
         &self,
-        input: DescribeEventSubscriptionsMessage,
-    ) -> RusotoFuture<EventSubscriptionsMessage, DescribeEventSubscriptionsError>;
+        input: DescribeEventSubscriptionsRequest,
+    ) -> Request<DescribeEventSubscriptionsRequest>;
 
     /// <p>Returns events related to clusters, security groups, snapshots, and parameter groups for the past 14 days. Events specific to a particular cluster, security group, snapshot or parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>
-    fn describe_events(
-        &self,
-        input: DescribeEventsMessage,
-    ) -> RusotoFuture<EventsMessage, DescribeEventsError>;
+    fn describe_events(&self, input: DescribeEventsRequest) -> Request<DescribeEventsRequest>;
 
     /// <p>Returns information about the specified HSM client certificate. If no certificate ID is specified, returns information about all the HSM certificates owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM client certificates that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM client certificates that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM client certificates are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_hsm_client_certificates(
         &self,
-        input: DescribeHsmClientCertificatesMessage,
-    ) -> RusotoFuture<HsmClientCertificateMessage, DescribeHsmClientCertificatesError>;
+        input: DescribeHsmClientCertificatesRequest,
+    ) -> Request<DescribeHsmClientCertificatesRequest>;
 
     /// <p>Returns information about the specified Amazon Redshift HSM configuration. If no configuration ID is specified, returns information about all the HSM configurations owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM connections that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM connections that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM connections are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_hsm_configurations(
         &self,
-        input: DescribeHsmConfigurationsMessage,
-    ) -> RusotoFuture<HsmConfigurationMessage, DescribeHsmConfigurationsError>;
+        input: DescribeHsmConfigurationsRequest,
+    ) -> Request<DescribeHsmConfigurationsRequest>;
 
     /// <p>Describes whether information, such as queries and connection attempts, is being logged for the specified Amazon Redshift cluster.</p>
     fn describe_logging_status(
         &self,
-        input: DescribeLoggingStatusMessage,
-    ) -> RusotoFuture<LoggingStatus, DescribeLoggingStatusError>;
+        input: DescribeLoggingStatusRequest,
+    ) -> Request<DescribeLoggingStatusRequest>;
 
     /// <p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS Region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_orderable_cluster_options(
         &self,
-        input: DescribeOrderableClusterOptionsMessage,
-    ) -> RusotoFuture<OrderableClusterOptionsMessage, DescribeOrderableClusterOptionsError>;
+        input: DescribeOrderableClusterOptionsRequest,
+    ) -> Request<DescribeOrderableClusterOptionsRequest>;
 
     /// <p>Returns a list of the available reserved node offerings by Amazon Redshift with their descriptions including the node type, the fixed and recurring costs of reserving the node and duration the node will be reserved for you. These descriptions help you determine which reserve node offering you want to purchase. You then use the unique offering ID in you call to <a>PurchaseReservedNodeOffering</a> to reserve one or more nodes for your Amazon Redshift cluster. </p> <p> For more information about reserved node offerings, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_reserved_node_offerings(
         &self,
-        input: DescribeReservedNodeOfferingsMessage,
-    ) -> RusotoFuture<ReservedNodeOfferingsMessage, DescribeReservedNodeOfferingsError>;
+        input: DescribeReservedNodeOfferingsRequest,
+    ) -> Request<DescribeReservedNodeOfferingsRequest>;
 
     /// <p>Returns the descriptions of the reserved nodes.</p>
     fn describe_reserved_nodes(
         &self,
-        input: DescribeReservedNodesMessage,
-    ) -> RusotoFuture<ReservedNodesMessage, DescribeReservedNodesError>;
+        input: DescribeReservedNodesRequest,
+    ) -> Request<DescribeReservedNodesRequest>;
 
     /// <p>Returns information about the last resize operation for the specified cluster. If no resize operation has ever been initiated for the specified cluster, a <code>HTTP 404</code> error is returned. If a resize operation was initiated and completed, the status of the resize remains as <code>SUCCEEDED</code> until the next resize. </p> <p>A resize operation can be requested using <a>ModifyCluster</a> and specifying a different number or type of nodes for the cluster. </p>
-    fn describe_resize(
-        &self,
-        input: DescribeResizeMessage,
-    ) -> RusotoFuture<ResizeProgressMessage, DescribeResizeError>;
+    fn describe_resize(&self, input: DescribeResizeRequest) -> Request<DescribeResizeRequest>;
 
     /// <p>Returns a list of snapshot copy grants owned by the AWS account in the destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn describe_snapshot_copy_grants(
         &self,
-        input: DescribeSnapshotCopyGrantsMessage,
-    ) -> RusotoFuture<SnapshotCopyGrantMessage, DescribeSnapshotCopyGrantsError>;
+        input: DescribeSnapshotCopyGrantsRequest,
+    ) -> Request<DescribeSnapshotCopyGrantsRequest>;
 
     /// <p>Returns a list of snapshot schedules. </p>
     fn describe_snapshot_schedules(
         &self,
-        input: DescribeSnapshotSchedulesMessage,
-    ) -> RusotoFuture<DescribeSnapshotSchedulesOutputMessage, DescribeSnapshotSchedulesError>;
+        input: DescribeSnapshotSchedulesRequest,
+    ) -> Request<DescribeSnapshotSchedulesRequest>;
 
     /// <p>Returns the total amount of snapshot usage and provisioned storage for a user in megabytes.</p>
-    fn describe_storage(&self) -> RusotoFuture<CustomerStorageMessage, DescribeStorageError>;
+    fn describe_storage(&self) -> Request<DescribeStorageRequest>;
 
     /// <p>Lists the status of one or more table restore requests made using the <a>RestoreTableFromClusterSnapshot</a> API action. If you don't specify a value for the <code>TableRestoreRequestId</code> parameter, then <code>DescribeTableRestoreStatus</code> returns the status of all table restore requests ordered by the date and time of the request in ascending order. Otherwise <code>DescribeTableRestoreStatus</code> returns the status of the table specified by <code>TableRestoreRequestId</code>.</p>
     fn describe_table_restore_status(
         &self,
-        input: DescribeTableRestoreStatusMessage,
-    ) -> RusotoFuture<TableRestoreStatusMessage, DescribeTableRestoreStatusError>;
+        input: DescribeTableRestoreStatusRequest,
+    ) -> Request<DescribeTableRestoreStatusRequest>;
 
     /// <p>Returns a list of tags. You can return tags from a specific resource by specifying an ARN, or you can return all tags for a given type of resource, such as clusters, snapshots, and so on.</p> <p>The following are limitations for <code>DescribeTags</code>: </p> <ul> <li> <p>You cannot specify an ARN and a resource-type value together in the same request.</p> </li> <li> <p>You cannot use the <code>MaxRecords</code> and <code>Marker</code> parameters together with the ARN parameter.</p> </li> <li> <p>The <code>MaxRecords</code> parameter can be a range from 10 to 50 results to return in a request.</p> </li> </ul> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all resources that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all resources that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, resources are returned regardless of whether they have tag keys or values associated with them.</p>
-    fn describe_tags(
-        &self,
-        input: DescribeTagsMessage,
-    ) -> RusotoFuture<TaggedResourceListMessage, DescribeTagsError>;
+    fn describe_tags(&self, input: DescribeTagsRequest) -> Request<DescribeTagsRequest>;
 
     /// <p>Stops logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>
-    fn disable_logging(
-        &self,
-        input: DisableLoggingMessage,
-    ) -> RusotoFuture<LoggingStatus, DisableLoggingError>;
+    fn disable_logging(&self, input: DisableLoggingRequest) -> Request<DisableLoggingRequest>;
 
     /// <p>Disables the automatic copying of snapshots from one region to another region for a specified cluster.</p> <p>If your cluster and its snapshots are encrypted using a customer master key (CMK) from AWS KMS, use <a>DeleteSnapshotCopyGrant</a> to delete the grant that grants Amazon Redshift permission to the CMK in the destination region. </p>
     fn disable_snapshot_copy(
         &self,
-        input: DisableSnapshotCopyMessage,
-    ) -> RusotoFuture<DisableSnapshotCopyResult, DisableSnapshotCopyError>;
+        input: DisableSnapshotCopyRequest,
+    ) -> Request<DisableSnapshotCopyRequest>;
 
     /// <p>Starts logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>
-    fn enable_logging(
-        &self,
-        input: EnableLoggingMessage,
-    ) -> RusotoFuture<LoggingStatus, EnableLoggingError>;
+    fn enable_logging(&self, input: EnableLoggingRequest) -> Request<EnableLoggingRequest>;
 
     /// <p>Enables the automatic copy of snapshots from one region to another region for a specified cluster.</p>
     fn enable_snapshot_copy(
         &self,
-        input: EnableSnapshotCopyMessage,
-    ) -> RusotoFuture<EnableSnapshotCopyResult, EnableSnapshotCopyError>;
+        input: EnableSnapshotCopyRequest,
+    ) -> Request<EnableSnapshotCopyRequest>;
 
     /// <p>Returns a database user name and temporary password with temporary authorization to log on to an Amazon Redshift database. The action returns the database user name prefixed with <code>IAM:</code> if <code>AutoCreate</code> is <code>False</code> or <code>IAMA:</code> if <code>AutoCreate</code> is <code>True</code>. You can optionally specify one or more database user groups that the user will join at log on. By default, the temporary credentials expire in 900 seconds. You can optionally specify a duration between 900 seconds (15 minutes) and 3600 seconds (60 minutes). For more information, see <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/generating-user-credentials.html">Using IAM Authentication to Generate Database User Credentials</a> in the Amazon Redshift Cluster Management Guide.</p> <p>The AWS Identity and Access Management (IAM)user or role that executes GetClusterCredentials must have an IAM policy attached that allows access to all necessary actions and resources. For more information about permissions, see <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/redshift-iam-access-control-identity-based.html#redshift-policy-resources.getclustercredentials-resources">Resource Policies for GetClusterCredentials</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If the <code>DbGroups</code> parameter is specified, the IAM policy must allow the <code>redshift:JoinGroup</code> action with access to the listed <code>dbgroups</code>. </p> <p>In addition, if the <code>AutoCreate</code> parameter is set to <code>True</code>, then the policy must include the <code>redshift:CreateClusterUser</code> privilege.</p> <p>If the <code>DbName</code> parameter is specified, the IAM policy must allow access to the resource <code>dbname</code> for the specified database name. </p>
     fn get_cluster_credentials(
         &self,
-        input: GetClusterCredentialsMessage,
-    ) -> RusotoFuture<ClusterCredentials, GetClusterCredentialsError>;
+        input: GetClusterCredentialsRequest,
+    ) -> Request<GetClusterCredentialsRequest>;
 
     /// <p>Returns an array of DC2 ReservedNodeOfferings that matches the payment type, term, and usage price of the given DC1 reserved node.</p>
     fn get_reserved_node_exchange_offerings(
         &self,
-        input: GetReservedNodeExchangeOfferingsInputMessage,
-    ) -> RusotoFuture<
-        GetReservedNodeExchangeOfferingsOutputMessage,
-        GetReservedNodeExchangeOfferingsError,
-    >;
+        input: GetReservedNodeExchangeOfferingsRequest,
+    ) -> Request<GetReservedNodeExchangeOfferingsRequest>;
 
     /// <p>Modifies the settings for a cluster. For example, you can add another security or parameter group, update the preferred maintenance window, or change the master user password. Resetting a cluster password or modifying the security groups associated with a cluster do not need a reboot. However, modifying a parameter group requires a reboot for parameters to take effect. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>You can also change node type and the number of nodes to scale up or down the cluster. When resizing a cluster, you must specify both the number of nodes and the node type even if one of the parameters does not change.</p>
-    fn modify_cluster(
-        &self,
-        input: ModifyClusterMessage,
-    ) -> RusotoFuture<ModifyClusterResult, ModifyClusterError>;
+    fn modify_cluster(&self, input: ModifyClusterRequest) -> Request<ModifyClusterRequest>;
 
     /// <p>Modifies the database revision of a cluster. The database revision is a unique revision of the database running in a cluster.</p>
     fn modify_cluster_db_revision(
         &self,
-        input: ModifyClusterDbRevisionMessage,
-    ) -> RusotoFuture<ModifyClusterDbRevisionResult, ModifyClusterDbRevisionError>;
+        input: ModifyClusterDbRevisionRequest,
+    ) -> Request<ModifyClusterDbRevisionRequest>;
 
     /// <p>Modifies the list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services.</p> <p>A cluster can have up to 10 IAM roles associated at any time.</p>
     fn modify_cluster_iam_roles(
         &self,
-        input: ModifyClusterIamRolesMessage,
-    ) -> RusotoFuture<ModifyClusterIamRolesResult, ModifyClusterIamRolesError>;
+        input: ModifyClusterIamRolesRequest,
+    ) -> Request<ModifyClusterIamRolesRequest>;
 
     /// <p>Modifies the maintenance settings of a cluster. For example, you can defer a maintenance window. You can also update or cancel a deferment. </p>
     fn modify_cluster_maintenance(
         &self,
-        input: ModifyClusterMaintenanceMessage,
-    ) -> RusotoFuture<ModifyClusterMaintenanceResult, ModifyClusterMaintenanceError>;
+        input: ModifyClusterMaintenanceRequest,
+    ) -> Request<ModifyClusterMaintenanceRequest>;
 
     /// <p>Modifies the parameters of a parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn modify_cluster_parameter_group(
         &self,
-        input: ModifyClusterParameterGroupMessage,
-    ) -> RusotoFuture<ClusterParameterGroupNameMessage, ModifyClusterParameterGroupError>;
+        input: ModifyClusterParameterGroupRequest,
+    ) -> Request<ModifyClusterParameterGroupRequest>;
 
     /// <p>Modifies the settings for a snapshot.</p>
     fn modify_cluster_snapshot(
         &self,
-        input: ModifyClusterSnapshotMessage,
-    ) -> RusotoFuture<ModifyClusterSnapshotResult, ModifyClusterSnapshotError>;
+        input: ModifyClusterSnapshotRequest,
+    ) -> Request<ModifyClusterSnapshotRequest>;
 
     /// <p>Modifies a snapshot schedule for a cluster.</p>
     fn modify_cluster_snapshot_schedule(
         &self,
-        input: ModifyClusterSnapshotScheduleMessage,
-    ) -> RusotoFuture<(), ModifyClusterSnapshotScheduleError>;
+        input: ModifyClusterSnapshotScheduleRequest,
+    ) -> Request<ModifyClusterSnapshotScheduleRequest>;
 
     /// <p>Modifies a cluster subnet group to include the specified list of VPC subnets. The operation replaces the existing list of subnets with the new list of subnets.</p>
     fn modify_cluster_subnet_group(
         &self,
-        input: ModifyClusterSubnetGroupMessage,
-    ) -> RusotoFuture<ModifyClusterSubnetGroupResult, ModifyClusterSubnetGroupError>;
+        input: ModifyClusterSubnetGroupRequest,
+    ) -> Request<ModifyClusterSubnetGroupRequest>;
 
     /// <p>Modifies an existing Amazon Redshift event notification subscription.</p>
     fn modify_event_subscription(
         &self,
-        input: ModifyEventSubscriptionMessage,
-    ) -> RusotoFuture<ModifyEventSubscriptionResult, ModifyEventSubscriptionError>;
+        input: ModifyEventSubscriptionRequest,
+    ) -> Request<ModifyEventSubscriptionRequest>;
 
     /// <p>Modifies the number of days to retain snapshots in the destination AWS Region after they are copied from the source AWS Region. By default, this operation only changes the retention period of copied automated snapshots. The retention periods for both new and existing copied automated snapshots are updated with the new retention period. You can set the manual option to change only the retention periods of copied manual snapshots. If you set this option, only newly copied manual snapshots have the new retention period. </p>
     fn modify_snapshot_copy_retention_period(
         &self,
-        input: ModifySnapshotCopyRetentionPeriodMessage,
-    ) -> RusotoFuture<ModifySnapshotCopyRetentionPeriodResult, ModifySnapshotCopyRetentionPeriodError>;
+        input: ModifySnapshotCopyRetentionPeriodRequest,
+    ) -> Request<ModifySnapshotCopyRetentionPeriodRequest>;
 
     /// <p>Modifies a snapshot schedule. Any schedule associated with a cluster is modified asynchronously.</p>
     fn modify_snapshot_schedule(
         &self,
-        input: ModifySnapshotScheduleMessage,
-    ) -> RusotoFuture<SnapshotSchedule, ModifySnapshotScheduleError>;
+        input: ModifySnapshotScheduleRequest,
+    ) -> Request<ModifySnapshotScheduleRequest>;
 
     /// <p>Allows you to purchase reserved nodes. Amazon Redshift offers a predefined set of reserved node offerings. You can purchase one or more of the offerings. You can call the <a>DescribeReservedNodeOfferings</a> API to obtain the available reserved node offerings. You can call this API by providing a specific reserved node offering and the number of nodes you want to reserve. </p> <p> For more information about reserved node offerings, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn purchase_reserved_node_offering(
         &self,
-        input: PurchaseReservedNodeOfferingMessage,
-    ) -> RusotoFuture<PurchaseReservedNodeOfferingResult, PurchaseReservedNodeOfferingError>;
+        input: PurchaseReservedNodeOfferingRequest,
+    ) -> Request<PurchaseReservedNodeOfferingRequest>;
 
     /// <p>Reboots a cluster. This action is taken as soon as possible. It results in a momentary outage to the cluster, during which the cluster status is set to <code>rebooting</code>. A cluster event is created when the reboot is completed. Any pending cluster modifications (see <a>ModifyCluster</a>) are applied at this reboot. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
-    fn reboot_cluster(
-        &self,
-        input: RebootClusterMessage,
-    ) -> RusotoFuture<RebootClusterResult, RebootClusterError>;
+    fn reboot_cluster(&self, input: RebootClusterRequest) -> Request<RebootClusterRequest>;
 
     /// <p>Sets one or more parameters of the specified parameter group to their default values and sets the source values of the parameters to "engine-default". To reset the entire parameter group specify the <i>ResetAllParameters</i> parameter. For parameter changes to take effect you must reboot any associated clusters. </p>
     fn reset_cluster_parameter_group(
         &self,
-        input: ResetClusterParameterGroupMessage,
-    ) -> RusotoFuture<ClusterParameterGroupNameMessage, ResetClusterParameterGroupError>;
+        input: ResetClusterParameterGroupRequest,
+    ) -> Request<ResetClusterParameterGroupRequest>;
 
     /// <p><p>Changes the size of the cluster. You can change the cluster&#39;s type, or change the number or type of nodes. The default behavior is to use the elastic resize method. With an elastic resize, your cluster is available for read and write operations more quickly than with the classic resize method. </p> <p>Elastic resize operations have the following restrictions:</p> <ul> <li> <p>You can only resize clusters of the following types:</p> <ul> <li> <p>dc2.large</p> </li> <li> <p>dc2.8xlarge</p> </li> <li> <p>ds2.xlarge</p> </li> <li> <p>ds2.8xlarge</p> </li> </ul> </li> <li> <p>The type of nodes that you add must match the node type for the cluster.</p> </li> </ul></p>
-    fn resize_cluster(
-        &self,
-        input: ResizeClusterMessage,
-    ) -> RusotoFuture<ResizeClusterResult, ResizeClusterError>;
+    fn resize_cluster(&self, input: ResizeClusterRequest) -> Request<ResizeClusterRequest>;
 
     /// <p>Creates a new cluster from a snapshot. By default, Amazon Redshift creates the resulting cluster with the same configuration as the original cluster from which the snapshot was created, except that the new cluster is created with the default cluster security and parameter groups. After Amazon Redshift creates the cluster, you can use the <a>ModifyCluster</a> API to associate a different security group and different parameter group with the restored cluster. If you are using a DS node type, you can also choose to change to another DS node type of the same size during restore.</p> <p>If you restore a cluster into a VPC, you must provide a cluster subnet group where you want the cluster restored.</p> <p> For more information about working with snapshots, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn restore_from_cluster_snapshot(
         &self,
-        input: RestoreFromClusterSnapshotMessage,
-    ) -> RusotoFuture<RestoreFromClusterSnapshotResult, RestoreFromClusterSnapshotError>;
+        input: RestoreFromClusterSnapshotRequest,
+    ) -> Request<RestoreFromClusterSnapshotRequest>;
 
     /// <p>Creates a new table from a table in an Amazon Redshift cluster snapshot. You must create the new table within the Amazon Redshift cluster that the snapshot was taken from.</p> <p>You cannot use <code>RestoreTableFromClusterSnapshot</code> to restore a table with the same name as an existing table in an Amazon Redshift cluster. That is, you cannot overwrite an existing table in a cluster with a restored table. If you want to replace your original table with a new, restored table, then rename or drop your original table before you call <code>RestoreTableFromClusterSnapshot</code>. When you have renamed your original table, then you can pass the original name of the table as the <code>NewTableName</code> parameter value in the call to <code>RestoreTableFromClusterSnapshot</code>. This way, you can replace the original table with the table created from the snapshot.</p>
     fn restore_table_from_cluster_snapshot(
         &self,
-        input: RestoreTableFromClusterSnapshotMessage,
-    ) -> RusotoFuture<RestoreTableFromClusterSnapshotResult, RestoreTableFromClusterSnapshotError>;
+        input: RestoreTableFromClusterSnapshotRequest,
+    ) -> Request<RestoreTableFromClusterSnapshotRequest>;
 
     /// <p>Revokes an ingress rule in an Amazon Redshift security group for a previously authorized IP range or Amazon EC2 security group. To add an ingress rule, see <a>AuthorizeClusterSecurityGroupIngress</a>. For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn revoke_cluster_security_group_ingress(
         &self,
-        input: RevokeClusterSecurityGroupIngressMessage,
-    ) -> RusotoFuture<RevokeClusterSecurityGroupIngressResult, RevokeClusterSecurityGroupIngressError>;
+        input: RevokeClusterSecurityGroupIngressRequest,
+    ) -> Request<RevokeClusterSecurityGroupIngressRequest>;
 
     /// <p>Removes the ability of the specified AWS customer account to restore the specified snapshot. If the account is currently restoring the snapshot, the restore will run to completion.</p> <p> For more information about working with snapshots, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn revoke_snapshot_access(
         &self,
-        input: RevokeSnapshotAccessMessage,
-    ) -> RusotoFuture<RevokeSnapshotAccessResult, RevokeSnapshotAccessError>;
+        input: RevokeSnapshotAccessRequest,
+    ) -> Request<RevokeSnapshotAccessRequest>;
 
     /// <p>Rotates the encryption keys for a cluster.</p>
     fn rotate_encryption_key(
         &self,
-        input: RotateEncryptionKeyMessage,
-    ) -> RusotoFuture<RotateEncryptionKeyResult, RotateEncryptionKeyError>;
+        input: RotateEncryptionKeyRequest,
+    ) -> Request<RotateEncryptionKeyRequest>;
 }
 /// A client for the Amazon Redshift API.
 #[derive(Clone)]
@@ -16766,19 +17612,633 @@ impl Redshift for RedshiftClient {
     /// <p>Exchanges a DC1 Reserved Node for a DC2 Reserved Node with no changes to the configuration (term, payment type, or number of nodes) and no additional costs. </p>
     fn accept_reserved_node_exchange(
         &self,
-        input: AcceptReservedNodeExchangeInputMessage,
-    ) -> RusotoFuture<AcceptReservedNodeExchangeOutputMessage, AcceptReservedNodeExchangeError>
-    {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        input: AcceptReservedNodeExchangeRequest,
+    ) -> Request<AcceptReservedNodeExchangeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds an inbound (ingress) rule to an Amazon Redshift security group. Depending on whether the application accessing your cluster is running on the Internet or an Amazon EC2 instance, you can authorize inbound access to either a Classless Interdomain Routing (CIDR)/Internet Protocol (IP) range or to an Amazon EC2 security group. You can add as many as 20 ingress rules to an Amazon Redshift security group.</p> <p>If you authorize access to an Amazon EC2 security group, specify <i>EC2SecurityGroupName</i> and <i>EC2SecurityGroupOwnerId</i>. The Amazon EC2 security group and Amazon Redshift cluster must be in the same AWS Region. </p> <p>If you authorize access to a CIDR/IP address range, specify <i>CIDRIP</i>. For an overview of CIDR blocks, see the Wikipedia article on <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Classless Inter-Domain Routing</a>. </p> <p>You must also associate the security group with a cluster so that clients running on these IP addresses or the EC2 instance are authorized to connect to the cluster. For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Working with Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    fn authorize_cluster_security_group_ingress(
+        &self,
+        input: AuthorizeClusterSecurityGroupIngressRequest,
+    ) -> Request<AuthorizeClusterSecurityGroupIngressRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Authorizes the specified AWS customer account to restore the specified snapshot.</p> <p> For more information about working with snapshots, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    fn authorize_snapshot_access(
+        &self,
+        input: AuthorizeSnapshotAccessRequest,
+    ) -> Request<AuthorizeSnapshotAccessRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a set of cluster snapshots.</p>
+    fn batch_delete_cluster_snapshots(
+        &self,
+        input: BatchDeleteClusterSnapshotsRequest,
+    ) -> Request<BatchDeleteClusterSnapshotsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the settings for a list of snapshots.</p>
+    fn batch_modify_cluster_snapshots(
+        &self,
+        input: BatchModifyClusterSnapshotsRequest,
+    ) -> Request<BatchModifyClusterSnapshotsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Cancels a resize operation.</p>
+    fn cancel_resize(&self, input: CancelResizeRequest) -> Request<CancelResizeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Copies the specified automated cluster snapshot to a new manual cluster snapshot. The source must be an automated snapshot and it must be in the available state.</p> <p>When you delete a cluster, Amazon Redshift deletes any automated snapshots of the cluster. Also, when the retention period of the snapshot expires, Amazon Redshift automatically deletes it. If you want to keep an automated snapshot for a longer period, you can make a manual copy of the snapshot. Manual snapshots are retained until you delete them.</p> <p> For more information about working with snapshots, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    fn copy_cluster_snapshot(
+        &self,
+        input: CopyClusterSnapshotRequest,
+    ) -> Request<CopyClusterSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new cluster.</p> <p>To create a cluster in Virtual Private Cloud (VPC), you must provide a cluster subnet group name. The cluster subnet group identifies the subnets of your VPC that Amazon Redshift uses when creating the cluster. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    fn create_cluster(&self, input: CreateClusterRequest) -> Request<CreateClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an Amazon Redshift parameter group.</p> <p>Creating parameter groups is independent of creating clusters. You can associate a cluster with a parameter group when you create the cluster. You can also associate an existing cluster with a parameter group after the cluster is created by using <a>ModifyCluster</a>. </p> <p>Parameters in the parameter group define specific behavior that applies to the databases you create on the cluster. For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    fn create_cluster_parameter_group(
+        &self,
+        input: CreateClusterParameterGroupRequest,
+    ) -> Request<CreateClusterParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new Amazon Redshift security group. You use security groups to control access to non-VPC clusters.</p> <p> For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    fn create_cluster_security_group(
+        &self,
+        input: CreateClusterSecurityGroupRequest,
+    ) -> Request<CreateClusterSecurityGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a manual snapshot of the specified cluster. The cluster must be in the <code>available</code> state. </p> <p> For more information about working with snapshots, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    fn create_cluster_snapshot(
+        &self,
+        input: CreateClusterSnapshotRequest,
+    ) -> Request<CreateClusterSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new Amazon Redshift subnet group. You must provide a list of one or more subnets in your existing Amazon Virtual Private Cloud (Amazon VPC) when creating Amazon Redshift subnet group.</p> <p> For information about subnet groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-cluster-subnet-groups.html">Amazon Redshift Cluster Subnet Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    fn create_cluster_subnet_group(
+        &self,
+        input: CreateClusterSubnetGroupRequest,
+    ) -> Request<CreateClusterSubnetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an Amazon Redshift event notification subscription. This action requires an ARN (Amazon Resource Name) of an Amazon SNS topic created by either the Amazon Redshift console, the Amazon SNS console, or the Amazon SNS API. To obtain an ARN with Amazon SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the source type, and lists of Amazon Redshift source IDs, event categories, and event severities. Notifications will be sent for all events you want that match those criteria. For example, you can specify source type = cluster, source ID = my-cluster-1 and mycluster2, event categories = Availability, Backup, and severity = ERROR. The subscription will only send notifications for those ERROR events in the Availability and Backup categories for the specified clusters.</p> <p>If you specify both the source type and source IDs, such as source type = cluster and source identifier = my-cluster-1, notifications will be sent for all the cluster events for my-cluster-1. If you specify a source type but do not specify a source identifier, you will receive notice of the events for the objects of that type in your AWS account. If you do not specify either the SourceType nor the SourceIdentifier, you will be notified of events generated from all Amazon Redshift sources belonging to your AWS account. You must specify a source type if you specify a source ID.</p>
+    fn create_event_subscription(
+        &self,
+        input: CreateEventSubscriptionRequest,
+    ) -> Request<CreateEventSubscriptionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an HSM client certificate that an Amazon Redshift cluster will use to connect to the client's HSM in order to store and retrieve the keys used to encrypt the cluster databases.</p> <p>The command returns a public key, which you must store in the HSM. In addition to creating the HSM certificate, you must create an Amazon Redshift HSM configuration that provides a cluster the information needed to store and use encryption keys in the HSM. For more information, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>
+    fn create_hsm_client_certificate(
+        &self,
+        input: CreateHsmClientCertificateRequest,
+    ) -> Request<CreateHsmClientCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an HSM configuration that contains the information required by an Amazon Redshift cluster to store and use database encryption keys in a Hardware Security Module (HSM). After creating the HSM configuration, you can specify it as a parameter when creating a cluster. The cluster will then store its encryption keys in the HSM.</p> <p>In addition to creating an HSM configuration, you must also create an HSM client certificate. For more information, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>
+    fn create_hsm_configuration(
+        &self,
+        input: CreateHsmConfigurationRequest,
+    ) -> Request<CreateHsmConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a snapshot copy grant that permits Amazon Redshift to use a customer master key (CMK) from AWS Key Management Service (AWS KMS) to encrypt copied snapshots in a destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    fn create_snapshot_copy_grant(
+        &self,
+        input: CreateSnapshotCopyGrantRequest,
+    ) -> Request<CreateSnapshotCopyGrantRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new snapshot schedule.</p>
+    fn create_snapshot_schedule(
+        &self,
+        input: CreateSnapshotScheduleRequest,
+    ) -> Request<CreateSnapshotScheduleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds one or more tags to a specified resource.</p> <p>A resource can have up to 50 tags. If you try to create more than 50 tags for a resource, you will receive an error and the attempt will fail.</p> <p>If you specify a key that already exists for the resource, the value for that key will be updated with the new value.</p>
+    fn create_tags(&self, input: CreateTagsRequest) -> Request<CreateTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a previously provisioned cluster. A successful response from the web service indicates that the request was received correctly. Use <a>DescribeClusters</a> to monitor the status of the deletion. The delete operation cannot be canceled or reverted once submitted. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you want to shut down the cluster and retain it for future use, set <i>SkipFinalClusterSnapshot</i> to <code>false</code> and specify a name for <i>FinalClusterSnapshotIdentifier</i>. You can later restore this snapshot to resume using the cluster. If a final cluster snapshot is requested, the status of the cluster will be "final-snapshot" while the snapshot is being taken, then it's "deleting" once Amazon Redshift begins deleting the cluster. </p> <p> For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    fn delete_cluster(&self, input: DeleteClusterRequest) -> Request<DeleteClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a specified Amazon Redshift parameter group.</p> <note> <p>You cannot delete a parameter group if it is associated with a cluster.</p> </note></p>
+    fn delete_cluster_parameter_group(
+        &self,
+        input: DeleteClusterParameterGroupRequest,
+    ) -> Request<DeleteClusterParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an Amazon Redshift security group.</p> <note> <p>You cannot delete a security group that is associated with any clusters. You cannot delete the default security group.</p> </note> <p> For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    fn delete_cluster_security_group(
+        &self,
+        input: DeleteClusterSecurityGroupRequest,
+    ) -> Request<DeleteClusterSecurityGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified manual snapshot. The snapshot must be in the <code>available</code> state, with no other users authorized to access the snapshot. </p> <p>Unlike automated snapshots, manual snapshots are retained even after you delete your cluster. Amazon Redshift does not delete your manual snapshots. You must delete manual snapshot explicitly to avoid getting charged. If other accounts are authorized to access the snapshot, you must revoke all of the authorizations before you can delete the snapshot.</p>
+    fn delete_cluster_snapshot(
+        &self,
+        input: DeleteClusterSnapshotRequest,
+    ) -> Request<DeleteClusterSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified cluster subnet group.</p>
+    fn delete_cluster_subnet_group(
+        &self,
+        input: DeleteClusterSubnetGroupRequest,
+    ) -> Request<DeleteClusterSubnetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an Amazon Redshift event notification subscription.</p>
+    fn delete_event_subscription(
+        &self,
+        input: DeleteEventSubscriptionRequest,
+    ) -> Request<DeleteEventSubscriptionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified HSM client certificate.</p>
+    fn delete_hsm_client_certificate(
+        &self,
+        input: DeleteHsmClientCertificateRequest,
+    ) -> Request<DeleteHsmClientCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified Amazon Redshift HSM configuration.</p>
+    fn delete_hsm_configuration(
+        &self,
+        input: DeleteHsmConfigurationRequest,
+    ) -> Request<DeleteHsmConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified snapshot copy grant.</p>
+    fn delete_snapshot_copy_grant(
+        &self,
+        input: DeleteSnapshotCopyGrantRequest,
+    ) -> Request<DeleteSnapshotCopyGrantRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a snapshot schedule.</p>
+    fn delete_snapshot_schedule(
+        &self,
+        input: DeleteSnapshotScheduleRequest,
+    ) -> Request<DeleteSnapshotScheduleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a tag or tags from a resource. You must provide the ARN of the resource from which you want to delete the tag or tags.</p>
+    fn delete_tags(&self, input: DeleteTagsRequest) -> Request<DeleteTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of attributes attached to an account</p>
+    fn describe_account_attributes(
+        &self,
+        input: DescribeAccountAttributesRequest,
+    ) -> Request<DescribeAccountAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns an array of <code>ClusterDbRevision</code> objects.</p>
+    fn describe_cluster_db_revisions(
+        &self,
+        input: DescribeClusterDbRevisionsRequest,
+    ) -> Request<DescribeClusterDbRevisionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of Amazon Redshift parameter groups, including parameter groups you created and the default parameter group. For each parameter group, the response includes the parameter group name, description, and parameter group family name. You can optionally specify a name to retrieve the description of a specific parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all parameter groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all parameter groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, parameter groups are returned regardless of whether they have tag keys or values associated with them.</p>
+    fn describe_cluster_parameter_groups(
+        &self,
+        input: DescribeClusterParameterGroupsRequest,
+    ) -> Request<DescribeClusterParameterGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a detailed list of parameters contained within the specified Amazon Redshift parameter group. For each parameter the response includes information such as parameter name, description, data type, value, whether the parameter value is modifiable, and so on.</p> <p>You can specify <i>source</i> filter to retrieve parameters of only specific type. For example, to retrieve parameters that were modified by a user action such as from <a>ModifyClusterParameterGroup</a>, you can specify <i>source</i> equal to <i>user</i>.</p> <p> For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    fn describe_cluster_parameters(
+        &self,
+        input: DescribeClusterParametersRequest,
+    ) -> Request<DescribeClusterParametersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about Amazon Redshift security groups. If the name of a security group is specified, the response will contain only information about only that security group.</p> <p> For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all security groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all security groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, security groups are returned regardless of whether they have tag keys or values associated with them.</p>
+    fn describe_cluster_security_groups(
+        &self,
+        input: DescribeClusterSecurityGroupsRequest,
+    ) -> Request<DescribeClusterSecurityGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns one or more snapshot objects, which contain metadata about your cluster snapshots. By default, this operation returns information about all snapshots of all clusters that are owned by you AWS customer account. No information is returned for snapshots owned by inactive AWS customer accounts.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all snapshots that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all snapshots that have any combination of those values are returned. Only snapshots that you own are returned in the response; shared snapshots are not returned with the tag key and tag value request parameters.</p> <p>If both tag keys and values are omitted from the request, snapshots are returned regardless of whether they have tag keys or values associated with them.</p>
+    fn describe_cluster_snapshots(
+        &self,
+        input: DescribeClusterSnapshotsRequest,
+    ) -> Request<DescribeClusterSnapshotsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns one or more cluster subnet group objects, which contain metadata about your cluster subnet groups. By default, this operation returns information about all cluster subnet groups that are defined in you AWS account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all subnet groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all subnet groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, subnet groups are returned regardless of whether they have tag keys or values associated with them.</p>
+    fn describe_cluster_subnet_groups(
+        &self,
+        input: DescribeClusterSubnetGroupsRequest,
+    ) -> Request<DescribeClusterSubnetGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of all the available maintenance tracks.</p>
+    fn describe_cluster_tracks(
+        &self,
+        input: DescribeClusterTracksRequest,
+    ) -> Request<DescribeClusterTracksRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns descriptions of the available Amazon Redshift cluster versions. You can call this operation even before creating any clusters to learn more about the Amazon Redshift versions. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    fn describe_cluster_versions(
+        &self,
+        input: DescribeClusterVersionsRequest,
+    ) -> Request<DescribeClusterVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns properties of provisioned clusters including general cluster properties, cluster database properties, maintenance and backup properties, and security and access properties. This operation supports pagination. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all clusters that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all clusters that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, clusters are returned regardless of whether they have tag keys or values associated with them.</p>
+    fn describe_clusters(
+        &self,
+        input: DescribeClustersRequest,
+    ) -> Request<DescribeClustersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of parameter settings for the specified parameter group family.</p> <p> For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    fn describe_default_cluster_parameters(
+        &self,
+        input: DescribeDefaultClusterParametersRequest,
+    ) -> Request<DescribeDefaultClusterParametersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Displays a list of event categories for all event source types, or for a specified source type. For a list of the event categories and source types, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-event-notifications.html">Amazon Redshift Event Notifications</a>.</p>
+    fn describe_event_categories(
+        &self,
+        input: DescribeEventCategoriesRequest,
+    ) -> Request<DescribeEventCategoriesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists descriptions of all the Amazon Redshift event notification subscriptions for a customer account. If you specify a subscription name, lists the description for that subscription.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all event notification subscriptions that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all subscriptions that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, subscriptions are returned regardless of whether they have tag keys or values associated with them.</p>
+    fn describe_event_subscriptions(
+        &self,
+        input: DescribeEventSubscriptionsRequest,
+    ) -> Request<DescribeEventSubscriptionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns events related to clusters, security groups, snapshots, and parameter groups for the past 14 days. Events specific to a particular cluster, security group, snapshot or parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>
+    fn describe_events(&self, input: DescribeEventsRequest) -> Request<DescribeEventsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about the specified HSM client certificate. If no certificate ID is specified, returns information about all the HSM certificates owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM client certificates that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM client certificates that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM client certificates are returned regardless of whether they have tag keys or values associated with them.</p>
+    fn describe_hsm_client_certificates(
+        &self,
+        input: DescribeHsmClientCertificatesRequest,
+    ) -> Request<DescribeHsmClientCertificatesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about the specified Amazon Redshift HSM configuration. If no configuration ID is specified, returns information about all the HSM configurations owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM connections that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM connections that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM connections are returned regardless of whether they have tag keys or values associated with them.</p>
+    fn describe_hsm_configurations(
+        &self,
+        input: DescribeHsmConfigurationsRequest,
+    ) -> Request<DescribeHsmConfigurationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes whether information, such as queries and connection attempts, is being logged for the specified Amazon Redshift cluster.</p>
+    fn describe_logging_status(
+        &self,
+        input: DescribeLoggingStatusRequest,
+    ) -> Request<DescribeLoggingStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS Region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    fn describe_orderable_cluster_options(
+        &self,
+        input: DescribeOrderableClusterOptionsRequest,
+    ) -> Request<DescribeOrderableClusterOptionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of the available reserved node offerings by Amazon Redshift with their descriptions including the node type, the fixed and recurring costs of reserving the node and duration the node will be reserved for you. These descriptions help you determine which reserve node offering you want to purchase. You then use the unique offering ID in you call to <a>PurchaseReservedNodeOffering</a> to reserve one or more nodes for your Amazon Redshift cluster. </p> <p> For more information about reserved node offerings, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    fn describe_reserved_node_offerings(
+        &self,
+        input: DescribeReservedNodeOfferingsRequest,
+    ) -> Request<DescribeReservedNodeOfferingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the descriptions of the reserved nodes.</p>
+    fn describe_reserved_nodes(
+        &self,
+        input: DescribeReservedNodesRequest,
+    ) -> Request<DescribeReservedNodesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about the last resize operation for the specified cluster. If no resize operation has ever been initiated for the specified cluster, a <code>HTTP 404</code> error is returned. If a resize operation was initiated and completed, the status of the resize remains as <code>SUCCEEDED</code> until the next resize. </p> <p>A resize operation can be requested using <a>ModifyCluster</a> and specifying a different number or type of nodes for the cluster. </p>
+    fn describe_resize(&self, input: DescribeResizeRequest) -> Request<DescribeResizeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of snapshot copy grants owned by the AWS account in the destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    fn describe_snapshot_copy_grants(
+        &self,
+        input: DescribeSnapshotCopyGrantsRequest,
+    ) -> Request<DescribeSnapshotCopyGrantsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of snapshot schedules. </p>
+    fn describe_snapshot_schedules(
+        &self,
+        input: DescribeSnapshotSchedulesRequest,
+    ) -> Request<DescribeSnapshotSchedulesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the total amount of snapshot usage and provisioned storage for a user in megabytes.</p>
+    fn describe_storage(&self) -> Request<DescribeStorageRequest> {
+        Request::new(
+            DescribeStorageRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Lists the status of one or more table restore requests made using the <a>RestoreTableFromClusterSnapshot</a> API action. If you don't specify a value for the <code>TableRestoreRequestId</code> parameter, then <code>DescribeTableRestoreStatus</code> returns the status of all table restore requests ordered by the date and time of the request in ascending order. Otherwise <code>DescribeTableRestoreStatus</code> returns the status of the table specified by <code>TableRestoreRequestId</code>.</p>
+    fn describe_table_restore_status(
+        &self,
+        input: DescribeTableRestoreStatusRequest,
+    ) -> Request<DescribeTableRestoreStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of tags. You can return tags from a specific resource by specifying an ARN, or you can return all tags for a given type of resource, such as clusters, snapshots, and so on.</p> <p>The following are limitations for <code>DescribeTags</code>: </p> <ul> <li> <p>You cannot specify an ARN and a resource-type value together in the same request.</p> </li> <li> <p>You cannot use the <code>MaxRecords</code> and <code>Marker</code> parameters together with the ARN parameter.</p> </li> <li> <p>The <code>MaxRecords</code> parameter can be a range from 10 to 50 results to return in a request.</p> </li> </ul> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all resources that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all resources that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, resources are returned regardless of whether they have tag keys or values associated with them.</p>
+    fn describe_tags(&self, input: DescribeTagsRequest) -> Request<DescribeTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>
+    fn disable_logging(&self, input: DisableLoggingRequest) -> Request<DisableLoggingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disables the automatic copying of snapshots from one region to another region for a specified cluster.</p> <p>If your cluster and its snapshots are encrypted using a customer master key (CMK) from AWS KMS, use <a>DeleteSnapshotCopyGrant</a> to delete the grant that grants Amazon Redshift permission to the CMK in the destination region. </p>
+    fn disable_snapshot_copy(
+        &self,
+        input: DisableSnapshotCopyRequest,
+    ) -> Request<DisableSnapshotCopyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>
+    fn enable_logging(&self, input: EnableLoggingRequest) -> Request<EnableLoggingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Enables the automatic copy of snapshots from one region to another region for a specified cluster.</p>
+    fn enable_snapshot_copy(
+        &self,
+        input: EnableSnapshotCopyRequest,
+    ) -> Request<EnableSnapshotCopyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a database user name and temporary password with temporary authorization to log on to an Amazon Redshift database. The action returns the database user name prefixed with <code>IAM:</code> if <code>AutoCreate</code> is <code>False</code> or <code>IAMA:</code> if <code>AutoCreate</code> is <code>True</code>. You can optionally specify one or more database user groups that the user will join at log on. By default, the temporary credentials expire in 900 seconds. You can optionally specify a duration between 900 seconds (15 minutes) and 3600 seconds (60 minutes). For more information, see <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/generating-user-credentials.html">Using IAM Authentication to Generate Database User Credentials</a> in the Amazon Redshift Cluster Management Guide.</p> <p>The AWS Identity and Access Management (IAM)user or role that executes GetClusterCredentials must have an IAM policy attached that allows access to all necessary actions and resources. For more information about permissions, see <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/redshift-iam-access-control-identity-based.html#redshift-policy-resources.getclustercredentials-resources">Resource Policies for GetClusterCredentials</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If the <code>DbGroups</code> parameter is specified, the IAM policy must allow the <code>redshift:JoinGroup</code> action with access to the listed <code>dbgroups</code>. </p> <p>In addition, if the <code>AutoCreate</code> parameter is set to <code>True</code>, then the policy must include the <code>redshift:CreateClusterUser</code> privilege.</p> <p>If the <code>DbName</code> parameter is specified, the IAM policy must allow access to the resource <code>dbname</code> for the specified database name. </p>
+    fn get_cluster_credentials(
+        &self,
+        input: GetClusterCredentialsRequest,
+    ) -> Request<GetClusterCredentialsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns an array of DC2 ReservedNodeOfferings that matches the payment type, term, and usage price of the given DC1 reserved node.</p>
+    fn get_reserved_node_exchange_offerings(
+        &self,
+        input: GetReservedNodeExchangeOfferingsRequest,
+    ) -> Request<GetReservedNodeExchangeOfferingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the settings for a cluster. For example, you can add another security or parameter group, update the preferred maintenance window, or change the master user password. Resetting a cluster password or modifying the security groups associated with a cluster do not need a reboot. However, modifying a parameter group requires a reboot for parameters to take effect. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>You can also change node type and the number of nodes to scale up or down the cluster. When resizing a cluster, you must specify both the number of nodes and the node type even if one of the parameters does not change.</p>
+    fn modify_cluster(&self, input: ModifyClusterRequest) -> Request<ModifyClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the database revision of a cluster. The database revision is a unique revision of the database running in a cluster.</p>
+    fn modify_cluster_db_revision(
+        &self,
+        input: ModifyClusterDbRevisionRequest,
+    ) -> Request<ModifyClusterDbRevisionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services.</p> <p>A cluster can have up to 10 IAM roles associated at any time.</p>
+    fn modify_cluster_iam_roles(
+        &self,
+        input: ModifyClusterIamRolesRequest,
+    ) -> Request<ModifyClusterIamRolesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the maintenance settings of a cluster. For example, you can defer a maintenance window. You can also update or cancel a deferment. </p>
+    fn modify_cluster_maintenance(
+        &self,
+        input: ModifyClusterMaintenanceRequest,
+    ) -> Request<ModifyClusterMaintenanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the parameters of a parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    fn modify_cluster_parameter_group(
+        &self,
+        input: ModifyClusterParameterGroupRequest,
+    ) -> Request<ModifyClusterParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the settings for a snapshot.</p>
+    fn modify_cluster_snapshot(
+        &self,
+        input: ModifyClusterSnapshotRequest,
+    ) -> Request<ModifyClusterSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies a snapshot schedule for a cluster.</p>
+    fn modify_cluster_snapshot_schedule(
+        &self,
+        input: ModifyClusterSnapshotScheduleRequest,
+    ) -> Request<ModifyClusterSnapshotScheduleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies a cluster subnet group to include the specified list of VPC subnets. The operation replaces the existing list of subnets with the new list of subnets.</p>
+    fn modify_cluster_subnet_group(
+        &self,
+        input: ModifyClusterSubnetGroupRequest,
+    ) -> Request<ModifyClusterSubnetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies an existing Amazon Redshift event notification subscription.</p>
+    fn modify_event_subscription(
+        &self,
+        input: ModifyEventSubscriptionRequest,
+    ) -> Request<ModifyEventSubscriptionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the number of days to retain snapshots in the destination AWS Region after they are copied from the source AWS Region. By default, this operation only changes the retention period of copied automated snapshots. The retention periods for both new and existing copied automated snapshots are updated with the new retention period. You can set the manual option to change only the retention periods of copied manual snapshots. If you set this option, only newly copied manual snapshots have the new retention period. </p>
+    fn modify_snapshot_copy_retention_period(
+        &self,
+        input: ModifySnapshotCopyRetentionPeriodRequest,
+    ) -> Request<ModifySnapshotCopyRetentionPeriodRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies a snapshot schedule. Any schedule associated with a cluster is modified asynchronously.</p>
+    fn modify_snapshot_schedule(
+        &self,
+        input: ModifySnapshotScheduleRequest,
+    ) -> Request<ModifySnapshotScheduleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Allows you to purchase reserved nodes. Amazon Redshift offers a predefined set of reserved node offerings. You can purchase one or more of the offerings. You can call the <a>DescribeReservedNodeOfferings</a> API to obtain the available reserved node offerings. You can call this API by providing a specific reserved node offering and the number of nodes you want to reserve. </p> <p> For more information about reserved node offerings, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    fn purchase_reserved_node_offering(
+        &self,
+        input: PurchaseReservedNodeOfferingRequest,
+    ) -> Request<PurchaseReservedNodeOfferingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Reboots a cluster. This action is taken as soon as possible. It results in a momentary outage to the cluster, during which the cluster status is set to <code>rebooting</code>. A cluster event is created when the reboot is completed. Any pending cluster modifications (see <a>ModifyCluster</a>) are applied at this reboot. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    fn reboot_cluster(&self, input: RebootClusterRequest) -> Request<RebootClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets one or more parameters of the specified parameter group to their default values and sets the source values of the parameters to "engine-default". To reset the entire parameter group specify the <i>ResetAllParameters</i> parameter. For parameter changes to take effect you must reboot any associated clusters. </p>
+    fn reset_cluster_parameter_group(
+        &self,
+        input: ResetClusterParameterGroupRequest,
+    ) -> Request<ResetClusterParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Changes the size of the cluster. You can change the cluster&#39;s type, or change the number or type of nodes. The default behavior is to use the elastic resize method. With an elastic resize, your cluster is available for read and write operations more quickly than with the classic resize method. </p> <p>Elastic resize operations have the following restrictions:</p> <ul> <li> <p>You can only resize clusters of the following types:</p> <ul> <li> <p>dc2.large</p> </li> <li> <p>dc2.8xlarge</p> </li> <li> <p>ds2.xlarge</p> </li> <li> <p>ds2.8xlarge</p> </li> </ul> </li> <li> <p>The type of nodes that you add must match the node type for the cluster.</p> </li> </ul></p>
+    fn resize_cluster(&self, input: ResizeClusterRequest) -> Request<ResizeClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new cluster from a snapshot. By default, Amazon Redshift creates the resulting cluster with the same configuration as the original cluster from which the snapshot was created, except that the new cluster is created with the default cluster security and parameter groups. After Amazon Redshift creates the cluster, you can use the <a>ModifyCluster</a> API to associate a different security group and different parameter group with the restored cluster. If you are using a DS node type, you can also choose to change to another DS node type of the same size during restore.</p> <p>If you restore a cluster into a VPC, you must provide a cluster subnet group where you want the cluster restored.</p> <p> For more information about working with snapshots, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    fn restore_from_cluster_snapshot(
+        &self,
+        input: RestoreFromClusterSnapshotRequest,
+    ) -> Request<RestoreFromClusterSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new table from a table in an Amazon Redshift cluster snapshot. You must create the new table within the Amazon Redshift cluster that the snapshot was taken from.</p> <p>You cannot use <code>RestoreTableFromClusterSnapshot</code> to restore a table with the same name as an existing table in an Amazon Redshift cluster. That is, you cannot overwrite an existing table in a cluster with a restored table. If you want to replace your original table with a new, restored table, then rename or drop your original table before you call <code>RestoreTableFromClusterSnapshot</code>. When you have renamed your original table, then you can pass the original name of the table as the <code>NewTableName</code> parameter value in the call to <code>RestoreTableFromClusterSnapshot</code>. This way, you can replace the original table with the table created from the snapshot.</p>
+    fn restore_table_from_cluster_snapshot(
+        &self,
+        input: RestoreTableFromClusterSnapshotRequest,
+    ) -> Request<RestoreTableFromClusterSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Revokes an ingress rule in an Amazon Redshift security group for a previously authorized IP range or Amazon EC2 security group. To add an ingress rule, see <a>AuthorizeClusterSecurityGroupIngress</a>. For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    fn revoke_cluster_security_group_ingress(
+        &self,
+        input: RevokeClusterSecurityGroupIngressRequest,
+    ) -> Request<RevokeClusterSecurityGroupIngressRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the ability of the specified AWS customer account to restore the specified snapshot. If the account is currently restoring the snapshot, the restore will run to completion.</p> <p> For more information about working with snapshots, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    fn revoke_snapshot_access(
+        &self,
+        input: RevokeSnapshotAccessRequest,
+    ) -> Request<RevokeSnapshotAccessRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Rotates the encryption keys for a cluster.</p>
+    fn rotate_encryption_key(
+        &self,
+        input: RotateEncryptionKeyRequest,
+    ) -> Request<RotateEncryptionKeyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AcceptReservedNodeExchangeRequest {
+    type Output = AcceptReservedNodeExchangeResponse;
+    type Error = AcceptReservedNodeExchangeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AcceptReservedNodeExchange");
         params.put("Version", "2012-12-01");
-        AcceptReservedNodeExchangeInputMessageSerializer::serialize(&mut params, "", &input);
+        AcceptReservedNodeExchangeRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AcceptReservedNodeExchangeError::from_response(response))
@@ -16789,7 +18249,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = AcceptReservedNodeExchangeOutputMessage::default();
+                    result = AcceptReservedNodeExchangeResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -16799,7 +18259,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = AcceptReservedNodeExchangeOutputMessageDeserializer::deserialize(
+                    result = AcceptReservedNodeExchangeResponseDeserializer::deserialize(
                         "AcceptReservedNodeExchangeResult",
                         &mut stack,
                     )?;
@@ -16811,25 +18271,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Adds an inbound (ingress) rule to an Amazon Redshift security group. Depending on whether the application accessing your cluster is running on the Internet or an Amazon EC2 instance, you can authorize inbound access to either a Classless Interdomain Routing (CIDR)/Internet Protocol (IP) range or to an Amazon EC2 security group. You can add as many as 20 ingress rules to an Amazon Redshift security group.</p> <p>If you authorize access to an Amazon EC2 security group, specify <i>EC2SecurityGroupName</i> and <i>EC2SecurityGroupOwnerId</i>. The Amazon EC2 security group and Amazon Redshift cluster must be in the same AWS Region. </p> <p>If you authorize access to a CIDR/IP address range, specify <i>CIDRIP</i>. For an overview of CIDR blocks, see the Wikipedia article on <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Classless Inter-Domain Routing</a>. </p> <p>You must also associate the security group with a cluster so that clients running on these IP addresses or the EC2 instance are authorized to connect to the cluster. For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Working with Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn authorize_cluster_security_group_ingress(
-        &self,
-        input: AuthorizeClusterSecurityGroupIngressMessage,
-    ) -> RusotoFuture<
-        AuthorizeClusterSecurityGroupIngressResult,
-        AuthorizeClusterSecurityGroupIngressError,
-    > {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for AuthorizeClusterSecurityGroupIngressRequest {
+    type Output = AuthorizeClusterSecurityGroupIngressResponse;
+    type Error = AuthorizeClusterSecurityGroupIngressError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AuthorizeClusterSecurityGroupIngress");
         params.put("Version", "2012-12-01");
-        AuthorizeClusterSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
+        AuthorizeClusterSecurityGroupIngressRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AuthorizeClusterSecurityGroupIngressError::from_response(
@@ -16842,7 +18304,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = AuthorizeClusterSecurityGroupIngressResult::default();
+                    result = AuthorizeClusterSecurityGroupIngressResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -16852,7 +18314,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = AuthorizeClusterSecurityGroupIngressResultDeserializer::deserialize(
+                    result = AuthorizeClusterSecurityGroupIngressResponseDeserializer::deserialize(
                         "AuthorizeClusterSecurityGroupIngressResult",
                         &mut stack,
                     )?;
@@ -16864,22 +18326,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Authorizes the specified AWS customer account to restore the specified snapshot.</p> <p> For more information about working with snapshots, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn authorize_snapshot_access(
-        &self,
-        input: AuthorizeSnapshotAccessMessage,
-    ) -> RusotoFuture<AuthorizeSnapshotAccessResult, AuthorizeSnapshotAccessError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for AuthorizeSnapshotAccessRequest {
+    type Output = AuthorizeSnapshotAccessResponse;
+    type Error = AuthorizeSnapshotAccessError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AuthorizeSnapshotAccess");
         params.put("Version", "2012-12-01");
-        AuthorizeSnapshotAccessMessageSerializer::serialize(&mut params, "", &input);
+        AuthorizeSnapshotAccessRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AuthorizeSnapshotAccessError::from_response(response))
@@ -16890,7 +18357,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = AuthorizeSnapshotAccessResult::default();
+                    result = AuthorizeSnapshotAccessResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -16900,7 +18367,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = AuthorizeSnapshotAccessResultDeserializer::deserialize(
+                    result = AuthorizeSnapshotAccessResponseDeserializer::deserialize(
                         "AuthorizeSnapshotAccessResult",
                         &mut stack,
                     )?;
@@ -16912,22 +18379,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes a set of cluster snapshots.</p>
-    fn batch_delete_cluster_snapshots(
-        &self,
-        input: BatchDeleteClusterSnapshotsRequest,
-    ) -> RusotoFuture<BatchDeleteClusterSnapshotsResult, BatchDeleteClusterSnapshotsError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for BatchDeleteClusterSnapshotsRequest {
+    type Output = BatchDeleteClusterSnapshotsResponse;
+    type Error = BatchDeleteClusterSnapshotsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "BatchDeleteClusterSnapshots");
         params.put("Version", "2012-12-01");
-        BatchDeleteClusterSnapshotsRequestSerializer::serialize(&mut params, "", &input);
+        BatchDeleteClusterSnapshotsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(BatchDeleteClusterSnapshotsError::from_response(response))
@@ -16938,7 +18410,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = BatchDeleteClusterSnapshotsResult::default();
+                    result = BatchDeleteClusterSnapshotsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -16948,7 +18420,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = BatchDeleteClusterSnapshotsResultDeserializer::deserialize(
+                    result = BatchDeleteClusterSnapshotsResponseDeserializer::deserialize(
                         "BatchDeleteClusterSnapshotsResult",
                         &mut stack,
                     )?;
@@ -16960,23 +18432,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies the settings for a list of snapshots.</p>
-    fn batch_modify_cluster_snapshots(
-        &self,
-        input: BatchModifyClusterSnapshotsMessage,
-    ) -> RusotoFuture<BatchModifyClusterSnapshotsOutputMessage, BatchModifyClusterSnapshotsError>
-    {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for BatchModifyClusterSnapshotsRequest {
+    type Output = BatchModifyClusterSnapshotsResponse;
+    type Error = BatchModifyClusterSnapshotsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "BatchModifyClusterSnapshots");
         params.put("Version", "2012-12-01");
-        BatchModifyClusterSnapshotsMessageSerializer::serialize(&mut params, "", &input);
+        BatchModifyClusterSnapshotsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(BatchModifyClusterSnapshotsError::from_response(response))
@@ -16987,7 +18463,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = BatchModifyClusterSnapshotsOutputMessage::default();
+                    result = BatchModifyClusterSnapshotsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -16997,7 +18473,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = BatchModifyClusterSnapshotsOutputMessageDeserializer::deserialize(
+                    result = BatchModifyClusterSnapshotsResponseDeserializer::deserialize(
                         "BatchModifyClusterSnapshotsResult",
                         &mut stack,
                     )?;
@@ -17009,22 +18485,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Cancels a resize operation.</p>
-    fn cancel_resize(
-        &self,
-        input: CancelResizeMessage,
-    ) -> RusotoFuture<ResizeProgressMessage, CancelResizeError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for CancelResizeRequest {
+    type Output = CancelResizeResponse;
+    type Error = CancelResizeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CancelResize");
         params.put("Version", "2012-12-01");
-        CancelResizeMessageSerializer::serialize(&mut params, "", &input);
+        CancelResizeRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -17038,7 +18519,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ResizeProgressMessage::default();
+                    result = CancelResizeResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -17048,7 +18529,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ResizeProgressMessageDeserializer::deserialize(
+                    result = CancelResizeResponseDeserializer::deserialize(
                         "CancelResizeResult",
                         &mut stack,
                     )?;
@@ -17060,22 +18541,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Copies the specified automated cluster snapshot to a new manual cluster snapshot. The source must be an automated snapshot and it must be in the available state.</p> <p>When you delete a cluster, Amazon Redshift deletes any automated snapshots of the cluster. Also, when the retention period of the snapshot expires, Amazon Redshift automatically deletes it. If you want to keep an automated snapshot for a longer period, you can make a manual copy of the snapshot. Manual snapshots are retained until you delete them.</p> <p> For more information about working with snapshots, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn copy_cluster_snapshot(
-        &self,
-        input: CopyClusterSnapshotMessage,
-    ) -> RusotoFuture<CopyClusterSnapshotResult, CopyClusterSnapshotError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for CopyClusterSnapshotRequest {
+    type Output = CopyClusterSnapshotResponse;
+    type Error = CopyClusterSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CopyClusterSnapshot");
         params.put("Version", "2012-12-01");
-        CopyClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        CopyClusterSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -17088,7 +18574,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CopyClusterSnapshotResult::default();
+                    result = CopyClusterSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -17098,7 +18584,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CopyClusterSnapshotResultDeserializer::deserialize(
+                    result = CopyClusterSnapshotResponseDeserializer::deserialize(
                         "CopyClusterSnapshotResult",
                         &mut stack,
                     )?;
@@ -17110,22 +18596,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new cluster.</p> <p>To create a cluster in Virtual Private Cloud (VPC), you must provide a cluster subnet group name. The cluster subnet group identifies the subnets of your VPC that Amazon Redshift uses when creating the cluster. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn create_cluster(
-        &self,
-        input: CreateClusterMessage,
-    ) -> RusotoFuture<CreateClusterResult, CreateClusterError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for CreateClusterRequest {
+    type Output = CreateClusterResponse;
+    type Error = CreateClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateCluster");
         params.put("Version", "2012-12-01");
-        CreateClusterMessageSerializer::serialize(&mut params, "", &input);
+        CreateClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -17139,7 +18630,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateClusterResult::default();
+                    result = CreateClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -17149,7 +18640,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateClusterResultDeserializer::deserialize(
+                    result = CreateClusterResponseDeserializer::deserialize(
                         "CreateClusterResult",
                         &mut stack,
                     )?;
@@ -17161,22 +18652,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Creates an Amazon Redshift parameter group.</p> <p>Creating parameter groups is independent of creating clusters. You can associate a cluster with a parameter group when you create the cluster. You can also associate an existing cluster with a parameter group after the cluster is created by using <a>ModifyCluster</a>. </p> <p>Parameters in the parameter group define specific behavior that applies to the databases you create on the cluster. For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn create_cluster_parameter_group(
-        &self,
-        input: CreateClusterParameterGroupMessage,
-    ) -> RusotoFuture<CreateClusterParameterGroupResult, CreateClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for CreateClusterParameterGroupRequest {
+    type Output = CreateClusterParameterGroupResponse;
+    type Error = CreateClusterParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateClusterParameterGroup");
         params.put("Version", "2012-12-01");
-        CreateClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        CreateClusterParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateClusterParameterGroupError::from_response(response))
@@ -17187,7 +18683,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateClusterParameterGroupResult::default();
+                    result = CreateClusterParameterGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -17197,7 +18693,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateClusterParameterGroupResultDeserializer::deserialize(
+                    result = CreateClusterParameterGroupResponseDeserializer::deserialize(
                         "CreateClusterParameterGroupResult",
                         &mut stack,
                     )?;
@@ -17209,22 +18705,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new Amazon Redshift security group. You use security groups to control access to non-VPC clusters.</p> <p> For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn create_cluster_security_group(
-        &self,
-        input: CreateClusterSecurityGroupMessage,
-    ) -> RusotoFuture<CreateClusterSecurityGroupResult, CreateClusterSecurityGroupError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for CreateClusterSecurityGroupRequest {
+    type Output = CreateClusterSecurityGroupResponse;
+    type Error = CreateClusterSecurityGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateClusterSecurityGroup");
         params.put("Version", "2012-12-01");
-        CreateClusterSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
+        CreateClusterSecurityGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateClusterSecurityGroupError::from_response(response))
@@ -17235,7 +18736,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateClusterSecurityGroupResult::default();
+                    result = CreateClusterSecurityGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -17245,7 +18746,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateClusterSecurityGroupResultDeserializer::deserialize(
+                    result = CreateClusterSecurityGroupResponseDeserializer::deserialize(
                         "CreateClusterSecurityGroupResult",
                         &mut stack,
                     )?;
@@ -17257,22 +18758,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a manual snapshot of the specified cluster. The cluster must be in the <code>available</code> state. </p> <p> For more information about working with snapshots, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn create_cluster_snapshot(
-        &self,
-        input: CreateClusterSnapshotMessage,
-    ) -> RusotoFuture<CreateClusterSnapshotResult, CreateClusterSnapshotError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for CreateClusterSnapshotRequest {
+    type Output = CreateClusterSnapshotResponse;
+    type Error = CreateClusterSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateClusterSnapshot");
         params.put("Version", "2012-12-01");
-        CreateClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        CreateClusterSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateClusterSnapshotError::from_response(response))
@@ -17283,7 +18789,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateClusterSnapshotResult::default();
+                    result = CreateClusterSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -17293,7 +18799,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateClusterSnapshotResultDeserializer::deserialize(
+                    result = CreateClusterSnapshotResponseDeserializer::deserialize(
                         "CreateClusterSnapshotResult",
                         &mut stack,
                     )?;
@@ -17305,22 +18811,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new Amazon Redshift subnet group. You must provide a list of one or more subnets in your existing Amazon Virtual Private Cloud (Amazon VPC) when creating Amazon Redshift subnet group.</p> <p> For information about subnet groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-cluster-subnet-groups.html">Amazon Redshift Cluster Subnet Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn create_cluster_subnet_group(
-        &self,
-        input: CreateClusterSubnetGroupMessage,
-    ) -> RusotoFuture<CreateClusterSubnetGroupResult, CreateClusterSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for CreateClusterSubnetGroupRequest {
+    type Output = CreateClusterSubnetGroupResponse;
+    type Error = CreateClusterSubnetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateClusterSubnetGroup");
         params.put("Version", "2012-12-01");
-        CreateClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
+        CreateClusterSubnetGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateClusterSubnetGroupError::from_response(response))
@@ -17331,7 +18842,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateClusterSubnetGroupResult::default();
+                    result = CreateClusterSubnetGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -17341,7 +18852,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateClusterSubnetGroupResultDeserializer::deserialize(
+                    result = CreateClusterSubnetGroupResponseDeserializer::deserialize(
                         "CreateClusterSubnetGroupResult",
                         &mut stack,
                     )?;
@@ -17353,22 +18864,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Creates an Amazon Redshift event notification subscription. This action requires an ARN (Amazon Resource Name) of an Amazon SNS topic created by either the Amazon Redshift console, the Amazon SNS console, or the Amazon SNS API. To obtain an ARN with Amazon SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the source type, and lists of Amazon Redshift source IDs, event categories, and event severities. Notifications will be sent for all events you want that match those criteria. For example, you can specify source type = cluster, source ID = my-cluster-1 and mycluster2, event categories = Availability, Backup, and severity = ERROR. The subscription will only send notifications for those ERROR events in the Availability and Backup categories for the specified clusters.</p> <p>If you specify both the source type and source IDs, such as source type = cluster and source identifier = my-cluster-1, notifications will be sent for all the cluster events for my-cluster-1. If you specify a source type but do not specify a source identifier, you will receive notice of the events for the objects of that type in your AWS account. If you do not specify either the SourceType nor the SourceIdentifier, you will be notified of events generated from all Amazon Redshift sources belonging to your AWS account. You must specify a source type if you specify a source ID.</p>
-    fn create_event_subscription(
-        &self,
-        input: CreateEventSubscriptionMessage,
-    ) -> RusotoFuture<CreateEventSubscriptionResult, CreateEventSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for CreateEventSubscriptionRequest {
+    type Output = CreateEventSubscriptionResponse;
+    type Error = CreateEventSubscriptionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateEventSubscription");
         params.put("Version", "2012-12-01");
-        CreateEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
+        CreateEventSubscriptionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateEventSubscriptionError::from_response(response))
@@ -17379,7 +18895,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateEventSubscriptionResult::default();
+                    result = CreateEventSubscriptionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -17389,7 +18905,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateEventSubscriptionResultDeserializer::deserialize(
+                    result = CreateEventSubscriptionResponseDeserializer::deserialize(
                         "CreateEventSubscriptionResult",
                         &mut stack,
                     )?;
@@ -17401,22 +18917,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Creates an HSM client certificate that an Amazon Redshift cluster will use to connect to the client's HSM in order to store and retrieve the keys used to encrypt the cluster databases.</p> <p>The command returns a public key, which you must store in the HSM. In addition to creating the HSM certificate, you must create an Amazon Redshift HSM configuration that provides a cluster the information needed to store and use encryption keys in the HSM. For more information, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>
-    fn create_hsm_client_certificate(
-        &self,
-        input: CreateHsmClientCertificateMessage,
-    ) -> RusotoFuture<CreateHsmClientCertificateResult, CreateHsmClientCertificateError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for CreateHsmClientCertificateRequest {
+    type Output = CreateHsmClientCertificateResponse;
+    type Error = CreateHsmClientCertificateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateHsmClientCertificate");
         params.put("Version", "2012-12-01");
-        CreateHsmClientCertificateMessageSerializer::serialize(&mut params, "", &input);
+        CreateHsmClientCertificateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateHsmClientCertificateError::from_response(response))
@@ -17427,7 +18948,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateHsmClientCertificateResult::default();
+                    result = CreateHsmClientCertificateResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -17437,7 +18958,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateHsmClientCertificateResultDeserializer::deserialize(
+                    result = CreateHsmClientCertificateResponseDeserializer::deserialize(
                         "CreateHsmClientCertificateResult",
                         &mut stack,
                     )?;
@@ -17449,22 +18970,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Creates an HSM configuration that contains the information required by an Amazon Redshift cluster to store and use database encryption keys in a Hardware Security Module (HSM). After creating the HSM configuration, you can specify it as a parameter when creating a cluster. The cluster will then store its encryption keys in the HSM.</p> <p>In addition to creating an HSM configuration, you must also create an HSM client certificate. For more information, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>
-    fn create_hsm_configuration(
-        &self,
-        input: CreateHsmConfigurationMessage,
-    ) -> RusotoFuture<CreateHsmConfigurationResult, CreateHsmConfigurationError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for CreateHsmConfigurationRequest {
+    type Output = CreateHsmConfigurationResponse;
+    type Error = CreateHsmConfigurationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateHsmConfiguration");
         params.put("Version", "2012-12-01");
-        CreateHsmConfigurationMessageSerializer::serialize(&mut params, "", &input);
+        CreateHsmConfigurationRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateHsmConfigurationError::from_response(response))
@@ -17475,7 +19001,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateHsmConfigurationResult::default();
+                    result = CreateHsmConfigurationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -17485,7 +19011,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateHsmConfigurationResultDeserializer::deserialize(
+                    result = CreateHsmConfigurationResponseDeserializer::deserialize(
                         "CreateHsmConfigurationResult",
                         &mut stack,
                     )?;
@@ -17497,22 +19023,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a snapshot copy grant that permits Amazon Redshift to use a customer master key (CMK) from AWS Key Management Service (AWS KMS) to encrypt copied snapshots in a destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
-    fn create_snapshot_copy_grant(
-        &self,
-        input: CreateSnapshotCopyGrantMessage,
-    ) -> RusotoFuture<CreateSnapshotCopyGrantResult, CreateSnapshotCopyGrantError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for CreateSnapshotCopyGrantRequest {
+    type Output = CreateSnapshotCopyGrantResponse;
+    type Error = CreateSnapshotCopyGrantError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateSnapshotCopyGrant");
         params.put("Version", "2012-12-01");
-        CreateSnapshotCopyGrantMessageSerializer::serialize(&mut params, "", &input);
+        CreateSnapshotCopyGrantRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateSnapshotCopyGrantError::from_response(response))
@@ -17523,7 +19054,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateSnapshotCopyGrantResult::default();
+                    result = CreateSnapshotCopyGrantResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -17533,7 +19064,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateSnapshotCopyGrantResultDeserializer::deserialize(
+                    result = CreateSnapshotCopyGrantResponseDeserializer::deserialize(
                         "CreateSnapshotCopyGrantResult",
                         &mut stack,
                     )?;
@@ -17545,22 +19076,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new snapshot schedule.</p>
-    fn create_snapshot_schedule(
-        &self,
-        input: CreateSnapshotScheduleMessage,
-    ) -> RusotoFuture<SnapshotSchedule, CreateSnapshotScheduleError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for CreateSnapshotScheduleRequest {
+    type Output = CreateSnapshotScheduleResponse;
+    type Error = CreateSnapshotScheduleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateSnapshotSchedule");
         params.put("Version", "2012-12-01");
-        CreateSnapshotScheduleMessageSerializer::serialize(&mut params, "", &input);
+        CreateSnapshotScheduleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateSnapshotScheduleError::from_response(response))
@@ -17571,7 +19107,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = SnapshotSchedule::default();
+                    result = CreateSnapshotScheduleResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -17581,7 +19117,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = SnapshotScheduleDeserializer::deserialize(
+                    result = CreateSnapshotScheduleResponseDeserializer::deserialize(
                         "CreateSnapshotScheduleResult",
                         &mut stack,
                     )?;
@@ -17593,19 +19129,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Adds one or more tags to a specified resource.</p> <p>A resource can have up to 50 tags. If you try to create more than 50 tags for a resource, you will receive an error and the attempt will fail.</p> <p>If you specify a key that already exists for the resource, the value for that key will be updated with the new value.</p>
-    fn create_tags(&self, input: CreateTagsMessage) -> RusotoFuture<(), CreateTagsError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for CreateTagsRequest {
+    type Output = CreateTagsResponse;
+    type Error = CreateTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateTags");
         params.put("Version", "2012-12-01");
-        CreateTagsMessageSerializer::serialize(&mut params, "", &input);
+        CreateTagsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -17615,25 +19159,48 @@ impl Redshift for RedshiftClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = CreateTagsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        CreateTagsResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes a previously provisioned cluster. A successful response from the web service indicates that the request was received correctly. Use <a>DescribeClusters</a> to monitor the status of the deletion. The delete operation cannot be canceled or reverted once submitted. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you want to shut down the cluster and retain it for future use, set <i>SkipFinalClusterSnapshot</i> to <code>false</code> and specify a name for <i>FinalClusterSnapshotIdentifier</i>. You can later restore this snapshot to resume using the cluster. If a final cluster snapshot is requested, the status of the cluster will be "final-snapshot" while the snapshot is being taken, then it's "deleting" once Amazon Redshift begins deleting the cluster. </p> <p> For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn delete_cluster(
-        &self,
-        input: DeleteClusterMessage,
-    ) -> RusotoFuture<DeleteClusterResult, DeleteClusterError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DeleteClusterRequest {
+    type Output = DeleteClusterResponse;
+    type Error = DeleteClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteCluster");
         params.put("Version", "2012-12-01");
-        DeleteClusterMessageSerializer::serialize(&mut params, "", &input);
+        DeleteClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -17647,7 +19214,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteClusterResult::default();
+                    result = DeleteClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -17657,7 +19224,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteClusterResultDeserializer::deserialize(
+                    result = DeleteClusterResponseDeserializer::deserialize(
                         "DeleteClusterResult",
                         &mut stack,
                     )?;
@@ -17669,72 +19236,127 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p><p>Deletes a specified Amazon Redshift parameter group.</p> <note> <p>You cannot delete a parameter group if it is associated with a cluster.</p> </note></p>
-    fn delete_cluster_parameter_group(
-        &self,
-        input: DeleteClusterParameterGroupMessage,
-    ) -> RusotoFuture<(), DeleteClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DeleteClusterParameterGroupRequest {
+    type Output = DeleteClusterParameterGroupResponse;
+    type Error = DeleteClusterParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteClusterParameterGroup");
         params.put("Version", "2012-12-01");
-        DeleteClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        DeleteClusterParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteClusterParameterGroupError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteClusterParameterGroupResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteClusterParameterGroupResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes an Amazon Redshift security group.</p> <note> <p>You cannot delete a security group that is associated with any clusters. You cannot delete the default security group.</p> </note> <p> For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn delete_cluster_security_group(
-        &self,
-        input: DeleteClusterSecurityGroupMessage,
-    ) -> RusotoFuture<(), DeleteClusterSecurityGroupError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DeleteClusterSecurityGroupRequest {
+    type Output = DeleteClusterSecurityGroupResponse;
+    type Error = DeleteClusterSecurityGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteClusterSecurityGroup");
         params.put("Version", "2012-12-01");
-        DeleteClusterSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
+        DeleteClusterSecurityGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteClusterSecurityGroupError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteClusterSecurityGroupResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteClusterSecurityGroupResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the specified manual snapshot. The snapshot must be in the <code>available</code> state, with no other users authorized to access the snapshot. </p> <p>Unlike automated snapshots, manual snapshots are retained even after you delete your cluster. Amazon Redshift does not delete your manual snapshots. You must delete manual snapshot explicitly to avoid getting charged. If other accounts are authorized to access the snapshot, you must revoke all of the authorizations before you can delete the snapshot.</p>
-    fn delete_cluster_snapshot(
-        &self,
-        input: DeleteClusterSnapshotMessage,
-    ) -> RusotoFuture<DeleteClusterSnapshotResult, DeleteClusterSnapshotError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DeleteClusterSnapshotRequest {
+    type Output = DeleteClusterSnapshotResponse;
+    type Error = DeleteClusterSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteClusterSnapshot");
         params.put("Version", "2012-12-01");
-        DeleteClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        DeleteClusterSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteClusterSnapshotError::from_response(response))
@@ -17745,7 +19367,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteClusterSnapshotResult::default();
+                    result = DeleteClusterSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -17755,7 +19377,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteClusterSnapshotResultDeserializer::deserialize(
+                    result = DeleteClusterSnapshotResponseDeserializer::deserialize(
                         "DeleteClusterSnapshotResult",
                         &mut stack,
                     )?;
@@ -17767,169 +19389,327 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes the specified cluster subnet group.</p>
-    fn delete_cluster_subnet_group(
-        &self,
-        input: DeleteClusterSubnetGroupMessage,
-    ) -> RusotoFuture<(), DeleteClusterSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DeleteClusterSubnetGroupRequest {
+    type Output = DeleteClusterSubnetGroupResponse;
+    type Error = DeleteClusterSubnetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteClusterSubnetGroup");
         params.put("Version", "2012-12-01");
-        DeleteClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
+        DeleteClusterSubnetGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteClusterSubnetGroupError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteClusterSubnetGroupResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteClusterSubnetGroupResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes an Amazon Redshift event notification subscription.</p>
-    fn delete_event_subscription(
-        &self,
-        input: DeleteEventSubscriptionMessage,
-    ) -> RusotoFuture<(), DeleteEventSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DeleteEventSubscriptionRequest {
+    type Output = DeleteEventSubscriptionResponse;
+    type Error = DeleteEventSubscriptionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteEventSubscription");
         params.put("Version", "2012-12-01");
-        DeleteEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
+        DeleteEventSubscriptionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteEventSubscriptionError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteEventSubscriptionResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteEventSubscriptionResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the specified HSM client certificate.</p>
-    fn delete_hsm_client_certificate(
-        &self,
-        input: DeleteHsmClientCertificateMessage,
-    ) -> RusotoFuture<(), DeleteHsmClientCertificateError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DeleteHsmClientCertificateRequest {
+    type Output = DeleteHsmClientCertificateResponse;
+    type Error = DeleteHsmClientCertificateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteHsmClientCertificate");
         params.put("Version", "2012-12-01");
-        DeleteHsmClientCertificateMessageSerializer::serialize(&mut params, "", &input);
+        DeleteHsmClientCertificateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteHsmClientCertificateError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteHsmClientCertificateResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteHsmClientCertificateResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the specified Amazon Redshift HSM configuration.</p>
-    fn delete_hsm_configuration(
-        &self,
-        input: DeleteHsmConfigurationMessage,
-    ) -> RusotoFuture<(), DeleteHsmConfigurationError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DeleteHsmConfigurationRequest {
+    type Output = DeleteHsmConfigurationResponse;
+    type Error = DeleteHsmConfigurationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteHsmConfiguration");
         params.put("Version", "2012-12-01");
-        DeleteHsmConfigurationMessageSerializer::serialize(&mut params, "", &input);
+        DeleteHsmConfigurationRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteHsmConfigurationError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteHsmConfigurationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteHsmConfigurationResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the specified snapshot copy grant.</p>
-    fn delete_snapshot_copy_grant(
-        &self,
-        input: DeleteSnapshotCopyGrantMessage,
-    ) -> RusotoFuture<(), DeleteSnapshotCopyGrantError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DeleteSnapshotCopyGrantRequest {
+    type Output = DeleteSnapshotCopyGrantResponse;
+    type Error = DeleteSnapshotCopyGrantError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteSnapshotCopyGrant");
         params.put("Version", "2012-12-01");
-        DeleteSnapshotCopyGrantMessageSerializer::serialize(&mut params, "", &input);
+        DeleteSnapshotCopyGrantRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteSnapshotCopyGrantError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteSnapshotCopyGrantResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteSnapshotCopyGrantResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes a snapshot schedule.</p>
-    fn delete_snapshot_schedule(
-        &self,
-        input: DeleteSnapshotScheduleMessage,
-    ) -> RusotoFuture<(), DeleteSnapshotScheduleError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DeleteSnapshotScheduleRequest {
+    type Output = DeleteSnapshotScheduleResponse;
+    type Error = DeleteSnapshotScheduleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteSnapshotSchedule");
         params.put("Version", "2012-12-01");
-        DeleteSnapshotScheduleMessageSerializer::serialize(&mut params, "", &input);
+        DeleteSnapshotScheduleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteSnapshotScheduleError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteSnapshotScheduleResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteSnapshotScheduleResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes a tag or tags from a resource. You must provide the ARN of the resource from which you want to delete the tag or tags.</p>
-    fn delete_tags(&self, input: DeleteTagsMessage) -> RusotoFuture<(), DeleteTagsError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DeleteTagsRequest {
+    type Output = DeleteTagsResponse;
+    type Error = DeleteTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteTags");
         params.put("Version", "2012-12-01");
-        DeleteTagsMessageSerializer::serialize(&mut params, "", &input);
+        DeleteTagsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -17939,25 +19719,48 @@ impl Redshift for RedshiftClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteTagsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        DeleteTagsResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Returns a list of attributes attached to an account</p>
-    fn describe_account_attributes(
-        &self,
-        input: DescribeAccountAttributesMessage,
-    ) -> RusotoFuture<AccountAttributeList, DescribeAccountAttributesError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeAccountAttributesRequest {
+    type Output = DescribeAccountAttributesResponse;
+    type Error = DescribeAccountAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAccountAttributes");
         params.put("Version", "2012-12-01");
-        DescribeAccountAttributesMessageSerializer::serialize(&mut params, "", &input);
+        DescribeAccountAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAccountAttributesError::from_response(response))
@@ -17968,7 +19771,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = AccountAttributeList::default();
+                    result = DescribeAccountAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -17978,7 +19781,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = AccountAttributeListDeserializer::deserialize(
+                    result = DescribeAccountAttributesResponseDeserializer::deserialize(
                         "DescribeAccountAttributesResult",
                         &mut stack,
                     )?;
@@ -17990,22 +19793,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns an array of <code>ClusterDbRevision</code> objects.</p>
-    fn describe_cluster_db_revisions(
-        &self,
-        input: DescribeClusterDbRevisionsMessage,
-    ) -> RusotoFuture<ClusterDbRevisionsMessage, DescribeClusterDbRevisionsError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeClusterDbRevisionsRequest {
+    type Output = DescribeClusterDbRevisionsResponse;
+    type Error = DescribeClusterDbRevisionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeClusterDbRevisions");
         params.put("Version", "2012-12-01");
-        DescribeClusterDbRevisionsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeClusterDbRevisionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClusterDbRevisionsError::from_response(response))
@@ -18016,7 +19824,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ClusterDbRevisionsMessage::default();
+                    result = DescribeClusterDbRevisionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18026,7 +19834,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ClusterDbRevisionsMessageDeserializer::deserialize(
+                    result = DescribeClusterDbRevisionsResponseDeserializer::deserialize(
                         "DescribeClusterDbRevisionsResult",
                         &mut stack,
                     )?;
@@ -18038,22 +19846,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of Amazon Redshift parameter groups, including parameter groups you created and the default parameter group. For each parameter group, the response includes the parameter group name, description, and parameter group family name. You can optionally specify a name to retrieve the description of a specific parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all parameter groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all parameter groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, parameter groups are returned regardless of whether they have tag keys or values associated with them.</p>
-    fn describe_cluster_parameter_groups(
-        &self,
-        input: DescribeClusterParameterGroupsMessage,
-    ) -> RusotoFuture<ClusterParameterGroupsMessage, DescribeClusterParameterGroupsError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeClusterParameterGroupsRequest {
+    type Output = DescribeClusterParameterGroupsResponse;
+    type Error = DescribeClusterParameterGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeClusterParameterGroups");
         params.put("Version", "2012-12-01");
-        DescribeClusterParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeClusterParameterGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClusterParameterGroupsError::from_response(response))
@@ -18064,7 +19877,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ClusterParameterGroupsMessage::default();
+                    result = DescribeClusterParameterGroupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18074,7 +19887,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ClusterParameterGroupsMessageDeserializer::deserialize(
+                    result = DescribeClusterParameterGroupsResponseDeserializer::deserialize(
                         "DescribeClusterParameterGroupsResult",
                         &mut stack,
                     )?;
@@ -18086,22 +19899,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a detailed list of parameters contained within the specified Amazon Redshift parameter group. For each parameter the response includes information such as parameter name, description, data type, value, whether the parameter value is modifiable, and so on.</p> <p>You can specify <i>source</i> filter to retrieve parameters of only specific type. For example, to retrieve parameters that were modified by a user action such as from <a>ModifyClusterParameterGroup</a>, you can specify <i>source</i> equal to <i>user</i>.</p> <p> For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn describe_cluster_parameters(
-        &self,
-        input: DescribeClusterParametersMessage,
-    ) -> RusotoFuture<ClusterParameterGroupDetails, DescribeClusterParametersError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeClusterParametersRequest {
+    type Output = DescribeClusterParametersResponse;
+    type Error = DescribeClusterParametersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeClusterParameters");
         params.put("Version", "2012-12-01");
-        DescribeClusterParametersMessageSerializer::serialize(&mut params, "", &input);
+        DescribeClusterParametersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClusterParametersError::from_response(response))
@@ -18112,7 +19930,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ClusterParameterGroupDetails::default();
+                    result = DescribeClusterParametersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18122,7 +19940,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ClusterParameterGroupDetailsDeserializer::deserialize(
+                    result = DescribeClusterParametersResponseDeserializer::deserialize(
                         "DescribeClusterParametersResult",
                         &mut stack,
                     )?;
@@ -18134,22 +19952,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns information about Amazon Redshift security groups. If the name of a security group is specified, the response will contain only information about only that security group.</p> <p> For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all security groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all security groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, security groups are returned regardless of whether they have tag keys or values associated with them.</p>
-    fn describe_cluster_security_groups(
-        &self,
-        input: DescribeClusterSecurityGroupsMessage,
-    ) -> RusotoFuture<ClusterSecurityGroupMessage, DescribeClusterSecurityGroupsError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeClusterSecurityGroupsRequest {
+    type Output = DescribeClusterSecurityGroupsResponse;
+    type Error = DescribeClusterSecurityGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeClusterSecurityGroups");
         params.put("Version", "2012-12-01");
-        DescribeClusterSecurityGroupsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeClusterSecurityGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClusterSecurityGroupsError::from_response(response))
@@ -18160,7 +19983,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ClusterSecurityGroupMessage::default();
+                    result = DescribeClusterSecurityGroupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18170,7 +19993,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ClusterSecurityGroupMessageDeserializer::deserialize(
+                    result = DescribeClusterSecurityGroupsResponseDeserializer::deserialize(
                         "DescribeClusterSecurityGroupsResult",
                         &mut stack,
                     )?;
@@ -18182,22 +20005,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns one or more snapshot objects, which contain metadata about your cluster snapshots. By default, this operation returns information about all snapshots of all clusters that are owned by you AWS customer account. No information is returned for snapshots owned by inactive AWS customer accounts.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all snapshots that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all snapshots that have any combination of those values are returned. Only snapshots that you own are returned in the response; shared snapshots are not returned with the tag key and tag value request parameters.</p> <p>If both tag keys and values are omitted from the request, snapshots are returned regardless of whether they have tag keys or values associated with them.</p>
-    fn describe_cluster_snapshots(
-        &self,
-        input: DescribeClusterSnapshotsMessage,
-    ) -> RusotoFuture<SnapshotMessage, DescribeClusterSnapshotsError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeClusterSnapshotsRequest {
+    type Output = DescribeClusterSnapshotsResponse;
+    type Error = DescribeClusterSnapshotsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeClusterSnapshots");
         params.put("Version", "2012-12-01");
-        DescribeClusterSnapshotsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeClusterSnapshotsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClusterSnapshotsError::from_response(response))
@@ -18208,7 +20036,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = SnapshotMessage::default();
+                    result = DescribeClusterSnapshotsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18218,7 +20046,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = SnapshotMessageDeserializer::deserialize(
+                    result = DescribeClusterSnapshotsResponseDeserializer::deserialize(
                         "DescribeClusterSnapshotsResult",
                         &mut stack,
                     )?;
@@ -18230,22 +20058,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns one or more cluster subnet group objects, which contain metadata about your cluster subnet groups. By default, this operation returns information about all cluster subnet groups that are defined in you AWS account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all subnet groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all subnet groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, subnet groups are returned regardless of whether they have tag keys or values associated with them.</p>
-    fn describe_cluster_subnet_groups(
-        &self,
-        input: DescribeClusterSubnetGroupsMessage,
-    ) -> RusotoFuture<ClusterSubnetGroupMessage, DescribeClusterSubnetGroupsError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeClusterSubnetGroupsRequest {
+    type Output = DescribeClusterSubnetGroupsResponse;
+    type Error = DescribeClusterSubnetGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeClusterSubnetGroups");
         params.put("Version", "2012-12-01");
-        DescribeClusterSubnetGroupsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeClusterSubnetGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClusterSubnetGroupsError::from_response(response))
@@ -18256,7 +20089,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ClusterSubnetGroupMessage::default();
+                    result = DescribeClusterSubnetGroupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18266,7 +20099,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ClusterSubnetGroupMessageDeserializer::deserialize(
+                    result = DescribeClusterSubnetGroupsResponseDeserializer::deserialize(
                         "DescribeClusterSubnetGroupsResult",
                         &mut stack,
                     )?;
@@ -18278,22 +20111,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of all the available maintenance tracks.</p>
-    fn describe_cluster_tracks(
-        &self,
-        input: DescribeClusterTracksMessage,
-    ) -> RusotoFuture<TrackListMessage, DescribeClusterTracksError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeClusterTracksRequest {
+    type Output = DescribeClusterTracksResponse;
+    type Error = DescribeClusterTracksError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeClusterTracks");
         params.put("Version", "2012-12-01");
-        DescribeClusterTracksMessageSerializer::serialize(&mut params, "", &input);
+        DescribeClusterTracksRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClusterTracksError::from_response(response))
@@ -18304,7 +20142,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = TrackListMessage::default();
+                    result = DescribeClusterTracksResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18314,7 +20152,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = TrackListMessageDeserializer::deserialize(
+                    result = DescribeClusterTracksResponseDeserializer::deserialize(
                         "DescribeClusterTracksResult",
                         &mut stack,
                     )?;
@@ -18326,22 +20164,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns descriptions of the available Amazon Redshift cluster versions. You can call this operation even before creating any clusters to learn more about the Amazon Redshift versions. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn describe_cluster_versions(
-        &self,
-        input: DescribeClusterVersionsMessage,
-    ) -> RusotoFuture<ClusterVersionsMessage, DescribeClusterVersionsError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeClusterVersionsRequest {
+    type Output = DescribeClusterVersionsResponse;
+    type Error = DescribeClusterVersionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeClusterVersions");
         params.put("Version", "2012-12-01");
-        DescribeClusterVersionsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeClusterVersionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClusterVersionsError::from_response(response))
@@ -18352,7 +20195,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ClusterVersionsMessage::default();
+                    result = DescribeClusterVersionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18362,7 +20205,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ClusterVersionsMessageDeserializer::deserialize(
+                    result = DescribeClusterVersionsResponseDeserializer::deserialize(
                         "DescribeClusterVersionsResult",
                         &mut stack,
                     )?;
@@ -18374,22 +20217,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns properties of provisioned clusters including general cluster properties, cluster database properties, maintenance and backup properties, and security and access properties. This operation supports pagination. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all clusters that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all clusters that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, clusters are returned regardless of whether they have tag keys or values associated with them.</p>
-    fn describe_clusters(
-        &self,
-        input: DescribeClustersMessage,
-    ) -> RusotoFuture<ClustersMessage, DescribeClustersError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeClustersRequest {
+    type Output = DescribeClustersResponse;
+    type Error = DescribeClustersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeClusters");
         params.put("Version", "2012-12-01");
-        DescribeClustersMessageSerializer::serialize(&mut params, "", &input);
+        DescribeClustersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -18403,7 +20251,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ClustersMessage::default();
+                    result = DescribeClustersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18413,7 +20261,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ClustersMessageDeserializer::deserialize(
+                    result = DescribeClustersResponseDeserializer::deserialize(
                         "DescribeClustersResult",
                         &mut stack,
                     )?;
@@ -18425,23 +20273,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of parameter settings for the specified parameter group family.</p> <p> For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn describe_default_cluster_parameters(
-        &self,
-        input: DescribeDefaultClusterParametersMessage,
-    ) -> RusotoFuture<DescribeDefaultClusterParametersResult, DescribeDefaultClusterParametersError>
-    {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeDefaultClusterParametersRequest {
+    type Output = DescribeDefaultClusterParametersResponse;
+    type Error = DescribeDefaultClusterParametersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDefaultClusterParameters");
         params.put("Version", "2012-12-01");
-        DescribeDefaultClusterParametersMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDefaultClusterParametersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDefaultClusterParametersError::from_response(
@@ -18454,7 +20306,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeDefaultClusterParametersResult::default();
+                    result = DescribeDefaultClusterParametersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18464,7 +20316,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeDefaultClusterParametersResultDeserializer::deserialize(
+                    result = DescribeDefaultClusterParametersResponseDeserializer::deserialize(
                         "DescribeDefaultClusterParametersResult",
                         &mut stack,
                     )?;
@@ -18476,22 +20328,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Displays a list of event categories for all event source types, or for a specified source type. For a list of the event categories and source types, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-event-notifications.html">Amazon Redshift Event Notifications</a>.</p>
-    fn describe_event_categories(
-        &self,
-        input: DescribeEventCategoriesMessage,
-    ) -> RusotoFuture<EventCategoriesMessage, DescribeEventCategoriesError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeEventCategoriesRequest {
+    type Output = DescribeEventCategoriesResponse;
+    type Error = DescribeEventCategoriesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEventCategories");
         params.put("Version", "2012-12-01");
-        DescribeEventCategoriesMessageSerializer::serialize(&mut params, "", &input);
+        DescribeEventCategoriesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEventCategoriesError::from_response(response))
@@ -18502,7 +20359,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = EventCategoriesMessage::default();
+                    result = DescribeEventCategoriesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18512,7 +20369,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = EventCategoriesMessageDeserializer::deserialize(
+                    result = DescribeEventCategoriesResponseDeserializer::deserialize(
                         "DescribeEventCategoriesResult",
                         &mut stack,
                     )?;
@@ -18524,22 +20381,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Lists descriptions of all the Amazon Redshift event notification subscriptions for a customer account. If you specify a subscription name, lists the description for that subscription.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all event notification subscriptions that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all subscriptions that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, subscriptions are returned regardless of whether they have tag keys or values associated with them.</p>
-    fn describe_event_subscriptions(
-        &self,
-        input: DescribeEventSubscriptionsMessage,
-    ) -> RusotoFuture<EventSubscriptionsMessage, DescribeEventSubscriptionsError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeEventSubscriptionsRequest {
+    type Output = DescribeEventSubscriptionsResponse;
+    type Error = DescribeEventSubscriptionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEventSubscriptions");
         params.put("Version", "2012-12-01");
-        DescribeEventSubscriptionsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeEventSubscriptionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEventSubscriptionsError::from_response(response))
@@ -18550,7 +20412,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = EventSubscriptionsMessage::default();
+                    result = DescribeEventSubscriptionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18560,7 +20422,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = EventSubscriptionsMessageDeserializer::deserialize(
+                    result = DescribeEventSubscriptionsResponseDeserializer::deserialize(
                         "DescribeEventSubscriptionsResult",
                         &mut stack,
                     )?;
@@ -18572,22 +20434,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns events related to clusters, security groups, snapshots, and parameter groups for the past 14 days. Events specific to a particular cluster, security group, snapshot or parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>
-    fn describe_events(
-        &self,
-        input: DescribeEventsMessage,
-    ) -> RusotoFuture<EventsMessage, DescribeEventsError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeEventsRequest {
+    type Output = DescribeEventsResponse;
+    type Error = DescribeEventsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEvents");
         params.put("Version", "2012-12-01");
-        DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeEventsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -18601,7 +20468,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = EventsMessage::default();
+                    result = DescribeEventsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18611,8 +20478,10 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        EventsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack)?;
+                    result = DescribeEventsResponseDeserializer::deserialize(
+                        "DescribeEventsResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -18621,22 +20490,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns information about the specified HSM client certificate. If no certificate ID is specified, returns information about all the HSM certificates owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM client certificates that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM client certificates that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM client certificates are returned regardless of whether they have tag keys or values associated with them.</p>
-    fn describe_hsm_client_certificates(
-        &self,
-        input: DescribeHsmClientCertificatesMessage,
-    ) -> RusotoFuture<HsmClientCertificateMessage, DescribeHsmClientCertificatesError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeHsmClientCertificatesRequest {
+    type Output = DescribeHsmClientCertificatesResponse;
+    type Error = DescribeHsmClientCertificatesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeHsmClientCertificates");
         params.put("Version", "2012-12-01");
-        DescribeHsmClientCertificatesMessageSerializer::serialize(&mut params, "", &input);
+        DescribeHsmClientCertificatesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeHsmClientCertificatesError::from_response(response))
@@ -18647,7 +20521,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = HsmClientCertificateMessage::default();
+                    result = DescribeHsmClientCertificatesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18657,7 +20531,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = HsmClientCertificateMessageDeserializer::deserialize(
+                    result = DescribeHsmClientCertificatesResponseDeserializer::deserialize(
                         "DescribeHsmClientCertificatesResult",
                         &mut stack,
                     )?;
@@ -18669,22 +20543,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns information about the specified Amazon Redshift HSM configuration. If no configuration ID is specified, returns information about all the HSM configurations owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM connections that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM connections that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM connections are returned regardless of whether they have tag keys or values associated with them.</p>
-    fn describe_hsm_configurations(
-        &self,
-        input: DescribeHsmConfigurationsMessage,
-    ) -> RusotoFuture<HsmConfigurationMessage, DescribeHsmConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeHsmConfigurationsRequest {
+    type Output = DescribeHsmConfigurationsResponse;
+    type Error = DescribeHsmConfigurationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeHsmConfigurations");
         params.put("Version", "2012-12-01");
-        DescribeHsmConfigurationsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeHsmConfigurationsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeHsmConfigurationsError::from_response(response))
@@ -18695,7 +20574,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = HsmConfigurationMessage::default();
+                    result = DescribeHsmConfigurationsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18705,7 +20584,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = HsmConfigurationMessageDeserializer::deserialize(
+                    result = DescribeHsmConfigurationsResponseDeserializer::deserialize(
                         "DescribeHsmConfigurationsResult",
                         &mut stack,
                     )?;
@@ -18717,22 +20596,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Describes whether information, such as queries and connection attempts, is being logged for the specified Amazon Redshift cluster.</p>
-    fn describe_logging_status(
-        &self,
-        input: DescribeLoggingStatusMessage,
-    ) -> RusotoFuture<LoggingStatus, DescribeLoggingStatusError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeLoggingStatusRequest {
+    type Output = DescribeLoggingStatusResponse;
+    type Error = DescribeLoggingStatusError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLoggingStatus");
         params.put("Version", "2012-12-01");
-        DescribeLoggingStatusMessageSerializer::serialize(&mut params, "", &input);
+        DescribeLoggingStatusRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLoggingStatusError::from_response(response))
@@ -18743,7 +20627,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = LoggingStatus::default();
+                    result = DescribeLoggingStatusResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18753,7 +20637,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = LoggingStatusDeserializer::deserialize(
+                    result = DescribeLoggingStatusResponseDeserializer::deserialize(
                         "DescribeLoggingStatusResult",
                         &mut stack,
                     )?;
@@ -18765,22 +20649,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS Region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn describe_orderable_cluster_options(
-        &self,
-        input: DescribeOrderableClusterOptionsMessage,
-    ) -> RusotoFuture<OrderableClusterOptionsMessage, DescribeOrderableClusterOptionsError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeOrderableClusterOptionsRequest {
+    type Output = DescribeOrderableClusterOptionsResponse;
+    type Error = DescribeOrderableClusterOptionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeOrderableClusterOptions");
         params.put("Version", "2012-12-01");
-        DescribeOrderableClusterOptionsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeOrderableClusterOptionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeOrderableClusterOptionsError::from_response(
@@ -18793,7 +20682,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = OrderableClusterOptionsMessage::default();
+                    result = DescribeOrderableClusterOptionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18803,7 +20692,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = OrderableClusterOptionsMessageDeserializer::deserialize(
+                    result = DescribeOrderableClusterOptionsResponseDeserializer::deserialize(
                         "DescribeOrderableClusterOptionsResult",
                         &mut stack,
                     )?;
@@ -18815,22 +20704,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of the available reserved node offerings by Amazon Redshift with their descriptions including the node type, the fixed and recurring costs of reserving the node and duration the node will be reserved for you. These descriptions help you determine which reserve node offering you want to purchase. You then use the unique offering ID in you call to <a>PurchaseReservedNodeOffering</a> to reserve one or more nodes for your Amazon Redshift cluster. </p> <p> For more information about reserved node offerings, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn describe_reserved_node_offerings(
-        &self,
-        input: DescribeReservedNodeOfferingsMessage,
-    ) -> RusotoFuture<ReservedNodeOfferingsMessage, DescribeReservedNodeOfferingsError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeReservedNodeOfferingsRequest {
+    type Output = DescribeReservedNodeOfferingsResponse;
+    type Error = DescribeReservedNodeOfferingsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeReservedNodeOfferings");
         params.put("Version", "2012-12-01");
-        DescribeReservedNodeOfferingsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeReservedNodeOfferingsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReservedNodeOfferingsError::from_response(response))
@@ -18841,7 +20735,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ReservedNodeOfferingsMessage::default();
+                    result = DescribeReservedNodeOfferingsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18851,7 +20745,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ReservedNodeOfferingsMessageDeserializer::deserialize(
+                    result = DescribeReservedNodeOfferingsResponseDeserializer::deserialize(
                         "DescribeReservedNodeOfferingsResult",
                         &mut stack,
                     )?;
@@ -18863,22 +20757,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns the descriptions of the reserved nodes.</p>
-    fn describe_reserved_nodes(
-        &self,
-        input: DescribeReservedNodesMessage,
-    ) -> RusotoFuture<ReservedNodesMessage, DescribeReservedNodesError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeReservedNodesRequest {
+    type Output = DescribeReservedNodesResponse;
+    type Error = DescribeReservedNodesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeReservedNodes");
         params.put("Version", "2012-12-01");
-        DescribeReservedNodesMessageSerializer::serialize(&mut params, "", &input);
+        DescribeReservedNodesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReservedNodesError::from_response(response))
@@ -18889,7 +20788,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ReservedNodesMessage::default();
+                    result = DescribeReservedNodesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18899,7 +20798,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ReservedNodesMessageDeserializer::deserialize(
+                    result = DescribeReservedNodesResponseDeserializer::deserialize(
                         "DescribeReservedNodesResult",
                         &mut stack,
                     )?;
@@ -18911,22 +20810,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns information about the last resize operation for the specified cluster. If no resize operation has ever been initiated for the specified cluster, a <code>HTTP 404</code> error is returned. If a resize operation was initiated and completed, the status of the resize remains as <code>SUCCEEDED</code> until the next resize. </p> <p>A resize operation can be requested using <a>ModifyCluster</a> and specifying a different number or type of nodes for the cluster. </p>
-    fn describe_resize(
-        &self,
-        input: DescribeResizeMessage,
-    ) -> RusotoFuture<ResizeProgressMessage, DescribeResizeError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeResizeRequest {
+    type Output = DescribeResizeResponse;
+    type Error = DescribeResizeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeResize");
         params.put("Version", "2012-12-01");
-        DescribeResizeMessageSerializer::serialize(&mut params, "", &input);
+        DescribeResizeRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -18940,7 +20844,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ResizeProgressMessage::default();
+                    result = DescribeResizeResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18950,7 +20854,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ResizeProgressMessageDeserializer::deserialize(
+                    result = DescribeResizeResponseDeserializer::deserialize(
                         "DescribeResizeResult",
                         &mut stack,
                     )?;
@@ -18962,22 +20866,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of snapshot copy grants owned by the AWS account in the destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
-    fn describe_snapshot_copy_grants(
-        &self,
-        input: DescribeSnapshotCopyGrantsMessage,
-    ) -> RusotoFuture<SnapshotCopyGrantMessage, DescribeSnapshotCopyGrantsError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeSnapshotCopyGrantsRequest {
+    type Output = DescribeSnapshotCopyGrantsResponse;
+    type Error = DescribeSnapshotCopyGrantsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeSnapshotCopyGrants");
         params.put("Version", "2012-12-01");
-        DescribeSnapshotCopyGrantsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeSnapshotCopyGrantsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSnapshotCopyGrantsError::from_response(response))
@@ -18988,7 +20897,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = SnapshotCopyGrantMessage::default();
+                    result = DescribeSnapshotCopyGrantsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18998,7 +20907,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = SnapshotCopyGrantMessageDeserializer::deserialize(
+                    result = DescribeSnapshotCopyGrantsResponseDeserializer::deserialize(
                         "DescribeSnapshotCopyGrantsResult",
                         &mut stack,
                     )?;
@@ -19010,22 +20919,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of snapshot schedules. </p>
-    fn describe_snapshot_schedules(
-        &self,
-        input: DescribeSnapshotSchedulesMessage,
-    ) -> RusotoFuture<DescribeSnapshotSchedulesOutputMessage, DescribeSnapshotSchedulesError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeSnapshotSchedulesRequest {
+    type Output = DescribeSnapshotSchedulesResponse;
+    type Error = DescribeSnapshotSchedulesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeSnapshotSchedules");
         params.put("Version", "2012-12-01");
-        DescribeSnapshotSchedulesMessageSerializer::serialize(&mut params, "", &input);
+        DescribeSnapshotSchedulesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSnapshotSchedulesError::from_response(response))
@@ -19036,7 +20950,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeSnapshotSchedulesOutputMessage::default();
+                    result = DescribeSnapshotSchedulesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19046,7 +20960,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeSnapshotSchedulesOutputMessageDeserializer::deserialize(
+                    result = DescribeSnapshotSchedulesResponseDeserializer::deserialize(
                         "DescribeSnapshotSchedulesResult",
                         &mut stack,
                     )?;
@@ -19058,19 +20972,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns the total amount of snapshot usage and provisioned storage for a user in megabytes.</p>
-    fn describe_storage(&self) -> RusotoFuture<CustomerStorageMessage, DescribeStorageError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeStorageRequest {
+    type Output = DescribeStorageResponse;
+    type Error = DescribeStorageError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeStorage");
         params.put("Version", "2012-12-01");
-
+        DescribeStorageRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -19084,7 +21006,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CustomerStorageMessage::default();
+                    result = DescribeStorageResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19094,7 +21016,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CustomerStorageMessageDeserializer::deserialize(
+                    result = DescribeStorageResponseDeserializer::deserialize(
                         "DescribeStorageResult",
                         &mut stack,
                     )?;
@@ -19106,22 +21028,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the status of one or more table restore requests made using the <a>RestoreTableFromClusterSnapshot</a> API action. If you don't specify a value for the <code>TableRestoreRequestId</code> parameter, then <code>DescribeTableRestoreStatus</code> returns the status of all table restore requests ordered by the date and time of the request in ascending order. Otherwise <code>DescribeTableRestoreStatus</code> returns the status of the table specified by <code>TableRestoreRequestId</code>.</p>
-    fn describe_table_restore_status(
-        &self,
-        input: DescribeTableRestoreStatusMessage,
-    ) -> RusotoFuture<TableRestoreStatusMessage, DescribeTableRestoreStatusError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeTableRestoreStatusRequest {
+    type Output = DescribeTableRestoreStatusResponse;
+    type Error = DescribeTableRestoreStatusError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeTableRestoreStatus");
         params.put("Version", "2012-12-01");
-        DescribeTableRestoreStatusMessageSerializer::serialize(&mut params, "", &input);
+        DescribeTableRestoreStatusRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeTableRestoreStatusError::from_response(response))
@@ -19132,7 +21059,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = TableRestoreStatusMessage::default();
+                    result = DescribeTableRestoreStatusResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19142,7 +21069,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = TableRestoreStatusMessageDeserializer::deserialize(
+                    result = DescribeTableRestoreStatusResponseDeserializer::deserialize(
                         "DescribeTableRestoreStatusResult",
                         &mut stack,
                     )?;
@@ -19154,22 +21081,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of tags. You can return tags from a specific resource by specifying an ARN, or you can return all tags for a given type of resource, such as clusters, snapshots, and so on.</p> <p>The following are limitations for <code>DescribeTags</code>: </p> <ul> <li> <p>You cannot specify an ARN and a resource-type value together in the same request.</p> </li> <li> <p>You cannot use the <code>MaxRecords</code> and <code>Marker</code> parameters together with the ARN parameter.</p> </li> <li> <p>The <code>MaxRecords</code> parameter can be a range from 10 to 50 results to return in a request.</p> </li> </ul> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all resources that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all resources that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, resources are returned regardless of whether they have tag keys or values associated with them.</p>
-    fn describe_tags(
-        &self,
-        input: DescribeTagsMessage,
-    ) -> RusotoFuture<TaggedResourceListMessage, DescribeTagsError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DescribeTagsRequest {
+    type Output = DescribeTagsResponse;
+    type Error = DescribeTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeTags");
         params.put("Version", "2012-12-01");
-        DescribeTagsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeTagsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -19183,7 +21115,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = TaggedResourceListMessage::default();
+                    result = DescribeTagsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19193,7 +21125,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = TaggedResourceListMessageDeserializer::deserialize(
+                    result = DescribeTagsResponseDeserializer::deserialize(
                         "DescribeTagsResult",
                         &mut stack,
                     )?;
@@ -19205,22 +21137,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Stops logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>
-    fn disable_logging(
-        &self,
-        input: DisableLoggingMessage,
-    ) -> RusotoFuture<LoggingStatus, DisableLoggingError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DisableLoggingRequest {
+    type Output = DisableLoggingResponse;
+    type Error = DisableLoggingError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DisableLogging");
         params.put("Version", "2012-12-01");
-        DisableLoggingMessageSerializer::serialize(&mut params, "", &input);
+        DisableLoggingRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -19234,7 +21171,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = LoggingStatus::default();
+                    result = DisableLoggingResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19244,8 +21181,10 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        LoggingStatusDeserializer::deserialize("DisableLoggingResult", &mut stack)?;
+                    result = DisableLoggingResponseDeserializer::deserialize(
+                        "DisableLoggingResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -19254,22 +21193,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Disables the automatic copying of snapshots from one region to another region for a specified cluster.</p> <p>If your cluster and its snapshots are encrypted using a customer master key (CMK) from AWS KMS, use <a>DeleteSnapshotCopyGrant</a> to delete the grant that grants Amazon Redshift permission to the CMK in the destination region. </p>
-    fn disable_snapshot_copy(
-        &self,
-        input: DisableSnapshotCopyMessage,
-    ) -> RusotoFuture<DisableSnapshotCopyResult, DisableSnapshotCopyError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for DisableSnapshotCopyRequest {
+    type Output = DisableSnapshotCopyResponse;
+    type Error = DisableSnapshotCopyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DisableSnapshotCopy");
         params.put("Version", "2012-12-01");
-        DisableSnapshotCopyMessageSerializer::serialize(&mut params, "", &input);
+        DisableSnapshotCopyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -19282,7 +21226,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DisableSnapshotCopyResult::default();
+                    result = DisableSnapshotCopyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19292,7 +21236,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DisableSnapshotCopyResultDeserializer::deserialize(
+                    result = DisableSnapshotCopyResponseDeserializer::deserialize(
                         "DisableSnapshotCopyResult",
                         &mut stack,
                     )?;
@@ -19304,22 +21248,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Starts logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>
-    fn enable_logging(
-        &self,
-        input: EnableLoggingMessage,
-    ) -> RusotoFuture<LoggingStatus, EnableLoggingError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for EnableLoggingRequest {
+    type Output = EnableLoggingResponse;
+    type Error = EnableLoggingError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "EnableLogging");
         params.put("Version", "2012-12-01");
-        EnableLoggingMessageSerializer::serialize(&mut params, "", &input);
+        EnableLoggingRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -19333,7 +21282,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = LoggingStatus::default();
+                    result = EnableLoggingResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19343,8 +21292,10 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        LoggingStatusDeserializer::deserialize("EnableLoggingResult", &mut stack)?;
+                    result = EnableLoggingResponseDeserializer::deserialize(
+                        "EnableLoggingResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -19353,22 +21304,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Enables the automatic copy of snapshots from one region to another region for a specified cluster.</p>
-    fn enable_snapshot_copy(
-        &self,
-        input: EnableSnapshotCopyMessage,
-    ) -> RusotoFuture<EnableSnapshotCopyResult, EnableSnapshotCopyError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for EnableSnapshotCopyRequest {
+    type Output = EnableSnapshotCopyResponse;
+    type Error = EnableSnapshotCopyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "EnableSnapshotCopy");
         params.put("Version", "2012-12-01");
-        EnableSnapshotCopyMessageSerializer::serialize(&mut params, "", &input);
+        EnableSnapshotCopyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -19382,7 +21338,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = EnableSnapshotCopyResult::default();
+                    result = EnableSnapshotCopyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19392,7 +21348,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = EnableSnapshotCopyResultDeserializer::deserialize(
+                    result = EnableSnapshotCopyResponseDeserializer::deserialize(
                         "EnableSnapshotCopyResult",
                         &mut stack,
                     )?;
@@ -19404,22 +21360,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a database user name and temporary password with temporary authorization to log on to an Amazon Redshift database. The action returns the database user name prefixed with <code>IAM:</code> if <code>AutoCreate</code> is <code>False</code> or <code>IAMA:</code> if <code>AutoCreate</code> is <code>True</code>. You can optionally specify one or more database user groups that the user will join at log on. By default, the temporary credentials expire in 900 seconds. You can optionally specify a duration between 900 seconds (15 minutes) and 3600 seconds (60 minutes). For more information, see <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/generating-user-credentials.html">Using IAM Authentication to Generate Database User Credentials</a> in the Amazon Redshift Cluster Management Guide.</p> <p>The AWS Identity and Access Management (IAM)user or role that executes GetClusterCredentials must have an IAM policy attached that allows access to all necessary actions and resources. For more information about permissions, see <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/redshift-iam-access-control-identity-based.html#redshift-policy-resources.getclustercredentials-resources">Resource Policies for GetClusterCredentials</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If the <code>DbGroups</code> parameter is specified, the IAM policy must allow the <code>redshift:JoinGroup</code> action with access to the listed <code>dbgroups</code>. </p> <p>In addition, if the <code>AutoCreate</code> parameter is set to <code>True</code>, then the policy must include the <code>redshift:CreateClusterUser</code> privilege.</p> <p>If the <code>DbName</code> parameter is specified, the IAM policy must allow access to the resource <code>dbname</code> for the specified database name. </p>
-    fn get_cluster_credentials(
-        &self,
-        input: GetClusterCredentialsMessage,
-    ) -> RusotoFuture<ClusterCredentials, GetClusterCredentialsError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for GetClusterCredentialsRequest {
+    type Output = GetClusterCredentialsResponse;
+    type Error = GetClusterCredentialsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetClusterCredentials");
         params.put("Version", "2012-12-01");
-        GetClusterCredentialsMessageSerializer::serialize(&mut params, "", &input);
+        GetClusterCredentialsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetClusterCredentialsError::from_response(response))
@@ -19430,7 +21391,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ClusterCredentials::default();
+                    result = GetClusterCredentialsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19440,7 +21401,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ClusterCredentialsDeserializer::deserialize(
+                    result = GetClusterCredentialsResponseDeserializer::deserialize(
                         "GetClusterCredentialsResult",
                         &mut stack,
                     )?;
@@ -19452,25 +21413,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Returns an array of DC2 ReservedNodeOfferings that matches the payment type, term, and usage price of the given DC1 reserved node.</p>
-    fn get_reserved_node_exchange_offerings(
-        &self,
-        input: GetReservedNodeExchangeOfferingsInputMessage,
-    ) -> RusotoFuture<
-        GetReservedNodeExchangeOfferingsOutputMessage,
-        GetReservedNodeExchangeOfferingsError,
-    > {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for GetReservedNodeExchangeOfferingsRequest {
+    type Output = GetReservedNodeExchangeOfferingsResponse;
+    type Error = GetReservedNodeExchangeOfferingsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetReservedNodeExchangeOfferings");
         params.put("Version", "2012-12-01");
-        GetReservedNodeExchangeOfferingsInputMessageSerializer::serialize(&mut params, "", &input);
+        GetReservedNodeExchangeOfferingsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetReservedNodeExchangeOfferingsError::from_response(
@@ -19483,7 +21446,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = GetReservedNodeExchangeOfferingsOutputMessage::default();
+                    result = GetReservedNodeExchangeOfferingsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19493,11 +21456,10 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        GetReservedNodeExchangeOfferingsOutputMessageDeserializer::deserialize(
-                            "GetReservedNodeExchangeOfferingsResult",
-                            &mut stack,
-                        )?;
+                    result = GetReservedNodeExchangeOfferingsResponseDeserializer::deserialize(
+                        "GetReservedNodeExchangeOfferingsResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -19506,22 +21468,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies the settings for a cluster. For example, you can add another security or parameter group, update the preferred maintenance window, or change the master user password. Resetting a cluster password or modifying the security groups associated with a cluster do not need a reboot. However, modifying a parameter group requires a reboot for parameters to take effect. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>You can also change node type and the number of nodes to scale up or down the cluster. When resizing a cluster, you must specify both the number of nodes and the node type even if one of the parameters does not change.</p>
-    fn modify_cluster(
-        &self,
-        input: ModifyClusterMessage,
-    ) -> RusotoFuture<ModifyClusterResult, ModifyClusterError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for ModifyClusterRequest {
+    type Output = ModifyClusterResponse;
+    type Error = ModifyClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyCluster");
         params.put("Version", "2012-12-01");
-        ModifyClusterMessageSerializer::serialize(&mut params, "", &input);
+        ModifyClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -19535,7 +21502,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyClusterResult::default();
+                    result = ModifyClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19545,7 +21512,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyClusterResultDeserializer::deserialize(
+                    result = ModifyClusterResponseDeserializer::deserialize(
                         "ModifyClusterResult",
                         &mut stack,
                     )?;
@@ -19557,22 +21524,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies the database revision of a cluster. The database revision is a unique revision of the database running in a cluster.</p>
-    fn modify_cluster_db_revision(
-        &self,
-        input: ModifyClusterDbRevisionMessage,
-    ) -> RusotoFuture<ModifyClusterDbRevisionResult, ModifyClusterDbRevisionError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for ModifyClusterDbRevisionRequest {
+    type Output = ModifyClusterDbRevisionResponse;
+    type Error = ModifyClusterDbRevisionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyClusterDbRevision");
         params.put("Version", "2012-12-01");
-        ModifyClusterDbRevisionMessageSerializer::serialize(&mut params, "", &input);
+        ModifyClusterDbRevisionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyClusterDbRevisionError::from_response(response))
@@ -19583,7 +21555,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyClusterDbRevisionResult::default();
+                    result = ModifyClusterDbRevisionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19593,7 +21565,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyClusterDbRevisionResultDeserializer::deserialize(
+                    result = ModifyClusterDbRevisionResponseDeserializer::deserialize(
                         "ModifyClusterDbRevisionResult",
                         &mut stack,
                     )?;
@@ -19605,22 +21577,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies the list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services.</p> <p>A cluster can have up to 10 IAM roles associated at any time.</p>
-    fn modify_cluster_iam_roles(
-        &self,
-        input: ModifyClusterIamRolesMessage,
-    ) -> RusotoFuture<ModifyClusterIamRolesResult, ModifyClusterIamRolesError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for ModifyClusterIamRolesRequest {
+    type Output = ModifyClusterIamRolesResponse;
+    type Error = ModifyClusterIamRolesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyClusterIamRoles");
         params.put("Version", "2012-12-01");
-        ModifyClusterIamRolesMessageSerializer::serialize(&mut params, "", &input);
+        ModifyClusterIamRolesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyClusterIamRolesError::from_response(response))
@@ -19631,7 +21608,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyClusterIamRolesResult::default();
+                    result = ModifyClusterIamRolesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19641,7 +21618,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyClusterIamRolesResultDeserializer::deserialize(
+                    result = ModifyClusterIamRolesResponseDeserializer::deserialize(
                         "ModifyClusterIamRolesResult",
                         &mut stack,
                     )?;
@@ -19653,22 +21630,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies the maintenance settings of a cluster. For example, you can defer a maintenance window. You can also update or cancel a deferment. </p>
-    fn modify_cluster_maintenance(
-        &self,
-        input: ModifyClusterMaintenanceMessage,
-    ) -> RusotoFuture<ModifyClusterMaintenanceResult, ModifyClusterMaintenanceError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for ModifyClusterMaintenanceRequest {
+    type Output = ModifyClusterMaintenanceResponse;
+    type Error = ModifyClusterMaintenanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyClusterMaintenance");
         params.put("Version", "2012-12-01");
-        ModifyClusterMaintenanceMessageSerializer::serialize(&mut params, "", &input);
+        ModifyClusterMaintenanceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyClusterMaintenanceError::from_response(response))
@@ -19679,7 +21661,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyClusterMaintenanceResult::default();
+                    result = ModifyClusterMaintenanceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19689,7 +21671,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyClusterMaintenanceResultDeserializer::deserialize(
+                    result = ModifyClusterMaintenanceResponseDeserializer::deserialize(
                         "ModifyClusterMaintenanceResult",
                         &mut stack,
                     )?;
@@ -19701,22 +21683,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies the parameters of a parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn modify_cluster_parameter_group(
-        &self,
-        input: ModifyClusterParameterGroupMessage,
-    ) -> RusotoFuture<ClusterParameterGroupNameMessage, ModifyClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for ModifyClusterParameterGroupRequest {
+    type Output = ModifyClusterParameterGroupResponse;
+    type Error = ModifyClusterParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyClusterParameterGroup");
         params.put("Version", "2012-12-01");
-        ModifyClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        ModifyClusterParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyClusterParameterGroupError::from_response(response))
@@ -19727,7 +21714,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ClusterParameterGroupNameMessage::default();
+                    result = ModifyClusterParameterGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19737,7 +21724,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ClusterParameterGroupNameMessageDeserializer::deserialize(
+                    result = ModifyClusterParameterGroupResponseDeserializer::deserialize(
                         "ModifyClusterParameterGroupResult",
                         &mut stack,
                     )?;
@@ -19749,22 +21736,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies the settings for a snapshot.</p>
-    fn modify_cluster_snapshot(
-        &self,
-        input: ModifyClusterSnapshotMessage,
-    ) -> RusotoFuture<ModifyClusterSnapshotResult, ModifyClusterSnapshotError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for ModifyClusterSnapshotRequest {
+    type Output = ModifyClusterSnapshotResponse;
+    type Error = ModifyClusterSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyClusterSnapshot");
         params.put("Version", "2012-12-01");
-        ModifyClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        ModifyClusterSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyClusterSnapshotError::from_response(response))
@@ -19775,7 +21767,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyClusterSnapshotResult::default();
+                    result = ModifyClusterSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19785,7 +21777,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyClusterSnapshotResultDeserializer::deserialize(
+                    result = ModifyClusterSnapshotResponseDeserializer::deserialize(
                         "ModifyClusterSnapshotResult",
                         &mut stack,
                     )?;
@@ -19797,47 +21789,77 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies a snapshot schedule for a cluster.</p>
-    fn modify_cluster_snapshot_schedule(
-        &self,
-        input: ModifyClusterSnapshotScheduleMessage,
-    ) -> RusotoFuture<(), ModifyClusterSnapshotScheduleError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for ModifyClusterSnapshotScheduleRequest {
+    type Output = ModifyClusterSnapshotScheduleResponse;
+    type Error = ModifyClusterSnapshotScheduleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyClusterSnapshotSchedule");
         params.put("Version", "2012-12-01");
-        ModifyClusterSnapshotScheduleMessageSerializer::serialize(&mut params, "", &input);
+        ModifyClusterSnapshotScheduleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyClusterSnapshotScheduleError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ModifyClusterSnapshotScheduleResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = ModifyClusterSnapshotScheduleResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Modifies a cluster subnet group to include the specified list of VPC subnets. The operation replaces the existing list of subnets with the new list of subnets.</p>
-    fn modify_cluster_subnet_group(
-        &self,
-        input: ModifyClusterSubnetGroupMessage,
-    ) -> RusotoFuture<ModifyClusterSubnetGroupResult, ModifyClusterSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for ModifyClusterSubnetGroupRequest {
+    type Output = ModifyClusterSubnetGroupResponse;
+    type Error = ModifyClusterSubnetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyClusterSubnetGroup");
         params.put("Version", "2012-12-01");
-        ModifyClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
+        ModifyClusterSubnetGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyClusterSubnetGroupError::from_response(response))
@@ -19848,7 +21870,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyClusterSubnetGroupResult::default();
+                    result = ModifyClusterSubnetGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19858,7 +21880,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyClusterSubnetGroupResultDeserializer::deserialize(
+                    result = ModifyClusterSubnetGroupResponseDeserializer::deserialize(
                         "ModifyClusterSubnetGroupResult",
                         &mut stack,
                     )?;
@@ -19870,22 +21892,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies an existing Amazon Redshift event notification subscription.</p>
-    fn modify_event_subscription(
-        &self,
-        input: ModifyEventSubscriptionMessage,
-    ) -> RusotoFuture<ModifyEventSubscriptionResult, ModifyEventSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for ModifyEventSubscriptionRequest {
+    type Output = ModifyEventSubscriptionResponse;
+    type Error = ModifyEventSubscriptionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyEventSubscription");
         params.put("Version", "2012-12-01");
-        ModifyEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
+        ModifyEventSubscriptionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyEventSubscriptionError::from_response(response))
@@ -19896,7 +21923,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyEventSubscriptionResult::default();
+                    result = ModifyEventSubscriptionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19906,7 +21933,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyEventSubscriptionResultDeserializer::deserialize(
+                    result = ModifyEventSubscriptionResponseDeserializer::deserialize(
                         "ModifyEventSubscriptionResult",
                         &mut stack,
                     )?;
@@ -19918,23 +21945,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies the number of days to retain snapshots in the destination AWS Region after they are copied from the source AWS Region. By default, this operation only changes the retention period of copied automated snapshots. The retention periods for both new and existing copied automated snapshots are updated with the new retention period. You can set the manual option to change only the retention periods of copied manual snapshots. If you set this option, only newly copied manual snapshots have the new retention period. </p>
-    fn modify_snapshot_copy_retention_period(
-        &self,
-        input: ModifySnapshotCopyRetentionPeriodMessage,
-    ) -> RusotoFuture<ModifySnapshotCopyRetentionPeriodResult, ModifySnapshotCopyRetentionPeriodError>
-    {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for ModifySnapshotCopyRetentionPeriodRequest {
+    type Output = ModifySnapshotCopyRetentionPeriodResponse;
+    type Error = ModifySnapshotCopyRetentionPeriodError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifySnapshotCopyRetentionPeriod");
         params.put("Version", "2012-12-01");
-        ModifySnapshotCopyRetentionPeriodMessageSerializer::serialize(&mut params, "", &input);
+        ModifySnapshotCopyRetentionPeriodRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifySnapshotCopyRetentionPeriodError::from_response(
@@ -19947,7 +21978,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifySnapshotCopyRetentionPeriodResult::default();
+                    result = ModifySnapshotCopyRetentionPeriodResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19957,7 +21988,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifySnapshotCopyRetentionPeriodResultDeserializer::deserialize(
+                    result = ModifySnapshotCopyRetentionPeriodResponseDeserializer::deserialize(
                         "ModifySnapshotCopyRetentionPeriodResult",
                         &mut stack,
                     )?;
@@ -19969,22 +22000,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies a snapshot schedule. Any schedule associated with a cluster is modified asynchronously.</p>
-    fn modify_snapshot_schedule(
-        &self,
-        input: ModifySnapshotScheduleMessage,
-    ) -> RusotoFuture<SnapshotSchedule, ModifySnapshotScheduleError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for ModifySnapshotScheduleRequest {
+    type Output = ModifySnapshotScheduleResponse;
+    type Error = ModifySnapshotScheduleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifySnapshotSchedule");
         params.put("Version", "2012-12-01");
-        ModifySnapshotScheduleMessageSerializer::serialize(&mut params, "", &input);
+        ModifySnapshotScheduleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifySnapshotScheduleError::from_response(response))
@@ -19995,7 +22031,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = SnapshotSchedule::default();
+                    result = ModifySnapshotScheduleResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20005,7 +22041,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = SnapshotScheduleDeserializer::deserialize(
+                    result = ModifySnapshotScheduleResponseDeserializer::deserialize(
                         "ModifySnapshotScheduleResult",
                         &mut stack,
                     )?;
@@ -20017,22 +22053,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Allows you to purchase reserved nodes. Amazon Redshift offers a predefined set of reserved node offerings. You can purchase one or more of the offerings. You can call the <a>DescribeReservedNodeOfferings</a> API to obtain the available reserved node offerings. You can call this API by providing a specific reserved node offering and the number of nodes you want to reserve. </p> <p> For more information about reserved node offerings, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn purchase_reserved_node_offering(
-        &self,
-        input: PurchaseReservedNodeOfferingMessage,
-    ) -> RusotoFuture<PurchaseReservedNodeOfferingResult, PurchaseReservedNodeOfferingError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for PurchaseReservedNodeOfferingRequest {
+    type Output = PurchaseReservedNodeOfferingResponse;
+    type Error = PurchaseReservedNodeOfferingError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PurchaseReservedNodeOffering");
         params.put("Version", "2012-12-01");
-        PurchaseReservedNodeOfferingMessageSerializer::serialize(&mut params, "", &input);
+        PurchaseReservedNodeOfferingRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PurchaseReservedNodeOfferingError::from_response(response))
@@ -20043,7 +22084,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = PurchaseReservedNodeOfferingResult::default();
+                    result = PurchaseReservedNodeOfferingResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20053,7 +22094,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = PurchaseReservedNodeOfferingResultDeserializer::deserialize(
+                    result = PurchaseReservedNodeOfferingResponseDeserializer::deserialize(
                         "PurchaseReservedNodeOfferingResult",
                         &mut stack,
                     )?;
@@ -20065,22 +22106,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Reboots a cluster. This action is taken as soon as possible. It results in a momentary outage to the cluster, during which the cluster status is set to <code>rebooting</code>. A cluster event is created when the reboot is completed. Any pending cluster modifications (see <a>ModifyCluster</a>) are applied at this reboot. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
-    fn reboot_cluster(
-        &self,
-        input: RebootClusterMessage,
-    ) -> RusotoFuture<RebootClusterResult, RebootClusterError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for RebootClusterRequest {
+    type Output = RebootClusterResponse;
+    type Error = RebootClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RebootCluster");
         params.put("Version", "2012-12-01");
-        RebootClusterMessageSerializer::serialize(&mut params, "", &input);
+        RebootClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20094,7 +22140,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RebootClusterResult::default();
+                    result = RebootClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20104,7 +22150,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RebootClusterResultDeserializer::deserialize(
+                    result = RebootClusterResponseDeserializer::deserialize(
                         "RebootClusterResult",
                         &mut stack,
                     )?;
@@ -20116,22 +22162,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Sets one or more parameters of the specified parameter group to their default values and sets the source values of the parameters to "engine-default". To reset the entire parameter group specify the <i>ResetAllParameters</i> parameter. For parameter changes to take effect you must reboot any associated clusters. </p>
-    fn reset_cluster_parameter_group(
-        &self,
-        input: ResetClusterParameterGroupMessage,
-    ) -> RusotoFuture<ClusterParameterGroupNameMessage, ResetClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for ResetClusterParameterGroupRequest {
+    type Output = ResetClusterParameterGroupResponse;
+    type Error = ResetClusterParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ResetClusterParameterGroup");
         params.put("Version", "2012-12-01");
-        ResetClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        ResetClusterParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ResetClusterParameterGroupError::from_response(response))
@@ -20142,7 +22193,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ClusterParameterGroupNameMessage::default();
+                    result = ResetClusterParameterGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20152,7 +22203,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ClusterParameterGroupNameMessageDeserializer::deserialize(
+                    result = ResetClusterParameterGroupResponseDeserializer::deserialize(
                         "ResetClusterParameterGroupResult",
                         &mut stack,
                     )?;
@@ -20164,22 +22215,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p><p>Changes the size of the cluster. You can change the cluster&#39;s type, or change the number or type of nodes. The default behavior is to use the elastic resize method. With an elastic resize, your cluster is available for read and write operations more quickly than with the classic resize method. </p> <p>Elastic resize operations have the following restrictions:</p> <ul> <li> <p>You can only resize clusters of the following types:</p> <ul> <li> <p>dc2.large</p> </li> <li> <p>dc2.8xlarge</p> </li> <li> <p>ds2.xlarge</p> </li> <li> <p>ds2.8xlarge</p> </li> </ul> </li> <li> <p>The type of nodes that you add must match the node type for the cluster.</p> </li> </ul></p>
-    fn resize_cluster(
-        &self,
-        input: ResizeClusterMessage,
-    ) -> RusotoFuture<ResizeClusterResult, ResizeClusterError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for ResizeClusterRequest {
+    type Output = ResizeClusterResponse;
+    type Error = ResizeClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ResizeCluster");
         params.put("Version", "2012-12-01");
-        ResizeClusterMessageSerializer::serialize(&mut params, "", &input);
+        ResizeClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20193,7 +22249,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ResizeClusterResult::default();
+                    result = ResizeClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20203,7 +22259,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ResizeClusterResultDeserializer::deserialize(
+                    result = ResizeClusterResponseDeserializer::deserialize(
                         "ResizeClusterResult",
                         &mut stack,
                     )?;
@@ -20215,22 +22271,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new cluster from a snapshot. By default, Amazon Redshift creates the resulting cluster with the same configuration as the original cluster from which the snapshot was created, except that the new cluster is created with the default cluster security and parameter groups. After Amazon Redshift creates the cluster, you can use the <a>ModifyCluster</a> API to associate a different security group and different parameter group with the restored cluster. If you are using a DS node type, you can also choose to change to another DS node type of the same size during restore.</p> <p>If you restore a cluster into a VPC, you must provide a cluster subnet group where you want the cluster restored.</p> <p> For more information about working with snapshots, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn restore_from_cluster_snapshot(
-        &self,
-        input: RestoreFromClusterSnapshotMessage,
-    ) -> RusotoFuture<RestoreFromClusterSnapshotResult, RestoreFromClusterSnapshotError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for RestoreFromClusterSnapshotRequest {
+    type Output = RestoreFromClusterSnapshotResponse;
+    type Error = RestoreFromClusterSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RestoreFromClusterSnapshot");
         params.put("Version", "2012-12-01");
-        RestoreFromClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        RestoreFromClusterSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RestoreFromClusterSnapshotError::from_response(response))
@@ -20241,7 +22302,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RestoreFromClusterSnapshotResult::default();
+                    result = RestoreFromClusterSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20251,7 +22312,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RestoreFromClusterSnapshotResultDeserializer::deserialize(
+                    result = RestoreFromClusterSnapshotResponseDeserializer::deserialize(
                         "RestoreFromClusterSnapshotResult",
                         &mut stack,
                     )?;
@@ -20263,23 +22324,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new table from a table in an Amazon Redshift cluster snapshot. You must create the new table within the Amazon Redshift cluster that the snapshot was taken from.</p> <p>You cannot use <code>RestoreTableFromClusterSnapshot</code> to restore a table with the same name as an existing table in an Amazon Redshift cluster. That is, you cannot overwrite an existing table in a cluster with a restored table. If you want to replace your original table with a new, restored table, then rename or drop your original table before you call <code>RestoreTableFromClusterSnapshot</code>. When you have renamed your original table, then you can pass the original name of the table as the <code>NewTableName</code> parameter value in the call to <code>RestoreTableFromClusterSnapshot</code>. This way, you can replace the original table with the table created from the snapshot.</p>
-    fn restore_table_from_cluster_snapshot(
-        &self,
-        input: RestoreTableFromClusterSnapshotMessage,
-    ) -> RusotoFuture<RestoreTableFromClusterSnapshotResult, RestoreTableFromClusterSnapshotError>
-    {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for RestoreTableFromClusterSnapshotRequest {
+    type Output = RestoreTableFromClusterSnapshotResponse;
+    type Error = RestoreTableFromClusterSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RestoreTableFromClusterSnapshot");
         params.put("Version", "2012-12-01");
-        RestoreTableFromClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        RestoreTableFromClusterSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RestoreTableFromClusterSnapshotError::from_response(
@@ -20292,7 +22357,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RestoreTableFromClusterSnapshotResult::default();
+                    result = RestoreTableFromClusterSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20302,7 +22367,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RestoreTableFromClusterSnapshotResultDeserializer::deserialize(
+                    result = RestoreTableFromClusterSnapshotResponseDeserializer::deserialize(
                         "RestoreTableFromClusterSnapshotResult",
                         &mut stack,
                     )?;
@@ -20314,23 +22379,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Revokes an ingress rule in an Amazon Redshift security group for a previously authorized IP range or Amazon EC2 security group. To add an ingress rule, see <a>AuthorizeClusterSecurityGroupIngress</a>. For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
-    fn revoke_cluster_security_group_ingress(
-        &self,
-        input: RevokeClusterSecurityGroupIngressMessage,
-    ) -> RusotoFuture<RevokeClusterSecurityGroupIngressResult, RevokeClusterSecurityGroupIngressError>
-    {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for RevokeClusterSecurityGroupIngressRequest {
+    type Output = RevokeClusterSecurityGroupIngressResponse;
+    type Error = RevokeClusterSecurityGroupIngressError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RevokeClusterSecurityGroupIngress");
         params.put("Version", "2012-12-01");
-        RevokeClusterSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
+        RevokeClusterSecurityGroupIngressRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RevokeClusterSecurityGroupIngressError::from_response(
@@ -20343,7 +22412,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RevokeClusterSecurityGroupIngressResult::default();
+                    result = RevokeClusterSecurityGroupIngressResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20353,7 +22422,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RevokeClusterSecurityGroupIngressResultDeserializer::deserialize(
+                    result = RevokeClusterSecurityGroupIngressResponseDeserializer::deserialize(
                         "RevokeClusterSecurityGroupIngressResult",
                         &mut stack,
                     )?;
@@ -20365,22 +22434,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Removes the ability of the specified AWS customer account to restore the specified snapshot. If the account is currently restoring the snapshot, the restore will run to completion.</p> <p> For more information about working with snapshots, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    fn revoke_snapshot_access(
-        &self,
-        input: RevokeSnapshotAccessMessage,
-    ) -> RusotoFuture<RevokeSnapshotAccessResult, RevokeSnapshotAccessError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for RevokeSnapshotAccessRequest {
+    type Output = RevokeSnapshotAccessResponse;
+    type Error = RevokeSnapshotAccessError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RevokeSnapshotAccess");
         params.put("Version", "2012-12-01");
-        RevokeSnapshotAccessMessageSerializer::serialize(&mut params, "", &input);
+        RevokeSnapshotAccessRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -20393,7 +22467,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RevokeSnapshotAccessResult::default();
+                    result = RevokeSnapshotAccessResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20403,7 +22477,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RevokeSnapshotAccessResultDeserializer::deserialize(
+                    result = RevokeSnapshotAccessResponseDeserializer::deserialize(
                         "RevokeSnapshotAccessResult",
                         &mut stack,
                     )?;
@@ -20415,22 +22489,27 @@ impl Redshift for RedshiftClient {
             }))
         })
     }
+}
 
-    /// <p>Rotates the encryption keys for a cluster.</p>
-    fn rotate_encryption_key(
-        &self,
-        input: RotateEncryptionKeyMessage,
-    ) -> RusotoFuture<RotateEncryptionKeyResult, RotateEncryptionKeyError> {
-        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+impl ServiceRequest for RotateEncryptionKeyRequest {
+    type Output = RotateEncryptionKeyResponse;
+    type Error = RotateEncryptionKeyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "redshift", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RotateEncryptionKey");
         params.put("Version", "2012-12-01");
-        RotateEncryptionKeyMessageSerializer::serialize(&mut params, "", &input);
+        RotateEncryptionKeyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -20443,7 +22522,7 @@ impl Redshift for RedshiftClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RotateEncryptionKeyResult::default();
+                    result = RotateEncryptionKeyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20453,7 +22532,7 @@ impl Redshift for RedshiftClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RotateEncryptionKeyResultDeserializer::deserialize(
+                    result = RotateEncryptionKeyResponseDeserializer::deserialize(
                         "RotateEncryptionKeyResult",
                         &mut stack,
                     )?;
@@ -20485,7 +22564,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = AuthorizeClusterSecurityGroupIngressMessage::default();
+        let request = AuthorizeClusterSecurityGroupIngressRequest::default();
         let result = client
             .authorize_cluster_security_group_ingress(request)
             .sync();
@@ -20501,7 +22580,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = CopyClusterSnapshotMessage::default();
+        let request = CopyClusterSnapshotRequest::default();
         let result = client.copy_cluster_snapshot(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20515,7 +22594,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = CreateClusterParameterGroupMessage::default();
+        let request = CreateClusterParameterGroupRequest::default();
         let result = client.create_cluster_parameter_group(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20529,7 +22608,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = CreateClusterSecurityGroupMessage::default();
+        let request = CreateClusterSecurityGroupRequest::default();
         let result = client.create_cluster_security_group(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20543,7 +22622,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = CreateClusterSnapshotMessage::default();
+        let request = CreateClusterSnapshotRequest::default();
         let result = client.create_cluster_snapshot(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20557,7 +22636,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = CreateClusterSubnetGroupMessage::default();
+        let request = CreateClusterSubnetGroupRequest::default();
         let result = client.create_cluster_subnet_group(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20571,7 +22650,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = CreateClusterMessage::default();
+        let request = CreateClusterRequest::default();
         let result = client.create_cluster(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20585,7 +22664,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DeleteClusterParameterGroupMessage::default();
+        let request = DeleteClusterParameterGroupRequest::default();
         let result = client.delete_cluster_parameter_group(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20599,7 +22678,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DeleteClusterSnapshotMessage::default();
+        let request = DeleteClusterSnapshotRequest::default();
         let result = client.delete_cluster_snapshot(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20613,7 +22692,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DeleteClusterMessage::default();
+        let request = DeleteClusterRequest::default();
         let result = client.delete_cluster(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20627,7 +22706,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeClusterParameterGroupsMessage::default();
+        let request = DescribeClusterParameterGroupsRequest::default();
         let result = client.describe_cluster_parameter_groups(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20641,7 +22720,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeClusterParametersMessage::default();
+        let request = DescribeClusterParametersRequest::default();
         let result = client.describe_cluster_parameters(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20655,7 +22734,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeClusterSecurityGroupsMessage::default();
+        let request = DescribeClusterSecurityGroupsRequest::default();
         let result = client.describe_cluster_security_groups(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20669,7 +22748,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeClusterSnapshotsMessage::default();
+        let request = DescribeClusterSnapshotsRequest::default();
         let result = client.describe_cluster_snapshots(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20683,7 +22762,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeClusterSubnetGroupsMessage::default();
+        let request = DescribeClusterSubnetGroupsRequest::default();
         let result = client.describe_cluster_subnet_groups(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20697,7 +22776,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeClusterVersionsMessage::default();
+        let request = DescribeClusterVersionsRequest::default();
         let result = client.describe_cluster_versions(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20711,7 +22790,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeClustersMessage::default();
+        let request = DescribeClustersRequest::default();
         let result = client.describe_clusters(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20725,7 +22804,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeEventsMessage::default();
+        let request = DescribeEventsRequest::default();
         let result = client.describe_events(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20739,7 +22818,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeOrderableClusterOptionsMessage::default();
+        let request = DescribeOrderableClusterOptionsRequest::default();
         let result = client.describe_orderable_cluster_options(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20753,7 +22832,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeReservedNodeOfferingsMessage::default();
+        let request = DescribeReservedNodeOfferingsRequest::default();
         let result = client.describe_reserved_node_offerings(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20767,7 +22846,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeReservedNodesMessage::default();
+        let request = DescribeReservedNodesRequest::default();
         let result = client.describe_reserved_nodes(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20781,7 +22860,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeResizeMessage::default();
+        let request = DescribeResizeRequest::default();
         let result = client.describe_resize(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20795,7 +22874,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ModifyClusterParameterGroupMessage::default();
+        let request = ModifyClusterParameterGroupRequest::default();
         let result = client.modify_cluster_parameter_group(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20809,7 +22888,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = PurchaseReservedNodeOfferingMessage::default();
+        let request = PurchaseReservedNodeOfferingRequest::default();
         let result = client.purchase_reserved_node_offering(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20823,7 +22902,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = RebootClusterMessage::default();
+        let request = RebootClusterRequest::default();
         let result = client.reboot_cluster(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20837,7 +22916,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ResetClusterParameterGroupMessage::default();
+        let request = ResetClusterParameterGroupRequest::default();
         let result = client.reset_cluster_parameter_group(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20851,7 +22930,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = RestoreFromClusterSnapshotMessage::default();
+        let request = RestoreFromClusterSnapshotRequest::default();
         let result = client.restore_from_cluster_snapshot(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -20865,7 +22944,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             RedshiftClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = RevokeClusterSecurityGroupIngressMessage::default();
+        let request = RevokeClusterSecurityGroupIngressRequest::default();
         let result = client.revoke_cluster_security_group_ingress(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }

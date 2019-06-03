@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -2369,127 +2370,104 @@ impl Error for UpdateSubnetGroupError {
 /// Trait representing the capabilities of the Amazon DAX API. Amazon DAX clients implement this trait.
 pub trait DynamodbAccelerator {
     /// <p>Creates a DAX cluster. All nodes in the cluster run the same DAX caching software.</p>
-    fn create_cluster(
-        &self,
-        input: CreateClusterRequest,
-    ) -> RusotoFuture<CreateClusterResponse, CreateClusterError>;
+    fn create_cluster(&self, input: CreateClusterRequest) -> Request<CreateClusterRequest>;
 
     /// <p>Creates a new parameter group. A parameter group is a collection of parameters that you apply to all of the nodes in a DAX cluster.</p>
     fn create_parameter_group(
         &self,
         input: CreateParameterGroupRequest,
-    ) -> RusotoFuture<CreateParameterGroupResponse, CreateParameterGroupError>;
+    ) -> Request<CreateParameterGroupRequest>;
 
     /// <p>Creates a new subnet group.</p>
     fn create_subnet_group(
         &self,
         input: CreateSubnetGroupRequest,
-    ) -> RusotoFuture<CreateSubnetGroupResponse, CreateSubnetGroupError>;
+    ) -> Request<CreateSubnetGroupRequest>;
 
     /// <p><p>Removes one or more nodes from a DAX cluster.</p> <note> <p>You cannot use <code>DecreaseReplicationFactor</code> to remove the last node in a DAX cluster. If you need to do this, use <code>DeleteCluster</code> instead.</p> </note></p>
     fn decrease_replication_factor(
         &self,
         input: DecreaseReplicationFactorRequest,
-    ) -> RusotoFuture<DecreaseReplicationFactorResponse, DecreaseReplicationFactorError>;
+    ) -> Request<DecreaseReplicationFactorRequest>;
 
     /// <p>Deletes a previously provisioned DAX cluster. <i>DeleteCluster</i> deletes all associated nodes, node endpoints and the DAX cluster itself. When you receive a successful response from this action, DAX immediately begins deleting the cluster; you cannot cancel or revert this action.</p>
-    fn delete_cluster(
-        &self,
-        input: DeleteClusterRequest,
-    ) -> RusotoFuture<DeleteClusterResponse, DeleteClusterError>;
+    fn delete_cluster(&self, input: DeleteClusterRequest) -> Request<DeleteClusterRequest>;
 
     /// <p>Deletes the specified parameter group. You cannot delete a parameter group if it is associated with any DAX clusters.</p>
     fn delete_parameter_group(
         &self,
         input: DeleteParameterGroupRequest,
-    ) -> RusotoFuture<DeleteParameterGroupResponse, DeleteParameterGroupError>;
+    ) -> Request<DeleteParameterGroupRequest>;
 
     /// <p><p>Deletes a subnet group.</p> <note> <p>You cannot delete a subnet group if it is associated with any DAX clusters.</p> </note></p>
     fn delete_subnet_group(
         &self,
         input: DeleteSubnetGroupRequest,
-    ) -> RusotoFuture<DeleteSubnetGroupResponse, DeleteSubnetGroupError>;
+    ) -> Request<DeleteSubnetGroupRequest>;
 
     /// <p>Returns information about all provisioned DAX clusters if no cluster identifier is specified, or about a specific DAX cluster if a cluster identifier is supplied.</p> <p>If the cluster is in the CREATING state, only cluster level information will be displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the DELETING state, only cluster level information will be displayed.</p> <p>If nodes are currently being added to the DAX cluster, node endpoint information and creation time for the additional nodes will not be displayed until they are completely provisioned. When the DAX cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If nodes are currently being removed from the DAX cluster, no endpoint information for the removed nodes is displayed.</p>
-    fn describe_clusters(
-        &self,
-        input: DescribeClustersRequest,
-    ) -> RusotoFuture<DescribeClustersResponse, DescribeClustersError>;
+    fn describe_clusters(&self, input: DescribeClustersRequest)
+        -> Request<DescribeClustersRequest>;
 
     /// <p>Returns the default system parameter information for the DAX caching software.</p>
     fn describe_default_parameters(
         &self,
         input: DescribeDefaultParametersRequest,
-    ) -> RusotoFuture<DescribeDefaultParametersResponse, DescribeDefaultParametersError>;
+    ) -> Request<DescribeDefaultParametersRequest>;
 
     /// <p>Returns events related to DAX clusters and parameter groups. You can obtain events specific to a particular DAX cluster or parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
-    fn describe_events(
-        &self,
-        input: DescribeEventsRequest,
-    ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError>;
+    fn describe_events(&self, input: DescribeEventsRequest) -> Request<DescribeEventsRequest>;
 
     /// <p>Returns a list of parameter group descriptions. If a parameter group name is specified, the list will contain only the descriptions for that group.</p>
     fn describe_parameter_groups(
         &self,
         input: DescribeParameterGroupsRequest,
-    ) -> RusotoFuture<DescribeParameterGroupsResponse, DescribeParameterGroupsError>;
+    ) -> Request<DescribeParameterGroupsRequest>;
 
     /// <p>Returns the detailed parameter list for a particular parameter group.</p>
     fn describe_parameters(
         &self,
         input: DescribeParametersRequest,
-    ) -> RusotoFuture<DescribeParametersResponse, DescribeParametersError>;
+    ) -> Request<DescribeParametersRequest>;
 
     /// <p>Returns a list of subnet group descriptions. If a subnet group name is specified, the list will contain only the description of that group.</p>
     fn describe_subnet_groups(
         &self,
         input: DescribeSubnetGroupsRequest,
-    ) -> RusotoFuture<DescribeSubnetGroupsResponse, DescribeSubnetGroupsError>;
+    ) -> Request<DescribeSubnetGroupsRequest>;
 
     /// <p>Adds one or more nodes to a DAX cluster.</p>
     fn increase_replication_factor(
         &self,
         input: IncreaseReplicationFactorRequest,
-    ) -> RusotoFuture<IncreaseReplicationFactorResponse, IncreaseReplicationFactorError>;
+    ) -> Request<IncreaseReplicationFactorRequest>;
 
     /// <p>List all of the tags for a DAX cluster. You can call <code>ListTags</code> up to 10 times per second, per account.</p>
-    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
+    fn list_tags(&self, input: ListTagsRequest) -> Request<ListTagsRequest>;
 
     /// <p>Reboots a single node of a DAX cluster. The reboot action takes place as soon as possible. During the reboot, the node status is set to REBOOTING.</p>
-    fn reboot_node(
-        &self,
-        input: RebootNodeRequest,
-    ) -> RusotoFuture<RebootNodeResponse, RebootNodeError>;
+    fn reboot_node(&self, input: RebootNodeRequest) -> Request<RebootNodeRequest>;
 
     /// <p>Associates a set of tags with a DAX resource. You can call <code>TagResource</code> up to 5 times per second, per account. </p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Removes the association of tags from a DAX resource. You can call <code>UntagResource</code> up to 5 times per second, per account. </p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Modifies the settings for a DAX cluster. You can use this action to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>
-    fn update_cluster(
-        &self,
-        input: UpdateClusterRequest,
-    ) -> RusotoFuture<UpdateClusterResponse, UpdateClusterError>;
+    fn update_cluster(&self, input: UpdateClusterRequest) -> Request<UpdateClusterRequest>;
 
     /// <p>Modifies the parameters of a parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>
     fn update_parameter_group(
         &self,
         input: UpdateParameterGroupRequest,
-    ) -> RusotoFuture<UpdateParameterGroupResponse, UpdateParameterGroupError>;
+    ) -> Request<UpdateParameterGroupRequest>;
 
     /// <p>Modifies an existing subnet group.</p>
     fn update_subnet_group(
         &self,
         input: UpdateSubnetGroupRequest,
-    ) -> RusotoFuture<UpdateSubnetGroupResponse, UpdateSubnetGroupError>;
+    ) -> Request<UpdateSubnetGroupRequest>;
 }
 /// A client for the Amazon DAX API.
 #[derive(Clone)]
@@ -2529,18 +2507,167 @@ impl DynamodbAcceleratorClient {
 
 impl DynamodbAccelerator for DynamodbAcceleratorClient {
     /// <p>Creates a DAX cluster. All nodes in the cluster run the same DAX caching software.</p>
-    fn create_cluster(
+    fn create_cluster(&self, input: CreateClusterRequest) -> Request<CreateClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new parameter group. A parameter group is a collection of parameters that you apply to all of the nodes in a DAX cluster.</p>
+    fn create_parameter_group(
         &self,
-        input: CreateClusterRequest,
-    ) -> RusotoFuture<CreateClusterResponse, CreateClusterError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        input: CreateParameterGroupRequest,
+    ) -> Request<CreateParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new subnet group.</p>
+    fn create_subnet_group(
+        &self,
+        input: CreateSubnetGroupRequest,
+    ) -> Request<CreateSubnetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Removes one or more nodes from a DAX cluster.</p> <note> <p>You cannot use <code>DecreaseReplicationFactor</code> to remove the last node in a DAX cluster. If you need to do this, use <code>DeleteCluster</code> instead.</p> </note></p>
+    fn decrease_replication_factor(
+        &self,
+        input: DecreaseReplicationFactorRequest,
+    ) -> Request<DecreaseReplicationFactorRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a previously provisioned DAX cluster. <i>DeleteCluster</i> deletes all associated nodes, node endpoints and the DAX cluster itself. When you receive a successful response from this action, DAX immediately begins deleting the cluster; you cannot cancel or revert this action.</p>
+    fn delete_cluster(&self, input: DeleteClusterRequest) -> Request<DeleteClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified parameter group. You cannot delete a parameter group if it is associated with any DAX clusters.</p>
+    fn delete_parameter_group(
+        &self,
+        input: DeleteParameterGroupRequest,
+    ) -> Request<DeleteParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a subnet group.</p> <note> <p>You cannot delete a subnet group if it is associated with any DAX clusters.</p> </note></p>
+    fn delete_subnet_group(
+        &self,
+        input: DeleteSubnetGroupRequest,
+    ) -> Request<DeleteSubnetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about all provisioned DAX clusters if no cluster identifier is specified, or about a specific DAX cluster if a cluster identifier is supplied.</p> <p>If the cluster is in the CREATING state, only cluster level information will be displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the DELETING state, only cluster level information will be displayed.</p> <p>If nodes are currently being added to the DAX cluster, node endpoint information and creation time for the additional nodes will not be displayed until they are completely provisioned. When the DAX cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If nodes are currently being removed from the DAX cluster, no endpoint information for the removed nodes is displayed.</p>
+    fn describe_clusters(
+        &self,
+        input: DescribeClustersRequest,
+    ) -> Request<DescribeClustersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the default system parameter information for the DAX caching software.</p>
+    fn describe_default_parameters(
+        &self,
+        input: DescribeDefaultParametersRequest,
+    ) -> Request<DescribeDefaultParametersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns events related to DAX clusters and parameter groups. You can obtain events specific to a particular DAX cluster or parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
+    fn describe_events(&self, input: DescribeEventsRequest) -> Request<DescribeEventsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of parameter group descriptions. If a parameter group name is specified, the list will contain only the descriptions for that group.</p>
+    fn describe_parameter_groups(
+        &self,
+        input: DescribeParameterGroupsRequest,
+    ) -> Request<DescribeParameterGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the detailed parameter list for a particular parameter group.</p>
+    fn describe_parameters(
+        &self,
+        input: DescribeParametersRequest,
+    ) -> Request<DescribeParametersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of subnet group descriptions. If a subnet group name is specified, the list will contain only the description of that group.</p>
+    fn describe_subnet_groups(
+        &self,
+        input: DescribeSubnetGroupsRequest,
+    ) -> Request<DescribeSubnetGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds one or more nodes to a DAX cluster.</p>
+    fn increase_replication_factor(
+        &self,
+        input: IncreaseReplicationFactorRequest,
+    ) -> Request<IncreaseReplicationFactorRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>List all of the tags for a DAX cluster. You can call <code>ListTags</code> up to 10 times per second, per account.</p>
+    fn list_tags(&self, input: ListTagsRequest) -> Request<ListTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Reboots a single node of a DAX cluster. The reboot action takes place as soon as possible. During the reboot, the node status is set to REBOOTING.</p>
+    fn reboot_node(&self, input: RebootNodeRequest) -> Request<RebootNodeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Associates a set of tags with a DAX resource. You can call <code>TagResource</code> up to 5 times per second, per account. </p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the association of tags from a DAX resource. You can call <code>UntagResource</code> up to 5 times per second, per account. </p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the settings for a DAX cluster. You can use this action to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>
+    fn update_cluster(&self, input: UpdateClusterRequest) -> Request<UpdateClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the parameters of a parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>
+    fn update_parameter_group(
+        &self,
+        input: UpdateParameterGroupRequest,
+    ) -> Request<UpdateParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies an existing subnet group.</p>
+    fn update_subnet_group(
+        &self,
+        input: UpdateSubnetGroupRequest,
+    ) -> Request<UpdateSubnetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CreateClusterRequest {
+    type Output = CreateClusterResponse;
+    type Error = CreateClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.CreateCluster");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2556,20 +2683,25 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new parameter group. A parameter group is a collection of parameters that you apply to all of the nodes in a DAX cluster.</p>
-    fn create_parameter_group(
-        &self,
-        input: CreateParameterGroupRequest,
-    ) -> RusotoFuture<CreateParameterGroupResponse, CreateParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+impl ServiceRequest for CreateParameterGroupRequest {
+    type Output = CreateParameterGroupResponse;
+    type Error = CreateParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.CreateParameterGroup");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2584,20 +2716,25 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new subnet group.</p>
-    fn create_subnet_group(
-        &self,
-        input: CreateSubnetGroupRequest,
-    ) -> RusotoFuture<CreateSubnetGroupResponse, CreateSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+impl ServiceRequest for CreateSubnetGroupRequest {
+    type Output = CreateSubnetGroupResponse;
+    type Error = CreateSubnetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.CreateSubnetGroup");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2613,20 +2750,25 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             }
         })
     }
+}
 
-    /// <p><p>Removes one or more nodes from a DAX cluster.</p> <note> <p>You cannot use <code>DecreaseReplicationFactor</code> to remove the last node in a DAX cluster. If you need to do this, use <code>DeleteCluster</code> instead.</p> </note></p>
-    fn decrease_replication_factor(
-        &self,
-        input: DecreaseReplicationFactorRequest,
-    ) -> RusotoFuture<DecreaseReplicationFactorResponse, DecreaseReplicationFactorError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+impl ServiceRequest for DecreaseReplicationFactorRequest {
+    type Output = DecreaseReplicationFactorResponse;
+    type Error = DecreaseReplicationFactorError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DecreaseReplicationFactor");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2639,20 +2781,25 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a previously provisioned DAX cluster. <i>DeleteCluster</i> deletes all associated nodes, node endpoints and the DAX cluster itself. When you receive a successful response from this action, DAX immediately begins deleting the cluster; you cannot cancel or revert this action.</p>
-    fn delete_cluster(
-        &self,
-        input: DeleteClusterRequest,
-    ) -> RusotoFuture<DeleteClusterResponse, DeleteClusterError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+impl ServiceRequest for DeleteClusterRequest {
+    type Output = DeleteClusterResponse;
+    type Error = DeleteClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DeleteCluster");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2668,20 +2815,25 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified parameter group. You cannot delete a parameter group if it is associated with any DAX clusters.</p>
-    fn delete_parameter_group(
-        &self,
-        input: DeleteParameterGroupRequest,
-    ) -> RusotoFuture<DeleteParameterGroupResponse, DeleteParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+impl ServiceRequest for DeleteParameterGroupRequest {
+    type Output = DeleteParameterGroupResponse;
+    type Error = DeleteParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DeleteParameterGroup");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2696,20 +2848,25 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             }
         })
     }
+}
 
-    /// <p><p>Deletes a subnet group.</p> <note> <p>You cannot delete a subnet group if it is associated with any DAX clusters.</p> </note></p>
-    fn delete_subnet_group(
-        &self,
-        input: DeleteSubnetGroupRequest,
-    ) -> RusotoFuture<DeleteSubnetGroupResponse, DeleteSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+impl ServiceRequest for DeleteSubnetGroupRequest {
+    type Output = DeleteSubnetGroupResponse;
+    type Error = DeleteSubnetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DeleteSubnetGroup");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2725,20 +2882,25 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about all provisioned DAX clusters if no cluster identifier is specified, or about a specific DAX cluster if a cluster identifier is supplied.</p> <p>If the cluster is in the CREATING state, only cluster level information will be displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the DELETING state, only cluster level information will be displayed.</p> <p>If nodes are currently being added to the DAX cluster, node endpoint information and creation time for the additional nodes will not be displayed until they are completely provisioned. When the DAX cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If nodes are currently being removed from the DAX cluster, no endpoint information for the removed nodes is displayed.</p>
-    fn describe_clusters(
-        &self,
-        input: DescribeClustersRequest,
-    ) -> RusotoFuture<DescribeClustersResponse, DescribeClustersError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+impl ServiceRequest for DescribeClustersRequest {
+    type Output = DescribeClustersResponse;
+    type Error = DescribeClustersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DescribeClusters");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2754,20 +2916,25 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             }
         })
     }
+}
 
-    /// <p>Returns the default system parameter information for the DAX caching software.</p>
-    fn describe_default_parameters(
-        &self,
-        input: DescribeDefaultParametersRequest,
-    ) -> RusotoFuture<DescribeDefaultParametersResponse, DescribeDefaultParametersError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+impl ServiceRequest for DescribeDefaultParametersRequest {
+    type Output = DescribeDefaultParametersResponse;
+    type Error = DescribeDefaultParametersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DescribeDefaultParameters");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2780,20 +2947,25 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             }
         })
     }
+}
 
-    /// <p>Returns events related to DAX clusters and parameter groups. You can obtain events specific to a particular DAX cluster or parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
-    fn describe_events(
-        &self,
-        input: DescribeEventsRequest,
-    ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+impl ServiceRequest for DescribeEventsRequest {
+    type Output = DescribeEventsResponse;
+    type Error = DescribeEventsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DescribeEvents");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2809,20 +2981,25 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of parameter group descriptions. If a parameter group name is specified, the list will contain only the descriptions for that group.</p>
-    fn describe_parameter_groups(
-        &self,
-        input: DescribeParameterGroupsRequest,
-    ) -> RusotoFuture<DescribeParameterGroupsResponse, DescribeParameterGroupsError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+impl ServiceRequest for DescribeParameterGroupsRequest {
+    type Output = DescribeParameterGroupsResponse;
+    type Error = DescribeParameterGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DescribeParameterGroups");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2835,20 +3012,25 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             }
         })
     }
+}
 
-    /// <p>Returns the detailed parameter list for a particular parameter group.</p>
-    fn describe_parameters(
-        &self,
-        input: DescribeParametersRequest,
-    ) -> RusotoFuture<DescribeParametersResponse, DescribeParametersError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+impl ServiceRequest for DescribeParametersRequest {
+    type Output = DescribeParametersResponse;
+    type Error = DescribeParametersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DescribeParameters");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2864,20 +3046,25 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of subnet group descriptions. If a subnet group name is specified, the list will contain only the description of that group.</p>
-    fn describe_subnet_groups(
-        &self,
-        input: DescribeSubnetGroupsRequest,
-    ) -> RusotoFuture<DescribeSubnetGroupsResponse, DescribeSubnetGroupsError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+impl ServiceRequest for DescribeSubnetGroupsRequest {
+    type Output = DescribeSubnetGroupsResponse;
+    type Error = DescribeSubnetGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DescribeSubnetGroups");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2892,20 +3079,25 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             }
         })
     }
+}
 
-    /// <p>Adds one or more nodes to a DAX cluster.</p>
-    fn increase_replication_factor(
-        &self,
-        input: IncreaseReplicationFactorRequest,
-    ) -> RusotoFuture<IncreaseReplicationFactorResponse, IncreaseReplicationFactorError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+impl ServiceRequest for IncreaseReplicationFactorRequest {
+    type Output = IncreaseReplicationFactorResponse;
+    type Error = IncreaseReplicationFactorError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.IncreaseReplicationFactor");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2918,17 +3110,25 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             }
         })
     }
+}
 
-    /// <p>List all of the tags for a DAX cluster. You can call <code>ListTags</code> up to 10 times per second, per account.</p>
-    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+impl ServiceRequest for ListTagsRequest {
+    type Output = ListTagsResponse;
+    type Error = ListTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.ListTags");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2944,20 +3144,25 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             }
         })
     }
+}
 
-    /// <p>Reboots a single node of a DAX cluster. The reboot action takes place as soon as possible. During the reboot, the node status is set to REBOOTING.</p>
-    fn reboot_node(
-        &self,
-        input: RebootNodeRequest,
-    ) -> RusotoFuture<RebootNodeResponse, RebootNodeError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+impl ServiceRequest for RebootNodeRequest {
+    type Output = RebootNodeResponse;
+    type Error = RebootNodeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.RebootNode");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2973,20 +3178,25 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             }
         })
     }
+}
 
-    /// <p>Associates a set of tags with a DAX resource. You can call <code>TagResource</code> up to 5 times per second, per account. </p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.TagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3002,20 +3212,25 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             }
         })
     }
+}
 
-    /// <p>Removes the association of tags from a DAX resource. You can call <code>UntagResource</code> up to 5 times per second, per account. </p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.UntagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3031,20 +3246,25 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             }
         })
     }
+}
 
-    /// <p>Modifies the settings for a DAX cluster. You can use this action to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>
-    fn update_cluster(
-        &self,
-        input: UpdateClusterRequest,
-    ) -> RusotoFuture<UpdateClusterResponse, UpdateClusterError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+impl ServiceRequest for UpdateClusterRequest {
+    type Output = UpdateClusterResponse;
+    type Error = UpdateClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.UpdateCluster");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3060,20 +3280,25 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             }
         })
     }
+}
 
-    /// <p>Modifies the parameters of a parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>
-    fn update_parameter_group(
-        &self,
-        input: UpdateParameterGroupRequest,
-    ) -> RusotoFuture<UpdateParameterGroupResponse, UpdateParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+impl ServiceRequest for UpdateParameterGroupRequest {
+    type Output = UpdateParameterGroupResponse;
+    type Error = UpdateParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.UpdateParameterGroup");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3088,20 +3313,25 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             }
         })
     }
+}
 
-    /// <p>Modifies an existing subnet group.</p>
-    fn update_subnet_group(
-        &self,
-        input: UpdateSubnetGroupRequest,
-    ) -> RusotoFuture<UpdateSubnetGroupResponse, UpdateSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+impl ServiceRequest for UpdateSubnetGroupRequest {
+    type Output = UpdateSubnetGroupResponse;
+    type Error = UpdateSubnetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dax", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.UpdateSubnetGroup");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)

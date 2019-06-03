@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -595,6 +596,10 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) that uniquely identifies the resource.</p>
@@ -604,6 +609,10 @@ pub struct UntagResourceRequest {
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceResponse {}
 
 /// <p>Zookeeper node information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1383,76 +1392,61 @@ impl Error for UntagResourceError {
 /// Trait representing the capabilities of the Kafka API. Kafka clients implement this trait.
 pub trait Kafka {
     /// <p>Creates a new MSK cluster.</p>
-    fn create_cluster(
-        &self,
-        input: CreateClusterRequest,
-    ) -> RusotoFuture<CreateClusterResponse, CreateClusterError>;
+    fn create_cluster(&self, input: CreateClusterRequest) -> Request<CreateClusterRequest>;
 
     /// <p>Creates a new MSK configuration.</p>
     fn create_configuration(
         &self,
         input: CreateConfigurationRequest,
-    ) -> RusotoFuture<CreateConfigurationResponse, CreateConfigurationError>;
+    ) -> Request<CreateConfigurationRequest>;
 
     /// <p>Deletes the MSK cluster specified by the Amazon Resource Name (ARN) in the request.</p>
-    fn delete_cluster(
-        &self,
-        input: DeleteClusterRequest,
-    ) -> RusotoFuture<DeleteClusterResponse, DeleteClusterError>;
+    fn delete_cluster(&self, input: DeleteClusterRequest) -> Request<DeleteClusterRequest>;
 
     /// <p>Returns a description of the MSK cluster whose Amazon Resource Name (ARN) is specified in the request.</p>
-    fn describe_cluster(
-        &self,
-        input: DescribeClusterRequest,
-    ) -> RusotoFuture<DescribeClusterResponse, DescribeClusterError>;
+    fn describe_cluster(&self, input: DescribeClusterRequest) -> Request<DescribeClusterRequest>;
 
     /// <p>Returns a description of this MSK configuration.</p>
     fn describe_configuration(
         &self,
         input: DescribeConfigurationRequest,
-    ) -> RusotoFuture<DescribeConfigurationResponse, DescribeConfigurationError>;
+    ) -> Request<DescribeConfigurationRequest>;
 
     /// <p>Returns a description of this revision of the configuration.</p>
     fn describe_configuration_revision(
         &self,
         input: DescribeConfigurationRevisionRequest,
-    ) -> RusotoFuture<DescribeConfigurationRevisionResponse, DescribeConfigurationRevisionError>;
+    ) -> Request<DescribeConfigurationRevisionRequest>;
 
     /// <p>A list of brokers that a client application can use to bootstrap.</p>
     fn get_bootstrap_brokers(
         &self,
         input: GetBootstrapBrokersRequest,
-    ) -> RusotoFuture<GetBootstrapBrokersResponse, GetBootstrapBrokersError>;
+    ) -> Request<GetBootstrapBrokersRequest>;
 
     /// <p>Returns a list of clusters in an account.</p>
-    fn list_clusters(
-        &self,
-        input: ListClustersRequest,
-    ) -> RusotoFuture<ListClustersResponse, ListClustersError>;
+    fn list_clusters(&self, input: ListClustersRequest) -> Request<ListClustersRequest>;
 
     /// <p>Returns a list of all the MSK configurations in this Region for this account.</p>
     fn list_configurations(
         &self,
         input: ListConfigurationsRequest,
-    ) -> RusotoFuture<ListConfigurationsResponse, ListConfigurationsError>;
+    ) -> Request<ListConfigurationsRequest>;
 
     /// <p>Returns a list of the broker nodes in the cluster.</p>
-    fn list_nodes(
-        &self,
-        input: ListNodesRequest,
-    ) -> RusotoFuture<ListNodesResponse, ListNodesError>;
+    fn list_nodes(&self, input: ListNodesRequest) -> Request<ListNodesRequest>;
 
     /// <p>Returns a list of tags attached to a resource.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Tag a resource with given tags.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Remove tags of a resource by given tag keys.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 }
 /// A client for the Kafka API.
 #[derive(Clone)]
@@ -1492,19 +1486,108 @@ impl KafkaClient {
 
 impl Kafka for KafkaClient {
     /// <p>Creates a new MSK cluster.</p>
-    fn create_cluster(
+    fn create_cluster(&self, input: CreateClusterRequest) -> Request<CreateClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new MSK configuration.</p>
+    fn create_configuration(
         &self,
-        input: CreateClusterRequest,
-    ) -> RusotoFuture<CreateClusterResponse, CreateClusterError> {
+        input: CreateConfigurationRequest,
+    ) -> Request<CreateConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the MSK cluster specified by the Amazon Resource Name (ARN) in the request.</p>
+    fn delete_cluster(&self, input: DeleteClusterRequest) -> Request<DeleteClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a description of the MSK cluster whose Amazon Resource Name (ARN) is specified in the request.</p>
+    fn describe_cluster(&self, input: DescribeClusterRequest) -> Request<DescribeClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a description of this MSK configuration.</p>
+    fn describe_configuration(
+        &self,
+        input: DescribeConfigurationRequest,
+    ) -> Request<DescribeConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a description of this revision of the configuration.</p>
+    fn describe_configuration_revision(
+        &self,
+        input: DescribeConfigurationRevisionRequest,
+    ) -> Request<DescribeConfigurationRevisionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>A list of brokers that a client application can use to bootstrap.</p>
+    fn get_bootstrap_brokers(
+        &self,
+        input: GetBootstrapBrokersRequest,
+    ) -> Request<GetBootstrapBrokersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of clusters in an account.</p>
+    fn list_clusters(&self, input: ListClustersRequest) -> Request<ListClustersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of all the MSK configurations in this Region for this account.</p>
+    fn list_configurations(
+        &self,
+        input: ListConfigurationsRequest,
+    ) -> Request<ListConfigurationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of the broker nodes in the cluster.</p>
+    fn list_nodes(&self, input: ListNodesRequest) -> Request<ListNodesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of tags attached to a resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Tag a resource with given tags.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Remove tags of a resource by given tag keys.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CreateClusterRequest {
+    type Output = CreateClusterResponse;
+    type Error = CreateClusterError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/clusters";
 
-        let mut request = SignedRequest::new("POST", "kafka", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "kafka", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1522,21 +1605,27 @@ impl Kafka for KafkaClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new MSK configuration.</p>
-    fn create_configuration(
-        &self,
-        input: CreateConfigurationRequest,
-    ) -> RusotoFuture<CreateConfigurationResponse, CreateConfigurationError> {
+impl ServiceRequest for CreateConfigurationRequest {
+    type Output = CreateConfigurationResponse;
+    type Error = CreateConfigurationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/configurations";
 
-        let mut request = SignedRequest::new("POST", "kafka", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "kafka", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1553,27 +1642,30 @@ impl Kafka for KafkaClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the MSK cluster specified by the Amazon Resource Name (ARN) in the request.</p>
-    fn delete_cluster(
-        &self,
-        input: DeleteClusterRequest,
-    ) -> RusotoFuture<DeleteClusterResponse, DeleteClusterError> {
-        let request_uri = format!(
-            "/v1/clusters/{cluster_arn}",
-            cluster_arn = input.cluster_arn
-        );
+impl ServiceRequest for DeleteClusterRequest {
+    type Output = DeleteClusterResponse;
+    type Error = DeleteClusterError;
 
-        let mut request = SignedRequest::new("DELETE", "kafka", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/clusters/{cluster_arn}", cluster_arn = self.cluster_arn);
+
+        let mut request = SignedRequest::new("DELETE", "kafka", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.current_version {
+        if let Some(ref x) = self.current_version {
             params.put("currentVersion", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1591,21 +1683,24 @@ impl Kafka for KafkaClient {
             }
         })
     }
+}
 
-    /// <p>Returns a description of the MSK cluster whose Amazon Resource Name (ARN) is specified in the request.</p>
-    fn describe_cluster(
-        &self,
-        input: DescribeClusterRequest,
-    ) -> RusotoFuture<DescribeClusterResponse, DescribeClusterError> {
-        let request_uri = format!(
-            "/v1/clusters/{cluster_arn}",
-            cluster_arn = input.cluster_arn
-        );
+impl ServiceRequest for DescribeClusterRequest {
+    type Output = DescribeClusterResponse;
+    type Error = DescribeClusterError;
 
-        let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/clusters/{cluster_arn}", cluster_arn = self.cluster_arn);
+
+        let mut request = SignedRequest::new("GET", "kafka", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1623,18 +1718,24 @@ impl Kafka for KafkaClient {
             }
         })
     }
+}
 
-    /// <p>Returns a description of this MSK configuration.</p>
-    fn describe_configuration(
-        &self,
-        input: DescribeConfigurationRequest,
-    ) -> RusotoFuture<DescribeConfigurationResponse, DescribeConfigurationError> {
-        let request_uri = format!("/v1/configurations/{arn}", arn = input.arn);
+impl ServiceRequest for DescribeConfigurationRequest {
+    type Output = DescribeConfigurationResponse;
+    type Error = DescribeConfigurationError;
 
-        let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/configurations/{arn}", arn = self.arn);
+
+        let mut request = SignedRequest::new("GET", "kafka", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1651,23 +1752,28 @@ impl Kafka for KafkaClient {
             }
         })
     }
+}
 
-    /// <p>Returns a description of this revision of the configuration.</p>
-    fn describe_configuration_revision(
-        &self,
-        input: DescribeConfigurationRevisionRequest,
-    ) -> RusotoFuture<DescribeConfigurationRevisionResponse, DescribeConfigurationRevisionError>
-    {
+impl ServiceRequest for DescribeConfigurationRevisionRequest {
+    type Output = DescribeConfigurationRevisionResponse;
+    type Error = DescribeConfigurationRevisionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v1/configurations/{arn}/revisions/{revision}",
-            arn = input.arn,
-            revision = input.revision
+            arn = self.arn,
+            revision = self.revision
         );
 
-        let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "kafka", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1682,21 +1788,27 @@ impl Kafka for KafkaClient {
             }
         })
     }
+}
 
-    /// <p>A list of brokers that a client application can use to bootstrap.</p>
-    fn get_bootstrap_brokers(
-        &self,
-        input: GetBootstrapBrokersRequest,
-    ) -> RusotoFuture<GetBootstrapBrokersResponse, GetBootstrapBrokersError> {
+impl ServiceRequest for GetBootstrapBrokersRequest {
+    type Output = GetBootstrapBrokersResponse;
+    type Error = GetBootstrapBrokersError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}/bootstrap-brokers",
-            cluster_arn = input.cluster_arn
+            cluster_arn = self.cluster_arn
         );
 
-        let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "kafka", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1713,30 +1825,36 @@ impl Kafka for KafkaClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of clusters in an account.</p>
-    fn list_clusters(
-        &self,
-        input: ListClustersRequest,
-    ) -> RusotoFuture<ListClustersResponse, ListClustersError> {
+impl ServiceRequest for ListClustersRequest {
+    type Output = ListClustersResponse;
+    type Error = ListClustersError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/clusters";
 
-        let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "kafka", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.cluster_name_filter {
+        if let Some(ref x) = self.cluster_name_filter {
             params.put("clusterNameFilter", x);
         }
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1754,27 +1872,33 @@ impl Kafka for KafkaClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of all the MSK configurations in this Region for this account.</p>
-    fn list_configurations(
-        &self,
-        input: ListConfigurationsRequest,
-    ) -> RusotoFuture<ListConfigurationsResponse, ListConfigurationsError> {
+impl ServiceRequest for ListConfigurationsRequest {
+    type Output = ListConfigurationsResponse;
+    type Error = ListConfigurationsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/configurations";
 
-        let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "kafka", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1792,30 +1916,36 @@ impl Kafka for KafkaClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of the broker nodes in the cluster.</p>
-    fn list_nodes(
-        &self,
-        input: ListNodesRequest,
-    ) -> RusotoFuture<ListNodesResponse, ListNodesError> {
+impl ServiceRequest for ListNodesRequest {
+    type Output = ListNodesResponse;
+    type Error = ListNodesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}/nodes",
-            cluster_arn = input.cluster_arn
+            cluster_arn = self.cluster_arn
         );
 
-        let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "kafka", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1833,18 +1963,24 @@ impl Kafka for KafkaClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of tags attached to a resource.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
 
-        let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "kafka", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1861,21 +1997,30 @@ impl Kafka for KafkaClient {
             }
         })
     }
+}
 
-    /// <p>Tag a resource with given tags.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
-        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
 
-        let mut request = SignedRequest::new("POST", "kafka", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "kafka", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = TagResourceResponse {};
 
                     Ok(result)
                 }))
@@ -1889,24 +2034,33 @@ impl Kafka for KafkaClient {
             }
         })
     }
+}
 
-    /// <p>Remove tags of a resource by given tag keys.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
-        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
 
-        let mut request = SignedRequest::new("DELETE", "kafka", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "kafka", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        for item in input.tag_keys.iter() {
+        for item in self.tag_keys.iter() {
             params.put("tagKeys", item);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UntagResourceResponse {};
 
                     Ok(result)
                 }))

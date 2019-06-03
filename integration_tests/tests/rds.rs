@@ -5,7 +5,7 @@ extern crate rusoto_rds;
 
 use rusoto_core::Region;
 use rusoto_rds::{
-    CreateOptionGroupMessage, DeleteOptionGroupMessage, DescribeDBClustersMessage, Rds, RdsClient,
+    CreateOptionGroupRequest, DeleteOptionGroupRequest, DescribeDBClustersRequest, Rds, RdsClient,
     Tag,
 };
 
@@ -13,7 +13,7 @@ use rusoto_rds::{
 fn should_describe_db_clusters() {
     let _ = env_logger::try_init();
     let client = RdsClient::new(Region::UsEast1);
-    let request = DescribeDBClustersMessage::default();
+    let request = DescribeDBClustersRequest::default();
 
     let result = client.describe_db_clusters(request).sync();
     println!("{:#?}", result);
@@ -32,7 +32,7 @@ fn should_create_destroy_options_group() {
     };
     tags.push(tag);
 
-    let create_opt_group_request = CreateOptionGroupMessage {
+    let create_opt_group_request = CreateOptionGroupRequest {
         engine_name: "mysql".to_string(),
         major_engine_version: "5.6".to_string(),
         option_group_description: "rusotogroup".to_string(),
@@ -47,7 +47,7 @@ fn should_create_destroy_options_group() {
     // Check ListTagsForResource to ensure tags got applied
     // (They do not appear in the Console, so there's probably a bug)
 
-    let delete_opt_group_req = DeleteOptionGroupMessage {
+    let delete_opt_group_req = DeleteOptionGroupRequest {
         option_group_name: "rusotogroup".to_string(),
     };
     let delete_result = client.delete_option_group(delete_opt_group_req).sync();

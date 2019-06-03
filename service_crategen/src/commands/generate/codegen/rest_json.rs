@@ -27,13 +27,10 @@ impl GenerateProtocol for RestJsonGenerator {
                 writer,
                 "
                 {documentation}
-                {method_signature} -> \
-                      RusotoFuture<{output_type}, {error_type}>;
+                {method_signature};
                 ",
                 documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
-                method_signature = generate_method_signature(operation, input_shape),
-                error_type = error_type_name(service, operation_name),
-                output_type = output_type
+                method_signature = generate_method_signature(service, operation),
             )?
         }
         Ok(())
@@ -47,40 +44,70 @@ impl GenerateProtocol for RestJsonGenerator {
             // Retrieve the `Shape` for the input for this operation.
             let input_shape = &service.get_shape(input_type);
 
+            let input = match service.has_non_empty_input_shape(operation) {
+                true => "input".to_owned(),
+                false => format!("{} {{}}", input_type)
+            };
+
+            writeln!(writer,
+                "{documentation}
+                {method_signature} {{
+                    Request::new({input}, self.region.clone(), self.client.clone())
+                }}
+                ",
+                documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
+                method_signature = generate_method_signature(service, operation),
+                input = input
+            )?
+        }
+        Ok(())
+    }
+
+    fn generate_operations(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
+        for (operation_name, operation) in service.operations().iter() {
+            let input_type = operation.input_shape_or("()");
+            let output_type = operation.output_shape_or("()");
+
+            // Retrieve the `Shape` for the input for this operation.
+            let input_shape = &service.get_shape(input_type);
+            
             let (request_uri, _) =
                 rest_request_generator::parse_query_string(&operation.http.request_uri);
 
             writeln!(writer,"
-                {documentation}
-                {method_signature} -> RusotoFuture<{output_type}, {error_type}> {{
-                    {request_uri_formatter}
+                impl ServiceRequest for {input_type} {{
+                    type Output = {output_type};
+                    type Error = {error_type};
 
-                    let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", &self.region, &request_uri);
-                    {default_headers}
-                    {set_headers}
-                    {modify_endpoint_prefix}
-                    {load_payload}
-                    {load_headers}
-                    {load_params}
+                    #[allow(unused_variables, warnings)]
+                    fn dispatch(self, region: &region::Region, dispatcher: &impl Dispatcher) -> RusotoFuture<Self::Output, Self::Error> {{
+                        {request_uri_formatter}
 
-                    self.client.sign_and_dispatch(request, |response| {{
-                        if {status_check} {{
-                            Box::new(response.buffer().from_err().and_then(|response| {{
-                                {parse_body}
-                                {parse_headers}
-                                {parse_status_code}
-                                Ok(result)
-                            }}))
-                        }} else {{
-                            Box::new(response.buffer().from_err().and_then(|response| {{
-                                Err({error_type}::from_response(response))
-                            }}))
-                        }}
-                    }})
+                        let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", region, &request_uri);
+                        {default_headers}
+                        {set_headers}
+                        {modify_endpoint_prefix}
+                        {load_payload}
+                        {load_headers}
+                        {load_params}
+
+                        dispatcher.dispatch(request, |response| {{
+                            if {status_check} {{
+                                Box::new(response.buffer().from_err().and_then(|response| {{
+                                    {parse_body}
+                                    {parse_headers}
+                                    {parse_status_code}
+                                    Ok(result)
+                                }}))
+                            }} else {{
+                                Box::new(response.buffer().from_err().and_then(|response| {{
+                                    Err({error_type}::from_response(response))
+                                }}))
+                            }}
+                        }})
+                    }}
                 }}
                 ",
-                documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
-                method_signature = generate_method_signature(operation, input_shape),
                 endpoint_prefix = service.signing_name(),
                 modify_endpoint_prefix = generate_endpoint_modification(service).unwrap_or_else(|| "".to_owned()),
                 http_method = operation.http.method,
@@ -88,6 +115,7 @@ impl GenerateProtocol for RestJsonGenerator {
                 status_check = http_code_expected(operation.http.response_code),
                 parse_body = generate_body_parser(operation, service),
                 parse_status_code = generate_status_code_parser(operation, service),
+                input_type = input_type,
                 output_type = output_type,
                 load_headers = rest_request_generator::generate_headers(service, operation).unwrap_or_else(|| "".to_string()),
                 parse_headers = rest_response_parser::generate_response_headers_parser(service, operation)
@@ -157,7 +185,7 @@ fn generate_headers(service: &Service<'_>) -> Option<String> {
 // SageMaker Runtime allows to overwrite content-type
 fn generate_default_headers(service: &Service<'_>) -> String {
     if service.full_name() == "Amazon SageMaker Runtime" {
-        return "if input.content_type.is_none() {
+        return "if self.content_type.is_none() {
                     request.set_content_type(\"application/x-amz-json-1.1\".to_owned());
                 }"
         .to_string();
@@ -179,22 +207,17 @@ fn generate_endpoint_modification(service: &Service<'_>) -> Option<String> {
 
 // IoT defines a lot of empty (and therefore unnecessary) request shapes
 // don't clutter method signatures with them
-fn generate_method_signature(operation: &Operation, shape: &Option<&Shape>) -> String {
-    match shape {
-        Some(s) => match s.members {
-            Some(ref members) if !members.is_empty() => format!(
-                "fn {method_name}(&self, input: {input_type})",
-                method_name = operation.name.to_snake_case(),
-                input_type = operation.input_shape()
-            ),
-            _ => format!(
-                "fn {method_name}(&self)",
-                method_name = operation.name.to_snake_case()
-            ),
-        },
-        None => format!(
-            "fn {method_name}(&self)",
-            method_name = operation.name.to_snake_case()
+fn generate_method_signature(service: &Service<'_>, operation: &Operation) -> String {
+    match service.has_non_empty_input_shape(operation) {
+        true => format!(
+            "fn {method_name}(&self, input: {input_type}) -> Request<{input_type}>",
+            method_name = operation.name.to_snake_case(),
+            input_type = operation.input_shape()
+        ),
+        false => format!(
+            "fn {method_name}(&self) -> Request<{input_type}>",
+            method_name = operation.name.to_snake_case(),
+            input_type = operation.input_shape()
         ),
     }
 }
@@ -211,12 +234,11 @@ fn generate_payload(service: &Service<'_>, input_shape: &Option<&Shape>) -> Opti
             // only use the input_shape if it has non-query, non-header members
             // (i.e., location unspecified)
             if i.members
-                .as_ref()
-                .unwrap()
                 .iter()
+                .flat_map(|members| members.iter())
                 .any(|(_, member)| member.location.is_none())
             {
-                Some("let encoded = Some(serde_json::to_vec(&input).unwrap());".to_owned())
+                Some("let encoded = Some(serde_json::to_vec(&self).unwrap());".to_owned())
             } else {
                 None
             }
@@ -242,10 +264,10 @@ fn declared_payload(input_shape: &Shape, payload_member_name: &str, service: &Se
         // if it's a String or a Blob, send it as the raw payload
         payload_type if payload_type == ShapeType::Blob || payload_type == ShapeType::String => {
             if input_shape.required(payload_member_name) {
-                format!("let encoded = Some(input.{}.to_owned());", field_name)
+                format!("let encoded = Some(self.{}.to_owned());", field_name)
             } else {
                 format!(
-                    "let encoded = if let Some(ref payload) = input.{} {{
+                    "let encoded = if let Some(ref payload) = self.{} {{
                             Some(payload.to_owned())
                         }} else {{
                             None
@@ -257,7 +279,7 @@ fn declared_payload(input_shape: &Shape, payload_member_name: &str, service: &Se
 
         // otherwise serialize the payload member as json and use that
         _ => format!(
-            "let encoded = Some(serde_json::to_vec(&input.{}).unwrap());",
+            "let encoded = Some(serde_json::to_vec(&self.{}).unwrap());",
             field_name
         ),
     }
@@ -284,14 +306,14 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
 /// Generate code to plumb the response status code into any fields
 /// in the output shape that specify it
 fn generate_status_code_parser(operation: &Operation, service: &Service<'_>) -> String {
-    if operation.output.is_none() {
-        return "".to_owned();
-    }
-
     let shape_name = &operation.output.as_ref().unwrap().shape;
     let output_shape = &service
         .get_shape(shape_name)
         .expect("Shape missing from service definition");
+
+    if output_shape.members.is_none() {
+        return "".to_owned();
+    }
 
     let mut status_code_parser = "".to_string();
 
@@ -324,14 +346,14 @@ fn generate_status_code_parser(operation: &Operation, service: &Service<'_>) -> 
 /// will be set later (e.g. from headers), so the compiler won't spit out
 /// warnings about unnecessary mutability
 fn generate_body_parser(operation: &Operation, service: &Service<'_>) -> String {
-    if operation.output.is_none() {
-        return "let result = ::std::mem::drop(response);".to_string();
-    }
-
     let shape_name = &operation.output.as_ref().unwrap().shape;
     let output_shape = &service
         .get_shape(shape_name)
         .expect("Shape missing from service definition");
+
+    if output_shape.members.is_none() {
+        return format!("let result = {} {{}};", shape_name);
+    }
 
     let mutable_result = output_shape
         .members

@@ -19,13 +19,14 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetMediaInput {
+pub struct GetMediaRequest {
     /// <p>Identifies the starting chunk to get from the specified stream. </p>
     #[serde(rename = "StartSelector")]
     pub start_selector: StartSelector,
@@ -40,7 +41,7 @@ pub struct GetMediaInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetMediaOutput {
+pub struct GetMediaResponse {
     /// <p>The content type of the requested media.</p>
     pub content_type: Option<String>,
     /// <p><p> The payload Kinesis Video Streams returns is a sequence of chunks from the specified stream. For information about the chunks, see . The chunks that Kinesis Video Streams returns in the <code>GetMedia</code> call also include the following additional Matroska (MKV) tags: </p> <ul> <li> <p>AWS<em>KINESISVIDEO</em>CONTINUATION<em>TOKEN (UTF-8 string) - In the event your <code>GetMedia</code> call terminates, you can use this continuation token in your next request to get the next chunk where the last request terminated.</p> </li> <li> <p>AWS</em>KINESISVIDEO<em>MILLIS</em>BEHIND<em>NOW (UTF-8 string) - Client applications can use this tag value to determine how far behind the chunk returned in the response is from the latest chunk on the stream. </p> </li> <li> <p>AWS</em>KINESISVIDEO<em>FRAGMENT</em>NUMBER - Fragment number returned in the chunk.</p> </li> <li> <p>AWS<em>KINESISVIDEO</em>SERVER<em>TIMESTAMP - Server timestamp of the fragment.</p> </li> <li> <p>AWS</em>KINESISVIDEO<em>PRODUCER</em>TIMESTAMP - Producer timestamp of the fragment.</p> </li> </ul> <p>The following tags will be present if an error occurs:</p> <ul> <li> <p>AWS<em>KINESISVIDEO</em>ERROR<em>CODE - String description of an error that caused GetMedia to stop.</p> </li> <li> <p>AWS</em>KINESISVIDEO<em>ERROR</em>ID: Integer code of the error.</p> </li> </ul> <p>The error codes are as follows:</p> <ul> <li> <p>3002 - Error writing to the stream</p> </li> <li> <p>4000 - Requested fragment is not found</p> </li> <li> <p>4500 - Access denied for the stream&#39;s KMS key</p> </li> <li> <p>4501 - Stream&#39;s KMS key is disabled</p> </li> <li> <p>4502 - Validation error on the stream&#39;s KMS key</p> </li> <li> <p>4503 - KMS key specified in the stream is unavailable</p> </li> <li> <p>4504 - Invalid usage of the KMS key specified in the stream</p> </li> <li> <p>4505 - Invalid state of the KMS key specified in the stream</p> </li> <li> <p>4506 - Unable to find the KMS key specified in the stream</p> </li> <li> <p>5000 - Internal error</p> </li> </ul></p>
@@ -133,7 +134,7 @@ impl Error for GetMediaError {
 /// Trait representing the capabilities of the Kinesis Video Media API. Kinesis Video Media clients implement this trait.
 pub trait KinesisVideoMedia {
     /// <p><p> Use this API to retrieve media content from a Kinesis video stream. In the request, you identify the stream name or stream Amazon Resource Name (ARN), and the starting chunk. Kinesis Video Streams then returns a stream of chunks in order by fragment number.</p> <note> <p>You must first call the <code>GetDataEndpoint</code> API to get an endpoint. Then send the <code>GetMedia</code> requests to this endpoint using the <a href="https://docs.aws.amazon.com/cli/latest/reference/">--endpoint-url parameter</a>. </p> </note> <p>When you put media data (fragments) on a stream, Kinesis Video Streams stores each incoming fragment and related metadata in what is called a &quot;chunk.&quot; For more information, see . The <code>GetMedia</code> API returns a stream of these chunks starting from the chunk that you specify in the request. </p> <p>The following limits apply when using the <code>GetMedia</code> API:</p> <ul> <li> <p>A client can call <code>GetMedia</code> up to five times per second per stream. </p> </li> <li> <p>Kinesis Video Streams sends media data at a rate of up to 25 megabytes per second (or 200 megabits per second) during a <code>GetMedia</code> session. </p> </li> </ul></p>
-    fn get_media(&self, input: GetMediaInput) -> RusotoFuture<GetMediaOutput, GetMediaError>;
+    fn get_media(&self, input: GetMediaRequest) -> Request<GetMediaRequest>;
 }
 /// A client for the Kinesis Video Media API.
 #[derive(Clone)]
@@ -173,19 +174,33 @@ impl KinesisVideoMediaClient {
 
 impl KinesisVideoMedia for KinesisVideoMediaClient {
     /// <p><p> Use this API to retrieve media content from a Kinesis video stream. In the request, you identify the stream name or stream Amazon Resource Name (ARN), and the starting chunk. Kinesis Video Streams then returns a stream of chunks in order by fragment number.</p> <note> <p>You must first call the <code>GetDataEndpoint</code> API to get an endpoint. Then send the <code>GetMedia</code> requests to this endpoint using the <a href="https://docs.aws.amazon.com/cli/latest/reference/">--endpoint-url parameter</a>. </p> </note> <p>When you put media data (fragments) on a stream, Kinesis Video Streams stores each incoming fragment and related metadata in what is called a &quot;chunk.&quot; For more information, see . The <code>GetMedia</code> API returns a stream of these chunks starting from the chunk that you specify in the request. </p> <p>The following limits apply when using the <code>GetMedia</code> API:</p> <ul> <li> <p>A client can call <code>GetMedia</code> up to five times per second per stream. </p> </li> <li> <p>Kinesis Video Streams sends media data at a rate of up to 25 megabytes per second (or 200 megabits per second) during a <code>GetMedia</code> session. </p> </li> </ul></p>
-    fn get_media(&self, input: GetMediaInput) -> RusotoFuture<GetMediaOutput, GetMediaError> {
+    fn get_media(&self, input: GetMediaRequest) -> Request<GetMediaRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for GetMediaRequest {
+    type Output = GetMediaResponse;
+    type Error = GetMediaError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/getMedia";
 
-        let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "kinesisvideo", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let mut result = GetMediaOutput::default();
+                    let mut result = GetMediaResponse::default();
                     result.payload = Some(response.body);
 
                     if let Some(content_type) = response.headers.get("Content-Type") {

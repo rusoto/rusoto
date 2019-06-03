@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -95,27 +96,6 @@ impl AbortIncompleteMultipartUploadSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AbortMultipartUploadOutput {
-    pub request_charged: Option<String>,
-}
-
-struct AbortMultipartUploadOutputDeserializer;
-impl AbortMultipartUploadOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<AbortMultipartUploadOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let obj = AbortMultipartUploadOutput::default();
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AbortMultipartUploadRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -126,6 +106,27 @@ pub struct AbortMultipartUploadRequest {
     pub upload_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AbortMultipartUploadResponse {
+    pub request_charged: Option<String>,
+}
+
+struct AbortMultipartUploadResponseDeserializer;
+impl AbortMultipartUploadResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AbortMultipartUploadResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = AbortMultipartUploadResponse::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccelerateConfiguration {
@@ -1859,7 +1860,20 @@ impl CommonPrefixListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CompleteMultipartUploadOutput {
+pub struct CompleteMultipartUploadRequest {
+    /// <p><p/></p>
+    pub bucket: String,
+    /// <p><p/></p>
+    pub key: String,
+    /// <p><p/></p>
+    pub multipart_upload: Option<CompletedMultipartUpload>,
+    pub request_payer: Option<String>,
+    /// <p><p/></p>
+    pub upload_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CompleteMultipartUploadResponse {
     /// <p><p/></p>
     pub bucket: Option<String>,
     /// <p>Entity tag of the object.</p>
@@ -1879,14 +1893,14 @@ pub struct CompleteMultipartUploadOutput {
     pub version_id: Option<String>,
 }
 
-struct CompleteMultipartUploadOutputDeserializer;
-impl CompleteMultipartUploadOutputDeserializer {
+struct CompleteMultipartUploadResponseDeserializer;
+impl CompleteMultipartUploadResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CompleteMultipartUploadOutput, XmlParseError> {
-        deserialize_elements::<_, CompleteMultipartUploadOutput, _>(
+    ) -> Result<CompleteMultipartUploadResponse, XmlParseError> {
+        deserialize_elements::<_, CompleteMultipartUploadResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1910,19 +1924,6 @@ impl CompleteMultipartUploadOutputDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CompleteMultipartUploadRequest {
-    /// <p><p/></p>
-    pub bucket: String,
-    /// <p><p/></p>
-    pub key: String,
-    /// <p><p/></p>
-    pub multipart_upload: Option<CompletedMultipartUpload>,
-    pub request_payer: Option<String>,
-    /// <p><p/></p>
-    pub upload_id: String,
-}
-
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CompletedMultipartUpload {
@@ -2121,43 +2122,6 @@ impl ContinuationEventDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CopyObjectOutput {
-    /// <p><p/></p>
-    pub copy_object_result: Option<CopyObjectResult>,
-    /// <p><p/></p>
-    pub copy_source_version_id: Option<String>,
-    /// <p>If the object expiration is configured, the response includes this header.</p>
-    pub expiration: Option<String>,
-    pub request_charged: Option<String>,
-    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
-    pub sse_customer_algorithm: Option<String>,
-    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>
-    pub sse_customer_key_md5: Option<String>,
-    /// <p>If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.</p>
-    pub ssekms_key_id: Option<String>,
-    /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
-    pub server_side_encryption: Option<String>,
-    /// <p>Version ID of the newly created copy.</p>
-    pub version_id: Option<String>,
-}
-
-struct CopyObjectOutputDeserializer;
-impl CopyObjectOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CopyObjectOutput, XmlParseError> {
-        Ok(CopyObjectOutput {
-            copy_object_result: Some(CopyObjectResultDeserializer::deserialize(
-                "CopyObjectResult",
-                stack,
-            )?),
-            ..CopyObjectOutput::default()
-        })
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyObjectRequest {
     /// <p>The canned ACL to apply to the object.</p>
     pub acl: Option<String>,
@@ -2232,6 +2196,43 @@ pub struct CopyObjectRequest {
     pub website_redirect_location: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CopyObjectResponse {
+    /// <p><p/></p>
+    pub copy_object_result: Option<CopyObjectResult>,
+    /// <p><p/></p>
+    pub copy_source_version_id: Option<String>,
+    /// <p>If the object expiration is configured, the response includes this header.</p>
+    pub expiration: Option<String>,
+    pub request_charged: Option<String>,
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
+    pub sse_customer_algorithm: Option<String>,
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>
+    pub sse_customer_key_md5: Option<String>,
+    /// <p>If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.</p>
+    pub ssekms_key_id: Option<String>,
+    /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
+    pub server_side_encryption: Option<String>,
+    /// <p>Version ID of the newly created copy.</p>
+    pub version_id: Option<String>,
+}
+
+struct CopyObjectResponseDeserializer;
+impl CopyObjectResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CopyObjectResponse, XmlParseError> {
+        Ok(CopyObjectResponse {
+            copy_object_result: Some(CopyObjectResultDeserializer::deserialize(
+                "CopyObjectResult",
+                stack,
+            )?),
+            ..CopyObjectResponse::default()
+        })
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyObjectResult {
@@ -2330,28 +2331,6 @@ impl CreateBucketConfigurationSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateBucketOutput {
-    /// <p><p/></p>
-    pub location: Option<String>,
-}
-
-struct CreateBucketOutputDeserializer;
-impl CreateBucketOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CreateBucketOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let obj = CreateBucketOutput::default();
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateBucketRequest {
     /// <p>The canned ACL to apply to the bucket.</p>
     pub acl: Option<String>,
@@ -2374,56 +2353,25 @@ pub struct CreateBucketRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateMultipartUploadOutput {
-    /// <p>Date when multipart upload will become eligible for abort operation by lifecycle.</p>
-    pub abort_date: Option<String>,
-    /// <p>Id of the lifecycle rule that makes a multipart upload eligible for abort operation.</p>
-    pub abort_rule_id: Option<String>,
-    /// <p>Name of the bucket to which the multipart upload was initiated.</p>
-    pub bucket: Option<String>,
-    /// <p>Object key for which the multipart upload was initiated.</p>
-    pub key: Option<String>,
-    pub request_charged: Option<String>,
-    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
-    pub sse_customer_algorithm: Option<String>,
-    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>
-    pub sse_customer_key_md5: Option<String>,
-    /// <p>If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.</p>
-    pub ssekms_key_id: Option<String>,
-    /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
-    pub server_side_encryption: Option<String>,
-    /// <p>ID for the initiated multipart upload.</p>
-    pub upload_id: Option<String>,
+pub struct CreateBucketResponse {
+    /// <p><p/></p>
+    pub location: Option<String>,
 }
 
-struct CreateMultipartUploadOutputDeserializer;
-impl CreateMultipartUploadOutputDeserializer {
+struct CreateBucketResponseDeserializer;
+impl CreateBucketResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateMultipartUploadOutput, XmlParseError> {
-        deserialize_elements::<_, CreateMultipartUploadOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Bucket" => {
-                        obj.bucket = Some(BucketNameDeserializer::deserialize("Bucket", stack)?);
-                    }
-                    "Key" => {
-                        obj.key = Some(ObjectKeyDeserializer::deserialize("Key", stack)?);
-                    }
-                    "UploadId" => {
-                        obj.upload_id = Some(MultipartUploadIdDeserializer::deserialize(
-                            "UploadId", stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
+    ) -> Result<CreateBucketResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = CreateBucketResponse::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -2481,6 +2429,59 @@ pub struct CreateMultipartUploadRequest {
     pub website_redirect_location: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateMultipartUploadResponse {
+    /// <p>Date when multipart upload will become eligible for abort operation by lifecycle.</p>
+    pub abort_date: Option<String>,
+    /// <p>Id of the lifecycle rule that makes a multipart upload eligible for abort operation.</p>
+    pub abort_rule_id: Option<String>,
+    /// <p>Name of the bucket to which the multipart upload was initiated.</p>
+    pub bucket: Option<String>,
+    /// <p>Object key for which the multipart upload was initiated.</p>
+    pub key: Option<String>,
+    pub request_charged: Option<String>,
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
+    pub sse_customer_algorithm: Option<String>,
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>
+    pub sse_customer_key_md5: Option<String>,
+    /// <p>If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.</p>
+    pub ssekms_key_id: Option<String>,
+    /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
+    pub server_side_encryption: Option<String>,
+    /// <p>ID for the initiated multipart upload.</p>
+    pub upload_id: Option<String>,
+}
+
+struct CreateMultipartUploadResponseDeserializer;
+impl CreateMultipartUploadResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateMultipartUploadResponse, XmlParseError> {
+        deserialize_elements::<_, CreateMultipartUploadResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Bucket" => {
+                        obj.bucket = Some(BucketNameDeserializer::deserialize("Bucket", stack)?);
+                    }
+                    "Key" => {
+                        obj.key = Some(ObjectKeyDeserializer::deserialize("Key", stack)?);
+                    }
+                    "UploadId" => {
+                        obj.upload_id = Some(MultipartUploadIdDeserializer::deserialize(
+                            "UploadId", stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 struct CreationDateDeserializer;
 impl CreationDateDeserializer {
     #[allow(unused_variables)]
@@ -2709,17 +2710,56 @@ pub struct DeleteBucketAnalyticsConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteBucketAnalyticsConfigurationResponse {}
+
+struct DeleteBucketAnalyticsConfigurationResponseDeserializer;
+impl DeleteBucketAnalyticsConfigurationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteBucketAnalyticsConfigurationResponse, XmlParseError> {
+        Ok(DeleteBucketAnalyticsConfigurationResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketCorsRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteBucketCorsResponse {}
+
+struct DeleteBucketCorsResponseDeserializer;
+impl DeleteBucketCorsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteBucketCorsResponse, XmlParseError> {
+        Ok(DeleteBucketCorsResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketEncryptionRequest {
     /// <p>The name of the bucket containing the server-side encryption configuration to delete.</p>
     pub bucket: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteBucketEncryptionResponse {}
+
+struct DeleteBucketEncryptionResponseDeserializer;
+impl DeleteBucketEncryptionResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteBucketEncryptionResponse, XmlParseError> {
+        Ok(DeleteBucketEncryptionResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketInventoryConfigurationRequest {
     /// <p>The name of the bucket containing the inventory configuration to delete.</p>
@@ -2729,11 +2769,37 @@ pub struct DeleteBucketInventoryConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteBucketInventoryConfigurationResponse {}
+
+struct DeleteBucketInventoryConfigurationResponseDeserializer;
+impl DeleteBucketInventoryConfigurationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteBucketInventoryConfigurationResponse, XmlParseError> {
+        Ok(DeleteBucketInventoryConfigurationResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketLifecycleRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteBucketLifecycleResponse {}
+
+struct DeleteBucketLifecycleResponseDeserializer;
+impl DeleteBucketLifecycleResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteBucketLifecycleResponse, XmlParseError> {
+        Ok(DeleteBucketLifecycleResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketMetricsConfigurationRequest {
     /// <p>The name of the bucket containing the metrics configuration to delete.</p>
@@ -2743,11 +2809,37 @@ pub struct DeleteBucketMetricsConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteBucketMetricsConfigurationResponse {}
+
+struct DeleteBucketMetricsConfigurationResponseDeserializer;
+impl DeleteBucketMetricsConfigurationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteBucketMetricsConfigurationResponse, XmlParseError> {
+        Ok(DeleteBucketMetricsConfigurationResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketPolicyRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteBucketPolicyResponse {}
+
+struct DeleteBucketPolicyResponseDeserializer;
+impl DeleteBucketPolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteBucketPolicyResponse, XmlParseError> {
+        Ok(DeleteBucketPolicyResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketReplicationRequest {
     /// <p><p> The bucket name. </p> <note> <p>It can take a while to propagate the deletion of a replication configuration to all Amazon S3 systems.</p> </note></p>
@@ -2755,11 +2847,37 @@ pub struct DeleteBucketReplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteBucketReplicationResponse {}
+
+struct DeleteBucketReplicationResponseDeserializer;
+impl DeleteBucketReplicationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteBucketReplicationResponse, XmlParseError> {
+        Ok(DeleteBucketReplicationResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteBucketResponse {}
+
+struct DeleteBucketResponseDeserializer;
+impl DeleteBucketResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteBucketResponse, XmlParseError> {
+        Ok(DeleteBucketResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketTaggingRequest {
     /// <p><p/></p>
@@ -2767,11 +2885,37 @@ pub struct DeleteBucketTaggingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteBucketTaggingResponse {}
+
+struct DeleteBucketTaggingResponseDeserializer;
+impl DeleteBucketTaggingResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteBucketTaggingResponse, XmlParseError> {
+        Ok(DeleteBucketTaggingResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketWebsiteRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteBucketWebsiteResponse {}
+
+struct DeleteBucketWebsiteResponseDeserializer;
+impl DeleteBucketWebsiteResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteBucketWebsiteResponse, XmlParseError> {
+        Ok(DeleteBucketWebsiteResponse::default())
+    }
+}
 struct DeleteMarkerDeserializer;
 impl DeleteMarkerDeserializer {
     #[allow(unused_variables)]
@@ -2961,31 +3105,6 @@ impl DeleteMarkersDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteObjectOutput {
-    /// <p>Specifies whether the versioned object that was permanently deleted was (true) or was not (false) a delete marker.</p>
-    pub delete_marker: Option<bool>,
-    pub request_charged: Option<String>,
-    /// <p>Returns the version ID of the delete marker created as a result of the DELETE operation.</p>
-    pub version_id: Option<String>,
-}
-
-struct DeleteObjectOutputDeserializer;
-impl DeleteObjectOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DeleteObjectOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let obj = DeleteObjectOutput::default();
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteObjectRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -3001,21 +3120,24 @@ pub struct DeleteObjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteObjectTaggingOutput {
-    /// <p>The versionId of the object the tag-set was removed from.</p>
+pub struct DeleteObjectResponse {
+    /// <p>Specifies whether the versioned object that was permanently deleted was (true) or was not (false) a delete marker.</p>
+    pub delete_marker: Option<bool>,
+    pub request_charged: Option<String>,
+    /// <p>Returns the version ID of the delete marker created as a result of the DELETE operation.</p>
     pub version_id: Option<String>,
 }
 
-struct DeleteObjectTaggingOutputDeserializer;
-impl DeleteObjectTaggingOutputDeserializer {
+struct DeleteObjectResponseDeserializer;
+impl DeleteObjectResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteObjectTaggingOutput, XmlParseError> {
+    ) -> Result<DeleteObjectResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = DeleteObjectTaggingOutput::default();
+        let obj = DeleteObjectResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -3033,7 +3155,42 @@ pub struct DeleteObjectTaggingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteObjectsOutput {
+pub struct DeleteObjectTaggingResponse {
+    /// <p>The versionId of the object the tag-set was removed from.</p>
+    pub version_id: Option<String>,
+}
+
+struct DeleteObjectTaggingResponseDeserializer;
+impl DeleteObjectTaggingResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteObjectTaggingResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = DeleteObjectTaggingResponse::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteObjectsRequest {
+    /// <p><p/></p>
+    pub bucket: String,
+    /// <p>Specifies whether you want to delete this object even if it has a Governance-type Object Lock in place. You must have sufficient permissions to perform this operation.</p>
+    pub bypass_governance_retention: Option<bool>,
+    /// <p><p/></p>
+    pub delete: Delete,
+    /// <p>The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device.</p>
+    pub mfa: Option<String>,
+    pub request_payer: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteObjectsResponse {
     /// <p><p/></p>
     pub deleted: Option<Vec<DeletedObject>>,
     /// <p><p/></p>
@@ -3041,14 +3198,14 @@ pub struct DeleteObjectsOutput {
     pub request_charged: Option<String>,
 }
 
-struct DeleteObjectsOutputDeserializer;
-impl DeleteObjectsOutputDeserializer {
+struct DeleteObjectsResponseDeserializer;
+impl DeleteObjectsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteObjectsOutput, XmlParseError> {
-        deserialize_elements::<_, DeleteObjectsOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<DeleteObjectsResponse, XmlParseError> {
+        deserialize_elements::<_, DeleteObjectsResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Deleted" => {
                     obj.deleted
@@ -3067,24 +3224,24 @@ impl DeleteObjectsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteObjectsRequest {
-    /// <p><p/></p>
-    pub bucket: String,
-    /// <p>Specifies whether you want to delete this object even if it has a Governance-type Object Lock in place. You must have sufficient permissions to perform this operation.</p>
-    pub bypass_governance_retention: Option<bool>,
-    /// <p><p/></p>
-    pub delete: Delete,
-    /// <p>The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device.</p>
-    pub mfa: Option<String>,
-    pub request_payer: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeletePublicAccessBlockRequest {
     /// <p>The Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want to delete. </p>
     pub bucket: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeletePublicAccessBlockResponse {}
+
+struct DeletePublicAccessBlockResponseDeserializer;
+impl DeletePublicAccessBlockResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeletePublicAccessBlockResponse, XmlParseError> {
+        Ok(DeletePublicAccessBlockResponse::default())
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeletedObject {
@@ -4209,19 +4366,25 @@ impl FilterRuleValueSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketAccelerateConfigurationOutput {
+pub struct GetBucketAccelerateConfigurationRequest {
+    /// <p>Name of the bucket for which the accelerate configuration is retrieved.</p>
+    pub bucket: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetBucketAccelerateConfigurationResponse {
     /// <p>The accelerate configuration of the bucket.</p>
     pub status: Option<String>,
 }
 
-struct GetBucketAccelerateConfigurationOutputDeserializer;
-impl GetBucketAccelerateConfigurationOutputDeserializer {
+struct GetBucketAccelerateConfigurationResponseDeserializer;
+impl GetBucketAccelerateConfigurationResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetBucketAccelerateConfigurationOutput, XmlParseError> {
-        deserialize_elements::<_, GetBucketAccelerateConfigurationOutput, _>(
+    ) -> Result<GetBucketAccelerateConfigurationResponse, XmlParseError> {
+        deserialize_elements::<_, GetBucketAccelerateConfigurationResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -4239,27 +4402,27 @@ impl GetBucketAccelerateConfigurationOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketAccelerateConfigurationRequest {
-    /// <p>Name of the bucket for which the accelerate configuration is retrieved.</p>
+pub struct GetBucketAclRequest {
+    /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketAclOutput {
+pub struct GetBucketAclResponse {
     /// <p>A list of grants.</p>
     pub grants: Option<Vec<Grant>>,
     /// <p><p/></p>
     pub owner: Option<Owner>,
 }
 
-struct GetBucketAclOutputDeserializer;
-impl GetBucketAclOutputDeserializer {
+struct GetBucketAclResponseDeserializer;
+impl GetBucketAclResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetBucketAclOutput, XmlParseError> {
-        deserialize_elements::<_, GetBucketAclOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<GetBucketAclResponse, XmlParseError> {
+        deserialize_elements::<_, GetBucketAclResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AccessControlList" => {
                     obj.grants
@@ -4276,34 +4439,6 @@ impl GetBucketAclOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketAclRequest {
-    /// <p><p/></p>
-    pub bucket: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketAnalyticsConfigurationOutput {
-    /// <p>The configuration and any analyses for the analytics filter.</p>
-    pub analytics_configuration: Option<AnalyticsConfiguration>,
-}
-
-struct GetBucketAnalyticsConfigurationOutputDeserializer;
-impl GetBucketAnalyticsConfigurationOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<GetBucketAnalyticsConfigurationOutput, XmlParseError> {
-        Ok(GetBucketAnalyticsConfigurationOutput {
-            analytics_configuration: Some(AnalyticsConfigurationDeserializer::deserialize(
-                "AnalyticsConfiguration",
-                stack,
-            )?),
-            ..GetBucketAnalyticsConfigurationOutput::default()
-        })
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketAnalyticsConfigurationRequest {
     /// <p>The name of the bucket from which an analytics configuration is retrieved.</p>
     pub bucket: String,
@@ -4312,19 +4447,47 @@ pub struct GetBucketAnalyticsConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketCorsOutput {
-    /// <p><p/></p>
-    pub cors_rules: Option<Vec<CORSRule>>,
+pub struct GetBucketAnalyticsConfigurationResponse {
+    /// <p>The configuration and any analyses for the analytics filter.</p>
+    pub analytics_configuration: Option<AnalyticsConfiguration>,
 }
 
-struct GetBucketCorsOutputDeserializer;
-impl GetBucketCorsOutputDeserializer {
+struct GetBucketAnalyticsConfigurationResponseDeserializer;
+impl GetBucketAnalyticsConfigurationResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetBucketCorsOutput, XmlParseError> {
-        deserialize_elements::<_, GetBucketCorsOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<GetBucketAnalyticsConfigurationResponse, XmlParseError> {
+        Ok(GetBucketAnalyticsConfigurationResponse {
+            analytics_configuration: Some(AnalyticsConfigurationDeserializer::deserialize(
+                "AnalyticsConfiguration",
+                stack,
+            )?),
+            ..GetBucketAnalyticsConfigurationResponse::default()
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetBucketCorsRequest {
+    /// <p><p/></p>
+    pub bucket: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetBucketCorsResponse {
+    /// <p><p/></p>
+    pub cors_rules: Option<Vec<CORSRule>>,
+}
+
+struct GetBucketCorsResponseDeserializer;
+impl GetBucketCorsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetBucketCorsResponse, XmlParseError> {
+        deserialize_elements::<_, GetBucketCorsResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CORSRule" => {
                     obj.cors_rules
@@ -4338,59 +4501,31 @@ impl GetBucketCorsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketCorsRequest {
-    /// <p><p/></p>
-    pub bucket: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketEncryptionOutput {
-    pub server_side_encryption_configuration: Option<ServerSideEncryptionConfiguration>,
-}
-
-struct GetBucketEncryptionOutputDeserializer;
-impl GetBucketEncryptionOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<GetBucketEncryptionOutput, XmlParseError> {
-        Ok(GetBucketEncryptionOutput {
-            server_side_encryption_configuration: Some(
-                ServerSideEncryptionConfigurationDeserializer::deserialize(
-                    "ServerSideEncryptionConfiguration",
-                    stack,
-                )?,
-            ),
-            ..GetBucketEncryptionOutput::default()
-        })
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketEncryptionRequest {
     /// <p>The name of the bucket from which the server-side encryption configuration is retrieved.</p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketInventoryConfigurationOutput {
-    /// <p>Specifies the inventory configuration.</p>
-    pub inventory_configuration: Option<InventoryConfiguration>,
+pub struct GetBucketEncryptionResponse {
+    pub server_side_encryption_configuration: Option<ServerSideEncryptionConfiguration>,
 }
 
-struct GetBucketInventoryConfigurationOutputDeserializer;
-impl GetBucketInventoryConfigurationOutputDeserializer {
+struct GetBucketEncryptionResponseDeserializer;
+impl GetBucketEncryptionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetBucketInventoryConfigurationOutput, XmlParseError> {
-        Ok(GetBucketInventoryConfigurationOutput {
-            inventory_configuration: Some(InventoryConfigurationDeserializer::deserialize(
-                "InventoryConfiguration",
-                stack,
-            )?),
-            ..GetBucketInventoryConfigurationOutput::default()
+    ) -> Result<GetBucketEncryptionResponse, XmlParseError> {
+        Ok(GetBucketEncryptionResponse {
+            server_side_encryption_configuration: Some(
+                ServerSideEncryptionConfigurationDeserializer::deserialize(
+                    "ServerSideEncryptionConfiguration",
+                    stack,
+                )?,
+            ),
+            ..GetBucketEncryptionResponse::default()
         })
     }
 }
@@ -4403,19 +4538,47 @@ pub struct GetBucketInventoryConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketLifecycleConfigurationOutput {
-    /// <p><p/></p>
-    pub rules: Option<Vec<LifecycleRule>>,
+pub struct GetBucketInventoryConfigurationResponse {
+    /// <p>Specifies the inventory configuration.</p>
+    pub inventory_configuration: Option<InventoryConfiguration>,
 }
 
-struct GetBucketLifecycleConfigurationOutputDeserializer;
-impl GetBucketLifecycleConfigurationOutputDeserializer {
+struct GetBucketInventoryConfigurationResponseDeserializer;
+impl GetBucketInventoryConfigurationResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetBucketLifecycleConfigurationOutput, XmlParseError> {
-        deserialize_elements::<_, GetBucketLifecycleConfigurationOutput, _>(
+    ) -> Result<GetBucketInventoryConfigurationResponse, XmlParseError> {
+        Ok(GetBucketInventoryConfigurationResponse {
+            inventory_configuration: Some(InventoryConfigurationDeserializer::deserialize(
+                "InventoryConfiguration",
+                stack,
+            )?),
+            ..GetBucketInventoryConfigurationResponse::default()
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetBucketLifecycleConfigurationRequest {
+    /// <p><p/></p>
+    pub bucket: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetBucketLifecycleConfigurationResponse {
+    /// <p><p/></p>
+    pub rules: Option<Vec<LifecycleRule>>,
+}
+
+struct GetBucketLifecycleConfigurationResponseDeserializer;
+impl GetBucketLifecycleConfigurationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetBucketLifecycleConfigurationResponse, XmlParseError> {
+        deserialize_elements::<_, GetBucketLifecycleConfigurationResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -4433,25 +4596,25 @@ impl GetBucketLifecycleConfigurationOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketLifecycleConfigurationRequest {
+pub struct GetBucketLifecycleRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketLifecycleOutput {
+pub struct GetBucketLifecycleResponse {
     /// <p><p/></p>
     pub rules: Option<Vec<Rule>>,
 }
 
-struct GetBucketLifecycleOutputDeserializer;
-impl GetBucketLifecycleOutputDeserializer {
+struct GetBucketLifecycleResponseDeserializer;
+impl GetBucketLifecycleResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetBucketLifecycleOutput, XmlParseError> {
-        deserialize_elements::<_, GetBucketLifecycleOutput, _>(
+    ) -> Result<GetBucketLifecycleResponse, XmlParseError> {
+        deserialize_elements::<_, GetBucketLifecycleResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -4469,62 +4632,30 @@ impl GetBucketLifecycleOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketLifecycleRequest {
-    /// <p><p/></p>
-    pub bucket: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketLocationOutput {
-    /// <p><p/></p>
-    pub location_constraint: Option<String>,
-}
-
-struct GetBucketLocationOutputDeserializer;
-impl GetBucketLocationOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<GetBucketLocationOutput, XmlParseError> {
-        let mut obj = GetBucketLocationOutput::default();
-        obj.location_constraint = Some(BucketLocationConstraintDeserializer::deserialize(
-            "LocationConstraint",
-            stack,
-        )?);
-        Ok(obj)
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketLocationRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketLoggingOutput {
-    pub logging_enabled: Option<LoggingEnabled>,
+pub struct GetBucketLocationResponse {
+    /// <p><p/></p>
+    pub location_constraint: Option<String>,
 }
 
-struct GetBucketLoggingOutputDeserializer;
-impl GetBucketLoggingOutputDeserializer {
+struct GetBucketLocationResponseDeserializer;
+impl GetBucketLocationResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetBucketLoggingOutput, XmlParseError> {
-        deserialize_elements::<_, GetBucketLoggingOutput, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "LoggingEnabled" => {
-                    obj.logging_enabled = Some(LoggingEnabledDeserializer::deserialize(
-                        "LoggingEnabled",
-                        stack,
-                    )?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+    ) -> Result<GetBucketLocationResponse, XmlParseError> {
+        let mut obj = GetBucketLocationResponse::default();
+        obj.location_constraint = Some(BucketLocationConstraintDeserializer::deserialize(
+            "LocationConstraint",
+            stack,
+        )?);
+        Ok(obj)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4534,25 +4665,33 @@ pub struct GetBucketLoggingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketMetricsConfigurationOutput {
-    /// <p>Specifies the metrics configuration.</p>
-    pub metrics_configuration: Option<MetricsConfiguration>,
+pub struct GetBucketLoggingResponse {
+    pub logging_enabled: Option<LoggingEnabled>,
 }
 
-struct GetBucketMetricsConfigurationOutputDeserializer;
-impl GetBucketMetricsConfigurationOutputDeserializer {
+struct GetBucketLoggingResponseDeserializer;
+impl GetBucketLoggingResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetBucketMetricsConfigurationOutput, XmlParseError> {
-        Ok(GetBucketMetricsConfigurationOutput {
-            metrics_configuration: Some(MetricsConfigurationDeserializer::deserialize(
-                "MetricsConfiguration",
-                stack,
-            )?),
-            ..GetBucketMetricsConfigurationOutput::default()
-        })
+    ) -> Result<GetBucketLoggingResponse, XmlParseError> {
+        deserialize_elements::<_, GetBucketLoggingResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "LoggingEnabled" => {
+                        obj.logging_enabled = Some(LoggingEnabledDeserializer::deserialize(
+                            "LoggingEnabled",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4564,17 +4703,143 @@ pub struct GetBucketMetricsConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetBucketMetricsConfigurationResponse {
+    /// <p>Specifies the metrics configuration.</p>
+    pub metrics_configuration: Option<MetricsConfiguration>,
+}
+
+struct GetBucketMetricsConfigurationResponseDeserializer;
+impl GetBucketMetricsConfigurationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetBucketMetricsConfigurationResponse, XmlParseError> {
+        Ok(GetBucketMetricsConfigurationResponse {
+            metrics_configuration: Some(MetricsConfigurationDeserializer::deserialize(
+                "MetricsConfiguration",
+                stack,
+            )?),
+            ..GetBucketMetricsConfigurationResponse::default()
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketNotificationConfigurationRequest {
     /// <p>Name of the bucket to get the notification configuration for.</p>
     pub bucket: String,
 }
 
+/// <p>A container for specifying the notification configuration of the bucket. If this element is empty, notifications are turned off for the bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketPolicyOutput {
-    /// <p>The bucket policy as a JSON document.</p>
-    pub policy: Option<String>,
+pub struct GetBucketNotificationConfigurationResponse {
+    /// <p><p/></p>
+    pub lambda_function_configurations: Option<Vec<LambdaFunctionConfiguration>>,
+    /// <p><p/></p>
+    pub queue_configurations: Option<Vec<QueueConfiguration>>,
+    /// <p><p/></p>
+    pub topic_configurations: Option<Vec<TopicConfiguration>>,
 }
 
+struct GetBucketNotificationConfigurationResponseDeserializer;
+impl GetBucketNotificationConfigurationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetBucketNotificationConfigurationResponse, XmlParseError> {
+        deserialize_elements::<_, GetBucketNotificationConfigurationResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CloudFunctionConfiguration" => {
+                        obj.lambda_function_configurations
+                            .get_or_insert(vec![])
+                            .extend(LambdaFunctionConfigurationListDeserializer::deserialize(
+                                "CloudFunctionConfiguration",
+                                stack,
+                            )?);
+                    }
+                    "QueueConfiguration" => {
+                        obj.queue_configurations.get_or_insert(vec![]).extend(
+                            QueueConfigurationListDeserializer::deserialize(
+                                "QueueConfiguration",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "TopicConfiguration" => {
+                        obj.topic_configurations.get_or_insert(vec![]).extend(
+                            TopicConfigurationListDeserializer::deserialize(
+                                "TopicConfiguration",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetBucketNotificationRequest {
+    /// <p>Name of the bucket to get the notification configuration for.</p>
+    pub bucket: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetBucketNotificationResponse {
+    /// <p><p/></p>
+    pub cloud_function_configuration: Option<CloudFunctionConfiguration>,
+    /// <p><p/></p>
+    pub queue_configuration: Option<QueueConfigurationDeprecated>,
+    /// <p><p/></p>
+    pub topic_configuration: Option<TopicConfigurationDeprecated>,
+}
+
+struct GetBucketNotificationResponseDeserializer;
+impl GetBucketNotificationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetBucketNotificationResponse, XmlParseError> {
+        deserialize_elements::<_, GetBucketNotificationResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CloudFunctionConfiguration" => {
+                        obj.cloud_function_configuration =
+                            Some(CloudFunctionConfigurationDeserializer::deserialize(
+                                "CloudFunctionConfiguration",
+                                stack,
+                            )?);
+                    }
+                    "QueueConfiguration" => {
+                        obj.queue_configuration =
+                            Some(QueueConfigurationDeprecatedDeserializer::deserialize(
+                                "QueueConfiguration",
+                                stack,
+                            )?);
+                    }
+                    "TopicConfiguration" => {
+                        obj.topic_configuration =
+                            Some(TopicConfigurationDeprecatedDeserializer::deserialize(
+                                "TopicConfiguration",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketPolicyRequest {
     /// <p><p/></p>
@@ -4582,27 +4847,11 @@ pub struct GetBucketPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketPolicyStatusOutput {
-    /// <p>The policy status for the specified bucket.</p>
-    pub policy_status: Option<PolicyStatus>,
+pub struct GetBucketPolicyResponse {
+    /// <p>The bucket policy as a JSON document.</p>
+    pub policy: Option<String>,
 }
 
-struct GetBucketPolicyStatusOutputDeserializer;
-impl GetBucketPolicyStatusOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<GetBucketPolicyStatusOutput, XmlParseError> {
-        Ok(GetBucketPolicyStatusOutput {
-            policy_status: Some(PolicyStatusDeserializer::deserialize(
-                "PolicyStatus",
-                stack,
-            )?),
-            ..GetBucketPolicyStatusOutput::default()
-        })
-    }
-}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketPolicyStatusRequest {
     /// <p>The name of the Amazon S3 bucket whose policy status you want to retrieve.</p>
@@ -4610,23 +4859,24 @@ pub struct GetBucketPolicyStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketReplicationOutput {
-    pub replication_configuration: Option<ReplicationConfiguration>,
+pub struct GetBucketPolicyStatusResponse {
+    /// <p>The policy status for the specified bucket.</p>
+    pub policy_status: Option<PolicyStatus>,
 }
 
-struct GetBucketReplicationOutputDeserializer;
-impl GetBucketReplicationOutputDeserializer {
+struct GetBucketPolicyStatusResponseDeserializer;
+impl GetBucketPolicyStatusResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetBucketReplicationOutput, XmlParseError> {
-        Ok(GetBucketReplicationOutput {
-            replication_configuration: Some(ReplicationConfigurationDeserializer::deserialize(
-                "ReplicationConfiguration",
+    ) -> Result<GetBucketPolicyStatusResponse, XmlParseError> {
+        Ok(GetBucketPolicyStatusResponse {
+            policy_status: Some(PolicyStatusDeserializer::deserialize(
+                "PolicyStatus",
                 stack,
             )?),
-            ..GetBucketReplicationOutput::default()
+            ..GetBucketPolicyStatusResponse::default()
         })
     }
 }
@@ -4637,19 +4887,46 @@ pub struct GetBucketReplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketRequestPaymentOutput {
-    /// <p>Specifies who pays for the download and request fees.</p>
-    pub payer: Option<String>,
+pub struct GetBucketReplicationResponse {
+    pub replication_configuration: Option<ReplicationConfiguration>,
 }
 
-struct GetBucketRequestPaymentOutputDeserializer;
-impl GetBucketRequestPaymentOutputDeserializer {
+struct GetBucketReplicationResponseDeserializer;
+impl GetBucketReplicationResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetBucketRequestPaymentOutput, XmlParseError> {
-        deserialize_elements::<_, GetBucketRequestPaymentOutput, _>(
+    ) -> Result<GetBucketReplicationResponse, XmlParseError> {
+        Ok(GetBucketReplicationResponse {
+            replication_configuration: Some(ReplicationConfigurationDeserializer::deserialize(
+                "ReplicationConfiguration",
+                stack,
+            )?),
+            ..GetBucketReplicationResponse::default()
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetBucketRequestPaymentRequest {
+    /// <p><p/></p>
+    pub bucket: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetBucketRequestPaymentResponse {
+    /// <p>Specifies who pays for the download and request fees.</p>
+    pub payer: Option<String>,
+}
+
+struct GetBucketRequestPaymentResponseDeserializer;
+impl GetBucketRequestPaymentResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetBucketRequestPaymentResponse, XmlParseError> {
+        deserialize_elements::<_, GetBucketRequestPaymentResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -4665,58 +4942,62 @@ impl GetBucketRequestPaymentOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketRequestPaymentRequest {
-    /// <p><p/></p>
-    pub bucket: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketTaggingOutput {
-    /// <p><p/></p>
-    pub tag_set: Vec<Tag>,
-}
-
-struct GetBucketTaggingOutputDeserializer;
-impl GetBucketTaggingOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<GetBucketTaggingOutput, XmlParseError> {
-        deserialize_elements::<_, GetBucketTaggingOutput, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "TagSet" => {
-                    obj.tag_set
-                        .extend(TagSetDeserializer::deserialize("TagSet", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketTaggingRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketVersioningOutput {
+pub struct GetBucketTaggingResponse {
+    /// <p><p/></p>
+    pub tag_set: Vec<Tag>,
+}
+
+struct GetBucketTaggingResponseDeserializer;
+impl GetBucketTaggingResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetBucketTaggingResponse, XmlParseError> {
+        deserialize_elements::<_, GetBucketTaggingResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "TagSet" => {
+                        obj.tag_set
+                            .extend(TagSetDeserializer::deserialize("TagSet", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetBucketVersioningRequest {
+    /// <p><p/></p>
+    pub bucket: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetBucketVersioningResponse {
     /// <p>Specifies whether MFA delete is enabled in the bucket versioning configuration. This element is only returned if the bucket has been configured with MFA delete. If the bucket has never been so configured, this element is not returned.</p>
     pub mfa_delete: Option<String>,
     /// <p>The versioning state of the bucket.</p>
     pub status: Option<String>,
 }
 
-struct GetBucketVersioningOutputDeserializer;
-impl GetBucketVersioningOutputDeserializer {
+struct GetBucketVersioningResponseDeserializer;
+impl GetBucketVersioningResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetBucketVersioningOutput, XmlParseError> {
-        deserialize_elements::<_, GetBucketVersioningOutput, _>(
+    ) -> Result<GetBucketVersioningResponse, XmlParseError> {
+        deserialize_elements::<_, GetBucketVersioningResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -4740,13 +5021,13 @@ impl GetBucketVersioningOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketVersioningRequest {
+pub struct GetBucketWebsiteRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketWebsiteOutput {
+pub struct GetBucketWebsiteResponse {
     /// <p><p/></p>
     pub error_document: Option<ErrorDocument>,
     /// <p><p/></p>
@@ -4757,53 +5038,62 @@ pub struct GetBucketWebsiteOutput {
     pub routing_rules: Option<Vec<RoutingRule>>,
 }
 
-struct GetBucketWebsiteOutputDeserializer;
-impl GetBucketWebsiteOutputDeserializer {
+struct GetBucketWebsiteResponseDeserializer;
+impl GetBucketWebsiteResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetBucketWebsiteOutput, XmlParseError> {
-        deserialize_elements::<_, GetBucketWebsiteOutput, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "ErrorDocument" => {
-                    obj.error_document = Some(ErrorDocumentDeserializer::deserialize(
-                        "ErrorDocument",
-                        stack,
-                    )?);
-                }
-                "IndexDocument" => {
-                    obj.index_document = Some(IndexDocumentDeserializer::deserialize(
-                        "IndexDocument",
-                        stack,
-                    )?);
-                }
-                "RedirectAllRequestsTo" => {
-                    obj.redirect_all_requests_to =
-                        Some(RedirectAllRequestsToDeserializer::deserialize(
-                            "RedirectAllRequestsTo",
+    ) -> Result<GetBucketWebsiteResponse, XmlParseError> {
+        deserialize_elements::<_, GetBucketWebsiteResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ErrorDocument" => {
+                        obj.error_document = Some(ErrorDocumentDeserializer::deserialize(
+                            "ErrorDocument",
                             stack,
                         )?);
+                    }
+                    "IndexDocument" => {
+                        obj.index_document = Some(IndexDocumentDeserializer::deserialize(
+                            "IndexDocument",
+                            stack,
+                        )?);
+                    }
+                    "RedirectAllRequestsTo" => {
+                        obj.redirect_all_requests_to =
+                            Some(RedirectAllRequestsToDeserializer::deserialize(
+                                "RedirectAllRequestsTo",
+                                stack,
+                            )?);
+                    }
+                    "RoutingRules" => {
+                        obj.routing_rules.get_or_insert(vec![]).extend(
+                            RoutingRulesDeserializer::deserialize("RoutingRules", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
                 }
-                "RoutingRules" => {
-                    obj.routing_rules.get_or_insert(vec![]).extend(
-                        RoutingRulesDeserializer::deserialize("RoutingRules", stack)?,
-                    );
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetBucketWebsiteRequest {
+pub struct GetObjectAclRequest {
     /// <p><p/></p>
     pub bucket: String,
+    /// <p><p/></p>
+    pub key: String,
+    pub request_payer: Option<String>,
+    /// <p>VersionId used to reference a specific version of the object.</p>
+    pub version_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetObjectAclOutput {
+pub struct GetObjectAclResponse {
     /// <p>A list of grants.</p>
     pub grants: Option<Vec<Grant>>,
     /// <p><p/></p>
@@ -4811,14 +5101,14 @@ pub struct GetObjectAclOutput {
     pub request_charged: Option<String>,
 }
 
-struct GetObjectAclOutputDeserializer;
-impl GetObjectAclOutputDeserializer {
+struct GetObjectAclResponseDeserializer;
+impl GetObjectAclResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetObjectAclOutput, XmlParseError> {
-        deserialize_elements::<_, GetObjectAclOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<GetObjectAclResponse, XmlParseError> {
+        deserialize_elements::<_, GetObjectAclResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AccessControlList" => {
                     obj.grants
@@ -4835,39 +5125,6 @@ impl GetObjectAclOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetObjectAclRequest {
-    /// <p><p/></p>
-    pub bucket: String,
-    /// <p><p/></p>
-    pub key: String,
-    pub request_payer: Option<String>,
-    /// <p>VersionId used to reference a specific version of the object.</p>
-    pub version_id: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetObjectLegalHoldOutput {
-    /// <p>The current Legal Hold status for the specified object.</p>
-    pub legal_hold: Option<ObjectLockLegalHold>,
-}
-
-struct GetObjectLegalHoldOutputDeserializer;
-impl GetObjectLegalHoldOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<GetObjectLegalHoldOutput, XmlParseError> {
-        Ok(GetObjectLegalHoldOutput {
-            legal_hold: Some(ObjectLockLegalHoldDeserializer::deserialize(
-                "LegalHold",
-                stack,
-            )?),
-            ..GetObjectLegalHoldOutput::default()
-        })
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetObjectLegalHoldRequest {
     /// <p>The bucket containing the object whose Legal Hold status you want to retrieve.</p>
     pub bucket: String,
@@ -4879,24 +5136,24 @@ pub struct GetObjectLegalHoldRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetObjectLockConfigurationOutput {
-    /// <p>The specified bucket's Object Lock configuration.</p>
-    pub object_lock_configuration: Option<ObjectLockConfiguration>,
+pub struct GetObjectLegalHoldResponse {
+    /// <p>The current Legal Hold status for the specified object.</p>
+    pub legal_hold: Option<ObjectLockLegalHold>,
 }
 
-struct GetObjectLockConfigurationOutputDeserializer;
-impl GetObjectLockConfigurationOutputDeserializer {
+struct GetObjectLegalHoldResponseDeserializer;
+impl GetObjectLegalHoldResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetObjectLockConfigurationOutput, XmlParseError> {
-        Ok(GetObjectLockConfigurationOutput {
-            object_lock_configuration: Some(ObjectLockConfigurationDeserializer::deserialize(
-                "ObjectLockConfiguration",
+    ) -> Result<GetObjectLegalHoldResponse, XmlParseError> {
+        Ok(GetObjectLegalHoldResponse {
+            legal_hold: Some(ObjectLockLegalHoldDeserializer::deserialize(
+                "LegalHold",
                 stack,
             )?),
-            ..GetObjectLockConfigurationOutput::default()
+            ..GetObjectLegalHoldResponse::default()
         })
     }
 }
@@ -4906,8 +5163,71 @@ pub struct GetObjectLockConfigurationRequest {
     pub bucket: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetObjectLockConfigurationResponse {
+    /// <p>The specified bucket's Object Lock configuration.</p>
+    pub object_lock_configuration: Option<ObjectLockConfiguration>,
+}
+
+struct GetObjectLockConfigurationResponseDeserializer;
+impl GetObjectLockConfigurationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetObjectLockConfigurationResponse, XmlParseError> {
+        Ok(GetObjectLockConfigurationResponse {
+            object_lock_configuration: Some(ObjectLockConfigurationDeserializer::deserialize(
+                "ObjectLockConfiguration",
+                stack,
+            )?),
+            ..GetObjectLockConfigurationResponse::default()
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetObjectRequest {
+    /// <p><p/></p>
+    pub bucket: String,
+    /// <p>Return the object only if its entity tag (ETag) is the same as the one specified, otherwise return a 412 (precondition failed).</p>
+    pub if_match: Option<String>,
+    /// <p>Return the object only if it has been modified since the specified time, otherwise return a 304 (not modified).</p>
+    pub if_modified_since: Option<String>,
+    /// <p>Return the object only if its entity tag (ETag) is different from the one specified, otherwise return a 304 (not modified).</p>
+    pub if_none_match: Option<String>,
+    /// <p>Return the object only if it has not been modified since the specified time, otherwise return a 412 (precondition failed).</p>
+    pub if_unmodified_since: Option<String>,
+    /// <p><p/></p>
+    pub key: String,
+    /// <p>Part number of the object being read. This is a positive integer between 1 and 10,000. Effectively performs a 'ranged' GET request for the part specified. Useful for downloading just a part of an object.</p>
+    pub part_number: Option<i64>,
+    /// <p>Downloads the specified range bytes of an object. For more information about the HTTP Range header, go to http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.</p>
+    pub range: Option<String>,
+    pub request_payer: Option<String>,
+    /// <p>Sets the Cache-Control header of the response.</p>
+    pub response_cache_control: Option<String>,
+    /// <p>Sets the Content-Disposition header of the response</p>
+    pub response_content_disposition: Option<String>,
+    /// <p>Sets the Content-Encoding header of the response.</p>
+    pub response_content_encoding: Option<String>,
+    /// <p>Sets the Content-Language header of the response.</p>
+    pub response_content_language: Option<String>,
+    /// <p>Sets the Content-Type header of the response.</p>
+    pub response_content_type: Option<String>,
+    /// <p>Sets the Expires header of the response.</p>
+    pub response_expires: Option<String>,
+    /// <p>Specifies the algorithm to use to when encrypting the object (e.g., AES256).</p>
+    pub sse_customer_algorithm: Option<String>,
+    /// <p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header.</p>
+    pub sse_customer_key: Option<String>,
+    /// <p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.</p>
+    pub sse_customer_key_md5: Option<String>,
+    /// <p>VersionId used to reference a specific version of the object.</p>
+    pub version_id: Option<String>,
+}
+
 #[derive(Default, Debug)]
-pub struct GetObjectOutput {
+pub struct GetObjectResponse {
     /// <p><p/></p>
     pub accept_ranges: Option<String>,
     /// <p>Object data.</p>
@@ -4972,69 +5292,6 @@ pub struct GetObjectOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetObjectRequest {
-    /// <p><p/></p>
-    pub bucket: String,
-    /// <p>Return the object only if its entity tag (ETag) is the same as the one specified, otherwise return a 412 (precondition failed).</p>
-    pub if_match: Option<String>,
-    /// <p>Return the object only if it has been modified since the specified time, otherwise return a 304 (not modified).</p>
-    pub if_modified_since: Option<String>,
-    /// <p>Return the object only if its entity tag (ETag) is different from the one specified, otherwise return a 304 (not modified).</p>
-    pub if_none_match: Option<String>,
-    /// <p>Return the object only if it has not been modified since the specified time, otherwise return a 412 (precondition failed).</p>
-    pub if_unmodified_since: Option<String>,
-    /// <p><p/></p>
-    pub key: String,
-    /// <p>Part number of the object being read. This is a positive integer between 1 and 10,000. Effectively performs a 'ranged' GET request for the part specified. Useful for downloading just a part of an object.</p>
-    pub part_number: Option<i64>,
-    /// <p>Downloads the specified range bytes of an object. For more information about the HTTP Range header, go to http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.</p>
-    pub range: Option<String>,
-    pub request_payer: Option<String>,
-    /// <p>Sets the Cache-Control header of the response.</p>
-    pub response_cache_control: Option<String>,
-    /// <p>Sets the Content-Disposition header of the response</p>
-    pub response_content_disposition: Option<String>,
-    /// <p>Sets the Content-Encoding header of the response.</p>
-    pub response_content_encoding: Option<String>,
-    /// <p>Sets the Content-Language header of the response.</p>
-    pub response_content_language: Option<String>,
-    /// <p>Sets the Content-Type header of the response.</p>
-    pub response_content_type: Option<String>,
-    /// <p>Sets the Expires header of the response.</p>
-    pub response_expires: Option<String>,
-    /// <p>Specifies the algorithm to use to when encrypting the object (e.g., AES256).</p>
-    pub sse_customer_algorithm: Option<String>,
-    /// <p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header.</p>
-    pub sse_customer_key: Option<String>,
-    /// <p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.</p>
-    pub sse_customer_key_md5: Option<String>,
-    /// <p>VersionId used to reference a specific version of the object.</p>
-    pub version_id: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetObjectRetentionOutput {
-    /// <p>The container element for an object's retention settings.</p>
-    pub retention: Option<ObjectLockRetention>,
-}
-
-struct GetObjectRetentionOutputDeserializer;
-impl GetObjectRetentionOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<GetObjectRetentionOutput, XmlParseError> {
-        Ok(GetObjectRetentionOutput {
-            retention: Some(ObjectLockRetentionDeserializer::deserialize(
-                "Retention",
-                stack,
-            )?),
-            ..GetObjectRetentionOutput::default()
-        })
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetObjectRetentionRequest {
     /// <p>The bucket containing the object whose retention settings you want to retrieve.</p>
     pub bucket: String,
@@ -5046,29 +5303,24 @@ pub struct GetObjectRetentionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetObjectTaggingOutput {
-    /// <p><p/></p>
-    pub tag_set: Vec<Tag>,
-    /// <p><p/></p>
-    pub version_id: Option<String>,
+pub struct GetObjectRetentionResponse {
+    /// <p>The container element for an object's retention settings.</p>
+    pub retention: Option<ObjectLockRetention>,
 }
 
-struct GetObjectTaggingOutputDeserializer;
-impl GetObjectTaggingOutputDeserializer {
+struct GetObjectRetentionResponseDeserializer;
+impl GetObjectRetentionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetObjectTaggingOutput, XmlParseError> {
-        deserialize_elements::<_, GetObjectTaggingOutput, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "TagSet" => {
-                    obj.tag_set
-                        .extend(TagSetDeserializer::deserialize("TagSet", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
+    ) -> Result<GetObjectRetentionResponse, XmlParseError> {
+        Ok(GetObjectRetentionResponse {
+            retention: Some(ObjectLockRetentionDeserializer::deserialize(
+                "Retention",
+                stack,
+            )?),
+            ..GetObjectRetentionResponse::default()
         })
     }
 }
@@ -5082,13 +5334,37 @@ pub struct GetObjectTaggingRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug)]
-pub struct GetObjectTorrentOutput {
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetObjectTaggingResponse {
     /// <p><p/></p>
-    pub body: Option<StreamingBody>,
-    pub request_charged: Option<String>,
+    pub tag_set: Vec<Tag>,
+    /// <p><p/></p>
+    pub version_id: Option<String>,
 }
 
+struct GetObjectTaggingResponseDeserializer;
+impl GetObjectTaggingResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetObjectTaggingResponse, XmlParseError> {
+        deserialize_elements::<_, GetObjectTaggingResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "TagSet" => {
+                        obj.tag_set
+                            .extend(TagSetDeserializer::deserialize("TagSet", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetObjectTorrentRequest {
     /// <p><p/></p>
@@ -5098,36 +5374,43 @@ pub struct GetObjectTorrentRequest {
     pub request_payer: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetPublicAccessBlockOutput {
-    /// <p>The <code>PublicAccessBlock</code> configuration currently in effect for this Amazon S3 bucket.</p>
-    pub public_access_block_configuration: Option<PublicAccessBlockConfiguration>,
+#[derive(Default, Debug)]
+pub struct GetObjectTorrentResponse {
+    /// <p><p/></p>
+    pub body: Option<StreamingBody>,
+    pub request_charged: Option<String>,
 }
 
-struct GetPublicAccessBlockOutputDeserializer;
-impl GetPublicAccessBlockOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<GetPublicAccessBlockOutput, XmlParseError> {
-        Ok(GetPublicAccessBlockOutput {
-            public_access_block_configuration: Some(
-                PublicAccessBlockConfigurationDeserializer::deserialize(
-                    "PublicAccessBlockConfiguration",
-                    stack,
-                )?,
-            ),
-            ..GetPublicAccessBlockOutput::default()
-        })
-    }
-}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetPublicAccessBlockRequest {
     /// <p>The name of the Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want to retrieve. </p>
     pub bucket: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetPublicAccessBlockResponse {
+    /// <p>The <code>PublicAccessBlock</code> configuration currently in effect for this Amazon S3 bucket.</p>
+    pub public_access_block_configuration: Option<PublicAccessBlockConfiguration>,
+}
+
+struct GetPublicAccessBlockResponseDeserializer;
+impl GetPublicAccessBlockResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetPublicAccessBlockResponse, XmlParseError> {
+        Ok(GetPublicAccessBlockResponse {
+            public_access_block_configuration: Some(
+                PublicAccessBlockConfigurationDeserializer::deserialize(
+                    "PublicAccessBlockConfiguration",
+                    stack,
+                )?,
+            ),
+            ..GetPublicAccessBlockResponse::default()
+        })
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GlacierJobParameters {
@@ -5362,7 +5645,49 @@ pub struct HeadBucketRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct HeadObjectOutput {
+pub struct HeadBucketResponse {}
+
+struct HeadBucketResponseDeserializer;
+impl HeadBucketResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<HeadBucketResponse, XmlParseError> {
+        Ok(HeadBucketResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct HeadObjectRequest {
+    /// <p><p/></p>
+    pub bucket: String,
+    /// <p>Return the object only if its entity tag (ETag) is the same as the one specified, otherwise return a 412 (precondition failed).</p>
+    pub if_match: Option<String>,
+    /// <p>Return the object only if it has been modified since the specified time, otherwise return a 304 (not modified).</p>
+    pub if_modified_since: Option<String>,
+    /// <p>Return the object only if its entity tag (ETag) is different from the one specified, otherwise return a 304 (not modified).</p>
+    pub if_none_match: Option<String>,
+    /// <p>Return the object only if it has not been modified since the specified time, otherwise return a 412 (precondition failed).</p>
+    pub if_unmodified_since: Option<String>,
+    /// <p><p/></p>
+    pub key: String,
+    /// <p>Part number of the object being read. This is a positive integer between 1 and 10,000. Effectively performs a 'ranged' HEAD request for the part specified. Useful querying about the size of the part and the number of parts in this object.</p>
+    pub part_number: Option<i64>,
+    /// <p>Downloads the specified range bytes of an object. For more information about the HTTP Range header, go to http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.</p>
+    pub range: Option<String>,
+    pub request_payer: Option<String>,
+    /// <p>Specifies the algorithm to use to when encrypting the object (e.g., AES256).</p>
+    pub sse_customer_algorithm: Option<String>,
+    /// <p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header.</p>
+    pub sse_customer_key: Option<String>,
+    /// <p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.</p>
+    pub sse_customer_key_md5: Option<String>,
+    /// <p>VersionId used to reference a specific version of the object.</p>
+    pub version_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct HeadObjectResponse {
     /// <p><p/></p>
     pub accept_ranges: Option<String>,
     /// <p>Specifies caching behavior along the request/reply chain.</p>
@@ -5420,51 +5745,22 @@ pub struct HeadObjectOutput {
     pub website_redirect_location: Option<String>,
 }
 
-struct HeadObjectOutputDeserializer;
-impl HeadObjectOutputDeserializer {
+struct HeadObjectResponseDeserializer;
+impl HeadObjectResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<HeadObjectOutput, XmlParseError> {
+    ) -> Result<HeadObjectResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = HeadObjectOutput::default();
+        let obj = HeadObjectResponse::default();
 
         end_element(tag_name, stack)?;
 
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct HeadObjectRequest {
-    /// <p><p/></p>
-    pub bucket: String,
-    /// <p>Return the object only if its entity tag (ETag) is the same as the one specified, otherwise return a 412 (precondition failed).</p>
-    pub if_match: Option<String>,
-    /// <p>Return the object only if it has been modified since the specified time, otherwise return a 304 (not modified).</p>
-    pub if_modified_since: Option<String>,
-    /// <p>Return the object only if its entity tag (ETag) is different from the one specified, otherwise return a 304 (not modified).</p>
-    pub if_none_match: Option<String>,
-    /// <p>Return the object only if it has not been modified since the specified time, otherwise return a 412 (precondition failed).</p>
-    pub if_unmodified_since: Option<String>,
-    /// <p><p/></p>
-    pub key: String,
-    /// <p>Part number of the object being read. This is a positive integer between 1 and 10,000. Effectively performs a 'ranged' HEAD request for the part specified. Useful querying about the size of the part and the number of parts in this object.</p>
-    pub part_number: Option<i64>,
-    /// <p>Downloads the specified range bytes of an object. For more information about the HTTP Range header, go to http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.</p>
-    pub range: Option<String>,
-    pub request_payer: Option<String>,
-    /// <p>Specifies the algorithm to use to when encrypting the object (e.g., AES256).</p>
-    pub sse_customer_algorithm: Option<String>,
-    /// <p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header.</p>
-    pub sse_customer_key: Option<String>,
-    /// <p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.</p>
-    pub sse_customer_key_md5: Option<String>,
-    /// <p>VersionId used to reference a specific version of the object.</p>
-    pub version_id: Option<String>,
-}
-
 struct HostNameDeserializer;
 impl HostNameDeserializer {
     #[allow(unused_variables)]
@@ -7204,7 +7500,15 @@ impl LifecycleRulesSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListBucketAnalyticsConfigurationsOutput {
+pub struct ListBucketAnalyticsConfigurationsRequest {
+    /// <p>The name of the bucket from which analytics configurations are retrieved.</p>
+    pub bucket: String,
+    /// <p>The ContinuationToken that represents a placeholder from where this request should begin.</p>
+    pub continuation_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ListBucketAnalyticsConfigurationsResponse {
     /// <p>The list of analytics configurations for a bucket.</p>
     pub analytics_configuration_list: Option<Vec<AnalyticsConfiguration>>,
     /// <p>The ContinuationToken that represents where this request began.</p>
@@ -7215,14 +7519,14 @@ pub struct ListBucketAnalyticsConfigurationsOutput {
     pub next_continuation_token: Option<String>,
 }
 
-struct ListBucketAnalyticsConfigurationsOutputDeserializer;
-impl ListBucketAnalyticsConfigurationsOutputDeserializer {
+struct ListBucketAnalyticsConfigurationsResponseDeserializer;
+impl ListBucketAnalyticsConfigurationsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListBucketAnalyticsConfigurationsOutput, XmlParseError> {
-        deserialize_elements::<_, ListBucketAnalyticsConfigurationsOutput, _>(
+    ) -> Result<ListBucketAnalyticsConfigurationsResponse, XmlParseError> {
+        deserialize_elements::<_, ListBucketAnalyticsConfigurationsResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -7257,15 +7561,15 @@ impl ListBucketAnalyticsConfigurationsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListBucketAnalyticsConfigurationsRequest {
-    /// <p>The name of the bucket from which analytics configurations are retrieved.</p>
+pub struct ListBucketInventoryConfigurationsRequest {
+    /// <p>The name of the bucket containing the inventory configurations to retrieve.</p>
     pub bucket: String,
-    /// <p>The ContinuationToken that represents a placeholder from where this request should begin.</p>
+    /// <p>The marker used to continue an inventory configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands.</p>
     pub continuation_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListBucketInventoryConfigurationsOutput {
+pub struct ListBucketInventoryConfigurationsResponse {
     /// <p>If sent in the request, the marker that is used as a starting point for this inventory configuration list response.</p>
     pub continuation_token: Option<String>,
     /// <p>The list of inventory configurations for a bucket.</p>
@@ -7276,14 +7580,14 @@ pub struct ListBucketInventoryConfigurationsOutput {
     pub next_continuation_token: Option<String>,
 }
 
-struct ListBucketInventoryConfigurationsOutputDeserializer;
-impl ListBucketInventoryConfigurationsOutputDeserializer {
+struct ListBucketInventoryConfigurationsResponseDeserializer;
+impl ListBucketInventoryConfigurationsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListBucketInventoryConfigurationsOutput, XmlParseError> {
-        deserialize_elements::<_, ListBucketInventoryConfigurationsOutput, _>(
+    ) -> Result<ListBucketInventoryConfigurationsResponse, XmlParseError> {
+        deserialize_elements::<_, ListBucketInventoryConfigurationsResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -7318,15 +7622,15 @@ impl ListBucketInventoryConfigurationsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListBucketInventoryConfigurationsRequest {
-    /// <p>The name of the bucket containing the inventory configurations to retrieve.</p>
+pub struct ListBucketMetricsConfigurationsRequest {
+    /// <p>The name of the bucket containing the metrics configurations to retrieve.</p>
     pub bucket: String,
-    /// <p>The marker used to continue an inventory configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands.</p>
+    /// <p>The marker that is used to continue a metrics configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands.</p>
     pub continuation_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListBucketMetricsConfigurationsOutput {
+pub struct ListBucketMetricsConfigurationsResponse {
     /// <p>The marker that is used as a starting point for this metrics configuration list response. This value is present if it was sent in the request.</p>
     pub continuation_token: Option<String>,
     /// <p>Indicates whether the returned list of metrics configurations is complete. A value of true indicates that the list is not complete and the NextContinuationToken will be provided for a subsequent request.</p>
@@ -7337,14 +7641,14 @@ pub struct ListBucketMetricsConfigurationsOutput {
     pub next_continuation_token: Option<String>,
 }
 
-struct ListBucketMetricsConfigurationsOutputDeserializer;
-impl ListBucketMetricsConfigurationsOutputDeserializer {
+struct ListBucketMetricsConfigurationsResponseDeserializer;
+impl ListBucketMetricsConfigurationsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListBucketMetricsConfigurationsOutput, XmlParseError> {
-        deserialize_elements::<_, ListBucketMetricsConfigurationsOutput, _>(
+    ) -> Result<ListBucketMetricsConfigurationsResponse, XmlParseError> {
+        deserialize_elements::<_, ListBucketMetricsConfigurationsResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -7379,29 +7683,24 @@ impl ListBucketMetricsConfigurationsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListBucketMetricsConfigurationsRequest {
-    /// <p>The name of the bucket containing the metrics configurations to retrieve.</p>
-    pub bucket: String,
-    /// <p>The marker that is used to continue a metrics configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands.</p>
-    pub continuation_token: Option<String>,
-}
+pub struct ListBucketsRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListBucketsOutput {
+pub struct ListBucketsResponse {
     /// <p><p/></p>
     pub buckets: Option<Vec<Bucket>>,
     /// <p><p/></p>
     pub owner: Option<Owner>,
 }
 
-struct ListBucketsOutputDeserializer;
-impl ListBucketsOutputDeserializer {
+struct ListBucketsResponseDeserializer;
+impl ListBucketsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListBucketsOutput, XmlParseError> {
-        deserialize_elements::<_, ListBucketsOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<ListBucketsResponse, XmlParseError> {
+        deserialize_elements::<_, ListBucketsResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Buckets" => {
                     obj.buckets
@@ -7418,7 +7717,24 @@ impl ListBucketsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListMultipartUploadsOutput {
+pub struct ListMultipartUploadsRequest {
+    /// <p><p/></p>
+    pub bucket: String,
+    /// <p>Character you use to group keys.</p>
+    pub delimiter: Option<String>,
+    pub encoding_type: Option<String>,
+    /// <p>Together with upload-id-marker, this parameter specifies the multipart upload after which listing should begin.</p>
+    pub key_marker: Option<String>,
+    /// <p>Sets the maximum number of multipart uploads, from 1 to 1,000, to return in the response body. 1,000 is the maximum number of uploads that can be returned in a response.</p>
+    pub max_uploads: Option<i64>,
+    /// <p>Lists in-progress uploads only for those keys that begin with the specified prefix.</p>
+    pub prefix: Option<String>,
+    /// <p>Together with key-marker, specifies the multipart upload after which listing should begin. If key-marker is not specified, the upload-id-marker parameter is ignored.</p>
+    pub upload_id_marker: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ListMultipartUploadsResponse {
     /// <p>Name of the bucket to which the multipart upload was initiated.</p>
     pub bucket: Option<String>,
     /// <p><p/></p>
@@ -7445,14 +7761,14 @@ pub struct ListMultipartUploadsOutput {
     pub uploads: Option<Vec<MultipartUpload>>,
 }
 
-struct ListMultipartUploadsOutputDeserializer;
-impl ListMultipartUploadsOutputDeserializer {
+struct ListMultipartUploadsResponseDeserializer;
+impl ListMultipartUploadsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListMultipartUploadsOutput, XmlParseError> {
-        deserialize_elements::<_, ListMultipartUploadsOutput, _>(
+    ) -> Result<ListMultipartUploadsResponse, XmlParseError> {
+        deserialize_elements::<_, ListMultipartUploadsResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -7522,24 +7838,24 @@ impl ListMultipartUploadsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListMultipartUploadsRequest {
+pub struct ListObjectVersionsRequest {
     /// <p><p/></p>
     pub bucket: String,
-    /// <p>Character you use to group keys.</p>
+    /// <p>A delimiter is a character you use to group keys.</p>
     pub delimiter: Option<String>,
     pub encoding_type: Option<String>,
-    /// <p>Together with upload-id-marker, this parameter specifies the multipart upload after which listing should begin.</p>
+    /// <p>Specifies the key to start with when listing objects in a bucket.</p>
     pub key_marker: Option<String>,
-    /// <p>Sets the maximum number of multipart uploads, from 1 to 1,000, to return in the response body. 1,000 is the maximum number of uploads that can be returned in a response.</p>
-    pub max_uploads: Option<i64>,
-    /// <p>Lists in-progress uploads only for those keys that begin with the specified prefix.</p>
+    /// <p>Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more.</p>
+    pub max_keys: Option<i64>,
+    /// <p>Limits the response to keys that begin with the specified prefix.</p>
     pub prefix: Option<String>,
-    /// <p>Together with key-marker, specifies the multipart upload after which listing should begin. If key-marker is not specified, the upload-id-marker parameter is ignored.</p>
-    pub upload_id_marker: Option<String>,
+    /// <p>Specifies the object version you want to start listing from.</p>
+    pub version_id_marker: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListObjectVersionsOutput {
+pub struct ListObjectVersionsResponse {
     /// <p><p/></p>
     pub common_prefixes: Option<Vec<CommonPrefix>>,
     /// <p><p/></p>
@@ -7568,14 +7884,14 @@ pub struct ListObjectVersionsOutput {
     pub versions: Option<Vec<ObjectVersion>>,
 }
 
-struct ListObjectVersionsOutputDeserializer;
-impl ListObjectVersionsOutputDeserializer {
+struct ListObjectVersionsResponseDeserializer;
+impl ListObjectVersionsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListObjectVersionsOutput, XmlParseError> {
-        deserialize_elements::<_, ListObjectVersionsOutput, _>(
+    ) -> Result<ListObjectVersionsResponse, XmlParseError> {
+        deserialize_elements::<_, ListObjectVersionsResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -7649,24 +7965,24 @@ impl ListObjectVersionsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListObjectVersionsRequest {
+pub struct ListObjectsRequest {
     /// <p><p/></p>
     pub bucket: String,
     /// <p>A delimiter is a character you use to group keys.</p>
     pub delimiter: Option<String>,
     pub encoding_type: Option<String>,
     /// <p>Specifies the key to start with when listing objects in a bucket.</p>
-    pub key_marker: Option<String>,
+    pub marker: Option<String>,
     /// <p>Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more.</p>
     pub max_keys: Option<i64>,
     /// <p>Limits the response to keys that begin with the specified prefix.</p>
     pub prefix: Option<String>,
-    /// <p>Specifies the object version you want to start listing from.</p>
-    pub version_id_marker: Option<String>,
+    /// <p>Confirms that the requester knows that she or he will be charged for the list objects request. Bucket owners need not specify this parameter in their requests.</p>
+    pub request_payer: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListObjectsOutput {
+pub struct ListObjectsResponse {
     /// <p><p/></p>
     pub common_prefixes: Option<Vec<CommonPrefix>>,
     /// <p><p/></p>
@@ -7689,14 +8005,14 @@ pub struct ListObjectsOutput {
     pub prefix: Option<String>,
 }
 
-struct ListObjectsOutputDeserializer;
-impl ListObjectsOutputDeserializer {
+struct ListObjectsResponseDeserializer;
+impl ListObjectsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListObjectsOutput, XmlParseError> {
-        deserialize_elements::<_, ListObjectsOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<ListObjectsResponse, XmlParseError> {
+        deserialize_elements::<_, ListObjectsResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CommonPrefixes" => {
                     obj.common_prefixes.get_or_insert(vec![]).extend(
@@ -7744,24 +8060,29 @@ impl ListObjectsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListObjectsRequest {
-    /// <p><p/></p>
+pub struct ListObjectsV2Request {
+    /// <p>Name of the bucket to list.</p>
     pub bucket: String,
+    /// <p>ContinuationToken indicates Amazon S3 that the list is being continued on this bucket with a token. ContinuationToken is obfuscated and is not a real key</p>
+    pub continuation_token: Option<String>,
     /// <p>A delimiter is a character you use to group keys.</p>
     pub delimiter: Option<String>,
+    /// <p>Encoding type used by Amazon S3 to encode object keys in the response.</p>
     pub encoding_type: Option<String>,
-    /// <p>Specifies the key to start with when listing objects in a bucket.</p>
-    pub marker: Option<String>,
+    /// <p>The owner field is not present in listV2 by default, if you want to return owner field with each key in the result then set the fetch owner field to true</p>
+    pub fetch_owner: Option<bool>,
     /// <p>Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more.</p>
     pub max_keys: Option<i64>,
     /// <p>Limits the response to keys that begin with the specified prefix.</p>
     pub prefix: Option<String>,
-    /// <p>Confirms that the requester knows that she or he will be charged for the list objects request. Bucket owners need not specify this parameter in their requests.</p>
+    /// <p>Confirms that the requester knows that she or he will be charged for the list objects request in V2 style. Bucket owners need not specify this parameter in their requests.</p>
     pub request_payer: Option<String>,
+    /// <p>StartAfter is where you want Amazon S3 to start listing from. Amazon S3 starts listing after this specified key. StartAfter can be any key in the bucket</p>
+    pub start_after: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListObjectsV2Output {
+pub struct ListObjectsV2Response {
     /// <p>CommonPrefixes contains all (if there are any) keys between Prefix and the next occurrence of the string specified by delimiter</p>
     pub common_prefixes: Option<Vec<CommonPrefix>>,
     /// <p>Metadata about each object returned.</p>
@@ -7788,14 +8109,14 @@ pub struct ListObjectsV2Output {
     pub start_after: Option<String>,
 }
 
-struct ListObjectsV2OutputDeserializer;
-impl ListObjectsV2OutputDeserializer {
+struct ListObjectsV2ResponseDeserializer;
+impl ListObjectsV2ResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListObjectsV2Output, XmlParseError> {
-        deserialize_elements::<_, ListObjectsV2Output, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<ListObjectsV2Response, XmlParseError> {
+        deserialize_elements::<_, ListObjectsV2Response, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CommonPrefixes" => {
                     obj.common_prefixes.get_or_insert(vec![]).extend(
@@ -7853,29 +8174,22 @@ impl ListObjectsV2OutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListObjectsV2Request {
-    /// <p>Name of the bucket to list.</p>
+pub struct ListPartsRequest {
+    /// <p><p/></p>
     pub bucket: String,
-    /// <p>ContinuationToken indicates Amazon S3 that the list is being continued on this bucket with a token. ContinuationToken is obfuscated and is not a real key</p>
-    pub continuation_token: Option<String>,
-    /// <p>A delimiter is a character you use to group keys.</p>
-    pub delimiter: Option<String>,
-    /// <p>Encoding type used by Amazon S3 to encode object keys in the response.</p>
-    pub encoding_type: Option<String>,
-    /// <p>The owner field is not present in listV2 by default, if you want to return owner field with each key in the result then set the fetch owner field to true</p>
-    pub fetch_owner: Option<bool>,
-    /// <p>Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more.</p>
-    pub max_keys: Option<i64>,
-    /// <p>Limits the response to keys that begin with the specified prefix.</p>
-    pub prefix: Option<String>,
-    /// <p>Confirms that the requester knows that she or he will be charged for the list objects request in V2 style. Bucket owners need not specify this parameter in their requests.</p>
+    /// <p><p/></p>
+    pub key: String,
+    /// <p>Sets the maximum number of parts to return.</p>
+    pub max_parts: Option<i64>,
+    /// <p>Specifies the part after which listing should begin. Only parts with higher part numbers will be listed.</p>
+    pub part_number_marker: Option<i64>,
     pub request_payer: Option<String>,
-    /// <p>StartAfter is where you want Amazon S3 to start listing from. Amazon S3 starts listing after this specified key. StartAfter can be any key in the bucket</p>
-    pub start_after: Option<String>,
+    /// <p>Upload ID identifying the multipart upload whose parts are being listed.</p>
+    pub upload_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListPartsOutput {
+pub struct ListPartsResponse {
     /// <p>Date when multipart upload will become eligible for abort operation by lifecycle.</p>
     pub abort_date: Option<String>,
     /// <p>Id of the lifecycle rule that makes a multipart upload eligible for abort operation.</p>
@@ -7905,14 +8219,14 @@ pub struct ListPartsOutput {
     pub upload_id: Option<String>,
 }
 
-struct ListPartsOutputDeserializer;
-impl ListPartsOutputDeserializer {
+struct ListPartsResponseDeserializer;
+impl ListPartsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListPartsOutput, XmlParseError> {
-        deserialize_elements::<_, ListPartsOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<ListPartsResponse, XmlParseError> {
+        deserialize_elements::<_, ListPartsResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Bucket" => {
                     obj.bucket = Some(BucketNameDeserializer::deserialize("Bucket", stack)?);
@@ -7968,21 +8282,6 @@ impl ListPartsOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListPartsRequest {
-    /// <p><p/></p>
-    pub bucket: String,
-    /// <p><p/></p>
-    pub key: String,
-    /// <p>Sets the maximum number of parts to return.</p>
-    pub max_parts: Option<i64>,
-    /// <p>Specifies the part after which listing should begin. Only parts with higher part numbers will be listed.</p>
-    pub part_number_marker: Option<i64>,
-    pub request_payer: Option<String>,
-    /// <p>Upload ID identifying the multipart upload whose parts are being listed.</p>
-    pub upload_id: String,
-}
-
 struct LocationDeserializer;
 impl LocationDeserializer {
     #[allow(unused_variables)]
@@ -8977,50 +9276,6 @@ pub struct NotificationConfiguration {
     pub topic_configurations: Option<Vec<TopicConfiguration>>,
 }
 
-struct NotificationConfigurationDeserializer;
-impl NotificationConfigurationDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<NotificationConfiguration, XmlParseError> {
-        deserialize_elements::<_, NotificationConfiguration, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "CloudFunctionConfiguration" => {
-                        obj.lambda_function_configurations
-                            .get_or_insert(vec![])
-                            .extend(LambdaFunctionConfigurationListDeserializer::deserialize(
-                                "CloudFunctionConfiguration",
-                                stack,
-                            )?);
-                    }
-                    "QueueConfiguration" => {
-                        obj.queue_configurations.get_or_insert(vec![]).extend(
-                            QueueConfigurationListDeserializer::deserialize(
-                                "QueueConfiguration",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "TopicConfiguration" => {
-                        obj.topic_configurations.get_or_insert(vec![]).extend(
-                            TopicConfigurationListDeserializer::deserialize(
-                                "TopicConfiguration",
-                                stack,
-                            )?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
-
 pub struct NotificationConfigurationSerializer;
 impl NotificationConfigurationSerializer {
     #[allow(unused_variables, warnings)]
@@ -9058,47 +9313,6 @@ pub struct NotificationConfigurationDeprecated {
     pub queue_configuration: Option<QueueConfigurationDeprecated>,
     /// <p><p/></p>
     pub topic_configuration: Option<TopicConfigurationDeprecated>,
-}
-
-struct NotificationConfigurationDeprecatedDeserializer;
-impl NotificationConfigurationDeprecatedDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<NotificationConfigurationDeprecated, XmlParseError> {
-        deserialize_elements::<_, NotificationConfigurationDeprecated, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "CloudFunctionConfiguration" => {
-                        obj.cloud_function_configuration =
-                            Some(CloudFunctionConfigurationDeserializer::deserialize(
-                                "CloudFunctionConfiguration",
-                                stack,
-                            )?);
-                    }
-                    "QueueConfiguration" => {
-                        obj.queue_configuration =
-                            Some(QueueConfigurationDeprecatedDeserializer::deserialize(
-                                "QueueConfiguration",
-                                stack,
-                            )?);
-                    }
-                    "TopicConfiguration" => {
-                        obj.topic_configuration =
-                            Some(TopicConfigurationDeprecatedDeserializer::deserialize(
-                                "TopicConfiguration",
-                                stack,
-                            )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
 }
 
 pub struct NotificationConfigurationDeprecatedSerializer;
@@ -10573,6 +10787,19 @@ pub struct PutBucketAccelerateConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutBucketAccelerateConfigurationResponse {}
+
+struct PutBucketAccelerateConfigurationResponseDeserializer;
+impl PutBucketAccelerateConfigurationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutBucketAccelerateConfigurationResponse, XmlParseError> {
+        Ok(PutBucketAccelerateConfigurationResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketAclRequest {
     /// <p>The canned ACL to apply to the bucket.</p>
     pub acl: Option<String>,
@@ -10595,6 +10822,19 @@ pub struct PutBucketAclRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutBucketAclResponse {}
+
+struct PutBucketAclResponseDeserializer;
+impl PutBucketAclResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutBucketAclResponse, XmlParseError> {
+        Ok(PutBucketAclResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketAnalyticsConfigurationRequest {
     /// <p>The configuration and any analyses for the analytics filter.</p>
     pub analytics_configuration: AnalyticsConfiguration,
@@ -10604,6 +10844,19 @@ pub struct PutBucketAnalyticsConfigurationRequest {
     pub id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutBucketAnalyticsConfigurationResponse {}
+
+struct PutBucketAnalyticsConfigurationResponseDeserializer;
+impl PutBucketAnalyticsConfigurationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutBucketAnalyticsConfigurationResponse, XmlParseError> {
+        Ok(PutBucketAnalyticsConfigurationResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketCorsRequest {
     /// <p><p/></p>
@@ -10615,6 +10868,19 @@ pub struct PutBucketCorsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutBucketCorsResponse {}
+
+struct PutBucketCorsResponseDeserializer;
+impl PutBucketCorsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutBucketCorsResponse, XmlParseError> {
+        Ok(PutBucketCorsResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketEncryptionRequest {
     /// <p>The name of the bucket for which the server-side encryption configuration is set.</p>
     pub bucket: String,
@@ -10623,6 +10889,19 @@ pub struct PutBucketEncryptionRequest {
     pub server_side_encryption_configuration: ServerSideEncryptionConfiguration,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutBucketEncryptionResponse {}
+
+struct PutBucketEncryptionResponseDeserializer;
+impl PutBucketEncryptionResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutBucketEncryptionResponse, XmlParseError> {
+        Ok(PutBucketEncryptionResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketInventoryConfigurationRequest {
     /// <p>The name of the bucket where the inventory configuration will be stored.</p>
@@ -10634,6 +10913,19 @@ pub struct PutBucketInventoryConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutBucketInventoryConfigurationResponse {}
+
+struct PutBucketInventoryConfigurationResponseDeserializer;
+impl PutBucketInventoryConfigurationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutBucketInventoryConfigurationResponse, XmlParseError> {
+        Ok(PutBucketInventoryConfigurationResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketLifecycleConfigurationRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -10641,6 +10933,19 @@ pub struct PutBucketLifecycleConfigurationRequest {
     pub lifecycle_configuration: Option<BucketLifecycleConfiguration>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutBucketLifecycleConfigurationResponse {}
+
+struct PutBucketLifecycleConfigurationResponseDeserializer;
+impl PutBucketLifecycleConfigurationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutBucketLifecycleConfigurationResponse, XmlParseError> {
+        Ok(PutBucketLifecycleConfigurationResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketLifecycleRequest {
     /// <p><p/></p>
@@ -10652,6 +10957,19 @@ pub struct PutBucketLifecycleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutBucketLifecycleResponse {}
+
+struct PutBucketLifecycleResponseDeserializer;
+impl PutBucketLifecycleResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutBucketLifecycleResponse, XmlParseError> {
+        Ok(PutBucketLifecycleResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketLoggingRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -10661,6 +10979,19 @@ pub struct PutBucketLoggingRequest {
     pub content_md5: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutBucketLoggingResponse {}
+
+struct PutBucketLoggingResponseDeserializer;
+impl PutBucketLoggingResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutBucketLoggingResponse, XmlParseError> {
+        Ok(PutBucketLoggingResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketMetricsConfigurationRequest {
     /// <p>The name of the bucket for which the metrics configuration is set.</p>
@@ -10672,12 +11003,38 @@ pub struct PutBucketMetricsConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutBucketMetricsConfigurationResponse {}
+
+struct PutBucketMetricsConfigurationResponseDeserializer;
+impl PutBucketMetricsConfigurationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutBucketMetricsConfigurationResponse, XmlParseError> {
+        Ok(PutBucketMetricsConfigurationResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketNotificationConfigurationRequest {
     /// <p><p/></p>
     pub bucket: String,
     pub notification_configuration: NotificationConfiguration,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutBucketNotificationConfigurationResponse {}
+
+struct PutBucketNotificationConfigurationResponseDeserializer;
+impl PutBucketNotificationConfigurationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutBucketNotificationConfigurationResponse, XmlParseError> {
+        Ok(PutBucketNotificationConfigurationResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketNotificationRequest {
     /// <p><p/></p>
@@ -10688,6 +11045,19 @@ pub struct PutBucketNotificationRequest {
     pub notification_configuration: NotificationConfigurationDeprecated,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutBucketNotificationResponse {}
+
+struct PutBucketNotificationResponseDeserializer;
+impl PutBucketNotificationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutBucketNotificationResponse, XmlParseError> {
+        Ok(PutBucketNotificationResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketPolicyRequest {
     /// <p><p/></p>
@@ -10701,6 +11071,19 @@ pub struct PutBucketPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutBucketPolicyResponse {}
+
+struct PutBucketPolicyResponseDeserializer;
+impl PutBucketPolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutBucketPolicyResponse, XmlParseError> {
+        Ok(PutBucketPolicyResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketReplicationRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -10712,6 +11095,19 @@ pub struct PutBucketReplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutBucketReplicationResponse {}
+
+struct PutBucketReplicationResponseDeserializer;
+impl PutBucketReplicationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutBucketReplicationResponse, XmlParseError> {
+        Ok(PutBucketReplicationResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketRequestPaymentRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -10722,6 +11118,19 @@ pub struct PutBucketRequestPaymentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutBucketRequestPaymentResponse {}
+
+struct PutBucketRequestPaymentResponseDeserializer;
+impl PutBucketRequestPaymentResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutBucketRequestPaymentResponse, XmlParseError> {
+        Ok(PutBucketRequestPaymentResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketTaggingRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -10731,6 +11140,19 @@ pub struct PutBucketTaggingRequest {
     pub tagging: Tagging,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutBucketTaggingResponse {}
+
+struct PutBucketTaggingResponseDeserializer;
+impl PutBucketTaggingResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutBucketTaggingResponse, XmlParseError> {
+        Ok(PutBucketTaggingResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketVersioningRequest {
     /// <p><p/></p>
@@ -10744,6 +11166,19 @@ pub struct PutBucketVersioningRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutBucketVersioningResponse {}
+
+struct PutBucketVersioningResponseDeserializer;
+impl PutBucketVersioningResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutBucketVersioningResponse, XmlParseError> {
+        Ok(PutBucketVersioningResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketWebsiteRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -10754,24 +11189,16 @@ pub struct PutBucketWebsiteRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PutObjectAclOutput {
-    pub request_charged: Option<String>,
-}
+pub struct PutBucketWebsiteResponse {}
 
-struct PutObjectAclOutputDeserializer;
-impl PutObjectAclOutputDeserializer {
+struct PutBucketWebsiteResponseDeserializer;
+impl PutBucketWebsiteResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<PutObjectAclOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let obj = PutObjectAclOutput::default();
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+    ) -> Result<PutBucketWebsiteResponse, XmlParseError> {
+        Ok(PutBucketWebsiteResponse::default())
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -10802,20 +11229,20 @@ pub struct PutObjectAclRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PutObjectLegalHoldOutput {
+pub struct PutObjectAclResponse {
     pub request_charged: Option<String>,
 }
 
-struct PutObjectLegalHoldOutputDeserializer;
-impl PutObjectLegalHoldOutputDeserializer {
+struct PutObjectAclResponseDeserializer;
+impl PutObjectAclResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<PutObjectLegalHoldOutput, XmlParseError> {
+    ) -> Result<PutObjectAclResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = PutObjectLegalHoldOutput::default();
+        let obj = PutObjectAclResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -10838,20 +11265,20 @@ pub struct PutObjectLegalHoldRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PutObjectLockConfigurationOutput {
+pub struct PutObjectLegalHoldResponse {
     pub request_charged: Option<String>,
 }
 
-struct PutObjectLockConfigurationOutputDeserializer;
-impl PutObjectLockConfigurationOutputDeserializer {
+struct PutObjectLegalHoldResponseDeserializer;
+impl PutObjectLegalHoldResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<PutObjectLockConfigurationOutput, XmlParseError> {
+    ) -> Result<PutObjectLegalHoldResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = PutObjectLockConfigurationOutput::default();
+        let obj = PutObjectLegalHoldResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -10872,34 +11299,20 @@ pub struct PutObjectLockConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PutObjectOutput {
-    /// <p>Entity tag for the uploaded object.</p>
-    pub e_tag: Option<String>,
-    /// <p>If the object expiration is configured, this will contain the expiration date (expiry-date) and rule ID (rule-id). The value of rule-id is URL encoded.</p>
-    pub expiration: Option<String>,
+pub struct PutObjectLockConfigurationResponse {
     pub request_charged: Option<String>,
-    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
-    pub sse_customer_algorithm: Option<String>,
-    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>
-    pub sse_customer_key_md5: Option<String>,
-    /// <p>If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.</p>
-    pub ssekms_key_id: Option<String>,
-    /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
-    pub server_side_encryption: Option<String>,
-    /// <p>Version of the object.</p>
-    pub version_id: Option<String>,
 }
 
-struct PutObjectOutputDeserializer;
-impl PutObjectOutputDeserializer {
+struct PutObjectLockConfigurationResponseDeserializer;
+impl PutObjectLockConfigurationResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<PutObjectOutput, XmlParseError> {
+    ) -> Result<PutObjectLockConfigurationResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = PutObjectOutput::default();
+        let obj = PutObjectLockConfigurationResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -10968,20 +11381,34 @@ pub struct PutObjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PutObjectRetentionOutput {
+pub struct PutObjectResponse {
+    /// <p>Entity tag for the uploaded object.</p>
+    pub e_tag: Option<String>,
+    /// <p>If the object expiration is configured, this will contain the expiration date (expiry-date) and rule ID (rule-id). The value of rule-id is URL encoded.</p>
+    pub expiration: Option<String>,
     pub request_charged: Option<String>,
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
+    pub sse_customer_algorithm: Option<String>,
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>
+    pub sse_customer_key_md5: Option<String>,
+    /// <p>If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.</p>
+    pub ssekms_key_id: Option<String>,
+    /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
+    pub server_side_encryption: Option<String>,
+    /// <p>Version of the object.</p>
+    pub version_id: Option<String>,
 }
 
-struct PutObjectRetentionOutputDeserializer;
-impl PutObjectRetentionOutputDeserializer {
+struct PutObjectResponseDeserializer;
+impl PutObjectResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<PutObjectRetentionOutput, XmlParseError> {
+    ) -> Result<PutObjectResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = PutObjectRetentionOutput::default();
+        let obj = PutObjectResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -11006,21 +11433,20 @@ pub struct PutObjectRetentionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PutObjectTaggingOutput {
-    /// <p><p/></p>
-    pub version_id: Option<String>,
+pub struct PutObjectRetentionResponse {
+    pub request_charged: Option<String>,
 }
 
-struct PutObjectTaggingOutputDeserializer;
-impl PutObjectTaggingOutputDeserializer {
+struct PutObjectRetentionResponseDeserializer;
+impl PutObjectRetentionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<PutObjectTaggingOutput, XmlParseError> {
+    ) -> Result<PutObjectRetentionResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = PutObjectTaggingOutput::default();
+        let obj = PutObjectRetentionResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -11042,6 +11468,28 @@ pub struct PutObjectTaggingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutObjectTaggingResponse {
+    /// <p><p/></p>
+    pub version_id: Option<String>,
+}
+
+struct PutObjectTaggingResponseDeserializer;
+impl PutObjectTaggingResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutObjectTaggingResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = PutObjectTaggingResponse::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutPublicAccessBlockRequest {
     /// <p>The name of the Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want to set.</p>
     pub bucket: String,
@@ -11051,6 +11499,19 @@ pub struct PutPublicAccessBlockRequest {
     pub public_access_block_configuration: PublicAccessBlockConfiguration,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutPublicAccessBlockResponse {}
+
+struct PutPublicAccessBlockResponseDeserializer;
+impl PutPublicAccessBlockResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutPublicAccessBlockResponse, XmlParseError> {
+        Ok(PutPublicAccessBlockResponse::default())
+    }
+}
 struct QueueArnDeserializer;
 impl QueueArnDeserializer {
     #[allow(unused_variables)]
@@ -12247,29 +12708,6 @@ impl ResponseExpiresSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreObjectOutput {
-    pub request_charged: Option<String>,
-    /// <p>Indicates the path in the provided S3 output location where Select results will be restored to.</p>
-    pub restore_output_path: Option<String>,
-}
-
-struct RestoreObjectOutputDeserializer;
-impl RestoreObjectOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<RestoreObjectOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let obj = RestoreObjectOutput::default();
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreObjectRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -12281,6 +12719,29 @@ pub struct RestoreObjectRequest {
     pub version_id: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RestoreObjectResponse {
+    pub request_charged: Option<String>,
+    /// <p>Indicates the path in the provided S3 output location where Select results will be restored to.</p>
+    pub restore_output_path: Option<String>,
+}
+
+struct RestoreObjectResponseDeserializer;
+impl RestoreObjectResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RestoreObjectResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = RestoreObjectResponse::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>Container for restore job parameters.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreRequest {
@@ -12962,27 +13423,6 @@ impl SelectObjectContentEventStreamDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct SelectObjectContentOutput {
-    /// <p><p/></p>
-    pub payload: Option<SelectObjectContentEventStream>,
-}
-
-struct SelectObjectContentOutputDeserializer;
-impl SelectObjectContentOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<SelectObjectContentOutput, XmlParseError> {
-        Ok(SelectObjectContentOutput {
-            payload: Some(SelectObjectContentEventStreamDeserializer::deserialize(
-                "Payload", stack,
-            )?),
-            ..SelectObjectContentOutput::default()
-        })
-    }
-}
 /// <p>Request to filter the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records. It returns only records that match the specified SQL expression. You must also specify the data serialization format for the response. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html">S3Select API Documentation</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SelectObjectContentRequest {
@@ -13037,6 +13477,27 @@ impl SelectObjectContentRequestSerializer {
             &RequestProgressSerializer::serialize(&mut writer, "RequestProgress", value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SelectObjectContentResponse {
+    /// <p><p/></p>
+    pub payload: Option<SelectObjectContentEventStream>,
+}
+
+struct SelectObjectContentResponseDeserializer;
+impl SelectObjectContentResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SelectObjectContentResponse, XmlParseError> {
+        Ok(SelectObjectContentResponse {
+            payload: Some(SelectObjectContentEventStreamDeserializer::deserialize(
+                "Payload", stack,
+            )?),
+            ..SelectObjectContentResponse::default()
+        })
     }
 }
 /// <p>Describes the parameters for Select job types.</p>
@@ -14658,39 +15119,6 @@ impl UploadIdMarkerSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct UploadPartCopyOutput {
-    /// <p><p/></p>
-    pub copy_part_result: Option<CopyPartResult>,
-    /// <p>The version of the source object that was copied, if you have enabled versioning on the source bucket.</p>
-    pub copy_source_version_id: Option<String>,
-    pub request_charged: Option<String>,
-    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
-    pub sse_customer_algorithm: Option<String>,
-    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>
-    pub sse_customer_key_md5: Option<String>,
-    /// <p>If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.</p>
-    pub ssekms_key_id: Option<String>,
-    /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
-    pub server_side_encryption: Option<String>,
-}
-
-struct UploadPartCopyOutputDeserializer;
-impl UploadPartCopyOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<UploadPartCopyOutput, XmlParseError> {
-        Ok(UploadPartCopyOutput {
-            copy_part_result: Some(CopyPartResultDeserializer::deserialize(
-                "CopyPartResult",
-                stack,
-            )?),
-            ..UploadPartCopyOutput::default()
-        })
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UploadPartCopyRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -14728,9 +15156,11 @@ pub struct UploadPartCopyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct UploadPartOutput {
-    /// <p>Entity tag for the uploaded object.</p>
-    pub e_tag: Option<String>,
+pub struct UploadPartCopyResponse {
+    /// <p><p/></p>
+    pub copy_part_result: Option<CopyPartResult>,
+    /// <p>The version of the source object that was copied, if you have enabled versioning on the source bucket.</p>
+    pub copy_source_version_id: Option<String>,
     pub request_charged: Option<String>,
     /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
     pub sse_customer_algorithm: Option<String>,
@@ -14742,20 +15172,20 @@ pub struct UploadPartOutput {
     pub server_side_encryption: Option<String>,
 }
 
-struct UploadPartOutputDeserializer;
-impl UploadPartOutputDeserializer {
+struct UploadPartCopyResponseDeserializer;
+impl UploadPartCopyResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<UploadPartOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let obj = UploadPartOutput::default();
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+    ) -> Result<UploadPartCopyResponse, XmlParseError> {
+        Ok(UploadPartCopyResponse {
+            copy_part_result: Some(CopyPartResultDeserializer::deserialize(
+                "CopyPartResult",
+                stack,
+            )?),
+            ..UploadPartCopyResponse::default()
+        })
     }
 }
 #[derive(Default, Debug)]
@@ -14781,6 +15211,38 @@ pub struct UploadPartRequest {
     pub sse_customer_key_md5: Option<String>,
     /// <p>Upload ID identifying the multipart upload whose part is being uploaded.</p>
     pub upload_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UploadPartResponse {
+    /// <p>Entity tag for the uploaded object.</p>
+    pub e_tag: Option<String>,
+    pub request_charged: Option<String>,
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
+    pub sse_customer_algorithm: Option<String>,
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>
+    pub sse_customer_key_md5: Option<String>,
+    /// <p>If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.</p>
+    pub ssekms_key_id: Option<String>,
+    /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
+    pub server_side_encryption: Option<String>,
+}
+
+struct UploadPartResponseDeserializer;
+impl UploadPartResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UploadPartResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = UploadPartResponse::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
 }
 
 pub struct UserMetadataSerializer;
@@ -18319,505 +18781,457 @@ pub trait S3 {
     fn abort_multipart_upload(
         &self,
         input: AbortMultipartUploadRequest,
-    ) -> RusotoFuture<AbortMultipartUploadOutput, AbortMultipartUploadError>;
+    ) -> Request<AbortMultipartUploadRequest>;
 
     /// <p>Completes a multipart upload by assembling previously uploaded parts.</p>
     fn complete_multipart_upload(
         &self,
         input: CompleteMultipartUploadRequest,
-    ) -> RusotoFuture<CompleteMultipartUploadOutput, CompleteMultipartUploadError>;
+    ) -> Request<CompleteMultipartUploadRequest>;
 
     /// <p>Creates a copy of an object that is already stored in Amazon S3.</p>
-    fn copy_object(
-        &self,
-        input: CopyObjectRequest,
-    ) -> RusotoFuture<CopyObjectOutput, CopyObjectError>;
+    fn copy_object(&self, input: CopyObjectRequest) -> Request<CopyObjectRequest>;
 
     /// <p>Creates a new bucket.</p>
-    fn create_bucket(
-        &self,
-        input: CreateBucketRequest,
-    ) -> RusotoFuture<CreateBucketOutput, CreateBucketError>;
+    fn create_bucket(&self, input: CreateBucketRequest) -> Request<CreateBucketRequest>;
 
     /// <p>Initiates a multipart upload and returns an upload ID.</p> <p> <b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
     fn create_multipart_upload(
         &self,
         input: CreateMultipartUploadRequest,
-    ) -> RusotoFuture<CreateMultipartUploadOutput, CreateMultipartUploadError>;
+    ) -> Request<CreateMultipartUploadRequest>;
 
     /// <p>Deletes the bucket. All objects (including all object versions and Delete Markers) in the bucket must be deleted before the bucket itself can be deleted.</p>
-    fn delete_bucket(&self, input: DeleteBucketRequest) -> RusotoFuture<(), DeleteBucketError>;
+    fn delete_bucket(&self, input: DeleteBucketRequest) -> Request<DeleteBucketRequest>;
 
     /// <p>Deletes an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
     fn delete_bucket_analytics_configuration(
         &self,
         input: DeleteBucketAnalyticsConfigurationRequest,
-    ) -> RusotoFuture<(), DeleteBucketAnalyticsConfigurationError>;
+    ) -> Request<DeleteBucketAnalyticsConfigurationRequest>;
 
     /// <p>Deletes the CORS configuration information set for the bucket.</p>
     fn delete_bucket_cors(
         &self,
         input: DeleteBucketCorsRequest,
-    ) -> RusotoFuture<(), DeleteBucketCorsError>;
+    ) -> Request<DeleteBucketCorsRequest>;
 
     /// <p>Deletes the server-side encryption configuration from the bucket.</p>
     fn delete_bucket_encryption(
         &self,
         input: DeleteBucketEncryptionRequest,
-    ) -> RusotoFuture<(), DeleteBucketEncryptionError>;
+    ) -> Request<DeleteBucketEncryptionRequest>;
 
     /// <p>Deletes an inventory configuration (identified by the inventory ID) from the bucket.</p>
     fn delete_bucket_inventory_configuration(
         &self,
         input: DeleteBucketInventoryConfigurationRequest,
-    ) -> RusotoFuture<(), DeleteBucketInventoryConfigurationError>;
+    ) -> Request<DeleteBucketInventoryConfigurationRequest>;
 
     /// <p>Deletes the lifecycle configuration from the bucket.</p>
     fn delete_bucket_lifecycle(
         &self,
         input: DeleteBucketLifecycleRequest,
-    ) -> RusotoFuture<(), DeleteBucketLifecycleError>;
+    ) -> Request<DeleteBucketLifecycleRequest>;
 
     /// <p>Deletes a metrics configuration (specified by the metrics configuration ID) from the bucket.</p>
     fn delete_bucket_metrics_configuration(
         &self,
         input: DeleteBucketMetricsConfigurationRequest,
-    ) -> RusotoFuture<(), DeleteBucketMetricsConfigurationError>;
+    ) -> Request<DeleteBucketMetricsConfigurationRequest>;
 
     /// <p>Deletes the policy from the bucket.</p>
     fn delete_bucket_policy(
         &self,
         input: DeleteBucketPolicyRequest,
-    ) -> RusotoFuture<(), DeleteBucketPolicyError>;
+    ) -> Request<DeleteBucketPolicyRequest>;
 
     /// <p> Deletes the replication configuration from the bucket. For information about replication configuration, see <a href=" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
     fn delete_bucket_replication(
         &self,
         input: DeleteBucketReplicationRequest,
-    ) -> RusotoFuture<(), DeleteBucketReplicationError>;
+    ) -> Request<DeleteBucketReplicationRequest>;
 
     /// <p>Deletes the tags from the bucket.</p>
     fn delete_bucket_tagging(
         &self,
         input: DeleteBucketTaggingRequest,
-    ) -> RusotoFuture<(), DeleteBucketTaggingError>;
+    ) -> Request<DeleteBucketTaggingRequest>;
 
     /// <p>This operation removes the website configuration from the bucket.</p>
     fn delete_bucket_website(
         &self,
         input: DeleteBucketWebsiteRequest,
-    ) -> RusotoFuture<(), DeleteBucketWebsiteError>;
+    ) -> Request<DeleteBucketWebsiteRequest>;
 
     /// <p>Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object. If there isn't a null version, Amazon S3 does not remove any objects.</p>
-    fn delete_object(
-        &self,
-        input: DeleteObjectRequest,
-    ) -> RusotoFuture<DeleteObjectOutput, DeleteObjectError>;
+    fn delete_object(&self, input: DeleteObjectRequest) -> Request<DeleteObjectRequest>;
 
     /// <p>Removes the tag-set from an existing object.</p>
     fn delete_object_tagging(
         &self,
         input: DeleteObjectTaggingRequest,
-    ) -> RusotoFuture<DeleteObjectTaggingOutput, DeleteObjectTaggingError>;
+    ) -> Request<DeleteObjectTaggingRequest>;
 
     /// <p>This operation enables you to delete multiple objects from a bucket using a single HTTP request. You may specify up to 1000 keys.</p>
-    fn delete_objects(
-        &self,
-        input: DeleteObjectsRequest,
-    ) -> RusotoFuture<DeleteObjectsOutput, DeleteObjectsError>;
+    fn delete_objects(&self, input: DeleteObjectsRequest) -> Request<DeleteObjectsRequest>;
 
     /// <p>Removes the <code>PublicAccessBlock</code> configuration from an Amazon S3 bucket.</p>
     fn delete_public_access_block(
         &self,
         input: DeletePublicAccessBlockRequest,
-    ) -> RusotoFuture<(), DeletePublicAccessBlockError>;
+    ) -> Request<DeletePublicAccessBlockRequest>;
 
     /// <p>Returns the accelerate configuration of a bucket.</p>
     fn get_bucket_accelerate_configuration(
         &self,
         input: GetBucketAccelerateConfigurationRequest,
-    ) -> RusotoFuture<GetBucketAccelerateConfigurationOutput, GetBucketAccelerateConfigurationError>;
+    ) -> Request<GetBucketAccelerateConfigurationRequest>;
 
     /// <p>Gets the access control policy for the bucket.</p>
-    fn get_bucket_acl(
-        &self,
-        input: GetBucketAclRequest,
-    ) -> RusotoFuture<GetBucketAclOutput, GetBucketAclError>;
+    fn get_bucket_acl(&self, input: GetBucketAclRequest) -> Request<GetBucketAclRequest>;
 
     /// <p>Gets an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
     fn get_bucket_analytics_configuration(
         &self,
         input: GetBucketAnalyticsConfigurationRequest,
-    ) -> RusotoFuture<GetBucketAnalyticsConfigurationOutput, GetBucketAnalyticsConfigurationError>;
+    ) -> Request<GetBucketAnalyticsConfigurationRequest>;
 
     /// <p>Returns the CORS configuration for the bucket.</p>
-    fn get_bucket_cors(
-        &self,
-        input: GetBucketCorsRequest,
-    ) -> RusotoFuture<GetBucketCorsOutput, GetBucketCorsError>;
+    fn get_bucket_cors(&self, input: GetBucketCorsRequest) -> Request<GetBucketCorsRequest>;
 
     /// <p>Returns the server-side encryption configuration of a bucket.</p>
     fn get_bucket_encryption(
         &self,
         input: GetBucketEncryptionRequest,
-    ) -> RusotoFuture<GetBucketEncryptionOutput, GetBucketEncryptionError>;
+    ) -> Request<GetBucketEncryptionRequest>;
 
     /// <p>Returns an inventory configuration (identified by the inventory ID) from the bucket.</p>
     fn get_bucket_inventory_configuration(
         &self,
         input: GetBucketInventoryConfigurationRequest,
-    ) -> RusotoFuture<GetBucketInventoryConfigurationOutput, GetBucketInventoryConfigurationError>;
+    ) -> Request<GetBucketInventoryConfigurationRequest>;
 
     /// <p> No longer used, see the GetBucketLifecycleConfiguration operation.</p>
     fn get_bucket_lifecycle(
         &self,
         input: GetBucketLifecycleRequest,
-    ) -> RusotoFuture<GetBucketLifecycleOutput, GetBucketLifecycleError>;
+    ) -> Request<GetBucketLifecycleRequest>;
 
     /// <p>Returns the lifecycle configuration information set on the bucket.</p>
     fn get_bucket_lifecycle_configuration(
         &self,
         input: GetBucketLifecycleConfigurationRequest,
-    ) -> RusotoFuture<GetBucketLifecycleConfigurationOutput, GetBucketLifecycleConfigurationError>;
+    ) -> Request<GetBucketLifecycleConfigurationRequest>;
 
     /// <p>Returns the region the bucket resides in.</p>
     fn get_bucket_location(
         &self,
         input: GetBucketLocationRequest,
-    ) -> RusotoFuture<GetBucketLocationOutput, GetBucketLocationError>;
+    ) -> Request<GetBucketLocationRequest>;
 
     /// <p>Returns the logging status of a bucket and the permissions users have to view and modify that status. To use GET, you must be the bucket owner.</p>
     fn get_bucket_logging(
         &self,
         input: GetBucketLoggingRequest,
-    ) -> RusotoFuture<GetBucketLoggingOutput, GetBucketLoggingError>;
+    ) -> Request<GetBucketLoggingRequest>;
 
     /// <p>Gets a metrics configuration (specified by the metrics configuration ID) from the bucket.</p>
     fn get_bucket_metrics_configuration(
         &self,
         input: GetBucketMetricsConfigurationRequest,
-    ) -> RusotoFuture<GetBucketMetricsConfigurationOutput, GetBucketMetricsConfigurationError>;
+    ) -> Request<GetBucketMetricsConfigurationRequest>;
 
     /// <p> No longer used, see the GetBucketNotificationConfiguration operation.</p>
     fn get_bucket_notification(
         &self,
-        input: GetBucketNotificationConfigurationRequest,
-    ) -> RusotoFuture<NotificationConfigurationDeprecated, GetBucketNotificationError>;
+        input: GetBucketNotificationRequest,
+    ) -> Request<GetBucketNotificationRequest>;
 
     /// <p>Returns the notification configuration of a bucket.</p>
     fn get_bucket_notification_configuration(
         &self,
         input: GetBucketNotificationConfigurationRequest,
-    ) -> RusotoFuture<NotificationConfiguration, GetBucketNotificationConfigurationError>;
+    ) -> Request<GetBucketNotificationConfigurationRequest>;
 
     /// <p>Returns the policy of a specified bucket.</p>
-    fn get_bucket_policy(
-        &self,
-        input: GetBucketPolicyRequest,
-    ) -> RusotoFuture<GetBucketPolicyOutput, GetBucketPolicyError>;
+    fn get_bucket_policy(&self, input: GetBucketPolicyRequest) -> Request<GetBucketPolicyRequest>;
 
     /// <p>Retrieves the policy status for an Amazon S3 bucket, indicating whether the bucket is public.</p>
     fn get_bucket_policy_status(
         &self,
         input: GetBucketPolicyStatusRequest,
-    ) -> RusotoFuture<GetBucketPolicyStatusOutput, GetBucketPolicyStatusError>;
+    ) -> Request<GetBucketPolicyStatusRequest>;
 
     /// <p><p>Returns the replication configuration of a bucket.</p> <note> <p> It can take a while to propagate the put or delete a replication configuration to all Amazon S3 systems. Therefore, a get request soon after put or delete can return a wrong result. </p> </note></p>
     fn get_bucket_replication(
         &self,
         input: GetBucketReplicationRequest,
-    ) -> RusotoFuture<GetBucketReplicationOutput, GetBucketReplicationError>;
+    ) -> Request<GetBucketReplicationRequest>;
 
     /// <p>Returns the request payment configuration of a bucket.</p>
     fn get_bucket_request_payment(
         &self,
         input: GetBucketRequestPaymentRequest,
-    ) -> RusotoFuture<GetBucketRequestPaymentOutput, GetBucketRequestPaymentError>;
+    ) -> Request<GetBucketRequestPaymentRequest>;
 
     /// <p>Returns the tag set associated with the bucket.</p>
     fn get_bucket_tagging(
         &self,
         input: GetBucketTaggingRequest,
-    ) -> RusotoFuture<GetBucketTaggingOutput, GetBucketTaggingError>;
+    ) -> Request<GetBucketTaggingRequest>;
 
     /// <p>Returns the versioning state of a bucket.</p>
     fn get_bucket_versioning(
         &self,
         input: GetBucketVersioningRequest,
-    ) -> RusotoFuture<GetBucketVersioningOutput, GetBucketVersioningError>;
+    ) -> Request<GetBucketVersioningRequest>;
 
     /// <p>Returns the website configuration for a bucket.</p>
     fn get_bucket_website(
         &self,
         input: GetBucketWebsiteRequest,
-    ) -> RusotoFuture<GetBucketWebsiteOutput, GetBucketWebsiteError>;
+    ) -> Request<GetBucketWebsiteRequest>;
 
     /// <p>Retrieves objects from Amazon S3.</p>
-    fn get_object(&self, input: GetObjectRequest) -> RusotoFuture<GetObjectOutput, GetObjectError>;
+    fn get_object(&self, input: GetObjectRequest) -> Request<GetObjectRequest>;
 
     /// <p>Returns the access control list (ACL) of an object.</p>
-    fn get_object_acl(
-        &self,
-        input: GetObjectAclRequest,
-    ) -> RusotoFuture<GetObjectAclOutput, GetObjectAclError>;
+    fn get_object_acl(&self, input: GetObjectAclRequest) -> Request<GetObjectAclRequest>;
 
     /// <p>Gets an object's current Legal Hold status.</p>
     fn get_object_legal_hold(
         &self,
         input: GetObjectLegalHoldRequest,
-    ) -> RusotoFuture<GetObjectLegalHoldOutput, GetObjectLegalHoldError>;
+    ) -> Request<GetObjectLegalHoldRequest>;
 
     /// <p>Gets the Object Lock configuration for a bucket. The rule specified in the Object Lock configuration will be applied by default to every new object placed in the specified bucket.</p>
     fn get_object_lock_configuration(
         &self,
         input: GetObjectLockConfigurationRequest,
-    ) -> RusotoFuture<GetObjectLockConfigurationOutput, GetObjectLockConfigurationError>;
+    ) -> Request<GetObjectLockConfigurationRequest>;
 
     /// <p>Retrieves an object's retention settings.</p>
     fn get_object_retention(
         &self,
         input: GetObjectRetentionRequest,
-    ) -> RusotoFuture<GetObjectRetentionOutput, GetObjectRetentionError>;
+    ) -> Request<GetObjectRetentionRequest>;
 
     /// <p>Returns the tag-set of an object.</p>
     fn get_object_tagging(
         &self,
         input: GetObjectTaggingRequest,
-    ) -> RusotoFuture<GetObjectTaggingOutput, GetObjectTaggingError>;
+    ) -> Request<GetObjectTaggingRequest>;
 
     /// <p>Return torrent files from a bucket.</p>
     fn get_object_torrent(
         &self,
         input: GetObjectTorrentRequest,
-    ) -> RusotoFuture<GetObjectTorrentOutput, GetObjectTorrentError>;
+    ) -> Request<GetObjectTorrentRequest>;
 
     /// <p>Retrieves the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket.</p>
     fn get_public_access_block(
         &self,
         input: GetPublicAccessBlockRequest,
-    ) -> RusotoFuture<GetPublicAccessBlockOutput, GetPublicAccessBlockError>;
+    ) -> Request<GetPublicAccessBlockRequest>;
 
     /// <p>This operation is useful to determine if a bucket exists and you have permission to access it.</p>
-    fn head_bucket(&self, input: HeadBucketRequest) -> RusotoFuture<(), HeadBucketError>;
+    fn head_bucket(&self, input: HeadBucketRequest) -> Request<HeadBucketRequest>;
 
     /// <p>The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you're only interested in an object's metadata. To use HEAD, you must have READ access to the object.</p>
-    fn head_object(
-        &self,
-        input: HeadObjectRequest,
-    ) -> RusotoFuture<HeadObjectOutput, HeadObjectError>;
+    fn head_object(&self, input: HeadObjectRequest) -> Request<HeadObjectRequest>;
 
     /// <p>Lists the analytics configurations for the bucket.</p>
     fn list_bucket_analytics_configurations(
         &self,
         input: ListBucketAnalyticsConfigurationsRequest,
-    ) -> RusotoFuture<ListBucketAnalyticsConfigurationsOutput, ListBucketAnalyticsConfigurationsError>;
+    ) -> Request<ListBucketAnalyticsConfigurationsRequest>;
 
     /// <p>Returns a list of inventory configurations for the bucket.</p>
     fn list_bucket_inventory_configurations(
         &self,
         input: ListBucketInventoryConfigurationsRequest,
-    ) -> RusotoFuture<ListBucketInventoryConfigurationsOutput, ListBucketInventoryConfigurationsError>;
+    ) -> Request<ListBucketInventoryConfigurationsRequest>;
 
     /// <p>Lists the metrics configurations for the bucket.</p>
     fn list_bucket_metrics_configurations(
         &self,
         input: ListBucketMetricsConfigurationsRequest,
-    ) -> RusotoFuture<ListBucketMetricsConfigurationsOutput, ListBucketMetricsConfigurationsError>;
+    ) -> Request<ListBucketMetricsConfigurationsRequest>;
 
     /// <p>Returns a list of all buckets owned by the authenticated sender of the request.</p>
-    fn list_buckets(&self) -> RusotoFuture<ListBucketsOutput, ListBucketsError>;
+    fn list_buckets(&self) -> Request<ListBucketsRequest>;
 
     /// <p>This operation lists in-progress multipart uploads.</p>
     fn list_multipart_uploads(
         &self,
         input: ListMultipartUploadsRequest,
-    ) -> RusotoFuture<ListMultipartUploadsOutput, ListMultipartUploadsError>;
+    ) -> Request<ListMultipartUploadsRequest>;
 
     /// <p>Returns metadata about all of the versions of objects in a bucket.</p>
     fn list_object_versions(
         &self,
         input: ListObjectVersionsRequest,
-    ) -> RusotoFuture<ListObjectVersionsOutput, ListObjectVersionsError>;
+    ) -> Request<ListObjectVersionsRequest>;
 
     /// <p>Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket.</p>
-    fn list_objects(
-        &self,
-        input: ListObjectsRequest,
-    ) -> RusotoFuture<ListObjectsOutput, ListObjectsError>;
+    fn list_objects(&self, input: ListObjectsRequest) -> Request<ListObjectsRequest>;
 
     /// <p>Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket. Note: ListObjectsV2 is the revised List Objects API and we recommend you use this revised API for new application development.</p>
-    fn list_objects_v2(
-        &self,
-        input: ListObjectsV2Request,
-    ) -> RusotoFuture<ListObjectsV2Output, ListObjectsV2Error>;
+    fn list_objects_v2(&self, input: ListObjectsV2Request) -> Request<ListObjectsV2Request>;
 
     /// <p>Lists the parts that have been uploaded for a specific multipart upload.</p>
-    fn list_parts(&self, input: ListPartsRequest) -> RusotoFuture<ListPartsOutput, ListPartsError>;
+    fn list_parts(&self, input: ListPartsRequest) -> Request<ListPartsRequest>;
 
     /// <p>Sets the accelerate configuration of an existing bucket.</p>
     fn put_bucket_accelerate_configuration(
         &self,
         input: PutBucketAccelerateConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketAccelerateConfigurationError>;
+    ) -> Request<PutBucketAccelerateConfigurationRequest>;
 
     /// <p>Sets the permissions on a bucket using access control lists (ACL).</p>
-    fn put_bucket_acl(&self, input: PutBucketAclRequest) -> RusotoFuture<(), PutBucketAclError>;
+    fn put_bucket_acl(&self, input: PutBucketAclRequest) -> Request<PutBucketAclRequest>;
 
     /// <p>Sets an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
     fn put_bucket_analytics_configuration(
         &self,
         input: PutBucketAnalyticsConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketAnalyticsConfigurationError>;
+    ) -> Request<PutBucketAnalyticsConfigurationRequest>;
 
     /// <p>Sets the CORS configuration for a bucket.</p>
-    fn put_bucket_cors(&self, input: PutBucketCorsRequest) -> RusotoFuture<(), PutBucketCorsError>;
+    fn put_bucket_cors(&self, input: PutBucketCorsRequest) -> Request<PutBucketCorsRequest>;
 
     /// <p>Creates a new server-side encryption configuration (or replaces an existing one, if present).</p>
     fn put_bucket_encryption(
         &self,
         input: PutBucketEncryptionRequest,
-    ) -> RusotoFuture<(), PutBucketEncryptionError>;
+    ) -> Request<PutBucketEncryptionRequest>;
 
     /// <p>Adds an inventory configuration (identified by the inventory ID) from the bucket.</p>
     fn put_bucket_inventory_configuration(
         &self,
         input: PutBucketInventoryConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketInventoryConfigurationError>;
+    ) -> Request<PutBucketInventoryConfigurationRequest>;
 
     /// <p> No longer used, see the PutBucketLifecycleConfiguration operation.</p>
     fn put_bucket_lifecycle(
         &self,
         input: PutBucketLifecycleRequest,
-    ) -> RusotoFuture<(), PutBucketLifecycleError>;
+    ) -> Request<PutBucketLifecycleRequest>;
 
     /// <p>Sets lifecycle configuration for your bucket. If a lifecycle configuration exists, it replaces it.</p>
     fn put_bucket_lifecycle_configuration(
         &self,
         input: PutBucketLifecycleConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketLifecycleConfigurationError>;
+    ) -> Request<PutBucketLifecycleConfigurationRequest>;
 
     /// <p>Set the logging parameters for a bucket and to specify permissions for who can view and modify the logging parameters. To set the logging status of a bucket, you must be the bucket owner.</p>
     fn put_bucket_logging(
         &self,
         input: PutBucketLoggingRequest,
-    ) -> RusotoFuture<(), PutBucketLoggingError>;
+    ) -> Request<PutBucketLoggingRequest>;
 
     /// <p>Sets a metrics configuration (specified by the metrics configuration ID) for the bucket.</p>
     fn put_bucket_metrics_configuration(
         &self,
         input: PutBucketMetricsConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketMetricsConfigurationError>;
+    ) -> Request<PutBucketMetricsConfigurationRequest>;
 
     /// <p> No longer used, see the PutBucketNotificationConfiguration operation.</p>
     fn put_bucket_notification(
         &self,
         input: PutBucketNotificationRequest,
-    ) -> RusotoFuture<(), PutBucketNotificationError>;
+    ) -> Request<PutBucketNotificationRequest>;
 
     /// <p>Enables notifications of specified events for a bucket.</p>
     fn put_bucket_notification_configuration(
         &self,
         input: PutBucketNotificationConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketNotificationConfigurationError>;
+    ) -> Request<PutBucketNotificationConfigurationRequest>;
 
     /// <p>Replaces a policy on a bucket. If the bucket already has a policy, the one in this request completely replaces it.</p>
-    fn put_bucket_policy(
-        &self,
-        input: PutBucketPolicyRequest,
-    ) -> RusotoFuture<(), PutBucketPolicyError>;
+    fn put_bucket_policy(&self, input: PutBucketPolicyRequest) -> Request<PutBucketPolicyRequest>;
 
     /// <p> Creates a replication configuration or replaces an existing one. For more information, see <a href=" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
     fn put_bucket_replication(
         &self,
         input: PutBucketReplicationRequest,
-    ) -> RusotoFuture<(), PutBucketReplicationError>;
+    ) -> Request<PutBucketReplicationRequest>;
 
     /// <p>Sets the request payment configuration for a bucket. By default, the bucket owner pays for downloads from the bucket. This configuration parameter enables the bucket owner (only) to specify that the person requesting the download will be charged for the download. Documentation on requester pays buckets can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html</p>
     fn put_bucket_request_payment(
         &self,
         input: PutBucketRequestPaymentRequest,
-    ) -> RusotoFuture<(), PutBucketRequestPaymentError>;
+    ) -> Request<PutBucketRequestPaymentRequest>;
 
     /// <p>Sets the tags for a bucket.</p>
     fn put_bucket_tagging(
         &self,
         input: PutBucketTaggingRequest,
-    ) -> RusotoFuture<(), PutBucketTaggingError>;
+    ) -> Request<PutBucketTaggingRequest>;
 
     /// <p>Sets the versioning state of an existing bucket. To set the versioning state, you must be the bucket owner.</p>
     fn put_bucket_versioning(
         &self,
         input: PutBucketVersioningRequest,
-    ) -> RusotoFuture<(), PutBucketVersioningError>;
+    ) -> Request<PutBucketVersioningRequest>;
 
     /// <p>Set the website configuration for a bucket.</p>
     fn put_bucket_website(
         &self,
         input: PutBucketWebsiteRequest,
-    ) -> RusotoFuture<(), PutBucketWebsiteError>;
+    ) -> Request<PutBucketWebsiteRequest>;
 
     /// <p>Adds an object to a bucket.</p>
-    fn put_object(&self, input: PutObjectRequest) -> RusotoFuture<PutObjectOutput, PutObjectError>;
+    fn put_object(&self, input: PutObjectRequest) -> Request<PutObjectRequest>;
 
     /// <p>uses the acl subresource to set the access control list (ACL) permissions for an object that already exists in a bucket</p>
-    fn put_object_acl(
-        &self,
-        input: PutObjectAclRequest,
-    ) -> RusotoFuture<PutObjectAclOutput, PutObjectAclError>;
+    fn put_object_acl(&self, input: PutObjectAclRequest) -> Request<PutObjectAclRequest>;
 
     /// <p>Applies a Legal Hold configuration to the specified object.</p>
     fn put_object_legal_hold(
         &self,
         input: PutObjectLegalHoldRequest,
-    ) -> RusotoFuture<PutObjectLegalHoldOutput, PutObjectLegalHoldError>;
+    ) -> Request<PutObjectLegalHoldRequest>;
 
     /// <p>Places an Object Lock configuration on the specified bucket. The rule specified in the Object Lock configuration will be applied by default to every new object placed in the specified bucket.</p>
     fn put_object_lock_configuration(
         &self,
         input: PutObjectLockConfigurationRequest,
-    ) -> RusotoFuture<PutObjectLockConfigurationOutput, PutObjectLockConfigurationError>;
+    ) -> Request<PutObjectLockConfigurationRequest>;
 
     /// <p>Places an Object Retention configuration on an object.</p>
     fn put_object_retention(
         &self,
         input: PutObjectRetentionRequest,
-    ) -> RusotoFuture<PutObjectRetentionOutput, PutObjectRetentionError>;
+    ) -> Request<PutObjectRetentionRequest>;
 
     /// <p>Sets the supplied tag-set to an object that already exists in a bucket</p>
     fn put_object_tagging(
         &self,
         input: PutObjectTaggingRequest,
-    ) -> RusotoFuture<PutObjectTaggingOutput, PutObjectTaggingError>;
+    ) -> Request<PutObjectTaggingRequest>;
 
     /// <p>Creates or modifies the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket.</p>
     fn put_public_access_block(
         &self,
         input: PutPublicAccessBlockRequest,
-    ) -> RusotoFuture<(), PutPublicAccessBlockError>;
+    ) -> Request<PutPublicAccessBlockRequest>;
 
     /// <p>Restores an archived copy of an object back into Amazon S3</p>
-    fn restore_object(
-        &self,
-        input: RestoreObjectRequest,
-    ) -> RusotoFuture<RestoreObjectOutput, RestoreObjectError>;
+    fn restore_object(&self, input: RestoreObjectRequest) -> Request<RestoreObjectRequest>;
 
     /// <p>This operation filters the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response.</p>
     fn select_object_content(
         &self,
         input: SelectObjectContentRequest,
-    ) -> RusotoFuture<SelectObjectContentOutput, SelectObjectContentError>;
+    ) -> Request<SelectObjectContentRequest>;
 
     /// <p>Uploads a part in a multipart upload.</p> <p> <b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
-    fn upload_part(
-        &self,
-        input: UploadPartRequest,
-    ) -> RusotoFuture<UploadPartOutput, UploadPartError>;
+    fn upload_part(&self, input: UploadPartRequest) -> Request<UploadPartRequest>;
 
     /// <p>Uploads a part by copying data from an existing object as data source.</p>
-    fn upload_part_copy(
-        &self,
-        input: UploadPartCopyRequest,
-    ) -> RusotoFuture<UploadPartCopyOutput, UploadPartCopyError>;
+    fn upload_part_copy(&self, input: UploadPartCopyRequest) -> Request<UploadPartCopyRequest>;
 }
 /// A client for the Amazon S3 API.
 #[derive(Clone)]
@@ -18857,23 +19271,664 @@ impl S3Client {
 
 impl S3 for S3Client {
     /// <p>Aborts a multipart upload.</p> <p>To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.</p>
-    #[allow(unused_variables, warnings)]
     fn abort_multipart_upload(
         &self,
         input: AbortMultipartUploadRequest,
-    ) -> RusotoFuture<AbortMultipartUploadOutput, AbortMultipartUploadError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    ) -> Request<AbortMultipartUploadRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
 
-        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
+    /// <p>Completes a multipart upload by assembling previously uploaded parts.</p>
+    fn complete_multipart_upload(
+        &self,
+        input: CompleteMultipartUploadRequest,
+    ) -> Request<CompleteMultipartUploadRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
 
-        if let Some(ref request_payer) = input.request_payer {
+    /// <p>Creates a copy of an object that is already stored in Amazon S3.</p>
+    fn copy_object(&self, input: CopyObjectRequest) -> Request<CopyObjectRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new bucket.</p>
+    fn create_bucket(&self, input: CreateBucketRequest) -> Request<CreateBucketRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Initiates a multipart upload and returns an upload ID.</p> <p> <b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
+    fn create_multipart_upload(
+        &self,
+        input: CreateMultipartUploadRequest,
+    ) -> Request<CreateMultipartUploadRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the bucket. All objects (including all object versions and Delete Markers) in the bucket must be deleted before the bucket itself can be deleted.</p>
+    fn delete_bucket(&self, input: DeleteBucketRequest) -> Request<DeleteBucketRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
+    fn delete_bucket_analytics_configuration(
+        &self,
+        input: DeleteBucketAnalyticsConfigurationRequest,
+    ) -> Request<DeleteBucketAnalyticsConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the CORS configuration information set for the bucket.</p>
+    fn delete_bucket_cors(
+        &self,
+        input: DeleteBucketCorsRequest,
+    ) -> Request<DeleteBucketCorsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the server-side encryption configuration from the bucket.</p>
+    fn delete_bucket_encryption(
+        &self,
+        input: DeleteBucketEncryptionRequest,
+    ) -> Request<DeleteBucketEncryptionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an inventory configuration (identified by the inventory ID) from the bucket.</p>
+    fn delete_bucket_inventory_configuration(
+        &self,
+        input: DeleteBucketInventoryConfigurationRequest,
+    ) -> Request<DeleteBucketInventoryConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the lifecycle configuration from the bucket.</p>
+    fn delete_bucket_lifecycle(
+        &self,
+        input: DeleteBucketLifecycleRequest,
+    ) -> Request<DeleteBucketLifecycleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a metrics configuration (specified by the metrics configuration ID) from the bucket.</p>
+    fn delete_bucket_metrics_configuration(
+        &self,
+        input: DeleteBucketMetricsConfigurationRequest,
+    ) -> Request<DeleteBucketMetricsConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the policy from the bucket.</p>
+    fn delete_bucket_policy(
+        &self,
+        input: DeleteBucketPolicyRequest,
+    ) -> Request<DeleteBucketPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Deletes the replication configuration from the bucket. For information about replication configuration, see <a href=" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
+    fn delete_bucket_replication(
+        &self,
+        input: DeleteBucketReplicationRequest,
+    ) -> Request<DeleteBucketReplicationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the tags from the bucket.</p>
+    fn delete_bucket_tagging(
+        &self,
+        input: DeleteBucketTaggingRequest,
+    ) -> Request<DeleteBucketTaggingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation removes the website configuration from the bucket.</p>
+    fn delete_bucket_website(
+        &self,
+        input: DeleteBucketWebsiteRequest,
+    ) -> Request<DeleteBucketWebsiteRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object. If there isn't a null version, Amazon S3 does not remove any objects.</p>
+    fn delete_object(&self, input: DeleteObjectRequest) -> Request<DeleteObjectRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the tag-set from an existing object.</p>
+    fn delete_object_tagging(
+        &self,
+        input: DeleteObjectTaggingRequest,
+    ) -> Request<DeleteObjectTaggingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation enables you to delete multiple objects from a bucket using a single HTTP request. You may specify up to 1000 keys.</p>
+    fn delete_objects(&self, input: DeleteObjectsRequest) -> Request<DeleteObjectsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the <code>PublicAccessBlock</code> configuration from an Amazon S3 bucket.</p>
+    fn delete_public_access_block(
+        &self,
+        input: DeletePublicAccessBlockRequest,
+    ) -> Request<DeletePublicAccessBlockRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the accelerate configuration of a bucket.</p>
+    fn get_bucket_accelerate_configuration(
+        &self,
+        input: GetBucketAccelerateConfigurationRequest,
+    ) -> Request<GetBucketAccelerateConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the access control policy for the bucket.</p>
+    fn get_bucket_acl(&self, input: GetBucketAclRequest) -> Request<GetBucketAclRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
+    fn get_bucket_analytics_configuration(
+        &self,
+        input: GetBucketAnalyticsConfigurationRequest,
+    ) -> Request<GetBucketAnalyticsConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the CORS configuration for the bucket.</p>
+    fn get_bucket_cors(&self, input: GetBucketCorsRequest) -> Request<GetBucketCorsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the server-side encryption configuration of a bucket.</p>
+    fn get_bucket_encryption(
+        &self,
+        input: GetBucketEncryptionRequest,
+    ) -> Request<GetBucketEncryptionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns an inventory configuration (identified by the inventory ID) from the bucket.</p>
+    fn get_bucket_inventory_configuration(
+        &self,
+        input: GetBucketInventoryConfigurationRequest,
+    ) -> Request<GetBucketInventoryConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> No longer used, see the GetBucketLifecycleConfiguration operation.</p>
+    fn get_bucket_lifecycle(
+        &self,
+        input: GetBucketLifecycleRequest,
+    ) -> Request<GetBucketLifecycleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the lifecycle configuration information set on the bucket.</p>
+    fn get_bucket_lifecycle_configuration(
+        &self,
+        input: GetBucketLifecycleConfigurationRequest,
+    ) -> Request<GetBucketLifecycleConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the region the bucket resides in.</p>
+    fn get_bucket_location(
+        &self,
+        input: GetBucketLocationRequest,
+    ) -> Request<GetBucketLocationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the logging status of a bucket and the permissions users have to view and modify that status. To use GET, you must be the bucket owner.</p>
+    fn get_bucket_logging(
+        &self,
+        input: GetBucketLoggingRequest,
+    ) -> Request<GetBucketLoggingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a metrics configuration (specified by the metrics configuration ID) from the bucket.</p>
+    fn get_bucket_metrics_configuration(
+        &self,
+        input: GetBucketMetricsConfigurationRequest,
+    ) -> Request<GetBucketMetricsConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> No longer used, see the GetBucketNotificationConfiguration operation.</p>
+    fn get_bucket_notification(
+        &self,
+        input: GetBucketNotificationRequest,
+    ) -> Request<GetBucketNotificationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the notification configuration of a bucket.</p>
+    fn get_bucket_notification_configuration(
+        &self,
+        input: GetBucketNotificationConfigurationRequest,
+    ) -> Request<GetBucketNotificationConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the policy of a specified bucket.</p>
+    fn get_bucket_policy(&self, input: GetBucketPolicyRequest) -> Request<GetBucketPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the policy status for an Amazon S3 bucket, indicating whether the bucket is public.</p>
+    fn get_bucket_policy_status(
+        &self,
+        input: GetBucketPolicyStatusRequest,
+    ) -> Request<GetBucketPolicyStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Returns the replication configuration of a bucket.</p> <note> <p> It can take a while to propagate the put or delete a replication configuration to all Amazon S3 systems. Therefore, a get request soon after put or delete can return a wrong result. </p> </note></p>
+    fn get_bucket_replication(
+        &self,
+        input: GetBucketReplicationRequest,
+    ) -> Request<GetBucketReplicationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the request payment configuration of a bucket.</p>
+    fn get_bucket_request_payment(
+        &self,
+        input: GetBucketRequestPaymentRequest,
+    ) -> Request<GetBucketRequestPaymentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the tag set associated with the bucket.</p>
+    fn get_bucket_tagging(
+        &self,
+        input: GetBucketTaggingRequest,
+    ) -> Request<GetBucketTaggingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the versioning state of a bucket.</p>
+    fn get_bucket_versioning(
+        &self,
+        input: GetBucketVersioningRequest,
+    ) -> Request<GetBucketVersioningRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the website configuration for a bucket.</p>
+    fn get_bucket_website(
+        &self,
+        input: GetBucketWebsiteRequest,
+    ) -> Request<GetBucketWebsiteRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves objects from Amazon S3.</p>
+    fn get_object(&self, input: GetObjectRequest) -> Request<GetObjectRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the access control list (ACL) of an object.</p>
+    fn get_object_acl(&self, input: GetObjectAclRequest) -> Request<GetObjectAclRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets an object's current Legal Hold status.</p>
+    fn get_object_legal_hold(
+        &self,
+        input: GetObjectLegalHoldRequest,
+    ) -> Request<GetObjectLegalHoldRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the Object Lock configuration for a bucket. The rule specified in the Object Lock configuration will be applied by default to every new object placed in the specified bucket.</p>
+    fn get_object_lock_configuration(
+        &self,
+        input: GetObjectLockConfigurationRequest,
+    ) -> Request<GetObjectLockConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves an object's retention settings.</p>
+    fn get_object_retention(
+        &self,
+        input: GetObjectRetentionRequest,
+    ) -> Request<GetObjectRetentionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the tag-set of an object.</p>
+    fn get_object_tagging(
+        &self,
+        input: GetObjectTaggingRequest,
+    ) -> Request<GetObjectTaggingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Return torrent files from a bucket.</p>
+    fn get_object_torrent(
+        &self,
+        input: GetObjectTorrentRequest,
+    ) -> Request<GetObjectTorrentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket.</p>
+    fn get_public_access_block(
+        &self,
+        input: GetPublicAccessBlockRequest,
+    ) -> Request<GetPublicAccessBlockRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation is useful to determine if a bucket exists and you have permission to access it.</p>
+    fn head_bucket(&self, input: HeadBucketRequest) -> Request<HeadBucketRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you're only interested in an object's metadata. To use HEAD, you must have READ access to the object.</p>
+    fn head_object(&self, input: HeadObjectRequest) -> Request<HeadObjectRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the analytics configurations for the bucket.</p>
+    fn list_bucket_analytics_configurations(
+        &self,
+        input: ListBucketAnalyticsConfigurationsRequest,
+    ) -> Request<ListBucketAnalyticsConfigurationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of inventory configurations for the bucket.</p>
+    fn list_bucket_inventory_configurations(
+        &self,
+        input: ListBucketInventoryConfigurationsRequest,
+    ) -> Request<ListBucketInventoryConfigurationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the metrics configurations for the bucket.</p>
+    fn list_bucket_metrics_configurations(
+        &self,
+        input: ListBucketMetricsConfigurationsRequest,
+    ) -> Request<ListBucketMetricsConfigurationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of all buckets owned by the authenticated sender of the request.</p>
+    fn list_buckets(&self) -> Request<ListBucketsRequest> {
+        Request::new(
+            ListBucketsRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>This operation lists in-progress multipart uploads.</p>
+    fn list_multipart_uploads(
+        &self,
+        input: ListMultipartUploadsRequest,
+    ) -> Request<ListMultipartUploadsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns metadata about all of the versions of objects in a bucket.</p>
+    fn list_object_versions(
+        &self,
+        input: ListObjectVersionsRequest,
+    ) -> Request<ListObjectVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket.</p>
+    fn list_objects(&self, input: ListObjectsRequest) -> Request<ListObjectsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket. Note: ListObjectsV2 is the revised List Objects API and we recommend you use this revised API for new application development.</p>
+    fn list_objects_v2(&self, input: ListObjectsV2Request) -> Request<ListObjectsV2Request> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the parts that have been uploaded for a specific multipart upload.</p>
+    fn list_parts(&self, input: ListPartsRequest) -> Request<ListPartsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the accelerate configuration of an existing bucket.</p>
+    fn put_bucket_accelerate_configuration(
+        &self,
+        input: PutBucketAccelerateConfigurationRequest,
+    ) -> Request<PutBucketAccelerateConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the permissions on a bucket using access control lists (ACL).</p>
+    fn put_bucket_acl(&self, input: PutBucketAclRequest) -> Request<PutBucketAclRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
+    fn put_bucket_analytics_configuration(
+        &self,
+        input: PutBucketAnalyticsConfigurationRequest,
+    ) -> Request<PutBucketAnalyticsConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the CORS configuration for a bucket.</p>
+    fn put_bucket_cors(&self, input: PutBucketCorsRequest) -> Request<PutBucketCorsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new server-side encryption configuration (or replaces an existing one, if present).</p>
+    fn put_bucket_encryption(
+        &self,
+        input: PutBucketEncryptionRequest,
+    ) -> Request<PutBucketEncryptionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds an inventory configuration (identified by the inventory ID) from the bucket.</p>
+    fn put_bucket_inventory_configuration(
+        &self,
+        input: PutBucketInventoryConfigurationRequest,
+    ) -> Request<PutBucketInventoryConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> No longer used, see the PutBucketLifecycleConfiguration operation.</p>
+    fn put_bucket_lifecycle(
+        &self,
+        input: PutBucketLifecycleRequest,
+    ) -> Request<PutBucketLifecycleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets lifecycle configuration for your bucket. If a lifecycle configuration exists, it replaces it.</p>
+    fn put_bucket_lifecycle_configuration(
+        &self,
+        input: PutBucketLifecycleConfigurationRequest,
+    ) -> Request<PutBucketLifecycleConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Set the logging parameters for a bucket and to specify permissions for who can view and modify the logging parameters. To set the logging status of a bucket, you must be the bucket owner.</p>
+    fn put_bucket_logging(
+        &self,
+        input: PutBucketLoggingRequest,
+    ) -> Request<PutBucketLoggingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets a metrics configuration (specified by the metrics configuration ID) for the bucket.</p>
+    fn put_bucket_metrics_configuration(
+        &self,
+        input: PutBucketMetricsConfigurationRequest,
+    ) -> Request<PutBucketMetricsConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> No longer used, see the PutBucketNotificationConfiguration operation.</p>
+    fn put_bucket_notification(
+        &self,
+        input: PutBucketNotificationRequest,
+    ) -> Request<PutBucketNotificationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Enables notifications of specified events for a bucket.</p>
+    fn put_bucket_notification_configuration(
+        &self,
+        input: PutBucketNotificationConfigurationRequest,
+    ) -> Request<PutBucketNotificationConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Replaces a policy on a bucket. If the bucket already has a policy, the one in this request completely replaces it.</p>
+    fn put_bucket_policy(&self, input: PutBucketPolicyRequest) -> Request<PutBucketPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Creates a replication configuration or replaces an existing one. For more information, see <a href=" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
+    fn put_bucket_replication(
+        &self,
+        input: PutBucketReplicationRequest,
+    ) -> Request<PutBucketReplicationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the request payment configuration for a bucket. By default, the bucket owner pays for downloads from the bucket. This configuration parameter enables the bucket owner (only) to specify that the person requesting the download will be charged for the download. Documentation on requester pays buckets can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html</p>
+    fn put_bucket_request_payment(
+        &self,
+        input: PutBucketRequestPaymentRequest,
+    ) -> Request<PutBucketRequestPaymentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the tags for a bucket.</p>
+    fn put_bucket_tagging(
+        &self,
+        input: PutBucketTaggingRequest,
+    ) -> Request<PutBucketTaggingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the versioning state of an existing bucket. To set the versioning state, you must be the bucket owner.</p>
+    fn put_bucket_versioning(
+        &self,
+        input: PutBucketVersioningRequest,
+    ) -> Request<PutBucketVersioningRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Set the website configuration for a bucket.</p>
+    fn put_bucket_website(
+        &self,
+        input: PutBucketWebsiteRequest,
+    ) -> Request<PutBucketWebsiteRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds an object to a bucket.</p>
+    fn put_object(&self, input: PutObjectRequest) -> Request<PutObjectRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>uses the acl subresource to set the access control list (ACL) permissions for an object that already exists in a bucket</p>
+    fn put_object_acl(&self, input: PutObjectAclRequest) -> Request<PutObjectAclRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Applies a Legal Hold configuration to the specified object.</p>
+    fn put_object_legal_hold(
+        &self,
+        input: PutObjectLegalHoldRequest,
+    ) -> Request<PutObjectLegalHoldRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Places an Object Lock configuration on the specified bucket. The rule specified in the Object Lock configuration will be applied by default to every new object placed in the specified bucket.</p>
+    fn put_object_lock_configuration(
+        &self,
+        input: PutObjectLockConfigurationRequest,
+    ) -> Request<PutObjectLockConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Places an Object Retention configuration on an object.</p>
+    fn put_object_retention(
+        &self,
+        input: PutObjectRetentionRequest,
+    ) -> Request<PutObjectRetentionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the supplied tag-set to an object that already exists in a bucket</p>
+    fn put_object_tagging(
+        &self,
+        input: PutObjectTaggingRequest,
+    ) -> Request<PutObjectTaggingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates or modifies the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket.</p>
+    fn put_public_access_block(
+        &self,
+        input: PutPublicAccessBlockRequest,
+    ) -> Request<PutPublicAccessBlockRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Restores an archived copy of an object back into Amazon S3</p>
+    fn restore_object(&self, input: RestoreObjectRequest) -> Request<RestoreObjectRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation filters the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response.</p>
+    fn select_object_content(
+        &self,
+        input: SelectObjectContentRequest,
+    ) -> Request<SelectObjectContentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Uploads a part in a multipart upload.</p> <p> <b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
+    fn upload_part(&self, input: UploadPartRequest) -> Request<UploadPartRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Uploads a part by copying data from an existing object as data source.</p>
+    fn upload_part_copy(&self, input: UploadPartCopyRequest) -> Request<UploadPartCopyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AbortMultipartUploadRequest {
+    type Output = AbortMultipartUploadResponse;
+    type Error = AbortMultipartUploadError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
+
+        let mut request = SignedRequest::new("DELETE", "s3", region, &request_uri);
+
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
         let mut params = Params::new();
-        params.put("uploadId", &input.upload_id);
+        params.put("uploadId", &self.upload_id);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -18886,7 +19941,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = AbortMultipartUploadOutput::default();
+                    result = AbortMultipartUploadResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18895,7 +19950,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = AbortMultipartUploadOutputDeserializer::deserialize(
+                    result = AbortMultipartUploadResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -18908,36 +19963,41 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Completes a multipart upload by assembling previously uploaded parts.</p>
+impl ServiceRequest for CompleteMultipartUploadRequest {
+    type Output = CompleteMultipartUploadResponse;
+    type Error = CompleteMultipartUploadError;
+
     #[allow(unused_variables, warnings)]
-    fn complete_multipart_upload(
-        &self,
-        input: CompleteMultipartUploadRequest,
-    ) -> RusotoFuture<CompleteMultipartUploadOutput, CompleteMultipartUploadError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "s3", region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
         let mut params = Params::new();
-        params.put("uploadId", &input.upload_id);
+        params.put("uploadId", &self.upload_id);
         request.set_params(params);
-        if input.multipart_upload.is_some() {
+        if self.multipart_upload.is_some() {
             let mut writer = EventWriter::new(Vec::new());
             CompletedMultipartUploadSerializer::serialize(
                 &mut writer,
                 "CompleteMultipartUpload",
-                input.multipart_upload.as_ref().unwrap(),
+                self.multipart_upload.as_ref().unwrap(),
             );
             request.set_payload(Some(writer.into_inner()));
         } else {
             request.set_payload(Some(Vec::new()));
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CompleteMultipartUploadError::from_response(response))
@@ -18948,7 +20008,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = CompleteMultipartUploadOutput::default();
+                    result = CompleteMultipartUploadResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -18957,7 +20017,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CompleteMultipartUploadOutputDeserializer::deserialize(
+                    result = CompleteMultipartUploadResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -18991,64 +20051,69 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Creates a copy of an object that is already stored in Amazon S3.</p>
+impl ServiceRequest for CopyObjectRequest {
+    type Output = CopyObjectResponse;
+    type Error = CopyObjectError;
+
     #[allow(unused_variables, warnings)]
-    fn copy_object(
-        &self,
-        input: CopyObjectRequest,
-    ) -> RusotoFuture<CopyObjectOutput, CopyObjectError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref acl) = input.acl {
+        if let Some(ref acl) = self.acl {
             request.add_header("x-amz-acl", &acl.to_string());
         }
 
-        if let Some(ref cache_control) = input.cache_control {
+        if let Some(ref cache_control) = self.cache_control {
             request.add_header("Cache-Control", &cache_control.to_string());
         }
 
-        if let Some(ref content_disposition) = input.content_disposition {
+        if let Some(ref content_disposition) = self.content_disposition {
             request.add_header("Content-Disposition", &content_disposition.to_string());
         }
 
-        if let Some(ref content_encoding) = input.content_encoding {
+        if let Some(ref content_encoding) = self.content_encoding {
             request.add_header("Content-Encoding", &content_encoding.to_string());
         }
 
-        if let Some(ref content_language) = input.content_language {
+        if let Some(ref content_language) = self.content_language {
             request.add_header("Content-Language", &content_language.to_string());
         }
 
-        if let Some(ref content_type) = input.content_type {
+        if let Some(ref content_type) = self.content_type {
             request.add_header("Content-Type", &content_type.to_string());
         }
-        request.add_header("x-amz-copy-source", &input.copy_source);
+        request.add_header("x-amz-copy-source", &self.copy_source);
 
-        if let Some(ref copy_source_if_match) = input.copy_source_if_match {
+        if let Some(ref copy_source_if_match) = self.copy_source_if_match {
             request.add_header(
                 "x-amz-copy-source-if-match",
                 &copy_source_if_match.to_string(),
             );
         }
 
-        if let Some(ref copy_source_if_modified_since) = input.copy_source_if_modified_since {
+        if let Some(ref copy_source_if_modified_since) = self.copy_source_if_modified_since {
             request.add_header(
                 "x-amz-copy-source-if-modified-since",
                 &copy_source_if_modified_since.to_string(),
             );
         }
 
-        if let Some(ref copy_source_if_none_match) = input.copy_source_if_none_match {
+        if let Some(ref copy_source_if_none_match) = self.copy_source_if_none_match {
             request.add_header(
                 "x-amz-copy-source-if-none-match",
                 &copy_source_if_none_match.to_string(),
             );
         }
 
-        if let Some(ref copy_source_if_unmodified_since) = input.copy_source_if_unmodified_since {
+        if let Some(ref copy_source_if_unmodified_since) = self.copy_source_if_unmodified_since {
             request.add_header(
                 "x-amz-copy-source-if-unmodified-since",
                 &copy_source_if_unmodified_since.to_string(),
@@ -19056,7 +20121,7 @@ impl S3 for S3Client {
         }
 
         if let Some(ref copy_source_sse_customer_algorithm) =
-            input.copy_source_sse_customer_algorithm
+            self.copy_source_sse_customer_algorithm
         {
             request.add_header(
                 "x-amz-copy-source-server-side-encryption-customer-algorithm",
@@ -19064,128 +20129,128 @@ impl S3 for S3Client {
             );
         }
 
-        if let Some(ref copy_source_sse_customer_key) = input.copy_source_sse_customer_key {
+        if let Some(ref copy_source_sse_customer_key) = self.copy_source_sse_customer_key {
             request.add_header(
                 "x-amz-copy-source-server-side-encryption-customer-key",
                 &copy_source_sse_customer_key.to_string(),
             );
         }
 
-        if let Some(ref copy_source_sse_customer_key_md5) = input.copy_source_sse_customer_key_md5 {
+        if let Some(ref copy_source_sse_customer_key_md5) = self.copy_source_sse_customer_key_md5 {
             request.add_header(
                 "x-amz-copy-source-server-side-encryption-customer-key-MD5",
                 &copy_source_sse_customer_key_md5.to_string(),
             );
         }
 
-        if let Some(ref expires) = input.expires {
+        if let Some(ref expires) = self.expires {
             request.add_header("Expires", &expires.to_string());
         }
 
-        if let Some(ref grant_full_control) = input.grant_full_control {
+        if let Some(ref grant_full_control) = self.grant_full_control {
             request.add_header("x-amz-grant-full-control", &grant_full_control.to_string());
         }
 
-        if let Some(ref grant_read) = input.grant_read {
+        if let Some(ref grant_read) = self.grant_read {
             request.add_header("x-amz-grant-read", &grant_read.to_string());
         }
 
-        if let Some(ref grant_read_acp) = input.grant_read_acp {
+        if let Some(ref grant_read_acp) = self.grant_read_acp {
             request.add_header("x-amz-grant-read-acp", &grant_read_acp.to_string());
         }
 
-        if let Some(ref grant_write_acp) = input.grant_write_acp {
+        if let Some(ref grant_write_acp) = self.grant_write_acp {
             request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
         }
 
-        if let Some(ref metadata) = input.metadata {
+        if let Some(ref metadata) = self.metadata {
             for (header_name, header_value) in metadata.iter() {
                 let header = format!("x-amz-meta-{}", header_name);
                 request.add_header(header, header_value);
             }
         }
 
-        if let Some(ref metadata_directive) = input.metadata_directive {
+        if let Some(ref metadata_directive) = self.metadata_directive {
             request.add_header("x-amz-metadata-directive", &metadata_directive.to_string());
         }
 
-        if let Some(ref object_lock_legal_hold_status) = input.object_lock_legal_hold_status {
+        if let Some(ref object_lock_legal_hold_status) = self.object_lock_legal_hold_status {
             request.add_header(
                 "x-amz-object-lock-legal-hold",
                 &object_lock_legal_hold_status.to_string(),
             );
         }
 
-        if let Some(ref object_lock_mode) = input.object_lock_mode {
+        if let Some(ref object_lock_mode) = self.object_lock_mode {
             request.add_header("x-amz-object-lock-mode", &object_lock_mode.to_string());
         }
 
-        if let Some(ref object_lock_retain_until_date) = input.object_lock_retain_until_date {
+        if let Some(ref object_lock_retain_until_date) = self.object_lock_retain_until_date {
             request.add_header(
                 "x-amz-object-lock-retain-until-date",
                 &object_lock_retain_until_date.to_string(),
             );
         }
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
 
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
+        if let Some(ref sse_customer_algorithm) = self.sse_customer_algorithm {
             request.add_header(
                 "x-amz-server-side-encryption-customer-algorithm",
                 &sse_customer_algorithm.to_string(),
             );
         }
 
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
+        if let Some(ref sse_customer_key) = self.sse_customer_key {
             request.add_header(
                 "x-amz-server-side-encryption-customer-key",
                 &sse_customer_key.to_string(),
             );
         }
 
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
+        if let Some(ref sse_customer_key_md5) = self.sse_customer_key_md5 {
             request.add_header(
                 "x-amz-server-side-encryption-customer-key-MD5",
                 &sse_customer_key_md5.to_string(),
             );
         }
 
-        if let Some(ref ssekms_key_id) = input.ssekms_key_id {
+        if let Some(ref ssekms_key_id) = self.ssekms_key_id {
             request.add_header(
                 "x-amz-server-side-encryption-aws-kms-key-id",
                 &ssekms_key_id.to_string(),
             );
         }
 
-        if let Some(ref server_side_encryption) = input.server_side_encryption {
+        if let Some(ref server_side_encryption) = self.server_side_encryption {
             request.add_header(
                 "x-amz-server-side-encryption",
                 &server_side_encryption.to_string(),
             );
         }
 
-        if let Some(ref storage_class) = input.storage_class {
+        if let Some(ref storage_class) = self.storage_class {
             request.add_header("x-amz-storage-class", &storage_class.to_string());
         }
 
-        if let Some(ref tagging) = input.tagging {
+        if let Some(ref tagging) = self.tagging {
             request.add_header("x-amz-tagging", &tagging.to_string());
         }
 
-        if let Some(ref tagging_directive) = input.tagging_directive {
+        if let Some(ref tagging_directive) = self.tagging_directive {
             request.add_header("x-amz-tagging-directive", &tagging_directive.to_string());
         }
 
-        if let Some(ref website_redirect_location) = input.website_redirect_location {
+        if let Some(ref website_redirect_location) = self.website_redirect_location {
             request.add_header(
                 "x-amz-website-redirect-location",
                 &website_redirect_location.to_string(),
             );
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -19199,7 +20264,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = CopyObjectOutput::default();
+                    result = CopyObjectResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19209,7 +20274,7 @@ impl S3 for S3Client {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     result =
-                        CopyObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                        CopyObjectResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
                 if let Some(copy_source_version_id) =
                     response.headers.get("x-amz-copy-source-version-id")
@@ -19260,61 +20325,66 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Creates a new bucket.</p>
+impl ServiceRequest for CreateBucketRequest {
+    type Output = CreateBucketResponse;
+    type Error = CreateBucketError;
+
     #[allow(unused_variables, warnings)]
-    fn create_bucket(
-        &self,
-        input: CreateBucketRequest,
-    ) -> RusotoFuture<CreateBucketOutput, CreateBucketError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref acl) = input.acl {
+        if let Some(ref acl) = self.acl {
             request.add_header("x-amz-acl", &acl.to_string());
         }
 
-        if let Some(ref grant_full_control) = input.grant_full_control {
+        if let Some(ref grant_full_control) = self.grant_full_control {
             request.add_header("x-amz-grant-full-control", &grant_full_control.to_string());
         }
 
-        if let Some(ref grant_read) = input.grant_read {
+        if let Some(ref grant_read) = self.grant_read {
             request.add_header("x-amz-grant-read", &grant_read.to_string());
         }
 
-        if let Some(ref grant_read_acp) = input.grant_read_acp {
+        if let Some(ref grant_read_acp) = self.grant_read_acp {
             request.add_header("x-amz-grant-read-acp", &grant_read_acp.to_string());
         }
 
-        if let Some(ref grant_write) = input.grant_write {
+        if let Some(ref grant_write) = self.grant_write {
             request.add_header("x-amz-grant-write", &grant_write.to_string());
         }
 
-        if let Some(ref grant_write_acp) = input.grant_write_acp {
+        if let Some(ref grant_write_acp) = self.grant_write_acp {
             request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
         }
 
-        if let Some(ref object_lock_enabled_for_bucket) = input.object_lock_enabled_for_bucket {
+        if let Some(ref object_lock_enabled_for_bucket) = self.object_lock_enabled_for_bucket {
             request.add_header(
                 "x-amz-bucket-object-lock-enabled",
                 &object_lock_enabled_for_bucket.to_string(),
             );
         }
 
-        if input.create_bucket_configuration.is_some() {
+        if self.create_bucket_configuration.is_some() {
             let mut writer = EventWriter::new(Vec::new());
             CreateBucketConfigurationSerializer::serialize(
                 &mut writer,
                 "CreateBucketConfiguration",
-                input.create_bucket_configuration.as_ref().unwrap(),
+                self.create_bucket_configuration.as_ref().unwrap(),
             );
             request.set_payload(Some(writer.into_inner()));
         } else {
             request.set_payload(Some(Vec::new()));
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -19328,7 +20398,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = CreateBucketOutput::default();
+                    result = CreateBucketResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19337,8 +20407,10 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result =
-                        CreateBucketOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                    result = CreateBucketResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
                 }
                 if let Some(location) = response.headers.get("Location") {
                     let value = location.to_owned();
@@ -19348,134 +20420,139 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Initiates a multipart upload and returns an upload ID.</p> <p> <b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
+impl ServiceRequest for CreateMultipartUploadRequest {
+    type Output = CreateMultipartUploadResponse;
+    type Error = CreateMultipartUploadError;
+
     #[allow(unused_variables, warnings)]
-    fn create_multipart_upload(
-        &self,
-        input: CreateMultipartUploadRequest,
-    ) -> RusotoFuture<CreateMultipartUploadOutput, CreateMultipartUploadError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "s3", region, &request_uri);
 
-        if let Some(ref acl) = input.acl {
+        if let Some(ref acl) = self.acl {
             request.add_header("x-amz-acl", &acl.to_string());
         }
 
-        if let Some(ref cache_control) = input.cache_control {
+        if let Some(ref cache_control) = self.cache_control {
             request.add_header("Cache-Control", &cache_control.to_string());
         }
 
-        if let Some(ref content_disposition) = input.content_disposition {
+        if let Some(ref content_disposition) = self.content_disposition {
             request.add_header("Content-Disposition", &content_disposition.to_string());
         }
 
-        if let Some(ref content_encoding) = input.content_encoding {
+        if let Some(ref content_encoding) = self.content_encoding {
             request.add_header("Content-Encoding", &content_encoding.to_string());
         }
 
-        if let Some(ref content_language) = input.content_language {
+        if let Some(ref content_language) = self.content_language {
             request.add_header("Content-Language", &content_language.to_string());
         }
 
-        if let Some(ref content_type) = input.content_type {
+        if let Some(ref content_type) = self.content_type {
             request.add_header("Content-Type", &content_type.to_string());
         }
 
-        if let Some(ref expires) = input.expires {
+        if let Some(ref expires) = self.expires {
             request.add_header("Expires", &expires.to_string());
         }
 
-        if let Some(ref grant_full_control) = input.grant_full_control {
+        if let Some(ref grant_full_control) = self.grant_full_control {
             request.add_header("x-amz-grant-full-control", &grant_full_control.to_string());
         }
 
-        if let Some(ref grant_read) = input.grant_read {
+        if let Some(ref grant_read) = self.grant_read {
             request.add_header("x-amz-grant-read", &grant_read.to_string());
         }
 
-        if let Some(ref grant_read_acp) = input.grant_read_acp {
+        if let Some(ref grant_read_acp) = self.grant_read_acp {
             request.add_header("x-amz-grant-read-acp", &grant_read_acp.to_string());
         }
 
-        if let Some(ref grant_write_acp) = input.grant_write_acp {
+        if let Some(ref grant_write_acp) = self.grant_write_acp {
             request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
         }
 
-        if let Some(ref metadata) = input.metadata {
+        if let Some(ref metadata) = self.metadata {
             for (header_name, header_value) in metadata.iter() {
                 let header = format!("x-amz-meta-{}", header_name);
                 request.add_header(header, header_value);
             }
         }
 
-        if let Some(ref object_lock_legal_hold_status) = input.object_lock_legal_hold_status {
+        if let Some(ref object_lock_legal_hold_status) = self.object_lock_legal_hold_status {
             request.add_header(
                 "x-amz-object-lock-legal-hold",
                 &object_lock_legal_hold_status.to_string(),
             );
         }
 
-        if let Some(ref object_lock_mode) = input.object_lock_mode {
+        if let Some(ref object_lock_mode) = self.object_lock_mode {
             request.add_header("x-amz-object-lock-mode", &object_lock_mode.to_string());
         }
 
-        if let Some(ref object_lock_retain_until_date) = input.object_lock_retain_until_date {
+        if let Some(ref object_lock_retain_until_date) = self.object_lock_retain_until_date {
             request.add_header(
                 "x-amz-object-lock-retain-until-date",
                 &object_lock_retain_until_date.to_string(),
             );
         }
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
 
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
+        if let Some(ref sse_customer_algorithm) = self.sse_customer_algorithm {
             request.add_header(
                 "x-amz-server-side-encryption-customer-algorithm",
                 &sse_customer_algorithm.to_string(),
             );
         }
 
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
+        if let Some(ref sse_customer_key) = self.sse_customer_key {
             request.add_header(
                 "x-amz-server-side-encryption-customer-key",
                 &sse_customer_key.to_string(),
             );
         }
 
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
+        if let Some(ref sse_customer_key_md5) = self.sse_customer_key_md5 {
             request.add_header(
                 "x-amz-server-side-encryption-customer-key-MD5",
                 &sse_customer_key_md5.to_string(),
             );
         }
 
-        if let Some(ref ssekms_key_id) = input.ssekms_key_id {
+        if let Some(ref ssekms_key_id) = self.ssekms_key_id {
             request.add_header(
                 "x-amz-server-side-encryption-aws-kms-key-id",
                 &ssekms_key_id.to_string(),
             );
         }
 
-        if let Some(ref server_side_encryption) = input.server_side_encryption {
+        if let Some(ref server_side_encryption) = self.server_side_encryption {
             request.add_header(
                 "x-amz-server-side-encryption",
                 &server_side_encryption.to_string(),
             );
         }
 
-        if let Some(ref storage_class) = input.storage_class {
+        if let Some(ref storage_class) = self.storage_class {
             request.add_header("x-amz-storage-class", &storage_class.to_string());
         }
 
-        if let Some(ref tagging) = input.tagging {
+        if let Some(ref tagging) = self.tagging {
             request.add_header("x-amz-tagging", &tagging.to_string());
         }
 
-        if let Some(ref website_redirect_location) = input.website_redirect_location {
+        if let Some(ref website_redirect_location) = self.website_redirect_location {
             request.add_header(
                 "x-amz-website-redirect-location",
                 &website_redirect_location.to_string(),
@@ -19485,7 +20562,7 @@ impl S3 for S3Client {
         params.put_key("uploads");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateMultipartUploadError::from_response(response))
@@ -19496,7 +20573,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = CreateMultipartUploadOutput::default();
+                    result = CreateMultipartUploadResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19505,7 +20582,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateMultipartUploadOutputDeserializer::deserialize(
+                    result = CreateMultipartUploadResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -19553,15 +20630,23 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Deletes the bucket. All objects (including all object versions and Delete Markers) in the bucket must be deleted before the bucket itself can be deleted.</p>
+impl ServiceRequest for DeleteBucketRequest {
+    type Output = DeleteBucketResponse;
+    type Error = DeleteBucketError;
+
     #[allow(unused_variables, warnings)]
-    fn delete_bucket(&self, input: DeleteBucketRequest) -> RusotoFuture<(), DeleteBucketError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -19571,26 +20656,51 @@ impl S3 for S3Client {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = DeleteBucketResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteBucketResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
+impl ServiceRequest for DeleteBucketAnalyticsConfigurationRequest {
+    type Output = DeleteBucketAnalyticsConfigurationResponse;
+    type Error = DeleteBucketAnalyticsConfigurationError;
+
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_analytics_configuration(
-        &self,
-        input: DeleteBucketAnalyticsConfigurationRequest,
-    ) -> RusotoFuture<(), DeleteBucketAnalyticsConfigurationError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", region, &request_uri);
 
         let mut params = Params::new();
-        params.put("id", &input.id);
+        params.put("id", &self.id);
         params.put_key("analytics");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketAnalyticsConfigurationError::from_response(
@@ -19599,25 +20709,50 @@ impl S3 for S3Client {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = DeleteBucketAnalyticsConfigurationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteBucketAnalyticsConfigurationResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the CORS configuration information set for the bucket.</p>
+impl ServiceRequest for DeleteBucketCorsRequest {
+    type Output = DeleteBucketCorsResponse;
+    type Error = DeleteBucketCorsError;
+
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_cors(
-        &self,
-        input: DeleteBucketCorsRequest,
-    ) -> RusotoFuture<(), DeleteBucketCorsError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("cors");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -19627,51 +20762,101 @@ impl S3 for S3Client {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = DeleteBucketCorsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteBucketCorsResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the server-side encryption configuration from the bucket.</p>
+impl ServiceRequest for DeleteBucketEncryptionRequest {
+    type Output = DeleteBucketEncryptionResponse;
+    type Error = DeleteBucketEncryptionError;
+
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_encryption(
-        &self,
-        input: DeleteBucketEncryptionRequest,
-    ) -> RusotoFuture<(), DeleteBucketEncryptionError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("encryption");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketEncryptionError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = DeleteBucketEncryptionResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteBucketEncryptionResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes an inventory configuration (identified by the inventory ID) from the bucket.</p>
+impl ServiceRequest for DeleteBucketInventoryConfigurationRequest {
+    type Output = DeleteBucketInventoryConfigurationResponse;
+    type Error = DeleteBucketInventoryConfigurationError;
+
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_inventory_configuration(
-        &self,
-        input: DeleteBucketInventoryConfigurationRequest,
-    ) -> RusotoFuture<(), DeleteBucketInventoryConfigurationError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", region, &request_uri);
 
         let mut params = Params::new();
-        params.put("id", &input.id);
+        params.put("id", &self.id);
         params.put_key("inventory");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketInventoryConfigurationError::from_response(
@@ -19680,51 +20865,101 @@ impl S3 for S3Client {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = DeleteBucketInventoryConfigurationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteBucketInventoryConfigurationResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the lifecycle configuration from the bucket.</p>
+impl ServiceRequest for DeleteBucketLifecycleRequest {
+    type Output = DeleteBucketLifecycleResponse;
+    type Error = DeleteBucketLifecycleError;
+
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_lifecycle(
-        &self,
-        input: DeleteBucketLifecycleRequest,
-    ) -> RusotoFuture<(), DeleteBucketLifecycleError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("lifecycle");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketLifecycleError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = DeleteBucketLifecycleResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteBucketLifecycleResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes a metrics configuration (specified by the metrics configuration ID) from the bucket.</p>
+impl ServiceRequest for DeleteBucketMetricsConfigurationRequest {
+    type Output = DeleteBucketMetricsConfigurationResponse;
+    type Error = DeleteBucketMetricsConfigurationError;
+
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_metrics_configuration(
-        &self,
-        input: DeleteBucketMetricsConfigurationRequest,
-    ) -> RusotoFuture<(), DeleteBucketMetricsConfigurationError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", region, &request_uri);
 
         let mut params = Params::new();
-        params.put("id", &input.id);
+        params.put("id", &self.id);
         params.put_key("metrics");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketMetricsConfigurationError::from_response(
@@ -19733,25 +20968,50 @@ impl S3 for S3Client {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = DeleteBucketMetricsConfigurationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteBucketMetricsConfigurationResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the policy from the bucket.</p>
+impl ServiceRequest for DeleteBucketPolicyRequest {
+    type Output = DeleteBucketPolicyResponse;
+    type Error = DeleteBucketPolicyError;
+
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_policy(
-        &self,
-        input: DeleteBucketPolicyRequest,
-    ) -> RusotoFuture<(), DeleteBucketPolicyError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("policy");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -19761,50 +21021,100 @@ impl S3 for S3Client {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = DeleteBucketPolicyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteBucketPolicyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p> Deletes the replication configuration from the bucket. For information about replication configuration, see <a href=" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
+impl ServiceRequest for DeleteBucketReplicationRequest {
+    type Output = DeleteBucketReplicationResponse;
+    type Error = DeleteBucketReplicationError;
+
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_replication(
-        &self,
-        input: DeleteBucketReplicationRequest,
-    ) -> RusotoFuture<(), DeleteBucketReplicationError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("replication");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketReplicationError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = DeleteBucketReplicationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteBucketReplicationResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the tags from the bucket.</p>
+impl ServiceRequest for DeleteBucketTaggingRequest {
+    type Output = DeleteBucketTaggingResponse;
+    type Error = DeleteBucketTaggingError;
+
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_tagging(
-        &self,
-        input: DeleteBucketTaggingRequest,
-    ) -> RusotoFuture<(), DeleteBucketTaggingError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("tagging");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -19813,25 +21123,50 @@ impl S3 for S3Client {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = DeleteBucketTaggingResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteBucketTaggingResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>This operation removes the website configuration from the bucket.</p>
+impl ServiceRequest for DeleteBucketWebsiteRequest {
+    type Output = DeleteBucketWebsiteResponse;
+    type Error = DeleteBucketWebsiteError;
+
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_website(
-        &self,
-        input: DeleteBucketWebsiteRequest,
-    ) -> RusotoFuture<(), DeleteBucketWebsiteError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("website");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -19840,41 +21175,66 @@ impl S3 for S3Client {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = DeleteBucketWebsiteResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteBucketWebsiteResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object. If there isn't a null version, Amazon S3 does not remove any objects.</p>
+impl ServiceRequest for DeleteObjectRequest {
+    type Output = DeleteObjectResponse;
+    type Error = DeleteObjectError;
+
     #[allow(unused_variables, warnings)]
-    fn delete_object(
-        &self,
-        input: DeleteObjectRequest,
-    ) -> RusotoFuture<DeleteObjectOutput, DeleteObjectError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", region, &request_uri);
 
-        if let Some(ref bypass_governance_retention) = input.bypass_governance_retention {
+        if let Some(ref bypass_governance_retention) = self.bypass_governance_retention {
             request.add_header(
                 "x-amz-bypass-governance-retention",
                 &bypass_governance_retention.to_string(),
             );
         }
 
-        if let Some(ref mfa) = input.mfa {
+        if let Some(ref mfa) = self.mfa {
             request.add_header("x-amz-mfa", &mfa.to_string());
         }
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.version_id {
+        if let Some(ref x) = self.version_id {
             params.put("versionId", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -19888,7 +21248,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = DeleteObjectOutput::default();
+                    result = DeleteObjectResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19897,8 +21257,10 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result =
-                        DeleteObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                    result = DeleteObjectResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
                 }
                 if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
                     let value = delete_marker.to_owned();
@@ -19916,25 +21278,30 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Removes the tag-set from an existing object.</p>
+impl ServiceRequest for DeleteObjectTaggingRequest {
+    type Output = DeleteObjectTaggingResponse;
+    type Error = DeleteObjectTaggingError;
+
     #[allow(unused_variables, warnings)]
-    fn delete_object_tagging(
-        &self,
-        input: DeleteObjectTaggingRequest,
-    ) -> RusotoFuture<DeleteObjectTaggingOutput, DeleteObjectTaggingError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", region, &request_uri);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.version_id {
+        if let Some(ref x) = self.version_id {
             params.put("versionId", x);
         }
         params.put_key("tagging");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -19947,7 +21314,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = DeleteObjectTaggingOutput::default();
+                    result = DeleteObjectTaggingResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -19956,7 +21323,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = DeleteObjectTaggingOutputDeserializer::deserialize(
+                    result = DeleteObjectTaggingResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -19969,40 +21336,45 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>This operation enables you to delete multiple objects from a bucket using a single HTTP request. You may specify up to 1000 keys.</p>
+impl ServiceRequest for DeleteObjectsRequest {
+    type Output = DeleteObjectsResponse;
+    type Error = DeleteObjectsError;
+
     #[allow(unused_variables, warnings)]
-    fn delete_objects(
-        &self,
-        input: DeleteObjectsRequest,
-    ) -> RusotoFuture<DeleteObjectsOutput, DeleteObjectsError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "s3", region, &request_uri);
 
-        if let Some(ref bypass_governance_retention) = input.bypass_governance_retention {
+        if let Some(ref bypass_governance_retention) = self.bypass_governance_retention {
             request.add_header(
                 "x-amz-bypass-governance-retention",
                 &bypass_governance_retention.to_string(),
             );
         }
 
-        if let Some(ref mfa) = input.mfa {
+        if let Some(ref mfa) = self.mfa {
             request.add_header("x-amz-mfa", &mfa.to_string());
         }
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
         let mut params = Params::new();
         params.put_key("delete");
         request.set_params(params);
         let mut writer = EventWriter::new(Vec::new());
-        DeleteSerializer::serialize(&mut writer, "Delete", &input.delete);
+        DeleteSerializer::serialize(&mut writer, "Delete", &self.delete);
         request.set_payload(Some(writer.into_inner()));
         request.set_content_md5_header();
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20016,7 +21388,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = DeleteObjectsOutput::default();
+                    result = DeleteObjectsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20025,8 +21397,10 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result =
-                        DeleteObjectsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                    result = DeleteObjectsResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
                 }
                 if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
@@ -20036,48 +21410,77 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Removes the <code>PublicAccessBlock</code> configuration from an Amazon S3 bucket.</p>
+impl ServiceRequest for DeletePublicAccessBlockRequest {
+    type Output = DeletePublicAccessBlockResponse;
+    type Error = DeletePublicAccessBlockError;
+
     #[allow(unused_variables, warnings)]
-    fn delete_public_access_block(
-        &self,
-        input: DeletePublicAccessBlockRequest,
-    ) -> RusotoFuture<(), DeletePublicAccessBlockError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("publicAccessBlock");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeletePublicAccessBlockError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = DeletePublicAccessBlockResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeletePublicAccessBlockResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Returns the accelerate configuration of a bucket.</p>
+impl ServiceRequest for GetBucketAccelerateConfigurationRequest {
+    type Output = GetBucketAccelerateConfigurationResponse;
+    type Error = GetBucketAccelerateConfigurationError;
+
     #[allow(unused_variables, warnings)]
-    fn get_bucket_accelerate_configuration(
-        &self,
-        input: GetBucketAccelerateConfigurationRequest,
-    ) -> RusotoFuture<GetBucketAccelerateConfigurationOutput, GetBucketAccelerateConfigurationError>
-    {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("accelerate");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketAccelerateConfigurationError::from_response(
@@ -20090,7 +21493,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetBucketAccelerateConfigurationOutput::default();
+                    result = GetBucketAccelerateConfigurationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20099,7 +21502,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetBucketAccelerateConfigurationOutputDeserializer::deserialize(
+                    result = GetBucketAccelerateConfigurationResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -20109,22 +21512,27 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Gets the access control policy for the bucket.</p>
+impl ServiceRequest for GetBucketAclRequest {
+    type Output = GetBucketAclResponse;
+    type Error = GetBucketAclError;
+
     #[allow(unused_variables, warnings)]
-    fn get_bucket_acl(
-        &self,
-        input: GetBucketAclRequest,
-    ) -> RusotoFuture<GetBucketAclOutput, GetBucketAclError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("acl");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20138,7 +21546,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetBucketAclOutput::default();
+                    result = GetBucketAclResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20147,32 +21555,38 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result =
-                        GetBucketAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                    result = GetBucketAclResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
                 }
                 // parse non-payload
                 Ok(result)
             }))
         })
     }
+}
 
-    /// <p>Gets an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
+impl ServiceRequest for GetBucketAnalyticsConfigurationRequest {
+    type Output = GetBucketAnalyticsConfigurationResponse;
+    type Error = GetBucketAnalyticsConfigurationError;
+
     #[allow(unused_variables, warnings)]
-    fn get_bucket_analytics_configuration(
-        &self,
-        input: GetBucketAnalyticsConfigurationRequest,
-    ) -> RusotoFuture<GetBucketAnalyticsConfigurationOutput, GetBucketAnalyticsConfigurationError>
-    {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
-        params.put("id", &input.id);
+        params.put("id", &self.id);
         params.put_key("analytics");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketAnalyticsConfigurationError::from_response(
@@ -20185,7 +21599,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetBucketAnalyticsConfigurationOutput::default();
+                    result = GetBucketAnalyticsConfigurationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20194,7 +21608,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetBucketAnalyticsConfigurationOutputDeserializer::deserialize(
+                    result = GetBucketAnalyticsConfigurationResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -20204,22 +21618,27 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Returns the CORS configuration for the bucket.</p>
+impl ServiceRequest for GetBucketCorsRequest {
+    type Output = GetBucketCorsResponse;
+    type Error = GetBucketCorsError;
+
     #[allow(unused_variables, warnings)]
-    fn get_bucket_cors(
-        &self,
-        input: GetBucketCorsRequest,
-    ) -> RusotoFuture<GetBucketCorsOutput, GetBucketCorsError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("cors");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20233,7 +21652,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetBucketCorsOutput::default();
+                    result = GetBucketCorsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20242,30 +21661,37 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result =
-                        GetBucketCorsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                    result = GetBucketCorsResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
                 }
                 // parse non-payload
                 Ok(result)
             }))
         })
     }
+}
 
-    /// <p>Returns the server-side encryption configuration of a bucket.</p>
+impl ServiceRequest for GetBucketEncryptionRequest {
+    type Output = GetBucketEncryptionResponse;
+    type Error = GetBucketEncryptionError;
+
     #[allow(unused_variables, warnings)]
-    fn get_bucket_encryption(
-        &self,
-        input: GetBucketEncryptionRequest,
-    ) -> RusotoFuture<GetBucketEncryptionOutput, GetBucketEncryptionError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("encryption");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -20278,7 +21704,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetBucketEncryptionOutput::default();
+                    result = GetBucketEncryptionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20287,7 +21713,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetBucketEncryptionOutputDeserializer::deserialize(
+                    result = GetBucketEncryptionResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -20297,24 +21723,28 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Returns an inventory configuration (identified by the inventory ID) from the bucket.</p>
+impl ServiceRequest for GetBucketInventoryConfigurationRequest {
+    type Output = GetBucketInventoryConfigurationResponse;
+    type Error = GetBucketInventoryConfigurationError;
+
     #[allow(unused_variables, warnings)]
-    fn get_bucket_inventory_configuration(
-        &self,
-        input: GetBucketInventoryConfigurationRequest,
-    ) -> RusotoFuture<GetBucketInventoryConfigurationOutput, GetBucketInventoryConfigurationError>
-    {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
-        params.put("id", &input.id);
+        params.put("id", &self.id);
         params.put_key("inventory");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketInventoryConfigurationError::from_response(
@@ -20327,7 +21757,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetBucketInventoryConfigurationOutput::default();
+                    result = GetBucketInventoryConfigurationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20336,7 +21766,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetBucketInventoryConfigurationOutputDeserializer::deserialize(
+                    result = GetBucketInventoryConfigurationResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -20346,22 +21776,27 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p> No longer used, see the GetBucketLifecycleConfiguration operation.</p>
+impl ServiceRequest for GetBucketLifecycleRequest {
+    type Output = GetBucketLifecycleResponse;
+    type Error = GetBucketLifecycleError;
+
     #[allow(unused_variables, warnings)]
-    fn get_bucket_lifecycle(
-        &self,
-        input: GetBucketLifecycleRequest,
-    ) -> RusotoFuture<GetBucketLifecycleOutput, GetBucketLifecycleError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("lifecycle");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20375,7 +21810,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetBucketLifecycleOutput::default();
+                    result = GetBucketLifecycleResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20384,7 +21819,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetBucketLifecycleOutputDeserializer::deserialize(
+                    result = GetBucketLifecycleResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -20394,23 +21829,27 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Returns the lifecycle configuration information set on the bucket.</p>
+impl ServiceRequest for GetBucketLifecycleConfigurationRequest {
+    type Output = GetBucketLifecycleConfigurationResponse;
+    type Error = GetBucketLifecycleConfigurationError;
+
     #[allow(unused_variables, warnings)]
-    fn get_bucket_lifecycle_configuration(
-        &self,
-        input: GetBucketLifecycleConfigurationRequest,
-    ) -> RusotoFuture<GetBucketLifecycleConfigurationOutput, GetBucketLifecycleConfigurationError>
-    {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("lifecycle");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketLifecycleConfigurationError::from_response(
@@ -20423,7 +21862,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetBucketLifecycleConfigurationOutput::default();
+                    result = GetBucketLifecycleConfigurationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20432,7 +21871,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetBucketLifecycleConfigurationOutputDeserializer::deserialize(
+                    result = GetBucketLifecycleConfigurationResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -20442,22 +21881,27 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Returns the region the bucket resides in.</p>
+impl ServiceRequest for GetBucketLocationRequest {
+    type Output = GetBucketLocationResponse;
+    type Error = GetBucketLocationError;
+
     #[allow(unused_variables, warnings)]
-    fn get_bucket_location(
-        &self,
-        input: GetBucketLocationRequest,
-    ) -> RusotoFuture<GetBucketLocationOutput, GetBucketLocationError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("location");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20471,7 +21915,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetBucketLocationOutput::default();
+                    result = GetBucketLocationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20480,7 +21924,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetBucketLocationOutputDeserializer::deserialize(
+                    result = GetBucketLocationResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -20490,22 +21934,27 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Returns the logging status of a bucket and the permissions users have to view and modify that status. To use GET, you must be the bucket owner.</p>
+impl ServiceRequest for GetBucketLoggingRequest {
+    type Output = GetBucketLoggingResponse;
+    type Error = GetBucketLoggingError;
+
     #[allow(unused_variables, warnings)]
-    fn get_bucket_logging(
-        &self,
-        input: GetBucketLoggingRequest,
-    ) -> RusotoFuture<GetBucketLoggingOutput, GetBucketLoggingError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("logging");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20519,7 +21968,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetBucketLoggingOutput::default();
+                    result = GetBucketLoggingResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20528,7 +21977,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetBucketLoggingOutputDeserializer::deserialize(
+                    result = GetBucketLoggingResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -20538,23 +21987,28 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Gets a metrics configuration (specified by the metrics configuration ID) from the bucket.</p>
+impl ServiceRequest for GetBucketMetricsConfigurationRequest {
+    type Output = GetBucketMetricsConfigurationResponse;
+    type Error = GetBucketMetricsConfigurationError;
+
     #[allow(unused_variables, warnings)]
-    fn get_bucket_metrics_configuration(
-        &self,
-        input: GetBucketMetricsConfigurationRequest,
-    ) -> RusotoFuture<GetBucketMetricsConfigurationOutput, GetBucketMetricsConfigurationError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
-        params.put("id", &input.id);
+        params.put("id", &self.id);
         params.put_key("metrics");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketMetricsConfigurationError::from_response(response))
@@ -20565,7 +22019,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetBucketMetricsConfigurationOutput::default();
+                    result = GetBucketMetricsConfigurationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20574,7 +22028,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetBucketMetricsConfigurationOutputDeserializer::deserialize(
+                    result = GetBucketMetricsConfigurationResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -20584,22 +22038,27 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p> No longer used, see the GetBucketNotificationConfiguration operation.</p>
+impl ServiceRequest for GetBucketNotificationRequest {
+    type Output = GetBucketNotificationResponse;
+    type Error = GetBucketNotificationError;
+
     #[allow(unused_variables, warnings)]
-    fn get_bucket_notification(
-        &self,
-        input: GetBucketNotificationConfigurationRequest,
-    ) -> RusotoFuture<NotificationConfigurationDeprecated, GetBucketNotificationError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("notification");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketNotificationError::from_response(response))
@@ -20610,7 +22069,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = NotificationConfigurationDeprecated::default();
+                    result = GetBucketNotificationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20619,7 +22078,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = NotificationConfigurationDeprecatedDeserializer::deserialize(
+                    result = GetBucketNotificationResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -20629,22 +22088,27 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Returns the notification configuration of a bucket.</p>
+impl ServiceRequest for GetBucketNotificationConfigurationRequest {
+    type Output = GetBucketNotificationConfigurationResponse;
+    type Error = GetBucketNotificationConfigurationError;
+
     #[allow(unused_variables, warnings)]
-    fn get_bucket_notification_configuration(
-        &self,
-        input: GetBucketNotificationConfigurationRequest,
-    ) -> RusotoFuture<NotificationConfiguration, GetBucketNotificationConfigurationError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("notification");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketNotificationConfigurationError::from_response(
@@ -20657,7 +22121,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = NotificationConfiguration::default();
+                    result = GetBucketNotificationConfigurationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20666,7 +22130,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = NotificationConfigurationDeserializer::deserialize(
+                    result = GetBucketNotificationConfigurationResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -20676,22 +22140,27 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Returns the policy of a specified bucket.</p>
+impl ServiceRequest for GetBucketPolicyRequest {
+    type Output = GetBucketPolicyResponse;
+    type Error = GetBucketPolicyError;
+
     #[allow(unused_variables, warnings)]
-    fn get_bucket_policy(
-        &self,
-        input: GetBucketPolicyRequest,
-    ) -> RusotoFuture<GetBucketPolicyOutput, GetBucketPolicyError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("policy");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20702,29 +22171,34 @@ impl S3 for S3Client {
             }
 
             Box::new(response.buffer().from_err().map(move |response| {
-                let mut result = GetBucketPolicyOutput::default();
+                let mut result = GetBucketPolicyResponse::default();
                 result.policy = Some(String::from_utf8_lossy(response.body.as_ref()).into());
 
                 result
             }))
         })
     }
+}
 
-    /// <p>Retrieves the policy status for an Amazon S3 bucket, indicating whether the bucket is public.</p>
+impl ServiceRequest for GetBucketPolicyStatusRequest {
+    type Output = GetBucketPolicyStatusResponse;
+    type Error = GetBucketPolicyStatusError;
+
     #[allow(unused_variables, warnings)]
-    fn get_bucket_policy_status(
-        &self,
-        input: GetBucketPolicyStatusRequest,
-    ) -> RusotoFuture<GetBucketPolicyStatusOutput, GetBucketPolicyStatusError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("policyStatus");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketPolicyStatusError::from_response(response))
@@ -20735,7 +22209,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetBucketPolicyStatusOutput::default();
+                    result = GetBucketPolicyStatusResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20744,7 +22218,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetBucketPolicyStatusOutputDeserializer::deserialize(
+                    result = GetBucketPolicyStatusResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -20754,22 +22228,27 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p><p>Returns the replication configuration of a bucket.</p> <note> <p> It can take a while to propagate the put or delete a replication configuration to all Amazon S3 systems. Therefore, a get request soon after put or delete can return a wrong result. </p> </note></p>
+impl ServiceRequest for GetBucketReplicationRequest {
+    type Output = GetBucketReplicationResponse;
+    type Error = GetBucketReplicationError;
+
     #[allow(unused_variables, warnings)]
-    fn get_bucket_replication(
-        &self,
-        input: GetBucketReplicationRequest,
-    ) -> RusotoFuture<GetBucketReplicationOutput, GetBucketReplicationError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("replication");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -20782,7 +22261,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetBucketReplicationOutput::default();
+                    result = GetBucketReplicationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20791,7 +22270,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetBucketReplicationOutputDeserializer::deserialize(
+                    result = GetBucketReplicationResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -20801,22 +22280,27 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Returns the request payment configuration of a bucket.</p>
+impl ServiceRequest for GetBucketRequestPaymentRequest {
+    type Output = GetBucketRequestPaymentResponse;
+    type Error = GetBucketRequestPaymentError;
+
     #[allow(unused_variables, warnings)]
-    fn get_bucket_request_payment(
-        &self,
-        input: GetBucketRequestPaymentRequest,
-    ) -> RusotoFuture<GetBucketRequestPaymentOutput, GetBucketRequestPaymentError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("requestPayment");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketRequestPaymentError::from_response(response))
@@ -20827,7 +22311,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetBucketRequestPaymentOutput::default();
+                    result = GetBucketRequestPaymentResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20836,7 +22320,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetBucketRequestPaymentOutputDeserializer::deserialize(
+                    result = GetBucketRequestPaymentResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -20846,22 +22330,27 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Returns the tag set associated with the bucket.</p>
+impl ServiceRequest for GetBucketTaggingRequest {
+    type Output = GetBucketTaggingResponse;
+    type Error = GetBucketTaggingError;
+
     #[allow(unused_variables, warnings)]
-    fn get_bucket_tagging(
-        &self,
-        input: GetBucketTaggingRequest,
-    ) -> RusotoFuture<GetBucketTaggingOutput, GetBucketTaggingError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("tagging");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20875,7 +22364,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetBucketTaggingOutput::default();
+                    result = GetBucketTaggingResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20884,7 +22373,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetBucketTaggingOutputDeserializer::deserialize(
+                    result = GetBucketTaggingResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -20894,22 +22383,27 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Returns the versioning state of a bucket.</p>
+impl ServiceRequest for GetBucketVersioningRequest {
+    type Output = GetBucketVersioningResponse;
+    type Error = GetBucketVersioningError;
+
     #[allow(unused_variables, warnings)]
-    fn get_bucket_versioning(
-        &self,
-        input: GetBucketVersioningRequest,
-    ) -> RusotoFuture<GetBucketVersioningOutput, GetBucketVersioningError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("versioning");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -20922,7 +22416,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetBucketVersioningOutput::default();
+                    result = GetBucketVersioningResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20931,7 +22425,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetBucketVersioningOutputDeserializer::deserialize(
+                    result = GetBucketVersioningResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -20941,22 +22435,27 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Returns the website configuration for a bucket.</p>
+impl ServiceRequest for GetBucketWebsiteRequest {
+    type Output = GetBucketWebsiteResponse;
+    type Error = GetBucketWebsiteError;
+
     #[allow(unused_variables, warnings)]
-    fn get_bucket_website(
-        &self,
-        input: GetBucketWebsiteRequest,
-    ) -> RusotoFuture<GetBucketWebsiteOutput, GetBucketWebsiteError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("website");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20970,7 +22469,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetBucketWebsiteOutput::default();
+                    result = GetBucketWebsiteResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -20979,7 +22478,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetBucketWebsiteOutputDeserializer::deserialize(
+                    result = GetBucketWebsiteResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -20989,86 +22488,94 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Retrieves objects from Amazon S3.</p>
+impl ServiceRequest for GetObjectRequest {
+    type Output = GetObjectResponse;
+    type Error = GetObjectError;
+
     #[allow(unused_variables, warnings)]
-    fn get_object(&self, input: GetObjectRequest) -> RusotoFuture<GetObjectOutput, GetObjectError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
+        if let Some(ref if_match) = self.if_match {
             request.add_header("If-Match", &if_match.to_string());
         }
 
-        if let Some(ref if_modified_since) = input.if_modified_since {
+        if let Some(ref if_modified_since) = self.if_modified_since {
             request.add_header("If-Modified-Since", &if_modified_since.to_string());
         }
 
-        if let Some(ref if_none_match) = input.if_none_match {
+        if let Some(ref if_none_match) = self.if_none_match {
             request.add_header("If-None-Match", &if_none_match.to_string());
         }
 
-        if let Some(ref if_unmodified_since) = input.if_unmodified_since {
+        if let Some(ref if_unmodified_since) = self.if_unmodified_since {
             request.add_header("If-Unmodified-Since", &if_unmodified_since.to_string());
         }
 
-        if let Some(ref range) = input.range {
+        if let Some(ref range) = self.range {
             request.add_header("Range", &range.to_string());
         }
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
 
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
+        if let Some(ref sse_customer_algorithm) = self.sse_customer_algorithm {
             request.add_header(
                 "x-amz-server-side-encryption-customer-algorithm",
                 &sse_customer_algorithm.to_string(),
             );
         }
 
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
+        if let Some(ref sse_customer_key) = self.sse_customer_key {
             request.add_header(
                 "x-amz-server-side-encryption-customer-key",
                 &sse_customer_key.to_string(),
             );
         }
 
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
+        if let Some(ref sse_customer_key_md5) = self.sse_customer_key_md5 {
             request.add_header(
                 "x-amz-server-side-encryption-customer-key-MD5",
                 &sse_customer_key_md5.to_string(),
             );
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.part_number {
+        if let Some(ref x) = self.part_number {
             params.put("partNumber", x);
         }
-        if let Some(ref x) = input.response_cache_control {
+        if let Some(ref x) = self.response_cache_control {
             params.put("response-cache-control", x);
         }
-        if let Some(ref x) = input.response_content_disposition {
+        if let Some(ref x) = self.response_content_disposition {
             params.put("response-content-disposition", x);
         }
-        if let Some(ref x) = input.response_content_encoding {
+        if let Some(ref x) = self.response_content_encoding {
             params.put("response-content-encoding", x);
         }
-        if let Some(ref x) = input.response_content_language {
+        if let Some(ref x) = self.response_content_language {
             params.put("response-content-language", x);
         }
-        if let Some(ref x) = input.response_content_type {
+        if let Some(ref x) = self.response_content_type {
             params.put("response-content-type", x);
         }
-        if let Some(ref x) = input.response_expires {
+        if let Some(ref x) = self.response_expires {
             params.put("response-expires", x);
         }
-        if let Some(ref x) = input.version_id {
+        if let Some(ref x) = self.version_id {
             params.put("versionId", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21078,7 +22585,7 @@ impl S3 for S3Client {
                 );
             }
 
-            let mut result = GetObjectOutput::default();
+            let mut result = GetObjectResponse::default();
             result.body = Some(response.body);
             if let Some(accept_ranges) = response.headers.get("accept-ranges") {
                 let value = accept_ranges.to_owned();
@@ -21226,28 +22733,33 @@ impl S3 for S3Client {
             Box::new(future::ok(result))
         })
     }
+}
 
-    /// <p>Returns the access control list (ACL) of an object.</p>
+impl ServiceRequest for GetObjectAclRequest {
+    type Output = GetObjectAclResponse;
+    type Error = GetObjectAclError;
+
     #[allow(unused_variables, warnings)]
-    fn get_object_acl(
-        &self,
-        input: GetObjectAclRequest,
-    ) -> RusotoFuture<GetObjectAclOutput, GetObjectAclError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.version_id {
+        if let Some(ref x) = self.version_id {
             params.put("versionId", x);
         }
         params.put_key("acl");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21261,7 +22773,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetObjectAclOutput::default();
+                    result = GetObjectAclResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -21270,8 +22782,10 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result =
-                        GetObjectAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                    result = GetObjectAclResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
                 }
                 if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
@@ -21281,28 +22795,33 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Gets an object's current Legal Hold status.</p>
+impl ServiceRequest for GetObjectLegalHoldRequest {
+    type Output = GetObjectLegalHoldResponse;
+    type Error = GetObjectLegalHoldError;
+
     #[allow(unused_variables, warnings)]
-    fn get_object_legal_hold(
-        &self,
-        input: GetObjectLegalHoldRequest,
-    ) -> RusotoFuture<GetObjectLegalHoldOutput, GetObjectLegalHoldError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.version_id {
+        if let Some(ref x) = self.version_id {
             params.put("versionId", x);
         }
         params.put_key("legal-hold");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21316,7 +22835,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetObjectLegalHoldOutput::default();
+                    result = GetObjectLegalHoldResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -21325,7 +22844,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetObjectLegalHoldOutputDeserializer::deserialize(
+                    result = GetObjectLegalHoldResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -21335,22 +22854,27 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Gets the Object Lock configuration for a bucket. The rule specified in the Object Lock configuration will be applied by default to every new object placed in the specified bucket.</p>
+impl ServiceRequest for GetObjectLockConfigurationRequest {
+    type Output = GetObjectLockConfigurationResponse;
+    type Error = GetObjectLockConfigurationError;
+
     #[allow(unused_variables, warnings)]
-    fn get_object_lock_configuration(
-        &self,
-        input: GetObjectLockConfigurationRequest,
-    ) -> RusotoFuture<GetObjectLockConfigurationOutput, GetObjectLockConfigurationError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("object-lock");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetObjectLockConfigurationError::from_response(response))
@@ -21361,7 +22885,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetObjectLockConfigurationOutput::default();
+                    result = GetObjectLockConfigurationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -21370,7 +22894,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetObjectLockConfigurationOutputDeserializer::deserialize(
+                    result = GetObjectLockConfigurationResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -21380,28 +22904,33 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Retrieves an object's retention settings.</p>
+impl ServiceRequest for GetObjectRetentionRequest {
+    type Output = GetObjectRetentionResponse;
+    type Error = GetObjectRetentionError;
+
     #[allow(unused_variables, warnings)]
-    fn get_object_retention(
-        &self,
-        input: GetObjectRetentionRequest,
-    ) -> RusotoFuture<GetObjectRetentionOutput, GetObjectRetentionError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.version_id {
+        if let Some(ref x) = self.version_id {
             params.put("versionId", x);
         }
         params.put_key("retention");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21415,7 +22944,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetObjectRetentionOutput::default();
+                    result = GetObjectRetentionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -21424,7 +22953,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetObjectRetentionOutputDeserializer::deserialize(
+                    result = GetObjectRetentionResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -21434,25 +22963,30 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Returns the tag-set of an object.</p>
+impl ServiceRequest for GetObjectTaggingRequest {
+    type Output = GetObjectTaggingResponse;
+    type Error = GetObjectTaggingError;
+
     #[allow(unused_variables, warnings)]
-    fn get_object_tagging(
-        &self,
-        input: GetObjectTaggingRequest,
-    ) -> RusotoFuture<GetObjectTaggingOutput, GetObjectTaggingError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.version_id {
+        if let Some(ref x) = self.version_id {
             params.put("versionId", x);
         }
         params.put_key("tagging");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21466,7 +23000,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetObjectTaggingOutput::default();
+                    result = GetObjectTaggingResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -21475,7 +23009,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetObjectTaggingOutputDeserializer::deserialize(
+                    result = GetObjectTaggingResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -21488,25 +23022,30 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Return torrent files from a bucket.</p>
+impl ServiceRequest for GetObjectTorrentRequest {
+    type Output = GetObjectTorrentResponse;
+    type Error = GetObjectTorrentError;
+
     #[allow(unused_variables, warnings)]
-    fn get_object_torrent(
-        &self,
-        input: GetObjectTorrentRequest,
-    ) -> RusotoFuture<GetObjectTorrentOutput, GetObjectTorrentError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
         let mut params = Params::new();
         params.put_key("torrent");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21516,7 +23055,7 @@ impl S3 for S3Client {
                 );
             }
 
-            let mut result = GetObjectTorrentOutput::default();
+            let mut result = GetObjectTorrentResponse::default();
             result.body = Some(response.body);
             if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                 let value = request_charged.to_owned();
@@ -21525,22 +23064,27 @@ impl S3 for S3Client {
             Box::new(future::ok(result))
         })
     }
+}
 
-    /// <p>Retrieves the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket.</p>
+impl ServiceRequest for GetPublicAccessBlockRequest {
+    type Output = GetPublicAccessBlockResponse;
+    type Error = GetPublicAccessBlockError;
+
     #[allow(unused_variables, warnings)]
-    fn get_public_access_block(
-        &self,
-        input: GetPublicAccessBlockRequest,
-    ) -> RusotoFuture<GetPublicAccessBlockOutput, GetPublicAccessBlockError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("publicAccessBlock");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -21553,7 +23097,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetPublicAccessBlockOutput::default();
+                    result = GetPublicAccessBlockResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -21562,7 +23106,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetPublicAccessBlockOutputDeserializer::deserialize(
+                    result = GetPublicAccessBlockResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -21572,15 +23116,23 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>This operation is useful to determine if a bucket exists and you have permission to access it.</p>
+impl ServiceRequest for HeadBucketRequest {
+    type Output = HeadBucketResponse;
+    type Error = HeadBucketError;
+
     #[allow(unused_variables, warnings)]
-    fn head_bucket(&self, input: HeadBucketRequest) -> RusotoFuture<(), HeadBucketError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("HEAD", "s3", region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21590,74 +23142,97 @@ impl S3 for S3Client {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = HeadBucketResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        HeadBucketResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you're only interested in an object's metadata. To use HEAD, you must have READ access to the object.</p>
+impl ServiceRequest for HeadObjectRequest {
+    type Output = HeadObjectResponse;
+    type Error = HeadObjectError;
+
     #[allow(unused_variables, warnings)]
-    fn head_object(
-        &self,
-        input: HeadObjectRequest,
-    ) -> RusotoFuture<HeadObjectOutput, HeadObjectError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("HEAD", "s3", region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
+        if let Some(ref if_match) = self.if_match {
             request.add_header("If-Match", &if_match.to_string());
         }
 
-        if let Some(ref if_modified_since) = input.if_modified_since {
+        if let Some(ref if_modified_since) = self.if_modified_since {
             request.add_header("If-Modified-Since", &if_modified_since.to_string());
         }
 
-        if let Some(ref if_none_match) = input.if_none_match {
+        if let Some(ref if_none_match) = self.if_none_match {
             request.add_header("If-None-Match", &if_none_match.to_string());
         }
 
-        if let Some(ref if_unmodified_since) = input.if_unmodified_since {
+        if let Some(ref if_unmodified_since) = self.if_unmodified_since {
             request.add_header("If-Unmodified-Since", &if_unmodified_since.to_string());
         }
 
-        if let Some(ref range) = input.range {
+        if let Some(ref range) = self.range {
             request.add_header("Range", &range.to_string());
         }
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
 
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
+        if let Some(ref sse_customer_algorithm) = self.sse_customer_algorithm {
             request.add_header(
                 "x-amz-server-side-encryption-customer-algorithm",
                 &sse_customer_algorithm.to_string(),
             );
         }
 
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
+        if let Some(ref sse_customer_key) = self.sse_customer_key {
             request.add_header(
                 "x-amz-server-side-encryption-customer-key",
                 &sse_customer_key.to_string(),
             );
         }
 
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
+        if let Some(ref sse_customer_key_md5) = self.sse_customer_key_md5 {
             request.add_header(
                 "x-amz-server-side-encryption-customer-key-MD5",
                 &sse_customer_key_md5.to_string(),
             );
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.part_number {
+        if let Some(ref x) = self.part_number {
             params.put("partNumber", x);
         }
-        if let Some(ref x) = input.version_id {
+        if let Some(ref x) = self.version_id {
             params.put("versionId", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21671,7 +23246,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = HeadObjectOutput::default();
+                    result = HeadObjectResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -21681,7 +23256,7 @@ impl S3 for S3Client {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     result =
-                        HeadObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                        HeadObjectResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
                 if let Some(accept_ranges) = response.headers.get("accept-ranges") {
                     let value = accept_ranges.to_owned();
@@ -21822,26 +23397,30 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Lists the analytics configurations for the bucket.</p>
+impl ServiceRequest for ListBucketAnalyticsConfigurationsRequest {
+    type Output = ListBucketAnalyticsConfigurationsResponse;
+    type Error = ListBucketAnalyticsConfigurationsError;
+
     #[allow(unused_variables, warnings)]
-    fn list_bucket_analytics_configurations(
-        &self,
-        input: ListBucketAnalyticsConfigurationsRequest,
-    ) -> RusotoFuture<ListBucketAnalyticsConfigurationsOutput, ListBucketAnalyticsConfigurationsError>
-    {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.continuation_token {
+        if let Some(ref x) = self.continuation_token {
             params.put("continuation-token", x);
         }
         params.put_key("analytics");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListBucketAnalyticsConfigurationsError::from_response(
@@ -21854,7 +23433,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = ListBucketAnalyticsConfigurationsOutput::default();
+                    result = ListBucketAnalyticsConfigurationsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -21863,7 +23442,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListBucketAnalyticsConfigurationsOutputDeserializer::deserialize(
+                    result = ListBucketAnalyticsConfigurationsResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -21873,26 +23452,30 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of inventory configurations for the bucket.</p>
+impl ServiceRequest for ListBucketInventoryConfigurationsRequest {
+    type Output = ListBucketInventoryConfigurationsResponse;
+    type Error = ListBucketInventoryConfigurationsError;
+
     #[allow(unused_variables, warnings)]
-    fn list_bucket_inventory_configurations(
-        &self,
-        input: ListBucketInventoryConfigurationsRequest,
-    ) -> RusotoFuture<ListBucketInventoryConfigurationsOutput, ListBucketInventoryConfigurationsError>
-    {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.continuation_token {
+        if let Some(ref x) = self.continuation_token {
             params.put("continuation-token", x);
         }
         params.put_key("inventory");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListBucketInventoryConfigurationsError::from_response(
@@ -21905,7 +23488,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = ListBucketInventoryConfigurationsOutput::default();
+                    result = ListBucketInventoryConfigurationsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -21914,7 +23497,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListBucketInventoryConfigurationsOutputDeserializer::deserialize(
+                    result = ListBucketInventoryConfigurationsResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -21924,26 +23507,30 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Lists the metrics configurations for the bucket.</p>
+impl ServiceRequest for ListBucketMetricsConfigurationsRequest {
+    type Output = ListBucketMetricsConfigurationsResponse;
+    type Error = ListBucketMetricsConfigurationsError;
+
     #[allow(unused_variables, warnings)]
-    fn list_bucket_metrics_configurations(
-        &self,
-        input: ListBucketMetricsConfigurationsRequest,
-    ) -> RusotoFuture<ListBucketMetricsConfigurationsOutput, ListBucketMetricsConfigurationsError>
-    {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.continuation_token {
+        if let Some(ref x) = self.continuation_token {
             params.put("continuation-token", x);
         }
         params.put_key("metrics");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListBucketMetricsConfigurationsError::from_response(
@@ -21956,7 +23543,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = ListBucketMetricsConfigurationsOutput::default();
+                    result = ListBucketMetricsConfigurationsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -21965,7 +23552,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListBucketMetricsConfigurationsOutputDeserializer::deserialize(
+                    result = ListBucketMetricsConfigurationsResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -21975,15 +23562,23 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of all buckets owned by the authenticated sender of the request.</p>
+impl ServiceRequest for ListBucketsRequest {
+    type Output = ListBucketsResponse;
+    type Error = ListBucketsError;
+
     #[allow(unused_variables, warnings)]
-    fn list_buckets(&self) -> RusotoFuture<ListBucketsOutput, ListBucketsError> {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/";
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21997,7 +23592,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = ListBucketsOutput::default();
+                    result = ListBucketsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -22007,47 +23602,52 @@ impl S3 for S3Client {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     result =
-                        ListBucketsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                        ListBucketsResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
                 // parse non-payload
                 Ok(result)
             }))
         })
     }
+}
 
-    /// <p>This operation lists in-progress multipart uploads.</p>
+impl ServiceRequest for ListMultipartUploadsRequest {
+    type Output = ListMultipartUploadsResponse;
+    type Error = ListMultipartUploadsError;
+
     #[allow(unused_variables, warnings)]
-    fn list_multipart_uploads(
-        &self,
-        input: ListMultipartUploadsRequest,
-    ) -> RusotoFuture<ListMultipartUploadsOutput, ListMultipartUploadsError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.delimiter {
+        if let Some(ref x) = self.delimiter {
             params.put("delimiter", x);
         }
-        if let Some(ref x) = input.encoding_type {
+        if let Some(ref x) = self.encoding_type {
             params.put("encoding-type", x);
         }
-        if let Some(ref x) = input.key_marker {
+        if let Some(ref x) = self.key_marker {
             params.put("key-marker", x);
         }
-        if let Some(ref x) = input.max_uploads {
+        if let Some(ref x) = self.max_uploads {
             params.put("max-uploads", x);
         }
-        if let Some(ref x) = input.prefix {
+        if let Some(ref x) = self.prefix {
             params.put("prefix", x);
         }
-        if let Some(ref x) = input.upload_id_marker {
+        if let Some(ref x) = self.upload_id_marker {
             params.put("upload-id-marker", x);
         }
         params.put_key("uploads");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -22060,7 +23660,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = ListMultipartUploadsOutput::default();
+                    result = ListMultipartUploadsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -22069,7 +23669,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListMultipartUploadsOutputDeserializer::deserialize(
+                    result = ListMultipartUploadsResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -22079,40 +23679,45 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Returns metadata about all of the versions of objects in a bucket.</p>
+impl ServiceRequest for ListObjectVersionsRequest {
+    type Output = ListObjectVersionsResponse;
+    type Error = ListObjectVersionsError;
+
     #[allow(unused_variables, warnings)]
-    fn list_object_versions(
-        &self,
-        input: ListObjectVersionsRequest,
-    ) -> RusotoFuture<ListObjectVersionsOutput, ListObjectVersionsError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.delimiter {
+        if let Some(ref x) = self.delimiter {
             params.put("delimiter", x);
         }
-        if let Some(ref x) = input.encoding_type {
+        if let Some(ref x) = self.encoding_type {
             params.put("encoding-type", x);
         }
-        if let Some(ref x) = input.key_marker {
+        if let Some(ref x) = self.key_marker {
             params.put("key-marker", x);
         }
-        if let Some(ref x) = input.max_keys {
+        if let Some(ref x) = self.max_keys {
             params.put("max-keys", x);
         }
-        if let Some(ref x) = input.prefix {
+        if let Some(ref x) = self.prefix {
             params.put("prefix", x);
         }
-        if let Some(ref x) = input.version_id_marker {
+        if let Some(ref x) = self.version_id_marker {
             params.put("version-id-marker", x);
         }
         params.put_key("versions");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22126,7 +23731,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = ListObjectVersionsOutput::default();
+                    result = ListObjectVersionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -22135,7 +23740,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListObjectVersionsOutputDeserializer::deserialize(
+                    result = ListObjectVersionsResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -22145,39 +23750,44 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket.</p>
+impl ServiceRequest for ListObjectsRequest {
+    type Output = ListObjectsResponse;
+    type Error = ListObjectsError;
+
     #[allow(unused_variables, warnings)]
-    fn list_objects(
-        &self,
-        input: ListObjectsRequest,
-    ) -> RusotoFuture<ListObjectsOutput, ListObjectsError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.delimiter {
+        if let Some(ref x) = self.delimiter {
             params.put("delimiter", x);
         }
-        if let Some(ref x) = input.encoding_type {
+        if let Some(ref x) = self.encoding_type {
             params.put("encoding-type", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
-        if let Some(ref x) = input.max_keys {
+        if let Some(ref x) = self.max_keys {
             params.put("max-keys", x);
         }
-        if let Some(ref x) = input.prefix {
+        if let Some(ref x) = self.prefix {
             params.put("prefix", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22191,7 +23801,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = ListObjectsOutput::default();
+                    result = ListObjectsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -22201,53 +23811,58 @@ impl S3 for S3Client {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     result =
-                        ListObjectsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                        ListObjectsResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
                 // parse non-payload
                 Ok(result)
             }))
         })
     }
+}
 
-    /// <p>Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket. Note: ListObjectsV2 is the revised List Objects API and we recommend you use this revised API for new application development.</p>
+impl ServiceRequest for ListObjectsV2Request {
+    type Output = ListObjectsV2Response;
+    type Error = ListObjectsV2Error;
+
     #[allow(unused_variables, warnings)]
-    fn list_objects_v2(
-        &self,
-        input: ListObjectsV2Request,
-    ) -> RusotoFuture<ListObjectsV2Output, ListObjectsV2Error> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.continuation_token {
+        if let Some(ref x) = self.continuation_token {
             params.put("continuation-token", x);
         }
-        if let Some(ref x) = input.delimiter {
+        if let Some(ref x) = self.delimiter {
             params.put("delimiter", x);
         }
-        if let Some(ref x) = input.encoding_type {
+        if let Some(ref x) = self.encoding_type {
             params.put("encoding-type", x);
         }
-        if let Some(ref x) = input.fetch_owner {
+        if let Some(ref x) = self.fetch_owner {
             params.put("fetch-owner", x);
         }
-        if let Some(ref x) = input.max_keys {
+        if let Some(ref x) = self.max_keys {
             params.put("max-keys", x);
         }
-        if let Some(ref x) = input.prefix {
+        if let Some(ref x) = self.prefix {
             params.put("prefix", x);
         }
-        if let Some(ref x) = input.start_after {
+        if let Some(ref x) = self.start_after {
             params.put("start-after", x);
         }
         params.put("list-type", "2");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22261,7 +23876,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = ListObjectsV2Output::default();
+                    result = ListObjectsV2Response::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -22270,36 +23885,46 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result =
-                        ListObjectsV2OutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                    result = ListObjectsV2ResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
                 }
                 // parse non-payload
                 Ok(result)
             }))
         })
     }
+}
 
-    /// <p>Lists the parts that have been uploaded for a specific multipart upload.</p>
+impl ServiceRequest for ListPartsRequest {
+    type Output = ListPartsResponse;
+    type Error = ListPartsError;
+
     #[allow(unused_variables, warnings)]
-    fn list_parts(&self, input: ListPartsRequest) -> RusotoFuture<ListPartsOutput, ListPartsError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.max_parts {
+        if let Some(ref x) = self.max_parts {
             params.put("max-parts", x);
         }
-        if let Some(ref x) = input.part_number_marker {
+        if let Some(ref x) = self.part_number_marker {
             params.put("part-number-marker", x);
         }
-        params.put("uploadId", &input.upload_id);
+        params.put("uploadId", &self.upload_id);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22313,7 +23938,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = ListPartsOutput::default();
+                    result = ListPartsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -22323,7 +23948,7 @@ impl S3 for S3Client {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     result =
-                        ListPartsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                        ListPartsResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
                 if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
                     let value = abort_date.to_owned();
@@ -22341,16 +23966,21 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Sets the accelerate configuration of an existing bucket.</p>
+impl ServiceRequest for PutBucketAccelerateConfigurationRequest {
+    type Output = PutBucketAccelerateConfigurationResponse;
+    type Error = PutBucketAccelerateConfigurationError;
+
     #[allow(unused_variables, warnings)]
-    fn put_bucket_accelerate_configuration(
-        &self,
-        input: PutBucketAccelerateConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketAccelerateConfigurationError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("accelerate");
@@ -22359,11 +23989,11 @@ impl S3 for S3Client {
         AccelerateConfigurationSerializer::serialize(
             &mut writer,
             "AccelerateConfiguration",
-            &input.accelerate_configuration,
+            &self.accelerate_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketAccelerateConfigurationError::from_response(
@@ -22372,60 +24002,88 @@ impl S3 for S3Client {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutBucketAccelerateConfigurationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutBucketAccelerateConfigurationResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Sets the permissions on a bucket using access control lists (ACL).</p>
+impl ServiceRequest for PutBucketAclRequest {
+    type Output = PutBucketAclResponse;
+    type Error = PutBucketAclError;
+
     #[allow(unused_variables, warnings)]
-    fn put_bucket_acl(&self, input: PutBucketAclRequest) -> RusotoFuture<(), PutBucketAclError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref acl) = input.acl {
+        if let Some(ref acl) = self.acl {
             request.add_header("x-amz-acl", &acl.to_string());
         }
 
-        if let Some(ref content_md5) = input.content_md5 {
+        if let Some(ref content_md5) = self.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
 
-        if let Some(ref grant_full_control) = input.grant_full_control {
+        if let Some(ref grant_full_control) = self.grant_full_control {
             request.add_header("x-amz-grant-full-control", &grant_full_control.to_string());
         }
 
-        if let Some(ref grant_read) = input.grant_read {
+        if let Some(ref grant_read) = self.grant_read {
             request.add_header("x-amz-grant-read", &grant_read.to_string());
         }
 
-        if let Some(ref grant_read_acp) = input.grant_read_acp {
+        if let Some(ref grant_read_acp) = self.grant_read_acp {
             request.add_header("x-amz-grant-read-acp", &grant_read_acp.to_string());
         }
 
-        if let Some(ref grant_write) = input.grant_write {
+        if let Some(ref grant_write) = self.grant_write {
             request.add_header("x-amz-grant-write", &grant_write.to_string());
         }
 
-        if let Some(ref grant_write_acp) = input.grant_write_acp {
+        if let Some(ref grant_write_acp) = self.grant_write_acp {
             request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
         }
         let mut params = Params::new();
         params.put_key("acl");
         request.set_params(params);
-        if input.access_control_policy.is_some() {
+        if self.access_control_policy.is_some() {
             let mut writer = EventWriter::new(Vec::new());
             AccessControlPolicySerializer::serialize(
                 &mut writer,
                 "AccessControlPolicy",
-                input.access_control_policy.as_ref().unwrap(),
+                self.access_control_policy.as_ref().unwrap(),
             );
             request.set_payload(Some(writer.into_inner()));
         } else {
             request.set_payload(Some(Vec::new()));
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22435,33 +24093,58 @@ impl S3 for S3Client {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutBucketAclResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutBucketAclResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Sets an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
+impl ServiceRequest for PutBucketAnalyticsConfigurationRequest {
+    type Output = PutBucketAnalyticsConfigurationResponse;
+    type Error = PutBucketAnalyticsConfigurationError;
+
     #[allow(unused_variables, warnings)]
-    fn put_bucket_analytics_configuration(
-        &self,
-        input: PutBucketAnalyticsConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketAnalyticsConfigurationError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
         let mut params = Params::new();
-        params.put("id", &input.id);
+        params.put("id", &self.id);
         params.put_key("analytics");
         request.set_params(params);
         let mut writer = EventWriter::new(Vec::new());
         AnalyticsConfigurationSerializer::serialize(
             &mut writer,
             "AnalyticsConfiguration",
-            &input.analytics_configuration,
+            &self.analytics_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketAnalyticsConfigurationError::from_response(
@@ -22470,18 +24153,46 @@ impl S3 for S3Client {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutBucketAnalyticsConfigurationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutBucketAnalyticsConfigurationResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Sets the CORS configuration for a bucket.</p>
+impl ServiceRequest for PutBucketCorsRequest {
+    type Output = PutBucketCorsResponse;
+    type Error = PutBucketCorsError;
+
     #[allow(unused_variables, warnings)]
-    fn put_bucket_cors(&self, input: PutBucketCorsRequest) -> RusotoFuture<(), PutBucketCorsError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
+        if let Some(ref content_md5) = self.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
         let mut params = Params::new();
@@ -22491,12 +24202,12 @@ impl S3 for S3Client {
         CORSConfigurationSerializer::serialize(
             &mut writer,
             "CORSConfiguration",
-            &input.cors_configuration,
+            &self.cors_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
         request.set_content_md5_header();
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22506,21 +24217,46 @@ impl S3 for S3Client {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutBucketCorsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutBucketCorsResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Creates a new server-side encryption configuration (or replaces an existing one, if present).</p>
+impl ServiceRequest for PutBucketEncryptionRequest {
+    type Output = PutBucketEncryptionResponse;
+    type Error = PutBucketEncryptionError;
+
     #[allow(unused_variables, warnings)]
-    fn put_bucket_encryption(
-        &self,
-        input: PutBucketEncryptionRequest,
-    ) -> RusotoFuture<(), PutBucketEncryptionError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
+        if let Some(ref content_md5) = self.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
         let mut params = Params::new();
@@ -22530,11 +24266,11 @@ impl S3 for S3Client {
         ServerSideEncryptionConfigurationSerializer::serialize(
             &mut writer,
             "ServerSideEncryptionConfiguration",
-            &input.server_side_encryption_configuration,
+            &self.server_side_encryption_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -22543,33 +24279,58 @@ impl S3 for S3Client {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutBucketEncryptionResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutBucketEncryptionResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Adds an inventory configuration (identified by the inventory ID) from the bucket.</p>
+impl ServiceRequest for PutBucketInventoryConfigurationRequest {
+    type Output = PutBucketInventoryConfigurationResponse;
+    type Error = PutBucketInventoryConfigurationError;
+
     #[allow(unused_variables, warnings)]
-    fn put_bucket_inventory_configuration(
-        &self,
-        input: PutBucketInventoryConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketInventoryConfigurationError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
         let mut params = Params::new();
-        params.put("id", &input.id);
+        params.put("id", &self.id);
         params.put_key("inventory");
         request.set_params(params);
         let mut writer = EventWriter::new(Vec::new());
         InventoryConfigurationSerializer::serialize(
             &mut writer,
             "InventoryConfiguration",
-            &input.inventory_configuration,
+            &self.inventory_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketInventoryConfigurationError::from_response(
@@ -22578,32 +24339,57 @@ impl S3 for S3Client {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutBucketInventoryConfigurationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutBucketInventoryConfigurationResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p> No longer used, see the PutBucketLifecycleConfiguration operation.</p>
+impl ServiceRequest for PutBucketLifecycleRequest {
+    type Output = PutBucketLifecycleResponse;
+    type Error = PutBucketLifecycleError;
+
     #[allow(unused_variables, warnings)]
-    fn put_bucket_lifecycle(
-        &self,
-        input: PutBucketLifecycleRequest,
-    ) -> RusotoFuture<(), PutBucketLifecycleError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
+        if let Some(ref content_md5) = self.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
         let mut params = Params::new();
         params.put_key("lifecycle");
         request.set_params(params);
-        if input.lifecycle_configuration.is_some() {
+        if self.lifecycle_configuration.is_some() {
             let mut writer = EventWriter::new(Vec::new());
             LifecycleConfigurationSerializer::serialize(
                 &mut writer,
                 "LifecycleConfiguration",
-                input.lifecycle_configuration.as_ref().unwrap(),
+                self.lifecycle_configuration.as_ref().unwrap(),
             );
             request.set_payload(Some(writer.into_inner()));
         } else {
@@ -22611,7 +24397,7 @@ impl S3 for S3Client {
         }
         request.set_content_md5_header();
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22621,29 +24407,54 @@ impl S3 for S3Client {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutBucketLifecycleResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutBucketLifecycleResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Sets lifecycle configuration for your bucket. If a lifecycle configuration exists, it replaces it.</p>
+impl ServiceRequest for PutBucketLifecycleConfigurationRequest {
+    type Output = PutBucketLifecycleConfigurationResponse;
+    type Error = PutBucketLifecycleConfigurationError;
+
     #[allow(unused_variables, warnings)]
-    fn put_bucket_lifecycle_configuration(
-        &self,
-        input: PutBucketLifecycleConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketLifecycleConfigurationError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("lifecycle");
         request.set_params(params);
-        if input.lifecycle_configuration.is_some() {
+        if self.lifecycle_configuration.is_some() {
             let mut writer = EventWriter::new(Vec::new());
             BucketLifecycleConfigurationSerializer::serialize(
                 &mut writer,
                 "LifecycleConfiguration",
-                input.lifecycle_configuration.as_ref().unwrap(),
+                self.lifecycle_configuration.as_ref().unwrap(),
             );
             request.set_payload(Some(writer.into_inner()));
         } else {
@@ -22651,7 +24462,7 @@ impl S3 for S3Client {
         }
         request.set_content_md5_header();
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketLifecycleConfigurationError::from_response(
@@ -22660,21 +24471,46 @@ impl S3 for S3Client {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutBucketLifecycleConfigurationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutBucketLifecycleConfigurationResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Set the logging parameters for a bucket and to specify permissions for who can view and modify the logging parameters. To set the logging status of a bucket, you must be the bucket owner.</p>
+impl ServiceRequest for PutBucketLoggingRequest {
+    type Output = PutBucketLoggingResponse;
+    type Error = PutBucketLoggingError;
+
     #[allow(unused_variables, warnings)]
-    fn put_bucket_logging(
-        &self,
-        input: PutBucketLoggingRequest,
-    ) -> RusotoFuture<(), PutBucketLoggingError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
+        if let Some(ref content_md5) = self.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
         let mut params = Params::new();
@@ -22684,11 +24520,11 @@ impl S3 for S3Client {
         BucketLoggingStatusSerializer::serialize(
             &mut writer,
             "BucketLoggingStatus",
-            &input.bucket_logging_status,
+            &self.bucket_logging_status,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22698,54 +24534,104 @@ impl S3 for S3Client {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutBucketLoggingResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutBucketLoggingResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Sets a metrics configuration (specified by the metrics configuration ID) for the bucket.</p>
+impl ServiceRequest for PutBucketMetricsConfigurationRequest {
+    type Output = PutBucketMetricsConfigurationResponse;
+    type Error = PutBucketMetricsConfigurationError;
+
     #[allow(unused_variables, warnings)]
-    fn put_bucket_metrics_configuration(
-        &self,
-        input: PutBucketMetricsConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketMetricsConfigurationError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
         let mut params = Params::new();
-        params.put("id", &input.id);
+        params.put("id", &self.id);
         params.put_key("metrics");
         request.set_params(params);
         let mut writer = EventWriter::new(Vec::new());
         MetricsConfigurationSerializer::serialize(
             &mut writer,
             "MetricsConfiguration",
-            &input.metrics_configuration,
+            &self.metrics_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketMetricsConfigurationError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutBucketMetricsConfigurationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutBucketMetricsConfigurationResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p> No longer used, see the PutBucketNotificationConfiguration operation.</p>
+impl ServiceRequest for PutBucketNotificationRequest {
+    type Output = PutBucketNotificationResponse;
+    type Error = PutBucketNotificationError;
+
     #[allow(unused_variables, warnings)]
-    fn put_bucket_notification(
-        &self,
-        input: PutBucketNotificationRequest,
-    ) -> RusotoFuture<(), PutBucketNotificationError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
+        if let Some(ref content_md5) = self.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
         let mut params = Params::new();
@@ -22755,30 +24641,55 @@ impl S3 for S3Client {
         NotificationConfigurationDeprecatedSerializer::serialize(
             &mut writer,
             "NotificationConfigurationDeprecated",
-            &input.notification_configuration,
+            &self.notification_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketNotificationError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutBucketNotificationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutBucketNotificationResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Enables notifications of specified events for a bucket.</p>
+impl ServiceRequest for PutBucketNotificationConfigurationRequest {
+    type Output = PutBucketNotificationConfigurationResponse;
+    type Error = PutBucketNotificationConfigurationError;
+
     #[allow(unused_variables, warnings)]
-    fn put_bucket_notification_configuration(
-        &self,
-        input: PutBucketNotificationConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketNotificationConfigurationError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("notification");
@@ -22787,11 +24698,11 @@ impl S3 for S3Client {
         NotificationConfigurationSerializer::serialize(
             &mut writer,
             "NotificationConfiguration",
-            &input.notification_configuration,
+            &self.notification_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketNotificationConfigurationError::from_response(
@@ -22800,21 +24711,46 @@ impl S3 for S3Client {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutBucketNotificationConfigurationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutBucketNotificationConfigurationResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Replaces a policy on a bucket. If the bucket already has a policy, the one in this request completely replaces it.</p>
+impl ServiceRequest for PutBucketPolicyRequest {
+    type Output = PutBucketPolicyResponse;
+    type Error = PutBucketPolicyError;
+
     #[allow(unused_variables, warnings)]
-    fn put_bucket_policy(
-        &self,
-        input: PutBucketPolicyRequest,
-    ) -> RusotoFuture<(), PutBucketPolicyError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref confirm_remove_self_bucket_access) = input.confirm_remove_self_bucket_access
+        if let Some(ref confirm_remove_self_bucket_access) = self.confirm_remove_self_bucket_access
         {
             request.add_header(
                 "x-amz-confirm-remove-self-bucket-access",
@@ -22822,17 +24758,17 @@ impl S3 for S3Client {
             );
         }
 
-        if let Some(ref content_md5) = input.content_md5 {
+        if let Some(ref content_md5) = self.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
         let mut params = Params::new();
         params.put_key("policy");
         request.set_params(params);
         let mut writer = EventWriter::new(Vec::new());
-        PolicySerializer::serialize(&mut writer, "Policy", &input.policy);
+        PolicySerializer::serialize(&mut writer, "Policy", &self.policy);
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22842,25 +24778,50 @@ impl S3 for S3Client {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutBucketPolicyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutBucketPolicyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p> Creates a replication configuration or replaces an existing one. For more information, see <a href=" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
+impl ServiceRequest for PutBucketReplicationRequest {
+    type Output = PutBucketReplicationResponse;
+    type Error = PutBucketReplicationError;
+
     #[allow(unused_variables, warnings)]
-    fn put_bucket_replication(
-        &self,
-        input: PutBucketReplicationRequest,
-    ) -> RusotoFuture<(), PutBucketReplicationError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
+        if let Some(ref content_md5) = self.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
 
-        if let Some(ref token) = input.token {
+        if let Some(ref token) = self.token {
             request.add_header("x-amz-bucket-object-lock-token", &token.to_string());
         }
         let mut params = Params::new();
@@ -22870,12 +24831,12 @@ impl S3 for S3Client {
         ReplicationConfigurationSerializer::serialize(
             &mut writer,
             "ReplicationConfiguration",
-            &input.replication_configuration,
+            &self.replication_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
         request.set_content_md5_header();
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -22884,21 +24845,46 @@ impl S3 for S3Client {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutBucketReplicationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutBucketReplicationResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Sets the request payment configuration for a bucket. By default, the bucket owner pays for downloads from the bucket. This configuration parameter enables the bucket owner (only) to specify that the person requesting the download will be charged for the download. Documentation on requester pays buckets can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html</p>
+impl ServiceRequest for PutBucketRequestPaymentRequest {
+    type Output = PutBucketRequestPaymentResponse;
+    type Error = PutBucketRequestPaymentError;
+
     #[allow(unused_variables, warnings)]
-    fn put_bucket_request_payment(
-        &self,
-        input: PutBucketRequestPaymentRequest,
-    ) -> RusotoFuture<(), PutBucketRequestPaymentError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
+        if let Some(ref content_md5) = self.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
         let mut params = Params::new();
@@ -22908,43 +24894,68 @@ impl S3 for S3Client {
         RequestPaymentConfigurationSerializer::serialize(
             &mut writer,
             "RequestPaymentConfiguration",
-            &input.request_payment_configuration,
+            &self.request_payment_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketRequestPaymentError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutBucketRequestPaymentResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutBucketRequestPaymentResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Sets the tags for a bucket.</p>
+impl ServiceRequest for PutBucketTaggingRequest {
+    type Output = PutBucketTaggingResponse;
+    type Error = PutBucketTaggingError;
+
     #[allow(unused_variables, warnings)]
-    fn put_bucket_tagging(
-        &self,
-        input: PutBucketTaggingRequest,
-    ) -> RusotoFuture<(), PutBucketTaggingError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
+        if let Some(ref content_md5) = self.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
         let mut params = Params::new();
         params.put_key("tagging");
         request.set_params(params);
         let mut writer = EventWriter::new(Vec::new());
-        TaggingSerializer::serialize(&mut writer, "Tagging", &input.tagging);
+        TaggingSerializer::serialize(&mut writer, "Tagging", &self.tagging);
         request.set_payload(Some(writer.into_inner()));
         request.set_content_md5_header();
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22954,25 +24965,50 @@ impl S3 for S3Client {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutBucketTaggingResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutBucketTaggingResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Sets the versioning state of an existing bucket. To set the versioning state, you must be the bucket owner.</p>
+impl ServiceRequest for PutBucketVersioningRequest {
+    type Output = PutBucketVersioningResponse;
+    type Error = PutBucketVersioningError;
+
     #[allow(unused_variables, warnings)]
-    fn put_bucket_versioning(
-        &self,
-        input: PutBucketVersioningRequest,
-    ) -> RusotoFuture<(), PutBucketVersioningError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
+        if let Some(ref content_md5) = self.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
 
-        if let Some(ref mfa) = input.mfa {
+        if let Some(ref mfa) = self.mfa {
             request.add_header("x-amz-mfa", &mfa.to_string());
         }
         let mut params = Params::new();
@@ -22982,11 +25018,11 @@ impl S3 for S3Client {
         VersioningConfigurationSerializer::serialize(
             &mut writer,
             "VersioningConfiguration",
-            &input.versioning_configuration,
+            &self.versioning_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -22995,21 +25031,46 @@ impl S3 for S3Client {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutBucketVersioningResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutBucketVersioningResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Set the website configuration for a bucket.</p>
+impl ServiceRequest for PutBucketWebsiteRequest {
+    type Output = PutBucketWebsiteResponse;
+    type Error = PutBucketWebsiteError;
+
     #[allow(unused_variables, warnings)]
-    fn put_bucket_website(
-        &self,
-        input: PutBucketWebsiteRequest,
-    ) -> RusotoFuture<(), PutBucketWebsiteError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
+        if let Some(ref content_md5) = self.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
         let mut params = Params::new();
@@ -23019,11 +25080,11 @@ impl S3 for S3Client {
         WebsiteConfigurationSerializer::serialize(
             &mut writer,
             "WebsiteConfiguration",
-            &input.website_configuration,
+            &self.website_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -23033,153 +25094,181 @@ impl S3 for S3Client {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutBucketWebsiteResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutBucketWebsiteResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Adds an object to a bucket.</p>
+impl ServiceRequest for PutObjectRequest {
+    type Output = PutObjectResponse;
+    type Error = PutObjectError;
+
     #[allow(unused_variables, warnings)]
-    fn put_object(&self, input: PutObjectRequest) -> RusotoFuture<PutObjectOutput, PutObjectError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref acl) = input.acl {
+        if let Some(ref acl) = self.acl {
             request.add_header("x-amz-acl", &acl.to_string());
         }
 
-        if let Some(ref cache_control) = input.cache_control {
+        if let Some(ref cache_control) = self.cache_control {
             request.add_header("Cache-Control", &cache_control.to_string());
         }
 
-        if let Some(ref content_disposition) = input.content_disposition {
+        if let Some(ref content_disposition) = self.content_disposition {
             request.add_header("Content-Disposition", &content_disposition.to_string());
         }
 
-        if let Some(ref content_encoding) = input.content_encoding {
+        if let Some(ref content_encoding) = self.content_encoding {
             request.add_header("Content-Encoding", &content_encoding.to_string());
         }
 
-        if let Some(ref content_language) = input.content_language {
+        if let Some(ref content_language) = self.content_language {
             request.add_header("Content-Language", &content_language.to_string());
         }
 
-        if let Some(ref content_length) = input.content_length {
+        if let Some(ref content_length) = self.content_length {
             request.add_header("Content-Length", &content_length.to_string());
         }
 
-        if let Some(ref content_md5) = input.content_md5 {
+        if let Some(ref content_md5) = self.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
 
-        if let Some(ref content_type) = input.content_type {
+        if let Some(ref content_type) = self.content_type {
             request.add_header("Content-Type", &content_type.to_string());
         }
 
-        if let Some(ref expires) = input.expires {
+        if let Some(ref expires) = self.expires {
             request.add_header("Expires", &expires.to_string());
         }
 
-        if let Some(ref grant_full_control) = input.grant_full_control {
+        if let Some(ref grant_full_control) = self.grant_full_control {
             request.add_header("x-amz-grant-full-control", &grant_full_control.to_string());
         }
 
-        if let Some(ref grant_read) = input.grant_read {
+        if let Some(ref grant_read) = self.grant_read {
             request.add_header("x-amz-grant-read", &grant_read.to_string());
         }
 
-        if let Some(ref grant_read_acp) = input.grant_read_acp {
+        if let Some(ref grant_read_acp) = self.grant_read_acp {
             request.add_header("x-amz-grant-read-acp", &grant_read_acp.to_string());
         }
 
-        if let Some(ref grant_write_acp) = input.grant_write_acp {
+        if let Some(ref grant_write_acp) = self.grant_write_acp {
             request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
         }
 
-        if let Some(ref metadata) = input.metadata {
+        if let Some(ref metadata) = self.metadata {
             for (header_name, header_value) in metadata.iter() {
                 let header = format!("x-amz-meta-{}", header_name);
                 request.add_header(header, header_value);
             }
         }
 
-        if let Some(ref object_lock_legal_hold_status) = input.object_lock_legal_hold_status {
+        if let Some(ref object_lock_legal_hold_status) = self.object_lock_legal_hold_status {
             request.add_header(
                 "x-amz-object-lock-legal-hold",
                 &object_lock_legal_hold_status.to_string(),
             );
         }
 
-        if let Some(ref object_lock_mode) = input.object_lock_mode {
+        if let Some(ref object_lock_mode) = self.object_lock_mode {
             request.add_header("x-amz-object-lock-mode", &object_lock_mode.to_string());
         }
 
-        if let Some(ref object_lock_retain_until_date) = input.object_lock_retain_until_date {
+        if let Some(ref object_lock_retain_until_date) = self.object_lock_retain_until_date {
             request.add_header(
                 "x-amz-object-lock-retain-until-date",
                 &object_lock_retain_until_date.to_string(),
             );
         }
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
 
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
+        if let Some(ref sse_customer_algorithm) = self.sse_customer_algorithm {
             request.add_header(
                 "x-amz-server-side-encryption-customer-algorithm",
                 &sse_customer_algorithm.to_string(),
             );
         }
 
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
+        if let Some(ref sse_customer_key) = self.sse_customer_key {
             request.add_header(
                 "x-amz-server-side-encryption-customer-key",
                 &sse_customer_key.to_string(),
             );
         }
 
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
+        if let Some(ref sse_customer_key_md5) = self.sse_customer_key_md5 {
             request.add_header(
                 "x-amz-server-side-encryption-customer-key-MD5",
                 &sse_customer_key_md5.to_string(),
             );
         }
 
-        if let Some(ref ssekms_key_id) = input.ssekms_key_id {
+        if let Some(ref ssekms_key_id) = self.ssekms_key_id {
             request.add_header(
                 "x-amz-server-side-encryption-aws-kms-key-id",
                 &ssekms_key_id.to_string(),
             );
         }
 
-        if let Some(ref server_side_encryption) = input.server_side_encryption {
+        if let Some(ref server_side_encryption) = self.server_side_encryption {
             request.add_header(
                 "x-amz-server-side-encryption",
                 &server_side_encryption.to_string(),
             );
         }
 
-        if let Some(ref storage_class) = input.storage_class {
+        if let Some(ref storage_class) = self.storage_class {
             request.add_header("x-amz-storage-class", &storage_class.to_string());
         }
 
-        if let Some(ref tagging) = input.tagging {
+        if let Some(ref tagging) = self.tagging {
             request.add_header("x-amz-tagging", &tagging.to_string());
         }
 
-        if let Some(ref website_redirect_location) = input.website_redirect_location {
+        if let Some(ref website_redirect_location) = self.website_redirect_location {
             request.add_header(
                 "x-amz-website-redirect-location",
                 &website_redirect_location.to_string(),
             );
         }
 
-        if let Some(__body) = input.body {
+        if let Some(__body) = self.body {
             request.set_payload_stream(__body);
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -23193,7 +25282,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = PutObjectOutput::default();
+                    result = PutObjectResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -23203,7 +25292,7 @@ impl S3 for S3Client {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     result =
-                        PutObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                        PutObjectResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
@@ -23252,67 +25341,72 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>uses the acl subresource to set the access control list (ACL) permissions for an object that already exists in a bucket</p>
+impl ServiceRequest for PutObjectAclRequest {
+    type Output = PutObjectAclResponse;
+    type Error = PutObjectAclError;
+
     #[allow(unused_variables, warnings)]
-    fn put_object_acl(
-        &self,
-        input: PutObjectAclRequest,
-    ) -> RusotoFuture<PutObjectAclOutput, PutObjectAclError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref acl) = input.acl {
+        if let Some(ref acl) = self.acl {
             request.add_header("x-amz-acl", &acl.to_string());
         }
 
-        if let Some(ref content_md5) = input.content_md5 {
+        if let Some(ref content_md5) = self.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
 
-        if let Some(ref grant_full_control) = input.grant_full_control {
+        if let Some(ref grant_full_control) = self.grant_full_control {
             request.add_header("x-amz-grant-full-control", &grant_full_control.to_string());
         }
 
-        if let Some(ref grant_read) = input.grant_read {
+        if let Some(ref grant_read) = self.grant_read {
             request.add_header("x-amz-grant-read", &grant_read.to_string());
         }
 
-        if let Some(ref grant_read_acp) = input.grant_read_acp {
+        if let Some(ref grant_read_acp) = self.grant_read_acp {
             request.add_header("x-amz-grant-read-acp", &grant_read_acp.to_string());
         }
 
-        if let Some(ref grant_write) = input.grant_write {
+        if let Some(ref grant_write) = self.grant_write {
             request.add_header("x-amz-grant-write", &grant_write.to_string());
         }
 
-        if let Some(ref grant_write_acp) = input.grant_write_acp {
+        if let Some(ref grant_write_acp) = self.grant_write_acp {
             request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
         }
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.version_id {
+        if let Some(ref x) = self.version_id {
             params.put("versionId", x);
         }
         params.put_key("acl");
         request.set_params(params);
-        if input.access_control_policy.is_some() {
+        if self.access_control_policy.is_some() {
             let mut writer = EventWriter::new(Vec::new());
             AccessControlPolicySerializer::serialize(
                 &mut writer,
                 "AccessControlPolicy",
-                input.access_control_policy.as_ref().unwrap(),
+                self.access_control_policy.as_ref().unwrap(),
             );
             request.set_payload(Some(writer.into_inner()));
         } else {
             request.set_payload(Some(Vec::new()));
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -23326,7 +25420,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = PutObjectAclOutput::default();
+                    result = PutObjectAclResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -23335,8 +25429,10 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result =
-                        PutObjectAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                    result = PutObjectAclResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
                 }
                 if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
@@ -23346,43 +25442,48 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Applies a Legal Hold configuration to the specified object.</p>
+impl ServiceRequest for PutObjectLegalHoldRequest {
+    type Output = PutObjectLegalHoldResponse;
+    type Error = PutObjectLegalHoldError;
+
     #[allow(unused_variables, warnings)]
-    fn put_object_legal_hold(
-        &self,
-        input: PutObjectLegalHoldRequest,
-    ) -> RusotoFuture<PutObjectLegalHoldOutput, PutObjectLegalHoldError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
+        if let Some(ref content_md5) = self.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.version_id {
+        if let Some(ref x) = self.version_id {
             params.put("versionId", x);
         }
         params.put_key("legal-hold");
         request.set_params(params);
-        if input.legal_hold.is_some() {
+        if self.legal_hold.is_some() {
             let mut writer = EventWriter::new(Vec::new());
             ObjectLockLegalHoldSerializer::serialize(
                 &mut writer,
                 "LegalHold",
-                input.legal_hold.as_ref().unwrap(),
+                self.legal_hold.as_ref().unwrap(),
             );
             request.set_payload(Some(writer.into_inner()));
         } else {
             request.set_payload(Some(Vec::new()));
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -23396,7 +25497,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = PutObjectLegalHoldOutput::default();
+                    result = PutObjectLegalHoldResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -23405,7 +25506,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = PutObjectLegalHoldOutputDeserializer::deserialize(
+                    result = PutObjectLegalHoldResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -23418,44 +25519,49 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Places an Object Lock configuration on the specified bucket. The rule specified in the Object Lock configuration will be applied by default to every new object placed in the specified bucket.</p>
+impl ServiceRequest for PutObjectLockConfigurationRequest {
+    type Output = PutObjectLockConfigurationResponse;
+    type Error = PutObjectLockConfigurationError;
+
     #[allow(unused_variables, warnings)]
-    fn put_object_lock_configuration(
-        &self,
-        input: PutObjectLockConfigurationRequest,
-    ) -> RusotoFuture<PutObjectLockConfigurationOutput, PutObjectLockConfigurationError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
+        if let Some(ref content_md5) = self.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
 
-        if let Some(ref token) = input.token {
+        if let Some(ref token) = self.token {
             request.add_header("x-amz-bucket-object-lock-token", &token.to_string());
         }
         let mut params = Params::new();
         params.put_key("object-lock");
         request.set_params(params);
-        if input.object_lock_configuration.is_some() {
+        if self.object_lock_configuration.is_some() {
             let mut writer = EventWriter::new(Vec::new());
             ObjectLockConfigurationSerializer::serialize(
                 &mut writer,
                 "ObjectLockConfiguration",
-                input.object_lock_configuration.as_ref().unwrap(),
+                self.object_lock_configuration.as_ref().unwrap(),
             );
             request.set_payload(Some(writer.into_inner()));
         } else {
             request.set_payload(Some(Vec::new()));
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutObjectLockConfigurationError::from_response(response))
@@ -23466,7 +25572,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = PutObjectLockConfigurationOutput::default();
+                    result = PutObjectLockConfigurationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -23475,7 +25581,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = PutObjectLockConfigurationOutputDeserializer::deserialize(
+                    result = PutObjectLockConfigurationResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -23488,50 +25594,55 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Places an Object Retention configuration on an object.</p>
+impl ServiceRequest for PutObjectRetentionRequest {
+    type Output = PutObjectRetentionResponse;
+    type Error = PutObjectRetentionError;
+
     #[allow(unused_variables, warnings)]
-    fn put_object_retention(
-        &self,
-        input: PutObjectRetentionRequest,
-    ) -> RusotoFuture<PutObjectRetentionOutput, PutObjectRetentionError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref bypass_governance_retention) = input.bypass_governance_retention {
+        if let Some(ref bypass_governance_retention) = self.bypass_governance_retention {
             request.add_header(
                 "x-amz-bypass-governance-retention",
                 &bypass_governance_retention.to_string(),
             );
         }
 
-        if let Some(ref content_md5) = input.content_md5 {
+        if let Some(ref content_md5) = self.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.version_id {
+        if let Some(ref x) = self.version_id {
             params.put("versionId", x);
         }
         params.put_key("retention");
         request.set_params(params);
-        if input.retention.is_some() {
+        if self.retention.is_some() {
             let mut writer = EventWriter::new(Vec::new());
             ObjectLockRetentionSerializer::serialize(
                 &mut writer,
                 "Retention",
-                input.retention.as_ref().unwrap(),
+                self.retention.as_ref().unwrap(),
             );
             request.set_payload(Some(writer.into_inner()));
         } else {
             request.set_payload(Some(Vec::new()));
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -23545,7 +25656,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = PutObjectRetentionOutput::default();
+                    result = PutObjectRetentionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -23554,7 +25665,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = PutObjectRetentionOutputDeserializer::deserialize(
+                    result = PutObjectRetentionResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -23567,31 +25678,36 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Sets the supplied tag-set to an object that already exists in a bucket</p>
+impl ServiceRequest for PutObjectTaggingRequest {
+    type Output = PutObjectTaggingResponse;
+    type Error = PutObjectTaggingError;
+
     #[allow(unused_variables, warnings)]
-    fn put_object_tagging(
-        &self,
-        input: PutObjectTaggingRequest,
-    ) -> RusotoFuture<PutObjectTaggingOutput, PutObjectTaggingError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
+        if let Some(ref content_md5) = self.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.version_id {
+        if let Some(ref x) = self.version_id {
             params.put("versionId", x);
         }
         params.put_key("tagging");
         request.set_params(params);
         let mut writer = EventWriter::new(Vec::new());
-        TaggingSerializer::serialize(&mut writer, "Tagging", &input.tagging);
+        TaggingSerializer::serialize(&mut writer, "Tagging", &self.tagging);
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -23605,7 +25721,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = PutObjectTaggingOutput::default();
+                    result = PutObjectTaggingResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -23614,7 +25730,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = PutObjectTaggingOutputDeserializer::deserialize(
+                    result = PutObjectTaggingResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -23627,18 +25743,23 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Creates or modifies the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket.</p>
+impl ServiceRequest for PutPublicAccessBlockRequest {
+    type Output = PutPublicAccessBlockResponse;
+    type Error = PutPublicAccessBlockError;
+
     #[allow(unused_variables, warnings)]
-    fn put_public_access_block(
-        &self,
-        input: PutPublicAccessBlockRequest,
-    ) -> RusotoFuture<(), PutPublicAccessBlockError> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}", bucket = self.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
+        if let Some(ref content_md5) = self.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
         let mut params = Params::new();
@@ -23648,11 +25769,11 @@ impl S3 for S3Client {
         PublicAccessBlockConfigurationSerializer::serialize(
             &mut writer,
             "PublicAccessBlockConfiguration",
-            &input.public_access_block_configuration,
+            &self.public_access_block_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -23661,42 +25782,67 @@ impl S3 for S3Client {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutPublicAccessBlockResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutPublicAccessBlockResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Restores an archived copy of an object back into Amazon S3</p>
+impl ServiceRequest for RestoreObjectRequest {
+    type Output = RestoreObjectResponse;
+    type Error = RestoreObjectError;
+
     #[allow(unused_variables, warnings)]
-    fn restore_object(
-        &self,
-        input: RestoreObjectRequest,
-    ) -> RusotoFuture<RestoreObjectOutput, RestoreObjectError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "s3", region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.version_id {
+        if let Some(ref x) = self.version_id {
             params.put("versionId", x);
         }
         params.put_key("restore");
         request.set_params(params);
-        if input.restore_request.is_some() {
+        if self.restore_request.is_some() {
             let mut writer = EventWriter::new(Vec::new());
             RestoreRequestSerializer::serialize(
                 &mut writer,
                 "RestoreRequest",
-                input.restore_request.as_ref().unwrap(),
+                self.restore_request.as_ref().unwrap(),
             );
             request.set_payload(Some(writer.into_inner()));
         } else {
             request.set_payload(Some(Vec::new()));
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -23710,7 +25856,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = RestoreObjectOutput::default();
+                    result = RestoreObjectResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -23719,8 +25865,10 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result =
-                        RestoreObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                    result = RestoreObjectResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
                 }
                 if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
@@ -23735,32 +25883,37 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>This operation filters the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response.</p>
+impl ServiceRequest for SelectObjectContentRequest {
+    type Output = SelectObjectContentResponse;
+    type Error = SelectObjectContentError;
+
     #[allow(unused_variables, warnings)]
-    fn select_object_content(
-        &self,
-        input: SelectObjectContentRequest,
-    ) -> RusotoFuture<SelectObjectContentOutput, SelectObjectContentError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "s3", region, &request_uri);
 
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
+        if let Some(ref sse_customer_algorithm) = self.sse_customer_algorithm {
             request.add_header(
                 "x-amz-server-side-encryption-customer-algorithm",
                 &sse_customer_algorithm.to_string(),
             );
         }
 
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
+        if let Some(ref sse_customer_key) = self.sse_customer_key {
             request.add_header(
                 "x-amz-server-side-encryption-customer-key",
                 &sse_customer_key.to_string(),
             );
         }
 
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
+        if let Some(ref sse_customer_key_md5) = self.sse_customer_key_md5 {
             request.add_header(
                 "x-amz-server-side-encryption-customer-key-MD5",
                 &sse_customer_key_md5.to_string(),
@@ -23773,12 +25926,12 @@ impl S3 for S3Client {
         SelectObjectContentRequestSerializer::serialize(
             &mut writer,
             "SelectObjectContentRequest",
-            &input,
+            &self,
             "http://s3.amazonaws.com/doc/2006-03-01/",
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -23791,7 +25944,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = SelectObjectContentOutput::default();
+                    result = SelectObjectContentResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -23800,7 +25953,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = SelectObjectContentOutputDeserializer::deserialize(
+                    result = SelectObjectContentResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -23810,58 +25963,63 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Uploads a part in a multipart upload.</p> <p> <b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
+impl ServiceRequest for UploadPartRequest {
+    type Output = UploadPartResponse;
+    type Error = UploadPartError;
+
     #[allow(unused_variables, warnings)]
-    fn upload_part(
-        &self,
-        input: UploadPartRequest,
-    ) -> RusotoFuture<UploadPartOutput, UploadPartError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        if let Some(ref content_length) = input.content_length {
+        if let Some(ref content_length) = self.content_length {
             request.add_header("Content-Length", &content_length.to_string());
         }
 
-        if let Some(ref content_md5) = input.content_md5 {
+        if let Some(ref content_md5) = self.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
 
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
+        if let Some(ref sse_customer_algorithm) = self.sse_customer_algorithm {
             request.add_header(
                 "x-amz-server-side-encryption-customer-algorithm",
                 &sse_customer_algorithm.to_string(),
             );
         }
 
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
+        if let Some(ref sse_customer_key) = self.sse_customer_key {
             request.add_header(
                 "x-amz-server-side-encryption-customer-key",
                 &sse_customer_key.to_string(),
             );
         }
 
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
+        if let Some(ref sse_customer_key_md5) = self.sse_customer_key_md5 {
             request.add_header(
                 "x-amz-server-side-encryption-customer-key-MD5",
                 &sse_customer_key_md5.to_string(),
             );
         }
         let mut params = Params::new();
-        params.put("partNumber", &input.part_number);
-        params.put("uploadId", &input.upload_id);
+        params.put("partNumber", &self.part_number);
+        params.put("uploadId", &self.upload_id);
         request.set_params(params);
-        if let Some(__body) = input.body {
+        if let Some(__body) = self.body {
             request.set_payload_stream(__body);
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -23875,7 +26033,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = UploadPartOutput::default();
+                    result = UploadPartResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -23885,7 +26043,7 @@ impl S3 for S3Client {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     result =
-                        UploadPartOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                        UploadPartResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
@@ -23926,53 +26084,58 @@ impl S3 for S3Client {
             }))
         })
     }
+}
 
-    /// <p>Uploads a part by copying data from an existing object as data source.</p>
+impl ServiceRequest for UploadPartCopyRequest {
+    type Output = UploadPartCopyResponse;
+    type Error = UploadPartCopyError;
+
     #[allow(unused_variables, warnings)]
-    fn upload_part_copy(
-        &self,
-        input: UploadPartCopyRequest,
-    ) -> RusotoFuture<UploadPartCopyOutput, UploadPartCopyError> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
 
-        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", region, &request_uri);
 
-        request.add_header("x-amz-copy-source", &input.copy_source);
+        request.add_header("x-amz-copy-source", &self.copy_source);
 
-        if let Some(ref copy_source_if_match) = input.copy_source_if_match {
+        if let Some(ref copy_source_if_match) = self.copy_source_if_match {
             request.add_header(
                 "x-amz-copy-source-if-match",
                 &copy_source_if_match.to_string(),
             );
         }
 
-        if let Some(ref copy_source_if_modified_since) = input.copy_source_if_modified_since {
+        if let Some(ref copy_source_if_modified_since) = self.copy_source_if_modified_since {
             request.add_header(
                 "x-amz-copy-source-if-modified-since",
                 &copy_source_if_modified_since.to_string(),
             );
         }
 
-        if let Some(ref copy_source_if_none_match) = input.copy_source_if_none_match {
+        if let Some(ref copy_source_if_none_match) = self.copy_source_if_none_match {
             request.add_header(
                 "x-amz-copy-source-if-none-match",
                 &copy_source_if_none_match.to_string(),
             );
         }
 
-        if let Some(ref copy_source_if_unmodified_since) = input.copy_source_if_unmodified_since {
+        if let Some(ref copy_source_if_unmodified_since) = self.copy_source_if_unmodified_since {
             request.add_header(
                 "x-amz-copy-source-if-unmodified-since",
                 &copy_source_if_unmodified_since.to_string(),
             );
         }
 
-        if let Some(ref copy_source_range) = input.copy_source_range {
+        if let Some(ref copy_source_range) = self.copy_source_range {
             request.add_header("x-amz-copy-source-range", &copy_source_range.to_string());
         }
 
         if let Some(ref copy_source_sse_customer_algorithm) =
-            input.copy_source_sse_customer_algorithm
+            self.copy_source_sse_customer_algorithm
         {
             request.add_header(
                 "x-amz-copy-source-server-side-encryption-customer-algorithm",
@@ -23980,50 +26143,50 @@ impl S3 for S3Client {
             );
         }
 
-        if let Some(ref copy_source_sse_customer_key) = input.copy_source_sse_customer_key {
+        if let Some(ref copy_source_sse_customer_key) = self.copy_source_sse_customer_key {
             request.add_header(
                 "x-amz-copy-source-server-side-encryption-customer-key",
                 &copy_source_sse_customer_key.to_string(),
             );
         }
 
-        if let Some(ref copy_source_sse_customer_key_md5) = input.copy_source_sse_customer_key_md5 {
+        if let Some(ref copy_source_sse_customer_key_md5) = self.copy_source_sse_customer_key_md5 {
             request.add_header(
                 "x-amz-copy-source-server-side-encryption-customer-key-MD5",
                 &copy_source_sse_customer_key_md5.to_string(),
             );
         }
 
-        if let Some(ref request_payer) = input.request_payer {
+        if let Some(ref request_payer) = self.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
 
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
+        if let Some(ref sse_customer_algorithm) = self.sse_customer_algorithm {
             request.add_header(
                 "x-amz-server-side-encryption-customer-algorithm",
                 &sse_customer_algorithm.to_string(),
             );
         }
 
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
+        if let Some(ref sse_customer_key) = self.sse_customer_key {
             request.add_header(
                 "x-amz-server-side-encryption-customer-key",
                 &sse_customer_key.to_string(),
             );
         }
 
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
+        if let Some(ref sse_customer_key_md5) = self.sse_customer_key_md5 {
             request.add_header(
                 "x-amz-server-side-encryption-customer-key-MD5",
                 &sse_customer_key_md5.to_string(),
             );
         }
         let mut params = Params::new();
-        params.put("partNumber", &input.part_number);
-        params.put("uploadId", &input.upload_id);
+        params.put("partNumber", &self.part_number);
+        params.put("uploadId", &self.upload_id);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -24037,7 +26200,7 @@ impl S3 for S3Client {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = UploadPartCopyOutput::default();
+                    result = UploadPartCopyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -24046,7 +26209,7 @@ impl S3 for S3Client {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = UploadPartCopyOutputDeserializer::deserialize(
+                    result = UploadPartCopyResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;

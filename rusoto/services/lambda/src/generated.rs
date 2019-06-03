@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -219,6 +220,36 @@ pub struct CreateAliasRequest {
     pub routing_config: Option<AliasRoutingConfiguration>,
 }
 
+/// <p>Provides configuration information about a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateAliasResponse {
+    /// <p>The Amazon Resource Name (ARN) of the alias.</p>
+    #[serde(rename = "AliasArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alias_arn: Option<String>,
+    /// <p>A description of the alias.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The function version that the alias invokes.</p>
+    #[serde(rename = "FunctionVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_version: Option<String>,
+    /// <p>The name of the alias.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A unique identifier that changes when you update the alias.</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
+    /// <p>The <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-traffic-shifting-using-aliases.html">routing configuration</a> of the alias.</p>
+    #[serde(rename = "RoutingConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub routing_config: Option<AliasRoutingConfiguration>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateEventSourceMappingRequest {
     /// <p><p>The maximum number of items to retrieve in a single batch.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - Default 100. Max 10,000.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - Default 100. Max 1,000.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - Default 10. Max 10.</p> </li> </ul></p>
@@ -243,6 +274,44 @@ pub struct CreateEventSourceMappingRequest {
     #[serde(rename = "StartingPositionTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub starting_position_timestamp: Option<f64>,
+}
+
+/// <p>A mapping between an AWS resource and an AWS Lambda function. See <a>CreateEventSourceMapping</a> for details.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateEventSourceMappingResponse {
+    /// <p>The maximum number of items to retrieve in a single batch.</p>
+    #[serde(rename = "BatchSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub batch_size: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) of the event source.</p>
+    #[serde(rename = "EventSourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_source_arn: Option<String>,
+    /// <p>The ARN of the Lambda function.</p>
+    #[serde(rename = "FunctionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_arn: Option<String>,
+    /// <p>The date that the event source mapping was last updated.</p>
+    #[serde(rename = "LastModified")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified: Option<f64>,
+    /// <p>The result of the last AWS Lambda invocation of your Lambda function.</p>
+    #[serde(rename = "LastProcessingResult")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_processing_result: Option<String>,
+    /// <p>The state of the event source mapping. It can be one of the following: <code>Creating</code>, <code>Enabling</code>, <code>Enabled</code>, <code>Disabling</code>, <code>Disabled</code>, <code>Updating</code>, or <code>Deleting</code>.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>The cause of the last state change, either <code>User initiated</code> or <code>Lambda initiated</code>.</p>
+    #[serde(rename = "StateTransitionReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_transition_reason: Option<String>,
+    /// <p>The identifier of the event source mapping.</p>
+    #[serde(rename = "UUID")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub uuid: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -308,6 +377,92 @@ pub struct CreateFunctionRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// <p>Details about a function's configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateFunctionResponse {
+    /// <p>The SHA256 hash of the function's deployment package.</p>
+    #[serde(rename = "CodeSha256")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_sha_256: Option<String>,
+    /// <p>The size of the function's deployment package, in bytes.</p>
+    #[serde(rename = "CodeSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_size: Option<i64>,
+    /// <p>The function's dead letter queue.</p>
+    #[serde(rename = "DeadLetterConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dead_letter_config: Option<DeadLetterConfig>,
+    /// <p>The function's description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The function's environment variables.</p>
+    #[serde(rename = "Environment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment: Option<EnvironmentResponse>,
+    /// <p>The function's Amazon Resource Name (ARN).</p>
+    #[serde(rename = "FunctionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_arn: Option<String>,
+    /// <p>The name of the function.</p>
+    #[serde(rename = "FunctionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_name: Option<String>,
+    /// <p>The function that Lambda calls to begin executing your function.</p>
+    #[serde(rename = "Handler")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub handler: Option<String>,
+    /// <p>The KMS key that's used to encrypt the function's environment variables. This key is only returned if you've configured a customer-managed CMK.</p>
+    #[serde(rename = "KMSKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_arn: Option<String>,
+    /// <p>The date and time that the function was last updated, in <a href="https://www.w3.org/TR/NOTE-datetime">ISO-8601 format</a> (YYYY-MM-DDThh:mm:ss.sTZD).</p>
+    #[serde(rename = "LastModified")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified: Option<String>,
+    /// <p>The function's <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html"> layers</a>.</p>
+    #[serde(rename = "Layers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub layers: Option<Vec<Layer>>,
+    /// <p>For Lambda@Edge functions, the ARN of the master function.</p>
+    #[serde(rename = "MasterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_arn: Option<String>,
+    /// <p>The memory that's allocated to the function.</p>
+    #[serde(rename = "MemorySize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub memory_size: Option<i64>,
+    /// <p>The latest updated revision of the function or alias.</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
+    /// <p>The function's execution role.</p>
+    #[serde(rename = "Role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
+    /// <p>The runtime environment for the Lambda function.</p>
+    #[serde(rename = "Runtime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub runtime: Option<String>,
+    /// <p>The amount of time that Lambda allows a function to run before stopping it.</p>
+    #[serde(rename = "Timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<i64>,
+    /// <p>The function's AWS X-Ray tracing configuration.</p>
+    #[serde(rename = "TracingConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tracing_config: Option<TracingConfigResponse>,
+    /// <p>The version of the Lambda function.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+    /// <p>The function's networking configuration.</p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfigResponse>,
+}
+
 /// <p>The <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">dead letter queue</a> for failed asynchronous invocations.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeadLetterConfig {
@@ -327,11 +482,53 @@ pub struct DeleteAliasRequest {
     pub name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteAliasResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteEventSourceMappingRequest {
     /// <p>The identifier of the event source mapping.</p>
     #[serde(rename = "UUID")]
     pub uuid: String,
+}
+
+/// <p>A mapping between an AWS resource and an AWS Lambda function. See <a>CreateEventSourceMapping</a> for details.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteEventSourceMappingResponse {
+    /// <p>The maximum number of items to retrieve in a single batch.</p>
+    #[serde(rename = "BatchSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub batch_size: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) of the event source.</p>
+    #[serde(rename = "EventSourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_source_arn: Option<String>,
+    /// <p>The ARN of the Lambda function.</p>
+    #[serde(rename = "FunctionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_arn: Option<String>,
+    /// <p>The date that the event source mapping was last updated.</p>
+    #[serde(rename = "LastModified")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified: Option<f64>,
+    /// <p>The result of the last AWS Lambda invocation of your Lambda function.</p>
+    #[serde(rename = "LastProcessingResult")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_processing_result: Option<String>,
+    /// <p>The state of the event source mapping. It can be one of the following: <code>Creating</code>, <code>Enabling</code>, <code>Enabled</code>, <code>Disabling</code>, <code>Disabled</code>, <code>Updating</code>, or <code>Deleting</code>.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>The cause of the last state change, either <code>User initiated</code> or <code>Lambda initiated</code>.</p>
+    #[serde(rename = "StateTransitionReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_transition_reason: Option<String>,
+    /// <p>The identifier of the event source mapping.</p>
+    #[serde(rename = "UUID")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub uuid: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -340,6 +537,10 @@ pub struct DeleteFunctionConcurrencyRequest {
     #[serde(rename = "FunctionName")]
     pub function_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteFunctionConcurrencyResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteFunctionRequest {
@@ -352,6 +553,10 @@ pub struct DeleteFunctionRequest {
     pub qualifier: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteFunctionResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteLayerVersionRequest {
     /// <p>The name or Amazon Resource Name (ARN) of the layer.</p>
@@ -361,6 +566,10 @@ pub struct DeleteLayerVersionRequest {
     #[serde(rename = "VersionNumber")]
     pub version_number: i64,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteLayerVersionResponse {}
 
 /// <p>A function's environment variable settings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -589,11 +798,79 @@ pub struct GetAliasRequest {
     pub name: String,
 }
 
+/// <p>Provides configuration information about a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetAliasResponse {
+    /// <p>The Amazon Resource Name (ARN) of the alias.</p>
+    #[serde(rename = "AliasArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alias_arn: Option<String>,
+    /// <p>A description of the alias.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The function version that the alias invokes.</p>
+    #[serde(rename = "FunctionVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_version: Option<String>,
+    /// <p>The name of the alias.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A unique identifier that changes when you update the alias.</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
+    /// <p>The <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-traffic-shifting-using-aliases.html">routing configuration</a> of the alias.</p>
+    #[serde(rename = "RoutingConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub routing_config: Option<AliasRoutingConfiguration>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetEventSourceMappingRequest {
     /// <p>The identifier of the event source mapping.</p>
     #[serde(rename = "UUID")]
     pub uuid: String,
+}
+
+/// <p>A mapping between an AWS resource and an AWS Lambda function. See <a>CreateEventSourceMapping</a> for details.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetEventSourceMappingResponse {
+    /// <p>The maximum number of items to retrieve in a single batch.</p>
+    #[serde(rename = "BatchSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub batch_size: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) of the event source.</p>
+    #[serde(rename = "EventSourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_source_arn: Option<String>,
+    /// <p>The ARN of the Lambda function.</p>
+    #[serde(rename = "FunctionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_arn: Option<String>,
+    /// <p>The date that the event source mapping was last updated.</p>
+    #[serde(rename = "LastModified")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified: Option<f64>,
+    /// <p>The result of the last AWS Lambda invocation of your Lambda function.</p>
+    #[serde(rename = "LastProcessingResult")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_processing_result: Option<String>,
+    /// <p>The state of the event source mapping. It can be one of the following: <code>Creating</code>, <code>Enabling</code>, <code>Enabled</code>, <code>Disabling</code>, <code>Disabled</code>, <code>Updating</code>, or <code>Deleting</code>.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>The cause of the last state change, either <code>User initiated</code> or <code>Lambda initiated</code>.</p>
+    #[serde(rename = "StateTransitionReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_transition_reason: Option<String>,
+    /// <p>The identifier of the event source mapping.</p>
+    #[serde(rename = "UUID")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub uuid: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -605,6 +882,92 @@ pub struct GetFunctionConfigurationRequest {
     #[serde(rename = "Qualifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub qualifier: Option<String>,
+}
+
+/// <p>Details about a function's configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetFunctionConfigurationResponse {
+    /// <p>The SHA256 hash of the function's deployment package.</p>
+    #[serde(rename = "CodeSha256")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_sha_256: Option<String>,
+    /// <p>The size of the function's deployment package, in bytes.</p>
+    #[serde(rename = "CodeSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_size: Option<i64>,
+    /// <p>The function's dead letter queue.</p>
+    #[serde(rename = "DeadLetterConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dead_letter_config: Option<DeadLetterConfig>,
+    /// <p>The function's description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The function's environment variables.</p>
+    #[serde(rename = "Environment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment: Option<EnvironmentResponse>,
+    /// <p>The function's Amazon Resource Name (ARN).</p>
+    #[serde(rename = "FunctionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_arn: Option<String>,
+    /// <p>The name of the function.</p>
+    #[serde(rename = "FunctionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_name: Option<String>,
+    /// <p>The function that Lambda calls to begin executing your function.</p>
+    #[serde(rename = "Handler")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub handler: Option<String>,
+    /// <p>The KMS key that's used to encrypt the function's environment variables. This key is only returned if you've configured a customer-managed CMK.</p>
+    #[serde(rename = "KMSKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_arn: Option<String>,
+    /// <p>The date and time that the function was last updated, in <a href="https://www.w3.org/TR/NOTE-datetime">ISO-8601 format</a> (YYYY-MM-DDThh:mm:ss.sTZD).</p>
+    #[serde(rename = "LastModified")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified: Option<String>,
+    /// <p>The function's <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html"> layers</a>.</p>
+    #[serde(rename = "Layers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub layers: Option<Vec<Layer>>,
+    /// <p>For Lambda@Edge functions, the ARN of the master function.</p>
+    #[serde(rename = "MasterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_arn: Option<String>,
+    /// <p>The memory that's allocated to the function.</p>
+    #[serde(rename = "MemorySize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub memory_size: Option<i64>,
+    /// <p>The latest updated revision of the function or alias.</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
+    /// <p>The function's execution role.</p>
+    #[serde(rename = "Role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
+    /// <p>The runtime environment for the Lambda function.</p>
+    #[serde(rename = "Runtime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub runtime: Option<String>,
+    /// <p>The amount of time that Lambda allows a function to run before stopping it.</p>
+    #[serde(rename = "Timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<i64>,
+    /// <p>The function's AWS X-Ray tracing configuration.</p>
+    #[serde(rename = "TracingConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tracing_config: Option<TracingConfigResponse>,
+    /// <p>The version of the Lambda function.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+    /// <p>The function's networking configuration.</p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfigResponse>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -644,6 +1007,43 @@ pub struct GetLayerVersionByArnRequest {
     /// <p>The ARN of the layer version.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetLayerVersionByArnResponse {
+    /// <p>The layer's compatible runtimes.</p>
+    #[serde(rename = "CompatibleRuntimes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compatible_runtimes: Option<Vec<String>>,
+    /// <p>Details about the layer version.</p>
+    #[serde(rename = "Content")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<LayerVersionContentOutput>,
+    /// <p>The date that the layer version was created, in <a href="https://www.w3.org/TR/NOTE-datetime">ISO-8601 format</a> (YYYY-MM-DDThh:mm:ss.sTZD).</p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<String>,
+    /// <p>The description of the version.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The ARN of the layer.</p>
+    #[serde(rename = "LayerArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub layer_arn: Option<String>,
+    /// <p>The ARN of the layer version.</p>
+    #[serde(rename = "LayerVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub layer_version_arn: Option<String>,
+    /// <p>The layer's software license.</p>
+    #[serde(rename = "LicenseInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub license_info: Option<String>,
+    /// <p>The version number.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -741,7 +1141,32 @@ pub struct GetPolicyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct InvocationRequest {
+pub struct InvokeAsyncRequest {
+    /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
+    #[serde(rename = "FunctionName")]
+    pub function_name: String,
+    /// <p>The JSON that you want to provide to your Lambda function as input.</p>
+    #[serde(rename = "InvokeArgs")]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
+    pub invoke_args: bytes::Bytes,
+}
+
+/// <p>A success response (<code>202 Accepted</code>) indicates that the request is queued for invocation. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct InvokeAsyncResponse {
+    /// <p>The status code.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct InvokeRequest {
     /// <p>Up to 3583 bytes of base64-encoded data about the invoking client to pass to the function in the context object.</p>
     #[serde(rename = "ClientContext")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -773,7 +1198,7 @@ pub struct InvocationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct InvocationResponse {
+pub struct InvokeResponse {
     /// <p>The version of the function that executed. When you invoke a function with an alias, this indicates which version the alias resolved to.</p>
     pub executed_version: Option<String>,
     /// <p><p>If present, indicates that an error occurred during function execution. Details about the error are included in the response payload.</p> <ul> <li> <p> <code>Handled</code> - The runtime caught an error thrown by the function and formatted it into a JSON document.</p> </li> <li> <p> <code>Unhandled</code> - The runtime didn&#39;t handle the error. For example, the function ran out of memory or timed out.</p> </li> </ul></p>
@@ -784,31 +1209,6 @@ pub struct InvocationResponse {
     pub payload: Option<bytes::Bytes>,
     /// <p>The HTTP status code is in the 200 range for a successful request. For the <code>RequestResponse</code> invocation type, this status code is 200. For the <code>Event</code> invocation type, this status code is 202. For the <code>DryRun</code> invocation type, the status code is 204.</p>
     pub status_code: Option<i64>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct InvokeAsyncRequest {
-    /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
-    #[serde(rename = "FunctionName")]
-    pub function_name: String,
-    /// <p>The JSON that you want to provide to your Lambda function as input.</p>
-    #[serde(rename = "InvokeArgs")]
-    #[serde(
-        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
-    )]
-    pub invoke_args: bytes::Bytes,
-}
-
-/// <p>A success response (<code>202 Accepted</code>) indicates that the request is queued for invocation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct InvokeAsyncResponse {
-    /// <p>The status code.</p>
-    #[serde(rename = "Status")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<i64>,
 }
 
 /// <p>An <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>.</p>
@@ -1199,6 +1599,92 @@ pub struct PublishVersionRequest {
     pub revision_id: Option<String>,
 }
 
+/// <p>Details about a function's configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PublishVersionResponse {
+    /// <p>The SHA256 hash of the function's deployment package.</p>
+    #[serde(rename = "CodeSha256")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_sha_256: Option<String>,
+    /// <p>The size of the function's deployment package, in bytes.</p>
+    #[serde(rename = "CodeSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_size: Option<i64>,
+    /// <p>The function's dead letter queue.</p>
+    #[serde(rename = "DeadLetterConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dead_letter_config: Option<DeadLetterConfig>,
+    /// <p>The function's description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The function's environment variables.</p>
+    #[serde(rename = "Environment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment: Option<EnvironmentResponse>,
+    /// <p>The function's Amazon Resource Name (ARN).</p>
+    #[serde(rename = "FunctionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_arn: Option<String>,
+    /// <p>The name of the function.</p>
+    #[serde(rename = "FunctionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_name: Option<String>,
+    /// <p>The function that Lambda calls to begin executing your function.</p>
+    #[serde(rename = "Handler")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub handler: Option<String>,
+    /// <p>The KMS key that's used to encrypt the function's environment variables. This key is only returned if you've configured a customer-managed CMK.</p>
+    #[serde(rename = "KMSKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_arn: Option<String>,
+    /// <p>The date and time that the function was last updated, in <a href="https://www.w3.org/TR/NOTE-datetime">ISO-8601 format</a> (YYYY-MM-DDThh:mm:ss.sTZD).</p>
+    #[serde(rename = "LastModified")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified: Option<String>,
+    /// <p>The function's <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html"> layers</a>.</p>
+    #[serde(rename = "Layers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub layers: Option<Vec<Layer>>,
+    /// <p>For Lambda@Edge functions, the ARN of the master function.</p>
+    #[serde(rename = "MasterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_arn: Option<String>,
+    /// <p>The memory that's allocated to the function.</p>
+    #[serde(rename = "MemorySize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub memory_size: Option<i64>,
+    /// <p>The latest updated revision of the function or alias.</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
+    /// <p>The function's execution role.</p>
+    #[serde(rename = "Role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
+    /// <p>The runtime environment for the Lambda function.</p>
+    #[serde(rename = "Runtime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub runtime: Option<String>,
+    /// <p>The amount of time that Lambda allows a function to run before stopping it.</p>
+    #[serde(rename = "Timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<i64>,
+    /// <p>The function's AWS X-Ray tracing configuration.</p>
+    #[serde(rename = "TracingConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tracing_config: Option<TracingConfigResponse>,
+    /// <p>The version of the Lambda function.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+    /// <p>The function's networking configuration.</p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfigResponse>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutFunctionConcurrencyRequest {
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
@@ -1207,6 +1693,15 @@ pub struct PutFunctionConcurrencyRequest {
     /// <p>The number of simultaneous executions to reserve for the function.</p>
     #[serde(rename = "ReservedConcurrentExecutions")]
     pub reserved_concurrent_executions: i64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutFunctionConcurrencyResponse {
+    /// <p>The number of concurrent executions that are reserved for this function. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/concurrent-executions.html">Managing Concurrency</a>.</p>
+    #[serde(rename = "ReservedConcurrentExecutions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reserved_concurrent_executions: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1226,6 +1721,10 @@ pub struct RemoveLayerVersionPermissionRequest {
     pub version_number: i64,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RemoveLayerVersionPermissionResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemovePermissionRequest {
     /// <p>The name of the Lambda function, version, or alias.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code> (name-only), <code>my-function:v1</code> (with alias).</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>You can append a version number or alias to any of the formats. The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
@@ -1244,6 +1743,10 @@ pub struct RemovePermissionRequest {
     pub statement_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RemovePermissionResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TagResourceRequest {
     /// <p>The function's Amazon Resource Name (ARN).</p>
@@ -1253,6 +1756,10 @@ pub struct TagResourceRequest {
     #[serde(rename = "Tags")]
     pub tags: ::std::collections::HashMap<String, String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceResponse {}
 
 /// <p>The function's AWS X-Ray tracing configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1283,6 +1790,10 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateAliasRequest {
     /// <p>A description of the alias.</p>
@@ -1309,6 +1820,36 @@ pub struct UpdateAliasRequest {
     pub routing_config: Option<AliasRoutingConfiguration>,
 }
 
+/// <p>Provides configuration information about a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateAliasResponse {
+    /// <p>The Amazon Resource Name (ARN) of the alias.</p>
+    #[serde(rename = "AliasArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alias_arn: Option<String>,
+    /// <p>A description of the alias.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The function version that the alias invokes.</p>
+    #[serde(rename = "FunctionVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_version: Option<String>,
+    /// <p>The name of the alias.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A unique identifier that changes when you update the alias.</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
+    /// <p>The <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-traffic-shifting-using-aliases.html">routing configuration</a> of the alias.</p>
+    #[serde(rename = "RoutingConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub routing_config: Option<AliasRoutingConfiguration>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateEventSourceMappingRequest {
     /// <p><p>The maximum number of items to retrieve in a single batch.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - Default 100. Max 10,000.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - Default 100. Max 1,000.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - Default 10. Max 10.</p> </li> </ul></p>
@@ -1326,6 +1867,44 @@ pub struct UpdateEventSourceMappingRequest {
     /// <p>The identifier of the event source mapping.</p>
     #[serde(rename = "UUID")]
     pub uuid: String,
+}
+
+/// <p>A mapping between an AWS resource and an AWS Lambda function. See <a>CreateEventSourceMapping</a> for details.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateEventSourceMappingResponse {
+    /// <p>The maximum number of items to retrieve in a single batch.</p>
+    #[serde(rename = "BatchSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub batch_size: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) of the event source.</p>
+    #[serde(rename = "EventSourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_source_arn: Option<String>,
+    /// <p>The ARN of the Lambda function.</p>
+    #[serde(rename = "FunctionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_arn: Option<String>,
+    /// <p>The date that the event source mapping was last updated.</p>
+    #[serde(rename = "LastModified")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified: Option<f64>,
+    /// <p>The result of the last AWS Lambda invocation of your Lambda function.</p>
+    #[serde(rename = "LastProcessingResult")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_processing_result: Option<String>,
+    /// <p>The state of the event source mapping. It can be one of the following: <code>Creating</code>, <code>Enabling</code>, <code>Enabled</code>, <code>Disabling</code>, <code>Disabled</code>, <code>Updating</code>, or <code>Deleting</code>.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>The cause of the last state change, either <code>User initiated</code> or <code>Lambda initiated</code>.</p>
+    #[serde(rename = "StateTransitionReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_transition_reason: Option<String>,
+    /// <p>The identifier of the event source mapping.</p>
+    #[serde(rename = "UUID")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub uuid: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1366,6 +1945,92 @@ pub struct UpdateFunctionCodeRequest {
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub zip_file: Option<bytes::Bytes>,
+}
+
+/// <p>Details about a function's configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateFunctionCodeResponse {
+    /// <p>The SHA256 hash of the function's deployment package.</p>
+    #[serde(rename = "CodeSha256")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_sha_256: Option<String>,
+    /// <p>The size of the function's deployment package, in bytes.</p>
+    #[serde(rename = "CodeSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_size: Option<i64>,
+    /// <p>The function's dead letter queue.</p>
+    #[serde(rename = "DeadLetterConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dead_letter_config: Option<DeadLetterConfig>,
+    /// <p>The function's description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The function's environment variables.</p>
+    #[serde(rename = "Environment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment: Option<EnvironmentResponse>,
+    /// <p>The function's Amazon Resource Name (ARN).</p>
+    #[serde(rename = "FunctionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_arn: Option<String>,
+    /// <p>The name of the function.</p>
+    #[serde(rename = "FunctionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_name: Option<String>,
+    /// <p>The function that Lambda calls to begin executing your function.</p>
+    #[serde(rename = "Handler")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub handler: Option<String>,
+    /// <p>The KMS key that's used to encrypt the function's environment variables. This key is only returned if you've configured a customer-managed CMK.</p>
+    #[serde(rename = "KMSKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_arn: Option<String>,
+    /// <p>The date and time that the function was last updated, in <a href="https://www.w3.org/TR/NOTE-datetime">ISO-8601 format</a> (YYYY-MM-DDThh:mm:ss.sTZD).</p>
+    #[serde(rename = "LastModified")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified: Option<String>,
+    /// <p>The function's <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html"> layers</a>.</p>
+    #[serde(rename = "Layers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub layers: Option<Vec<Layer>>,
+    /// <p>For Lambda@Edge functions, the ARN of the master function.</p>
+    #[serde(rename = "MasterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_arn: Option<String>,
+    /// <p>The memory that's allocated to the function.</p>
+    #[serde(rename = "MemorySize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub memory_size: Option<i64>,
+    /// <p>The latest updated revision of the function or alias.</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
+    /// <p>The function's execution role.</p>
+    #[serde(rename = "Role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
+    /// <p>The runtime environment for the Lambda function.</p>
+    #[serde(rename = "Runtime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub runtime: Option<String>,
+    /// <p>The amount of time that Lambda allows a function to run before stopping it.</p>
+    #[serde(rename = "Timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<i64>,
+    /// <p>The function's AWS X-Ray tracing configuration.</p>
+    #[serde(rename = "TracingConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tracing_config: Option<TracingConfigResponse>,
+    /// <p>The version of the Lambda function.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+    /// <p>The function's networking configuration.</p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfigResponse>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1425,6 +2090,92 @@ pub struct UpdateFunctionConfigurationRequest {
     #[serde(rename = "VpcConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_config: Option<VpcConfig>,
+}
+
+/// <p>Details about a function's configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateFunctionConfigurationResponse {
+    /// <p>The SHA256 hash of the function's deployment package.</p>
+    #[serde(rename = "CodeSha256")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_sha_256: Option<String>,
+    /// <p>The size of the function's deployment package, in bytes.</p>
+    #[serde(rename = "CodeSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_size: Option<i64>,
+    /// <p>The function's dead letter queue.</p>
+    #[serde(rename = "DeadLetterConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dead_letter_config: Option<DeadLetterConfig>,
+    /// <p>The function's description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The function's environment variables.</p>
+    #[serde(rename = "Environment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment: Option<EnvironmentResponse>,
+    /// <p>The function's Amazon Resource Name (ARN).</p>
+    #[serde(rename = "FunctionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_arn: Option<String>,
+    /// <p>The name of the function.</p>
+    #[serde(rename = "FunctionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_name: Option<String>,
+    /// <p>The function that Lambda calls to begin executing your function.</p>
+    #[serde(rename = "Handler")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub handler: Option<String>,
+    /// <p>The KMS key that's used to encrypt the function's environment variables. This key is only returned if you've configured a customer-managed CMK.</p>
+    #[serde(rename = "KMSKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_arn: Option<String>,
+    /// <p>The date and time that the function was last updated, in <a href="https://www.w3.org/TR/NOTE-datetime">ISO-8601 format</a> (YYYY-MM-DDThh:mm:ss.sTZD).</p>
+    #[serde(rename = "LastModified")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified: Option<String>,
+    /// <p>The function's <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html"> layers</a>.</p>
+    #[serde(rename = "Layers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub layers: Option<Vec<Layer>>,
+    /// <p>For Lambda@Edge functions, the ARN of the master function.</p>
+    #[serde(rename = "MasterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_arn: Option<String>,
+    /// <p>The memory that's allocated to the function.</p>
+    #[serde(rename = "MemorySize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub memory_size: Option<i64>,
+    /// <p>The latest updated revision of the function or alias.</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
+    /// <p>The function's execution role.</p>
+    #[serde(rename = "Role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
+    /// <p>The runtime environment for the Lambda function.</p>
+    #[serde(rename = "Runtime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub runtime: Option<String>,
+    /// <p>The amount of time that Lambda allows a function to run before stopping it.</p>
+    #[serde(rename = "Timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<i64>,
+    /// <p>The function's AWS X-Ray tracing configuration.</p>
+    #[serde(rename = "TracingConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tracing_config: Option<TracingConfigResponse>,
+    /// <p>The version of the Lambda function.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+    /// <p>The function's networking configuration.</p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfigResponse>,
 }
 
 /// <p>The VPC security groups and subnets that are attached to a Lambda function.</p>
@@ -3779,216 +4530,173 @@ pub trait Lambda {
     fn add_layer_version_permission(
         &self,
         input: AddLayerVersionPermissionRequest,
-    ) -> RusotoFuture<AddLayerVersionPermissionResponse, AddLayerVersionPermissionError>;
+    ) -> Request<AddLayerVersionPermissionRequest>;
 
     /// <p>Grants an AWS service or another account permission to use a function. You can apply the policy at the function level, or specify a qualifier to restrict access to a single version or alias. If you use a qualifier, the invoker must use the full Amazon Resource Name (ARN) of that version or alias to invoke the function.</p> <p>To grant permission to another account, specify the account ID as the <code>Principal</code>. For AWS services, the principal is a domain-style identifier defined by the service, like <code>s3.amazonaws.com</code> or <code>sns.amazonaws.com</code>. For AWS services, you can also specify the ARN or owning account of the associated resource as the <code>SourceArn</code> or <code>SourceAccount</code>. If you grant permission to a service principal without specifying the source, other accounts could potentially configure resources in their account to invoke your Lambda function.</p> <p>This action adds a statement to a resource-based permission policy for the function. For more information about function policies, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/access-control-resource-based.html">Lambda Function Policies</a>. </p>
-    fn add_permission(
-        &self,
-        input: AddPermissionRequest,
-    ) -> RusotoFuture<AddPermissionResponse, AddPermissionError>;
+    fn add_permission(&self, input: AddPermissionRequest) -> Request<AddPermissionRequest>;
 
     /// <p>Creates an <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a> for a Lambda function version. Use aliases to provide clients with a function identifier that you can update to invoke a different version.</p> <p>You can also map an alias to split invocation requests between two versions. Use the <code>RoutingConfig</code> parameter to specify a second version and the percentage of invocation requests that it receives.</p>
-    fn create_alias(
-        &self,
-        input: CreateAliasRequest,
-    ) -> RusotoFuture<AliasConfiguration, CreateAliasError>;
+    fn create_alias(&self, input: CreateAliasRequest) -> Request<CreateAliasRequest>;
 
     /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> </ul></p>
     fn create_event_source_mapping(
         &self,
         input: CreateEventSourceMappingRequest,
-    ) -> RusotoFuture<EventSourceMappingConfiguration, CreateEventSourceMappingError>;
+    ) -> Request<CreateEventSourceMappingRequest>;
 
     /// <p>Creates a Lambda function. To create a function, you need a <a href="https://docs.aws.amazon.com/lambda/latest/dg/deployment-package-v2.html">deployment package</a> and an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role">execution role</a>. The deployment package contains your function code. The execution role grants the function permission to use AWS services, such as Amazon CloudWatch Logs for log streaming and AWS X-Ray for request tracing.</p> <p>A function has an unpublished version, and can have published versions and aliases. The unpublished version changes when you update your function's code and configuration. A published version is a snapshot of your function code and configuration that can't be changed. An alias is a named resource that maps to a version, and can be changed to map to a different version. Use the <code>Publish</code> parameter to create version <code>1</code> of your function from its initial configuration.</p> <p>The other parameters let you configure version-specific and function-level settings. You can modify version-specific settings later with <a>UpdateFunctionConfiguration</a>. Function-level settings apply to both the unpublished and published versions of the function, and include tags (<a>TagResource</a>) and per-function concurrency limits (<a>PutFunctionConcurrency</a>).</p> <p>If another account or an AWS service invokes your function, use <a>AddPermission</a> to grant permission by creating a resource-based IAM policy. You can grant permissions at the function level, on a version, or on an alias.</p> <p>To invoke your function directly, use <a>Invoke</a>. To invoke your function in response to events in other AWS services, create an event source mapping (<a>CreateEventSourceMapping</a>), or configure a function trigger in the other service. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-functions.html">Invoking Functions</a>.</p>
-    fn create_function(
-        &self,
-        input: CreateFunctionRequest,
-    ) -> RusotoFuture<FunctionConfiguration, CreateFunctionError>;
+    fn create_function(&self, input: CreateFunctionRequest) -> Request<CreateFunctionRequest>;
 
     /// <p>Deletes a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
-    fn delete_alias(&self, input: DeleteAliasRequest) -> RusotoFuture<(), DeleteAliasError>;
+    fn delete_alias(&self, input: DeleteAliasRequest) -> Request<DeleteAliasRequest>;
 
     /// <p>Deletes an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-invocation-modes.html">event source mapping</a>. You can get the identifier of a mapping from the output of <a>ListEventSourceMappings</a>.</p>
     fn delete_event_source_mapping(
         &self,
         input: DeleteEventSourceMappingRequest,
-    ) -> RusotoFuture<EventSourceMappingConfiguration, DeleteEventSourceMappingError>;
+    ) -> Request<DeleteEventSourceMappingRequest>;
 
     /// <p>Deletes a Lambda function. To delete a specific function version, use the <code>Qualifier</code> parameter. Otherwise, all versions and aliases are deleted.</p> <p>To delete Lambda event source mappings that invoke a function, use <a>DeleteEventSourceMapping</a>. For AWS services and resources that invoke your function directly, delete the trigger in the service where you originally configured it.</p>
-    fn delete_function(
-        &self,
-        input: DeleteFunctionRequest,
-    ) -> RusotoFuture<(), DeleteFunctionError>;
+    fn delete_function(&self, input: DeleteFunctionRequest) -> Request<DeleteFunctionRequest>;
 
     /// <p>Removes a concurrent execution limit from a function.</p>
     fn delete_function_concurrency(
         &self,
         input: DeleteFunctionConcurrencyRequest,
-    ) -> RusotoFuture<(), DeleteFunctionConcurrencyError>;
+    ) -> Request<DeleteFunctionConcurrencyRequest>;
 
     /// <p>Deletes a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Deleted versions can no longer be viewed or added to functions. To avoid breaking functions, a copy of the version remains in Lambda until no functions refer to it.</p>
     fn delete_layer_version(
         &self,
         input: DeleteLayerVersionRequest,
-    ) -> RusotoFuture<(), DeleteLayerVersionError>;
+    ) -> Request<DeleteLayerVersionRequest>;
 
     /// <p>Retrieves details about your account's <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">limits</a> and usage in an AWS Region.</p>
-    fn get_account_settings(
-        &self,
-    ) -> RusotoFuture<GetAccountSettingsResponse, GetAccountSettingsError>;
+    fn get_account_settings(&self) -> Request<GetAccountSettingsRequest>;
 
     /// <p>Returns details about a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
-    fn get_alias(&self, input: GetAliasRequest) -> RusotoFuture<AliasConfiguration, GetAliasError>;
+    fn get_alias(&self, input: GetAliasRequest) -> Request<GetAliasRequest>;
 
     /// <p>Returns details about an event source mapping. You can get the identifier of a mapping from the output of <a>ListEventSourceMappings</a>.</p>
     fn get_event_source_mapping(
         &self,
         input: GetEventSourceMappingRequest,
-    ) -> RusotoFuture<EventSourceMappingConfiguration, GetEventSourceMappingError>;
+    ) -> Request<GetEventSourceMappingRequest>;
 
     /// <p>Returns information about the function or function version, with a link to download the deployment package that's valid for 10 minutes. If you specify a function version, only details that are specific to that version are returned.</p>
-    fn get_function(
-        &self,
-        input: GetFunctionRequest,
-    ) -> RusotoFuture<GetFunctionResponse, GetFunctionError>;
+    fn get_function(&self, input: GetFunctionRequest) -> Request<GetFunctionRequest>;
 
     /// <p>Returns the version-specific settings of a Lambda function or version. The output includes only options that can vary between versions of a function. To modify these settings, use <a>UpdateFunctionConfiguration</a>.</p> <p>To get all of a function's details, including function-level settings, use <a>GetFunction</a>.</p>
     fn get_function_configuration(
         &self,
         input: GetFunctionConfigurationRequest,
-    ) -> RusotoFuture<FunctionConfiguration, GetFunctionConfigurationError>;
+    ) -> Request<GetFunctionConfigurationRequest>;
 
     /// <p>Returns information about a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>, with a link to download the layer archive that's valid for 10 minutes.</p>
-    fn get_layer_version(
-        &self,
-        input: GetLayerVersionRequest,
-    ) -> RusotoFuture<GetLayerVersionResponse, GetLayerVersionError>;
+    fn get_layer_version(&self, input: GetLayerVersionRequest) -> Request<GetLayerVersionRequest>;
 
     /// <p>Returns information about a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>, with a link to download the layer archive that's valid for 10 minutes.</p>
     fn get_layer_version_by_arn(
         &self,
         input: GetLayerVersionByArnRequest,
-    ) -> RusotoFuture<GetLayerVersionResponse, GetLayerVersionByArnError>;
+    ) -> Request<GetLayerVersionByArnRequest>;
 
     /// <p>Returns the permission policy for a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. For more information, see <a>AddLayerVersionPermission</a>.</p>
     fn get_layer_version_policy(
         &self,
         input: GetLayerVersionPolicyRequest,
-    ) -> RusotoFuture<GetLayerVersionPolicyResponse, GetLayerVersionPolicyError>;
+    ) -> Request<GetLayerVersionPolicyRequest>;
 
     /// <p>Returns the <a href="https://docs.aws.amazon.com/lambda/latest/dg/access-control-resource-based.html">resource-based IAM policy</a> for a function, version, or alias.</p>
-    fn get_policy(
-        &self,
-        input: GetPolicyRequest,
-    ) -> RusotoFuture<GetPolicyResponse, GetPolicyError>;
+    fn get_policy(&self, input: GetPolicyRequest) -> Request<GetPolicyRequest>;
 
     /// <p>Invokes a Lambda function. You can invoke a function synchronously (and wait for the response), or asynchronously. To invoke a function asynchronously, set <code>InvocationType</code> to <code>Event</code>.</p> <p>For synchronous invocation, details about the function response, including errors, are included in the response body and headers. For either invocation type, you can find more information in the <a href="https://docs.aws.amazon.com/lambda/latest/dg/monitoring-functions.html">execution log</a> and <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">trace</a>. To record function errors for asynchronous invocations, configure your function with a <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">dead letter queue</a>.</p> <p>When an error occurs, your function may be invoked multiple times. Retry behavior varies by error type, client, event source, and invocation type. For example, if you invoke a function asynchronously and it returns an error, Lambda executes the function up to two more times. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/retries-on-errors.html">Retry Behavior</a>.</p> <p>The status code in the API response doesn't reflect function errors. Error codes are reserved for errors that prevent your function from executing, such as permissions errors, <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">limit errors</a>, or issues with your function's code and configuration. For example, Lambda returns <code>TooManyRequestsException</code> if executing the function would cause you to exceed a concurrency limit at either the account level (<code>ConcurrentInvocationLimitExceeded</code>) or function level (<code>ReservedFunctionConcurrentInvocationLimitExceeded</code>).</p> <p>For functions with a long timeout, your client might be disconnected during synchronous invocation while it waits for a response. Configure your HTTP client, SDK, firewall, proxy, or operating system to allow for long connections with timeout or keep-alive settings.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>
-    fn invoke(&self, input: InvocationRequest) -> RusotoFuture<InvocationResponse, InvokeError>;
+    fn invoke(&self, input: InvokeRequest) -> Request<InvokeRequest>;
 
     /// <p><important> <p>For asynchronous function invocation, use <a>Invoke</a>.</p> </important> <p>Invokes a function asynchronously.</p></p>
-    fn invoke_async(
-        &self,
-        input: InvokeAsyncRequest,
-    ) -> RusotoFuture<InvokeAsyncResponse, InvokeAsyncError>;
+    fn invoke_async(&self, input: InvokeAsyncRequest) -> Request<InvokeAsyncRequest>;
 
     /// <p>Returns a list of <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">aliases</a> for a Lambda function.</p>
-    fn list_aliases(
-        &self,
-        input: ListAliasesRequest,
-    ) -> RusotoFuture<ListAliasesResponse, ListAliasesError>;
+    fn list_aliases(&self, input: ListAliasesRequest) -> Request<ListAliasesRequest>;
 
     /// <p>Lists event source mappings. Specify an <code>EventSourceArn</code> to only show event source mappings for a single event source.</p>
     fn list_event_source_mappings(
         &self,
         input: ListEventSourceMappingsRequest,
-    ) -> RusotoFuture<ListEventSourceMappingsResponse, ListEventSourceMappingsError>;
+    ) -> Request<ListEventSourceMappingsRequest>;
 
     /// <p>Returns a list of Lambda functions, with the version-specific configuration of each.</p> <p>Set <code>FunctionVersion</code> to <code>ALL</code> to include all published versions of each function in addition to the unpublished version. To get more information about a function or version, use <a>GetFunction</a>.</p>
-    fn list_functions(
-        &self,
-        input: ListFunctionsRequest,
-    ) -> RusotoFuture<ListFunctionsResponse, ListFunctionsError>;
+    fn list_functions(&self, input: ListFunctionsRequest) -> Request<ListFunctionsRequest>;
 
     /// <p>Lists the versions of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Versions that have been deleted aren't listed. Specify a <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">runtime identifier</a> to list only versions that indicate that they're compatible with that runtime.</p>
     fn list_layer_versions(
         &self,
         input: ListLayerVersionsRequest,
-    ) -> RusotoFuture<ListLayerVersionsResponse, ListLayerVersionsError>;
+    ) -> Request<ListLayerVersionsRequest>;
 
     /// <p>Lists <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layers</a> and shows information about the latest version of each. Specify a <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">runtime identifier</a> to list only layers that indicate that they're compatible with that runtime.</p>
-    fn list_layers(
-        &self,
-        input: ListLayersRequest,
-    ) -> RusotoFuture<ListLayersResponse, ListLayersError>;
+    fn list_layers(&self, input: ListLayersRequest) -> Request<ListLayersRequest>;
 
     /// <p>Returns a function's <a href="https://docs.aws.amazon.com/lambda/latest/dg/tagging.html">tags</a>. You can also view tags with <a>GetFunction</a>.</p>
-    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
+    fn list_tags(&self, input: ListTagsRequest) -> Request<ListTagsRequest>;
 
     /// <p>Returns a list of <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">versions</a>, with the version-specific configuration of each. </p>
     fn list_versions_by_function(
         &self,
         input: ListVersionsByFunctionRequest,
-    ) -> RusotoFuture<ListVersionsByFunctionResponse, ListVersionsByFunctionError>;
+    ) -> Request<ListVersionsByFunctionRequest>;
 
     /// <p>Creates an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a> from a ZIP archive. Each time you call <code>PublishLayerVersion</code> with the same version name, a new version is created.</p> <p>Add layers to your function with <a>CreateFunction</a> or <a>UpdateFunctionConfiguration</a>.</p>
     fn publish_layer_version(
         &self,
         input: PublishLayerVersionRequest,
-    ) -> RusotoFuture<PublishLayerVersionResponse, PublishLayerVersionError>;
+    ) -> Request<PublishLayerVersionRequest>;
 
     /// <p>Creates a <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">version</a> from the current code and configuration of a function. Use versions to create a snapshot of your function code and configuration that doesn't change.</p> <p>AWS Lambda doesn't publish a version if the function's configuration and code haven't changed since the last version. Use <a>UpdateFunctionCode</a> or <a>UpdateFunctionConfiguration</a> to update the function before publishing a version.</p> <p>Clients can invoke versions directly or with an alias. To create an alias, use <a>CreateAlias</a>.</p>
-    fn publish_version(
-        &self,
-        input: PublishVersionRequest,
-    ) -> RusotoFuture<FunctionConfiguration, PublishVersionError>;
+    fn publish_version(&self, input: PublishVersionRequest) -> Request<PublishVersionRequest>;
 
     /// <p>Sets the maximum number of simultaneous executions for a function, and reserves capacity for that concurrency level.</p> <p>Concurrency settings apply to the function as a whole, including all published versions and the unpublished version. Reserving concurrency both ensures that your function has capacity to process the specified number of events simultaneously, and prevents it from scaling beyond that level. Use <a>GetFunction</a> to see the current setting for a function.</p> <p>Use <a>GetAccountSettings</a> to see your regional concurrency limit. You can reserve concurrency for as many functions as you like, as long as you leave at least 100 simultaneous executions unreserved for functions that aren't configured with a per-function limit. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/concurrent-executions.html">Managing Concurrency</a>.</p>
     fn put_function_concurrency(
         &self,
         input: PutFunctionConcurrencyRequest,
-    ) -> RusotoFuture<Concurrency, PutFunctionConcurrencyError>;
+    ) -> Request<PutFunctionConcurrencyRequest>;
 
     /// <p>Removes a statement from the permissions policy for a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. For more information, see <a>AddLayerVersionPermission</a>.</p>
     fn remove_layer_version_permission(
         &self,
         input: RemoveLayerVersionPermissionRequest,
-    ) -> RusotoFuture<(), RemoveLayerVersionPermissionError>;
+    ) -> Request<RemoveLayerVersionPermissionRequest>;
 
     /// <p>Revokes function-use permission from an AWS service or another account. You can get the ID of the statement from the output of <a>GetPolicy</a>.</p>
-    fn remove_permission(
-        &self,
-        input: RemovePermissionRequest,
-    ) -> RusotoFuture<(), RemovePermissionError>;
+    fn remove_permission(&self, input: RemovePermissionRequest)
+        -> Request<RemovePermissionRequest>;
 
     /// <p>Adds <a href="https://docs.aws.amazon.com/lambda/latest/dg/tagging.html">tags</a> to a function.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Removes <a href="https://docs.aws.amazon.com/lambda/latest/dg/tagging.html">tags</a> from a function.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Updates the configuration of a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
-    fn update_alias(
-        &self,
-        input: UpdateAliasRequest,
-    ) -> RusotoFuture<AliasConfiguration, UpdateAliasError>;
+    fn update_alias(&self, input: UpdateAliasRequest) -> Request<UpdateAliasRequest>;
 
     /// <p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p>
     fn update_event_source_mapping(
         &self,
         input: UpdateEventSourceMappingRequest,
-    ) -> RusotoFuture<EventSourceMappingConfiguration, UpdateEventSourceMappingError>;
+    ) -> Request<UpdateEventSourceMappingRequest>;
 
     /// <p>Updates a Lambda function's code.</p> <p>The function's code is locked when you publish a version. You can't modify the code of a published version, only the unpublished version.</p>
     fn update_function_code(
         &self,
         input: UpdateFunctionCodeRequest,
-    ) -> RusotoFuture<FunctionConfiguration, UpdateFunctionCodeError>;
+    ) -> Request<UpdateFunctionCodeRequest>;
 
     /// <p>Modify the version-specific settings of a Lambda function.</p> <p>These settings can vary between versions of a function and are locked when you publish a version. You can't modify the configuration of a published version, only the unpublished version.</p> <p>To configure function concurrency, use <a>PutFunctionConcurrency</a>. To grant invoke permissions to an account or AWS service, use <a>AddPermission</a>.</p>
     fn update_function_configuration(
         &self,
         input: UpdateFunctionConfigurationRequest,
-    ) -> RusotoFuture<FunctionConfiguration, UpdateFunctionConfigurationError>;
+    ) -> Request<UpdateFunctionConfigurationRequest>;
 }
 /// A client for the AWS Lambda API.
 #[derive(Clone)]
@@ -4031,26 +4739,288 @@ impl Lambda for LambdaClient {
     fn add_layer_version_permission(
         &self,
         input: AddLayerVersionPermissionRequest,
-    ) -> RusotoFuture<AddLayerVersionPermissionResponse, AddLayerVersionPermissionError> {
+    ) -> Request<AddLayerVersionPermissionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Grants an AWS service or another account permission to use a function. You can apply the policy at the function level, or specify a qualifier to restrict access to a single version or alias. If you use a qualifier, the invoker must use the full Amazon Resource Name (ARN) of that version or alias to invoke the function.</p> <p>To grant permission to another account, specify the account ID as the <code>Principal</code>. For AWS services, the principal is a domain-style identifier defined by the service, like <code>s3.amazonaws.com</code> or <code>sns.amazonaws.com</code>. For AWS services, you can also specify the ARN or owning account of the associated resource as the <code>SourceArn</code> or <code>SourceAccount</code>. If you grant permission to a service principal without specifying the source, other accounts could potentially configure resources in their account to invoke your Lambda function.</p> <p>This action adds a statement to a resource-based permission policy for the function. For more information about function policies, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/access-control-resource-based.html">Lambda Function Policies</a>. </p>
+    fn add_permission(&self, input: AddPermissionRequest) -> Request<AddPermissionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a> for a Lambda function version. Use aliases to provide clients with a function identifier that you can update to invoke a different version.</p> <p>You can also map an alias to split invocation requests between two versions. Use the <code>RoutingConfig</code> parameter to specify a second version and the percentage of invocation requests that it receives.</p>
+    fn create_alias(&self, input: CreateAliasRequest) -> Request<CreateAliasRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> </ul></p>
+    fn create_event_source_mapping(
+        &self,
+        input: CreateEventSourceMappingRequest,
+    ) -> Request<CreateEventSourceMappingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a Lambda function. To create a function, you need a <a href="https://docs.aws.amazon.com/lambda/latest/dg/deployment-package-v2.html">deployment package</a> and an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role">execution role</a>. The deployment package contains your function code. The execution role grants the function permission to use AWS services, such as Amazon CloudWatch Logs for log streaming and AWS X-Ray for request tracing.</p> <p>A function has an unpublished version, and can have published versions and aliases. The unpublished version changes when you update your function's code and configuration. A published version is a snapshot of your function code and configuration that can't be changed. An alias is a named resource that maps to a version, and can be changed to map to a different version. Use the <code>Publish</code> parameter to create version <code>1</code> of your function from its initial configuration.</p> <p>The other parameters let you configure version-specific and function-level settings. You can modify version-specific settings later with <a>UpdateFunctionConfiguration</a>. Function-level settings apply to both the unpublished and published versions of the function, and include tags (<a>TagResource</a>) and per-function concurrency limits (<a>PutFunctionConcurrency</a>).</p> <p>If another account or an AWS service invokes your function, use <a>AddPermission</a> to grant permission by creating a resource-based IAM policy. You can grant permissions at the function level, on a version, or on an alias.</p> <p>To invoke your function directly, use <a>Invoke</a>. To invoke your function in response to events in other AWS services, create an event source mapping (<a>CreateEventSourceMapping</a>), or configure a function trigger in the other service. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-functions.html">Invoking Functions</a>.</p>
+    fn create_function(&self, input: CreateFunctionRequest) -> Request<CreateFunctionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
+    fn delete_alias(&self, input: DeleteAliasRequest) -> Request<DeleteAliasRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-invocation-modes.html">event source mapping</a>. You can get the identifier of a mapping from the output of <a>ListEventSourceMappings</a>.</p>
+    fn delete_event_source_mapping(
+        &self,
+        input: DeleteEventSourceMappingRequest,
+    ) -> Request<DeleteEventSourceMappingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a Lambda function. To delete a specific function version, use the <code>Qualifier</code> parameter. Otherwise, all versions and aliases are deleted.</p> <p>To delete Lambda event source mappings that invoke a function, use <a>DeleteEventSourceMapping</a>. For AWS services and resources that invoke your function directly, delete the trigger in the service where you originally configured it.</p>
+    fn delete_function(&self, input: DeleteFunctionRequest) -> Request<DeleteFunctionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes a concurrent execution limit from a function.</p>
+    fn delete_function_concurrency(
+        &self,
+        input: DeleteFunctionConcurrencyRequest,
+    ) -> Request<DeleteFunctionConcurrencyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Deleted versions can no longer be viewed or added to functions. To avoid breaking functions, a copy of the version remains in Lambda until no functions refer to it.</p>
+    fn delete_layer_version(
+        &self,
+        input: DeleteLayerVersionRequest,
+    ) -> Request<DeleteLayerVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves details about your account's <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">limits</a> and usage in an AWS Region.</p>
+    fn get_account_settings(&self) -> Request<GetAccountSettingsRequest> {
+        Request::new(
+            GetAccountSettingsRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Returns details about a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
+    fn get_alias(&self, input: GetAliasRequest) -> Request<GetAliasRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns details about an event source mapping. You can get the identifier of a mapping from the output of <a>ListEventSourceMappings</a>.</p>
+    fn get_event_source_mapping(
+        &self,
+        input: GetEventSourceMappingRequest,
+    ) -> Request<GetEventSourceMappingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about the function or function version, with a link to download the deployment package that's valid for 10 minutes. If you specify a function version, only details that are specific to that version are returned.</p>
+    fn get_function(&self, input: GetFunctionRequest) -> Request<GetFunctionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the version-specific settings of a Lambda function or version. The output includes only options that can vary between versions of a function. To modify these settings, use <a>UpdateFunctionConfiguration</a>.</p> <p>To get all of a function's details, including function-level settings, use <a>GetFunction</a>.</p>
+    fn get_function_configuration(
+        &self,
+        input: GetFunctionConfigurationRequest,
+    ) -> Request<GetFunctionConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>, with a link to download the layer archive that's valid for 10 minutes.</p>
+    fn get_layer_version(&self, input: GetLayerVersionRequest) -> Request<GetLayerVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>, with a link to download the layer archive that's valid for 10 minutes.</p>
+    fn get_layer_version_by_arn(
+        &self,
+        input: GetLayerVersionByArnRequest,
+    ) -> Request<GetLayerVersionByArnRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the permission policy for a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. For more information, see <a>AddLayerVersionPermission</a>.</p>
+    fn get_layer_version_policy(
+        &self,
+        input: GetLayerVersionPolicyRequest,
+    ) -> Request<GetLayerVersionPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the <a href="https://docs.aws.amazon.com/lambda/latest/dg/access-control-resource-based.html">resource-based IAM policy</a> for a function, version, or alias.</p>
+    fn get_policy(&self, input: GetPolicyRequest) -> Request<GetPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Invokes a Lambda function. You can invoke a function synchronously (and wait for the response), or asynchronously. To invoke a function asynchronously, set <code>InvocationType</code> to <code>Event</code>.</p> <p>For synchronous invocation, details about the function response, including errors, are included in the response body and headers. For either invocation type, you can find more information in the <a href="https://docs.aws.amazon.com/lambda/latest/dg/monitoring-functions.html">execution log</a> and <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">trace</a>. To record function errors for asynchronous invocations, configure your function with a <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">dead letter queue</a>.</p> <p>When an error occurs, your function may be invoked multiple times. Retry behavior varies by error type, client, event source, and invocation type. For example, if you invoke a function asynchronously and it returns an error, Lambda executes the function up to two more times. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/retries-on-errors.html">Retry Behavior</a>.</p> <p>The status code in the API response doesn't reflect function errors. Error codes are reserved for errors that prevent your function from executing, such as permissions errors, <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">limit errors</a>, or issues with your function's code and configuration. For example, Lambda returns <code>TooManyRequestsException</code> if executing the function would cause you to exceed a concurrency limit at either the account level (<code>ConcurrentInvocationLimitExceeded</code>) or function level (<code>ReservedFunctionConcurrentInvocationLimitExceeded</code>).</p> <p>For functions with a long timeout, your client might be disconnected during synchronous invocation while it waits for a response. Configure your HTTP client, SDK, firewall, proxy, or operating system to allow for long connections with timeout or keep-alive settings.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>
+    fn invoke(&self, input: InvokeRequest) -> Request<InvokeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><important> <p>For asynchronous function invocation, use <a>Invoke</a>.</p> </important> <p>Invokes a function asynchronously.</p></p>
+    fn invoke_async(&self, input: InvokeAsyncRequest) -> Request<InvokeAsyncRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">aliases</a> for a Lambda function.</p>
+    fn list_aliases(&self, input: ListAliasesRequest) -> Request<ListAliasesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists event source mappings. Specify an <code>EventSourceArn</code> to only show event source mappings for a single event source.</p>
+    fn list_event_source_mappings(
+        &self,
+        input: ListEventSourceMappingsRequest,
+    ) -> Request<ListEventSourceMappingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of Lambda functions, with the version-specific configuration of each.</p> <p>Set <code>FunctionVersion</code> to <code>ALL</code> to include all published versions of each function in addition to the unpublished version. To get more information about a function or version, use <a>GetFunction</a>.</p>
+    fn list_functions(&self, input: ListFunctionsRequest) -> Request<ListFunctionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the versions of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Versions that have been deleted aren't listed. Specify a <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">runtime identifier</a> to list only versions that indicate that they're compatible with that runtime.</p>
+    fn list_layer_versions(
+        &self,
+        input: ListLayerVersionsRequest,
+    ) -> Request<ListLayerVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layers</a> and shows information about the latest version of each. Specify a <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">runtime identifier</a> to list only layers that indicate that they're compatible with that runtime.</p>
+    fn list_layers(&self, input: ListLayersRequest) -> Request<ListLayersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a function's <a href="https://docs.aws.amazon.com/lambda/latest/dg/tagging.html">tags</a>. You can also view tags with <a>GetFunction</a>.</p>
+    fn list_tags(&self, input: ListTagsRequest) -> Request<ListTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">versions</a>, with the version-specific configuration of each. </p>
+    fn list_versions_by_function(
+        &self,
+        input: ListVersionsByFunctionRequest,
+    ) -> Request<ListVersionsByFunctionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a> from a ZIP archive. Each time you call <code>PublishLayerVersion</code> with the same version name, a new version is created.</p> <p>Add layers to your function with <a>CreateFunction</a> or <a>UpdateFunctionConfiguration</a>.</p>
+    fn publish_layer_version(
+        &self,
+        input: PublishLayerVersionRequest,
+    ) -> Request<PublishLayerVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">version</a> from the current code and configuration of a function. Use versions to create a snapshot of your function code and configuration that doesn't change.</p> <p>AWS Lambda doesn't publish a version if the function's configuration and code haven't changed since the last version. Use <a>UpdateFunctionCode</a> or <a>UpdateFunctionConfiguration</a> to update the function before publishing a version.</p> <p>Clients can invoke versions directly or with an alias. To create an alias, use <a>CreateAlias</a>.</p>
+    fn publish_version(&self, input: PublishVersionRequest) -> Request<PublishVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the maximum number of simultaneous executions for a function, and reserves capacity for that concurrency level.</p> <p>Concurrency settings apply to the function as a whole, including all published versions and the unpublished version. Reserving concurrency both ensures that your function has capacity to process the specified number of events simultaneously, and prevents it from scaling beyond that level. Use <a>GetFunction</a> to see the current setting for a function.</p> <p>Use <a>GetAccountSettings</a> to see your regional concurrency limit. You can reserve concurrency for as many functions as you like, as long as you leave at least 100 simultaneous executions unreserved for functions that aren't configured with a per-function limit. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/concurrent-executions.html">Managing Concurrency</a>.</p>
+    fn put_function_concurrency(
+        &self,
+        input: PutFunctionConcurrencyRequest,
+    ) -> Request<PutFunctionConcurrencyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes a statement from the permissions policy for a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. For more information, see <a>AddLayerVersionPermission</a>.</p>
+    fn remove_layer_version_permission(
+        &self,
+        input: RemoveLayerVersionPermissionRequest,
+    ) -> Request<RemoveLayerVersionPermissionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Revokes function-use permission from an AWS service or another account. You can get the ID of the statement from the output of <a>GetPolicy</a>.</p>
+    fn remove_permission(
+        &self,
+        input: RemovePermissionRequest,
+    ) -> Request<RemovePermissionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds <a href="https://docs.aws.amazon.com/lambda/latest/dg/tagging.html">tags</a> to a function.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes <a href="https://docs.aws.amazon.com/lambda/latest/dg/tagging.html">tags</a> from a function.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the configuration of a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
+    fn update_alias(&self, input: UpdateAliasRequest) -> Request<UpdateAliasRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p>
+    fn update_event_source_mapping(
+        &self,
+        input: UpdateEventSourceMappingRequest,
+    ) -> Request<UpdateEventSourceMappingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a Lambda function's code.</p> <p>The function's code is locked when you publish a version. You can't modify the code of a published version, only the unpublished version.</p>
+    fn update_function_code(
+        &self,
+        input: UpdateFunctionCodeRequest,
+    ) -> Request<UpdateFunctionCodeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modify the version-specific settings of a Lambda function.</p> <p>These settings can vary between versions of a function and are locked when you publish a version. You can't modify the configuration of a published version, only the unpublished version.</p> <p>To configure function concurrency, use <a>PutFunctionConcurrency</a>. To grant invoke permissions to an account or AWS service, use <a>AddPermission</a>.</p>
+    fn update_function_configuration(
+        &self,
+        input: UpdateFunctionConfigurationRequest,
+    ) -> Request<UpdateFunctionConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AddLayerVersionPermissionRequest {
+    type Output = AddLayerVersionPermissionResponse;
+    type Error = AddLayerVersionPermissionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions/{version_number}/policy",
-            layer_name = input.layer_name,
-            version_number = input.version_number
+            layer_name = self.layer_name,
+            version_number = self.version_number
         );
 
-        let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.revision_id {
+        if let Some(ref x) = self.revision_id {
             params.put("RevisionId", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4065,30 +5035,36 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Grants an AWS service or another account permission to use a function. You can apply the policy at the function level, or specify a qualifier to restrict access to a single version or alias. If you use a qualifier, the invoker must use the full Amazon Resource Name (ARN) of that version or alias to invoke the function.</p> <p>To grant permission to another account, specify the account ID as the <code>Principal</code>. For AWS services, the principal is a domain-style identifier defined by the service, like <code>s3.amazonaws.com</code> or <code>sns.amazonaws.com</code>. For AWS services, you can also specify the ARN or owning account of the associated resource as the <code>SourceArn</code> or <code>SourceAccount</code>. If you grant permission to a service principal without specifying the source, other accounts could potentially configure resources in their account to invoke your Lambda function.</p> <p>This action adds a statement to a resource-based permission policy for the function. For more information about function policies, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/access-control-resource-based.html">Lambda Function Policies</a>. </p>
-    fn add_permission(
-        &self,
-        input: AddPermissionRequest,
-    ) -> RusotoFuture<AddPermissionResponse, AddPermissionError> {
+impl ServiceRequest for AddPermissionRequest {
+    type Output = AddPermissionResponse;
+    type Error = AddPermissionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/policy",
-            function_name = input.function_name
+            function_name = self.function_name
         );
 
-        let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.qualifier {
+        if let Some(ref x) = self.qualifier {
             params.put("Qualifier", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4106,28 +5082,34 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Creates an <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a> for a Lambda function version. Use aliases to provide clients with a function identifier that you can update to invoke a different version.</p> <p>You can also map an alias to split invocation requests between two versions. Use the <code>RoutingConfig</code> parameter to specify a second version and the percentage of invocation requests that it receives.</p>
-    fn create_alias(
-        &self,
-        input: CreateAliasRequest,
-    ) -> RusotoFuture<AliasConfiguration, CreateAliasError> {
+impl ServiceRequest for CreateAliasRequest {
+    type Output = CreateAliasResponse;
+    type Error = CreateAliasError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases",
-            function_name = input.function_name
+            function_name = self.function_name
         );
 
-        let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AliasConfiguration, _>()?;
+                        .deserialize::<CreateAliasResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -4141,25 +5123,31 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> </ul></p>
-    fn create_event_source_mapping(
-        &self,
-        input: CreateEventSourceMappingRequest,
-    ) -> RusotoFuture<EventSourceMappingConfiguration, CreateEventSourceMappingError> {
+impl ServiceRequest for CreateEventSourceMappingRequest {
+    type Output = CreateEventSourceMappingResponse;
+    type Error = CreateEventSourceMappingError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2015-03-31/event-source-mappings/";
 
-        let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<EventSourceMappingConfiguration, _>()?;
+                        .deserialize::<CreateEventSourceMappingResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -4170,25 +5158,31 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Creates a Lambda function. To create a function, you need a <a href="https://docs.aws.amazon.com/lambda/latest/dg/deployment-package-v2.html">deployment package</a> and an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role">execution role</a>. The deployment package contains your function code. The execution role grants the function permission to use AWS services, such as Amazon CloudWatch Logs for log streaming and AWS X-Ray for request tracing.</p> <p>A function has an unpublished version, and can have published versions and aliases. The unpublished version changes when you update your function's code and configuration. A published version is a snapshot of your function code and configuration that can't be changed. An alias is a named resource that maps to a version, and can be changed to map to a different version. Use the <code>Publish</code> parameter to create version <code>1</code> of your function from its initial configuration.</p> <p>The other parameters let you configure version-specific and function-level settings. You can modify version-specific settings later with <a>UpdateFunctionConfiguration</a>. Function-level settings apply to both the unpublished and published versions of the function, and include tags (<a>TagResource</a>) and per-function concurrency limits (<a>PutFunctionConcurrency</a>).</p> <p>If another account or an AWS service invokes your function, use <a>AddPermission</a> to grant permission by creating a resource-based IAM policy. You can grant permissions at the function level, on a version, or on an alias.</p> <p>To invoke your function directly, use <a>Invoke</a>. To invoke your function in response to events in other AWS services, create an event source mapping (<a>CreateEventSourceMapping</a>), or configure a function trigger in the other service. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-functions.html">Invoking Functions</a>.</p>
-    fn create_function(
-        &self,
-        input: CreateFunctionRequest,
-    ) -> RusotoFuture<FunctionConfiguration, CreateFunctionError> {
+impl ServiceRequest for CreateFunctionRequest {
+    type Output = CreateFunctionResponse;
+    type Error = CreateFunctionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2015-03-31/functions";
 
-        let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<FunctionConfiguration, _>()?;
+                        .deserialize::<CreateFunctionResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -4202,22 +5196,31 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
-    fn delete_alias(&self, input: DeleteAliasRequest) -> RusotoFuture<(), DeleteAliasError> {
+impl ServiceRequest for DeleteAliasRequest {
+    type Output = DeleteAliasResponse;
+    type Error = DeleteAliasError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases/{name}",
-            function_name = input.function_name,
-            name = input.name
+            function_name = self.function_name,
+            name = self.name
         );
 
-        let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteAliasResponse {};
 
                     Ok(result)
                 }))
@@ -4231,25 +5234,28 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-invocation-modes.html">event source mapping</a>. You can get the identifier of a mapping from the output of <a>ListEventSourceMappings</a>.</p>
-    fn delete_event_source_mapping(
-        &self,
-        input: DeleteEventSourceMappingRequest,
-    ) -> RusotoFuture<EventSourceMappingConfiguration, DeleteEventSourceMappingError> {
-        let request_uri = format!(
-            "/2015-03-31/event-source-mappings/{uuid}",
-            uuid = input.uuid
-        );
+impl ServiceRequest for DeleteEventSourceMappingRequest {
+    type Output = DeleteEventSourceMappingResponse;
+    type Error = DeleteEventSourceMappingError;
 
-        let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/2015-03-31/event-source-mappings/{uuid}", uuid = self.uuid);
+
+        let mut request = SignedRequest::new("DELETE", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<EventSourceMappingConfiguration, _>()?;
+                        .deserialize::<DeleteEventSourceMappingResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -4260,30 +5266,36 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a Lambda function. To delete a specific function version, use the <code>Qualifier</code> parameter. Otherwise, all versions and aliases are deleted.</p> <p>To delete Lambda event source mappings that invoke a function, use <a>DeleteEventSourceMapping</a>. For AWS services and resources that invoke your function directly, delete the trigger in the service where you originally configured it.</p>
-    fn delete_function(
-        &self,
-        input: DeleteFunctionRequest,
-    ) -> RusotoFuture<(), DeleteFunctionError> {
+impl ServiceRequest for DeleteFunctionRequest {
+    type Output = DeleteFunctionResponse;
+    type Error = DeleteFunctionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}",
-            function_name = input.function_name
+            function_name = self.function_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.qualifier {
+        if let Some(ref x) = self.qualifier {
             params.put("Qualifier", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteFunctionResponse {};
 
                     Ok(result)
                 }))
@@ -4297,24 +5309,30 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Removes a concurrent execution limit from a function.</p>
-    fn delete_function_concurrency(
-        &self,
-        input: DeleteFunctionConcurrencyRequest,
-    ) -> RusotoFuture<(), DeleteFunctionConcurrencyError> {
+impl ServiceRequest for DeleteFunctionConcurrencyRequest {
+    type Output = DeleteFunctionConcurrencyResponse;
+    type Error = DeleteFunctionConcurrencyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2017-10-31/functions/{function_name}/concurrency",
-            function_name = input.function_name
+            function_name = self.function_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteFunctionConcurrencyResponse {};
 
                     Ok(result)
                 }))
@@ -4325,25 +5343,31 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Deleted versions can no longer be viewed or added to functions. To avoid breaking functions, a copy of the version remains in Lambda until no functions refer to it.</p>
-    fn delete_layer_version(
-        &self,
-        input: DeleteLayerVersionRequest,
-    ) -> RusotoFuture<(), DeleteLayerVersionError> {
+impl ServiceRequest for DeleteLayerVersionRequest {
+    type Output = DeleteLayerVersionResponse;
+    type Error = DeleteLayerVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions/{version_number}",
-            layer_name = input.layer_name,
-            version_number = input.version_number
+            layer_name = self.layer_name,
+            version_number = self.version_number
         );
 
-        let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteLayerVersionResponse {};
 
                     Ok(result)
                 }))
@@ -4357,17 +5381,24 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves details about your account's <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">limits</a> and usage in an AWS Region.</p>
-    fn get_account_settings(
-        &self,
-    ) -> RusotoFuture<GetAccountSettingsResponse, GetAccountSettingsError> {
+impl ServiceRequest for GetAccountSettingsRequest {
+    type Output = GetAccountSettingsResponse;
+    type Error = GetAccountSettingsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2016-08-19/account-settings/";
 
-        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4385,23 +5416,32 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Returns details about a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
-    fn get_alias(&self, input: GetAliasRequest) -> RusotoFuture<AliasConfiguration, GetAliasError> {
+impl ServiceRequest for GetAliasRequest {
+    type Output = GetAliasResponse;
+    type Error = GetAliasError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases/{name}",
-            function_name = input.function_name,
-            name = input.name
+            function_name = self.function_name,
+            name = self.name
         );
 
-        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AliasConfiguration, _>()?;
+                        .deserialize::<GetAliasResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -4415,25 +5455,28 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Returns details about an event source mapping. You can get the identifier of a mapping from the output of <a>ListEventSourceMappings</a>.</p>
-    fn get_event_source_mapping(
-        &self,
-        input: GetEventSourceMappingRequest,
-    ) -> RusotoFuture<EventSourceMappingConfiguration, GetEventSourceMappingError> {
-        let request_uri = format!(
-            "/2015-03-31/event-source-mappings/{uuid}",
-            uuid = input.uuid
-        );
+impl ServiceRequest for GetEventSourceMappingRequest {
+    type Output = GetEventSourceMappingResponse;
+    type Error = GetEventSourceMappingError;
 
-        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/2015-03-31/event-source-mappings/{uuid}", uuid = self.uuid);
+
+        let mut request = SignedRequest::new("GET", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<EventSourceMappingConfiguration, _>()?;
+                        .deserialize::<GetEventSourceMappingResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -4446,27 +5489,33 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about the function or function version, with a link to download the deployment package that's valid for 10 minutes. If you specify a function version, only details that are specific to that version are returned.</p>
-    fn get_function(
-        &self,
-        input: GetFunctionRequest,
-    ) -> RusotoFuture<GetFunctionResponse, GetFunctionError> {
+impl ServiceRequest for GetFunctionRequest {
+    type Output = GetFunctionResponse;
+    type Error = GetFunctionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}",
-            function_name = input.function_name
+            function_name = self.function_name
         );
 
-        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.qualifier {
+        if let Some(ref x) = self.qualifier {
             params.put("Qualifier", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4484,31 +5533,37 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Returns the version-specific settings of a Lambda function or version. The output includes only options that can vary between versions of a function. To modify these settings, use <a>UpdateFunctionConfiguration</a>.</p> <p>To get all of a function's details, including function-level settings, use <a>GetFunction</a>.</p>
-    fn get_function_configuration(
-        &self,
-        input: GetFunctionConfigurationRequest,
-    ) -> RusotoFuture<FunctionConfiguration, GetFunctionConfigurationError> {
+impl ServiceRequest for GetFunctionConfigurationRequest {
+    type Output = GetFunctionConfigurationResponse;
+    type Error = GetFunctionConfigurationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/configuration",
-            function_name = input.function_name
+            function_name = self.function_name
         );
 
-        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.qualifier {
+        if let Some(ref x) = self.qualifier {
             params.put("Qualifier", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<FunctionConfiguration, _>()?;
+                        .deserialize::<GetFunctionConfigurationResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -4519,22 +5574,28 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>, with a link to download the layer archive that's valid for 10 minutes.</p>
-    fn get_layer_version(
-        &self,
-        input: GetLayerVersionRequest,
-    ) -> RusotoFuture<GetLayerVersionResponse, GetLayerVersionError> {
+impl ServiceRequest for GetLayerVersionRequest {
+    type Output = GetLayerVersionResponse;
+    type Error = GetLayerVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions/{version_number}",
-            layer_name = input.layer_name,
-            version_number = input.version_number
+            layer_name = self.layer_name,
+            version_number = self.version_number
         );
 
-        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4552,27 +5613,33 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>, with a link to download the layer archive that's valid for 10 minutes.</p>
-    fn get_layer_version_by_arn(
-        &self,
-        input: GetLayerVersionByArnRequest,
-    ) -> RusotoFuture<GetLayerVersionResponse, GetLayerVersionByArnError> {
+impl ServiceRequest for GetLayerVersionByArnRequest {
+    type Output = GetLayerVersionByArnResponse;
+    type Error = GetLayerVersionByArnError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2018-10-31/layers";
 
-        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        params.put("Arn", &input.arn);
+        params.put("Arn", &self.arn);
         params.put("find", "LayerVersion");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetLayerVersionResponse, _>()?;
+                        .deserialize::<GetLayerVersionByArnResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -4585,22 +5652,28 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Returns the permission policy for a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. For more information, see <a>AddLayerVersionPermission</a>.</p>
-    fn get_layer_version_policy(
-        &self,
-        input: GetLayerVersionPolicyRequest,
-    ) -> RusotoFuture<GetLayerVersionPolicyResponse, GetLayerVersionPolicyError> {
+impl ServiceRequest for GetLayerVersionPolicyRequest {
+    type Output = GetLayerVersionPolicyResponse;
+    type Error = GetLayerVersionPolicyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions/{version_number}/policy",
-            layer_name = input.layer_name,
-            version_number = input.version_number
+            layer_name = self.layer_name,
+            version_number = self.version_number
         );
 
-        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4617,27 +5690,33 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Returns the <a href="https://docs.aws.amazon.com/lambda/latest/dg/access-control-resource-based.html">resource-based IAM policy</a> for a function, version, or alias.</p>
-    fn get_policy(
-        &self,
-        input: GetPolicyRequest,
-    ) -> RusotoFuture<GetPolicyResponse, GetPolicyError> {
+impl ServiceRequest for GetPolicyRequest {
+    type Output = GetPolicyResponse;
+    type Error = GetPolicyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/policy",
-            function_name = input.function_name
+            function_name = self.function_name
         );
 
-        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.qualifier {
+        if let Some(ref x) = self.qualifier {
             params.put("Qualifier", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4655,45 +5734,54 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Invokes a Lambda function. You can invoke a function synchronously (and wait for the response), or asynchronously. To invoke a function asynchronously, set <code>InvocationType</code> to <code>Event</code>.</p> <p>For synchronous invocation, details about the function response, including errors, are included in the response body and headers. For either invocation type, you can find more information in the <a href="https://docs.aws.amazon.com/lambda/latest/dg/monitoring-functions.html">execution log</a> and <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">trace</a>. To record function errors for asynchronous invocations, configure your function with a <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">dead letter queue</a>.</p> <p>When an error occurs, your function may be invoked multiple times. Retry behavior varies by error type, client, event source, and invocation type. For example, if you invoke a function asynchronously and it returns an error, Lambda executes the function up to two more times. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/retries-on-errors.html">Retry Behavior</a>.</p> <p>The status code in the API response doesn't reflect function errors. Error codes are reserved for errors that prevent your function from executing, such as permissions errors, <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">limit errors</a>, or issues with your function's code and configuration. For example, Lambda returns <code>TooManyRequestsException</code> if executing the function would cause you to exceed a concurrency limit at either the account level (<code>ConcurrentInvocationLimitExceeded</code>) or function level (<code>ReservedFunctionConcurrentInvocationLimitExceeded</code>).</p> <p>For functions with a long timeout, your client might be disconnected during synchronous invocation while it waits for a response. Configure your HTTP client, SDK, firewall, proxy, or operating system to allow for long connections with timeout or keep-alive settings.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>
-    fn invoke(&self, input: InvocationRequest) -> RusotoFuture<InvocationResponse, InvokeError> {
+impl ServiceRequest for InvokeRequest {
+    type Output = InvokeResponse;
+    type Error = InvokeError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/invocations",
-            function_name = input.function_name
+            function_name = self.function_name
         );
 
-        let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = if let Some(ref payload) = input.payload {
+        let encoded = if let Some(ref payload) = self.payload {
             Some(payload.to_owned())
         } else {
             None
         };
         request.set_payload(encoded);
 
-        if let Some(ref client_context) = input.client_context {
+        if let Some(ref client_context) = self.client_context {
             request.add_header("X-Amz-Client-Context", &client_context.to_string());
         }
 
-        if let Some(ref invocation_type) = input.invocation_type {
+        if let Some(ref invocation_type) = self.invocation_type {
             request.add_header("X-Amz-Invocation-Type", &invocation_type.to_string());
         }
 
-        if let Some(ref log_type) = input.log_type {
+        if let Some(ref log_type) = self.log_type {
             request.add_header("X-Amz-Log-Type", &log_type.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.qualifier {
+        if let Some(ref x) = self.qualifier {
             params.put("Qualifier", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let mut result = InvocationResponse::default();
+                    let mut result = InvokeResponse::default();
                     result.payload = Some(response.body);
 
                     if let Some(executed_version) = response.headers.get("X-Amz-Executed-Version") {
@@ -4721,24 +5809,30 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p><important> <p>For asynchronous function invocation, use <a>Invoke</a>.</p> </important> <p>Invokes a function asynchronously.</p></p>
-    fn invoke_async(
-        &self,
-        input: InvokeAsyncRequest,
-    ) -> RusotoFuture<InvokeAsyncResponse, InvokeAsyncError> {
+impl ServiceRequest for InvokeAsyncRequest {
+    type Output = InvokeAsyncResponse;
+    type Error = InvokeAsyncError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2014-11-13/functions/{function_name}/invoke-async/",
-            function_name = input.function_name
+            function_name = self.function_name
         );
 
-        let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(input.invoke_args.to_owned());
+        let encoded = Some(self.invoke_args.to_owned());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let mut result = proto::json::ResponsePayload::new(&response)
@@ -4757,33 +5851,39 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">aliases</a> for a Lambda function.</p>
-    fn list_aliases(
-        &self,
-        input: ListAliasesRequest,
-    ) -> RusotoFuture<ListAliasesResponse, ListAliasesError> {
+impl ServiceRequest for ListAliasesRequest {
+    type Output = ListAliasesResponse;
+    type Error = ListAliasesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases",
-            function_name = input.function_name
+            function_name = self.function_name
         );
 
-        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.function_version {
+        if let Some(ref x) = self.function_version {
             params.put("FunctionVersion", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("Marker", x);
         }
-        if let Some(ref x) = input.max_items {
+        if let Some(ref x) = self.max_items {
             params.put("MaxItems", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4801,33 +5901,39 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Lists event source mappings. Specify an <code>EventSourceArn</code> to only show event source mappings for a single event source.</p>
-    fn list_event_source_mappings(
-        &self,
-        input: ListEventSourceMappingsRequest,
-    ) -> RusotoFuture<ListEventSourceMappingsResponse, ListEventSourceMappingsError> {
+impl ServiceRequest for ListEventSourceMappingsRequest {
+    type Output = ListEventSourceMappingsResponse;
+    type Error = ListEventSourceMappingsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2015-03-31/event-source-mappings/";
 
-        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.event_source_arn {
+        if let Some(ref x) = self.event_source_arn {
             params.put("EventSourceArn", x);
         }
-        if let Some(ref x) = input.function_name {
+        if let Some(ref x) = self.function_name {
             params.put("FunctionName", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("Marker", x);
         }
-        if let Some(ref x) = input.max_items {
+        if let Some(ref x) = self.max_items {
             params.put("MaxItems", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4842,33 +5948,39 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of Lambda functions, with the version-specific configuration of each.</p> <p>Set <code>FunctionVersion</code> to <code>ALL</code> to include all published versions of each function in addition to the unpublished version. To get more information about a function or version, use <a>GetFunction</a>.</p>
-    fn list_functions(
-        &self,
-        input: ListFunctionsRequest,
-    ) -> RusotoFuture<ListFunctionsResponse, ListFunctionsError> {
+impl ServiceRequest for ListFunctionsRequest {
+    type Output = ListFunctionsResponse;
+    type Error = ListFunctionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2015-03-31/functions/";
 
-        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.function_version {
+        if let Some(ref x) = self.function_version {
             params.put("FunctionVersion", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("Marker", x);
         }
-        if let Some(ref x) = input.master_region {
+        if let Some(ref x) = self.master_region {
             params.put("MasterRegion", x);
         }
-        if let Some(ref x) = input.max_items {
+        if let Some(ref x) = self.max_items {
             params.put("MaxItems", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4886,33 +5998,39 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Lists the versions of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Versions that have been deleted aren't listed. Specify a <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">runtime identifier</a> to list only versions that indicate that they're compatible with that runtime.</p>
-    fn list_layer_versions(
-        &self,
-        input: ListLayerVersionsRequest,
-    ) -> RusotoFuture<ListLayerVersionsResponse, ListLayerVersionsError> {
+impl ServiceRequest for ListLayerVersionsRequest {
+    type Output = ListLayerVersionsResponse;
+    type Error = ListLayerVersionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions",
-            layer_name = input.layer_name
+            layer_name = self.layer_name
         );
 
-        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.compatible_runtime {
+        if let Some(ref x) = self.compatible_runtime {
             params.put("CompatibleRuntime", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("Marker", x);
         }
-        if let Some(ref x) = input.max_items {
+        if let Some(ref x) = self.max_items {
             params.put("MaxItems", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4930,30 +6048,36 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Lists <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layers</a> and shows information about the latest version of each. Specify a <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">runtime identifier</a> to list only layers that indicate that they're compatible with that runtime.</p>
-    fn list_layers(
-        &self,
-        input: ListLayersRequest,
-    ) -> RusotoFuture<ListLayersResponse, ListLayersError> {
+impl ServiceRequest for ListLayersRequest {
+    type Output = ListLayersResponse;
+    type Error = ListLayersError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2018-10-31/layers";
 
-        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.compatible_runtime {
+        if let Some(ref x) = self.compatible_runtime {
             params.put("CompatibleRuntime", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("Marker", x);
         }
-        if let Some(ref x) = input.max_items {
+        if let Some(ref x) = self.max_items {
             params.put("MaxItems", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4971,15 +6095,24 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Returns a function's <a href="https://docs.aws.amazon.com/lambda/latest/dg/tagging.html">tags</a>. You can also view tags with <a>GetFunction</a>.</p>
-    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
-        let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
+impl ServiceRequest for ListTagsRequest {
+    type Output = ListTagsResponse;
+    type Error = ListTagsError;
 
-        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/2017-03-31/tags/{arn}", arn = self.resource);
+
+        let mut request = SignedRequest::new("GET", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4997,30 +6130,36 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">versions</a>, with the version-specific configuration of each. </p>
-    fn list_versions_by_function(
-        &self,
-        input: ListVersionsByFunctionRequest,
-    ) -> RusotoFuture<ListVersionsByFunctionResponse, ListVersionsByFunctionError> {
+impl ServiceRequest for ListVersionsByFunctionRequest {
+    type Output = ListVersionsByFunctionResponse;
+    type Error = ListVersionsByFunctionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/versions",
-            function_name = input.function_name
+            function_name = self.function_name
         );
 
-        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("Marker", x);
         }
-        if let Some(ref x) = input.max_items {
+        if let Some(ref x) = self.max_items {
             params.put("MaxItems", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5037,24 +6176,30 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Creates an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a> from a ZIP archive. Each time you call <code>PublishLayerVersion</code> with the same version name, a new version is created.</p> <p>Add layers to your function with <a>CreateFunction</a> or <a>UpdateFunctionConfiguration</a>.</p>
-    fn publish_layer_version(
-        &self,
-        input: PublishLayerVersionRequest,
-    ) -> RusotoFuture<PublishLayerVersionResponse, PublishLayerVersionError> {
+impl ServiceRequest for PublishLayerVersionRequest {
+    type Output = PublishLayerVersionResponse;
+    type Error = PublishLayerVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions",
-            layer_name = input.layer_name
+            layer_name = self.layer_name
         );
 
-        let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5071,28 +6216,34 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Creates a <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">version</a> from the current code and configuration of a function. Use versions to create a snapshot of your function code and configuration that doesn't change.</p> <p>AWS Lambda doesn't publish a version if the function's configuration and code haven't changed since the last version. Use <a>UpdateFunctionCode</a> or <a>UpdateFunctionConfiguration</a> to update the function before publishing a version.</p> <p>Clients can invoke versions directly or with an alias. To create an alias, use <a>CreateAlias</a>.</p>
-    fn publish_version(
-        &self,
-        input: PublishVersionRequest,
-    ) -> RusotoFuture<FunctionConfiguration, PublishVersionError> {
+impl ServiceRequest for PublishVersionRequest {
+    type Output = PublishVersionResponse;
+    type Error = PublishVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/versions",
-            function_name = input.function_name
+            function_name = self.function_name
         );
 
-        let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<FunctionConfiguration, _>()?;
+                        .deserialize::<PublishVersionResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -5106,28 +6257,34 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Sets the maximum number of simultaneous executions for a function, and reserves capacity for that concurrency level.</p> <p>Concurrency settings apply to the function as a whole, including all published versions and the unpublished version. Reserving concurrency both ensures that your function has capacity to process the specified number of events simultaneously, and prevents it from scaling beyond that level. Use <a>GetFunction</a> to see the current setting for a function.</p> <p>Use <a>GetAccountSettings</a> to see your regional concurrency limit. You can reserve concurrency for as many functions as you like, as long as you leave at least 100 simultaneous executions unreserved for functions that aren't configured with a per-function limit. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/concurrent-executions.html">Managing Concurrency</a>.</p>
-    fn put_function_concurrency(
-        &self,
-        input: PutFunctionConcurrencyRequest,
-    ) -> RusotoFuture<Concurrency, PutFunctionConcurrencyError> {
+impl ServiceRequest for PutFunctionConcurrencyRequest {
+    type Output = PutFunctionConcurrencyResponse;
+    type Error = PutFunctionConcurrencyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2017-10-31/functions/{function_name}/concurrency",
-            function_name = input.function_name
+            function_name = self.function_name
         );
 
-        let mut request = SignedRequest::new("PUT", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<Concurrency, _>()?;
+                        .deserialize::<PutFunctionConcurrencyResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -5140,32 +6297,38 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Removes a statement from the permissions policy for a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. For more information, see <a>AddLayerVersionPermission</a>.</p>
-    fn remove_layer_version_permission(
-        &self,
-        input: RemoveLayerVersionPermissionRequest,
-    ) -> RusotoFuture<(), RemoveLayerVersionPermissionError> {
+impl ServiceRequest for RemoveLayerVersionPermissionRequest {
+    type Output = RemoveLayerVersionPermissionResponse;
+    type Error = RemoveLayerVersionPermissionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions/{version_number}/policy/{statement_id}",
-            layer_name = input.layer_name,
-            statement_id = input.statement_id,
-            version_number = input.version_number
+            layer_name = self.layer_name,
+            statement_id = self.statement_id,
+            version_number = self.version_number
         );
 
-        let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.revision_id {
+        if let Some(ref x) = self.revision_id {
             params.put("RevisionId", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = RemoveLayerVersionPermissionResponse {};
 
                     Ok(result)
                 }))
@@ -5176,34 +6339,40 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Revokes function-use permission from an AWS service or another account. You can get the ID of the statement from the output of <a>GetPolicy</a>.</p>
-    fn remove_permission(
-        &self,
-        input: RemovePermissionRequest,
-    ) -> RusotoFuture<(), RemovePermissionError> {
+impl ServiceRequest for RemovePermissionRequest {
+    type Output = RemovePermissionResponse;
+    type Error = RemovePermissionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/policy/{statement_id}",
-            function_name = input.function_name,
-            statement_id = input.statement_id
+            function_name = self.function_name,
+            statement_id = self.statement_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.qualifier {
+        if let Some(ref x) = self.qualifier {
             params.put("Qualifier", x);
         }
-        if let Some(ref x) = input.revision_id {
+        if let Some(ref x) = self.revision_id {
             params.put("RevisionId", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = RemovePermissionResponse {};
 
                     Ok(result)
                 }))
@@ -5217,21 +6386,30 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Adds <a href="https://docs.aws.amazon.com/lambda/latest/dg/tagging.html">tags</a> to a function.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
-        let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
 
-        let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/2017-03-31/tags/{arn}", arn = self.resource);
+
+        let mut request = SignedRequest::new("POST", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = TagResourceResponse {};
 
                     Ok(result)
                 }))
@@ -5245,24 +6423,33 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Removes <a href="https://docs.aws.amazon.com/lambda/latest/dg/tagging.html">tags</a> from a function.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
-        let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
 
-        let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/2017-03-31/tags/{arn}", arn = self.resource);
+
+        let mut request = SignedRequest::new("DELETE", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        for item in input.tag_keys.iter() {
+        for item in self.tag_keys.iter() {
             params.put("tagKeys", item);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UntagResourceResponse {};
 
                     Ok(result)
                 }))
@@ -5276,29 +6463,35 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Updates the configuration of a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
-    fn update_alias(
-        &self,
-        input: UpdateAliasRequest,
-    ) -> RusotoFuture<AliasConfiguration, UpdateAliasError> {
+impl ServiceRequest for UpdateAliasRequest {
+    type Output = UpdateAliasResponse;
+    type Error = UpdateAliasError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases/{name}",
-            function_name = input.function_name,
-            name = input.name
+            function_name = self.function_name,
+            name = self.name
         );
 
-        let mut request = SignedRequest::new("PUT", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AliasConfiguration, _>()?;
+                        .deserialize::<UpdateAliasResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -5312,28 +6505,31 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p>
-    fn update_event_source_mapping(
-        &self,
-        input: UpdateEventSourceMappingRequest,
-    ) -> RusotoFuture<EventSourceMappingConfiguration, UpdateEventSourceMappingError> {
-        let request_uri = format!(
-            "/2015-03-31/event-source-mappings/{uuid}",
-            uuid = input.uuid
-        );
+impl ServiceRequest for UpdateEventSourceMappingRequest {
+    type Output = UpdateEventSourceMappingResponse;
+    type Error = UpdateEventSourceMappingError;
 
-        let mut request = SignedRequest::new("PUT", "lambda", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/2015-03-31/event-source-mappings/{uuid}", uuid = self.uuid);
+
+        let mut request = SignedRequest::new("PUT", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<EventSourceMappingConfiguration, _>()?;
+                        .deserialize::<UpdateEventSourceMappingResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -5344,28 +6540,34 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Updates a Lambda function's code.</p> <p>The function's code is locked when you publish a version. You can't modify the code of a published version, only the unpublished version.</p>
-    fn update_function_code(
-        &self,
-        input: UpdateFunctionCodeRequest,
-    ) -> RusotoFuture<FunctionConfiguration, UpdateFunctionCodeError> {
+impl ServiceRequest for UpdateFunctionCodeRequest {
+    type Output = UpdateFunctionCodeResponse;
+    type Error = UpdateFunctionCodeError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/code",
-            function_name = input.function_name
+            function_name = self.function_name
         );
 
-        let mut request = SignedRequest::new("PUT", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<FunctionConfiguration, _>()?;
+                        .deserialize::<UpdateFunctionCodeResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -5379,28 +6581,34 @@ impl Lambda for LambdaClient {
             }
         })
     }
+}
 
-    /// <p>Modify the version-specific settings of a Lambda function.</p> <p>These settings can vary between versions of a function and are locked when you publish a version. You can't modify the configuration of a published version, only the unpublished version.</p> <p>To configure function concurrency, use <a>PutFunctionConcurrency</a>. To grant invoke permissions to an account or AWS service, use <a>AddPermission</a>.</p>
-    fn update_function_configuration(
-        &self,
-        input: UpdateFunctionConfigurationRequest,
-    ) -> RusotoFuture<FunctionConfiguration, UpdateFunctionConfigurationError> {
+impl ServiceRequest for UpdateFunctionConfigurationRequest {
+    type Output = UpdateFunctionConfigurationResponse;
+    type Error = UpdateFunctionConfigurationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/configuration",
-            function_name = input.function_name
+            function_name = self.function_name
         );
 
-        let mut request = SignedRequest::new("PUT", "lambda", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "lambda", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<FunctionConfiguration, _>()?;
+                        .deserialize::<UpdateFunctionConfigurationResponse, _>()?;
 
                     Ok(result)
                 }))

@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -37,28 +38,6 @@ pub struct AccessLogSettings {
     #[serde(rename = "format")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub format: Option<String>,
-}
-
-/// <p><p>Represents an AWS account that is associated with API Gateway.</p> <div class="remarks"> <p>To view the account info, call <code>GET</code> on this resource.</p> <h4>Error Codes</h4> <p>The following exception may be thrown when the request fails.</p> <ul> <li>UnauthorizedException</li> <li>NotFoundException</li> <li>TooManyRequestsException</li> </ul> <p>For detailed error code information, including the corresponding HTTP Status Codes, see <a href="https://docs.aws.amazon.com/apigateway/api-reference/handling-errors/#api-error-codes">API Gateway Error Codes</a></p> <h4>Example: Get the information about an account.</h4> <h5>Request</h5> <pre><code>GET /account HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160531T184618Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash} </code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;_links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/account-apigateway-{rel}.html&quot;, &quot;name&quot;: &quot;account&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/account&quot; }, &quot;account:update&quot;: { &quot;href&quot;: &quot;/account&quot; } }, &quot;cloudwatchRoleArn&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;throttleSettings&quot;: { &quot;rateLimit&quot;: 500, &quot;burstLimit&quot;: 1000 } } </code></pre> <p>In addition to making the REST API call directly, you can use the AWS CLI and an AWS SDK to access this resource.</p> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-limits.html">API Gateway Limits</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html">Developer Guide</a>, <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-account.html">AWS CLI</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct Account {
-    /// <p>The version of the API keys used for the account.</p>
-    #[serde(rename = "apiKeyVersion")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub api_key_version: Option<String>,
-    /// <p>The ARN of an Amazon CloudWatch role for the current <a>Account</a>. </p>
-    #[serde(rename = "cloudwatchRoleArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub cloudwatch_role_arn: Option<String>,
-    /// <p>A list of features supported for the account. When usage plans are enabled, the features list will include an entry of <code>"UsagePlans"</code>.</p>
-    #[serde(rename = "features")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub features: Option<Vec<String>>,
-    /// <p>Specifies the API request limits configured for the current <a>Account</a>.</p>
-    #[serde(rename = "throttleSettings")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub throttle_settings: Option<ThrottleSettings>,
 }
 
 /// <p><p>A resource that can be distributed to callers for executing <a>Method</a> resources that require an API key. API keys can be mapped to any <a>Stage</a> on any <a>RestApi</a>, which indicates that the callers with the API key can make requests to that stage.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-api-keys.html">Use API Keys</a> </div></p>
@@ -105,37 +84,6 @@ pub struct ApiKey {
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
-}
-
-/// <p>The identifier of an <a>ApiKey</a> used in a <a>UsagePlan</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct ApiKeyIds {
-    /// <p>A list of all the <a>ApiKey</a> identifiers.</p>
-    #[serde(rename = "ids")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub ids: Option<Vec<String>>,
-    /// <p>A list of warning messages.</p>
-    #[serde(rename = "warnings")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub warnings: Option<Vec<String>>,
-}
-
-/// <p><p>Represents a collection of API keys as represented by an <a>ApiKeys</a> resource.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-api-keys.html">Use API Keys</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct ApiKeys {
-    /// <p>The current page of elements from this collection.</p>
-    #[serde(rename = "items")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<ApiKey>>,
-    #[serde(rename = "position")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub position: Option<String>,
-    /// <p>A list of warning messages logged during the import of API keys when the <code>failOnWarnings</code> option is set to true.</p>
-    #[serde(rename = "warnings")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub warnings: Option<Vec<String>>,
 }
 
 /// <p>API stage name of the associated API stage in a usage plan.</p>
@@ -201,19 +149,6 @@ pub struct Authorizer {
     pub type_: Option<String>,
 }
 
-/// <p><p>Represents a collection of <a>Authorizer</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorization</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct Authorizers {
-    /// <p>The current page of elements from this collection.</p>
-    #[serde(rename = "items")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<Authorizer>>,
-    #[serde(rename = "position")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub position: Option<String>,
-}
-
 /// <p><p>Represents the base path that callers of the API must provide as part of the URL after the domain name.</p> <div class="remarks">A custom domain name plus a <code>BasePathMapping</code> specification identifies a deployed <a>RestApi</a> in a given stage of the owner <a>Account</a>.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Custom Domain Names</a> </div></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -230,19 +165,6 @@ pub struct BasePathMapping {
     #[serde(rename = "stage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage: Option<String>,
-}
-
-/// <p><p>Represents a collection of <a>BasePathMapping</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Custom Domain Names</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct BasePathMappings {
-    /// <p>The current page of elements from this collection.</p>
-    #[serde(rename = "items")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<BasePathMapping>>,
-    #[serde(rename = "position")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub position: Option<String>,
 }
 
 /// <p>Configuration settings of a canary deployment.</p>
@@ -296,19 +218,6 @@ pub struct ClientCertificate {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p><p>Represents a collection of <a>ClientCertificate</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html">Use Client-Side Certificate</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct ClientCertificates {
-    /// <p>The current page of elements from this collection.</p>
-    #[serde(rename = "items")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<ClientCertificate>>,
-    #[serde(rename = "position")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub position: Option<String>,
-}
-
 /// <p>Request to create an <a>ApiKey</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateApiKeyRequest {
@@ -341,6 +250,52 @@ pub struct CreateApiKeyRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>Specifies a value of the API key.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+/// <p><p>A resource that can be distributed to callers for executing <a>Method</a> resources that require an API key. API keys can be mapped to any <a>Stage</a> on any <a>RestApi</a>, which indicates that the callers with the API key can make requests to that stage.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-api-keys.html">Use API Keys</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateApiKeyResponse {
+    /// <p>The timestamp when the API Key was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>An AWS Marketplace customer identifier , when integrating with the AWS SaaS Marketplace.</p>
+    #[serde(rename = "customerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub customer_id: Option<String>,
+    /// <p>The description of the API Key.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Specifies whether the API Key can be used by callers.</p>
+    #[serde(rename = "enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>The identifier of the API Key.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The timestamp when the API Key was last updated.</p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_date: Option<f64>,
+    /// <p>The name of the API Key.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A list of <a>Stage</a> resources that are associated with the <a>ApiKey</a> resource.</p>
+    #[serde(rename = "stageKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage_keys: Option<Vec<String>>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The value of the API Key.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
@@ -388,6 +343,52 @@ pub struct CreateAuthorizerRequest {
     pub type_: String,
 }
 
+/// <p><p>Represents an authorization layer for methods. If enabled on a method, API Gateway will activate the authorizer when a client calls the method.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorization</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateAuthorizerResponse {
+    /// <p>Optional customer-defined field, used in OpenAPI imports and exports without functional impact.</p>
+    #[serde(rename = "authType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auth_type: Option<String>,
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null.</p>
+    #[serde(rename = "authorizerCredentials")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_credentials: Option<String>,
+    /// <p>The TTL in seconds of cached authorizer results. If it equals 0, authorization caching is disabled. If it is greater than 0, API Gateway will cache authorizer responses. If this field is not set, the default value is 300. The maximum value is 3600, or 1 hour.</p>
+    #[serde(rename = "authorizerResultTtlInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_result_ttl_in_seconds: Option<i64>,
+    /// <p>Specifies the authorizer's Uniform Resource Identifier (URI). For <code>TOKEN</code> or <code>REQUEST</code> authorizers, this must be a well-formed Lambda function URI, for example, <code>arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations</code>. In general, the URI has this form <code>arn:aws:apigateway:{region}:lambda:path/{service_api}</code>, where <code>{region}</code> is the same as the region hosting the Lambda function, <code>path</code> indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial <code>/</code>. For Lambda functions, this is usually of the form <code>/2015-03-31/functions/[FunctionARN]/invocations</code>.</p>
+    #[serde(rename = "authorizerUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_uri: Option<String>,
+    /// <p>The identifier for the authorizer resource.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The identity source for which authorization is requested. <ul><li>For a <code>TOKEN</code> or <code>COGNITO_USER_POOLS</code> authorizer, this is required and specifies the request header mapping expression for the custom header holding the authorization token submitted by the client. For example, if the token header name is <code>Auth</code>, the header mapping expression is <code>method.request.header.Auth</code>.</li><li>For the <code>REQUEST</code> authorizer, this is required when authorization caching is enabled. The value is a comma-separated string of one or more mapping expressions of the specified request parameters. For example, if an <code>Auth</code> header, a <code>Name</code> query string parameter are defined as identity sources, this value is <code>method.request.header.Auth, method.request.querystring.Name</code>. These parameters will be used to derive the authorization caching key and to perform runtime validation of the <code>REQUEST</code> authorizer by verifying all of the identity-related request parameters are present, not null and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function, otherwise, it returns a 401 Unauthorized response without calling the Lambda function. The valid value is a string of comma-separated mapping expressions of the specified request parameters. When the authorization caching is not enabled, this property is optional.</li></ul></p>
+    #[serde(rename = "identitySource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_source: Option<String>,
+    /// <p>A validation expression for the incoming identity token. For <code>TOKEN</code> authorizers, this value is a regular expression. API Gateway will match the <code>aud</code> field of the incoming token from the client against the specified regular expression. It will invoke the authorizer's Lambda function when there is a match. Otherwise, it will return a 401 Unauthorized response without calling the Lambda function. The validation expression does not apply to the <code>REQUEST</code> authorizer.</p>
+    #[serde(rename = "identityValidationExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_validation_expression: Option<String>,
+    /// <p>[Required] The name of the authorizer.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A list of the Amazon Cognito user pool ARNs for the <code>COGNITO_USER_POOLS</code> authorizer. Each element is of this format: <code>arn:aws:cognito-idp:{region}:{account_id}:userpool/{user_pool_id}</code>. For a <code>TOKEN</code> or <code>REQUEST</code> authorizer, this is not defined. </p>
+    #[serde(rename = "providerARNs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider_ar_ns: Option<Vec<String>>,
+    /// <p>The authorizer type. Valid values are <code>TOKEN</code> for a Lambda function using a single authorization token submitted in a custom header, <code>REQUEST</code> for a Lambda function using incoming request parameters, and <code>COGNITO_USER_POOLS</code> for using an Amazon Cognito user pool.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
 /// <p>Requests API Gateway to create a new <a>BasePathMapping</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateBasePathMappingRequest {
@@ -402,6 +403,24 @@ pub struct CreateBasePathMappingRequest {
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
     /// <p>The name of the API's stage that you want to use for this mapping. Leave this blank if you do not want callers to explicitly specify the stage name after any base path name.</p>
+    #[serde(rename = "stage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage: Option<String>,
+}
+
+/// <p><p>Represents the base path that callers of the API must provide as part of the URL after the domain name.</p> <div class="remarks">A custom domain name plus a <code>BasePathMapping</code> specification identifies a deployed <a>RestApi</a> in a given stage of the owner <a>Account</a>.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Custom Domain Names</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateBasePathMappingResponse {
+    /// <p>The base path name that callers of the API must provide as part of the URL after the domain name.</p>
+    #[serde(rename = "basePath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_path: Option<String>,
+    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    #[serde(rename = "restApiId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rest_api_id: Option<String>,
+    /// <p>The name of the associated stage.</p>
     #[serde(rename = "stage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage: Option<String>,
@@ -447,6 +466,30 @@ pub struct CreateDeploymentRequest {
     pub variables: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p><p>An immutable representation of a <a>RestApi</a> resource that can be called by users using <a>Stages</a>. A deployment must be associated with a <a>Stage</a> for it to be callable over the Internet.</p> <div class="remarks">To create a deployment, call <code>POST</code> on the <a>Deployments</a> resource of a <a>RestApi</a>. To view, update, or delete a deployment, call <code>GET</code>, <code>PATCH</code>, or <code>DELETE</code> on the specified deployment resource (<code>/restapis/{restapi<em>id}/deployments/{deployment</em>id}</code>).</div> <div class="seeAlso"><a>RestApi</a>, <a>Deployments</a>, <a>Stage</a>, <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-deployment.html">AWS CLI</a>, <a href="https://aws.amazon.com/tools/">AWS SDKs</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateDeploymentResponse {
+    /// <p>A summary of the <a>RestApi</a> at the date and time that the deployment resource was created.</p>
+    #[serde(rename = "apiSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_summary: Option<
+        ::std::collections::HashMap<String, ::std::collections::HashMap<String, MethodSnapshot>>,
+    >,
+    /// <p>The date and time that the deployment resource was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The description for the deployment resource.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier for the deployment resource.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+}
+
 /// <p>Creates a new documentation part of a given API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDocumentationPartRequest {
@@ -459,6 +502,24 @@ pub struct CreateDocumentationPartRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p><p>A documentation part for a targeted API entity.</p> <div class="remarks"> <p>A documentation part consists of a content map (<code>properties</code>) and a target (<code>location</code>). The target specifies an API entity to which the documentation content applies. The supported API entity types are <code>API</code>, <code>AUTHORIZER</code>, <code>MODEL</code>, <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH<em>PARAMETER</code>, <code>QUERY</em>PARAMETER</code>, <code>REQUEST<em>HEADER</code>, <code>REQUEST</em>BODY</code>, <code>RESPONSE</code>, <code>RESPONSE<em>HEADER</code>, and <code>RESPONSE</em>BODY</code>. Valid <code>location</code> fields depend on the API entity type. All valid fields are not required.</p> <p>The content map is a JSON string of API-specific key-value pairs. Although an API can use any shape for the content map, only the OpenAPI-compliant documentation fields will be injected into the associated API entity definition in the exported OpenAPI definition file.</p></div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationParts</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateDocumentationPartResponse {
+    /// <p>The <a>DocumentationPart</a> identifier, generated by API Gateway when the <code>DocumentationPart</code> is created.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The location of the API entity to which the documentation applies. Valid fields depend on the targeted API entity type. All the valid location fields are not required. If not explicitly specified, a valid location field is treated as a wildcard and associated documentation content may be inherited by matching entities, unless overridden.</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<DocumentationPartLocation>,
+    /// <p>A content map of API-specific key-value pairs describing the targeted API entity. The map must be encoded as a JSON string, e.g., <code>"{ \"description\": \"The API does ...\" }"</code>. Only OpenAPI-compliant documentation-related fields from the <literal>properties</literal> map are exported and, hence, published as part of the API entity definitions, while the original documentation parts are exported in a OpenAPI extension of <code>x-amazon-apigateway-documentation</code>.</p>
+    #[serde(rename = "properties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub properties: Option<String>,
 }
 
 /// <p>Creates a new documentation version of a given API.</p>
@@ -478,6 +539,24 @@ pub struct CreateDocumentationVersionRequest {
     #[serde(rename = "stageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_name: Option<String>,
+}
+
+/// <p><p>A snapshot of the documentation of an API.</p> <div class="remarks"><p>Publishing API documentation involves creating a documentation version associated with an API stage and exporting the versioned documentation to an external (e.g., OpenAPI) file.</p></div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a>, <a>DocumentationVersions</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateDocumentationVersionResponse {
+    /// <p>The date when the API documentation snapshot is created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The description of the API documentation snapshot.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The version identifier of the API documentation snapshot.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
 }
 
 /// <p>A request to create a new domain name.</p>
@@ -524,6 +603,60 @@ pub struct CreateDomainNameRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p><p>Represents a custom domain name as a user-friendly host name of an API (<a>RestApi</a>).</p> <div class="Remarks"> <p>When you deploy an API, API Gateway creates a default host name for the API. This default API host name is of the <code>{restapi-id}.execute-api.{region}.amazonaws.com</code> format. With the default host name, you can access the API&#39;s root resource with the URL of <code>https://{restapi-id}.execute-api.{region}.amazonaws.com/{stage}/</code>. When you set up a custom domain name of <code>apis.example.com</code> for this API, you can then access the same resource using the URL of the <code>https://apis.examples.com/myApi</code>, where <code>myApi</code> is the base path mapping (<a>BasePathMapping</a>) of your API under the custom domain name. </p> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Set a Custom Host Name for an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateDomainNameResponse {
+    /// <p>The reference to an AWS-managed certificate that will be used by edge-optimized endpoint for this domain name. AWS Certificate Manager is the only supported source.</p>
+    #[serde(rename = "certificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_arn: Option<String>,
+    /// <p>The name of the certificate that will be used by edge-optimized endpoint for this domain name.</p>
+    #[serde(rename = "certificateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_name: Option<String>,
+    /// <p>The timestamp when the certificate that was used by edge-optimized endpoint for this domain name was uploaded.</p>
+    #[serde(rename = "certificateUploadDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_upload_date: Option<f64>,
+    /// <p>The domain name of the Amazon CloudFront distribution associated with this custom domain name for an edge-optimized endpoint. You set up this association when adding a DNS record pointing the custom domain name to this distribution name. For more information about CloudFront distributions, see the <a href="https://aws.amazon.com/documentation/cloudfront/" target="_blank">Amazon CloudFront documentation</a>.</p>
+    #[serde(rename = "distributionDomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub distribution_domain_name: Option<String>,
+    /// <p>The region-agnostic Amazon Route 53 Hosted Zone ID of the edge-optimized endpoint. The valid value is <code>Z2FDTNDATAQYW2</code> for all the regions. For more information, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-regional-api-custom-domain-create.html">Set up a Regional Custom Domain Name</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#apigateway_region">AWS Regions and Endpoints for API Gateway</a>. </p>
+    #[serde(rename = "distributionHostedZoneId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub distribution_hosted_zone_id: Option<String>,
+    /// <p>The custom domain name as an API host name, for example, <code>my-api.example.com</code>.</p>
+    #[serde(rename = "domainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>The endpoint configuration of this <a>DomainName</a> showing the endpoint types of the domain name. </p>
+    #[serde(rename = "endpointConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_configuration: Option<EndpointConfiguration>,
+    /// <p>The reference to an AWS-managed certificate that will be used for validating the regional domain name. AWS Certificate Manager is the only supported source.</p>
+    #[serde(rename = "regionalCertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regional_certificate_arn: Option<String>,
+    /// <p>The name of the certificate that will be used for validating the regional domain name.</p>
+    #[serde(rename = "regionalCertificateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regional_certificate_name: Option<String>,
+    /// <p>The domain name associated with the regional endpoint for this custom domain name. You set up this association by adding a DNS record that points the custom domain name to this regional domain name. The regional domain name is returned by API Gateway when you create a regional endpoint.</p>
+    #[serde(rename = "regionalDomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regional_domain_name: Option<String>,
+    /// <p>The region-specific Amazon Route 53 Hosted Zone ID of the regional endpoint. For more information, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-regional-api-custom-domain-create.html">Set up a Regional Custom Domain Name</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#apigateway_region">AWS Regions and Endpoints for API Gateway</a>. </p>
+    #[serde(rename = "regionalHostedZoneId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regional_hosted_zone_id: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>Request to add a new <a>Model</a> to an existing <a>RestApi</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateModelRequest {
@@ -541,6 +674,32 @@ pub struct CreateModelRequest {
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
     /// <p>The schema for the model. For <code>application/json</code> models, this should be <a href="https://tools.ietf.org/html/draft-zyp-json-schema-04" target="_blank">JSON schema draft 4</a> model.</p>
+    #[serde(rename = "schema")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema: Option<String>,
+}
+
+/// <p><p>Represents the data structure of a method&#39;s request or response payload.</p> <div class="remarks"> <p>A request model defines the data structure of the client-supplied request payload. A response model defines the data structure of the response payload returned by the back end. Although not required, models are useful for mapping payloads between the front end and back end.</p> <p>A model is used for generating an API&#39;s SDK, validating the input request body, and creating a skeletal mapping template.</p> </div> <div class="seeAlso"> <a>Method</a>, <a>MethodResponse</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Models and Mappings</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateModelResponse {
+    /// <p>The content-type for the model.</p>
+    #[serde(rename = "contentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_type: Option<String>,
+    /// <p>The description of the model.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier for the model resource.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name of the model. Must be an alphanumeric string.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The schema for the model. For <code>application/json</code> models, this should be <a href="https://tools.ietf.org/html/draft-zyp-json-schema-04" target="_blank">JSON schema draft 4</a> model. Do not include "\*/" characters in the description of any properties because such "\*/" characters may be interpreted as the closing marker for comments in some languages, such as Java or JavaScript, causing the installation of your API's SDK generated by API Gateway to fail.</p>
     #[serde(rename = "schema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema: Option<String>,
@@ -566,6 +725,28 @@ pub struct CreateRequestValidatorRequest {
     pub validate_request_parameters: Option<bool>,
 }
 
+/// <p><p>A set of validation rules for incoming <a>Method</a> requests.</p> <div class="remarks"> <p>In OpenAPI, a <a>RequestValidator</a> of an API is defined by the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.requestValidator.html">x-amazon-apigateway-request-validators.requestValidator</a> object. It the referenced using the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validator">x-amazon-apigateway-request-validator</a> property.</p> </div> <div class="seeAlso"><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html">Enable Basic Request Validation in API Gateway</a></div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateRequestValidatorResponse {
+    /// <p>The identifier of this <a>RequestValidator</a>.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name of this <a>RequestValidator</a></p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A Boolean flag to indicate whether to validate a request body according to the configured <a>Model</a> schema.</p>
+    #[serde(rename = "validateRequestBody")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validate_request_body: Option<bool>,
+    /// <p>A Boolean flag to indicate whether to validate request parameters (<code>true</code>) or not (<code>false</code>).</p>
+    #[serde(rename = "validateRequestParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validate_request_parameters: Option<bool>,
+}
+
 /// <p>Requests API Gateway to create a <a>Resource</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateResourceRequest {
@@ -578,6 +759,32 @@ pub struct CreateResourceRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p><p>Represents an API resource.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateResourceResponse {
+    /// <p>The resource's identifier.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The parent resource's identifier.</p>
+    #[serde(rename = "parentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_id: Option<String>,
+    /// <p>The full path for this resource.</p>
+    #[serde(rename = "path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+    /// <p>The last path segment for this resource.</p>
+    #[serde(rename = "pathPart")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path_part: Option<String>,
+    /// <p><p>Gets an API resource&#39;s method of a given HTTP verb.</p> <div class="remarks"> <p>The resource methods are a map of methods indexed by methods&#39; HTTP verbs enabled on the resource. This method map is included in the <code>200 OK</code> response of the <code>GET /restapis/{restapi<em>id}/resources/{resource</em>id}</code> or <code>GET /restapis/{restapi<em>id}/resources/{resource</em>id}?embed=methods</code> request.</p> <h4>Example: Get the GET method of an API resource</h4> <h5>Request</h5> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20170223T031827Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20170223/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <pre><code>{ &quot;<em>links&quot;: { &quot;curies&quot;: [ { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html&quot;, &quot;name&quot;: &quot;integration&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html&quot;, &quot;name&quot;: &quot;integrationresponse&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-{rel}.html&quot;, &quot;name&quot;: &quot;method&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true } ], &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot;, &quot;name&quot;: &quot;GET&quot;, &quot;title&quot;: &quot;GET&quot; }, &quot;integration:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;method:integration&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;method:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;methodresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/{status</em>code}&quot;, &quot;templated&quot;: true } }, &quot;apiKeyRequired&quot;: false, &quot;authorizationType&quot;: &quot;NONE&quot;, &quot;httpMethod&quot;: &quot;GET&quot;, &quot;<em>embedded&quot;: { &quot;method:integration&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integration:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integrationresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/{status<em>code}&quot;, &quot;templated&quot;: true } }, &quot;cacheKeyParameters&quot;: [], &quot;cacheNamespace&quot;: &quot;3kzxbg5sa2&quot;, &quot;credentials&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;httpMethod&quot;: &quot;POST&quot;, &quot;passthroughBehavior&quot;: &quot;WHEN</em>NO<em>MATCH&quot;, &quot;requestParameters&quot;: { &quot;integration.request.header.Content-Type&quot;: &quot;&#39;application/x-amz-json-1.1&#39;&quot; }, &quot;requestTemplates&quot;: { &quot;application/json&quot;: &quot;{\n}&quot; }, &quot;type&quot;: &quot;AWS&quot;, &quot;uri&quot;: &quot;arn:aws:apigateway:us-east-1:kinesis:action/ListStreams&quot;, &quot;</em>embedded&quot;: { &quot;integration:responses&quot;: { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integrationresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; }, &quot;integrationresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; } }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: &quot;&#39;application/xml&#39;&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;$util.urlDecode(&quot;%3CkinesisStreams%3E#foreach($stream in $input.path(&#39;$.StreamNames&#39;))%3Cstream%3E%3Cname%3E$stream%3C/name%3E%3C/stream%3E#end%3C/kinesisStreams%3E&quot;)\n&quot; }, &quot;statusCode&quot;: &quot;200&quot; } } }, &quot;method:responses&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; } } }</code></pre> <p>If the <code>OPTIONS</code> is enabled on the resource, you can follow the example here to get that method. Just replace the <code>GET</code> of the last path segment in the request URL with <code>OPTIONS</code>.</p> </div> <div class="seeAlso"> </div></p>
+    #[serde(rename = "resourceMethods")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_methods: Option<::std::collections::HashMap<String, Method>>,
 }
 
 /// <p>The POST Request to add a new <a>RestApi</a> resource to your collection.</p>
@@ -622,6 +829,60 @@ pub struct CreateRestApiRequest {
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+/// <p><p>Represents a REST API.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateRestApiResponse {
+    /// <p>The source of the API key for metering requests according to a usage plan. Valid values are: <ul><li><code>HEADER</code> to read the API key from the <code>X-API-Key</code> header of a request. </li><li><code>AUTHORIZER</code> to read the API key from the <code>UsageIdentifierKey</code> from a custom authorizer.</li></ul> </p>
+    #[serde(rename = "apiKeySource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_source: Option<String>,
+    /// <p>The list of binary media types supported by the <a>RestApi</a>. By default, the <a>RestApi</a> supports only UTF-8-encoded text payloads.</p>
+    #[serde(rename = "binaryMediaTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub binary_media_types: Option<Vec<String>>,
+    /// <p>The timestamp when the API was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The API's description.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The endpoint configuration of this <a>RestApi</a> showing the endpoint types of the API. </p>
+    #[serde(rename = "endpointConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_configuration: Option<EndpointConfiguration>,
+    /// <p>The API's identifier. This identifier is unique across all of your APIs in API Gateway.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>A nullable integer that is used to enable compression (with non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable compression (with a null value) on an API. When compression is enabled, compression or decompression is not applied on the payload if the payload size is smaller than this value. Setting it to zero allows compression for any payload size.</p>
+    #[serde(rename = "minimumCompressionSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_compression_size: Option<i64>,
+    /// <p>The API's name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A stringified JSON policy document that applies to this RestApi regardless of the caller and <a>Method</a> configuration.</p>
+    #[serde(rename = "policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A version identifier for the API.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+    /// <p>The warning messages reported when <code>failonwarnings</code> is turned on during API import.</p>
+    #[serde(rename = "warnings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub warnings: Option<Vec<String>>,
 }
 
 /// <p>Requests API Gateway to create a <a>Stage</a> resource.</p>
@@ -670,6 +931,80 @@ pub struct CreateStageRequest {
     pub variables: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p><p>Represents a unique identifier for a version of a deployed <a>RestApi</a> that is callable by users.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html">Deploy an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateStageResponse {
+    /// <p>Settings for logging access in this stage.</p>
+    #[serde(rename = "accessLogSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_log_settings: Option<AccessLogSettings>,
+    /// <p>Specifies whether a cache cluster is enabled for the stage.</p>
+    #[serde(rename = "cacheClusterEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_cluster_enabled: Option<bool>,
+    /// <p>The size of the cache cluster for the stage, if enabled.</p>
+    #[serde(rename = "cacheClusterSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_cluster_size: Option<String>,
+    /// <p>The status of the cache cluster for the stage, if enabled.</p>
+    #[serde(rename = "cacheClusterStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_cluster_status: Option<String>,
+    /// <p>Settings for the canary deployment in this stage.</p>
+    #[serde(rename = "canarySettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub canary_settings: Option<CanarySettings>,
+    /// <p>The identifier of a client certificate for an API stage.</p>
+    #[serde(rename = "clientCertificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_certificate_id: Option<String>,
+    /// <p>The timestamp when the stage was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The identifier of the <a>Deployment</a> that the stage points to.</p>
+    #[serde(rename = "deploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_id: Option<String>,
+    /// <p>The stage's description.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The version of the associated API documentation.</p>
+    #[serde(rename = "documentationVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub documentation_version: Option<String>,
+    /// <p>The timestamp when the stage last updated.</p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_date: Option<f64>,
+    /// <p>A map that defines the method settings for a <a>Stage</a> resource. Keys (designated as <code>/{method_setting_key</code> below) are method paths defined as <code>{resource_path}/{http_method}</code> for an individual method override, or <code>/\*/\*</code> for overriding all methods in the stage. </p>
+    #[serde(rename = "methodSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub method_settings: Option<::std::collections::HashMap<String, MethodSetting>>,
+    /// <p>The name of the stage is the first path segment in the Uniform Resource Identifier (URI) of a call to API Gateway.</p>
+    #[serde(rename = "stageName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage_name: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Specifies whether active tracing with X-ray is enabled for the <a>Stage</a>.</p>
+    #[serde(rename = "tracingEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tracing_enabled: Option<bool>,
+    /// <p>A map that defines the stage variables for a <a>Stage</a> resource. Variable names can have alphanumeric and underscore characters, and the values must match <code>[A-Za-z0-9-._~:/?#&amp;=,]+</code>.</p>
+    #[serde(rename = "variables")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub variables: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The ARN of the WebAcl associated with the <a>Stage</a>.</p>
+    #[serde(rename = "webAclArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub web_acl_arn: Option<String>,
+}
+
 /// <p>The POST request to create a usage plan key for adding an existing API key to a usage plan.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateUsagePlanKeyRequest {
@@ -682,6 +1017,28 @@ pub struct CreateUsagePlanKeyRequest {
     /// <p>[Required] The Id of the <a>UsagePlan</a> resource representing the usage plan containing the to-be-created <a>UsagePlanKey</a> resource representing a plan customer.</p>
     #[serde(rename = "usagePlanId")]
     pub usage_plan_id: String,
+}
+
+/// <p><p>Represents a usage plan key to identify a plan customer.</p> <div class="remarks"> <p>To associate an API stage with a selected API key in a usage plan, you must create a UsagePlanKey resource to represent the selected <a>ApiKey</a>.</p> </div>&quot; <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateUsagePlanKeyResponse {
+    /// <p>The Id of a usage plan key.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name of a usage plan key.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The type of a usage plan key. Currently, the valid key type is <code>API_KEY</code>.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p>The value of a usage plan key.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
 }
 
 /// <p>The POST request to create a usage plan with the name, description, throttle limits and quota limits, as well as the associated API stages, specified in the payload.</p>
@@ -712,6 +1069,44 @@ pub struct CreateUsagePlanRequest {
     pub throttle: Option<ThrottleSettings>,
 }
 
+/// <p><p>Represents a usage plan than can specify who can assess associated API stages with specified request limits and quotas.</p> <div class="remarks"> <p>In a usage plan, you associate an API by specifying the API&#39;s Id and a stage name of the specified API. You add plan customers by adding API keys to the plan. </p> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateUsagePlanResponse {
+    /// <p>The associated API stages of a usage plan.</p>
+    #[serde(rename = "apiStages")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_stages: Option<Vec<ApiStage>>,
+    /// <p>The description of a usage plan.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier of a <a>UsagePlan</a> resource.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name of a usage plan.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The AWS Markeplace product identifier to associate with the usage plan as a SaaS product on AWS Marketplace.</p>
+    #[serde(rename = "productCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_code: Option<String>,
+    /// <p>The maximum number of permitted requests per a given unit time interval.</p>
+    #[serde(rename = "quota")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quota: Option<QuotaSettings>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The request throttle limits of a usage plan.</p>
+    #[serde(rename = "throttle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub throttle: Option<ThrottleSettings>,
+}
+
 /// <p>Creates a VPC link, under the caller's account in a selected region, in an asynchronous operation that typically takes 2-4 minutes to complete and become operational. The caller must have permissions to create and update VPC Endpoint services.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateVpcLinkRequest {
@@ -731,6 +1126,40 @@ pub struct CreateVpcLinkRequest {
     pub target_arns: Vec<String>,
 }
 
+/// <p><p>A API Gateway VPC link for a <a>RestApi</a> to access resources in an Amazon Virtual Private Cloud (VPC).</p> <div class="remarks"> <p><p>To enable access to a resource in an Amazon Virtual Private Cloud through Amazon API Gateway, you, as an API developer, create a <a>VpcLink</a> resource targeted for one or more network load balancers of the VPC and then integrate an API method with a private integration that uses the <a>VpcLink</a>. The private integration has an integration type of <code>HTTP</code> or <code>HTTP<em>PROXY</code> and has a connection type of <code>VPC</em>LINK</code>. The integration uses the <code>connectionId</code> property to identify the <a>VpcLink</a> used.</p> </p> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateVpcLinkResponse {
+    /// <p>The description of the VPC link.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier of the <a>VpcLink</a>. It is used in an <a>Integration</a> to reference this <a>VpcLink</a>.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name used to label and identify the VPC link.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The status of the VPC link. The valid values are <code>AVAILABLE</code>, <code>PENDING</code>, <code>DELETING</code>, or <code>FAILED</code>. Deploying an API will wait if the status is <code>PENDING</code> and will fail if the status is <code>DELETING</code>. </p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A description about the VPC link status.</p>
+    #[serde(rename = "statusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_message: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The ARNs of network load balancers of the VPC targeted by the VPC link. The network load balancers must be owned by the same AWS account of the API owner.</p>
+    #[serde(rename = "targetArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_arns: Option<Vec<String>>,
+}
+
 /// <p>A request to delete the <a>ApiKey</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteApiKeyRequest {
@@ -738,6 +1167,10 @@ pub struct DeleteApiKeyRequest {
     #[serde(rename = "apiKey")]
     pub api_key: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteApiKeyResponse {}
 
 /// <p>Request to delete an existing <a>Authorizer</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -750,6 +1183,10 @@ pub struct DeleteAuthorizerRequest {
     pub rest_api_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteAuthorizerResponse {}
+
 /// <p>A request to delete the <a>BasePathMapping</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteBasePathMappingRequest {
@@ -761,6 +1198,10 @@ pub struct DeleteBasePathMappingRequest {
     pub domain_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteBasePathMappingResponse {}
+
 /// <p>A request to delete the <a>ClientCertificate</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteClientCertificateRequest {
@@ -768,6 +1209,10 @@ pub struct DeleteClientCertificateRequest {
     #[serde(rename = "clientCertificateId")]
     pub client_certificate_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteClientCertificateResponse {}
 
 /// <p>Requests API Gateway to delete a <a>Deployment</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -780,6 +1225,10 @@ pub struct DeleteDeploymentRequest {
     pub rest_api_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteDeploymentResponse {}
+
 /// <p>Deletes an existing documentation part of an API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDocumentationPartRequest {
@@ -790,6 +1239,10 @@ pub struct DeleteDocumentationPartRequest {
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteDocumentationPartResponse {}
 
 /// <p>Deletes an existing documentation version of an API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -802,6 +1255,10 @@ pub struct DeleteDocumentationVersionRequest {
     pub rest_api_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteDocumentationVersionResponse {}
+
 /// <p>A request to delete the <a>DomainName</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDomainNameRequest {
@@ -809,6 +1266,10 @@ pub struct DeleteDomainNameRequest {
     #[serde(rename = "domainName")]
     pub domain_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteDomainNameResponse {}
 
 /// <p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -820,6 +1281,10 @@ pub struct DeleteGatewayResponseRequest {
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteGatewayResponseResponse {}
 
 /// <p>Represents a delete integration request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -834,6 +1299,10 @@ pub struct DeleteIntegrationRequest {
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteIntegrationResponse {}
 
 /// <p>Represents a delete integration response request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -852,6 +1321,10 @@ pub struct DeleteIntegrationResponseRequest {
     pub status_code: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteIntegrationResponseResponse {}
+
 /// <p>Request to delete an existing <a>Method</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteMethodRequest {
@@ -865,6 +1338,10 @@ pub struct DeleteMethodRequest {
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteMethodResponse {}
 
 /// <p>A request to delete an existing <a>MethodResponse</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -883,6 +1360,10 @@ pub struct DeleteMethodResponseRequest {
     pub status_code: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteMethodResponseResponse {}
+
 /// <p>Request to delete an existing model in an existing <a>RestApi</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteModelRequest {
@@ -893,6 +1374,10 @@ pub struct DeleteModelRequest {
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteModelResponse {}
 
 /// <p>Deletes a specified <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -905,6 +1390,10 @@ pub struct DeleteRequestValidatorRequest {
     pub rest_api_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteRequestValidatorResponse {}
+
 /// <p>Request to delete a <a>Resource</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteResourceRequest {
@@ -916,6 +1405,10 @@ pub struct DeleteResourceRequest {
     pub rest_api_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteResourceResponse {}
+
 /// <p>Request to delete the specified API from your collection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteRestApiRequest {
@@ -923,6 +1416,10 @@ pub struct DeleteRestApiRequest {
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteRestApiResponse {}
 
 /// <p>Requests API Gateway to delete a <a>Stage</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -935,6 +1432,10 @@ pub struct DeleteStageRequest {
     pub stage_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteStageResponse {}
+
 /// <p>The DELETE request to delete a usage plan key and remove the underlying API key from the associated usage plan.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteUsagePlanKeyRequest {
@@ -946,6 +1447,10 @@ pub struct DeleteUsagePlanKeyRequest {
     pub usage_plan_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteUsagePlanKeyResponse {}
+
 /// <p>The DELETE request to delete a usage plan of a given plan Id.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteUsagePlanRequest {
@@ -954,6 +1459,10 @@ pub struct DeleteUsagePlanRequest {
     pub usage_plan_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteUsagePlanResponse {}
+
 /// <p>Deletes an existing <a>VpcLink</a> of a specified identifier.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteVpcLinkRequest {
@@ -961,6 +1470,10 @@ pub struct DeleteVpcLinkRequest {
     #[serde(rename = "vpcLinkId")]
     pub vpc_link_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteVpcLinkResponse {}
 
 /// <p><p>An immutable representation of a <a>RestApi</a> resource that can be called by users using <a>Stages</a>. A deployment must be associated with a <a>Stage</a> for it to be callable over the Internet.</p> <div class="remarks">To create a deployment, call <code>POST</code> on the <a>Deployments</a> resource of a <a>RestApi</a>. To view, update, or delete a deployment, call <code>GET</code>, <code>PATCH</code>, or <code>DELETE</code> on the specified deployment resource (<code>/restapis/{restapi<em>id}/deployments/{deployment</em>id}</code>).</div> <div class="seeAlso"><a>RestApi</a>, <a>Deployments</a>, <a>Stage</a>, <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-deployment.html">AWS CLI</a>, <a href="https://aws.amazon.com/tools/">AWS SDKs</a> </div></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1003,19 +1516,6 @@ pub struct DeploymentCanarySettings {
     pub use_stage_cache: Option<bool>,
 }
 
-/// <p><p>Represents a collection resource that contains zero or more references to your existing deployments, and links that guide you on how to interact with your collection. The collection offers a paginated view of the contained deployments.</p> <div class="remarks">To create a new deployment of a <a>RestApi</a>, make a <code>POST</code> request against this resource. To view, update, or delete an existing deployment, make a <code>GET</code>, <code>PATCH</code>, or <code>DELETE</code> request, respectively, on a specified <a>Deployment</a> resource.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html">Deploying an API</a>, <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-deployment.html">AWS CLI</a>, <a href="https://aws.amazon.com/tools/">AWS SDKs</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct Deployments {
-    /// <p>The current page of elements from this collection.</p>
-    #[serde(rename = "items")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<Deployment>>,
-    #[serde(rename = "position")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub position: Option<String>,
-}
-
 /// <p><p>A documentation part for a targeted API entity.</p> <div class="remarks"> <p>A documentation part consists of a content map (<code>properties</code>) and a target (<code>location</code>). The target specifies an API entity to which the documentation content applies. The supported API entity types are <code>API</code>, <code>AUTHORIZER</code>, <code>MODEL</code>, <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH<em>PARAMETER</code>, <code>QUERY</em>PARAMETER</code>, <code>REQUEST<em>HEADER</code>, <code>REQUEST</em>BODY</code>, <code>RESPONSE</code>, <code>RESPONSE<em>HEADER</code>, and <code>RESPONSE</em>BODY</code>. Valid <code>location</code> fields depend on the API entity type. All valid fields are not required.</p> <p>The content map is a JSON string of API-specific key-value pairs. Although an API can use any shape for the content map, only the OpenAPI-compliant documentation fields will be injected into the associated API entity definition in the exported OpenAPI definition file.</p></div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationParts</a> </div></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1032,20 +1532,6 @@ pub struct DocumentationPart {
     #[serde(rename = "properties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub properties: Option<String>,
-}
-
-/// <p><p>A collection of the imported <a>DocumentationPart</a> identifiers.</p> <div class="remarks">This is used to return the result when documentation parts in an external (e.g., OpenAPI) file are imported into API Gateway</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a href="https://docs.aws.amazon.com/apigateway/api-reference/link-relation/documentationpart-import/">documentationpart:import</a>, <a>DocumentationPart</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct DocumentationPartIds {
-    /// <p>A list of the returned documentation part identifiers.</p>
-    #[serde(rename = "ids")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub ids: Option<Vec<String>>,
-    /// <p>A list of warning messages reported during import of documentation parts.</p>
-    #[serde(rename = "warnings")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub warnings: Option<Vec<String>>,
 }
 
 /// <p>Specifies the target API entity to which the documentation applies.</p>
@@ -1072,19 +1558,6 @@ pub struct DocumentationPartLocation {
     pub type_: String,
 }
 
-/// <p><p>The collection of documentation parts of an API.</p> <div class="remarks"/> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct DocumentationParts {
-    /// <p>The current page of elements from this collection.</p>
-    #[serde(rename = "items")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<DocumentationPart>>,
-    #[serde(rename = "position")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub position: Option<String>,
-}
-
 /// <p><p>A snapshot of the documentation of an API.</p> <div class="remarks"><p>Publishing API documentation involves creating a documentation version associated with an API stage and exporting the versioned documentation to an external (e.g., OpenAPI) file.</p></div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a>, <a>DocumentationVersions</a> </div></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1101,19 +1574,6 @@ pub struct DocumentationVersion {
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
-}
-
-/// <p><p>The collection of documentation snapshots of an API. </p> <div class="remarks"><p>Use the <a>DocumentationVersions</a> to manage documentation snapshots associated with various API stages.</p></div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a>, <a>DocumentationVersion</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct DocumentationVersions {
-    /// <p>The current page of elements from this collection.</p>
-    #[serde(rename = "items")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<DocumentationVersion>>,
-    #[serde(rename = "position")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub position: Option<String>,
 }
 
 /// <p><p>Represents a custom domain name as a user-friendly host name of an API (<a>RestApi</a>).</p> <div class="Remarks"> <p>When you deploy an API, API Gateway creates a default host name for the API. This default API host name is of the <code>{restapi-id}.execute-api.{region}.amazonaws.com</code> format. With the default host name, you can access the API&#39;s root resource with the URL of <code>https://{restapi-id}.execute-api.{region}.amazonaws.com/{stage}/</code>. When you set up a custom domain name of <code>apis.example.com</code> for this API, you can then access the same resource using the URL of the <code>https://apis.examples.com/myApi</code>, where <code>myApi</code> is the base path mapping (<a>BasePathMapping</a>) of your API under the custom domain name. </p> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Set a Custom Host Name for an API</a> </div></p>
@@ -1170,19 +1630,6 @@ pub struct DomainName {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p><p>Represents a collection of <a>DomainName</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Client-Side Certificate</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct DomainNames {
-    /// <p>The current page of elements from this collection.</p>
-    #[serde(rename = "items")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<DomainName>>,
-    #[serde(rename = "position")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub position: Option<String>,
-}
-
 /// <p>The endpoint configuration to indicate the types of endpoints an API (<a>RestApi</a>) or its custom domain name (<a>DomainName</a>) has. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EndpointConfiguration {
@@ -1190,17 +1637,6 @@ pub struct EndpointConfiguration {
     #[serde(rename = "types")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub types: Option<Vec<String>>,
-}
-
-/// <p>The binary blob response to <a>GetExport</a>, which contains the generated SDK.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ExportResponse {
-    /// <p>The binary blob response to <a>GetExport</a>, which contains the export.</p>
-    pub body: Option<bytes::Bytes>,
-    /// <p>The content-disposition header value in the HTTP response.</p>
-    pub content_disposition: Option<String>,
-    /// <p>The content-type header value in the HTTP response. This will correspond to a valid 'accept' type in the request.</p>
-    pub content_type: Option<String>,
 }
 
 /// <p>Request to flush authorizer cache entries on a specified stage.</p>
@@ -1214,6 +1650,10 @@ pub struct FlushStageAuthorizersCacheRequest {
     pub stage_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct FlushStageAuthorizersCacheResponse {}
+
 /// <p>Requests API Gateway to flush a stage's cache.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct FlushStageCacheRequest {
@@ -1224,6 +1664,10 @@ pub struct FlushStageCacheRequest {
     #[serde(rename = "stageName")]
     pub stage_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct FlushStageCacheResponse {}
 
 /// <p><p>A gateway response of a given response type and status code, with optional response parameters and mapping templates.</p> <div class="remarks"> For more information about valid gateway response types, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html">Gateway Response Types Supported by API Gateway</a> <div class="example"> <h4>Example: Get a Gateway Response of a given response type</h4> <h5>Request</h5> <p>This example shows how to get a gateway response of the <code>MISSING<em>AUTHENTICATION</em>TOKEN</code> type.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T202516Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature=1b52460e3159c1a26cff29093855d50ea141c1c5b937528fecaf60f51129697a Cache-Control: no-cache Postman-Token: 3b2a1ce9-c848-2e26-2e2f-9c2caefbed45 </code></pre> <p>The response type is specified as a URL path.</p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;</em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html&quot;, &quot;name&quot;: &quot;gatewayresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, &quot;gatewayresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING</em>AUTHENTICATION<em>TOKEN&quot; } }, &quot;defaultResponse&quot;: false, &quot;responseParameters&quot;: { &quot;gatewayresponse.header.x-request-path&quot;: &quot;method.request.path.petId&quot;, &quot;gatewayresponse.header.Access-Control-Allow-Origin&quot;: &quot;&apos;a.b.c&apos;&quot;, &quot;gatewayresponse.header.x-request-query&quot;: &quot;method.request.querystring.q&quot;, &quot;gatewayresponse.header.x-request-header&quot;: &quot;method.request.header.Accept&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{\n &quot;message&quot;: $context.error.messageString,\n &quot;type&quot;: &quot;$context.error.responseType&quot;,\n &quot;stage&quot;: &quot;$context.stage&quot;,\n &quot;resourcePath&quot;: &quot;$context.resourcePath&quot;,\n &quot;stageVariables.a&quot;: &quot;$stageVariables.a&quot;,\n &quot;statusCode&quot;: &quot;&apos;404&apos;&quot;\n}&quot; }, &quot;responseType&quot;: &quot;MISSING</em>AUTHENTICATION_TOKEN&quot;, &quot;statusCode&quot;: &quot;404&quot; }</code></pre> <p></p> </div> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html">Customize Gateway Responses</a> </div></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1251,19 +1695,6 @@ pub struct GatewayResponse {
     pub status_code: Option<String>,
 }
 
-/// <p><p>The collection of the <a>GatewayResponse</a> instances of a <a>RestApi</a> as a <code>responseType</code>-to-<a>GatewayResponse</a> object map of key-value pairs. As such, pagination is not supported for querying this collection.</p> <div class="remarks"> For more information about valid gateway response types, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html">Gateway Response Types Supported by API Gateway</a> <div class="example"> <h4>Example: Get the collection of gateway responses of an API</h4> <h5>Request</h5> <p>This example request shows how to retrieve the <a>GatewayResponses</a> collection from an API.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T220604Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature=59b42fe54a76a5de8adf2c67baa6d39206f8e9ad49a1d77ccc6a5da3103a398a Cache-Control: no-cache Postman-Token: 5637af27-dc29-fc5c-9dfe-0645d52cb515 </code></pre> <p></p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;</em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html&quot;, &quot;name&quot;: &quot;gatewayresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses&quot; }, &quot;first&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses&quot; }, &quot;gatewayresponse:by-type&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;item&quot;: [ { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION</em>FAILURE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE<em>NOT</em>FOUND&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST<em>TOO</em>LARGE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED<em>MEDIA</em>TYPE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>CONFIGURATION</em>ERROR&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>5XX&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>4XX&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>PARAMETERS&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>BODY&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED<em>TOKEN&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS</em>DENIED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>API</em>KEY&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API<em>CONFIGURATION</em>ERROR&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA<em>EXCEEDED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION</em>TIMEOUT&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>SIGNATURE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER</em>FAILURE&quot; } ] }, &quot;<em>embedded&quot;: { &quot;item&quot;: [ { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>FAILURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>FAILURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INTEGRATION</em>FAILURE&quot;, &quot;statusCode&quot;: &quot;504&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE</em>NOT<em>FOUND&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE<em>NOT</em>FOUND&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;RESOURCE<em>NOT</em>FOUND&quot;, &quot;statusCode&quot;: &quot;404&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST</em>TOO<em>LARGE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST<em>TOO</em>LARGE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;REQUEST<em>TOO</em>LARGE&quot;, &quot;statusCode&quot;: &quot;413&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;THROTTLED&quot;, &quot;statusCode&quot;: &quot;429&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED</em>MEDIA<em>TYPE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED<em>MEDIA</em>TYPE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;UNSUPPORTED<em>MEDIA</em>TYPE&quot;, &quot;statusCode&quot;: &quot;415&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER</em>CONFIGURATION<em>ERROR&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>CONFIGURATION</em>ERROR&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;AUTHORIZER<em>CONFIGURATION</em>ERROR&quot;, &quot;statusCode&quot;: &quot;500&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>5XX&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>5XX&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;DEFAULT<em>5XX&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>4XX&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>4XX&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;DEFAULT</em>4XX&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD</em>REQUEST<em>PARAMETERS&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>PARAMETERS&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;BAD<em>REQUEST</em>PARAMETERS&quot;, &quot;statusCode&quot;: &quot;400&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD</em>REQUEST<em>BODY&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>BODY&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;BAD<em>REQUEST</em>BODY&quot;, &quot;statusCode&quot;: &quot;400&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED</em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED</em>TOKEN&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;EXPIRED<em>TOKEN&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS<em>DENIED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS<em>DENIED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;ACCESS</em>DENIED&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>API<em>KEY&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>API</em>KEY&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INVALID<em>API</em>KEY&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;UNAUTHORIZED&quot;, &quot;statusCode&quot;: &quot;401&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API</em>CONFIGURATION<em>ERROR&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API<em>CONFIGURATION</em>ERROR&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;API<em>CONFIGURATION</em>ERROR&quot;, &quot;statusCode&quot;: &quot;500&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA</em>EXCEEDED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA</em>EXCEEDED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;QUOTA<em>EXCEEDED&quot;, &quot;statusCode&quot;: &quot;429&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>TIMEOUT&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>TIMEOUT&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INTEGRATION</em>TIMEOUT&quot;, &quot;statusCode&quot;: &quot;504&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING</em>AUTHENTICATION<em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;MISSING<em>AUTHENTICATION</em>TOKEN&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>SIGNATURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>SIGNATURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INVALID<em>SIGNATURE&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>FAILURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>FAILURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;AUTHORIZER</em>FAILURE&quot;, &quot;statusCode&quot;: &quot;500&quot; } ] } }</code></pre> <p></p> </div> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html">Customize Gateway Responses</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct GatewayResponses {
-    /// <p>Returns the entire collection, because of no pagination support.</p>
-    #[serde(rename = "items")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<GatewayResponse>>,
-    #[serde(rename = "position")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub position: Option<String>,
-}
-
 /// <p>A request to generate a <a>ClientCertificate</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GenerateClientCertificateRequest {
@@ -1277,9 +1708,61 @@ pub struct GenerateClientCertificateRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p><p>Represents a client certificate used to configure client-side SSL authentication while sending requests to the integration endpoint.</p> <div class="remarks">Client certificates are used to authenticate an API by the backend server. To authenticate an API client (or user), use IAM roles and policies, a custom <a>Authorizer</a> or an Amazon Cognito user pool.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html">Use Client-Side Certificate</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GenerateClientCertificateResponse {
+    /// <p>The identifier of the client certificate.</p>
+    #[serde(rename = "clientCertificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_certificate_id: Option<String>,
+    /// <p>The timestamp when the client certificate was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The description of the client certificate.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The timestamp when the client certificate will expire.</p>
+    #[serde(rename = "expirationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiration_date: Option<f64>,
+    /// <p>The PEM-encoded public key of the client certificate, which can be used to configure certificate authentication in the integration endpoint .</p>
+    #[serde(rename = "pemEncodedCertificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pem_encoded_certificate: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>Requests API Gateway to get information about the current <a>Account</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetAccountRequest {}
+
+/// <p><p>Represents an AWS account that is associated with API Gateway.</p> <div class="remarks"> <p>To view the account info, call <code>GET</code> on this resource.</p> <h4>Error Codes</h4> <p>The following exception may be thrown when the request fails.</p> <ul> <li>UnauthorizedException</li> <li>NotFoundException</li> <li>TooManyRequestsException</li> </ul> <p>For detailed error code information, including the corresponding HTTP Status Codes, see <a href="https://docs.aws.amazon.com/apigateway/api-reference/handling-errors/#api-error-codes">API Gateway Error Codes</a></p> <h4>Example: Get the information about an account.</h4> <h5>Request</h5> <pre><code>GET /account HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160531T184618Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash} </code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;_links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/account-apigateway-{rel}.html&quot;, &quot;name&quot;: &quot;account&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/account&quot; }, &quot;account:update&quot;: { &quot;href&quot;: &quot;/account&quot; } }, &quot;cloudwatchRoleArn&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;throttleSettings&quot;: { &quot;rateLimit&quot;: 500, &quot;burstLimit&quot;: 1000 } } </code></pre> <p>In addition to making the REST API call directly, you can use the AWS CLI and an AWS SDK to access this resource.</p> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-limits.html">API Gateway Limits</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html">Developer Guide</a>, <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-account.html">AWS CLI</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetAccountResponse {
+    /// <p>The version of the API keys used for the account.</p>
+    #[serde(rename = "apiKeyVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_version: Option<String>,
+    /// <p>The ARN of an Amazon CloudWatch role for the current <a>Account</a>. </p>
+    #[serde(rename = "cloudwatchRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloudwatch_role_arn: Option<String>,
+    /// <p>A list of features supported for the account. When usage plans are enabled, the features list will include an entry of <code>"UsagePlans"</code>.</p>
+    #[serde(rename = "features")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub features: Option<Vec<String>>,
+    /// <p>Specifies the API request limits configured for the current <a>Account</a>.</p>
+    #[serde(rename = "throttleSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub throttle_settings: Option<ThrottleSettings>,
+}
 
 /// <p>A request to get information about the current <a>ApiKey</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1291,6 +1774,52 @@ pub struct GetApiKeyRequest {
     #[serde(rename = "includeValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_value: Option<bool>,
+}
+
+/// <p><p>A resource that can be distributed to callers for executing <a>Method</a> resources that require an API key. API keys can be mapped to any <a>Stage</a> on any <a>RestApi</a>, which indicates that the callers with the API key can make requests to that stage.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-api-keys.html">Use API Keys</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetApiKeyResponse {
+    /// <p>The timestamp when the API Key was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>An AWS Marketplace customer identifier , when integrating with the AWS SaaS Marketplace.</p>
+    #[serde(rename = "customerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub customer_id: Option<String>,
+    /// <p>The description of the API Key.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Specifies whether the API Key can be used by callers.</p>
+    #[serde(rename = "enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>The identifier of the API Key.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The timestamp when the API Key was last updated.</p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_date: Option<f64>,
+    /// <p>The name of the API Key.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A list of <a>Stage</a> resources that are associated with the <a>ApiKey</a> resource.</p>
+    #[serde(rename = "stageKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage_keys: Option<Vec<String>>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The value of the API Key.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
 }
 
 /// <p>A request to get information about the current <a>ApiKeys</a> resource.</p>
@@ -1318,6 +1847,23 @@ pub struct GetApiKeysRequest {
     pub position: Option<String>,
 }
 
+/// <p><p>Represents a collection of API keys as represented by an <a>ApiKeys</a> resource.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-api-keys.html">Use API Keys</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetApiKeysResponse {
+    /// <p>The current page of elements from this collection.</p>
+    #[serde(rename = "items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<ApiKey>>,
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+    /// <p>A list of warning messages logged during the import of API keys when the <code>failOnWarnings</code> option is set to true.</p>
+    #[serde(rename = "warnings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub warnings: Option<Vec<String>>,
+}
+
 /// <p>Request to describe an existing <a>Authorizer</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetAuthorizerRequest {
@@ -1327,6 +1873,52 @@ pub struct GetAuthorizerRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p><p>Represents an authorization layer for methods. If enabled on a method, API Gateway will activate the authorizer when a client calls the method.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorization</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetAuthorizerResponse {
+    /// <p>Optional customer-defined field, used in OpenAPI imports and exports without functional impact.</p>
+    #[serde(rename = "authType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auth_type: Option<String>,
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null.</p>
+    #[serde(rename = "authorizerCredentials")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_credentials: Option<String>,
+    /// <p>The TTL in seconds of cached authorizer results. If it equals 0, authorization caching is disabled. If it is greater than 0, API Gateway will cache authorizer responses. If this field is not set, the default value is 300. The maximum value is 3600, or 1 hour.</p>
+    #[serde(rename = "authorizerResultTtlInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_result_ttl_in_seconds: Option<i64>,
+    /// <p>Specifies the authorizer's Uniform Resource Identifier (URI). For <code>TOKEN</code> or <code>REQUEST</code> authorizers, this must be a well-formed Lambda function URI, for example, <code>arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations</code>. In general, the URI has this form <code>arn:aws:apigateway:{region}:lambda:path/{service_api}</code>, where <code>{region}</code> is the same as the region hosting the Lambda function, <code>path</code> indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial <code>/</code>. For Lambda functions, this is usually of the form <code>/2015-03-31/functions/[FunctionARN]/invocations</code>.</p>
+    #[serde(rename = "authorizerUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_uri: Option<String>,
+    /// <p>The identifier for the authorizer resource.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The identity source for which authorization is requested. <ul><li>For a <code>TOKEN</code> or <code>COGNITO_USER_POOLS</code> authorizer, this is required and specifies the request header mapping expression for the custom header holding the authorization token submitted by the client. For example, if the token header name is <code>Auth</code>, the header mapping expression is <code>method.request.header.Auth</code>.</li><li>For the <code>REQUEST</code> authorizer, this is required when authorization caching is enabled. The value is a comma-separated string of one or more mapping expressions of the specified request parameters. For example, if an <code>Auth</code> header, a <code>Name</code> query string parameter are defined as identity sources, this value is <code>method.request.header.Auth, method.request.querystring.Name</code>. These parameters will be used to derive the authorization caching key and to perform runtime validation of the <code>REQUEST</code> authorizer by verifying all of the identity-related request parameters are present, not null and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function, otherwise, it returns a 401 Unauthorized response without calling the Lambda function. The valid value is a string of comma-separated mapping expressions of the specified request parameters. When the authorization caching is not enabled, this property is optional.</li></ul></p>
+    #[serde(rename = "identitySource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_source: Option<String>,
+    /// <p>A validation expression for the incoming identity token. For <code>TOKEN</code> authorizers, this value is a regular expression. API Gateway will match the <code>aud</code> field of the incoming token from the client against the specified regular expression. It will invoke the authorizer's Lambda function when there is a match. Otherwise, it will return a 401 Unauthorized response without calling the Lambda function. The validation expression does not apply to the <code>REQUEST</code> authorizer.</p>
+    #[serde(rename = "identityValidationExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_validation_expression: Option<String>,
+    /// <p>[Required] The name of the authorizer.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A list of the Amazon Cognito user pool ARNs for the <code>COGNITO_USER_POOLS</code> authorizer. Each element is of this format: <code>arn:aws:cognito-idp:{region}:{account_id}:userpool/{user_pool_id}</code>. For a <code>TOKEN</code> or <code>REQUEST</code> authorizer, this is not defined. </p>
+    #[serde(rename = "providerARNs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider_ar_ns: Option<Vec<String>>,
+    /// <p>The authorizer type. Valid values are <code>TOKEN</code> for a Lambda function using a single authorization token submitted in a custom header, <code>REQUEST</code> for a Lambda function using incoming request parameters, and <code>COGNITO_USER_POOLS</code> for using an Amazon Cognito user pool.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 /// <p>Request to describe an existing <a>Authorizers</a> resource.</p>
@@ -1345,6 +1937,19 @@ pub struct GetAuthorizersRequest {
     pub rest_api_id: String,
 }
 
+/// <p><p>Represents a collection of <a>Authorizer</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorization</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetAuthorizersResponse {
+    /// <p>The current page of elements from this collection.</p>
+    #[serde(rename = "items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<Authorizer>>,
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+}
+
 /// <p>Request to describe a <a>BasePathMapping</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetBasePathMappingRequest {
@@ -1354,6 +1959,24 @@ pub struct GetBasePathMappingRequest {
     /// <p>[Required] The domain name of the <a>BasePathMapping</a> resource to be described.</p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
+}
+
+/// <p><p>Represents the base path that callers of the API must provide as part of the URL after the domain name.</p> <div class="remarks">A custom domain name plus a <code>BasePathMapping</code> specification identifies a deployed <a>RestApi</a> in a given stage of the owner <a>Account</a>.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Custom Domain Names</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetBasePathMappingResponse {
+    /// <p>The base path name that callers of the API must provide as part of the URL after the domain name.</p>
+    #[serde(rename = "basePath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_path: Option<String>,
+    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    #[serde(rename = "restApiId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rest_api_id: Option<String>,
+    /// <p>The name of the associated stage.</p>
+    #[serde(rename = "stage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage: Option<String>,
 }
 
 /// <p>A request to get information about a collection of <a>BasePathMapping</a> resources.</p>
@@ -1372,12 +1995,55 @@ pub struct GetBasePathMappingsRequest {
     pub position: Option<String>,
 }
 
+/// <p><p>Represents a collection of <a>BasePathMapping</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Custom Domain Names</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetBasePathMappingsResponse {
+    /// <p>The current page of elements from this collection.</p>
+    #[serde(rename = "items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<BasePathMapping>>,
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+}
+
 /// <p>A request to get information about the current <a>ClientCertificate</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetClientCertificateRequest {
     /// <p>[Required] The identifier of the <a>ClientCertificate</a> resource to be described.</p>
     #[serde(rename = "clientCertificateId")]
     pub client_certificate_id: String,
+}
+
+/// <p><p>Represents a client certificate used to configure client-side SSL authentication while sending requests to the integration endpoint.</p> <div class="remarks">Client certificates are used to authenticate an API by the backend server. To authenticate an API client (or user), use IAM roles and policies, a custom <a>Authorizer</a> or an Amazon Cognito user pool.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html">Use Client-Side Certificate</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetClientCertificateResponse {
+    /// <p>The identifier of the client certificate.</p>
+    #[serde(rename = "clientCertificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_certificate_id: Option<String>,
+    /// <p>The timestamp when the client certificate was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The description of the client certificate.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The timestamp when the client certificate will expire.</p>
+    #[serde(rename = "expirationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiration_date: Option<f64>,
+    /// <p>The PEM-encoded public key of the client certificate, which can be used to configure certificate authentication in the integration endpoint .</p>
+    #[serde(rename = "pemEncodedCertificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pem_encoded_certificate: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>A request to get information about a collection of <a>ClientCertificate</a> resources.</p>
@@ -1388,6 +2054,19 @@ pub struct GetClientCertificatesRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
     /// <p>The current pagination position in the paged result set.</p>
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+}
+
+/// <p><p>Represents a collection of <a>ClientCertificate</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html">Use Client-Side Certificate</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetClientCertificatesResponse {
+    /// <p>The current page of elements from this collection.</p>
+    #[serde(rename = "items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<ClientCertificate>>,
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
@@ -1408,6 +2087,30 @@ pub struct GetDeploymentRequest {
     pub rest_api_id: String,
 }
 
+/// <p><p>An immutable representation of a <a>RestApi</a> resource that can be called by users using <a>Stages</a>. A deployment must be associated with a <a>Stage</a> for it to be callable over the Internet.</p> <div class="remarks">To create a deployment, call <code>POST</code> on the <a>Deployments</a> resource of a <a>RestApi</a>. To view, update, or delete a deployment, call <code>GET</code>, <code>PATCH</code>, or <code>DELETE</code> on the specified deployment resource (<code>/restapis/{restapi<em>id}/deployments/{deployment</em>id}</code>).</div> <div class="seeAlso"><a>RestApi</a>, <a>Deployments</a>, <a>Stage</a>, <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-deployment.html">AWS CLI</a>, <a href="https://aws.amazon.com/tools/">AWS SDKs</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetDeploymentResponse {
+    /// <p>A summary of the <a>RestApi</a> at the date and time that the deployment resource was created.</p>
+    #[serde(rename = "apiSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_summary: Option<
+        ::std::collections::HashMap<String, ::std::collections::HashMap<String, MethodSnapshot>>,
+    >,
+    /// <p>The date and time that the deployment resource was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The description for the deployment resource.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier for the deployment resource.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+}
+
 /// <p>Requests API Gateway to get information about a <a>Deployments</a> collection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDeploymentsRequest {
@@ -1424,6 +2127,19 @@ pub struct GetDeploymentsRequest {
     pub rest_api_id: String,
 }
 
+/// <p><p>Represents a collection resource that contains zero or more references to your existing deployments, and links that guide you on how to interact with your collection. The collection offers a paginated view of the contained deployments.</p> <div class="remarks">To create a new deployment of a <a>RestApi</a>, make a <code>POST</code> request against this resource. To view, update, or delete an existing deployment, make a <code>GET</code>, <code>PATCH</code>, or <code>DELETE</code> request, respectively, on a specified <a>Deployment</a> resource.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html">Deploying an API</a>, <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-deployment.html">AWS CLI</a>, <a href="https://aws.amazon.com/tools/">AWS SDKs</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetDeploymentsResponse {
+    /// <p>The current page of elements from this collection.</p>
+    #[serde(rename = "items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<Deployment>>,
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+}
+
 /// <p>Gets a specified documentation part of a given API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDocumentationPartRequest {
@@ -1433,6 +2149,24 @@ pub struct GetDocumentationPartRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p><p>A documentation part for a targeted API entity.</p> <div class="remarks"> <p>A documentation part consists of a content map (<code>properties</code>) and a target (<code>location</code>). The target specifies an API entity to which the documentation content applies. The supported API entity types are <code>API</code>, <code>AUTHORIZER</code>, <code>MODEL</code>, <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH<em>PARAMETER</code>, <code>QUERY</em>PARAMETER</code>, <code>REQUEST<em>HEADER</code>, <code>REQUEST</em>BODY</code>, <code>RESPONSE</code>, <code>RESPONSE<em>HEADER</code>, and <code>RESPONSE</em>BODY</code>. Valid <code>location</code> fields depend on the API entity type. All valid fields are not required.</p> <p>The content map is a JSON string of API-specific key-value pairs. Although an API can use any shape for the content map, only the OpenAPI-compliant documentation fields will be injected into the associated API entity definition in the exported OpenAPI definition file.</p></div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationParts</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetDocumentationPartResponse {
+    /// <p>The <a>DocumentationPart</a> identifier, generated by API Gateway when the <code>DocumentationPart</code> is created.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The location of the API entity to which the documentation applies. Valid fields depend on the targeted API entity type. All the valid location fields are not required. If not explicitly specified, a valid location field is treated as a wildcard and associated documentation content may be inherited by matching entities, unless overridden.</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<DocumentationPartLocation>,
+    /// <p>A content map of API-specific key-value pairs describing the targeted API entity. The map must be encoded as a JSON string, e.g., <code>"{ \"description\": \"The API does ...\" }"</code>. Only OpenAPI-compliant documentation-related fields from the <literal>properties</literal> map are exported and, hence, published as part of the API entity definitions, while the original documentation parts are exported in a OpenAPI extension of <code>x-amazon-apigateway-documentation</code>.</p>
+    #[serde(rename = "properties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub properties: Option<String>,
 }
 
 /// <p>Gets the documentation parts of an API. The result may be filtered by the type, name, or path of API entities (targets).</p>
@@ -1467,6 +2201,19 @@ pub struct GetDocumentationPartsRequest {
     pub type_: Option<String>,
 }
 
+/// <p><p>The collection of documentation parts of an API.</p> <div class="remarks"/> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetDocumentationPartsResponse {
+    /// <p>The current page of elements from this collection.</p>
+    #[serde(rename = "items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<DocumentationPart>>,
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+}
+
 /// <p>Gets a documentation snapshot of an API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDocumentationVersionRequest {
@@ -1476,6 +2223,24 @@ pub struct GetDocumentationVersionRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p><p>A snapshot of the documentation of an API.</p> <div class="remarks"><p>Publishing API documentation involves creating a documentation version associated with an API stage and exporting the versioned documentation to an external (e.g., OpenAPI) file.</p></div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a>, <a>DocumentationVersions</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetDocumentationVersionResponse {
+    /// <p>The date when the API documentation snapshot is created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The description of the API documentation snapshot.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The version identifier of the API documentation snapshot.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
 }
 
 /// <p>Gets the documentation versions of an API.</p>
@@ -1494,12 +2259,79 @@ pub struct GetDocumentationVersionsRequest {
     pub rest_api_id: String,
 }
 
+/// <p><p>The collection of documentation snapshots of an API. </p> <div class="remarks"><p>Use the <a>DocumentationVersions</a> to manage documentation snapshots associated with various API stages.</p></div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a>, <a>DocumentationVersion</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetDocumentationVersionsResponse {
+    /// <p>The current page of elements from this collection.</p>
+    #[serde(rename = "items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<DocumentationVersion>>,
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+}
+
 /// <p>Request to get the name of a <a>DomainName</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDomainNameRequest {
     /// <p>[Required] The name of the <a>DomainName</a> resource.</p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
+}
+
+/// <p><p>Represents a custom domain name as a user-friendly host name of an API (<a>RestApi</a>).</p> <div class="Remarks"> <p>When you deploy an API, API Gateway creates a default host name for the API. This default API host name is of the <code>{restapi-id}.execute-api.{region}.amazonaws.com</code> format. With the default host name, you can access the API&#39;s root resource with the URL of <code>https://{restapi-id}.execute-api.{region}.amazonaws.com/{stage}/</code>. When you set up a custom domain name of <code>apis.example.com</code> for this API, you can then access the same resource using the URL of the <code>https://apis.examples.com/myApi</code>, where <code>myApi</code> is the base path mapping (<a>BasePathMapping</a>) of your API under the custom domain name. </p> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Set a Custom Host Name for an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetDomainNameResponse {
+    /// <p>The reference to an AWS-managed certificate that will be used by edge-optimized endpoint for this domain name. AWS Certificate Manager is the only supported source.</p>
+    #[serde(rename = "certificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_arn: Option<String>,
+    /// <p>The name of the certificate that will be used by edge-optimized endpoint for this domain name.</p>
+    #[serde(rename = "certificateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_name: Option<String>,
+    /// <p>The timestamp when the certificate that was used by edge-optimized endpoint for this domain name was uploaded.</p>
+    #[serde(rename = "certificateUploadDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_upload_date: Option<f64>,
+    /// <p>The domain name of the Amazon CloudFront distribution associated with this custom domain name for an edge-optimized endpoint. You set up this association when adding a DNS record pointing the custom domain name to this distribution name. For more information about CloudFront distributions, see the <a href="https://aws.amazon.com/documentation/cloudfront/" target="_blank">Amazon CloudFront documentation</a>.</p>
+    #[serde(rename = "distributionDomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub distribution_domain_name: Option<String>,
+    /// <p>The region-agnostic Amazon Route 53 Hosted Zone ID of the edge-optimized endpoint. The valid value is <code>Z2FDTNDATAQYW2</code> for all the regions. For more information, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-regional-api-custom-domain-create.html">Set up a Regional Custom Domain Name</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#apigateway_region">AWS Regions and Endpoints for API Gateway</a>. </p>
+    #[serde(rename = "distributionHostedZoneId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub distribution_hosted_zone_id: Option<String>,
+    /// <p>The custom domain name as an API host name, for example, <code>my-api.example.com</code>.</p>
+    #[serde(rename = "domainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>The endpoint configuration of this <a>DomainName</a> showing the endpoint types of the domain name. </p>
+    #[serde(rename = "endpointConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_configuration: Option<EndpointConfiguration>,
+    /// <p>The reference to an AWS-managed certificate that will be used for validating the regional domain name. AWS Certificate Manager is the only supported source.</p>
+    #[serde(rename = "regionalCertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regional_certificate_arn: Option<String>,
+    /// <p>The name of the certificate that will be used for validating the regional domain name.</p>
+    #[serde(rename = "regionalCertificateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regional_certificate_name: Option<String>,
+    /// <p>The domain name associated with the regional endpoint for this custom domain name. You set up this association by adding a DNS record that points the custom domain name to this regional domain name. The regional domain name is returned by API Gateway when you create a regional endpoint.</p>
+    #[serde(rename = "regionalDomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regional_domain_name: Option<String>,
+    /// <p>The region-specific Amazon Route 53 Hosted Zone ID of the regional endpoint. For more information, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-regional-api-custom-domain-create.html">Set up a Regional Custom Domain Name</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#apigateway_region">AWS Regions and Endpoints for API Gateway</a>. </p>
+    #[serde(rename = "regionalHostedZoneId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regional_hosted_zone_id: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Request to describe a collection of <a>DomainName</a> resources.</p>
@@ -1510,6 +2342,19 @@ pub struct GetDomainNamesRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
     /// <p>The current pagination position in the paged result set.</p>
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+}
+
+/// <p><p>Represents a collection of <a>DomainName</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Client-Side Certificate</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetDomainNamesResponse {
+    /// <p>The current page of elements from this collection.</p>
+    #[serde(rename = "items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<DomainName>>,
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
@@ -1537,6 +2382,17 @@ pub struct GetExportRequest {
     pub stage_name: String,
 }
 
+/// <p>The binary blob response to <a>GetExport</a>, which contains the generated SDK.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetExportResponse {
+    /// <p>The binary blob response to <a>GetExport</a>, which contains the export.</p>
+    pub body: Option<bytes::Bytes>,
+    /// <p>The content-disposition header value in the HTTP response.</p>
+    pub content_disposition: Option<String>,
+    /// <p>The content-type header value in the HTTP response. This will correspond to a valid 'accept' type in the request.</p>
+    pub content_type: Option<String>,
+}
+
 /// <p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetGatewayResponseRequest {
@@ -1546,6 +2402,32 @@ pub struct GetGatewayResponseRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p><p>A gateway response of a given response type and status code, with optional response parameters and mapping templates.</p> <div class="remarks"> For more information about valid gateway response types, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html">Gateway Response Types Supported by API Gateway</a> <div class="example"> <h4>Example: Get a Gateway Response of a given response type</h4> <h5>Request</h5> <p>This example shows how to get a gateway response of the <code>MISSING<em>AUTHENTICATION</em>TOKEN</code> type.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T202516Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature=1b52460e3159c1a26cff29093855d50ea141c1c5b937528fecaf60f51129697a Cache-Control: no-cache Postman-Token: 3b2a1ce9-c848-2e26-2e2f-9c2caefbed45 </code></pre> <p>The response type is specified as a URL path.</p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;</em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html&quot;, &quot;name&quot;: &quot;gatewayresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, &quot;gatewayresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING</em>AUTHENTICATION<em>TOKEN&quot; } }, &quot;defaultResponse&quot;: false, &quot;responseParameters&quot;: { &quot;gatewayresponse.header.x-request-path&quot;: &quot;method.request.path.petId&quot;, &quot;gatewayresponse.header.Access-Control-Allow-Origin&quot;: &quot;&apos;a.b.c&apos;&quot;, &quot;gatewayresponse.header.x-request-query&quot;: &quot;method.request.querystring.q&quot;, &quot;gatewayresponse.header.x-request-header&quot;: &quot;method.request.header.Accept&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{\n &quot;message&quot;: $context.error.messageString,\n &quot;type&quot;: &quot;$context.error.responseType&quot;,\n &quot;stage&quot;: &quot;$context.stage&quot;,\n &quot;resourcePath&quot;: &quot;$context.resourcePath&quot;,\n &quot;stageVariables.a&quot;: &quot;$stageVariables.a&quot;,\n &quot;statusCode&quot;: &quot;&apos;404&apos;&quot;\n}&quot; }, &quot;responseType&quot;: &quot;MISSING</em>AUTHENTICATION_TOKEN&quot;, &quot;statusCode&quot;: &quot;404&quot; }</code></pre> <p></p> </div> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html">Customize Gateway Responses</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetGatewayResponseResponse {
+    /// <p>A Boolean flag to indicate whether this <a>GatewayResponse</a> is the default gateway response (<code>true</code>) or not (<code>false</code>). A default gateway response is one generated by API Gateway without any customization by an API developer. </p>
+    #[serde(rename = "defaultResponse")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_response: Option<bool>,
+    /// <p>Response parameters (paths, query strings and headers) of the <a>GatewayResponse</a> as a string-to-string map of key-value pairs.</p>
+    #[serde(rename = "responseParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Response templates of the <a>GatewayResponse</a> as a string-to-string map of key-value pairs.</p>
+    #[serde(rename = "responseTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPE</li></ul> </p>
+    #[serde(rename = "responseType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_type: Option<String>,
+    /// <p>The HTTP status code for this <a>GatewayResponse</a>.</p>
+    #[serde(rename = "statusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_code: Option<String>,
 }
 
 /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
@@ -1564,6 +2446,19 @@ pub struct GetGatewayResponsesRequest {
     pub rest_api_id: String,
 }
 
+/// <p><p>The collection of the <a>GatewayResponse</a> instances of a <a>RestApi</a> as a <code>responseType</code>-to-<a>GatewayResponse</a> object map of key-value pairs. As such, pagination is not supported for querying this collection.</p> <div class="remarks"> For more information about valid gateway response types, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html">Gateway Response Types Supported by API Gateway</a> <div class="example"> <h4>Example: Get the collection of gateway responses of an API</h4> <h5>Request</h5> <p>This example request shows how to retrieve the <a>GatewayResponses</a> collection from an API.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T220604Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature=59b42fe54a76a5de8adf2c67baa6d39206f8e9ad49a1d77ccc6a5da3103a398a Cache-Control: no-cache Postman-Token: 5637af27-dc29-fc5c-9dfe-0645d52cb515 </code></pre> <p></p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;</em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html&quot;, &quot;name&quot;: &quot;gatewayresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses&quot; }, &quot;first&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses&quot; }, &quot;gatewayresponse:by-type&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;item&quot;: [ { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION</em>FAILURE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE<em>NOT</em>FOUND&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST<em>TOO</em>LARGE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED<em>MEDIA</em>TYPE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>CONFIGURATION</em>ERROR&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>5XX&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>4XX&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>PARAMETERS&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>BODY&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED<em>TOKEN&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS</em>DENIED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>API</em>KEY&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API<em>CONFIGURATION</em>ERROR&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA<em>EXCEEDED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION</em>TIMEOUT&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>SIGNATURE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER</em>FAILURE&quot; } ] }, &quot;<em>embedded&quot;: { &quot;item&quot;: [ { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>FAILURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>FAILURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INTEGRATION</em>FAILURE&quot;, &quot;statusCode&quot;: &quot;504&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE</em>NOT<em>FOUND&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE<em>NOT</em>FOUND&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;RESOURCE<em>NOT</em>FOUND&quot;, &quot;statusCode&quot;: &quot;404&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST</em>TOO<em>LARGE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST<em>TOO</em>LARGE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;REQUEST<em>TOO</em>LARGE&quot;, &quot;statusCode&quot;: &quot;413&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;THROTTLED&quot;, &quot;statusCode&quot;: &quot;429&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED</em>MEDIA<em>TYPE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED<em>MEDIA</em>TYPE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;UNSUPPORTED<em>MEDIA</em>TYPE&quot;, &quot;statusCode&quot;: &quot;415&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER</em>CONFIGURATION<em>ERROR&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>CONFIGURATION</em>ERROR&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;AUTHORIZER<em>CONFIGURATION</em>ERROR&quot;, &quot;statusCode&quot;: &quot;500&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>5XX&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>5XX&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;DEFAULT<em>5XX&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>4XX&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>4XX&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;DEFAULT</em>4XX&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD</em>REQUEST<em>PARAMETERS&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>PARAMETERS&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;BAD<em>REQUEST</em>PARAMETERS&quot;, &quot;statusCode&quot;: &quot;400&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD</em>REQUEST<em>BODY&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>BODY&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;BAD<em>REQUEST</em>BODY&quot;, &quot;statusCode&quot;: &quot;400&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED</em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED</em>TOKEN&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;EXPIRED<em>TOKEN&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS<em>DENIED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS<em>DENIED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;ACCESS</em>DENIED&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>API<em>KEY&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>API</em>KEY&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INVALID<em>API</em>KEY&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;UNAUTHORIZED&quot;, &quot;statusCode&quot;: &quot;401&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API</em>CONFIGURATION<em>ERROR&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API<em>CONFIGURATION</em>ERROR&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;API<em>CONFIGURATION</em>ERROR&quot;, &quot;statusCode&quot;: &quot;500&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA</em>EXCEEDED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA</em>EXCEEDED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;QUOTA<em>EXCEEDED&quot;, &quot;statusCode&quot;: &quot;429&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>TIMEOUT&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>TIMEOUT&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INTEGRATION</em>TIMEOUT&quot;, &quot;statusCode&quot;: &quot;504&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING</em>AUTHENTICATION<em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;MISSING<em>AUTHENTICATION</em>TOKEN&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>SIGNATURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>SIGNATURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INVALID<em>SIGNATURE&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>FAILURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>FAILURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;AUTHORIZER</em>FAILURE&quot;, &quot;statusCode&quot;: &quot;500&quot; } ] } }</code></pre> <p></p> </div> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html">Customize Gateway Responses</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetGatewayResponsesResponse {
+    /// <p>Returns the entire collection, because of no pagination support.</p>
+    #[serde(rename = "items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<GatewayResponse>>,
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+}
+
 /// <p>Represents a request to get the integration configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetIntegrationRequest {
@@ -1576,6 +2471,68 @@ pub struct GetIntegrationRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p><p>Represents an HTTP, HTTP<em>PROXY, AWS, AWS</em>PROXY, or Mock integration.</p> <div class="remarks">In the API Gateway console, the built-in Lambda integration is an AWS integration.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetIntegrationResponse {
+    /// <p>Specifies the integration's cache key parameters.</p>
+    #[serde(rename = "cacheKeyParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_key_parameters: Option<Vec<String>>,
+    /// <p>Specifies the integration's cache namespace.</p>
+    #[serde(rename = "cacheNamespace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_namespace: Option<String>,
+    /// <p>The (<a href="https://docs.aws.amazon.com/apigateway/api-reference/resource/vpc-link/#id"><code>id</code></a>) of the <a>VpcLink</a> used for the integration when <code>connectionType=VPC_LINK</code> and undefined, otherwise.</p>
+    #[serde(rename = "connectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_id: Option<String>,
+    /// <p>The type of the network connection to the integration endpoint. The valid value is <code>INTERNET</code> for connections through the public routable internet or <code>VPC_LINK</code> for private connections between API Gateway and a network load balancer in a VPC. The default value is <code>INTERNET</code>.</p>
+    #[serde(rename = "connectionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_type: Option<String>,
+    /// <p>Specifies how to handle request payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a request payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a request payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the request payload will be passed through from the method request to integration request without modification, provided that the <code>passthroughBehaviors</code> is configured to support payload pass-through.</p>
+    #[serde(rename = "contentHandling")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_handling: Option<String>,
+    /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string <code>arn:aws:iam::\*:user/\*</code>. To use resource-based permissions on supported AWS services, specify null.</p>
+    #[serde(rename = "credentials")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub credentials: Option<String>,
+    /// <p>Specifies the integration's HTTP method type.</p>
+    #[serde(rename = "httpMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_method: Option<String>,
+    /// <p><p>Specifies the integration&#39;s responses.</p> <div class="remarks"> <p/> <h4>Example: Get integration responses of a method</h4> <h5>Request</h5> <p/> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200 HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160607T191449Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160607/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash} </code></pre> <h5>Response</h5> <p>The successful response returns <code>200 OK</code> status and a payload as follows:</p> <pre><code>{ &quot;_links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html&quot;, &quot;name&quot;: &quot;integrationresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integrationresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; }, &quot;integrationresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; } }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: &quot;&#39;application/xml&#39;&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;$util.urlDecode(&quot;%3CkinesisStreams%3E#foreach($stream in $input.path(&#39;$.StreamNames&#39;))%3Cstream%3E%3Cname%3E$stream%3C/name%3E%3C/stream%3E#end%3C/kinesisStreams%3E&quot;)\n&quot; }, &quot;statusCode&quot;: &quot;200&quot; }</code></pre> <p/> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
+    #[serde(rename = "integrationResponses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_responses: Option<::std::collections::HashMap<String, IntegrationResponse>>,
+    /// <div> <p> Specifies how the method request body of an unmapped content type will be passed through the integration request to the back end without transformation. A content type is unmapped if no mapping template is defined in the integration or the content type does not match any of the mapped content types, as specified in <code>requestTemplates</code>. The valid value is one of the following: </p> <ul> <li> <code>WHEN_NO_MATCH</code>: passes the method request body through the integration request to the back end without transformation when the method request content type does not match any content type associated with the mapping templates defined in the integration request. </li> <li> <code>WHEN_NO_TEMPLATES</code>: passes the method request body through the integration request to the back end without transformation when no mapping template is defined in the integration request. If a template is defined when this option is selected, the method request of an unmapped content-type will be rejected with an HTTP <code>415 Unsupported Media Type</code> response. </li> <li> <code>NEVER</code>: rejects the method request with an HTTP <code>415 Unsupported Media Type</code> response when either the method request content type does not match any content type associated with the mapping templates defined in the integration request or no mapping template is defined in the integration request. </li> </ul> </div>
+    #[serde(rename = "passthroughBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub passthrough_behavior: Option<String>,
+    /// <p>A key-value map specifying request parameters that are passed from the method request to the back end. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the back end. The method request parameter value must match the pattern of <code>method.request.{location}.{name}</code>, where <code>location</code> is <code>querystring</code>, <code>path</code>, or <code>header</code> and <code>name</code> must be a valid and unique method request parameter name.</p>
+    #[serde(rename = "requestParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value.</p>
+    #[serde(rename = "requestTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds.</p>
+    #[serde(rename = "timeoutInMillis")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout_in_millis: Option<i64>,
+    /// <p>Specifies an API method integration type. The valid value is one of the following:</p> <ul> <li><code>AWS</code>: for integrating the API method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration.</li> <li><code>AWS_PROXY</code>: for integrating the API method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as the Lambda proxy integration.</li> <li><code>HTTP</code>: for integrating the API method request with an HTTP endpoint, including a private HTTP endpoint within a VPC. This integration is also referred to as the HTTP custom integration.</li> <li><code>HTTP_PROXY</code>: for integrating the API method request with an HTTP endpoint, including a private HTTP endpoint within a VPC, with the client request passed through as-is. This is also referred to as the HTTP proxy integration.</li> <li><code>MOCK</code>: for integrating the API method request with API Gateway as a "loop-back" endpoint without invoking any backend.</li> </ul> <p>For the HTTP and HTTP proxy integrations, each integration can specify a protocol (<code>http/https</code>), port and path. Standard 80 and 443 ports are supported as well as custom ports above 1024. An HTTP or HTTP proxy integration with a <code>connectionType</code> of <code>VPC_LINK</code> is referred to as a private integration and uses a <a>VpcLink</a> to connect API Gateway to a network load balancer of a VPC.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p><p>Specifies Uniform Resource Identifier (URI) of the integration endpoint.</p> <ul> <li><p> For <code>HTTP</code> or <code>HTTP<em>PROXY</code> integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the &lt;a target=&quot;</em>blank&quot; href=&quot;https://en.wikipedia.org/wiki/Uniform<em>Resource</em>Identifier&quot;&gt;RFC-3986 specification</a>, for either standard integration, where <code>connectionType</code> is not <code>VPC<em>LINK</code>, or private integration, where <code>connectionType</code> is <code>VPC</em>LINK</code>. For a private HTTP integration, the URI is not used for routing. </p> </li> <li><p> For <code>AWS</code> or <code>AWS<em>PROXY</code> integrations, the URI is of the form <code>arn:aws:apigateway:{region}:{subdomain.service|service}:path|action/{service</em>api}</code>. Here, <code>{Region}</code> is the API Gateway region (e.g., <code>us-east-1</code>); <code>{service}</code> is the name of the integrated AWS service (e.g., <code>s3</code>); and <code>{subdomain}</code> is a designated subdomain supported by certain AWS service for fast host-name lookup. <code>action</code> can be used for an AWS service action-based API, using an <code>Action={name}&amp;{p1}={v1}&amp;p2={v2}...</code> query string. The ensuing <code>{service<em>api}</code> refers to a supported action <code>{name}</code> plus any required input parameters. Alternatively, <code>path</code> can be used for an AWS service path-based API. The ensuing <code>service</em>api</code> refers to the path to an AWS service resource, including the region of the integrated AWS service, if applicable. For example, for integration with the S3 API of <code><a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGET.html">GetObject</a></code>, the <code>uri</code> can be either <code>arn:aws:apigateway:us-west-2:s3:action/GetObject&amp;Bucket={bucket}&amp;Key={key}</code> or <code>arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}</code></p> </li></ul></p>
+    #[serde(rename = "uri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub uri: Option<String>,
 }
 
 /// <p>Represents a get integration response request.</p>
@@ -1595,6 +2552,32 @@ pub struct GetIntegrationResponseRequest {
     pub status_code: String,
 }
 
+/// <p><p>Represents an integration response. The status code must map to an existing <a>MethodResponse</a>, and parameters and templates can be used to transform the back-end response.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetIntegrationResponseResponse {
+    /// <p>Specifies how to handle response payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a response payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the response payload will be passed through from the integration response to the method response without modification.</p>
+    #[serde(rename = "contentHandling")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_handling: Option<String>,
+    /// <p>A key-value map specifying response parameters that are passed to the method response from the back end. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of <code>method.response.header.{name}</code>, where <code>name</code> is a valid and unique header name. The mapped non-static value must match the pattern of <code>integration.response.header.{name}</code> or <code>integration.response.body.{JSON-expression}</code>, where <code>name</code> is a valid and unique response header name and <code>JSON-expression</code> is a valid JSON expression without the <code>$</code> prefix.</p>
+    #[serde(rename = "responseParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Specifies the templates used to transform the integration response body. Response templates are represented as a key/value map, with a content-type as the key and a template as the value.</p>
+    #[serde(rename = "responseTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Specifies the regular expression (regex) pattern used to choose an integration response based on the response from the back end. For example, if the success response returns nothing and the error response returns some string, you could use the <code>.+</code> regex to match error response. However, make sure that the error response does not contain any newline (<code>\n</code>) character in such cases. If the back end is an AWS Lambda function, the AWS Lambda function error header is matched. For all other HTTP and AWS back ends, the HTTP status code is matched.</p>
+    #[serde(rename = "selectionPattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub selection_pattern: Option<String>,
+    /// <p>Specifies the status code that is used to map the integration response to an existing <a>MethodResponse</a>.</p>
+    #[serde(rename = "statusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_code: Option<String>,
+}
+
 /// <p>Request to describe an existing <a>Method</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetMethodRequest {
@@ -1607,6 +2590,56 @@ pub struct GetMethodRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p><p> Represents a client-facing interface by which the client calls the API to access back-end resources. A <b>Method</b> resource is integrated with an <a>Integration</a> resource. Both consist of a request and one or more responses. The method request takes the client input that is passed to the back end through the integration request. A method response returns the output from the back end to the client through an integration response. A method request is embodied in a <b>Method</b> resource, whereas an integration request is embodied in an <a>Integration</a> resource. On the other hand, a method response is represented by a <a>MethodResponse</a> resource, whereas an integration response is represented by an <a>IntegrationResponse</a> resource. </p> <div class="remarks"> <p/> <h4>Example: Retrive the GET method on a specified resource</h4> <h5>Request</h5> <p>The following example request retrieves the information about the GET method on an API resource (<code>3kzxbg5sa2</code>) of an API (<code>fugvjdxtri</code>). </p> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160603T210259Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160603/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;<em>links&quot;: { &quot;curies&quot;: [ { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html&quot;, &quot;name&quot;: &quot;integration&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html&quot;, &quot;name&quot;: &quot;integrationresponse&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-{rel}.html&quot;, &quot;name&quot;: &quot;method&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true } ], &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot;, &quot;name&quot;: &quot;GET&quot;, &quot;title&quot;: &quot;GET&quot; }, &quot;integration:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;method:integration&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;method:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;methodresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/{status</em>code}&quot;, &quot;templated&quot;: true } }, &quot;apiKeyRequired&quot;: true, &quot;authorizationType&quot;: &quot;NONE&quot;, &quot;httpMethod&quot;: &quot;GET&quot;, &quot;<em>embedded&quot;: { &quot;method:integration&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integration:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integrationresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/{status<em>code}&quot;, &quot;templated&quot;: true } }, &quot;cacheKeyParameters&quot;: [], &quot;cacheNamespace&quot;: &quot;3kzxbg5sa2&quot;, &quot;credentials&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;httpMethod&quot;: &quot;POST&quot;, &quot;passthroughBehavior&quot;: &quot;WHEN</em>NO<em>MATCH&quot;, &quot;requestParameters&quot;: { &quot;integration.request.header.Content-Type&quot;: &quot;&#39;application/x-amz-json-1.1&#39;&quot; }, &quot;requestTemplates&quot;: { &quot;application/json&quot;: &quot;{\n}&quot; }, &quot;type&quot;: &quot;AWS&quot;, &quot;uri&quot;: &quot;arn:aws:apigateway:us-east-1:kinesis:action/ListStreams&quot;, &quot;</em>embedded&quot;: { &quot;integration:responses&quot;: { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integrationresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; }, &quot;integrationresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; } }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: &quot;&#39;application/xml&#39;&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;$util.urlDecode(&quot;%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E&quot;)&quot; }, &quot;statusCode&quot;: &quot;200&quot; } } }, &quot;method:responses&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; } } }</code></pre> <p>In the example above, the response template for the <code>200 OK</code> response maps the JSON output from the <code>ListStreams</code> action in the back end to an XML output. The mapping template is URL-encoded as <code>%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E</code> and the output is decoded using the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html#util-templat-reference">$util.urlDecode()</a> helper function.</p> </div> <div class="seeAlso"> <a>MethodResponse</a>, <a>Integration</a>, <a>IntegrationResponse</a>, <a>Resource</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-method-settings.html">Set up an API&#39;s method</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetMethodResponse {
+    /// <p>A boolean flag specifying whether a valid <a>ApiKey</a> is required to invoke this method.</p>
+    #[serde(rename = "apiKeyRequired")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_required: Option<bool>,
+    /// <p>A list of authorization scopes configured on the method. The scopes are used with a <code>COGNITO_USER_POOLS</code> authorizer to authorize the method invocation. The authorization works by matching the method scopes against the scopes parsed from the access token in the incoming request. The method invocation is authorized if any method scopes matches a claimed scope in the access token. Otherwise, the invocation is not authorized. When the method scope is configured, the client must provide an access token instead of an identity token for authorization purposes.</p>
+    #[serde(rename = "authorizationScopes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_scopes: Option<Vec<String>>,
+    /// <p>The method's authorization type. Valid values are <code>NONE</code> for open access, <code>AWS_IAM</code> for using AWS IAM permissions, <code>CUSTOM</code> for using a custom authorizer, or <code>COGNITO_USER_POOLS</code> for using a Cognito user pool.</p>
+    #[serde(rename = "authorizationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_type: Option<String>,
+    /// <p>The identifier of an <a>Authorizer</a> to use on this method. The <code>authorizationType</code> must be <code>CUSTOM</code>.</p>
+    #[serde(rename = "authorizerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_id: Option<String>,
+    /// <p>The method's HTTP verb.</p>
+    #[serde(rename = "httpMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_method: Option<String>,
+    /// <p><p>Gets the method&#39;s integration responsible for passing the client-submitted request to the back end and performing necessary transformations to make the request compliant with the back end.</p> <div class="remarks"> <p/> <h4>Example: </h4> <h5>Request</h5> <p/> <pre><code>GET /restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com Content-Length: 117 X-Amz-Date: 20160613T213210Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160613/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;<em>links&quot;: { &quot;curies&quot;: [ { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html&quot;, &quot;name&quot;: &quot;integration&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html&quot;, &quot;name&quot;: &quot;integrationresponse&quot;, &quot;templated&quot;: true } ], &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration&quot; }, &quot;integration:delete&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration&quot; }, &quot;integration:responses&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integration:update&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration&quot; }, &quot;integrationresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/{status</em>code}&quot;, &quot;templated&quot;: true } }, &quot;cacheKeyParameters&quot;: [], &quot;cacheNamespace&quot;: &quot;0cjtch&quot;, &quot;credentials&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;httpMethod&quot;: &quot;POST&quot;, &quot;passthroughBehavior&quot;: &quot;WHEN<em>NO</em>MATCH&quot;, &quot;requestTemplates&quot;: { &quot;application/json&quot;: &quot;{\n &quot;a&quot;: &quot;$input.params(&#39;operand1&#39;)&quot;,\n &quot;b&quot;: &quot;$input.params(&#39;operand2&#39;)&quot;, \n &quot;op&quot;: &quot;$input.params(&#39;operator&#39;)&quot; \n}&quot; }, &quot;type&quot;: &quot;AWS&quot;, &quot;uri&quot;: &quot;arn:aws:apigateway:us-west-2:lambda:path//2015-03-31/functions/arn:aws:lambda:us-west-2:123456789012:function:Calc/invocations&quot;, &quot;<em>embedded&quot;: { &quot;integration:responses&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integrationresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200&quot; }, &quot;integrationresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200&quot; } }, &quot;responseParameters&quot;: { &quot;method.response.header.operator&quot;: &quot;integration.response.body.op&quot;, &quot;method.response.header.operand<em>2&quot;: &quot;integration.response.body.b&quot;, &quot;method.response.header.operand</em>1&quot;: &quot;integration.response.body.a&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;#set($res = $input.path(&#39;$&#39;))\n{\n &quot;result&quot;: &quot;$res.a, $res.b, $res.op =&gt; $res.c&quot;,\n &quot;a&quot; : &quot;$res.a&quot;,\n &quot;b&quot; : &quot;$res.b&quot;,\n &quot;op&quot; : &quot;$res.op&quot;,\n &quot;c&quot; : &quot;$res.c&quot;\n}&quot; }, &quot;selectionPattern&quot;: &quot;&quot;, &quot;statusCode&quot;: &quot;200&quot; } } }</code></pre> <p/> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-integration.html">AWS CLI</a> </div></p>
+    #[serde(rename = "methodIntegration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub method_integration: Option<Integration>,
+    /// <p><p>Gets a method response associated with a given HTTP status code. </p> <div class="remarks"> <p>The collection of method responses are encapsulated in a key-value map, where the key is a response&#39;s HTTP status code and the value is a <a>MethodResponse</a> resource that specifies the response returned to the caller from the back end through the integration response.</p> <h4>Example: Get a 200 OK response of a GET method</h4> <h5>Request</h5> <p/> <pre><code>GET /restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200 HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com Content-Length: 117 X-Amz-Date: 20160613T215008Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160613/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;<em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.operator&quot;: false, &quot;method.response.header.operand</em>2&quot;: false, &quot;method.response.header.operand_1&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; }</code></pre> <p/> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-method-response.html">AWS CLI</a> </div></p>
+    #[serde(rename = "methodResponses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub method_responses: Option<::std::collections::HashMap<String, MethodResponse>>,
+    /// <p>A human-friendly operation identifier for the method. For example, you can assign the <code>operationName</code> of <code>ListPets</code> for the <code>GET /pets</code> method in <a href="https://petstore-demo-endpoint.execute-api.com/petstore/pets">PetStore</a> example.</p>
+    #[serde(rename = "operationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation_name: Option<String>,
+    /// <p>A key-value map specifying data schemas, represented by <a>Model</a> resources, (as the mapped value) of the request payloads of given content types (as the mapping key).</p>
+    #[serde(rename = "requestModels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_models: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A key-value map defining required or optional method request parameters that can be accepted by API Gateway. A key is a method request parameter name matching the pattern of <code>method.request.{location}.{name}</code>, where <code>location</code> is <code>querystring</code>, <code>path</code>, or <code>header</code> and <code>name</code> is a valid and unique parameter name. The value associated with the key is a Boolean flag indicating whether the parameter is required (<code>true</code>) or optional (<code>false</code>). The method request parameter names defined here are available in <a>Integration</a> to be mapped to integration request parameters or templates.</p>
+    #[serde(rename = "requestParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_parameters: Option<::std::collections::HashMap<String, bool>>,
+    /// <p>The identifier of a <a>RequestValidator</a> for request validation.</p>
+    #[serde(rename = "requestValidatorId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_validator_id: Option<String>,
 }
 
 /// <p>Request to describe a <a>MethodResponse</a> resource.</p>
@@ -1626,6 +2659,24 @@ pub struct GetMethodResponseRequest {
     pub status_code: String,
 }
 
+/// <p><p>Represents a method response of a given HTTP status code returned to the client. The method response is passed from the back end through the associated integration response that can be transformed using a mapping template. </p> <div class="remarks"> <p/> <h4>Example: A <b>MethodResponse</b> instance of an API</h4> <h5>Request</h5> <p>The example request retrieves a <b>MethodResponse</b> of the 200 status code.</p> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200 HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160603T222952Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160603/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns <code>200 OK</code> status and a payload as follows:</p> <pre><code>{ &quot;_links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; }</code></pre> <p/> </div> <div class="seeAlso"> <a>Method</a>, <a>IntegrationResponse</a>, <a>Integration</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetMethodResponseResponse {
+    /// <p>Specifies the <a>Model</a> resources used for the response's content-type. Response models are represented as a key/value map, with a content-type as the key and a <a>Model</a> name as the value.</p>
+    #[serde(rename = "responseModels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_models: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A key-value map specifying required or optional response parameters that API Gateway can send back to the caller. A key defines a method response header and the value specifies whether the associated method response header is required or not. The expression of the key must match the pattern <code>method.response.header.{name}</code>, where <code>name</code> is a valid and unique header name. API Gateway passes certain integration response data to the method response headers specified here according to the mapping you prescribe in the API's <a>IntegrationResponse</a>. The integration response data that can be mapped include an integration response header expressed in <code>integration.response.header.{name}</code>, a static value enclosed within a pair of single quotes (e.g., <code>'application/json'</code>), or a JSON expression from the back-end response payload in the form of <code>integration.response.body.{JSON-expression}</code>, where <code>JSON-expression</code> is a valid JSON expression without the <code>$</code> prefix.)</p>
+    #[serde(rename = "responseParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_parameters: Option<::std::collections::HashMap<String, bool>>,
+    /// <p>The method response's status code.</p>
+    #[serde(rename = "statusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_code: Option<String>,
+}
+
 /// <p>Request to list information about a model in an existing <a>RestApi</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetModelRequest {
@@ -1641,6 +2692,32 @@ pub struct GetModelRequest {
     pub rest_api_id: String,
 }
 
+/// <p><p>Represents the data structure of a method&#39;s request or response payload.</p> <div class="remarks"> <p>A request model defines the data structure of the client-supplied request payload. A response model defines the data structure of the response payload returned by the back end. Although not required, models are useful for mapping payloads between the front end and back end.</p> <p>A model is used for generating an API&#39;s SDK, validating the input request body, and creating a skeletal mapping template.</p> </div> <div class="seeAlso"> <a>Method</a>, <a>MethodResponse</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Models and Mappings</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetModelResponse {
+    /// <p>The content-type for the model.</p>
+    #[serde(rename = "contentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_type: Option<String>,
+    /// <p>The description of the model.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier for the model resource.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name of the model. Must be an alphanumeric string.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The schema for the model. For <code>application/json</code> models, this should be <a href="https://tools.ietf.org/html/draft-zyp-json-schema-04" target="_blank">JSON schema draft 4</a> model. Do not include "\*/" characters in the description of any properties because such "\*/" characters may be interpreted as the closing marker for comments in some languages, such as Java or JavaScript, causing the installation of your API's SDK generated by API Gateway to fail.</p>
+    #[serde(rename = "schema")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema: Option<String>,
+}
+
 /// <p>Request to generate a sample mapping template used to transform the payload.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetModelTemplateRequest {
@@ -1650,6 +2727,16 @@ pub struct GetModelTemplateRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p><p>Represents a mapping template used to transform a payload.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html#models-mappings-mappings">Mapping Templates</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetModelTemplateResponse {
+    /// <p>The Apache <a href="https://velocity.apache.org/engine/devel/vtl-reference-guide.html" target="_blank">Velocity Template Language (VTL)</a> template content used for the template resource.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
 }
 
 /// <p>Request to list existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>
@@ -1668,6 +2755,19 @@ pub struct GetModelsRequest {
     pub rest_api_id: String,
 }
 
+/// <p><p>Represents a collection of <a>Model</a> resources.</p> <div class="seeAlso"> <a>Method</a>, <a>MethodResponse</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Models and Mappings</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetModelsResponse {
+    /// <p>The current page of elements from this collection.</p>
+    #[serde(rename = "items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<Model>>,
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+}
+
 /// <p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetRequestValidatorRequest {
@@ -1677,6 +2777,28 @@ pub struct GetRequestValidatorRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p><p>A set of validation rules for incoming <a>Method</a> requests.</p> <div class="remarks"> <p>In OpenAPI, a <a>RequestValidator</a> of an API is defined by the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.requestValidator.html">x-amazon-apigateway-request-validators.requestValidator</a> object. It the referenced using the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validator">x-amazon-apigateway-request-validator</a> property.</p> </div> <div class="seeAlso"><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html">Enable Basic Request Validation in API Gateway</a></div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetRequestValidatorResponse {
+    /// <p>The identifier of this <a>RequestValidator</a>.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name of this <a>RequestValidator</a></p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A Boolean flag to indicate whether to validate a request body according to the configured <a>Model</a> schema.</p>
+    #[serde(rename = "validateRequestBody")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validate_request_body: Option<bool>,
+    /// <p>A Boolean flag to indicate whether to validate request parameters (<code>true</code>) or not (<code>false</code>).</p>
+    #[serde(rename = "validateRequestParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validate_request_parameters: Option<bool>,
 }
 
 /// <p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>
@@ -1695,6 +2817,19 @@ pub struct GetRequestValidatorsRequest {
     pub rest_api_id: String,
 }
 
+/// <p><p>A collection of <a>RequestValidator</a> resources of a given <a>RestApi</a>.</p> <div class="remarks"> <p>In OpenAPI, the <a>RequestValidators</a> of an API is defined by the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.html">x-amazon-apigateway-request-validators</a> extension.</p> </div> <div class="seeAlso"><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html">Enable Basic Request Validation in API Gateway</a></div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetRequestValidatorsResponse {
+    /// <p>The current page of elements from this collection.</p>
+    #[serde(rename = "items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<RequestValidator>>,
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+}
+
 /// <p>Request to list information about a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetResourceRequest {
@@ -1708,6 +2843,32 @@ pub struct GetResourceRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p><p>Represents an API resource.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetResourceResponse {
+    /// <p>The resource's identifier.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The parent resource's identifier.</p>
+    #[serde(rename = "parentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_id: Option<String>,
+    /// <p>The full path for this resource.</p>
+    #[serde(rename = "path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+    /// <p>The last path segment for this resource.</p>
+    #[serde(rename = "pathPart")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path_part: Option<String>,
+    /// <p><p>Gets an API resource&#39;s method of a given HTTP verb.</p> <div class="remarks"> <p>The resource methods are a map of methods indexed by methods&#39; HTTP verbs enabled on the resource. This method map is included in the <code>200 OK</code> response of the <code>GET /restapis/{restapi<em>id}/resources/{resource</em>id}</code> or <code>GET /restapis/{restapi<em>id}/resources/{resource</em>id}?embed=methods</code> request.</p> <h4>Example: Get the GET method of an API resource</h4> <h5>Request</h5> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20170223T031827Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20170223/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <pre><code>{ &quot;<em>links&quot;: { &quot;curies&quot;: [ { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html&quot;, &quot;name&quot;: &quot;integration&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html&quot;, &quot;name&quot;: &quot;integrationresponse&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-{rel}.html&quot;, &quot;name&quot;: &quot;method&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true } ], &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot;, &quot;name&quot;: &quot;GET&quot;, &quot;title&quot;: &quot;GET&quot; }, &quot;integration:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;method:integration&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;method:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;methodresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/{status</em>code}&quot;, &quot;templated&quot;: true } }, &quot;apiKeyRequired&quot;: false, &quot;authorizationType&quot;: &quot;NONE&quot;, &quot;httpMethod&quot;: &quot;GET&quot;, &quot;<em>embedded&quot;: { &quot;method:integration&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integration:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integrationresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/{status<em>code}&quot;, &quot;templated&quot;: true } }, &quot;cacheKeyParameters&quot;: [], &quot;cacheNamespace&quot;: &quot;3kzxbg5sa2&quot;, &quot;credentials&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;httpMethod&quot;: &quot;POST&quot;, &quot;passthroughBehavior&quot;: &quot;WHEN</em>NO<em>MATCH&quot;, &quot;requestParameters&quot;: { &quot;integration.request.header.Content-Type&quot;: &quot;&#39;application/x-amz-json-1.1&#39;&quot; }, &quot;requestTemplates&quot;: { &quot;application/json&quot;: &quot;{\n}&quot; }, &quot;type&quot;: &quot;AWS&quot;, &quot;uri&quot;: &quot;arn:aws:apigateway:us-east-1:kinesis:action/ListStreams&quot;, &quot;</em>embedded&quot;: { &quot;integration:responses&quot;: { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integrationresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; }, &quot;integrationresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; } }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: &quot;&#39;application/xml&#39;&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;$util.urlDecode(&quot;%3CkinesisStreams%3E#foreach($stream in $input.path(&#39;$.StreamNames&#39;))%3Cstream%3E%3Cname%3E$stream%3C/name%3E%3C/stream%3E#end%3C/kinesisStreams%3E&quot;)\n&quot; }, &quot;statusCode&quot;: &quot;200&quot; } } }, &quot;method:responses&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; } } }</code></pre> <p>If the <code>OPTIONS</code> is enabled on the resource, you can follow the example here to get that method. Just replace the <code>GET</code> of the last path segment in the request URL with <code>OPTIONS</code>.</p> </div> <div class="seeAlso"> </div></p>
+    #[serde(rename = "resourceMethods")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_methods: Option<::std::collections::HashMap<String, Method>>,
 }
 
 /// <p>Request to list information about a collection of resources.</p>
@@ -1730,12 +2891,79 @@ pub struct GetResourcesRequest {
     pub rest_api_id: String,
 }
 
+/// <p><p>Represents a collection of <a>Resource</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetResourcesResponse {
+    /// <p>The current page of elements from this collection.</p>
+    #[serde(rename = "items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<Resource>>,
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+}
+
 /// <p>The GET request to list an existing <a>RestApi</a> defined for your collection. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetRestApiRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p><p>Represents a REST API.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetRestApiResponse {
+    /// <p>The source of the API key for metering requests according to a usage plan. Valid values are: <ul><li><code>HEADER</code> to read the API key from the <code>X-API-Key</code> header of a request. </li><li><code>AUTHORIZER</code> to read the API key from the <code>UsageIdentifierKey</code> from a custom authorizer.</li></ul> </p>
+    #[serde(rename = "apiKeySource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_source: Option<String>,
+    /// <p>The list of binary media types supported by the <a>RestApi</a>. By default, the <a>RestApi</a> supports only UTF-8-encoded text payloads.</p>
+    #[serde(rename = "binaryMediaTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub binary_media_types: Option<Vec<String>>,
+    /// <p>The timestamp when the API was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The API's description.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The endpoint configuration of this <a>RestApi</a> showing the endpoint types of the API. </p>
+    #[serde(rename = "endpointConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_configuration: Option<EndpointConfiguration>,
+    /// <p>The API's identifier. This identifier is unique across all of your APIs in API Gateway.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>A nullable integer that is used to enable compression (with non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable compression (with a null value) on an API. When compression is enabled, compression or decompression is not applied on the payload if the payload size is smaller than this value. Setting it to zero allows compression for any payload size.</p>
+    #[serde(rename = "minimumCompressionSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_compression_size: Option<i64>,
+    /// <p>The API's name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A stringified JSON policy document that applies to this RestApi regardless of the caller and <a>Method</a> configuration.</p>
+    #[serde(rename = "policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A version identifier for the API.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+    /// <p>The warning messages reported when <code>failonwarnings</code> is turned on during API import.</p>
+    #[serde(rename = "warnings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub warnings: Option<Vec<String>>,
 }
 
 /// <p>The GET request to list existing <a>RestApis</a> defined for your collection.</p>
@@ -1746,6 +2974,19 @@ pub struct GetRestApisRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
     /// <p>The current pagination position in the paged result set.</p>
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+}
+
+/// <p><p>Contains references to your APIs and links that guide you in how to interact with your collection. A collection offers a paginated view of your APIs.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetRestApisResponse {
+    /// <p>The current page of elements from this collection.</p>
+    #[serde(rename = "items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<RestApi>>,
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
@@ -1769,12 +3010,45 @@ pub struct GetSdkRequest {
     pub stage_name: String,
 }
 
+/// <p>The binary blob response to <a>GetSdk</a>, which contains the generated SDK.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetSdkResponse {
+    /// <p>The binary blob response to <a>GetSdk</a>, which contains the generated SDK.</p>
+    pub body: Option<bytes::Bytes>,
+    /// <p>The content-disposition header value in the HTTP response.</p>
+    pub content_disposition: Option<String>,
+    /// <p>The content-type header value in the HTTP response.</p>
+    pub content_type: Option<String>,
+}
+
 /// <p>Get an <a>SdkType</a> instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetSdkTypeRequest {
     /// <p>[Required] The identifier of the queried <a>SdkType</a> instance.</p>
     #[serde(rename = "id")]
     pub id: String,
+}
+
+/// <p>A type of SDK that API Gateway can generate.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetSdkTypeResponse {
+    /// <p>A list of configuration properties of an <a>SdkType</a>.</p>
+    #[serde(rename = "configurationProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_properties: Option<Vec<SdkConfigurationProperty>>,
+    /// <p>The description of an <a>SdkType</a>.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The user-friendly name of an <a>SdkType</a> instance.</p>
+    #[serde(rename = "friendlyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub friendly_name: Option<String>,
+    /// <p>The identifier of an <a>SdkType</a> instance.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
 }
 
 /// <p>Get the <a>SdkTypes</a> collection.</p>
@@ -1785,6 +3059,19 @@ pub struct GetSdkTypesRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
     /// <p>The current pagination position in the paged result set.</p>
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+}
+
+/// <p>The collection of <a>SdkType</a> instances.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetSdkTypesResponse {
+    /// <p>The current page of elements from this collection.</p>
+    #[serde(rename = "items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<SdkType>>,
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
@@ -1801,6 +3088,80 @@ pub struct GetStageRequest {
     pub stage_name: String,
 }
 
+/// <p><p>Represents a unique identifier for a version of a deployed <a>RestApi</a> that is callable by users.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html">Deploy an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetStageResponse {
+    /// <p>Settings for logging access in this stage.</p>
+    #[serde(rename = "accessLogSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_log_settings: Option<AccessLogSettings>,
+    /// <p>Specifies whether a cache cluster is enabled for the stage.</p>
+    #[serde(rename = "cacheClusterEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_cluster_enabled: Option<bool>,
+    /// <p>The size of the cache cluster for the stage, if enabled.</p>
+    #[serde(rename = "cacheClusterSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_cluster_size: Option<String>,
+    /// <p>The status of the cache cluster for the stage, if enabled.</p>
+    #[serde(rename = "cacheClusterStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_cluster_status: Option<String>,
+    /// <p>Settings for the canary deployment in this stage.</p>
+    #[serde(rename = "canarySettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub canary_settings: Option<CanarySettings>,
+    /// <p>The identifier of a client certificate for an API stage.</p>
+    #[serde(rename = "clientCertificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_certificate_id: Option<String>,
+    /// <p>The timestamp when the stage was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The identifier of the <a>Deployment</a> that the stage points to.</p>
+    #[serde(rename = "deploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_id: Option<String>,
+    /// <p>The stage's description.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The version of the associated API documentation.</p>
+    #[serde(rename = "documentationVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub documentation_version: Option<String>,
+    /// <p>The timestamp when the stage last updated.</p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_date: Option<f64>,
+    /// <p>A map that defines the method settings for a <a>Stage</a> resource. Keys (designated as <code>/{method_setting_key</code> below) are method paths defined as <code>{resource_path}/{http_method}</code> for an individual method override, or <code>/\*/\*</code> for overriding all methods in the stage. </p>
+    #[serde(rename = "methodSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub method_settings: Option<::std::collections::HashMap<String, MethodSetting>>,
+    /// <p>The name of the stage is the first path segment in the Uniform Resource Identifier (URI) of a call to API Gateway.</p>
+    #[serde(rename = "stageName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage_name: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Specifies whether active tracing with X-ray is enabled for the <a>Stage</a>.</p>
+    #[serde(rename = "tracingEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tracing_enabled: Option<bool>,
+    /// <p>A map that defines the stage variables for a <a>Stage</a> resource. Variable names can have alphanumeric and underscore characters, and the values must match <code>[A-Za-z0-9-._~:/?#&amp;=,]+</code>.</p>
+    #[serde(rename = "variables")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub variables: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The ARN of the WebAcl associated with the <a>Stage</a>.</p>
+    #[serde(rename = "webAclArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub web_acl_arn: Option<String>,
+}
+
 /// <p>Requests API Gateway to get information about one or more <a>Stage</a> resources.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetStagesRequest {
@@ -1811,6 +3172,16 @@ pub struct GetStagesRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p><p>A list of <a>Stage</a> resources that are associated with the <a>ApiKey</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/stages.html">Deploying API in Stages</a></div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetStagesResponse {
+    /// <p>The current page of elements from this collection.</p>
+    #[serde(rename = "item")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub item: Option<Vec<Stage>>,
 }
 
 /// <p>Gets the <a>Tags</a> collection for a given resource.</p>
@@ -1829,6 +3200,16 @@ pub struct GetTagsRequest {
     pub resource_arn: String,
 }
 
+/// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetTagsResponse {
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>The GET request to get a usage plan key of a given key identifier.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetUsagePlanKeyRequest {
@@ -1838,6 +3219,28 @@ pub struct GetUsagePlanKeyRequest {
     /// <p>[Required] The Id of the <a>UsagePlan</a> resource representing the usage plan containing the to-be-retrieved <a>UsagePlanKey</a> resource representing a plan customer.</p>
     #[serde(rename = "usagePlanId")]
     pub usage_plan_id: String,
+}
+
+/// <p><p>Represents a usage plan key to identify a plan customer.</p> <div class="remarks"> <p>To associate an API stage with a selected API key in a usage plan, you must create a UsagePlanKey resource to represent the selected <a>ApiKey</a>.</p> </div>&quot; <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetUsagePlanKeyResponse {
+    /// <p>The Id of a usage plan key.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name of a usage plan key.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The type of a usage plan key. Currently, the valid key type is <code>API_KEY</code>.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p>The value of a usage plan key.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
 }
 
 /// <p>The GET request to get all the usage plan keys representing the API keys added to a specified usage plan.</p>
@@ -1860,12 +3263,63 @@ pub struct GetUsagePlanKeysRequest {
     pub usage_plan_id: String,
 }
 
+/// <p><p>Represents the collection of usage plan keys added to usage plans for the associated API keys and, possibly, other types of keys.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetUsagePlanKeysResponse {
+    /// <p>The current page of elements from this collection.</p>
+    #[serde(rename = "items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<UsagePlanKey>>,
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+}
+
 /// <p>The GET request to get a usage plan of a given plan identifier.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetUsagePlanRequest {
     /// <p>[Required] The identifier of the <a>UsagePlan</a> resource to be retrieved.</p>
     #[serde(rename = "usagePlanId")]
     pub usage_plan_id: String,
+}
+
+/// <p><p>Represents a usage plan than can specify who can assess associated API stages with specified request limits and quotas.</p> <div class="remarks"> <p>In a usage plan, you associate an API by specifying the API&#39;s Id and a stage name of the specified API. You add plan customers by adding API keys to the plan. </p> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetUsagePlanResponse {
+    /// <p>The associated API stages of a usage plan.</p>
+    #[serde(rename = "apiStages")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_stages: Option<Vec<ApiStage>>,
+    /// <p>The description of a usage plan.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier of a <a>UsagePlan</a> resource.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name of a usage plan.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The AWS Markeplace product identifier to associate with the usage plan as a SaaS product on AWS Marketplace.</p>
+    #[serde(rename = "productCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_code: Option<String>,
+    /// <p>The maximum number of permitted requests per a given unit time interval.</p>
+    #[serde(rename = "quota")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quota: Option<QuotaSettings>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The request throttle limits of a usage plan.</p>
+    #[serde(rename = "throttle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub throttle: Option<ThrottleSettings>,
 }
 
 /// <p>The GET request to get all the usage plans of the caller's account.</p>
@@ -1880,6 +3334,19 @@ pub struct GetUsagePlansRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
     /// <p>The current pagination position in the paged result set.</p>
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+}
+
+/// <p><p>Represents a collection of usage plans for an AWS account.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetUsagePlansResponse {
+    /// <p>The current page of elements from this collection.</p>
+    #[serde(rename = "items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<UsagePlan>>,
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
@@ -1911,12 +3378,71 @@ pub struct GetUsageRequest {
     pub usage_plan_id: String,
 }
 
+/// <p><p>Represents the usage data of a usage plan.</p> <div class="remarks"/> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-create-usage-plans-with-console.html#api-gateway-usage-plan-manage-usage">Manage Usage in a Usage Plan</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetUsageResponse {
+    /// <p>The ending date of the usage data.</p>
+    #[serde(rename = "endDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_date: Option<String>,
+    /// <p>The usage data, as daily logs of used and remaining quotas, over the specified time interval indexed over the API keys in a usage plan. For example, <code>{..., "values" : { "{api_key}" : [ [0, 100], [10, 90], [100, 10]]}</code>, where <code>{api_key}</code> stands for an API key value and the daily log entry is of the format <code>[used quota, remaining quota]</code>.</p>
+    #[serde(rename = "items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<::std::collections::HashMap<String, Vec<Vec<i64>>>>,
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+    /// <p>The starting date of the usage data.</p>
+    #[serde(rename = "startDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_date: Option<String>,
+    /// <p>The plan Id associated with this usage data.</p>
+    #[serde(rename = "usagePlanId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub usage_plan_id: Option<String>,
+}
+
 /// <p>Gets a specified VPC link under the caller's account in a region.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetVpcLinkRequest {
     /// <p>[Required] The identifier of the <a>VpcLink</a>. It is used in an <a>Integration</a> to reference this <a>VpcLink</a>.</p>
     #[serde(rename = "vpcLinkId")]
     pub vpc_link_id: String,
+}
+
+/// <p><p>A API Gateway VPC link for a <a>RestApi</a> to access resources in an Amazon Virtual Private Cloud (VPC).</p> <div class="remarks"> <p><p>To enable access to a resource in an Amazon Virtual Private Cloud through Amazon API Gateway, you, as an API developer, create a <a>VpcLink</a> resource targeted for one or more network load balancers of the VPC and then integrate an API method with a private integration that uses the <a>VpcLink</a>. The private integration has an integration type of <code>HTTP</code> or <code>HTTP<em>PROXY</code> and has a connection type of <code>VPC</em>LINK</code>. The integration uses the <code>connectionId</code> property to identify the <a>VpcLink</a> used.</p> </p> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetVpcLinkResponse {
+    /// <p>The description of the VPC link.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier of the <a>VpcLink</a>. It is used in an <a>Integration</a> to reference this <a>VpcLink</a>.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name used to label and identify the VPC link.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The status of the VPC link. The valid values are <code>AVAILABLE</code>, <code>PENDING</code>, <code>DELETING</code>, or <code>FAILED</code>. Deploying an API will wait if the status is <code>PENDING</code> and will fail if the status is <code>DELETING</code>. </p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A description about the VPC link status.</p>
+    #[serde(rename = "statusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_message: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The ARNs of network load balancers of the VPC targeted by the VPC link. The network load balancers must be owned by the same AWS account of the API owner.</p>
+    #[serde(rename = "targetArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_arns: Option<Vec<String>>,
 }
 
 /// <p>Gets the <a>VpcLinks</a> collection under the caller's account in a selected region.</p>
@@ -1927,6 +3453,19 @@ pub struct GetVpcLinksRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
     /// <p>The current pagination position in the paged result set.</p>
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+}
+
+/// <p><p>The collection of VPC links under the caller&#39;s account in a region.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-with-private-integration.html">Getting Started with Private Integrations</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-private-integration.html">Set up Private Integrations</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetVpcLinksResponse {
+    /// <p>The current page of elements from this collection.</p>
+    #[serde(rename = "items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<VpcLink>>,
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
@@ -1950,6 +3489,20 @@ pub struct ImportApiKeysRequest {
     /// <p>A query parameter to specify the input format to imported API keys. Currently, only the <code>csv</code> format is supported.</p>
     #[serde(rename = "format")]
     pub format: String,
+}
+
+/// <p>The identifier of an <a>ApiKey</a> used in a <a>UsagePlan</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ImportApiKeysResponse {
+    /// <p>A list of all the <a>ApiKey</a> identifiers.</p>
+    #[serde(rename = "ids")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ids: Option<Vec<String>>,
+    /// <p>A list of warning messages.</p>
+    #[serde(rename = "warnings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub warnings: Option<Vec<String>>,
 }
 
 /// <p>Import documentation parts from an external (e.g., OpenAPI) definition file. </p>
@@ -1976,6 +3529,20 @@ pub struct ImportDocumentationPartsRequest {
     pub rest_api_id: String,
 }
 
+/// <p><p>A collection of the imported <a>DocumentationPart</a> identifiers.</p> <div class="remarks">This is used to return the result when documentation parts in an external (e.g., OpenAPI) file are imported into API Gateway</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a href="https://docs.aws.amazon.com/apigateway/api-reference/link-relation/documentationpart-import/">documentationpart:import</a>, <a>DocumentationPart</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ImportDocumentationPartsResponse {
+    /// <p>A list of the returned documentation part identifiers.</p>
+    #[serde(rename = "ids")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ids: Option<Vec<String>>,
+    /// <p>A list of warning messages reported during import of documentation parts.</p>
+    #[serde(rename = "warnings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub warnings: Option<Vec<String>>,
+}
+
 /// <p>A POST request to import an API to API Gateway using an input of an API definition file.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ImportRestApiRequest {
@@ -1995,6 +3562,60 @@ pub struct ImportRestApiRequest {
     #[serde(rename = "parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p><p>Represents a REST API.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ImportRestApiResponse {
+    /// <p>The source of the API key for metering requests according to a usage plan. Valid values are: <ul><li><code>HEADER</code> to read the API key from the <code>X-API-Key</code> header of a request. </li><li><code>AUTHORIZER</code> to read the API key from the <code>UsageIdentifierKey</code> from a custom authorizer.</li></ul> </p>
+    #[serde(rename = "apiKeySource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_source: Option<String>,
+    /// <p>The list of binary media types supported by the <a>RestApi</a>. By default, the <a>RestApi</a> supports only UTF-8-encoded text payloads.</p>
+    #[serde(rename = "binaryMediaTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub binary_media_types: Option<Vec<String>>,
+    /// <p>The timestamp when the API was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The API's description.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The endpoint configuration of this <a>RestApi</a> showing the endpoint types of the API. </p>
+    #[serde(rename = "endpointConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_configuration: Option<EndpointConfiguration>,
+    /// <p>The API's identifier. This identifier is unique across all of your APIs in API Gateway.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>A nullable integer that is used to enable compression (with non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable compression (with a null value) on an API. When compression is enabled, compression or decompression is not applied on the payload if the payload size is smaller than this value. Setting it to zero allows compression for any payload size.</p>
+    #[serde(rename = "minimumCompressionSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_compression_size: Option<i64>,
+    /// <p>The API's name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A stringified JSON policy document that applies to this RestApi regardless of the caller and <a>Method</a> configuration.</p>
+    #[serde(rename = "policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A version identifier for the API.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+    /// <p>The warning messages reported when <code>failonwarnings</code> is turned on during API import.</p>
+    #[serde(rename = "warnings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub warnings: Option<Vec<String>>,
 }
 
 /// <p><p>Represents an HTTP, HTTP<em>PROXY, AWS, AWS</em>PROXY, or Mock integration.</p> <div class="remarks">In the API Gateway console, the built-in Lambda integration is an AWS integration.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
@@ -2239,19 +3860,6 @@ pub struct Model {
     pub schema: Option<String>,
 }
 
-/// <p><p>Represents a collection of <a>Model</a> resources.</p> <div class="seeAlso"> <a>Method</a>, <a>MethodResponse</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Models and Mappings</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct Models {
-    /// <p>The current page of elements from this collection.</p>
-    #[serde(rename = "items")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<Model>>,
-    #[serde(rename = "position")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub position: Option<String>,
-}
-
 /// <p>A single patch operation to apply to the specified resource. Please refer to http://tools.ietf.org/html/rfc6902#section-4 for an explanation of how each operation is used.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PatchOperation {
@@ -2291,6 +3899,32 @@ pub struct PutGatewayResponseRequest {
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
     /// <p>The HTTP status code of the <a>GatewayResponse</a>.</p>
+    #[serde(rename = "statusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_code: Option<String>,
+}
+
+/// <p><p>A gateway response of a given response type and status code, with optional response parameters and mapping templates.</p> <div class="remarks"> For more information about valid gateway response types, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html">Gateway Response Types Supported by API Gateway</a> <div class="example"> <h4>Example: Get a Gateway Response of a given response type</h4> <h5>Request</h5> <p>This example shows how to get a gateway response of the <code>MISSING<em>AUTHENTICATION</em>TOKEN</code> type.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T202516Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature=1b52460e3159c1a26cff29093855d50ea141c1c5b937528fecaf60f51129697a Cache-Control: no-cache Postman-Token: 3b2a1ce9-c848-2e26-2e2f-9c2caefbed45 </code></pre> <p>The response type is specified as a URL path.</p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;</em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html&quot;, &quot;name&quot;: &quot;gatewayresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, &quot;gatewayresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING</em>AUTHENTICATION<em>TOKEN&quot; } }, &quot;defaultResponse&quot;: false, &quot;responseParameters&quot;: { &quot;gatewayresponse.header.x-request-path&quot;: &quot;method.request.path.petId&quot;, &quot;gatewayresponse.header.Access-Control-Allow-Origin&quot;: &quot;&apos;a.b.c&apos;&quot;, &quot;gatewayresponse.header.x-request-query&quot;: &quot;method.request.querystring.q&quot;, &quot;gatewayresponse.header.x-request-header&quot;: &quot;method.request.header.Accept&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{\n &quot;message&quot;: $context.error.messageString,\n &quot;type&quot;: &quot;$context.error.responseType&quot;,\n &quot;stage&quot;: &quot;$context.stage&quot;,\n &quot;resourcePath&quot;: &quot;$context.resourcePath&quot;,\n &quot;stageVariables.a&quot;: &quot;$stageVariables.a&quot;,\n &quot;statusCode&quot;: &quot;&apos;404&apos;&quot;\n}&quot; }, &quot;responseType&quot;: &quot;MISSING</em>AUTHENTICATION_TOKEN&quot;, &quot;statusCode&quot;: &quot;404&quot; }</code></pre> <p></p> </div> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html">Customize Gateway Responses</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutGatewayResponseResponse {
+    /// <p>A Boolean flag to indicate whether this <a>GatewayResponse</a> is the default gateway response (<code>true</code>) or not (<code>false</code>). A default gateway response is one generated by API Gateway without any customization by an API developer. </p>
+    #[serde(rename = "defaultResponse")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_response: Option<bool>,
+    /// <p>Response parameters (paths, query strings and headers) of the <a>GatewayResponse</a> as a string-to-string map of key-value pairs.</p>
+    #[serde(rename = "responseParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Response templates of the <a>GatewayResponse</a> as a string-to-string map of key-value pairs.</p>
+    #[serde(rename = "responseTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPE</li></ul> </p>
+    #[serde(rename = "responseType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_type: Option<String>,
+    /// <p>The HTTP status code for this <a>GatewayResponse</a>.</p>
     #[serde(rename = "statusCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_code: Option<String>,
@@ -2361,6 +3995,68 @@ pub struct PutIntegrationRequest {
     pub uri: Option<String>,
 }
 
+/// <p><p>Represents an HTTP, HTTP<em>PROXY, AWS, AWS</em>PROXY, or Mock integration.</p> <div class="remarks">In the API Gateway console, the built-in Lambda integration is an AWS integration.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutIntegrationResponse {
+    /// <p>Specifies the integration's cache key parameters.</p>
+    #[serde(rename = "cacheKeyParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_key_parameters: Option<Vec<String>>,
+    /// <p>Specifies the integration's cache namespace.</p>
+    #[serde(rename = "cacheNamespace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_namespace: Option<String>,
+    /// <p>The (<a href="https://docs.aws.amazon.com/apigateway/api-reference/resource/vpc-link/#id"><code>id</code></a>) of the <a>VpcLink</a> used for the integration when <code>connectionType=VPC_LINK</code> and undefined, otherwise.</p>
+    #[serde(rename = "connectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_id: Option<String>,
+    /// <p>The type of the network connection to the integration endpoint. The valid value is <code>INTERNET</code> for connections through the public routable internet or <code>VPC_LINK</code> for private connections between API Gateway and a network load balancer in a VPC. The default value is <code>INTERNET</code>.</p>
+    #[serde(rename = "connectionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_type: Option<String>,
+    /// <p>Specifies how to handle request payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a request payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a request payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the request payload will be passed through from the method request to integration request without modification, provided that the <code>passthroughBehaviors</code> is configured to support payload pass-through.</p>
+    #[serde(rename = "contentHandling")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_handling: Option<String>,
+    /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string <code>arn:aws:iam::\*:user/\*</code>. To use resource-based permissions on supported AWS services, specify null.</p>
+    #[serde(rename = "credentials")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub credentials: Option<String>,
+    /// <p>Specifies the integration's HTTP method type.</p>
+    #[serde(rename = "httpMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_method: Option<String>,
+    /// <p><p>Specifies the integration&#39;s responses.</p> <div class="remarks"> <p/> <h4>Example: Get integration responses of a method</h4> <h5>Request</h5> <p/> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200 HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160607T191449Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160607/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash} </code></pre> <h5>Response</h5> <p>The successful response returns <code>200 OK</code> status and a payload as follows:</p> <pre><code>{ &quot;_links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html&quot;, &quot;name&quot;: &quot;integrationresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integrationresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; }, &quot;integrationresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; } }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: &quot;&#39;application/xml&#39;&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;$util.urlDecode(&quot;%3CkinesisStreams%3E#foreach($stream in $input.path(&#39;$.StreamNames&#39;))%3Cstream%3E%3Cname%3E$stream%3C/name%3E%3C/stream%3E#end%3C/kinesisStreams%3E&quot;)\n&quot; }, &quot;statusCode&quot;: &quot;200&quot; }</code></pre> <p/> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
+    #[serde(rename = "integrationResponses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_responses: Option<::std::collections::HashMap<String, IntegrationResponse>>,
+    /// <div> <p> Specifies how the method request body of an unmapped content type will be passed through the integration request to the back end without transformation. A content type is unmapped if no mapping template is defined in the integration or the content type does not match any of the mapped content types, as specified in <code>requestTemplates</code>. The valid value is one of the following: </p> <ul> <li> <code>WHEN_NO_MATCH</code>: passes the method request body through the integration request to the back end without transformation when the method request content type does not match any content type associated with the mapping templates defined in the integration request. </li> <li> <code>WHEN_NO_TEMPLATES</code>: passes the method request body through the integration request to the back end without transformation when no mapping template is defined in the integration request. If a template is defined when this option is selected, the method request of an unmapped content-type will be rejected with an HTTP <code>415 Unsupported Media Type</code> response. </li> <li> <code>NEVER</code>: rejects the method request with an HTTP <code>415 Unsupported Media Type</code> response when either the method request content type does not match any content type associated with the mapping templates defined in the integration request or no mapping template is defined in the integration request. </li> </ul> </div>
+    #[serde(rename = "passthroughBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub passthrough_behavior: Option<String>,
+    /// <p>A key-value map specifying request parameters that are passed from the method request to the back end. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the back end. The method request parameter value must match the pattern of <code>method.request.{location}.{name}</code>, where <code>location</code> is <code>querystring</code>, <code>path</code>, or <code>header</code> and <code>name</code> must be a valid and unique method request parameter name.</p>
+    #[serde(rename = "requestParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value.</p>
+    #[serde(rename = "requestTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds.</p>
+    #[serde(rename = "timeoutInMillis")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout_in_millis: Option<i64>,
+    /// <p>Specifies an API method integration type. The valid value is one of the following:</p> <ul> <li><code>AWS</code>: for integrating the API method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration.</li> <li><code>AWS_PROXY</code>: for integrating the API method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as the Lambda proxy integration.</li> <li><code>HTTP</code>: for integrating the API method request with an HTTP endpoint, including a private HTTP endpoint within a VPC. This integration is also referred to as the HTTP custom integration.</li> <li><code>HTTP_PROXY</code>: for integrating the API method request with an HTTP endpoint, including a private HTTP endpoint within a VPC, with the client request passed through as-is. This is also referred to as the HTTP proxy integration.</li> <li><code>MOCK</code>: for integrating the API method request with API Gateway as a "loop-back" endpoint without invoking any backend.</li> </ul> <p>For the HTTP and HTTP proxy integrations, each integration can specify a protocol (<code>http/https</code>), port and path. Standard 80 and 443 ports are supported as well as custom ports above 1024. An HTTP or HTTP proxy integration with a <code>connectionType</code> of <code>VPC_LINK</code> is referred to as a private integration and uses a <a>VpcLink</a> to connect API Gateway to a network load balancer of a VPC.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p><p>Specifies Uniform Resource Identifier (URI) of the integration endpoint.</p> <ul> <li><p> For <code>HTTP</code> or <code>HTTP<em>PROXY</code> integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the &lt;a target=&quot;</em>blank&quot; href=&quot;https://en.wikipedia.org/wiki/Uniform<em>Resource</em>Identifier&quot;&gt;RFC-3986 specification</a>, for either standard integration, where <code>connectionType</code> is not <code>VPC<em>LINK</code>, or private integration, where <code>connectionType</code> is <code>VPC</em>LINK</code>. For a private HTTP integration, the URI is not used for routing. </p> </li> <li><p> For <code>AWS</code> or <code>AWS<em>PROXY</code> integrations, the URI is of the form <code>arn:aws:apigateway:{region}:{subdomain.service|service}:path|action/{service</em>api}</code>. Here, <code>{Region}</code> is the API Gateway region (e.g., <code>us-east-1</code>); <code>{service}</code> is the name of the integrated AWS service (e.g., <code>s3</code>); and <code>{subdomain}</code> is a designated subdomain supported by certain AWS service for fast host-name lookup. <code>action</code> can be used for an AWS service action-based API, using an <code>Action={name}&amp;{p1}={v1}&amp;p2={v2}...</code> query string. The ensuing <code>{service<em>api}</code> refers to a supported action <code>{name}</code> plus any required input parameters. Alternatively, <code>path</code> can be used for an AWS service path-based API. The ensuing <code>service</em>api</code> refers to the path to an AWS service resource, including the region of the integrated AWS service, if applicable. For example, for integration with the S3 API of <code><a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGET.html">GetObject</a></code>, the <code>uri</code> can be either <code>arn:aws:apigateway:us-west-2:s3:action/GetObject&amp;Bucket={bucket}&amp;Key={key}</code> or <code>arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}</code></p> </li></ul></p>
+    #[serde(rename = "uri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub uri: Option<String>,
+}
+
 /// <p>Represents a put integration response request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutIntegrationResponseRequest {
@@ -2392,6 +4088,32 @@ pub struct PutIntegrationResponseRequest {
     /// <p>[Required] Specifies the status code that is used to map the integration response to an existing <a>MethodResponse</a>.</p>
     #[serde(rename = "statusCode")]
     pub status_code: String,
+}
+
+/// <p><p>Represents an integration response. The status code must map to an existing <a>MethodResponse</a>, and parameters and templates can be used to transform the back-end response.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutIntegrationResponseResponse {
+    /// <p>Specifies how to handle response payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a response payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the response payload will be passed through from the integration response to the method response without modification.</p>
+    #[serde(rename = "contentHandling")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_handling: Option<String>,
+    /// <p>A key-value map specifying response parameters that are passed to the method response from the back end. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of <code>method.response.header.{name}</code>, where <code>name</code> is a valid and unique header name. The mapped non-static value must match the pattern of <code>integration.response.header.{name}</code> or <code>integration.response.body.{JSON-expression}</code>, where <code>name</code> is a valid and unique response header name and <code>JSON-expression</code> is a valid JSON expression without the <code>$</code> prefix.</p>
+    #[serde(rename = "responseParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Specifies the templates used to transform the integration response body. Response templates are represented as a key/value map, with a content-type as the key and a template as the value.</p>
+    #[serde(rename = "responseTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Specifies the regular expression (regex) pattern used to choose an integration response based on the response from the back end. For example, if the success response returns nothing and the error response returns some string, you could use the <code>.+</code> regex to match error response. However, make sure that the error response does not contain any newline (<code>\n</code>) character in such cases. If the back end is an AWS Lambda function, the AWS Lambda function error header is matched. For all other HTTP and AWS back ends, the HTTP status code is matched.</p>
+    #[serde(rename = "selectionPattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub selection_pattern: Option<String>,
+    /// <p>Specifies the status code that is used to map the integration response to an existing <a>MethodResponse</a>.</p>
+    #[serde(rename = "statusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_code: Option<String>,
 }
 
 /// <p>Request to add a method to an existing <a>Resource</a> resource.</p>
@@ -2439,6 +4161,56 @@ pub struct PutMethodRequest {
     pub rest_api_id: String,
 }
 
+/// <p><p> Represents a client-facing interface by which the client calls the API to access back-end resources. A <b>Method</b> resource is integrated with an <a>Integration</a> resource. Both consist of a request and one or more responses. The method request takes the client input that is passed to the back end through the integration request. A method response returns the output from the back end to the client through an integration response. A method request is embodied in a <b>Method</b> resource, whereas an integration request is embodied in an <a>Integration</a> resource. On the other hand, a method response is represented by a <a>MethodResponse</a> resource, whereas an integration response is represented by an <a>IntegrationResponse</a> resource. </p> <div class="remarks"> <p/> <h4>Example: Retrive the GET method on a specified resource</h4> <h5>Request</h5> <p>The following example request retrieves the information about the GET method on an API resource (<code>3kzxbg5sa2</code>) of an API (<code>fugvjdxtri</code>). </p> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160603T210259Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160603/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;<em>links&quot;: { &quot;curies&quot;: [ { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html&quot;, &quot;name&quot;: &quot;integration&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html&quot;, &quot;name&quot;: &quot;integrationresponse&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-{rel}.html&quot;, &quot;name&quot;: &quot;method&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true } ], &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot;, &quot;name&quot;: &quot;GET&quot;, &quot;title&quot;: &quot;GET&quot; }, &quot;integration:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;method:integration&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;method:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;methodresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/{status</em>code}&quot;, &quot;templated&quot;: true } }, &quot;apiKeyRequired&quot;: true, &quot;authorizationType&quot;: &quot;NONE&quot;, &quot;httpMethod&quot;: &quot;GET&quot;, &quot;<em>embedded&quot;: { &quot;method:integration&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integration:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integrationresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/{status<em>code}&quot;, &quot;templated&quot;: true } }, &quot;cacheKeyParameters&quot;: [], &quot;cacheNamespace&quot;: &quot;3kzxbg5sa2&quot;, &quot;credentials&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;httpMethod&quot;: &quot;POST&quot;, &quot;passthroughBehavior&quot;: &quot;WHEN</em>NO<em>MATCH&quot;, &quot;requestParameters&quot;: { &quot;integration.request.header.Content-Type&quot;: &quot;&#39;application/x-amz-json-1.1&#39;&quot; }, &quot;requestTemplates&quot;: { &quot;application/json&quot;: &quot;{\n}&quot; }, &quot;type&quot;: &quot;AWS&quot;, &quot;uri&quot;: &quot;arn:aws:apigateway:us-east-1:kinesis:action/ListStreams&quot;, &quot;</em>embedded&quot;: { &quot;integration:responses&quot;: { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integrationresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; }, &quot;integrationresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; } }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: &quot;&#39;application/xml&#39;&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;$util.urlDecode(&quot;%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E&quot;)&quot; }, &quot;statusCode&quot;: &quot;200&quot; } } }, &quot;method:responses&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; } } }</code></pre> <p>In the example above, the response template for the <code>200 OK</code> response maps the JSON output from the <code>ListStreams</code> action in the back end to an XML output. The mapping template is URL-encoded as <code>%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E</code> and the output is decoded using the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html#util-templat-reference">$util.urlDecode()</a> helper function.</p> </div> <div class="seeAlso"> <a>MethodResponse</a>, <a>Integration</a>, <a>IntegrationResponse</a>, <a>Resource</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-method-settings.html">Set up an API&#39;s method</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutMethodResponse {
+    /// <p>A boolean flag specifying whether a valid <a>ApiKey</a> is required to invoke this method.</p>
+    #[serde(rename = "apiKeyRequired")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_required: Option<bool>,
+    /// <p>A list of authorization scopes configured on the method. The scopes are used with a <code>COGNITO_USER_POOLS</code> authorizer to authorize the method invocation. The authorization works by matching the method scopes against the scopes parsed from the access token in the incoming request. The method invocation is authorized if any method scopes matches a claimed scope in the access token. Otherwise, the invocation is not authorized. When the method scope is configured, the client must provide an access token instead of an identity token for authorization purposes.</p>
+    #[serde(rename = "authorizationScopes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_scopes: Option<Vec<String>>,
+    /// <p>The method's authorization type. Valid values are <code>NONE</code> for open access, <code>AWS_IAM</code> for using AWS IAM permissions, <code>CUSTOM</code> for using a custom authorizer, or <code>COGNITO_USER_POOLS</code> for using a Cognito user pool.</p>
+    #[serde(rename = "authorizationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_type: Option<String>,
+    /// <p>The identifier of an <a>Authorizer</a> to use on this method. The <code>authorizationType</code> must be <code>CUSTOM</code>.</p>
+    #[serde(rename = "authorizerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_id: Option<String>,
+    /// <p>The method's HTTP verb.</p>
+    #[serde(rename = "httpMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_method: Option<String>,
+    /// <p><p>Gets the method&#39;s integration responsible for passing the client-submitted request to the back end and performing necessary transformations to make the request compliant with the back end.</p> <div class="remarks"> <p/> <h4>Example: </h4> <h5>Request</h5> <p/> <pre><code>GET /restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com Content-Length: 117 X-Amz-Date: 20160613T213210Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160613/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;<em>links&quot;: { &quot;curies&quot;: [ { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html&quot;, &quot;name&quot;: &quot;integration&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html&quot;, &quot;name&quot;: &quot;integrationresponse&quot;, &quot;templated&quot;: true } ], &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration&quot; }, &quot;integration:delete&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration&quot; }, &quot;integration:responses&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integration:update&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration&quot; }, &quot;integrationresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/{status</em>code}&quot;, &quot;templated&quot;: true } }, &quot;cacheKeyParameters&quot;: [], &quot;cacheNamespace&quot;: &quot;0cjtch&quot;, &quot;credentials&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;httpMethod&quot;: &quot;POST&quot;, &quot;passthroughBehavior&quot;: &quot;WHEN<em>NO</em>MATCH&quot;, &quot;requestTemplates&quot;: { &quot;application/json&quot;: &quot;{\n &quot;a&quot;: &quot;$input.params(&#39;operand1&#39;)&quot;,\n &quot;b&quot;: &quot;$input.params(&#39;operand2&#39;)&quot;, \n &quot;op&quot;: &quot;$input.params(&#39;operator&#39;)&quot; \n}&quot; }, &quot;type&quot;: &quot;AWS&quot;, &quot;uri&quot;: &quot;arn:aws:apigateway:us-west-2:lambda:path//2015-03-31/functions/arn:aws:lambda:us-west-2:123456789012:function:Calc/invocations&quot;, &quot;<em>embedded&quot;: { &quot;integration:responses&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integrationresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200&quot; }, &quot;integrationresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200&quot; } }, &quot;responseParameters&quot;: { &quot;method.response.header.operator&quot;: &quot;integration.response.body.op&quot;, &quot;method.response.header.operand<em>2&quot;: &quot;integration.response.body.b&quot;, &quot;method.response.header.operand</em>1&quot;: &quot;integration.response.body.a&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;#set($res = $input.path(&#39;$&#39;))\n{\n &quot;result&quot;: &quot;$res.a, $res.b, $res.op =&gt; $res.c&quot;,\n &quot;a&quot; : &quot;$res.a&quot;,\n &quot;b&quot; : &quot;$res.b&quot;,\n &quot;op&quot; : &quot;$res.op&quot;,\n &quot;c&quot; : &quot;$res.c&quot;\n}&quot; }, &quot;selectionPattern&quot;: &quot;&quot;, &quot;statusCode&quot;: &quot;200&quot; } } }</code></pre> <p/> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-integration.html">AWS CLI</a> </div></p>
+    #[serde(rename = "methodIntegration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub method_integration: Option<Integration>,
+    /// <p><p>Gets a method response associated with a given HTTP status code. </p> <div class="remarks"> <p>The collection of method responses are encapsulated in a key-value map, where the key is a response&#39;s HTTP status code and the value is a <a>MethodResponse</a> resource that specifies the response returned to the caller from the back end through the integration response.</p> <h4>Example: Get a 200 OK response of a GET method</h4> <h5>Request</h5> <p/> <pre><code>GET /restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200 HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com Content-Length: 117 X-Amz-Date: 20160613T215008Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160613/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;<em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.operator&quot;: false, &quot;method.response.header.operand</em>2&quot;: false, &quot;method.response.header.operand_1&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; }</code></pre> <p/> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-method-response.html">AWS CLI</a> </div></p>
+    #[serde(rename = "methodResponses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub method_responses: Option<::std::collections::HashMap<String, MethodResponse>>,
+    /// <p>A human-friendly operation identifier for the method. For example, you can assign the <code>operationName</code> of <code>ListPets</code> for the <code>GET /pets</code> method in <a href="https://petstore-demo-endpoint.execute-api.com/petstore/pets">PetStore</a> example.</p>
+    #[serde(rename = "operationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation_name: Option<String>,
+    /// <p>A key-value map specifying data schemas, represented by <a>Model</a> resources, (as the mapped value) of the request payloads of given content types (as the mapping key).</p>
+    #[serde(rename = "requestModels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_models: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A key-value map defining required or optional method request parameters that can be accepted by API Gateway. A key is a method request parameter name matching the pattern of <code>method.request.{location}.{name}</code>, where <code>location</code> is <code>querystring</code>, <code>path</code>, or <code>header</code> and <code>name</code> is a valid and unique parameter name. The value associated with the key is a Boolean flag indicating whether the parameter is required (<code>true</code>) or optional (<code>false</code>). The method request parameter names defined here are available in <a>Integration</a> to be mapped to integration request parameters or templates.</p>
+    #[serde(rename = "requestParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_parameters: Option<::std::collections::HashMap<String, bool>>,
+    /// <p>The identifier of a <a>RequestValidator</a> for request validation.</p>
+    #[serde(rename = "requestValidatorId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_validator_id: Option<String>,
+}
+
 /// <p>Request to add a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutMethodResponseRequest {
@@ -2462,6 +4234,24 @@ pub struct PutMethodResponseRequest {
     /// <p>[Required] The method response's status code.</p>
     #[serde(rename = "statusCode")]
     pub status_code: String,
+}
+
+/// <p><p>Represents a method response of a given HTTP status code returned to the client. The method response is passed from the back end through the associated integration response that can be transformed using a mapping template. </p> <div class="remarks"> <p/> <h4>Example: A <b>MethodResponse</b> instance of an API</h4> <h5>Request</h5> <p>The example request retrieves a <b>MethodResponse</b> of the 200 status code.</p> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200 HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160603T222952Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160603/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns <code>200 OK</code> status and a payload as follows:</p> <pre><code>{ &quot;_links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; }</code></pre> <p/> </div> <div class="seeAlso"> <a>Method</a>, <a>IntegrationResponse</a>, <a>Integration</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutMethodResponseResponse {
+    /// <p>Specifies the <a>Model</a> resources used for the response's content-type. Response models are represented as a key/value map, with a content-type as the key and a <a>Model</a> name as the value.</p>
+    #[serde(rename = "responseModels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_models: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A key-value map specifying required or optional response parameters that API Gateway can send back to the caller. A key defines a method response header and the value specifies whether the associated method response header is required or not. The expression of the key must match the pattern <code>method.response.header.{name}</code>, where <code>name</code> is a valid and unique header name. API Gateway passes certain integration response data to the method response headers specified here according to the mapping you prescribe in the API's <a>IntegrationResponse</a>. The integration response data that can be mapped include an integration response header expressed in <code>integration.response.header.{name}</code>, a static value enclosed within a pair of single quotes (e.g., <code>'application/json'</code>), or a JSON expression from the back-end response payload in the form of <code>integration.response.body.{JSON-expression}</code>, where <code>JSON-expression</code> is a valid JSON expression without the <code>$</code> prefix.)</p>
+    #[serde(rename = "responseParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_parameters: Option<::std::collections::HashMap<String, bool>>,
+    /// <p>The method response's status code.</p>
+    #[serde(rename = "statusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_code: Option<String>,
 }
 
 /// <p>A PUT request to update an existing API, with external API definitions specified as the request body.</p>
@@ -2490,6 +4280,60 @@ pub struct PutRestApiRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p><p>Represents a REST API.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutRestApiResponse {
+    /// <p>The source of the API key for metering requests according to a usage plan. Valid values are: <ul><li><code>HEADER</code> to read the API key from the <code>X-API-Key</code> header of a request. </li><li><code>AUTHORIZER</code> to read the API key from the <code>UsageIdentifierKey</code> from a custom authorizer.</li></ul> </p>
+    #[serde(rename = "apiKeySource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_source: Option<String>,
+    /// <p>The list of binary media types supported by the <a>RestApi</a>. By default, the <a>RestApi</a> supports only UTF-8-encoded text payloads.</p>
+    #[serde(rename = "binaryMediaTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub binary_media_types: Option<Vec<String>>,
+    /// <p>The timestamp when the API was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The API's description.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The endpoint configuration of this <a>RestApi</a> showing the endpoint types of the API. </p>
+    #[serde(rename = "endpointConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_configuration: Option<EndpointConfiguration>,
+    /// <p>The API's identifier. This identifier is unique across all of your APIs in API Gateway.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>A nullable integer that is used to enable compression (with non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable compression (with a null value) on an API. When compression is enabled, compression or decompression is not applied on the payload if the payload size is smaller than this value. Setting it to zero allows compression for any payload size.</p>
+    #[serde(rename = "minimumCompressionSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_compression_size: Option<i64>,
+    /// <p>The API's name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A stringified JSON policy document that applies to this RestApi regardless of the caller and <a>Method</a> configuration.</p>
+    #[serde(rename = "policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A version identifier for the API.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+    /// <p>The warning messages reported when <code>failonwarnings</code> is turned on during API import.</p>
+    #[serde(rename = "warnings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub warnings: Option<Vec<String>>,
 }
 
 /// <p>Quotas configured for a usage plan.</p>
@@ -2531,19 +4375,6 @@ pub struct RequestValidator {
     pub validate_request_parameters: Option<bool>,
 }
 
-/// <p><p>A collection of <a>RequestValidator</a> resources of a given <a>RestApi</a>.</p> <div class="remarks"> <p>In OpenAPI, the <a>RequestValidators</a> of an API is defined by the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.html">x-amazon-apigateway-request-validators</a> extension.</p> </div> <div class="seeAlso"><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html">Enable Basic Request Validation in API Gateway</a></div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct RequestValidators {
-    /// <p>The current page of elements from this collection.</p>
-    #[serde(rename = "items")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<RequestValidator>>,
-    #[serde(rename = "position")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub position: Option<String>,
-}
-
 /// <p><p>Represents an API resource.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -2568,19 +4399,6 @@ pub struct Resource {
     #[serde(rename = "resourceMethods")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_methods: Option<::std::collections::HashMap<String, Method>>,
-}
-
-/// <p><p>Represents a collection of <a>Resource</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct Resources {
-    /// <p>The current page of elements from this collection.</p>
-    #[serde(rename = "items")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<Resource>>,
-    #[serde(rename = "position")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub position: Option<String>,
 }
 
 /// <p><p>Represents a REST API.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
@@ -2637,19 +4455,6 @@ pub struct RestApi {
     pub warnings: Option<Vec<String>>,
 }
 
-/// <p><p>Contains references to your APIs and links that guide you in how to interact with your collection. A collection offers a paginated view of your APIs.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct RestApis {
-    /// <p>The current page of elements from this collection.</p>
-    #[serde(rename = "items")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<RestApi>>,
-    #[serde(rename = "position")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub position: Option<String>,
-}
-
 /// <p>A configuration property of an SDK type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -2676,17 +4481,6 @@ pub struct SdkConfigurationProperty {
     pub required: Option<bool>,
 }
 
-/// <p>The binary blob response to <a>GetSdk</a>, which contains the generated SDK.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct SdkResponse {
-    /// <p>The binary blob response to <a>GetSdk</a>, which contains the generated SDK.</p>
-    pub body: Option<bytes::Bytes>,
-    /// <p>The content-disposition header value in the HTTP response.</p>
-    pub content_disposition: Option<String>,
-    /// <p>The content-type header value in the HTTP response.</p>
-    pub content_type: Option<String>,
-}
-
 /// <p>A type of SDK that API Gateway can generate.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -2707,19 +4501,6 @@ pub struct SdkType {
     #[serde(rename = "id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-}
-
-/// <p>The collection of <a>SdkType</a> instances.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct SdkTypes {
-    /// <p>The current page of elements from this collection.</p>
-    #[serde(rename = "items")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<SdkType>>,
-    #[serde(rename = "position")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub position: Option<String>,
 }
 
 /// <p><p>Represents a unique identifier for a version of a deployed <a>RestApi</a> that is callable by users.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html">Deploy an API</a> </div></p>
@@ -2809,16 +4590,6 @@ pub struct StageKey {
     pub stage_name: Option<String>,
 }
 
-/// <p><p>A list of <a>Stage</a> resources that are associated with the <a>ApiKey</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/stages.html">Deploying API in Stages</a></div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct Stages {
-    /// <p>The current page of elements from this collection.</p>
-    #[serde(rename = "item")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub item: Option<Vec<Stage>>,
-}
-
 /// <p>Adds or updates a tag on a given resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TagResourceRequest {
@@ -2830,25 +4601,9 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-/// <p>The collection of tags. Each tag element is associated with a given resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct Tags {
-    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
-    #[serde(rename = "tags")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub tags: Option<::std::collections::HashMap<String, String>>,
-}
-
-/// <p><p>Represents a mapping template used to transform a payload.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html#models-mappings-mappings">Mapping Templates</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct Template {
-    /// <p>The Apache <a href="https://velocity.apache.org/engine/devel/vtl-reference-guide.html" target="_blank">Velocity Template Language (VTL)</a> template content used for the template resource.</p>
-    #[serde(rename = "value")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub value: Option<String>,
-}
+pub struct TagResourceResponse {}
 
 /// <p>Make a request to simulate the execution of an <a>Authorizer</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3010,6 +4765,10 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceResponse {}
+
 /// <p>Requests API Gateway to change information about the current <a>Account</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateAccountRequest {
@@ -3017,6 +4776,28 @@ pub struct UpdateAccountRequest {
     #[serde(rename = "patchOperations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
+}
+
+/// <p><p>Represents an AWS account that is associated with API Gateway.</p> <div class="remarks"> <p>To view the account info, call <code>GET</code> on this resource.</p> <h4>Error Codes</h4> <p>The following exception may be thrown when the request fails.</p> <ul> <li>UnauthorizedException</li> <li>NotFoundException</li> <li>TooManyRequestsException</li> </ul> <p>For detailed error code information, including the corresponding HTTP Status Codes, see <a href="https://docs.aws.amazon.com/apigateway/api-reference/handling-errors/#api-error-codes">API Gateway Error Codes</a></p> <h4>Example: Get the information about an account.</h4> <h5>Request</h5> <pre><code>GET /account HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160531T184618Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash} </code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;_links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/account-apigateway-{rel}.html&quot;, &quot;name&quot;: &quot;account&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/account&quot; }, &quot;account:update&quot;: { &quot;href&quot;: &quot;/account&quot; } }, &quot;cloudwatchRoleArn&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;throttleSettings&quot;: { &quot;rateLimit&quot;: 500, &quot;burstLimit&quot;: 1000 } } </code></pre> <p>In addition to making the REST API call directly, you can use the AWS CLI and an AWS SDK to access this resource.</p> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-limits.html">API Gateway Limits</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html">Developer Guide</a>, <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-account.html">AWS CLI</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateAccountResponse {
+    /// <p>The version of the API keys used for the account.</p>
+    #[serde(rename = "apiKeyVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_version: Option<String>,
+    /// <p>The ARN of an Amazon CloudWatch role for the current <a>Account</a>. </p>
+    #[serde(rename = "cloudwatchRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloudwatch_role_arn: Option<String>,
+    /// <p>A list of features supported for the account. When usage plans are enabled, the features list will include an entry of <code>"UsagePlans"</code>.</p>
+    #[serde(rename = "features")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub features: Option<Vec<String>>,
+    /// <p>Specifies the API request limits configured for the current <a>Account</a>.</p>
+    #[serde(rename = "throttleSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub throttle_settings: Option<ThrottleSettings>,
 }
 
 /// <p>A request to change information about an <a>ApiKey</a> resource.</p>
@@ -3029,6 +4810,52 @@ pub struct UpdateApiKeyRequest {
     #[serde(rename = "patchOperations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
+}
+
+/// <p><p>A resource that can be distributed to callers for executing <a>Method</a> resources that require an API key. API keys can be mapped to any <a>Stage</a> on any <a>RestApi</a>, which indicates that the callers with the API key can make requests to that stage.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-api-keys.html">Use API Keys</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateApiKeyResponse {
+    /// <p>The timestamp when the API Key was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>An AWS Marketplace customer identifier , when integrating with the AWS SaaS Marketplace.</p>
+    #[serde(rename = "customerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub customer_id: Option<String>,
+    /// <p>The description of the API Key.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Specifies whether the API Key can be used by callers.</p>
+    #[serde(rename = "enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>The identifier of the API Key.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The timestamp when the API Key was last updated.</p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_date: Option<f64>,
+    /// <p>The name of the API Key.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A list of <a>Stage</a> resources that are associated with the <a>ApiKey</a> resource.</p>
+    #[serde(rename = "stageKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage_keys: Option<Vec<String>>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The value of the API Key.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
 }
 
 /// <p>Request to update an existing <a>Authorizer</a> resource.</p>
@@ -3046,6 +4873,52 @@ pub struct UpdateAuthorizerRequest {
     pub rest_api_id: String,
 }
 
+/// <p><p>Represents an authorization layer for methods. If enabled on a method, API Gateway will activate the authorizer when a client calls the method.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorization</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateAuthorizerResponse {
+    /// <p>Optional customer-defined field, used in OpenAPI imports and exports without functional impact.</p>
+    #[serde(rename = "authType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auth_type: Option<String>,
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null.</p>
+    #[serde(rename = "authorizerCredentials")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_credentials: Option<String>,
+    /// <p>The TTL in seconds of cached authorizer results. If it equals 0, authorization caching is disabled. If it is greater than 0, API Gateway will cache authorizer responses. If this field is not set, the default value is 300. The maximum value is 3600, or 1 hour.</p>
+    #[serde(rename = "authorizerResultTtlInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_result_ttl_in_seconds: Option<i64>,
+    /// <p>Specifies the authorizer's Uniform Resource Identifier (URI). For <code>TOKEN</code> or <code>REQUEST</code> authorizers, this must be a well-formed Lambda function URI, for example, <code>arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations</code>. In general, the URI has this form <code>arn:aws:apigateway:{region}:lambda:path/{service_api}</code>, where <code>{region}</code> is the same as the region hosting the Lambda function, <code>path</code> indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial <code>/</code>. For Lambda functions, this is usually of the form <code>/2015-03-31/functions/[FunctionARN]/invocations</code>.</p>
+    #[serde(rename = "authorizerUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_uri: Option<String>,
+    /// <p>The identifier for the authorizer resource.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The identity source for which authorization is requested. <ul><li>For a <code>TOKEN</code> or <code>COGNITO_USER_POOLS</code> authorizer, this is required and specifies the request header mapping expression for the custom header holding the authorization token submitted by the client. For example, if the token header name is <code>Auth</code>, the header mapping expression is <code>method.request.header.Auth</code>.</li><li>For the <code>REQUEST</code> authorizer, this is required when authorization caching is enabled. The value is a comma-separated string of one or more mapping expressions of the specified request parameters. For example, if an <code>Auth</code> header, a <code>Name</code> query string parameter are defined as identity sources, this value is <code>method.request.header.Auth, method.request.querystring.Name</code>. These parameters will be used to derive the authorization caching key and to perform runtime validation of the <code>REQUEST</code> authorizer by verifying all of the identity-related request parameters are present, not null and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function, otherwise, it returns a 401 Unauthorized response without calling the Lambda function. The valid value is a string of comma-separated mapping expressions of the specified request parameters. When the authorization caching is not enabled, this property is optional.</li></ul></p>
+    #[serde(rename = "identitySource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_source: Option<String>,
+    /// <p>A validation expression for the incoming identity token. For <code>TOKEN</code> authorizers, this value is a regular expression. API Gateway will match the <code>aud</code> field of the incoming token from the client against the specified regular expression. It will invoke the authorizer's Lambda function when there is a match. Otherwise, it will return a 401 Unauthorized response without calling the Lambda function. The validation expression does not apply to the <code>REQUEST</code> authorizer.</p>
+    #[serde(rename = "identityValidationExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_validation_expression: Option<String>,
+    /// <p>[Required] The name of the authorizer.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A list of the Amazon Cognito user pool ARNs for the <code>COGNITO_USER_POOLS</code> authorizer. Each element is of this format: <code>arn:aws:cognito-idp:{region}:{account_id}:userpool/{user_pool_id}</code>. For a <code>TOKEN</code> or <code>REQUEST</code> authorizer, this is not defined. </p>
+    #[serde(rename = "providerARNs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider_ar_ns: Option<Vec<String>>,
+    /// <p>The authorizer type. Valid values are <code>TOKEN</code> for a Lambda function using a single authorization token submitted in a custom header, <code>REQUEST</code> for a Lambda function using incoming request parameters, and <code>COGNITO_USER_POOLS</code> for using an Amazon Cognito user pool.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
 /// <p>A request to change information about the <a>BasePathMapping</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateBasePathMappingRequest {
@@ -3061,6 +4934,24 @@ pub struct UpdateBasePathMappingRequest {
     pub patch_operations: Option<Vec<PatchOperation>>,
 }
 
+/// <p><p>Represents the base path that callers of the API must provide as part of the URL after the domain name.</p> <div class="remarks">A custom domain name plus a <code>BasePathMapping</code> specification identifies a deployed <a>RestApi</a> in a given stage of the owner <a>Account</a>.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Custom Domain Names</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateBasePathMappingResponse {
+    /// <p>The base path name that callers of the API must provide as part of the URL after the domain name.</p>
+    #[serde(rename = "basePath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_path: Option<String>,
+    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    #[serde(rename = "restApiId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rest_api_id: Option<String>,
+    /// <p>The name of the associated stage.</p>
+    #[serde(rename = "stage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage: Option<String>,
+}
+
 /// <p>A request to change information about an <a>ClientCertificate</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateClientCertificateRequest {
@@ -3071,6 +4962,36 @@ pub struct UpdateClientCertificateRequest {
     #[serde(rename = "patchOperations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
+}
+
+/// <p><p>Represents a client certificate used to configure client-side SSL authentication while sending requests to the integration endpoint.</p> <div class="remarks">Client certificates are used to authenticate an API by the backend server. To authenticate an API client (or user), use IAM roles and policies, a custom <a>Authorizer</a> or an Amazon Cognito user pool.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html">Use Client-Side Certificate</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateClientCertificateResponse {
+    /// <p>The identifier of the client certificate.</p>
+    #[serde(rename = "clientCertificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_certificate_id: Option<String>,
+    /// <p>The timestamp when the client certificate was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The description of the client certificate.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The timestamp when the client certificate will expire.</p>
+    #[serde(rename = "expirationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiration_date: Option<f64>,
+    /// <p>The PEM-encoded public key of the client certificate, which can be used to configure certificate authentication in the integration endpoint .</p>
+    #[serde(rename = "pemEncodedCertificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pem_encoded_certificate: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Requests API Gateway to change information about a <a>Deployment</a> resource.</p>
@@ -3088,6 +5009,30 @@ pub struct UpdateDeploymentRequest {
     pub rest_api_id: String,
 }
 
+/// <p><p>An immutable representation of a <a>RestApi</a> resource that can be called by users using <a>Stages</a>. A deployment must be associated with a <a>Stage</a> for it to be callable over the Internet.</p> <div class="remarks">To create a deployment, call <code>POST</code> on the <a>Deployments</a> resource of a <a>RestApi</a>. To view, update, or delete a deployment, call <code>GET</code>, <code>PATCH</code>, or <code>DELETE</code> on the specified deployment resource (<code>/restapis/{restapi<em>id}/deployments/{deployment</em>id}</code>).</div> <div class="seeAlso"><a>RestApi</a>, <a>Deployments</a>, <a>Stage</a>, <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-deployment.html">AWS CLI</a>, <a href="https://aws.amazon.com/tools/">AWS SDKs</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateDeploymentResponse {
+    /// <p>A summary of the <a>RestApi</a> at the date and time that the deployment resource was created.</p>
+    #[serde(rename = "apiSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_summary: Option<
+        ::std::collections::HashMap<String, ::std::collections::HashMap<String, MethodSnapshot>>,
+    >,
+    /// <p>The date and time that the deployment resource was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The description for the deployment resource.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier for the deployment resource.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+}
+
 /// <p>Updates an existing documentation part of a given API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDocumentationPartRequest {
@@ -3101,6 +5046,24 @@ pub struct UpdateDocumentationPartRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p><p>A documentation part for a targeted API entity.</p> <div class="remarks"> <p>A documentation part consists of a content map (<code>properties</code>) and a target (<code>location</code>). The target specifies an API entity to which the documentation content applies. The supported API entity types are <code>API</code>, <code>AUTHORIZER</code>, <code>MODEL</code>, <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH<em>PARAMETER</code>, <code>QUERY</em>PARAMETER</code>, <code>REQUEST<em>HEADER</code>, <code>REQUEST</em>BODY</code>, <code>RESPONSE</code>, <code>RESPONSE<em>HEADER</code>, and <code>RESPONSE</em>BODY</code>. Valid <code>location</code> fields depend on the API entity type. All valid fields are not required.</p> <p>The content map is a JSON string of API-specific key-value pairs. Although an API can use any shape for the content map, only the OpenAPI-compliant documentation fields will be injected into the associated API entity definition in the exported OpenAPI definition file.</p></div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationParts</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateDocumentationPartResponse {
+    /// <p>The <a>DocumentationPart</a> identifier, generated by API Gateway when the <code>DocumentationPart</code> is created.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The location of the API entity to which the documentation applies. Valid fields depend on the targeted API entity type. All the valid location fields are not required. If not explicitly specified, a valid location field is treated as a wildcard and associated documentation content may be inherited by matching entities, unless overridden.</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<DocumentationPartLocation>,
+    /// <p>A content map of API-specific key-value pairs describing the targeted API entity. The map must be encoded as a JSON string, e.g., <code>"{ \"description\": \"The API does ...\" }"</code>. Only OpenAPI-compliant documentation-related fields from the <literal>properties</literal> map are exported and, hence, published as part of the API entity definitions, while the original documentation parts are exported in a OpenAPI extension of <code>x-amazon-apigateway-documentation</code>.</p>
+    #[serde(rename = "properties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub properties: Option<String>,
 }
 
 /// <p>Updates an existing documentation version of an API.</p>
@@ -3118,6 +5081,24 @@ pub struct UpdateDocumentationVersionRequest {
     pub rest_api_id: String,
 }
 
+/// <p><p>A snapshot of the documentation of an API.</p> <div class="remarks"><p>Publishing API documentation involves creating a documentation version associated with an API stage and exporting the versioned documentation to an external (e.g., OpenAPI) file.</p></div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a>, <a>DocumentationVersions</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateDocumentationVersionResponse {
+    /// <p>The date when the API documentation snapshot is created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The description of the API documentation snapshot.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The version identifier of the API documentation snapshot.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+}
+
 /// <p>A request to change information about the <a>DomainName</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDomainNameRequest {
@@ -3128,6 +5109,60 @@ pub struct UpdateDomainNameRequest {
     #[serde(rename = "patchOperations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
+}
+
+/// <p><p>Represents a custom domain name as a user-friendly host name of an API (<a>RestApi</a>).</p> <div class="Remarks"> <p>When you deploy an API, API Gateway creates a default host name for the API. This default API host name is of the <code>{restapi-id}.execute-api.{region}.amazonaws.com</code> format. With the default host name, you can access the API&#39;s root resource with the URL of <code>https://{restapi-id}.execute-api.{region}.amazonaws.com/{stage}/</code>. When you set up a custom domain name of <code>apis.example.com</code> for this API, you can then access the same resource using the URL of the <code>https://apis.examples.com/myApi</code>, where <code>myApi</code> is the base path mapping (<a>BasePathMapping</a>) of your API under the custom domain name. </p> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Set a Custom Host Name for an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateDomainNameResponse {
+    /// <p>The reference to an AWS-managed certificate that will be used by edge-optimized endpoint for this domain name. AWS Certificate Manager is the only supported source.</p>
+    #[serde(rename = "certificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_arn: Option<String>,
+    /// <p>The name of the certificate that will be used by edge-optimized endpoint for this domain name.</p>
+    #[serde(rename = "certificateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_name: Option<String>,
+    /// <p>The timestamp when the certificate that was used by edge-optimized endpoint for this domain name was uploaded.</p>
+    #[serde(rename = "certificateUploadDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_upload_date: Option<f64>,
+    /// <p>The domain name of the Amazon CloudFront distribution associated with this custom domain name for an edge-optimized endpoint. You set up this association when adding a DNS record pointing the custom domain name to this distribution name. For more information about CloudFront distributions, see the <a href="https://aws.amazon.com/documentation/cloudfront/" target="_blank">Amazon CloudFront documentation</a>.</p>
+    #[serde(rename = "distributionDomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub distribution_domain_name: Option<String>,
+    /// <p>The region-agnostic Amazon Route 53 Hosted Zone ID of the edge-optimized endpoint. The valid value is <code>Z2FDTNDATAQYW2</code> for all the regions. For more information, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-regional-api-custom-domain-create.html">Set up a Regional Custom Domain Name</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#apigateway_region">AWS Regions and Endpoints for API Gateway</a>. </p>
+    #[serde(rename = "distributionHostedZoneId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub distribution_hosted_zone_id: Option<String>,
+    /// <p>The custom domain name as an API host name, for example, <code>my-api.example.com</code>.</p>
+    #[serde(rename = "domainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>The endpoint configuration of this <a>DomainName</a> showing the endpoint types of the domain name. </p>
+    #[serde(rename = "endpointConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_configuration: Option<EndpointConfiguration>,
+    /// <p>The reference to an AWS-managed certificate that will be used for validating the regional domain name. AWS Certificate Manager is the only supported source.</p>
+    #[serde(rename = "regionalCertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regional_certificate_arn: Option<String>,
+    /// <p>The name of the certificate that will be used for validating the regional domain name.</p>
+    #[serde(rename = "regionalCertificateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regional_certificate_name: Option<String>,
+    /// <p>The domain name associated with the regional endpoint for this custom domain name. You set up this association by adding a DNS record that points the custom domain name to this regional domain name. The regional domain name is returned by API Gateway when you create a regional endpoint.</p>
+    #[serde(rename = "regionalDomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regional_domain_name: Option<String>,
+    /// <p>The region-specific Amazon Route 53 Hosted Zone ID of the regional endpoint. For more information, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-regional-api-custom-domain-create.html">Set up a Regional Custom Domain Name</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#apigateway_region">AWS Regions and Endpoints for API Gateway</a>. </p>
+    #[serde(rename = "regionalHostedZoneId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regional_hosted_zone_id: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
@@ -3143,6 +5178,32 @@ pub struct UpdateGatewayResponseRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p><p>A gateway response of a given response type and status code, with optional response parameters and mapping templates.</p> <div class="remarks"> For more information about valid gateway response types, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html">Gateway Response Types Supported by API Gateway</a> <div class="example"> <h4>Example: Get a Gateway Response of a given response type</h4> <h5>Request</h5> <p>This example shows how to get a gateway response of the <code>MISSING<em>AUTHENTICATION</em>TOKEN</code> type.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T202516Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature=1b52460e3159c1a26cff29093855d50ea141c1c5b937528fecaf60f51129697a Cache-Control: no-cache Postman-Token: 3b2a1ce9-c848-2e26-2e2f-9c2caefbed45 </code></pre> <p>The response type is specified as a URL path.</p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;</em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html&quot;, &quot;name&quot;: &quot;gatewayresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, &quot;gatewayresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING</em>AUTHENTICATION<em>TOKEN&quot; } }, &quot;defaultResponse&quot;: false, &quot;responseParameters&quot;: { &quot;gatewayresponse.header.x-request-path&quot;: &quot;method.request.path.petId&quot;, &quot;gatewayresponse.header.Access-Control-Allow-Origin&quot;: &quot;&apos;a.b.c&apos;&quot;, &quot;gatewayresponse.header.x-request-query&quot;: &quot;method.request.querystring.q&quot;, &quot;gatewayresponse.header.x-request-header&quot;: &quot;method.request.header.Accept&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{\n &quot;message&quot;: $context.error.messageString,\n &quot;type&quot;: &quot;$context.error.responseType&quot;,\n &quot;stage&quot;: &quot;$context.stage&quot;,\n &quot;resourcePath&quot;: &quot;$context.resourcePath&quot;,\n &quot;stageVariables.a&quot;: &quot;$stageVariables.a&quot;,\n &quot;statusCode&quot;: &quot;&apos;404&apos;&quot;\n}&quot; }, &quot;responseType&quot;: &quot;MISSING</em>AUTHENTICATION_TOKEN&quot;, &quot;statusCode&quot;: &quot;404&quot; }</code></pre> <p></p> </div> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html">Customize Gateway Responses</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateGatewayResponseResponse {
+    /// <p>A Boolean flag to indicate whether this <a>GatewayResponse</a> is the default gateway response (<code>true</code>) or not (<code>false</code>). A default gateway response is one generated by API Gateway without any customization by an API developer. </p>
+    #[serde(rename = "defaultResponse")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_response: Option<bool>,
+    /// <p>Response parameters (paths, query strings and headers) of the <a>GatewayResponse</a> as a string-to-string map of key-value pairs.</p>
+    #[serde(rename = "responseParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Response templates of the <a>GatewayResponse</a> as a string-to-string map of key-value pairs.</p>
+    #[serde(rename = "responseTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPE</li></ul> </p>
+    #[serde(rename = "responseType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_type: Option<String>,
+    /// <p>The HTTP status code for this <a>GatewayResponse</a>.</p>
+    #[serde(rename = "statusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_code: Option<String>,
 }
 
 /// <p>Represents an update integration request.</p>
@@ -3161,6 +5222,68 @@ pub struct UpdateIntegrationRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p><p>Represents an HTTP, HTTP<em>PROXY, AWS, AWS</em>PROXY, or Mock integration.</p> <div class="remarks">In the API Gateway console, the built-in Lambda integration is an AWS integration.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateIntegrationResponse {
+    /// <p>Specifies the integration's cache key parameters.</p>
+    #[serde(rename = "cacheKeyParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_key_parameters: Option<Vec<String>>,
+    /// <p>Specifies the integration's cache namespace.</p>
+    #[serde(rename = "cacheNamespace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_namespace: Option<String>,
+    /// <p>The (<a href="https://docs.aws.amazon.com/apigateway/api-reference/resource/vpc-link/#id"><code>id</code></a>) of the <a>VpcLink</a> used for the integration when <code>connectionType=VPC_LINK</code> and undefined, otherwise.</p>
+    #[serde(rename = "connectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_id: Option<String>,
+    /// <p>The type of the network connection to the integration endpoint. The valid value is <code>INTERNET</code> for connections through the public routable internet or <code>VPC_LINK</code> for private connections between API Gateway and a network load balancer in a VPC. The default value is <code>INTERNET</code>.</p>
+    #[serde(rename = "connectionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_type: Option<String>,
+    /// <p>Specifies how to handle request payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a request payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a request payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the request payload will be passed through from the method request to integration request without modification, provided that the <code>passthroughBehaviors</code> is configured to support payload pass-through.</p>
+    #[serde(rename = "contentHandling")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_handling: Option<String>,
+    /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string <code>arn:aws:iam::\*:user/\*</code>. To use resource-based permissions on supported AWS services, specify null.</p>
+    #[serde(rename = "credentials")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub credentials: Option<String>,
+    /// <p>Specifies the integration's HTTP method type.</p>
+    #[serde(rename = "httpMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_method: Option<String>,
+    /// <p><p>Specifies the integration&#39;s responses.</p> <div class="remarks"> <p/> <h4>Example: Get integration responses of a method</h4> <h5>Request</h5> <p/> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200 HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160607T191449Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160607/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash} </code></pre> <h5>Response</h5> <p>The successful response returns <code>200 OK</code> status and a payload as follows:</p> <pre><code>{ &quot;_links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html&quot;, &quot;name&quot;: &quot;integrationresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integrationresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; }, &quot;integrationresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; } }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: &quot;&#39;application/xml&#39;&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;$util.urlDecode(&quot;%3CkinesisStreams%3E#foreach($stream in $input.path(&#39;$.StreamNames&#39;))%3Cstream%3E%3Cname%3E$stream%3C/name%3E%3C/stream%3E#end%3C/kinesisStreams%3E&quot;)\n&quot; }, &quot;statusCode&quot;: &quot;200&quot; }</code></pre> <p/> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
+    #[serde(rename = "integrationResponses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_responses: Option<::std::collections::HashMap<String, IntegrationResponse>>,
+    /// <div> <p> Specifies how the method request body of an unmapped content type will be passed through the integration request to the back end without transformation. A content type is unmapped if no mapping template is defined in the integration or the content type does not match any of the mapped content types, as specified in <code>requestTemplates</code>. The valid value is one of the following: </p> <ul> <li> <code>WHEN_NO_MATCH</code>: passes the method request body through the integration request to the back end without transformation when the method request content type does not match any content type associated with the mapping templates defined in the integration request. </li> <li> <code>WHEN_NO_TEMPLATES</code>: passes the method request body through the integration request to the back end without transformation when no mapping template is defined in the integration request. If a template is defined when this option is selected, the method request of an unmapped content-type will be rejected with an HTTP <code>415 Unsupported Media Type</code> response. </li> <li> <code>NEVER</code>: rejects the method request with an HTTP <code>415 Unsupported Media Type</code> response when either the method request content type does not match any content type associated with the mapping templates defined in the integration request or no mapping template is defined in the integration request. </li> </ul> </div>
+    #[serde(rename = "passthroughBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub passthrough_behavior: Option<String>,
+    /// <p>A key-value map specifying request parameters that are passed from the method request to the back end. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the back end. The method request parameter value must match the pattern of <code>method.request.{location}.{name}</code>, where <code>location</code> is <code>querystring</code>, <code>path</code>, or <code>header</code> and <code>name</code> must be a valid and unique method request parameter name.</p>
+    #[serde(rename = "requestParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value.</p>
+    #[serde(rename = "requestTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds.</p>
+    #[serde(rename = "timeoutInMillis")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout_in_millis: Option<i64>,
+    /// <p>Specifies an API method integration type. The valid value is one of the following:</p> <ul> <li><code>AWS</code>: for integrating the API method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration.</li> <li><code>AWS_PROXY</code>: for integrating the API method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as the Lambda proxy integration.</li> <li><code>HTTP</code>: for integrating the API method request with an HTTP endpoint, including a private HTTP endpoint within a VPC. This integration is also referred to as the HTTP custom integration.</li> <li><code>HTTP_PROXY</code>: for integrating the API method request with an HTTP endpoint, including a private HTTP endpoint within a VPC, with the client request passed through as-is. This is also referred to as the HTTP proxy integration.</li> <li><code>MOCK</code>: for integrating the API method request with API Gateway as a "loop-back" endpoint without invoking any backend.</li> </ul> <p>For the HTTP and HTTP proxy integrations, each integration can specify a protocol (<code>http/https</code>), port and path. Standard 80 and 443 ports are supported as well as custom ports above 1024. An HTTP or HTTP proxy integration with a <code>connectionType</code> of <code>VPC_LINK</code> is referred to as a private integration and uses a <a>VpcLink</a> to connect API Gateway to a network load balancer of a VPC.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p><p>Specifies Uniform Resource Identifier (URI) of the integration endpoint.</p> <ul> <li><p> For <code>HTTP</code> or <code>HTTP<em>PROXY</code> integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the &lt;a target=&quot;</em>blank&quot; href=&quot;https://en.wikipedia.org/wiki/Uniform<em>Resource</em>Identifier&quot;&gt;RFC-3986 specification</a>, for either standard integration, where <code>connectionType</code> is not <code>VPC<em>LINK</code>, or private integration, where <code>connectionType</code> is <code>VPC</em>LINK</code>. For a private HTTP integration, the URI is not used for routing. </p> </li> <li><p> For <code>AWS</code> or <code>AWS<em>PROXY</code> integrations, the URI is of the form <code>arn:aws:apigateway:{region}:{subdomain.service|service}:path|action/{service</em>api}</code>. Here, <code>{Region}</code> is the API Gateway region (e.g., <code>us-east-1</code>); <code>{service}</code> is the name of the integrated AWS service (e.g., <code>s3</code>); and <code>{subdomain}</code> is a designated subdomain supported by certain AWS service for fast host-name lookup. <code>action</code> can be used for an AWS service action-based API, using an <code>Action={name}&amp;{p1}={v1}&amp;p2={v2}...</code> query string. The ensuing <code>{service<em>api}</code> refers to a supported action <code>{name}</code> plus any required input parameters. Alternatively, <code>path</code> can be used for an AWS service path-based API. The ensuing <code>service</em>api</code> refers to the path to an AWS service resource, including the region of the integrated AWS service, if applicable. For example, for integration with the S3 API of <code><a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGET.html">GetObject</a></code>, the <code>uri</code> can be either <code>arn:aws:apigateway:us-west-2:s3:action/GetObject&amp;Bucket={bucket}&amp;Key={key}</code> or <code>arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}</code></p> </li></ul></p>
+    #[serde(rename = "uri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub uri: Option<String>,
 }
 
 /// <p>Represents an update integration response request.</p>
@@ -3184,6 +5307,32 @@ pub struct UpdateIntegrationResponseRequest {
     pub status_code: String,
 }
 
+/// <p><p>Represents an integration response. The status code must map to an existing <a>MethodResponse</a>, and parameters and templates can be used to transform the back-end response.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateIntegrationResponseResponse {
+    /// <p>Specifies how to handle response payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a response payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the response payload will be passed through from the integration response to the method response without modification.</p>
+    #[serde(rename = "contentHandling")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_handling: Option<String>,
+    /// <p>A key-value map specifying response parameters that are passed to the method response from the back end. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of <code>method.response.header.{name}</code>, where <code>name</code> is a valid and unique header name. The mapped non-static value must match the pattern of <code>integration.response.header.{name}</code> or <code>integration.response.body.{JSON-expression}</code>, where <code>name</code> is a valid and unique response header name and <code>JSON-expression</code> is a valid JSON expression without the <code>$</code> prefix.</p>
+    #[serde(rename = "responseParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Specifies the templates used to transform the integration response body. Response templates are represented as a key/value map, with a content-type as the key and a template as the value.</p>
+    #[serde(rename = "responseTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Specifies the regular expression (regex) pattern used to choose an integration response based on the response from the back end. For example, if the success response returns nothing and the error response returns some string, you could use the <code>.+</code> regex to match error response. However, make sure that the error response does not contain any newline (<code>\n</code>) character in such cases. If the back end is an AWS Lambda function, the AWS Lambda function error header is matched. For all other HTTP and AWS back ends, the HTTP status code is matched.</p>
+    #[serde(rename = "selectionPattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub selection_pattern: Option<String>,
+    /// <p>Specifies the status code that is used to map the integration response to an existing <a>MethodResponse</a>.</p>
+    #[serde(rename = "statusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_code: Option<String>,
+}
+
 /// <p>Request to update an existing <a>Method</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateMethodRequest {
@@ -3200,6 +5349,56 @@ pub struct UpdateMethodRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p><p> Represents a client-facing interface by which the client calls the API to access back-end resources. A <b>Method</b> resource is integrated with an <a>Integration</a> resource. Both consist of a request and one or more responses. The method request takes the client input that is passed to the back end through the integration request. A method response returns the output from the back end to the client through an integration response. A method request is embodied in a <b>Method</b> resource, whereas an integration request is embodied in an <a>Integration</a> resource. On the other hand, a method response is represented by a <a>MethodResponse</a> resource, whereas an integration response is represented by an <a>IntegrationResponse</a> resource. </p> <div class="remarks"> <p/> <h4>Example: Retrive the GET method on a specified resource</h4> <h5>Request</h5> <p>The following example request retrieves the information about the GET method on an API resource (<code>3kzxbg5sa2</code>) of an API (<code>fugvjdxtri</code>). </p> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160603T210259Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160603/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;<em>links&quot;: { &quot;curies&quot;: [ { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html&quot;, &quot;name&quot;: &quot;integration&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html&quot;, &quot;name&quot;: &quot;integrationresponse&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-{rel}.html&quot;, &quot;name&quot;: &quot;method&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true } ], &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot;, &quot;name&quot;: &quot;GET&quot;, &quot;title&quot;: &quot;GET&quot; }, &quot;integration:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;method:integration&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;method:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;methodresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/{status</em>code}&quot;, &quot;templated&quot;: true } }, &quot;apiKeyRequired&quot;: true, &quot;authorizationType&quot;: &quot;NONE&quot;, &quot;httpMethod&quot;: &quot;GET&quot;, &quot;<em>embedded&quot;: { &quot;method:integration&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integration:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integrationresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/{status<em>code}&quot;, &quot;templated&quot;: true } }, &quot;cacheKeyParameters&quot;: [], &quot;cacheNamespace&quot;: &quot;3kzxbg5sa2&quot;, &quot;credentials&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;httpMethod&quot;: &quot;POST&quot;, &quot;passthroughBehavior&quot;: &quot;WHEN</em>NO<em>MATCH&quot;, &quot;requestParameters&quot;: { &quot;integration.request.header.Content-Type&quot;: &quot;&#39;application/x-amz-json-1.1&#39;&quot; }, &quot;requestTemplates&quot;: { &quot;application/json&quot;: &quot;{\n}&quot; }, &quot;type&quot;: &quot;AWS&quot;, &quot;uri&quot;: &quot;arn:aws:apigateway:us-east-1:kinesis:action/ListStreams&quot;, &quot;</em>embedded&quot;: { &quot;integration:responses&quot;: { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integrationresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; }, &quot;integrationresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; } }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: &quot;&#39;application/xml&#39;&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;$util.urlDecode(&quot;%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E&quot;)&quot; }, &quot;statusCode&quot;: &quot;200&quot; } } }, &quot;method:responses&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; } } }</code></pre> <p>In the example above, the response template for the <code>200 OK</code> response maps the JSON output from the <code>ListStreams</code> action in the back end to an XML output. The mapping template is URL-encoded as <code>%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E</code> and the output is decoded using the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html#util-templat-reference">$util.urlDecode()</a> helper function.</p> </div> <div class="seeAlso"> <a>MethodResponse</a>, <a>Integration</a>, <a>IntegrationResponse</a>, <a>Resource</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-method-settings.html">Set up an API&#39;s method</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateMethodResponse {
+    /// <p>A boolean flag specifying whether a valid <a>ApiKey</a> is required to invoke this method.</p>
+    #[serde(rename = "apiKeyRequired")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_required: Option<bool>,
+    /// <p>A list of authorization scopes configured on the method. The scopes are used with a <code>COGNITO_USER_POOLS</code> authorizer to authorize the method invocation. The authorization works by matching the method scopes against the scopes parsed from the access token in the incoming request. The method invocation is authorized if any method scopes matches a claimed scope in the access token. Otherwise, the invocation is not authorized. When the method scope is configured, the client must provide an access token instead of an identity token for authorization purposes.</p>
+    #[serde(rename = "authorizationScopes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_scopes: Option<Vec<String>>,
+    /// <p>The method's authorization type. Valid values are <code>NONE</code> for open access, <code>AWS_IAM</code> for using AWS IAM permissions, <code>CUSTOM</code> for using a custom authorizer, or <code>COGNITO_USER_POOLS</code> for using a Cognito user pool.</p>
+    #[serde(rename = "authorizationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_type: Option<String>,
+    /// <p>The identifier of an <a>Authorizer</a> to use on this method. The <code>authorizationType</code> must be <code>CUSTOM</code>.</p>
+    #[serde(rename = "authorizerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_id: Option<String>,
+    /// <p>The method's HTTP verb.</p>
+    #[serde(rename = "httpMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_method: Option<String>,
+    /// <p><p>Gets the method&#39;s integration responsible for passing the client-submitted request to the back end and performing necessary transformations to make the request compliant with the back end.</p> <div class="remarks"> <p/> <h4>Example: </h4> <h5>Request</h5> <p/> <pre><code>GET /restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com Content-Length: 117 X-Amz-Date: 20160613T213210Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160613/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;<em>links&quot;: { &quot;curies&quot;: [ { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html&quot;, &quot;name&quot;: &quot;integration&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html&quot;, &quot;name&quot;: &quot;integrationresponse&quot;, &quot;templated&quot;: true } ], &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration&quot; }, &quot;integration:delete&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration&quot; }, &quot;integration:responses&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integration:update&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration&quot; }, &quot;integrationresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/{status</em>code}&quot;, &quot;templated&quot;: true } }, &quot;cacheKeyParameters&quot;: [], &quot;cacheNamespace&quot;: &quot;0cjtch&quot;, &quot;credentials&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;httpMethod&quot;: &quot;POST&quot;, &quot;passthroughBehavior&quot;: &quot;WHEN<em>NO</em>MATCH&quot;, &quot;requestTemplates&quot;: { &quot;application/json&quot;: &quot;{\n &quot;a&quot;: &quot;$input.params(&#39;operand1&#39;)&quot;,\n &quot;b&quot;: &quot;$input.params(&#39;operand2&#39;)&quot;, \n &quot;op&quot;: &quot;$input.params(&#39;operator&#39;)&quot; \n}&quot; }, &quot;type&quot;: &quot;AWS&quot;, &quot;uri&quot;: &quot;arn:aws:apigateway:us-west-2:lambda:path//2015-03-31/functions/arn:aws:lambda:us-west-2:123456789012:function:Calc/invocations&quot;, &quot;<em>embedded&quot;: { &quot;integration:responses&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integrationresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200&quot; }, &quot;integrationresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200&quot; } }, &quot;responseParameters&quot;: { &quot;method.response.header.operator&quot;: &quot;integration.response.body.op&quot;, &quot;method.response.header.operand<em>2&quot;: &quot;integration.response.body.b&quot;, &quot;method.response.header.operand</em>1&quot;: &quot;integration.response.body.a&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;#set($res = $input.path(&#39;$&#39;))\n{\n &quot;result&quot;: &quot;$res.a, $res.b, $res.op =&gt; $res.c&quot;,\n &quot;a&quot; : &quot;$res.a&quot;,\n &quot;b&quot; : &quot;$res.b&quot;,\n &quot;op&quot; : &quot;$res.op&quot;,\n &quot;c&quot; : &quot;$res.c&quot;\n}&quot; }, &quot;selectionPattern&quot;: &quot;&quot;, &quot;statusCode&quot;: &quot;200&quot; } } }</code></pre> <p/> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-integration.html">AWS CLI</a> </div></p>
+    #[serde(rename = "methodIntegration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub method_integration: Option<Integration>,
+    /// <p><p>Gets a method response associated with a given HTTP status code. </p> <div class="remarks"> <p>The collection of method responses are encapsulated in a key-value map, where the key is a response&#39;s HTTP status code and the value is a <a>MethodResponse</a> resource that specifies the response returned to the caller from the back end through the integration response.</p> <h4>Example: Get a 200 OK response of a GET method</h4> <h5>Request</h5> <p/> <pre><code>GET /restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200 HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com Content-Length: 117 X-Amz-Date: 20160613T215008Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160613/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;<em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.operator&quot;: false, &quot;method.response.header.operand</em>2&quot;: false, &quot;method.response.header.operand_1&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; }</code></pre> <p/> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-method-response.html">AWS CLI</a> </div></p>
+    #[serde(rename = "methodResponses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub method_responses: Option<::std::collections::HashMap<String, MethodResponse>>,
+    /// <p>A human-friendly operation identifier for the method. For example, you can assign the <code>operationName</code> of <code>ListPets</code> for the <code>GET /pets</code> method in <a href="https://petstore-demo-endpoint.execute-api.com/petstore/pets">PetStore</a> example.</p>
+    #[serde(rename = "operationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation_name: Option<String>,
+    /// <p>A key-value map specifying data schemas, represented by <a>Model</a> resources, (as the mapped value) of the request payloads of given content types (as the mapping key).</p>
+    #[serde(rename = "requestModels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_models: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A key-value map defining required or optional method request parameters that can be accepted by API Gateway. A key is a method request parameter name matching the pattern of <code>method.request.{location}.{name}</code>, where <code>location</code> is <code>querystring</code>, <code>path</code>, or <code>header</code> and <code>name</code> is a valid and unique parameter name. The value associated with the key is a Boolean flag indicating whether the parameter is required (<code>true</code>) or optional (<code>false</code>). The method request parameter names defined here are available in <a>Integration</a> to be mapped to integration request parameters or templates.</p>
+    #[serde(rename = "requestParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_parameters: Option<::std::collections::HashMap<String, bool>>,
+    /// <p>The identifier of a <a>RequestValidator</a> for request validation.</p>
+    #[serde(rename = "requestValidatorId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_validator_id: Option<String>,
 }
 
 /// <p>A request to update an existing <a>MethodResponse</a> resource.</p>
@@ -3223,6 +5422,24 @@ pub struct UpdateMethodResponseRequest {
     pub status_code: String,
 }
 
+/// <p><p>Represents a method response of a given HTTP status code returned to the client. The method response is passed from the back end through the associated integration response that can be transformed using a mapping template. </p> <div class="remarks"> <p/> <h4>Example: A <b>MethodResponse</b> instance of an API</h4> <h5>Request</h5> <p>The example request retrieves a <b>MethodResponse</b> of the 200 status code.</p> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200 HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160603T222952Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160603/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns <code>200 OK</code> status and a payload as follows:</p> <pre><code>{ &quot;_links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; }</code></pre> <p/> </div> <div class="seeAlso"> <a>Method</a>, <a>IntegrationResponse</a>, <a>Integration</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateMethodResponseResponse {
+    /// <p>Specifies the <a>Model</a> resources used for the response's content-type. Response models are represented as a key/value map, with a content-type as the key and a <a>Model</a> name as the value.</p>
+    #[serde(rename = "responseModels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_models: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A key-value map specifying required or optional response parameters that API Gateway can send back to the caller. A key defines a method response header and the value specifies whether the associated method response header is required or not. The expression of the key must match the pattern <code>method.response.header.{name}</code>, where <code>name</code> is a valid and unique header name. API Gateway passes certain integration response data to the method response headers specified here according to the mapping you prescribe in the API's <a>IntegrationResponse</a>. The integration response data that can be mapped include an integration response header expressed in <code>integration.response.header.{name}</code>, a static value enclosed within a pair of single quotes (e.g., <code>'application/json'</code>), or a JSON expression from the back-end response payload in the form of <code>integration.response.body.{JSON-expression}</code>, where <code>JSON-expression</code> is a valid JSON expression without the <code>$</code> prefix.)</p>
+    #[serde(rename = "responseParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_parameters: Option<::std::collections::HashMap<String, bool>>,
+    /// <p>The method response's status code.</p>
+    #[serde(rename = "statusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_code: Option<String>,
+}
+
 /// <p>Request to update an existing model in an existing <a>RestApi</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateModelRequest {
@@ -3236,6 +5453,32 @@ pub struct UpdateModelRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p><p>Represents the data structure of a method&#39;s request or response payload.</p> <div class="remarks"> <p>A request model defines the data structure of the client-supplied request payload. A response model defines the data structure of the response payload returned by the back end. Although not required, models are useful for mapping payloads between the front end and back end.</p> <p>A model is used for generating an API&#39;s SDK, validating the input request body, and creating a skeletal mapping template.</p> </div> <div class="seeAlso"> <a>Method</a>, <a>MethodResponse</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Models and Mappings</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateModelResponse {
+    /// <p>The content-type for the model.</p>
+    #[serde(rename = "contentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_type: Option<String>,
+    /// <p>The description of the model.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier for the model resource.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name of the model. Must be an alphanumeric string.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The schema for the model. For <code>application/json</code> models, this should be <a href="https://tools.ietf.org/html/draft-zyp-json-schema-04" target="_blank">JSON schema draft 4</a> model. Do not include "\*/" characters in the description of any properties because such "\*/" characters may be interpreted as the closing marker for comments in some languages, such as Java or JavaScript, causing the installation of your API's SDK generated by API Gateway to fail.</p>
+    #[serde(rename = "schema")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema: Option<String>,
 }
 
 /// <p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
@@ -3253,6 +5496,28 @@ pub struct UpdateRequestValidatorRequest {
     pub rest_api_id: String,
 }
 
+/// <p><p>A set of validation rules for incoming <a>Method</a> requests.</p> <div class="remarks"> <p>In OpenAPI, a <a>RequestValidator</a> of an API is defined by the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.requestValidator.html">x-amazon-apigateway-request-validators.requestValidator</a> object. It the referenced using the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validator">x-amazon-apigateway-request-validator</a> property.</p> </div> <div class="seeAlso"><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html">Enable Basic Request Validation in API Gateway</a></div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateRequestValidatorResponse {
+    /// <p>The identifier of this <a>RequestValidator</a>.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name of this <a>RequestValidator</a></p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A Boolean flag to indicate whether to validate a request body according to the configured <a>Model</a> schema.</p>
+    #[serde(rename = "validateRequestBody")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validate_request_body: Option<bool>,
+    /// <p>A Boolean flag to indicate whether to validate request parameters (<code>true</code>) or not (<code>false</code>).</p>
+    #[serde(rename = "validateRequestParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validate_request_parameters: Option<bool>,
+}
+
 /// <p>Request to change information about a <a>Resource</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateResourceRequest {
@@ -3268,6 +5533,32 @@ pub struct UpdateResourceRequest {
     pub rest_api_id: String,
 }
 
+/// <p><p>Represents an API resource.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateResourceResponse {
+    /// <p>The resource's identifier.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The parent resource's identifier.</p>
+    #[serde(rename = "parentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_id: Option<String>,
+    /// <p>The full path for this resource.</p>
+    #[serde(rename = "path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+    /// <p>The last path segment for this resource.</p>
+    #[serde(rename = "pathPart")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path_part: Option<String>,
+    /// <p><p>Gets an API resource&#39;s method of a given HTTP verb.</p> <div class="remarks"> <p>The resource methods are a map of methods indexed by methods&#39; HTTP verbs enabled on the resource. This method map is included in the <code>200 OK</code> response of the <code>GET /restapis/{restapi<em>id}/resources/{resource</em>id}</code> or <code>GET /restapis/{restapi<em>id}/resources/{resource</em>id}?embed=methods</code> request.</p> <h4>Example: Get the GET method of an API resource</h4> <h5>Request</h5> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20170223T031827Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20170223/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <pre><code>{ &quot;<em>links&quot;: { &quot;curies&quot;: [ { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html&quot;, &quot;name&quot;: &quot;integration&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html&quot;, &quot;name&quot;: &quot;integrationresponse&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-{rel}.html&quot;, &quot;name&quot;: &quot;method&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true } ], &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot;, &quot;name&quot;: &quot;GET&quot;, &quot;title&quot;: &quot;GET&quot; }, &quot;integration:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;method:integration&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;method:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;methodresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/{status</em>code}&quot;, &quot;templated&quot;: true } }, &quot;apiKeyRequired&quot;: false, &quot;authorizationType&quot;: &quot;NONE&quot;, &quot;httpMethod&quot;: &quot;GET&quot;, &quot;<em>embedded&quot;: { &quot;method:integration&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integration:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integrationresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/{status<em>code}&quot;, &quot;templated&quot;: true } }, &quot;cacheKeyParameters&quot;: [], &quot;cacheNamespace&quot;: &quot;3kzxbg5sa2&quot;, &quot;credentials&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;httpMethod&quot;: &quot;POST&quot;, &quot;passthroughBehavior&quot;: &quot;WHEN</em>NO<em>MATCH&quot;, &quot;requestParameters&quot;: { &quot;integration.request.header.Content-Type&quot;: &quot;&#39;application/x-amz-json-1.1&#39;&quot; }, &quot;requestTemplates&quot;: { &quot;application/json&quot;: &quot;{\n}&quot; }, &quot;type&quot;: &quot;AWS&quot;, &quot;uri&quot;: &quot;arn:aws:apigateway:us-east-1:kinesis:action/ListStreams&quot;, &quot;</em>embedded&quot;: { &quot;integration:responses&quot;: { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integrationresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; }, &quot;integrationresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; } }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: &quot;&#39;application/xml&#39;&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;$util.urlDecode(&quot;%3CkinesisStreams%3E#foreach($stream in $input.path(&#39;$.StreamNames&#39;))%3Cstream%3E%3Cname%3E$stream%3C/name%3E%3C/stream%3E#end%3C/kinesisStreams%3E&quot;)\n&quot; }, &quot;statusCode&quot;: &quot;200&quot; } } }, &quot;method:responses&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; } } }</code></pre> <p>If the <code>OPTIONS</code> is enabled on the resource, you can follow the example here to get that method. Just replace the <code>GET</code> of the last path segment in the request URL with <code>OPTIONS</code>.</p> </div> <div class="seeAlso"> </div></p>
+    #[serde(rename = "resourceMethods")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_methods: Option<::std::collections::HashMap<String, Method>>,
+}
+
 /// <p>Request to update an existing <a>RestApi</a> resource in your collection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateRestApiRequest {
@@ -3278,6 +5569,60 @@ pub struct UpdateRestApiRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p><p>Represents a REST API.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateRestApiResponse {
+    /// <p>The source of the API key for metering requests according to a usage plan. Valid values are: <ul><li><code>HEADER</code> to read the API key from the <code>X-API-Key</code> header of a request. </li><li><code>AUTHORIZER</code> to read the API key from the <code>UsageIdentifierKey</code> from a custom authorizer.</li></ul> </p>
+    #[serde(rename = "apiKeySource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_source: Option<String>,
+    /// <p>The list of binary media types supported by the <a>RestApi</a>. By default, the <a>RestApi</a> supports only UTF-8-encoded text payloads.</p>
+    #[serde(rename = "binaryMediaTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub binary_media_types: Option<Vec<String>>,
+    /// <p>The timestamp when the API was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The API's description.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The endpoint configuration of this <a>RestApi</a> showing the endpoint types of the API. </p>
+    #[serde(rename = "endpointConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_configuration: Option<EndpointConfiguration>,
+    /// <p>The API's identifier. This identifier is unique across all of your APIs in API Gateway.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>A nullable integer that is used to enable compression (with non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable compression (with a null value) on an API. When compression is enabled, compression or decompression is not applied on the payload if the payload size is smaller than this value. Setting it to zero allows compression for any payload size.</p>
+    #[serde(rename = "minimumCompressionSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_compression_size: Option<i64>,
+    /// <p>The API's name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A stringified JSON policy document that applies to this RestApi regardless of the caller and <a>Method</a> configuration.</p>
+    #[serde(rename = "policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A version identifier for the API.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+    /// <p>The warning messages reported when <code>failonwarnings</code> is turned on during API import.</p>
+    #[serde(rename = "warnings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub warnings: Option<Vec<String>>,
 }
 
 /// <p>Requests API Gateway to change information about a <a>Stage</a> resource.</p>
@@ -3295,6 +5640,80 @@ pub struct UpdateStageRequest {
     pub stage_name: String,
 }
 
+/// <p><p>Represents a unique identifier for a version of a deployed <a>RestApi</a> that is callable by users.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html">Deploy an API</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateStageResponse {
+    /// <p>Settings for logging access in this stage.</p>
+    #[serde(rename = "accessLogSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_log_settings: Option<AccessLogSettings>,
+    /// <p>Specifies whether a cache cluster is enabled for the stage.</p>
+    #[serde(rename = "cacheClusterEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_cluster_enabled: Option<bool>,
+    /// <p>The size of the cache cluster for the stage, if enabled.</p>
+    #[serde(rename = "cacheClusterSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_cluster_size: Option<String>,
+    /// <p>The status of the cache cluster for the stage, if enabled.</p>
+    #[serde(rename = "cacheClusterStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_cluster_status: Option<String>,
+    /// <p>Settings for the canary deployment in this stage.</p>
+    #[serde(rename = "canarySettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub canary_settings: Option<CanarySettings>,
+    /// <p>The identifier of a client certificate for an API stage.</p>
+    #[serde(rename = "clientCertificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_certificate_id: Option<String>,
+    /// <p>The timestamp when the stage was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The identifier of the <a>Deployment</a> that the stage points to.</p>
+    #[serde(rename = "deploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_id: Option<String>,
+    /// <p>The stage's description.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The version of the associated API documentation.</p>
+    #[serde(rename = "documentationVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub documentation_version: Option<String>,
+    /// <p>The timestamp when the stage last updated.</p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_date: Option<f64>,
+    /// <p>A map that defines the method settings for a <a>Stage</a> resource. Keys (designated as <code>/{method_setting_key</code> below) are method paths defined as <code>{resource_path}/{http_method}</code> for an individual method override, or <code>/\*/\*</code> for overriding all methods in the stage. </p>
+    #[serde(rename = "methodSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub method_settings: Option<::std::collections::HashMap<String, MethodSetting>>,
+    /// <p>The name of the stage is the first path segment in the Uniform Resource Identifier (URI) of a call to API Gateway.</p>
+    #[serde(rename = "stageName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage_name: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Specifies whether active tracing with X-ray is enabled for the <a>Stage</a>.</p>
+    #[serde(rename = "tracingEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tracing_enabled: Option<bool>,
+    /// <p>A map that defines the stage variables for a <a>Stage</a> resource. Variable names can have alphanumeric and underscore characters, and the values must match <code>[A-Za-z0-9-._~:/?#&amp;=,]+</code>.</p>
+    #[serde(rename = "variables")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub variables: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The ARN of the WebAcl associated with the <a>Stage</a>.</p>
+    #[serde(rename = "webAclArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub web_acl_arn: Option<String>,
+}
+
 /// <p>The PATCH request to update a usage plan of a given plan Id.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateUsagePlanRequest {
@@ -3305,6 +5724,44 @@ pub struct UpdateUsagePlanRequest {
     /// <p>[Required] The Id of the to-be-updated usage plan.</p>
     #[serde(rename = "usagePlanId")]
     pub usage_plan_id: String,
+}
+
+/// <p><p>Represents a usage plan than can specify who can assess associated API stages with specified request limits and quotas.</p> <div class="remarks"> <p>In a usage plan, you associate an API by specifying the API&#39;s Id and a stage name of the specified API. You add plan customers by adding API keys to the plan. </p> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateUsagePlanResponse {
+    /// <p>The associated API stages of a usage plan.</p>
+    #[serde(rename = "apiStages")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_stages: Option<Vec<ApiStage>>,
+    /// <p>The description of a usage plan.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier of a <a>UsagePlan</a> resource.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name of a usage plan.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The AWS Markeplace product identifier to associate with the usage plan as a SaaS product on AWS Marketplace.</p>
+    #[serde(rename = "productCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_code: Option<String>,
+    /// <p>The maximum number of permitted requests per a given unit time interval.</p>
+    #[serde(rename = "quota")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quota: Option<QuotaSettings>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The request throttle limits of a usage plan.</p>
+    #[serde(rename = "throttle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub throttle: Option<ThrottleSettings>,
 }
 
 /// <p>The PATCH request to grant a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>
@@ -3322,22 +5779,10 @@ pub struct UpdateUsageRequest {
     pub usage_plan_id: String,
 }
 
-/// <p>Updates an existing <a>VpcLink</a> of a specified identifier.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateVpcLinkRequest {
-    /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
-    #[serde(rename = "patchOperations")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub patch_operations: Option<Vec<PatchOperation>>,
-    /// <p>[Required] The identifier of the <a>VpcLink</a>. It is used in an <a>Integration</a> to reference this <a>VpcLink</a>.</p>
-    #[serde(rename = "vpcLinkId")]
-    pub vpc_link_id: String,
-}
-
 /// <p><p>Represents the usage data of a usage plan.</p> <div class="remarks"/> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-create-usage-plans-with-console.html#api-gateway-usage-plan-manage-usage">Manage Usage in a Usage Plan</a> </div></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct Usage {
+pub struct UpdateUsageResponse {
     /// <p>The ending date of the usage data.</p>
     #[serde(rename = "endDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3357,6 +5802,52 @@ pub struct Usage {
     #[serde(rename = "usagePlanId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub usage_plan_id: Option<String>,
+}
+
+/// <p>Updates an existing <a>VpcLink</a> of a specified identifier.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateVpcLinkRequest {
+    /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
+    #[serde(rename = "patchOperations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub patch_operations: Option<Vec<PatchOperation>>,
+    /// <p>[Required] The identifier of the <a>VpcLink</a>. It is used in an <a>Integration</a> to reference this <a>VpcLink</a>.</p>
+    #[serde(rename = "vpcLinkId")]
+    pub vpc_link_id: String,
+}
+
+/// <p><p>A API Gateway VPC link for a <a>RestApi</a> to access resources in an Amazon Virtual Private Cloud (VPC).</p> <div class="remarks"> <p><p>To enable access to a resource in an Amazon Virtual Private Cloud through Amazon API Gateway, you, as an API developer, create a <a>VpcLink</a> resource targeted for one or more network load balancers of the VPC and then integrate an API method with a private integration that uses the <a>VpcLink</a>. The private integration has an integration type of <code>HTTP</code> or <code>HTTP<em>PROXY</code> and has a connection type of <code>VPC</em>LINK</code>. The integration uses the <code>connectionId</code> property to identify the <a>VpcLink</a> used.</p> </p> </div></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateVpcLinkResponse {
+    /// <p>The description of the VPC link.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier of the <a>VpcLink</a>. It is used in an <a>Integration</a> to reference this <a>VpcLink</a>.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name used to label and identify the VPC link.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The status of the VPC link. The valid values are <code>AVAILABLE</code>, <code>PENDING</code>, <code>DELETING</code>, or <code>FAILED</code>. Deploying an API will wait if the status is <code>PENDING</code> and will fail if the status is <code>DELETING</code>. </p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A description about the VPC link status.</p>
+    #[serde(rename = "statusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_message: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The ARNs of network load balancers of the VPC targeted by the VPC link. The network load balancers must be owned by the same AWS account of the API owner.</p>
+    #[serde(rename = "targetArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_arns: Option<Vec<String>>,
 }
 
 /// <p><p>Represents a usage plan than can specify who can assess associated API stages with specified request limits and quotas.</p> <div class="remarks"> <p>In a usage plan, you associate an API by specifying the API&#39;s Id and a stage name of the specified API. You add plan customers by adding API keys to the plan. </p> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
@@ -3419,32 +5910,6 @@ pub struct UsagePlanKey {
     pub value: Option<String>,
 }
 
-/// <p><p>Represents the collection of usage plan keys added to usage plans for the associated API keys and, possibly, other types of keys.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct UsagePlanKeys {
-    /// <p>The current page of elements from this collection.</p>
-    #[serde(rename = "items")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<UsagePlanKey>>,
-    #[serde(rename = "position")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub position: Option<String>,
-}
-
-/// <p><p>Represents a collection of usage plans for an AWS account.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct UsagePlans {
-    /// <p>The current page of elements from this collection.</p>
-    #[serde(rename = "items")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<UsagePlan>>,
-    #[serde(rename = "position")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub position: Option<String>,
-}
-
 /// <p><p>A API Gateway VPC link for a <a>RestApi</a> to access resources in an Amazon Virtual Private Cloud (VPC).</p> <div class="remarks"> <p><p>To enable access to a resource in an Amazon Virtual Private Cloud through Amazon API Gateway, you, as an API developer, create a <a>VpcLink</a> resource targeted for one or more network load balancers of the VPC and then integrate an API method with a private integration that uses the <a>VpcLink</a>. The private integration has an integration type of <code>HTTP</code> or <code>HTTP<em>PROXY</code> and has a connection type of <code>VPC</em>LINK</code>. The integration uses the <code>connectionId</code> property to identify the <a>VpcLink</a> used.</p> </p> </div></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -3477,19 +5942,6 @@ pub struct VpcLink {
     #[serde(rename = "targetArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_arns: Option<Vec<String>>,
-}
-
-/// <p><p>The collection of VPC links under the caller&#39;s account in a region.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-with-private-integration.html">Getting Started with Private Integrations</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-private-integration.html">Set up Private Integrations</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct VpcLinks {
-    /// <p>The current page of elements from this collection.</p>
-    #[serde(rename = "items")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<VpcLink>>,
-    #[serde(rename = "position")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub position: Option<String>,
 }
 
 /// Errors returned by CreateApiKey
@@ -9975,602 +12427,510 @@ impl Error for UpdateVpcLinkError {
 /// Trait representing the capabilities of the Amazon API Gateway API. Amazon API Gateway clients implement this trait.
 pub trait ApiGateway {
     /// <p><p>Create an <a>ApiKey</a> resource. </p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html">AWS CLI</a></div></p>
-    fn create_api_key(&self, input: CreateApiKeyRequest)
-        -> RusotoFuture<ApiKey, CreateApiKeyError>;
+    fn create_api_key(&self, input: CreateApiKeyRequest) -> Request<CreateApiKeyRequest>;
 
     /// <p><p>Adds a new <a>Authorizer</a> resource to an existing <a>RestApi</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/create-authorizer.html">AWS CLI</a></div></p>
-    fn create_authorizer(
-        &self,
-        input: CreateAuthorizerRequest,
-    ) -> RusotoFuture<Authorizer, CreateAuthorizerError>;
+    fn create_authorizer(&self, input: CreateAuthorizerRequest)
+        -> Request<CreateAuthorizerRequest>;
 
     /// <p>Creates a new <a>BasePathMapping</a> resource.</p>
     fn create_base_path_mapping(
         &self,
         input: CreateBasePathMappingRequest,
-    ) -> RusotoFuture<BasePathMapping, CreateBasePathMappingError>;
+    ) -> Request<CreateBasePathMappingRequest>;
 
     /// <p>Creates a <a>Deployment</a> resource, which makes a specified <a>RestApi</a> callable over the internet.</p>
-    fn create_deployment(
-        &self,
-        input: CreateDeploymentRequest,
-    ) -> RusotoFuture<Deployment, CreateDeploymentError>;
+    fn create_deployment(&self, input: CreateDeploymentRequest)
+        -> Request<CreateDeploymentRequest>;
 
     fn create_documentation_part(
         &self,
         input: CreateDocumentationPartRequest,
-    ) -> RusotoFuture<DocumentationPart, CreateDocumentationPartError>;
+    ) -> Request<CreateDocumentationPartRequest>;
 
     fn create_documentation_version(
         &self,
         input: CreateDocumentationVersionRequest,
-    ) -> RusotoFuture<DocumentationVersion, CreateDocumentationVersionError>;
+    ) -> Request<CreateDocumentationVersionRequest>;
 
     /// <p>Creates a new domain name.</p>
     fn create_domain_name(
         &self,
         input: CreateDomainNameRequest,
-    ) -> RusotoFuture<DomainName, CreateDomainNameError>;
+    ) -> Request<CreateDomainNameRequest>;
 
     /// <p>Adds a new <a>Model</a> resource to an existing <a>RestApi</a> resource.</p>
-    fn create_model(&self, input: CreateModelRequest) -> RusotoFuture<Model, CreateModelError>;
+    fn create_model(&self, input: CreateModelRequest) -> Request<CreateModelRequest>;
 
     /// <p>Creates a <a>ReqeustValidator</a> of a given <a>RestApi</a>.</p>
     fn create_request_validator(
         &self,
         input: CreateRequestValidatorRequest,
-    ) -> RusotoFuture<RequestValidator, CreateRequestValidatorError>;
+    ) -> Request<CreateRequestValidatorRequest>;
 
     /// <p>Creates a <a>Resource</a> resource.</p>
-    fn create_resource(
-        &self,
-        input: CreateResourceRequest,
-    ) -> RusotoFuture<Resource, CreateResourceError>;
+    fn create_resource(&self, input: CreateResourceRequest) -> Request<CreateResourceRequest>;
 
     /// <p>Creates a new <a>RestApi</a> resource.</p>
-    fn create_rest_api(
-        &self,
-        input: CreateRestApiRequest,
-    ) -> RusotoFuture<RestApi, CreateRestApiError>;
+    fn create_rest_api(&self, input: CreateRestApiRequest) -> Request<CreateRestApiRequest>;
 
     /// <p>Creates a new <a>Stage</a> resource that references a pre-existing <a>Deployment</a> for the API. </p>
-    fn create_stage(&self, input: CreateStageRequest) -> RusotoFuture<Stage, CreateStageError>;
+    fn create_stage(&self, input: CreateStageRequest) -> Request<CreateStageRequest>;
 
     /// <p>Creates a usage plan with the throttle and quota limits, as well as the associated API stages, specified in the payload. </p>
-    fn create_usage_plan(
-        &self,
-        input: CreateUsagePlanRequest,
-    ) -> RusotoFuture<UsagePlan, CreateUsagePlanError>;
+    fn create_usage_plan(&self, input: CreateUsagePlanRequest) -> Request<CreateUsagePlanRequest>;
 
     /// <p>Creates a usage plan key for adding an existing API key to a usage plan.</p>
     fn create_usage_plan_key(
         &self,
         input: CreateUsagePlanKeyRequest,
-    ) -> RusotoFuture<UsagePlanKey, CreateUsagePlanKeyError>;
+    ) -> Request<CreateUsagePlanKeyRequest>;
 
     /// <p>Creates a VPC link, under the caller's account in a selected region, in an asynchronous operation that typically takes 2-4 minutes to complete and become operational. The caller must have permissions to create and update VPC Endpoint services.</p>
-    fn create_vpc_link(
-        &self,
-        input: CreateVpcLinkRequest,
-    ) -> RusotoFuture<VpcLink, CreateVpcLinkError>;
+    fn create_vpc_link(&self, input: CreateVpcLinkRequest) -> Request<CreateVpcLinkRequest>;
 
     /// <p>Deletes the <a>ApiKey</a> resource.</p>
-    fn delete_api_key(&self, input: DeleteApiKeyRequest) -> RusotoFuture<(), DeleteApiKeyError>;
+    fn delete_api_key(&self, input: DeleteApiKeyRequest) -> Request<DeleteApiKeyRequest>;
 
     /// <p><p>Deletes an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/delete-authorizer.html">AWS CLI</a></div></p>
-    fn delete_authorizer(
-        &self,
-        input: DeleteAuthorizerRequest,
-    ) -> RusotoFuture<(), DeleteAuthorizerError>;
+    fn delete_authorizer(&self, input: DeleteAuthorizerRequest)
+        -> Request<DeleteAuthorizerRequest>;
 
     /// <p>Deletes the <a>BasePathMapping</a> resource.</p>
     fn delete_base_path_mapping(
         &self,
         input: DeleteBasePathMappingRequest,
-    ) -> RusotoFuture<(), DeleteBasePathMappingError>;
+    ) -> Request<DeleteBasePathMappingRequest>;
 
     /// <p>Deletes the <a>ClientCertificate</a> resource.</p>
     fn delete_client_certificate(
         &self,
         input: DeleteClientCertificateRequest,
-    ) -> RusotoFuture<(), DeleteClientCertificateError>;
+    ) -> Request<DeleteClientCertificateRequest>;
 
     /// <p>Deletes a <a>Deployment</a> resource. Deleting a deployment will only succeed if there are no <a>Stage</a> resources associated with it.</p>
-    fn delete_deployment(
-        &self,
-        input: DeleteDeploymentRequest,
-    ) -> RusotoFuture<(), DeleteDeploymentError>;
+    fn delete_deployment(&self, input: DeleteDeploymentRequest)
+        -> Request<DeleteDeploymentRequest>;
 
     fn delete_documentation_part(
         &self,
         input: DeleteDocumentationPartRequest,
-    ) -> RusotoFuture<(), DeleteDocumentationPartError>;
+    ) -> Request<DeleteDocumentationPartRequest>;
 
     fn delete_documentation_version(
         &self,
         input: DeleteDocumentationVersionRequest,
-    ) -> RusotoFuture<(), DeleteDocumentationVersionError>;
+    ) -> Request<DeleteDocumentationVersionRequest>;
 
     /// <p>Deletes the <a>DomainName</a> resource.</p>
     fn delete_domain_name(
         &self,
         input: DeleteDomainNameRequest,
-    ) -> RusotoFuture<(), DeleteDomainNameError>;
+    ) -> Request<DeleteDomainNameRequest>;
 
     /// <p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>
     fn delete_gateway_response(
         &self,
         input: DeleteGatewayResponseRequest,
-    ) -> RusotoFuture<(), DeleteGatewayResponseError>;
+    ) -> Request<DeleteGatewayResponseRequest>;
 
     /// <p>Represents a delete integration.</p>
     fn delete_integration(
         &self,
         input: DeleteIntegrationRequest,
-    ) -> RusotoFuture<(), DeleteIntegrationError>;
+    ) -> Request<DeleteIntegrationRequest>;
 
     /// <p>Represents a delete integration response.</p>
     fn delete_integration_response(
         &self,
         input: DeleteIntegrationResponseRequest,
-    ) -> RusotoFuture<(), DeleteIntegrationResponseError>;
+    ) -> Request<DeleteIntegrationResponseRequest>;
 
     /// <p>Deletes an existing <a>Method</a> resource.</p>
-    fn delete_method(&self, input: DeleteMethodRequest) -> RusotoFuture<(), DeleteMethodError>;
+    fn delete_method(&self, input: DeleteMethodRequest) -> Request<DeleteMethodRequest>;
 
     /// <p>Deletes an existing <a>MethodResponse</a> resource.</p>
     fn delete_method_response(
         &self,
         input: DeleteMethodResponseRequest,
-    ) -> RusotoFuture<(), DeleteMethodResponseError>;
+    ) -> Request<DeleteMethodResponseRequest>;
 
     /// <p>Deletes a model.</p>
-    fn delete_model(&self, input: DeleteModelRequest) -> RusotoFuture<(), DeleteModelError>;
+    fn delete_model(&self, input: DeleteModelRequest) -> Request<DeleteModelRequest>;
 
     /// <p>Deletes a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn delete_request_validator(
         &self,
         input: DeleteRequestValidatorRequest,
-    ) -> RusotoFuture<(), DeleteRequestValidatorError>;
+    ) -> Request<DeleteRequestValidatorRequest>;
 
     /// <p>Deletes a <a>Resource</a> resource.</p>
-    fn delete_resource(
-        &self,
-        input: DeleteResourceRequest,
-    ) -> RusotoFuture<(), DeleteResourceError>;
+    fn delete_resource(&self, input: DeleteResourceRequest) -> Request<DeleteResourceRequest>;
 
     /// <p>Deletes the specified API.</p>
-    fn delete_rest_api(&self, input: DeleteRestApiRequest) -> RusotoFuture<(), DeleteRestApiError>;
+    fn delete_rest_api(&self, input: DeleteRestApiRequest) -> Request<DeleteRestApiRequest>;
 
     /// <p>Deletes a <a>Stage</a> resource.</p>
-    fn delete_stage(&self, input: DeleteStageRequest) -> RusotoFuture<(), DeleteStageError>;
+    fn delete_stage(&self, input: DeleteStageRequest) -> Request<DeleteStageRequest>;
 
     /// <p>Deletes a usage plan of a given plan Id.</p>
-    fn delete_usage_plan(
-        &self,
-        input: DeleteUsagePlanRequest,
-    ) -> RusotoFuture<(), DeleteUsagePlanError>;
+    fn delete_usage_plan(&self, input: DeleteUsagePlanRequest) -> Request<DeleteUsagePlanRequest>;
 
     /// <p>Deletes a usage plan key and remove the underlying API key from the associated usage plan.</p>
     fn delete_usage_plan_key(
         &self,
         input: DeleteUsagePlanKeyRequest,
-    ) -> RusotoFuture<(), DeleteUsagePlanKeyError>;
+    ) -> Request<DeleteUsagePlanKeyRequest>;
 
     /// <p>Deletes an existing <a>VpcLink</a> of a specified identifier.</p>
-    fn delete_vpc_link(&self, input: DeleteVpcLinkRequest) -> RusotoFuture<(), DeleteVpcLinkError>;
+    fn delete_vpc_link(&self, input: DeleteVpcLinkRequest) -> Request<DeleteVpcLinkRequest>;
 
     /// <p>Flushes all authorizer cache entries on a stage.</p>
     fn flush_stage_authorizers_cache(
         &self,
         input: FlushStageAuthorizersCacheRequest,
-    ) -> RusotoFuture<(), FlushStageAuthorizersCacheError>;
+    ) -> Request<FlushStageAuthorizersCacheRequest>;
 
     /// <p>Flushes a stage's cache.</p>
-    fn flush_stage_cache(
-        &self,
-        input: FlushStageCacheRequest,
-    ) -> RusotoFuture<(), FlushStageCacheError>;
+    fn flush_stage_cache(&self, input: FlushStageCacheRequest) -> Request<FlushStageCacheRequest>;
 
     /// <p>Generates a <a>ClientCertificate</a> resource.</p>
     fn generate_client_certificate(
         &self,
         input: GenerateClientCertificateRequest,
-    ) -> RusotoFuture<ClientCertificate, GenerateClientCertificateError>;
+    ) -> Request<GenerateClientCertificateRequest>;
 
     /// <p>Gets information about the current <a>Account</a> resource.</p>
-    fn get_account(&self) -> RusotoFuture<Account, GetAccountError>;
+    fn get_account(&self) -> Request<GetAccountRequest>;
 
     /// <p>Gets information about the current <a>ApiKey</a> resource.</p>
-    fn get_api_key(&self, input: GetApiKeyRequest) -> RusotoFuture<ApiKey, GetApiKeyError>;
+    fn get_api_key(&self, input: GetApiKeyRequest) -> Request<GetApiKeyRequest>;
 
     /// <p>Gets information about the current <a>ApiKeys</a> resource.</p>
-    fn get_api_keys(&self, input: GetApiKeysRequest) -> RusotoFuture<ApiKeys, GetApiKeysError>;
+    fn get_api_keys(&self, input: GetApiKeysRequest) -> Request<GetApiKeysRequest>;
 
     /// <p><p>Describe an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizer.html">AWS CLI</a></div></p>
-    fn get_authorizer(
-        &self,
-        input: GetAuthorizerRequest,
-    ) -> RusotoFuture<Authorizer, GetAuthorizerError>;
+    fn get_authorizer(&self, input: GetAuthorizerRequest) -> Request<GetAuthorizerRequest>;
 
     /// <p><p>Describe an existing <a>Authorizers</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizers.html">AWS CLI</a></div></p>
-    fn get_authorizers(
-        &self,
-        input: GetAuthorizersRequest,
-    ) -> RusotoFuture<Authorizers, GetAuthorizersError>;
+    fn get_authorizers(&self, input: GetAuthorizersRequest) -> Request<GetAuthorizersRequest>;
 
     /// <p>Describe a <a>BasePathMapping</a> resource.</p>
     fn get_base_path_mapping(
         &self,
         input: GetBasePathMappingRequest,
-    ) -> RusotoFuture<BasePathMapping, GetBasePathMappingError>;
+    ) -> Request<GetBasePathMappingRequest>;
 
     /// <p>Represents a collection of <a>BasePathMapping</a> resources.</p>
     fn get_base_path_mappings(
         &self,
         input: GetBasePathMappingsRequest,
-    ) -> RusotoFuture<BasePathMappings, GetBasePathMappingsError>;
+    ) -> Request<GetBasePathMappingsRequest>;
 
     /// <p>Gets information about the current <a>ClientCertificate</a> resource.</p>
     fn get_client_certificate(
         &self,
         input: GetClientCertificateRequest,
-    ) -> RusotoFuture<ClientCertificate, GetClientCertificateError>;
+    ) -> Request<GetClientCertificateRequest>;
 
     /// <p>Gets a collection of <a>ClientCertificate</a> resources.</p>
     fn get_client_certificates(
         &self,
         input: GetClientCertificatesRequest,
-    ) -> RusotoFuture<ClientCertificates, GetClientCertificatesError>;
+    ) -> Request<GetClientCertificatesRequest>;
 
     /// <p>Gets information about a <a>Deployment</a> resource.</p>
-    fn get_deployment(
-        &self,
-        input: GetDeploymentRequest,
-    ) -> RusotoFuture<Deployment, GetDeploymentError>;
+    fn get_deployment(&self, input: GetDeploymentRequest) -> Request<GetDeploymentRequest>;
 
     /// <p>Gets information about a <a>Deployments</a> collection.</p>
-    fn get_deployments(
-        &self,
-        input: GetDeploymentsRequest,
-    ) -> RusotoFuture<Deployments, GetDeploymentsError>;
+    fn get_deployments(&self, input: GetDeploymentsRequest) -> Request<GetDeploymentsRequest>;
 
     fn get_documentation_part(
         &self,
         input: GetDocumentationPartRequest,
-    ) -> RusotoFuture<DocumentationPart, GetDocumentationPartError>;
+    ) -> Request<GetDocumentationPartRequest>;
 
     fn get_documentation_parts(
         &self,
         input: GetDocumentationPartsRequest,
-    ) -> RusotoFuture<DocumentationParts, GetDocumentationPartsError>;
+    ) -> Request<GetDocumentationPartsRequest>;
 
     fn get_documentation_version(
         &self,
         input: GetDocumentationVersionRequest,
-    ) -> RusotoFuture<DocumentationVersion, GetDocumentationVersionError>;
+    ) -> Request<GetDocumentationVersionRequest>;
 
     fn get_documentation_versions(
         &self,
         input: GetDocumentationVersionsRequest,
-    ) -> RusotoFuture<DocumentationVersions, GetDocumentationVersionsError>;
+    ) -> Request<GetDocumentationVersionsRequest>;
 
     /// <p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p>
-    fn get_domain_name(
-        &self,
-        input: GetDomainNameRequest,
-    ) -> RusotoFuture<DomainName, GetDomainNameError>;
+    fn get_domain_name(&self, input: GetDomainNameRequest) -> Request<GetDomainNameRequest>;
 
     /// <p>Represents a collection of <a>DomainName</a> resources.</p>
-    fn get_domain_names(
-        &self,
-        input: GetDomainNamesRequest,
-    ) -> RusotoFuture<DomainNames, GetDomainNamesError>;
+    fn get_domain_names(&self, input: GetDomainNamesRequest) -> Request<GetDomainNamesRequest>;
 
     /// <p>Exports a deployed version of a <a>RestApi</a> in a specified format.</p>
-    fn get_export(&self, input: GetExportRequest) -> RusotoFuture<ExportResponse, GetExportError>;
+    fn get_export(&self, input: GetExportRequest) -> Request<GetExportRequest>;
 
     /// <p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
     fn get_gateway_response(
         &self,
         input: GetGatewayResponseRequest,
-    ) -> RusotoFuture<GatewayResponse, GetGatewayResponseError>;
+    ) -> Request<GetGatewayResponseRequest>;
 
     /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
     fn get_gateway_responses(
         &self,
         input: GetGatewayResponsesRequest,
-    ) -> RusotoFuture<GatewayResponses, GetGatewayResponsesError>;
+    ) -> Request<GetGatewayResponsesRequest>;
 
     /// <p>Get the integration settings.</p>
-    fn get_integration(
-        &self,
-        input: GetIntegrationRequest,
-    ) -> RusotoFuture<Integration, GetIntegrationError>;
+    fn get_integration(&self, input: GetIntegrationRequest) -> Request<GetIntegrationRequest>;
 
     /// <p>Represents a get integration response.</p>
     fn get_integration_response(
         &self,
         input: GetIntegrationResponseRequest,
-    ) -> RusotoFuture<IntegrationResponse, GetIntegrationResponseError>;
+    ) -> Request<GetIntegrationResponseRequest>;
 
     /// <p>Describe an existing <a>Method</a> resource.</p>
-    fn get_method(&self, input: GetMethodRequest) -> RusotoFuture<Method, GetMethodError>;
+    fn get_method(&self, input: GetMethodRequest) -> Request<GetMethodRequest>;
 
     /// <p>Describes a <a>MethodResponse</a> resource.</p>
     fn get_method_response(
         &self,
         input: GetMethodResponseRequest,
-    ) -> RusotoFuture<MethodResponse, GetMethodResponseError>;
+    ) -> Request<GetMethodResponseRequest>;
 
     /// <p>Describes an existing model defined for a <a>RestApi</a> resource.</p>
-    fn get_model(&self, input: GetModelRequest) -> RusotoFuture<Model, GetModelError>;
+    fn get_model(&self, input: GetModelRequest) -> Request<GetModelRequest>;
 
     /// <p>Generates a sample mapping template that can be used to transform a payload into the structure of a model.</p>
     fn get_model_template(
         &self,
         input: GetModelTemplateRequest,
-    ) -> RusotoFuture<Template, GetModelTemplateError>;
+    ) -> Request<GetModelTemplateRequest>;
 
     /// <p>Describes existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>
-    fn get_models(&self, input: GetModelsRequest) -> RusotoFuture<Models, GetModelsError>;
+    fn get_models(&self, input: GetModelsRequest) -> Request<GetModelsRequest>;
 
     /// <p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn get_request_validator(
         &self,
         input: GetRequestValidatorRequest,
-    ) -> RusotoFuture<RequestValidator, GetRequestValidatorError>;
+    ) -> Request<GetRequestValidatorRequest>;
 
     /// <p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>
     fn get_request_validators(
         &self,
         input: GetRequestValidatorsRequest,
-    ) -> RusotoFuture<RequestValidators, GetRequestValidatorsError>;
+    ) -> Request<GetRequestValidatorsRequest>;
 
     /// <p>Lists information about a resource.</p>
-    fn get_resource(&self, input: GetResourceRequest) -> RusotoFuture<Resource, GetResourceError>;
+    fn get_resource(&self, input: GetResourceRequest) -> Request<GetResourceRequest>;
 
     /// <p>Lists information about a collection of <a>Resource</a> resources.</p>
-    fn get_resources(
-        &self,
-        input: GetResourcesRequest,
-    ) -> RusotoFuture<Resources, GetResourcesError>;
+    fn get_resources(&self, input: GetResourcesRequest) -> Request<GetResourcesRequest>;
 
     /// <p>Lists the <a>RestApi</a> resource in the collection.</p>
-    fn get_rest_api(&self, input: GetRestApiRequest) -> RusotoFuture<RestApi, GetRestApiError>;
+    fn get_rest_api(&self, input: GetRestApiRequest) -> Request<GetRestApiRequest>;
 
     /// <p>Lists the <a>RestApis</a> resources for your collection.</p>
-    fn get_rest_apis(&self, input: GetRestApisRequest) -> RusotoFuture<RestApis, GetRestApisError>;
+    fn get_rest_apis(&self, input: GetRestApisRequest) -> Request<GetRestApisRequest>;
 
     /// <p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
-    fn get_sdk(&self, input: GetSdkRequest) -> RusotoFuture<SdkResponse, GetSdkError>;
+    fn get_sdk(&self, input: GetSdkRequest) -> Request<GetSdkRequest>;
 
-    fn get_sdk_type(&self, input: GetSdkTypeRequest) -> RusotoFuture<SdkType, GetSdkTypeError>;
+    fn get_sdk_type(&self, input: GetSdkTypeRequest) -> Request<GetSdkTypeRequest>;
 
-    fn get_sdk_types(&self, input: GetSdkTypesRequest) -> RusotoFuture<SdkTypes, GetSdkTypesError>;
+    fn get_sdk_types(&self, input: GetSdkTypesRequest) -> Request<GetSdkTypesRequest>;
 
     /// <p>Gets information about a <a>Stage</a> resource.</p>
-    fn get_stage(&self, input: GetStageRequest) -> RusotoFuture<Stage, GetStageError>;
+    fn get_stage(&self, input: GetStageRequest) -> Request<GetStageRequest>;
 
     /// <p>Gets information about one or more <a>Stage</a> resources.</p>
-    fn get_stages(&self, input: GetStagesRequest) -> RusotoFuture<Stages, GetStagesError>;
+    fn get_stages(&self, input: GetStagesRequest) -> Request<GetStagesRequest>;
 
     /// <p>Gets the <a>Tags</a> collection for a given resource.</p>
-    fn get_tags(&self, input: GetTagsRequest) -> RusotoFuture<Tags, GetTagsError>;
+    fn get_tags(&self, input: GetTagsRequest) -> Request<GetTagsRequest>;
 
     /// <p>Gets the usage data of a usage plan in a specified time interval.</p>
-    fn get_usage(&self, input: GetUsageRequest) -> RusotoFuture<Usage, GetUsageError>;
+    fn get_usage(&self, input: GetUsageRequest) -> Request<GetUsageRequest>;
 
     /// <p>Gets a usage plan of a given plan identifier.</p>
-    fn get_usage_plan(
-        &self,
-        input: GetUsagePlanRequest,
-    ) -> RusotoFuture<UsagePlan, GetUsagePlanError>;
+    fn get_usage_plan(&self, input: GetUsagePlanRequest) -> Request<GetUsagePlanRequest>;
 
     /// <p>Gets a usage plan key of a given key identifier.</p>
-    fn get_usage_plan_key(
-        &self,
-        input: GetUsagePlanKeyRequest,
-    ) -> RusotoFuture<UsagePlanKey, GetUsagePlanKeyError>;
+    fn get_usage_plan_key(&self, input: GetUsagePlanKeyRequest) -> Request<GetUsagePlanKeyRequest>;
 
     /// <p>Gets all the usage plan keys representing the API keys added to a specified usage plan.</p>
     fn get_usage_plan_keys(
         &self,
         input: GetUsagePlanKeysRequest,
-    ) -> RusotoFuture<UsagePlanKeys, GetUsagePlanKeysError>;
+    ) -> Request<GetUsagePlanKeysRequest>;
 
     /// <p>Gets all the usage plans of the caller's account.</p>
-    fn get_usage_plans(
-        &self,
-        input: GetUsagePlansRequest,
-    ) -> RusotoFuture<UsagePlans, GetUsagePlansError>;
+    fn get_usage_plans(&self, input: GetUsagePlansRequest) -> Request<GetUsagePlansRequest>;
 
     /// <p>Gets a specified VPC link under the caller's account in a region.</p>
-    fn get_vpc_link(&self, input: GetVpcLinkRequest) -> RusotoFuture<VpcLink, GetVpcLinkError>;
+    fn get_vpc_link(&self, input: GetVpcLinkRequest) -> Request<GetVpcLinkRequest>;
 
     /// <p>Gets the <a>VpcLinks</a> collection under the caller's account in a selected region.</p>
-    fn get_vpc_links(&self, input: GetVpcLinksRequest) -> RusotoFuture<VpcLinks, GetVpcLinksError>;
+    fn get_vpc_links(&self, input: GetVpcLinksRequest) -> Request<GetVpcLinksRequest>;
 
     /// <p>Import API keys from an external source, such as a CSV-formatted file.</p>
-    fn import_api_keys(
-        &self,
-        input: ImportApiKeysRequest,
-    ) -> RusotoFuture<ApiKeyIds, ImportApiKeysError>;
+    fn import_api_keys(&self, input: ImportApiKeysRequest) -> Request<ImportApiKeysRequest>;
 
     fn import_documentation_parts(
         &self,
         input: ImportDocumentationPartsRequest,
-    ) -> RusotoFuture<DocumentationPartIds, ImportDocumentationPartsError>;
+    ) -> Request<ImportDocumentationPartsRequest>;
 
     /// <p>A feature of the API Gateway control service for creating a new API from an external API definition file.</p>
-    fn import_rest_api(
-        &self,
-        input: ImportRestApiRequest,
-    ) -> RusotoFuture<RestApi, ImportRestApiError>;
+    fn import_rest_api(&self, input: ImportRestApiRequest) -> Request<ImportRestApiRequest>;
 
     /// <p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>
     fn put_gateway_response(
         &self,
         input: PutGatewayResponseRequest,
-    ) -> RusotoFuture<GatewayResponse, PutGatewayResponseError>;
+    ) -> Request<PutGatewayResponseRequest>;
 
     /// <p>Sets up a method's integration.</p>
-    fn put_integration(
-        &self,
-        input: PutIntegrationRequest,
-    ) -> RusotoFuture<Integration, PutIntegrationError>;
+    fn put_integration(&self, input: PutIntegrationRequest) -> Request<PutIntegrationRequest>;
 
     /// <p>Represents a put integration.</p>
     fn put_integration_response(
         &self,
         input: PutIntegrationResponseRequest,
-    ) -> RusotoFuture<IntegrationResponse, PutIntegrationResponseError>;
+    ) -> Request<PutIntegrationResponseRequest>;
 
     /// <p>Add a method to an existing <a>Resource</a> resource.</p>
-    fn put_method(&self, input: PutMethodRequest) -> RusotoFuture<Method, PutMethodError>;
+    fn put_method(&self, input: PutMethodRequest) -> Request<PutMethodRequest>;
 
     /// <p>Adds a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>
     fn put_method_response(
         &self,
         input: PutMethodResponseRequest,
-    ) -> RusotoFuture<MethodResponse, PutMethodResponseError>;
+    ) -> Request<PutMethodResponseRequest>;
 
     /// <p>A feature of the API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>
-    fn put_rest_api(&self, input: PutRestApiRequest) -> RusotoFuture<RestApi, PutRestApiError>;
+    fn put_rest_api(&self, input: PutRestApiRequest) -> Request<PutRestApiRequest>;
 
     /// <p>Adds or updates a tag on a given resource.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p><p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorizers</a> </div></p>
     fn test_invoke_authorizer(
         &self,
         input: TestInvokeAuthorizerRequest,
-    ) -> RusotoFuture<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError>;
+    ) -> Request<TestInvokeAuthorizerRequest>;
 
     /// <p>Simulate the execution of a <a>Method</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p>
     fn test_invoke_method(
         &self,
         input: TestInvokeMethodRequest,
-    ) -> RusotoFuture<TestInvokeMethodResponse, TestInvokeMethodError>;
+    ) -> Request<TestInvokeMethodRequest>;
 
     /// <p>Removes a tag from a given resource.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Changes information about the current <a>Account</a> resource.</p>
-    fn update_account(
-        &self,
-        input: UpdateAccountRequest,
-    ) -> RusotoFuture<Account, UpdateAccountError>;
+    fn update_account(&self, input: UpdateAccountRequest) -> Request<UpdateAccountRequest>;
 
     /// <p>Changes information about an <a>ApiKey</a> resource.</p>
-    fn update_api_key(&self, input: UpdateApiKeyRequest)
-        -> RusotoFuture<ApiKey, UpdateApiKeyError>;
+    fn update_api_key(&self, input: UpdateApiKeyRequest) -> Request<UpdateApiKeyRequest>;
 
     /// <p><p>Updates an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/update-authorizer.html">AWS CLI</a></div></p>
-    fn update_authorizer(
-        &self,
-        input: UpdateAuthorizerRequest,
-    ) -> RusotoFuture<Authorizer, UpdateAuthorizerError>;
+    fn update_authorizer(&self, input: UpdateAuthorizerRequest)
+        -> Request<UpdateAuthorizerRequest>;
 
     /// <p>Changes information about the <a>BasePathMapping</a> resource.</p>
     fn update_base_path_mapping(
         &self,
         input: UpdateBasePathMappingRequest,
-    ) -> RusotoFuture<BasePathMapping, UpdateBasePathMappingError>;
+    ) -> Request<UpdateBasePathMappingRequest>;
 
     /// <p>Changes information about an <a>ClientCertificate</a> resource.</p>
     fn update_client_certificate(
         &self,
         input: UpdateClientCertificateRequest,
-    ) -> RusotoFuture<ClientCertificate, UpdateClientCertificateError>;
+    ) -> Request<UpdateClientCertificateRequest>;
 
     /// <p>Changes information about a <a>Deployment</a> resource.</p>
-    fn update_deployment(
-        &self,
-        input: UpdateDeploymentRequest,
-    ) -> RusotoFuture<Deployment, UpdateDeploymentError>;
+    fn update_deployment(&self, input: UpdateDeploymentRequest)
+        -> Request<UpdateDeploymentRequest>;
 
     fn update_documentation_part(
         &self,
         input: UpdateDocumentationPartRequest,
-    ) -> RusotoFuture<DocumentationPart, UpdateDocumentationPartError>;
+    ) -> Request<UpdateDocumentationPartRequest>;
 
     fn update_documentation_version(
         &self,
         input: UpdateDocumentationVersionRequest,
-    ) -> RusotoFuture<DocumentationVersion, UpdateDocumentationVersionError>;
+    ) -> Request<UpdateDocumentationVersionRequest>;
 
     /// <p>Changes information about the <a>DomainName</a> resource.</p>
     fn update_domain_name(
         &self,
         input: UpdateDomainNameRequest,
-    ) -> RusotoFuture<DomainName, UpdateDomainNameError>;
+    ) -> Request<UpdateDomainNameRequest>;
 
     /// <p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
     fn update_gateway_response(
         &self,
         input: UpdateGatewayResponseRequest,
-    ) -> RusotoFuture<GatewayResponse, UpdateGatewayResponseError>;
+    ) -> Request<UpdateGatewayResponseRequest>;
 
     /// <p>Represents an update integration.</p>
     fn update_integration(
         &self,
         input: UpdateIntegrationRequest,
-    ) -> RusotoFuture<Integration, UpdateIntegrationError>;
+    ) -> Request<UpdateIntegrationRequest>;
 
     /// <p>Represents an update integration response.</p>
     fn update_integration_response(
         &self,
         input: UpdateIntegrationResponseRequest,
-    ) -> RusotoFuture<IntegrationResponse, UpdateIntegrationResponseError>;
+    ) -> Request<UpdateIntegrationResponseRequest>;
 
     /// <p>Updates an existing <a>Method</a> resource.</p>
-    fn update_method(&self, input: UpdateMethodRequest) -> RusotoFuture<Method, UpdateMethodError>;
+    fn update_method(&self, input: UpdateMethodRequest) -> Request<UpdateMethodRequest>;
 
     /// <p>Updates an existing <a>MethodResponse</a> resource.</p>
     fn update_method_response(
         &self,
         input: UpdateMethodResponseRequest,
-    ) -> RusotoFuture<MethodResponse, UpdateMethodResponseError>;
+    ) -> Request<UpdateMethodResponseRequest>;
 
     /// <p>Changes information about a model.</p>
-    fn update_model(&self, input: UpdateModelRequest) -> RusotoFuture<Model, UpdateModelError>;
+    fn update_model(&self, input: UpdateModelRequest) -> Request<UpdateModelRequest>;
 
     /// <p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn update_request_validator(
         &self,
         input: UpdateRequestValidatorRequest,
-    ) -> RusotoFuture<RequestValidator, UpdateRequestValidatorError>;
+    ) -> Request<UpdateRequestValidatorRequest>;
 
     /// <p>Changes information about a <a>Resource</a> resource.</p>
-    fn update_resource(
-        &self,
-        input: UpdateResourceRequest,
-    ) -> RusotoFuture<Resource, UpdateResourceError>;
+    fn update_resource(&self, input: UpdateResourceRequest) -> Request<UpdateResourceRequest>;
 
     /// <p>Changes information about the specified API.</p>
-    fn update_rest_api(
-        &self,
-        input: UpdateRestApiRequest,
-    ) -> RusotoFuture<RestApi, UpdateRestApiError>;
+    fn update_rest_api(&self, input: UpdateRestApiRequest) -> Request<UpdateRestApiRequest>;
 
     /// <p>Changes information about a <a>Stage</a> resource.</p>
-    fn update_stage(&self, input: UpdateStageRequest) -> RusotoFuture<Stage, UpdateStageError>;
+    fn update_stage(&self, input: UpdateStageRequest) -> Request<UpdateStageRequest>;
 
     /// <p>Grants a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>
-    fn update_usage(&self, input: UpdateUsageRequest) -> RusotoFuture<Usage, UpdateUsageError>;
+    fn update_usage(&self, input: UpdateUsageRequest) -> Request<UpdateUsageRequest>;
 
     /// <p>Updates a usage plan of a given plan Id.</p>
-    fn update_usage_plan(
-        &self,
-        input: UpdateUsagePlanRequest,
-    ) -> RusotoFuture<UsagePlan, UpdateUsagePlanError>;
+    fn update_usage_plan(&self, input: UpdateUsagePlanRequest) -> Request<UpdateUsagePlanRequest>;
 
     /// <p>Updates an existing <a>VpcLink</a> of a specified identifier.</p>
-    fn update_vpc_link(
-        &self,
-        input: UpdateVpcLinkRequest,
-    ) -> RusotoFuture<VpcLink, UpdateVpcLinkError>;
+    fn update_vpc_link(&self, input: UpdateVpcLinkRequest) -> Request<UpdateVpcLinkRequest>;
 }
 /// A client for the Amazon API Gateway API.
 #[derive(Clone)]
@@ -10610,23 +12970,791 @@ impl ApiGatewayClient {
 
 impl ApiGateway for ApiGatewayClient {
     /// <p><p>Create an <a>ApiKey</a> resource. </p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html">AWS CLI</a></div></p>
-    fn create_api_key(
+    fn create_api_key(&self, input: CreateApiKeyRequest) -> Request<CreateApiKeyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Adds a new <a>Authorizer</a> resource to an existing <a>RestApi</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/create-authorizer.html">AWS CLI</a></div></p>
+    fn create_authorizer(
         &self,
-        input: CreateApiKeyRequest,
-    ) -> RusotoFuture<ApiKey, CreateApiKeyError> {
+        input: CreateAuthorizerRequest,
+    ) -> Request<CreateAuthorizerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new <a>BasePathMapping</a> resource.</p>
+    fn create_base_path_mapping(
+        &self,
+        input: CreateBasePathMappingRequest,
+    ) -> Request<CreateBasePathMappingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a <a>Deployment</a> resource, which makes a specified <a>RestApi</a> callable over the internet.</p>
+    fn create_deployment(
+        &self,
+        input: CreateDeploymentRequest,
+    ) -> Request<CreateDeploymentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    fn create_documentation_part(
+        &self,
+        input: CreateDocumentationPartRequest,
+    ) -> Request<CreateDocumentationPartRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    fn create_documentation_version(
+        &self,
+        input: CreateDocumentationVersionRequest,
+    ) -> Request<CreateDocumentationVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new domain name.</p>
+    fn create_domain_name(
+        &self,
+        input: CreateDomainNameRequest,
+    ) -> Request<CreateDomainNameRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds a new <a>Model</a> resource to an existing <a>RestApi</a> resource.</p>
+    fn create_model(&self, input: CreateModelRequest) -> Request<CreateModelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a <a>ReqeustValidator</a> of a given <a>RestApi</a>.</p>
+    fn create_request_validator(
+        &self,
+        input: CreateRequestValidatorRequest,
+    ) -> Request<CreateRequestValidatorRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a <a>Resource</a> resource.</p>
+    fn create_resource(&self, input: CreateResourceRequest) -> Request<CreateResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new <a>RestApi</a> resource.</p>
+    fn create_rest_api(&self, input: CreateRestApiRequest) -> Request<CreateRestApiRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new <a>Stage</a> resource that references a pre-existing <a>Deployment</a> for the API. </p>
+    fn create_stage(&self, input: CreateStageRequest) -> Request<CreateStageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a usage plan with the throttle and quota limits, as well as the associated API stages, specified in the payload. </p>
+    fn create_usage_plan(&self, input: CreateUsagePlanRequest) -> Request<CreateUsagePlanRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a usage plan key for adding an existing API key to a usage plan.</p>
+    fn create_usage_plan_key(
+        &self,
+        input: CreateUsagePlanKeyRequest,
+    ) -> Request<CreateUsagePlanKeyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a VPC link, under the caller's account in a selected region, in an asynchronous operation that typically takes 2-4 minutes to complete and become operational. The caller must have permissions to create and update VPC Endpoint services.</p>
+    fn create_vpc_link(&self, input: CreateVpcLinkRequest) -> Request<CreateVpcLinkRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the <a>ApiKey</a> resource.</p>
+    fn delete_api_key(&self, input: DeleteApiKeyRequest) -> Request<DeleteApiKeyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/delete-authorizer.html">AWS CLI</a></div></p>
+    fn delete_authorizer(
+        &self,
+        input: DeleteAuthorizerRequest,
+    ) -> Request<DeleteAuthorizerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the <a>BasePathMapping</a> resource.</p>
+    fn delete_base_path_mapping(
+        &self,
+        input: DeleteBasePathMappingRequest,
+    ) -> Request<DeleteBasePathMappingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the <a>ClientCertificate</a> resource.</p>
+    fn delete_client_certificate(
+        &self,
+        input: DeleteClientCertificateRequest,
+    ) -> Request<DeleteClientCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a <a>Deployment</a> resource. Deleting a deployment will only succeed if there are no <a>Stage</a> resources associated with it.</p>
+    fn delete_deployment(
+        &self,
+        input: DeleteDeploymentRequest,
+    ) -> Request<DeleteDeploymentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    fn delete_documentation_part(
+        &self,
+        input: DeleteDocumentationPartRequest,
+    ) -> Request<DeleteDocumentationPartRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    fn delete_documentation_version(
+        &self,
+        input: DeleteDocumentationVersionRequest,
+    ) -> Request<DeleteDocumentationVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the <a>DomainName</a> resource.</p>
+    fn delete_domain_name(
+        &self,
+        input: DeleteDomainNameRequest,
+    ) -> Request<DeleteDomainNameRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>
+    fn delete_gateway_response(
+        &self,
+        input: DeleteGatewayResponseRequest,
+    ) -> Request<DeleteGatewayResponseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Represents a delete integration.</p>
+    fn delete_integration(
+        &self,
+        input: DeleteIntegrationRequest,
+    ) -> Request<DeleteIntegrationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Represents a delete integration response.</p>
+    fn delete_integration_response(
+        &self,
+        input: DeleteIntegrationResponseRequest,
+    ) -> Request<DeleteIntegrationResponseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an existing <a>Method</a> resource.</p>
+    fn delete_method(&self, input: DeleteMethodRequest) -> Request<DeleteMethodRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an existing <a>MethodResponse</a> resource.</p>
+    fn delete_method_response(
+        &self,
+        input: DeleteMethodResponseRequest,
+    ) -> Request<DeleteMethodResponseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a model.</p>
+    fn delete_model(&self, input: DeleteModelRequest) -> Request<DeleteModelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
+    fn delete_request_validator(
+        &self,
+        input: DeleteRequestValidatorRequest,
+    ) -> Request<DeleteRequestValidatorRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a <a>Resource</a> resource.</p>
+    fn delete_resource(&self, input: DeleteResourceRequest) -> Request<DeleteResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified API.</p>
+    fn delete_rest_api(&self, input: DeleteRestApiRequest) -> Request<DeleteRestApiRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a <a>Stage</a> resource.</p>
+    fn delete_stage(&self, input: DeleteStageRequest) -> Request<DeleteStageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a usage plan of a given plan Id.</p>
+    fn delete_usage_plan(&self, input: DeleteUsagePlanRequest) -> Request<DeleteUsagePlanRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a usage plan key and remove the underlying API key from the associated usage plan.</p>
+    fn delete_usage_plan_key(
+        &self,
+        input: DeleteUsagePlanKeyRequest,
+    ) -> Request<DeleteUsagePlanKeyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an existing <a>VpcLink</a> of a specified identifier.</p>
+    fn delete_vpc_link(&self, input: DeleteVpcLinkRequest) -> Request<DeleteVpcLinkRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Flushes all authorizer cache entries on a stage.</p>
+    fn flush_stage_authorizers_cache(
+        &self,
+        input: FlushStageAuthorizersCacheRequest,
+    ) -> Request<FlushStageAuthorizersCacheRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Flushes a stage's cache.</p>
+    fn flush_stage_cache(&self, input: FlushStageCacheRequest) -> Request<FlushStageCacheRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Generates a <a>ClientCertificate</a> resource.</p>
+    fn generate_client_certificate(
+        &self,
+        input: GenerateClientCertificateRequest,
+    ) -> Request<GenerateClientCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about the current <a>Account</a> resource.</p>
+    fn get_account(&self) -> Request<GetAccountRequest> {
+        Request::new(
+            GetAccountRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Gets information about the current <a>ApiKey</a> resource.</p>
+    fn get_api_key(&self, input: GetApiKeyRequest) -> Request<GetApiKeyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about the current <a>ApiKeys</a> resource.</p>
+    fn get_api_keys(&self, input: GetApiKeysRequest) -> Request<GetApiKeysRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Describe an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizer.html">AWS CLI</a></div></p>
+    fn get_authorizer(&self, input: GetAuthorizerRequest) -> Request<GetAuthorizerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Describe an existing <a>Authorizers</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizers.html">AWS CLI</a></div></p>
+    fn get_authorizers(&self, input: GetAuthorizersRequest) -> Request<GetAuthorizersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describe a <a>BasePathMapping</a> resource.</p>
+    fn get_base_path_mapping(
+        &self,
+        input: GetBasePathMappingRequest,
+    ) -> Request<GetBasePathMappingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Represents a collection of <a>BasePathMapping</a> resources.</p>
+    fn get_base_path_mappings(
+        &self,
+        input: GetBasePathMappingsRequest,
+    ) -> Request<GetBasePathMappingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about the current <a>ClientCertificate</a> resource.</p>
+    fn get_client_certificate(
+        &self,
+        input: GetClientCertificateRequest,
+    ) -> Request<GetClientCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a collection of <a>ClientCertificate</a> resources.</p>
+    fn get_client_certificates(
+        &self,
+        input: GetClientCertificatesRequest,
+    ) -> Request<GetClientCertificatesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about a <a>Deployment</a> resource.</p>
+    fn get_deployment(&self, input: GetDeploymentRequest) -> Request<GetDeploymentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about a <a>Deployments</a> collection.</p>
+    fn get_deployments(&self, input: GetDeploymentsRequest) -> Request<GetDeploymentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    fn get_documentation_part(
+        &self,
+        input: GetDocumentationPartRequest,
+    ) -> Request<GetDocumentationPartRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    fn get_documentation_parts(
+        &self,
+        input: GetDocumentationPartsRequest,
+    ) -> Request<GetDocumentationPartsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    fn get_documentation_version(
+        &self,
+        input: GetDocumentationVersionRequest,
+    ) -> Request<GetDocumentationVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    fn get_documentation_versions(
+        &self,
+        input: GetDocumentationVersionsRequest,
+    ) -> Request<GetDocumentationVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p>
+    fn get_domain_name(&self, input: GetDomainNameRequest) -> Request<GetDomainNameRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Represents a collection of <a>DomainName</a> resources.</p>
+    fn get_domain_names(&self, input: GetDomainNamesRequest) -> Request<GetDomainNamesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Exports a deployed version of a <a>RestApi</a> in a specified format.</p>
+    fn get_export(&self, input: GetExportRequest) -> Request<GetExportRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
+    fn get_gateway_response(
+        &self,
+        input: GetGatewayResponseRequest,
+    ) -> Request<GetGatewayResponseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
+    fn get_gateway_responses(
+        &self,
+        input: GetGatewayResponsesRequest,
+    ) -> Request<GetGatewayResponsesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Get the integration settings.</p>
+    fn get_integration(&self, input: GetIntegrationRequest) -> Request<GetIntegrationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Represents a get integration response.</p>
+    fn get_integration_response(
+        &self,
+        input: GetIntegrationResponseRequest,
+    ) -> Request<GetIntegrationResponseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describe an existing <a>Method</a> resource.</p>
+    fn get_method(&self, input: GetMethodRequest) -> Request<GetMethodRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes a <a>MethodResponse</a> resource.</p>
+    fn get_method_response(
+        &self,
+        input: GetMethodResponseRequest,
+    ) -> Request<GetMethodResponseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes an existing model defined for a <a>RestApi</a> resource.</p>
+    fn get_model(&self, input: GetModelRequest) -> Request<GetModelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Generates a sample mapping template that can be used to transform a payload into the structure of a model.</p>
+    fn get_model_template(
+        &self,
+        input: GetModelTemplateRequest,
+    ) -> Request<GetModelTemplateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>
+    fn get_models(&self, input: GetModelsRequest) -> Request<GetModelsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
+    fn get_request_validator(
+        &self,
+        input: GetRequestValidatorRequest,
+    ) -> Request<GetRequestValidatorRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>
+    fn get_request_validators(
+        &self,
+        input: GetRequestValidatorsRequest,
+    ) -> Request<GetRequestValidatorsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists information about a resource.</p>
+    fn get_resource(&self, input: GetResourceRequest) -> Request<GetResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists information about a collection of <a>Resource</a> resources.</p>
+    fn get_resources(&self, input: GetResourcesRequest) -> Request<GetResourcesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the <a>RestApi</a> resource in the collection.</p>
+    fn get_rest_api(&self, input: GetRestApiRequest) -> Request<GetRestApiRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the <a>RestApis</a> resources for your collection.</p>
+    fn get_rest_apis(&self, input: GetRestApisRequest) -> Request<GetRestApisRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
+    fn get_sdk(&self, input: GetSdkRequest) -> Request<GetSdkRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    fn get_sdk_type(&self, input: GetSdkTypeRequest) -> Request<GetSdkTypeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    fn get_sdk_types(&self, input: GetSdkTypesRequest) -> Request<GetSdkTypesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about a <a>Stage</a> resource.</p>
+    fn get_stage(&self, input: GetStageRequest) -> Request<GetStageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about one or more <a>Stage</a> resources.</p>
+    fn get_stages(&self, input: GetStagesRequest) -> Request<GetStagesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the <a>Tags</a> collection for a given resource.</p>
+    fn get_tags(&self, input: GetTagsRequest) -> Request<GetTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the usage data of a usage plan in a specified time interval.</p>
+    fn get_usage(&self, input: GetUsageRequest) -> Request<GetUsageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a usage plan of a given plan identifier.</p>
+    fn get_usage_plan(&self, input: GetUsagePlanRequest) -> Request<GetUsagePlanRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a usage plan key of a given key identifier.</p>
+    fn get_usage_plan_key(&self, input: GetUsagePlanKeyRequest) -> Request<GetUsagePlanKeyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets all the usage plan keys representing the API keys added to a specified usage plan.</p>
+    fn get_usage_plan_keys(
+        &self,
+        input: GetUsagePlanKeysRequest,
+    ) -> Request<GetUsagePlanKeysRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets all the usage plans of the caller's account.</p>
+    fn get_usage_plans(&self, input: GetUsagePlansRequest) -> Request<GetUsagePlansRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a specified VPC link under the caller's account in a region.</p>
+    fn get_vpc_link(&self, input: GetVpcLinkRequest) -> Request<GetVpcLinkRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the <a>VpcLinks</a> collection under the caller's account in a selected region.</p>
+    fn get_vpc_links(&self, input: GetVpcLinksRequest) -> Request<GetVpcLinksRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Import API keys from an external source, such as a CSV-formatted file.</p>
+    fn import_api_keys(&self, input: ImportApiKeysRequest) -> Request<ImportApiKeysRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    fn import_documentation_parts(
+        &self,
+        input: ImportDocumentationPartsRequest,
+    ) -> Request<ImportDocumentationPartsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>A feature of the API Gateway control service for creating a new API from an external API definition file.</p>
+    fn import_rest_api(&self, input: ImportRestApiRequest) -> Request<ImportRestApiRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>
+    fn put_gateway_response(
+        &self,
+        input: PutGatewayResponseRequest,
+    ) -> Request<PutGatewayResponseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets up a method's integration.</p>
+    fn put_integration(&self, input: PutIntegrationRequest) -> Request<PutIntegrationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Represents a put integration.</p>
+    fn put_integration_response(
+        &self,
+        input: PutIntegrationResponseRequest,
+    ) -> Request<PutIntegrationResponseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Add a method to an existing <a>Resource</a> resource.</p>
+    fn put_method(&self, input: PutMethodRequest) -> Request<PutMethodRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>
+    fn put_method_response(
+        &self,
+        input: PutMethodResponseRequest,
+    ) -> Request<PutMethodResponseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>A feature of the API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>
+    fn put_rest_api(&self, input: PutRestApiRequest) -> Request<PutRestApiRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds or updates a tag on a given resource.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorizers</a> </div></p>
+    fn test_invoke_authorizer(
+        &self,
+        input: TestInvokeAuthorizerRequest,
+    ) -> Request<TestInvokeAuthorizerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Simulate the execution of a <a>Method</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p>
+    fn test_invoke_method(
+        &self,
+        input: TestInvokeMethodRequest,
+    ) -> Request<TestInvokeMethodRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes a tag from a given resource.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes information about the current <a>Account</a> resource.</p>
+    fn update_account(&self, input: UpdateAccountRequest) -> Request<UpdateAccountRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes information about an <a>ApiKey</a> resource.</p>
+    fn update_api_key(&self, input: UpdateApiKeyRequest) -> Request<UpdateApiKeyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Updates an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/update-authorizer.html">AWS CLI</a></div></p>
+    fn update_authorizer(
+        &self,
+        input: UpdateAuthorizerRequest,
+    ) -> Request<UpdateAuthorizerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes information about the <a>BasePathMapping</a> resource.</p>
+    fn update_base_path_mapping(
+        &self,
+        input: UpdateBasePathMappingRequest,
+    ) -> Request<UpdateBasePathMappingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes information about an <a>ClientCertificate</a> resource.</p>
+    fn update_client_certificate(
+        &self,
+        input: UpdateClientCertificateRequest,
+    ) -> Request<UpdateClientCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes information about a <a>Deployment</a> resource.</p>
+    fn update_deployment(
+        &self,
+        input: UpdateDeploymentRequest,
+    ) -> Request<UpdateDeploymentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    fn update_documentation_part(
+        &self,
+        input: UpdateDocumentationPartRequest,
+    ) -> Request<UpdateDocumentationPartRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    fn update_documentation_version(
+        &self,
+        input: UpdateDocumentationVersionRequest,
+    ) -> Request<UpdateDocumentationVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes information about the <a>DomainName</a> resource.</p>
+    fn update_domain_name(
+        &self,
+        input: UpdateDomainNameRequest,
+    ) -> Request<UpdateDomainNameRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
+    fn update_gateway_response(
+        &self,
+        input: UpdateGatewayResponseRequest,
+    ) -> Request<UpdateGatewayResponseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Represents an update integration.</p>
+    fn update_integration(
+        &self,
+        input: UpdateIntegrationRequest,
+    ) -> Request<UpdateIntegrationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Represents an update integration response.</p>
+    fn update_integration_response(
+        &self,
+        input: UpdateIntegrationResponseRequest,
+    ) -> Request<UpdateIntegrationResponseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an existing <a>Method</a> resource.</p>
+    fn update_method(&self, input: UpdateMethodRequest) -> Request<UpdateMethodRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an existing <a>MethodResponse</a> resource.</p>
+    fn update_method_response(
+        &self,
+        input: UpdateMethodResponseRequest,
+    ) -> Request<UpdateMethodResponseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes information about a model.</p>
+    fn update_model(&self, input: UpdateModelRequest) -> Request<UpdateModelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
+    fn update_request_validator(
+        &self,
+        input: UpdateRequestValidatorRequest,
+    ) -> Request<UpdateRequestValidatorRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes information about a <a>Resource</a> resource.</p>
+    fn update_resource(&self, input: UpdateResourceRequest) -> Request<UpdateResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes information about the specified API.</p>
+    fn update_rest_api(&self, input: UpdateRestApiRequest) -> Request<UpdateRestApiRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes information about a <a>Stage</a> resource.</p>
+    fn update_stage(&self, input: UpdateStageRequest) -> Request<UpdateStageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Grants a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>
+    fn update_usage(&self, input: UpdateUsageRequest) -> Request<UpdateUsageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a usage plan of a given plan Id.</p>
+    fn update_usage_plan(&self, input: UpdateUsagePlanRequest) -> Request<UpdateUsagePlanRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an existing <a>VpcLink</a> of a specified identifier.</p>
+    fn update_vpc_link(&self, input: UpdateVpcLinkRequest) -> Request<UpdateVpcLinkRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CreateApiKeyRequest {
+    type Output = CreateApiKeyResponse;
+    type Error = CreateApiKeyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/apikeys";
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<ApiKey, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateApiKeyResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -10640,28 +13768,34 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p><p>Adds a new <a>Authorizer</a> resource to an existing <a>RestApi</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/create-authorizer.html">AWS CLI</a></div></p>
-    fn create_authorizer(
-        &self,
-        input: CreateAuthorizerRequest,
-    ) -> RusotoFuture<Authorizer, CreateAuthorizerError> {
+impl ServiceRequest for CreateAuthorizerRequest {
+    type Output = CreateAuthorizerResponse;
+    type Error = CreateAuthorizerError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers",
-            restapi_id = input.rest_api_id
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<Authorizer, _>()?;
+                        .deserialize::<CreateAuthorizerResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -10675,28 +13809,34 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new <a>BasePathMapping</a> resource.</p>
-    fn create_base_path_mapping(
-        &self,
-        input: CreateBasePathMappingRequest,
-    ) -> RusotoFuture<BasePathMapping, CreateBasePathMappingError> {
+impl ServiceRequest for CreateBasePathMappingRequest {
+    type Output = CreateBasePathMappingResponse;
+    type Error = CreateBasePathMappingError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings",
-            domain_name = input.domain_name
+            domain_name = self.domain_name
         );
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BasePathMapping, _>()?;
+                        .deserialize::<CreateBasePathMappingResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -10709,28 +13849,34 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Creates a <a>Deployment</a> resource, which makes a specified <a>RestApi</a> callable over the internet.</p>
-    fn create_deployment(
-        &self,
-        input: CreateDeploymentRequest,
-    ) -> RusotoFuture<Deployment, CreateDeploymentError> {
+impl ServiceRequest for CreateDeploymentRequest {
+    type Output = CreateDeploymentResponse;
+    type Error = CreateDeploymentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments",
-            restapi_id = input.rest_api_id
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<Deployment, _>()?;
+                        .deserialize::<CreateDeploymentResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -10744,27 +13890,34 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    fn create_documentation_part(
-        &self,
-        input: CreateDocumentationPartRequest,
-    ) -> RusotoFuture<DocumentationPart, CreateDocumentationPartError> {
+impl ServiceRequest for CreateDocumentationPartRequest {
+    type Output = CreateDocumentationPartResponse;
+    type Error = CreateDocumentationPartError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts",
-            restapi_id = input.rest_api_id
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DocumentationPart, _>()?;
+                        .deserialize::<CreateDocumentationPartResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -10775,27 +13928,34 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    fn create_documentation_version(
-        &self,
-        input: CreateDocumentationVersionRequest,
-    ) -> RusotoFuture<DocumentationVersion, CreateDocumentationVersionError> {
+impl ServiceRequest for CreateDocumentationVersionRequest {
+    type Output = CreateDocumentationVersionResponse;
+    type Error = CreateDocumentationVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions",
-            restapi_id = input.rest_api_id
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DocumentationVersion, _>()?;
+                        .deserialize::<CreateDocumentationVersionResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -10806,25 +13966,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new domain name.</p>
-    fn create_domain_name(
-        &self,
-        input: CreateDomainNameRequest,
-    ) -> RusotoFuture<DomainName, CreateDomainNameError> {
+impl ServiceRequest for CreateDomainNameRequest {
+    type Output = CreateDomainNameResponse;
+    type Error = CreateDomainNameError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/domainnames";
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DomainName, _>()?;
+                        .deserialize::<CreateDomainNameResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -10838,25 +14004,34 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Adds a new <a>Model</a> resource to an existing <a>RestApi</a> resource.</p>
-    fn create_model(&self, input: CreateModelRequest) -> RusotoFuture<Model, CreateModelError> {
+impl ServiceRequest for CreateModelRequest {
+    type Output = CreateModelResponse;
+    type Error = CreateModelError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models",
-            restapi_id = input.rest_api_id
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<Model, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateModelResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -10870,28 +14045,34 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Creates a <a>ReqeustValidator</a> of a given <a>RestApi</a>.</p>
-    fn create_request_validator(
-        &self,
-        input: CreateRequestValidatorRequest,
-    ) -> RusotoFuture<RequestValidator, CreateRequestValidatorError> {
+impl ServiceRequest for CreateRequestValidatorRequest {
+    type Output = CreateRequestValidatorResponse;
+    type Error = CreateRequestValidatorError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators",
-            restapi_id = input.rest_api_id
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RequestValidator, _>()?;
+                        .deserialize::<CreateRequestValidatorResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -10904,29 +14085,35 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Creates a <a>Resource</a> resource.</p>
-    fn create_resource(
-        &self,
-        input: CreateResourceRequest,
-    ) -> RusotoFuture<Resource, CreateResourceError> {
+impl ServiceRequest for CreateResourceRequest {
+    type Output = CreateResourceResponse;
+    type Error = CreateResourceError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{parent_id}",
-            parent_id = input.parent_id,
-            restapi_id = input.rest_api_id
+            parent_id = self.parent_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<Resource, _>()?;
+                        .deserialize::<CreateResourceResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -10940,25 +14127,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new <a>RestApi</a> resource.</p>
-    fn create_rest_api(
-        &self,
-        input: CreateRestApiRequest,
-    ) -> RusotoFuture<RestApi, CreateRestApiError> {
+impl ServiceRequest for CreateRestApiRequest {
+    type Output = CreateRestApiResponse;
+    type Error = CreateRestApiError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/restapis";
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateRestApiResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -10972,25 +14165,34 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new <a>Stage</a> resource that references a pre-existing <a>Deployment</a> for the API. </p>
-    fn create_stage(&self, input: CreateStageRequest) -> RusotoFuture<Stage, CreateStageError> {
+impl ServiceRequest for CreateStageRequest {
+    type Output = CreateStageResponse;
+    type Error = CreateStageError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages",
-            restapi_id = input.rest_api_id
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<Stage, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateStageResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -11004,25 +14206,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Creates a usage plan with the throttle and quota limits, as well as the associated API stages, specified in the payload. </p>
-    fn create_usage_plan(
-        &self,
-        input: CreateUsagePlanRequest,
-    ) -> RusotoFuture<UsagePlan, CreateUsagePlanError> {
+impl ServiceRequest for CreateUsagePlanRequest {
+    type Output = CreateUsagePlanResponse;
+    type Error = CreateUsagePlanError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/usageplans";
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UsagePlan, _>()?;
+                        .deserialize::<CreateUsagePlanResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -11036,28 +14244,34 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Creates a usage plan key for adding an existing API key to a usage plan.</p>
-    fn create_usage_plan_key(
-        &self,
-        input: CreateUsagePlanKeyRequest,
-    ) -> RusotoFuture<UsagePlanKey, CreateUsagePlanKeyError> {
+impl ServiceRequest for CreateUsagePlanKeyRequest {
+    type Output = CreateUsagePlanKeyResponse;
+    type Error = CreateUsagePlanKeyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys",
-            usageplan_id = input.usage_plan_id
+            usageplan_id = self.usage_plan_id
         );
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UsagePlanKey, _>()?;
+                        .deserialize::<CreateUsagePlanKeyResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -11071,25 +14285,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Creates a VPC link, under the caller's account in a selected region, in an asynchronous operation that typically takes 2-4 minutes to complete and become operational. The caller must have permissions to create and update VPC Endpoint services.</p>
-    fn create_vpc_link(
-        &self,
-        input: CreateVpcLinkRequest,
-    ) -> RusotoFuture<VpcLink, CreateVpcLinkError> {
+impl ServiceRequest for CreateVpcLinkRequest {
+    type Output = CreateVpcLinkResponse;
+    type Error = CreateVpcLinkError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/vpclinks";
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<VpcLink, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateVpcLinkResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -11103,18 +14323,27 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the <a>ApiKey</a> resource.</p>
-    fn delete_api_key(&self, input: DeleteApiKeyRequest) -> RusotoFuture<(), DeleteApiKeyError> {
-        let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
+impl ServiceRequest for DeleteApiKeyRequest {
+    type Output = DeleteApiKeyResponse;
+    type Error = DeleteApiKeyError;
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/apikeys/{api_key}", api_key = self.api_key);
+
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteApiKeyResponse {};
 
                     Ok(result)
                 }))
@@ -11128,25 +14357,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p><p>Deletes an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/delete-authorizer.html">AWS CLI</a></div></p>
-    fn delete_authorizer(
-        &self,
-        input: DeleteAuthorizerRequest,
-    ) -> RusotoFuture<(), DeleteAuthorizerError> {
+impl ServiceRequest for DeleteAuthorizerRequest {
+    type Output = DeleteAuthorizerResponse;
+    type Error = DeleteAuthorizerError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers/{authorizer_id}",
-            authorizer_id = input.authorizer_id,
-            restapi_id = input.rest_api_id
+            authorizer_id = self.authorizer_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteAuthorizerResponse {};
 
                     Ok(result)
                 }))
@@ -11160,25 +14395,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the <a>BasePathMapping</a> resource.</p>
-    fn delete_base_path_mapping(
-        &self,
-        input: DeleteBasePathMappingRequest,
-    ) -> RusotoFuture<(), DeleteBasePathMappingError> {
+impl ServiceRequest for DeleteBasePathMappingRequest {
+    type Output = DeleteBasePathMappingResponse;
+    type Error = DeleteBasePathMappingError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings/{base_path}",
-            base_path = input.base_path,
-            domain_name = input.domain_name
+            base_path = self.base_path,
+            domain_name = self.domain_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteBasePathMappingResponse {};
 
                     Ok(result)
                 }))
@@ -11191,24 +14432,30 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the <a>ClientCertificate</a> resource.</p>
-    fn delete_client_certificate(
-        &self,
-        input: DeleteClientCertificateRequest,
-    ) -> RusotoFuture<(), DeleteClientCertificateError> {
+impl ServiceRequest for DeleteClientCertificateRequest {
+    type Output = DeleteClientCertificateResponse;
+    type Error = DeleteClientCertificateError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/clientcertificates/{clientcertificate_id}",
-            clientcertificate_id = input.client_certificate_id
+            clientcertificate_id = self.client_certificate_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteClientCertificateResponse {};
 
                     Ok(result)
                 }))
@@ -11219,25 +14466,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a <a>Deployment</a> resource. Deleting a deployment will only succeed if there are no <a>Stage</a> resources associated with it.</p>
-    fn delete_deployment(
-        &self,
-        input: DeleteDeploymentRequest,
-    ) -> RusotoFuture<(), DeleteDeploymentError> {
+impl ServiceRequest for DeleteDeploymentRequest {
+    type Output = DeleteDeploymentResponse;
+    type Error = DeleteDeploymentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments/{deployment_id}",
-            deployment_id = input.deployment_id,
-            restapi_id = input.rest_api_id
+            deployment_id = self.deployment_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteDeploymentResponse {};
 
                     Ok(result)
                 }))
@@ -11251,24 +14504,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    fn delete_documentation_part(
-        &self,
-        input: DeleteDocumentationPartRequest,
-    ) -> RusotoFuture<(), DeleteDocumentationPartError> {
+impl ServiceRequest for DeleteDocumentationPartRequest {
+    type Output = DeleteDocumentationPartResponse;
+    type Error = DeleteDocumentationPartError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts/{part_id}",
-            part_id = input.documentation_part_id,
-            restapi_id = input.rest_api_id
+            part_id = self.documentation_part_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteDocumentationPartResponse {};
 
                     Ok(result)
                 }))
@@ -11279,24 +14539,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    fn delete_documentation_version(
-        &self,
-        input: DeleteDocumentationVersionRequest,
-    ) -> RusotoFuture<(), DeleteDocumentationVersionError> {
+impl ServiceRequest for DeleteDocumentationVersionRequest {
+    type Output = DeleteDocumentationVersionResponse;
+    type Error = DeleteDocumentationVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions/{doc_version}",
-            doc_version = input.documentation_version,
-            restapi_id = input.rest_api_id
+            doc_version = self.documentation_version,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteDocumentationVersionResponse {};
 
                     Ok(result)
                 }))
@@ -11307,24 +14574,27 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the <a>DomainName</a> resource.</p>
-    fn delete_domain_name(
-        &self,
-        input: DeleteDomainNameRequest,
-    ) -> RusotoFuture<(), DeleteDomainNameError> {
-        let request_uri = format!(
-            "/domainnames/{domain_name}",
-            domain_name = input.domain_name
-        );
+impl ServiceRequest for DeleteDomainNameRequest {
+    type Output = DeleteDomainNameResponse;
+    type Error = DeleteDomainNameError;
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/domainnames/{domain_name}", domain_name = self.domain_name);
+
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteDomainNameResponse {};
 
                     Ok(result)
                 }))
@@ -11338,25 +14608,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>
-    fn delete_gateway_response(
-        &self,
-        input: DeleteGatewayResponseRequest,
-    ) -> RusotoFuture<(), DeleteGatewayResponseError> {
+impl ServiceRequest for DeleteGatewayResponseRequest {
+    type Output = DeleteGatewayResponseResponse;
+    type Error = DeleteGatewayResponseError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses/{response_type}",
-            response_type = input.response_type,
-            restapi_id = input.rest_api_id
+            response_type = self.response_type,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteGatewayResponseResponse {};
 
                     Ok(result)
                 }))
@@ -11369,26 +14645,32 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Represents a delete integration.</p>
-    fn delete_integration(
-        &self,
-        input: DeleteIntegrationRequest,
-    ) -> RusotoFuture<(), DeleteIntegrationError> {
+impl ServiceRequest for DeleteIntegrationRequest {
+    type Output = DeleteIntegrationResponse;
+    type Error = DeleteIntegrationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
-            http_method = input.http_method,
-            resource_id = input.resource_id,
-            restapi_id = input.rest_api_id
+            http_method = self.http_method,
+            resource_id = self.resource_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteIntegrationResponse {};
 
                     Ok(result)
                 }))
@@ -11402,21 +14684,27 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Represents a delete integration response.</p>
-    fn delete_integration_response(
-        &self,
-        input: DeleteIntegrationResponseRequest,
-    ) -> RusotoFuture<(), DeleteIntegrationResponseError> {
-        let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
+impl ServiceRequest for DeleteIntegrationResponseRequest {
+    type Output = DeleteIntegrationResponseResponse;
+    type Error = DeleteIntegrationResponseError;
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = self.http_method, resource_id = self.resource_id, restapi_id = self.rest_api_id, status_code = self.status_code);
+
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteIntegrationResponseResponse {};
 
                     Ok(result)
                 }))
@@ -11427,23 +14715,32 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an existing <a>Method</a> resource.</p>
-    fn delete_method(&self, input: DeleteMethodRequest) -> RusotoFuture<(), DeleteMethodError> {
+impl ServiceRequest for DeleteMethodRequest {
+    type Output = DeleteMethodResponse;
+    type Error = DeleteMethodError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
-            http_method = input.http_method,
-            resource_id = input.resource_id,
-            restapi_id = input.rest_api_id
+            http_method = self.http_method,
+            resource_id = self.resource_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteMethodResponse {};
 
                     Ok(result)
                 }))
@@ -11457,21 +14754,27 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an existing <a>MethodResponse</a> resource.</p>
-    fn delete_method_response(
-        &self,
-        input: DeleteMethodResponseRequest,
-    ) -> RusotoFuture<(), DeleteMethodResponseError> {
-        let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
+impl ServiceRequest for DeleteMethodResponseRequest {
+    type Output = DeleteMethodResponseResponse;
+    type Error = DeleteMethodResponseError;
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = self.http_method, resource_id = self.resource_id, restapi_id = self.rest_api_id, status_code = self.status_code);
+
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteMethodResponseResponse {};
 
                     Ok(result)
                 }))
@@ -11484,22 +14787,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a model.</p>
-    fn delete_model(&self, input: DeleteModelRequest) -> RusotoFuture<(), DeleteModelError> {
+impl ServiceRequest for DeleteModelRequest {
+    type Output = DeleteModelResponse;
+    type Error = DeleteModelError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}",
-            model_name = input.model_name,
-            restapi_id = input.rest_api_id
+            model_name = self.model_name,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteModelResponse {};
 
                     Ok(result)
                 }))
@@ -11513,25 +14825,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
-    fn delete_request_validator(
-        &self,
-        input: DeleteRequestValidatorRequest,
-    ) -> RusotoFuture<(), DeleteRequestValidatorError> {
+impl ServiceRequest for DeleteRequestValidatorRequest {
+    type Output = DeleteRequestValidatorResponse;
+    type Error = DeleteRequestValidatorError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}",
-            requestvalidator_id = input.request_validator_id,
-            restapi_id = input.rest_api_id
+            requestvalidator_id = self.request_validator_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteRequestValidatorResponse {};
 
                     Ok(result)
                 }))
@@ -11544,25 +14862,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a <a>Resource</a> resource.</p>
-    fn delete_resource(
-        &self,
-        input: DeleteResourceRequest,
-    ) -> RusotoFuture<(), DeleteResourceError> {
+impl ServiceRequest for DeleteResourceRequest {
+    type Output = DeleteResourceResponse;
+    type Error = DeleteResourceError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}",
-            resource_id = input.resource_id,
-            restapi_id = input.rest_api_id
+            resource_id = self.resource_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteResourceResponse {};
 
                     Ok(result)
                 }))
@@ -11576,18 +14900,27 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified API.</p>
-    fn delete_rest_api(&self, input: DeleteRestApiRequest) -> RusotoFuture<(), DeleteRestApiError> {
-        let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
+impl ServiceRequest for DeleteRestApiRequest {
+    type Output = DeleteRestApiResponse;
+    type Error = DeleteRestApiError;
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/restapis/{restapi_id}", restapi_id = self.rest_api_id);
+
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteRestApiResponse {};
 
                     Ok(result)
                 }))
@@ -11601,22 +14934,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a <a>Stage</a> resource.</p>
-    fn delete_stage(&self, input: DeleteStageRequest) -> RusotoFuture<(), DeleteStageError> {
+impl ServiceRequest for DeleteStageRequest {
+    type Output = DeleteStageResponse;
+    type Error = DeleteStageError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}",
-            restapi_id = input.rest_api_id,
-            stage_name = input.stage_name
+            restapi_id = self.rest_api_id,
+            stage_name = self.stage_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteStageResponse {};
 
                     Ok(result)
                 }))
@@ -11630,24 +14972,30 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a usage plan of a given plan Id.</p>
-    fn delete_usage_plan(
-        &self,
-        input: DeleteUsagePlanRequest,
-    ) -> RusotoFuture<(), DeleteUsagePlanError> {
+impl ServiceRequest for DeleteUsagePlanRequest {
+    type Output = DeleteUsagePlanResponse;
+    type Error = DeleteUsagePlanError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}",
-            usageplan_id = input.usage_plan_id
+            usageplan_id = self.usage_plan_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteUsagePlanResponse {};
 
                     Ok(result)
                 }))
@@ -11661,25 +15009,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a usage plan key and remove the underlying API key from the associated usage plan.</p>
-    fn delete_usage_plan_key(
-        &self,
-        input: DeleteUsagePlanKeyRequest,
-    ) -> RusotoFuture<(), DeleteUsagePlanKeyError> {
+impl ServiceRequest for DeleteUsagePlanKeyRequest {
+    type Output = DeleteUsagePlanKeyResponse;
+    type Error = DeleteUsagePlanKeyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys/{key_id}",
-            key_id = input.key_id,
-            usageplan_id = input.usage_plan_id
+            key_id = self.key_id,
+            usageplan_id = self.usage_plan_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteUsagePlanKeyResponse {};
 
                     Ok(result)
                 }))
@@ -11693,18 +15047,27 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an existing <a>VpcLink</a> of a specified identifier.</p>
-    fn delete_vpc_link(&self, input: DeleteVpcLinkRequest) -> RusotoFuture<(), DeleteVpcLinkError> {
-        let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = input.vpc_link_id);
+impl ServiceRequest for DeleteVpcLinkRequest {
+    type Output = DeleteVpcLinkResponse;
+    type Error = DeleteVpcLinkError;
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = self.vpc_link_id);
+
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteVpcLinkResponse {};
 
                     Ok(result)
                 }))
@@ -11718,25 +15081,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Flushes all authorizer cache entries on a stage.</p>
-    fn flush_stage_authorizers_cache(
-        &self,
-        input: FlushStageAuthorizersCacheRequest,
-    ) -> RusotoFuture<(), FlushStageAuthorizersCacheError> {
+impl ServiceRequest for FlushStageAuthorizersCacheRequest {
+    type Output = FlushStageAuthorizersCacheResponse;
+    type Error = FlushStageAuthorizersCacheError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/cache/authorizers",
-            restapi_id = input.rest_api_id,
-            stage_name = input.stage_name
+            restapi_id = self.rest_api_id,
+            stage_name = self.stage_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = FlushStageAuthorizersCacheResponse {};
 
                     Ok(result)
                 }))
@@ -11747,25 +15116,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Flushes a stage's cache.</p>
-    fn flush_stage_cache(
-        &self,
-        input: FlushStageCacheRequest,
-    ) -> RusotoFuture<(), FlushStageCacheError> {
+impl ServiceRequest for FlushStageCacheRequest {
+    type Output = FlushStageCacheResponse;
+    type Error = FlushStageCacheError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/cache/data",
-            restapi_id = input.rest_api_id,
-            stage_name = input.stage_name
+            restapi_id = self.rest_api_id,
+            stage_name = self.stage_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = FlushStageCacheResponse {};
 
                     Ok(result)
                 }))
@@ -11779,25 +15154,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Generates a <a>ClientCertificate</a> resource.</p>
-    fn generate_client_certificate(
-        &self,
-        input: GenerateClientCertificateRequest,
-    ) -> RusotoFuture<ClientCertificate, GenerateClientCertificateError> {
+impl ServiceRequest for GenerateClientCertificateRequest {
+    type Output = GenerateClientCertificateResponse;
+    type Error = GenerateClientCertificateError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/clientcertificates";
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ClientCertificate, _>()?;
+                        .deserialize::<GenerateClientCertificateResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -11808,19 +15189,28 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about the current <a>Account</a> resource.</p>
-    fn get_account(&self) -> RusotoFuture<Account, GetAccountError> {
+impl ServiceRequest for GetAccountRequest {
+    type Output = GetAccountResponse;
+    type Error = GetAccountError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/account";
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<Account, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetAccountResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -11834,25 +15224,34 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about the current <a>ApiKey</a> resource.</p>
-    fn get_api_key(&self, input: GetApiKeyRequest) -> RusotoFuture<ApiKey, GetApiKeyError> {
-        let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
+impl ServiceRequest for GetApiKeyRequest {
+    type Output = GetApiKeyResponse;
+    type Error = GetApiKeyError;
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/apikeys/{api_key}", api_key = self.api_key);
+
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.include_value {
+        if let Some(ref x) = self.include_value {
             params.put("includeValue", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<ApiKey, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetApiKeyResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -11866,37 +15265,46 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about the current <a>ApiKeys</a> resource.</p>
-    fn get_api_keys(&self, input: GetApiKeysRequest) -> RusotoFuture<ApiKeys, GetApiKeysError> {
+impl ServiceRequest for GetApiKeysRequest {
+    type Output = GetApiKeysResponse;
+    type Error = GetApiKeysError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/apikeys";
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.customer_id {
+        if let Some(ref x) = self.customer_id {
             params.put("customerId", x);
         }
-        if let Some(ref x) = input.include_values {
+        if let Some(ref x) = self.include_values {
             params.put("includeValues", x);
         }
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.name_query {
+        if let Some(ref x) = self.name_query {
             params.put("name", x);
         }
-        if let Some(ref x) = input.position {
+        if let Some(ref x) = self.position {
             params.put("position", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<ApiKeys, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetApiKeysResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -11910,26 +15318,32 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p><p>Describe an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizer.html">AWS CLI</a></div></p>
-    fn get_authorizer(
-        &self,
-        input: GetAuthorizerRequest,
-    ) -> RusotoFuture<Authorizer, GetAuthorizerError> {
+impl ServiceRequest for GetAuthorizerRequest {
+    type Output = GetAuthorizerResponse;
+    type Error = GetAuthorizerError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers/{authorizer_id}",
-            authorizer_id = input.authorizer_id,
-            restapi_id = input.rest_api_id
+            authorizer_id = self.authorizer_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<Authorizer, _>()?;
+                        .deserialize::<GetAuthorizerResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -11943,34 +15357,40 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p><p>Describe an existing <a>Authorizers</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizers.html">AWS CLI</a></div></p>
-    fn get_authorizers(
-        &self,
-        input: GetAuthorizersRequest,
-    ) -> RusotoFuture<Authorizers, GetAuthorizersError> {
+impl ServiceRequest for GetAuthorizersRequest {
+    type Output = GetAuthorizersResponse;
+    type Error = GetAuthorizersError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers",
-            restapi_id = input.rest_api_id
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.position {
+        if let Some(ref x) = self.position {
             params.put("position", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<Authorizers, _>()?;
+                        .deserialize::<GetAuthorizersResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -11984,26 +15404,32 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Describe a <a>BasePathMapping</a> resource.</p>
-    fn get_base_path_mapping(
-        &self,
-        input: GetBasePathMappingRequest,
-    ) -> RusotoFuture<BasePathMapping, GetBasePathMappingError> {
+impl ServiceRequest for GetBasePathMappingRequest {
+    type Output = GetBasePathMappingResponse;
+    type Error = GetBasePathMappingError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings/{base_path}",
-            base_path = input.base_path,
-            domain_name = input.domain_name
+            base_path = self.base_path,
+            domain_name = self.domain_name
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BasePathMapping, _>()?;
+                        .deserialize::<GetBasePathMappingResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12017,34 +15443,40 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Represents a collection of <a>BasePathMapping</a> resources.</p>
-    fn get_base_path_mappings(
-        &self,
-        input: GetBasePathMappingsRequest,
-    ) -> RusotoFuture<BasePathMappings, GetBasePathMappingsError> {
+impl ServiceRequest for GetBasePathMappingsRequest {
+    type Output = GetBasePathMappingsResponse;
+    type Error = GetBasePathMappingsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings",
-            domain_name = input.domain_name
+            domain_name = self.domain_name
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.position {
+        if let Some(ref x) = self.position {
             params.put("position", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BasePathMappings, _>()?;
+                        .deserialize::<GetBasePathMappingsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12057,25 +15489,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about the current <a>ClientCertificate</a> resource.</p>
-    fn get_client_certificate(
-        &self,
-        input: GetClientCertificateRequest,
-    ) -> RusotoFuture<ClientCertificate, GetClientCertificateError> {
+impl ServiceRequest for GetClientCertificateRequest {
+    type Output = GetClientCertificateResponse;
+    type Error = GetClientCertificateError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/clientcertificates/{clientcertificate_id}",
-            clientcertificate_id = input.client_certificate_id
+            clientcertificate_id = self.client_certificate_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ClientCertificate, _>()?;
+                        .deserialize::<GetClientCertificateResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12088,31 +15526,37 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets a collection of <a>ClientCertificate</a> resources.</p>
-    fn get_client_certificates(
-        &self,
-        input: GetClientCertificatesRequest,
-    ) -> RusotoFuture<ClientCertificates, GetClientCertificatesError> {
+impl ServiceRequest for GetClientCertificatesRequest {
+    type Output = GetClientCertificatesResponse;
+    type Error = GetClientCertificatesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/clientcertificates";
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.position {
+        if let Some(ref x) = self.position {
             params.put("position", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ClientCertificates, _>()?;
+                        .deserialize::<GetClientCertificatesResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12125,34 +15569,40 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about a <a>Deployment</a> resource.</p>
-    fn get_deployment(
-        &self,
-        input: GetDeploymentRequest,
-    ) -> RusotoFuture<Deployment, GetDeploymentError> {
+impl ServiceRequest for GetDeploymentRequest {
+    type Output = GetDeploymentResponse;
+    type Error = GetDeploymentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments/{deployment_id}",
-            deployment_id = input.deployment_id,
-            restapi_id = input.rest_api_id
+            deployment_id = self.deployment_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.embed {
+        if let Some(ref x) = self.embed {
             for item in x.iter() {
                 params.put("embed", item);
             }
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<Deployment, _>()?;
+                        .deserialize::<GetDeploymentResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12166,34 +15616,40 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about a <a>Deployments</a> collection.</p>
-    fn get_deployments(
-        &self,
-        input: GetDeploymentsRequest,
-    ) -> RusotoFuture<Deployments, GetDeploymentsError> {
+impl ServiceRequest for GetDeploymentsRequest {
+    type Output = GetDeploymentsResponse;
+    type Error = GetDeploymentsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments",
-            restapi_id = input.rest_api_id
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.position {
+        if let Some(ref x) = self.position {
             params.put("position", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<Deployments, _>()?;
+                        .deserialize::<GetDeploymentsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12207,25 +15663,32 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    fn get_documentation_part(
-        &self,
-        input: GetDocumentationPartRequest,
-    ) -> RusotoFuture<DocumentationPart, GetDocumentationPartError> {
+impl ServiceRequest for GetDocumentationPartRequest {
+    type Output = GetDocumentationPartResponse;
+    type Error = GetDocumentationPartError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts/{part_id}",
-            part_id = input.documentation_part_id,
-            restapi_id = input.rest_api_id
+            part_id = self.documentation_part_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DocumentationPart, _>()?;
+                        .deserialize::<GetDocumentationPartResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12238,45 +15701,52 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    fn get_documentation_parts(
-        &self,
-        input: GetDocumentationPartsRequest,
-    ) -> RusotoFuture<DocumentationParts, GetDocumentationPartsError> {
+impl ServiceRequest for GetDocumentationPartsRequest {
+    type Output = GetDocumentationPartsResponse;
+    type Error = GetDocumentationPartsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts",
-            restapi_id = input.rest_api_id
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.location_status {
+        if let Some(ref x) = self.location_status {
             params.put("locationStatus", x);
         }
-        if let Some(ref x) = input.name_query {
+        if let Some(ref x) = self.name_query {
             params.put("name", x);
         }
-        if let Some(ref x) = input.path {
+        if let Some(ref x) = self.path {
             params.put("path", x);
         }
-        if let Some(ref x) = input.position {
+        if let Some(ref x) = self.position {
             params.put("position", x);
         }
-        if let Some(ref x) = input.type_ {
+        if let Some(ref x) = self.type_ {
             params.put("type", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DocumentationParts, _>()?;
+                        .deserialize::<GetDocumentationPartsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12289,25 +15759,32 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    fn get_documentation_version(
-        &self,
-        input: GetDocumentationVersionRequest,
-    ) -> RusotoFuture<DocumentationVersion, GetDocumentationVersionError> {
+impl ServiceRequest for GetDocumentationVersionRequest {
+    type Output = GetDocumentationVersionResponse;
+    type Error = GetDocumentationVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions/{doc_version}",
-            doc_version = input.documentation_version,
-            restapi_id = input.rest_api_id
+            doc_version = self.documentation_version,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DocumentationVersion, _>()?;
+                        .deserialize::<GetDocumentationVersionResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12318,33 +15795,40 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    fn get_documentation_versions(
-        &self,
-        input: GetDocumentationVersionsRequest,
-    ) -> RusotoFuture<DocumentationVersions, GetDocumentationVersionsError> {
+impl ServiceRequest for GetDocumentationVersionsRequest {
+    type Output = GetDocumentationVersionsResponse;
+    type Error = GetDocumentationVersionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions",
-            restapi_id = input.rest_api_id
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.position {
+        if let Some(ref x) = self.position {
             params.put("position", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DocumentationVersions, _>()?;
+                        .deserialize::<GetDocumentationVersionsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12355,25 +15839,28 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p>
-    fn get_domain_name(
-        &self,
-        input: GetDomainNameRequest,
-    ) -> RusotoFuture<DomainName, GetDomainNameError> {
-        let request_uri = format!(
-            "/domainnames/{domain_name}",
-            domain_name = input.domain_name
-        );
+impl ServiceRequest for GetDomainNameRequest {
+    type Output = GetDomainNameResponse;
+    type Error = GetDomainNameError;
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/domainnames/{domain_name}", domain_name = self.domain_name);
+
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DomainName, _>()?;
+                        .deserialize::<GetDomainNameResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12387,31 +15874,37 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Represents a collection of <a>DomainName</a> resources.</p>
-    fn get_domain_names(
-        &self,
-        input: GetDomainNamesRequest,
-    ) -> RusotoFuture<DomainNames, GetDomainNamesError> {
+impl ServiceRequest for GetDomainNamesRequest {
+    type Output = GetDomainNamesResponse;
+    type Error = GetDomainNamesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/domainnames";
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.position {
+        if let Some(ref x) = self.position {
             params.put("position", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DomainNames, _>()?;
+                        .deserialize::<GetDomainNamesResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12425,34 +15918,43 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Exports a deployed version of a <a>RestApi</a> in a specified format.</p>
-    fn get_export(&self, input: GetExportRequest) -> RusotoFuture<ExportResponse, GetExportError> {
+impl ServiceRequest for GetExportRequest {
+    type Output = GetExportResponse;
+    type Error = GetExportError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/exports/{export_type}",
-            export_type = input.export_type,
-            restapi_id = input.rest_api_id,
-            stage_name = input.stage_name
+            export_type = self.export_type,
+            restapi_id = self.rest_api_id,
+            stage_name = self.stage_name
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref accepts) = input.accepts {
+        if let Some(ref accepts) = self.accepts {
             request.add_header("Accept", &accepts.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.parameters {
+        if let Some(ref x) = self.parameters {
             for (key, val) in x.iter() {
                 params.put(key, val);
             }
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let mut result = ExportResponse::default();
+                    let mut result = GetExportResponse::default();
                     result.body = Some(response.body);
 
                     if let Some(content_disposition) = response.headers.get("Content-Disposition") {
@@ -12476,26 +15978,32 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
-    fn get_gateway_response(
-        &self,
-        input: GetGatewayResponseRequest,
-    ) -> RusotoFuture<GatewayResponse, GetGatewayResponseError> {
+impl ServiceRequest for GetGatewayResponseRequest {
+    type Output = GetGatewayResponseResponse;
+    type Error = GetGatewayResponseError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses/{response_type}",
-            response_type = input.response_type,
-            restapi_id = input.rest_api_id
+            response_type = self.response_type,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GatewayResponse, _>()?;
+                        .deserialize::<GetGatewayResponseResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12509,34 +16017,40 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
-    fn get_gateway_responses(
-        &self,
-        input: GetGatewayResponsesRequest,
-    ) -> RusotoFuture<GatewayResponses, GetGatewayResponsesError> {
+impl ServiceRequest for GetGatewayResponsesRequest {
+    type Output = GetGatewayResponsesResponse;
+    type Error = GetGatewayResponsesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses",
-            restapi_id = input.rest_api_id
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.position {
+        if let Some(ref x) = self.position {
             params.put("position", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GatewayResponses, _>()?;
+                        .deserialize::<GetGatewayResponsesResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12549,27 +16063,33 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Get the integration settings.</p>
-    fn get_integration(
-        &self,
-        input: GetIntegrationRequest,
-    ) -> RusotoFuture<Integration, GetIntegrationError> {
+impl ServiceRequest for GetIntegrationRequest {
+    type Output = GetIntegrationResponse;
+    type Error = GetIntegrationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
-            http_method = input.http_method,
-            resource_id = input.resource_id,
-            restapi_id = input.rest_api_id
+            http_method = self.http_method,
+            resource_id = self.resource_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<Integration, _>()?;
+                        .deserialize::<GetIntegrationResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12583,22 +16103,28 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Represents a get integration response.</p>
-    fn get_integration_response(
-        &self,
-        input: GetIntegrationResponseRequest,
-    ) -> RusotoFuture<IntegrationResponse, GetIntegrationResponseError> {
-        let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
+impl ServiceRequest for GetIntegrationResponseRequest {
+    type Output = GetIntegrationResponseResponse;
+    type Error = GetIntegrationResponseError;
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = self.http_method, resource_id = self.resource_id, restapi_id = self.rest_api_id, status_code = self.status_code);
+
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<IntegrationResponse, _>()?;
+                        .deserialize::<GetIntegrationResponseResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12611,24 +16137,33 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Describe an existing <a>Method</a> resource.</p>
-    fn get_method(&self, input: GetMethodRequest) -> RusotoFuture<Method, GetMethodError> {
+impl ServiceRequest for GetMethodRequest {
+    type Output = GetMethodResponse;
+    type Error = GetMethodError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
-            http_method = input.http_method,
-            resource_id = input.resource_id,
-            restapi_id = input.rest_api_id
+            http_method = self.http_method,
+            resource_id = self.resource_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<Method, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetMethodResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12642,22 +16177,28 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Describes a <a>MethodResponse</a> resource.</p>
-    fn get_method_response(
-        &self,
-        input: GetMethodResponseRequest,
-    ) -> RusotoFuture<MethodResponse, GetMethodResponseError> {
-        let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
+impl ServiceRequest for GetMethodResponseRequest {
+    type Output = GetMethodResponseResponse;
+    type Error = GetMethodResponseError;
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = self.http_method, resource_id = self.resource_id, restapi_id = self.rest_api_id, status_code = self.status_code);
+
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<MethodResponse, _>()?;
+                        .deserialize::<GetMethodResponseResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12671,29 +16212,38 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Describes an existing model defined for a <a>RestApi</a> resource.</p>
-    fn get_model(&self, input: GetModelRequest) -> RusotoFuture<Model, GetModelError> {
+impl ServiceRequest for GetModelRequest {
+    type Output = GetModelResponse;
+    type Error = GetModelError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}",
-            model_name = input.model_name,
-            restapi_id = input.rest_api_id
+            model_name = self.model_name,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.flatten {
+        if let Some(ref x) = self.flatten {
             params.put("flatten", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<Model, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetModelResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12707,26 +16257,32 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Generates a sample mapping template that can be used to transform a payload into the structure of a model.</p>
-    fn get_model_template(
-        &self,
-        input: GetModelTemplateRequest,
-    ) -> RusotoFuture<Template, GetModelTemplateError> {
+impl ServiceRequest for GetModelTemplateRequest {
+    type Output = GetModelTemplateResponse;
+    type Error = GetModelTemplateError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}/default_template",
-            model_name = input.model_name,
-            restapi_id = input.rest_api_id
+            model_name = self.model_name,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<Template, _>()?;
+                        .deserialize::<GetModelTemplateResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12740,31 +16296,40 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Describes existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>
-    fn get_models(&self, input: GetModelsRequest) -> RusotoFuture<Models, GetModelsError> {
+impl ServiceRequest for GetModelsRequest {
+    type Output = GetModelsResponse;
+    type Error = GetModelsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models",
-            restapi_id = input.rest_api_id
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.position {
+        if let Some(ref x) = self.position {
             params.put("position", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<Models, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetModelsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12778,26 +16343,32 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
-    fn get_request_validator(
-        &self,
-        input: GetRequestValidatorRequest,
-    ) -> RusotoFuture<RequestValidator, GetRequestValidatorError> {
+impl ServiceRequest for GetRequestValidatorRequest {
+    type Output = GetRequestValidatorResponse;
+    type Error = GetRequestValidatorError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}",
-            requestvalidator_id = input.request_validator_id,
-            restapi_id = input.rest_api_id
+            requestvalidator_id = self.request_validator_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RequestValidator, _>()?;
+                        .deserialize::<GetRequestValidatorResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12810,34 +16381,40 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>
-    fn get_request_validators(
-        &self,
-        input: GetRequestValidatorsRequest,
-    ) -> RusotoFuture<RequestValidators, GetRequestValidatorsError> {
+impl ServiceRequest for GetRequestValidatorsRequest {
+    type Output = GetRequestValidatorsResponse;
+    type Error = GetRequestValidatorsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators",
-            restapi_id = input.rest_api_id
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.position {
+        if let Some(ref x) = self.position {
             params.put("position", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RequestValidators, _>()?;
+                        .deserialize::<GetRequestValidatorsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12850,31 +16427,40 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Lists information about a resource.</p>
-    fn get_resource(&self, input: GetResourceRequest) -> RusotoFuture<Resource, GetResourceError> {
+impl ServiceRequest for GetResourceRequest {
+    type Output = GetResourceResponse;
+    type Error = GetResourceError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}",
-            resource_id = input.resource_id,
-            restapi_id = input.rest_api_id
+            resource_id = self.resource_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.embed {
+        if let Some(ref x) = self.embed {
             for item in x.iter() {
                 params.put("embed", item);
             }
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<Resource, _>()?;
+                        .deserialize::<GetResourceResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12888,39 +16474,45 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Lists information about a collection of <a>Resource</a> resources.</p>
-    fn get_resources(
-        &self,
-        input: GetResourcesRequest,
-    ) -> RusotoFuture<Resources, GetResourcesError> {
+impl ServiceRequest for GetResourcesRequest {
+    type Output = GetResourcesResponse;
+    type Error = GetResourcesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources",
-            restapi_id = input.rest_api_id
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.embed {
+        if let Some(ref x) = self.embed {
             for item in x.iter() {
                 params.put("embed", item);
             }
         }
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.position {
+        if let Some(ref x) = self.position {
             params.put("position", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<Resources, _>()?;
+                        .deserialize::<GetResourcesResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12934,19 +16526,28 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Lists the <a>RestApi</a> resource in the collection.</p>
-    fn get_rest_api(&self, input: GetRestApiRequest) -> RusotoFuture<RestApi, GetRestApiError> {
-        let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
+impl ServiceRequest for GetRestApiRequest {
+    type Output = GetRestApiResponse;
+    type Error = GetRestApiError;
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/restapis/{restapi_id}", restapi_id = self.rest_api_id);
+
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetRestApiResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12960,28 +16561,37 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Lists the <a>RestApis</a> resources for your collection.</p>
-    fn get_rest_apis(&self, input: GetRestApisRequest) -> RusotoFuture<RestApis, GetRestApisError> {
+impl ServiceRequest for GetRestApisRequest {
+    type Output = GetRestApisResponse;
+    type Error = GetRestApisError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/restapis";
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.position {
+        if let Some(ref x) = self.position {
             params.put("position", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RestApis, _>()?;
+                        .deserialize::<GetRestApisResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -12995,31 +16605,40 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
-    fn get_sdk(&self, input: GetSdkRequest) -> RusotoFuture<SdkResponse, GetSdkError> {
+impl ServiceRequest for GetSdkRequest {
+    type Output = GetSdkResponse;
+    type Error = GetSdkError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/sdks/{sdk_type}",
-            restapi_id = input.rest_api_id,
-            sdk_type = input.sdk_type,
-            stage_name = input.stage_name
+            restapi_id = self.rest_api_id,
+            sdk_type = self.sdk_type,
+            stage_name = self.stage_name
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.parameters {
+        if let Some(ref x) = self.parameters {
             for (key, val) in x.iter() {
                 params.put(key, val);
             }
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let mut result = SdkResponse::default();
+                    let mut result = GetSdkResponse::default();
                     result.body = Some(response.body);
 
                     if let Some(content_disposition) = response.headers.get("Content-Disposition") {
@@ -13043,18 +16662,28 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    fn get_sdk_type(&self, input: GetSdkTypeRequest) -> RusotoFuture<SdkType, GetSdkTypeError> {
-        let request_uri = format!("/sdktypes/{sdktype_id}", sdktype_id = input.id);
+impl ServiceRequest for GetSdkTypeRequest {
+    type Output = GetSdkTypeResponse;
+    type Error = GetSdkTypeError;
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/sdktypes/{sdktype_id}", sdktype_id = self.id);
+
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<SdkType, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetSdkTypeResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13068,27 +16697,37 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    fn get_sdk_types(&self, input: GetSdkTypesRequest) -> RusotoFuture<SdkTypes, GetSdkTypesError> {
+impl ServiceRequest for GetSdkTypesRequest {
+    type Output = GetSdkTypesResponse;
+    type Error = GetSdkTypesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/sdktypes";
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.position {
+        if let Some(ref x) = self.position {
             params.put("position", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SdkTypes, _>()?;
+                        .deserialize::<GetSdkTypesResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13102,23 +16741,32 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about a <a>Stage</a> resource.</p>
-    fn get_stage(&self, input: GetStageRequest) -> RusotoFuture<Stage, GetStageError> {
+impl ServiceRequest for GetStageRequest {
+    type Output = GetStageResponse;
+    type Error = GetStageError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}",
-            restapi_id = input.rest_api_id,
-            stage_name = input.stage_name
+            restapi_id = self.rest_api_id,
+            stage_name = self.stage_name
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<Stage, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetStageResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13132,28 +16780,37 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about one or more <a>Stage</a> resources.</p>
-    fn get_stages(&self, input: GetStagesRequest) -> RusotoFuture<Stages, GetStagesError> {
+impl ServiceRequest for GetStagesRequest {
+    type Output = GetStagesResponse;
+    type Error = GetStagesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages",
-            restapi_id = input.rest_api_id
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.deployment_id {
+        if let Some(ref x) = self.deployment_id {
             params.put("deploymentId", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<Stages, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetStagesResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13167,28 +16824,37 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets the <a>Tags</a> collection for a given resource.</p>
-    fn get_tags(&self, input: GetTagsRequest) -> RusotoFuture<Tags, GetTagsError> {
-        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for GetTagsRequest {
+    type Output = GetTagsResponse;
+    type Error = GetTagsError;
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.position {
+        if let Some(ref x) = self.position {
             params.put("position", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<Tags, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetTagsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13202,36 +16868,45 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets the usage data of a usage plan in a specified time interval.</p>
-    fn get_usage(&self, input: GetUsageRequest) -> RusotoFuture<Usage, GetUsageError> {
+impl ServiceRequest for GetUsageRequest {
+    type Output = GetUsageResponse;
+    type Error = GetUsageError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/usage",
-            usageplan_id = input.usage_plan_id
+            usageplan_id = self.usage_plan_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        params.put("endDate", &input.end_date);
-        if let Some(ref x) = input.key_id {
+        params.put("endDate", &self.end_date);
+        if let Some(ref x) = self.key_id {
             params.put("keyId", x);
         }
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.position {
+        if let Some(ref x) = self.position {
             params.put("position", x);
         }
-        params.put("startDate", &input.start_date);
+        params.put("startDate", &self.start_date);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<Usage, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetUsageResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13245,25 +16920,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets a usage plan of a given plan identifier.</p>
-    fn get_usage_plan(
-        &self,
-        input: GetUsagePlanRequest,
-    ) -> RusotoFuture<UsagePlan, GetUsagePlanError> {
+impl ServiceRequest for GetUsagePlanRequest {
+    type Output = GetUsagePlanResponse;
+    type Error = GetUsagePlanError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}",
-            usageplan_id = input.usage_plan_id
+            usageplan_id = self.usage_plan_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UsagePlan, _>()?;
+                        .deserialize::<GetUsagePlanResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13277,26 +16958,32 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets a usage plan key of a given key identifier.</p>
-    fn get_usage_plan_key(
-        &self,
-        input: GetUsagePlanKeyRequest,
-    ) -> RusotoFuture<UsagePlanKey, GetUsagePlanKeyError> {
+impl ServiceRequest for GetUsagePlanKeyRequest {
+    type Output = GetUsagePlanKeyResponse;
+    type Error = GetUsagePlanKeyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys/{key_id}",
-            key_id = input.key_id,
-            usageplan_id = input.usage_plan_id
+            key_id = self.key_id,
+            usageplan_id = self.usage_plan_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UsagePlanKey, _>()?;
+                        .deserialize::<GetUsagePlanKeyResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13310,37 +16997,43 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets all the usage plan keys representing the API keys added to a specified usage plan.</p>
-    fn get_usage_plan_keys(
-        &self,
-        input: GetUsagePlanKeysRequest,
-    ) -> RusotoFuture<UsagePlanKeys, GetUsagePlanKeysError> {
+impl ServiceRequest for GetUsagePlanKeysRequest {
+    type Output = GetUsagePlanKeysResponse;
+    type Error = GetUsagePlanKeysError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys",
-            usageplan_id = input.usage_plan_id
+            usageplan_id = self.usage_plan_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.name_query {
+        if let Some(ref x) = self.name_query {
             params.put("name", x);
         }
-        if let Some(ref x) = input.position {
+        if let Some(ref x) = self.position {
             params.put("position", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UsagePlanKeys, _>()?;
+                        .deserialize::<GetUsagePlanKeysResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13354,34 +17047,40 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets all the usage plans of the caller's account.</p>
-    fn get_usage_plans(
-        &self,
-        input: GetUsagePlansRequest,
-    ) -> RusotoFuture<UsagePlans, GetUsagePlansError> {
+impl ServiceRequest for GetUsagePlansRequest {
+    type Output = GetUsagePlansResponse;
+    type Error = GetUsagePlansError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/usageplans";
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.key_id {
+        if let Some(ref x) = self.key_id {
             params.put("keyId", x);
         }
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.position {
+        if let Some(ref x) = self.position {
             params.put("position", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UsagePlans, _>()?;
+                        .deserialize::<GetUsagePlansResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13395,19 +17094,28 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets a specified VPC link under the caller's account in a region.</p>
-    fn get_vpc_link(&self, input: GetVpcLinkRequest) -> RusotoFuture<VpcLink, GetVpcLinkError> {
-        let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = input.vpc_link_id);
+impl ServiceRequest for GetVpcLinkRequest {
+    type Output = GetVpcLinkResponse;
+    type Error = GetVpcLinkError;
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = self.vpc_link_id);
+
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<VpcLink, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetVpcLinkResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13421,28 +17129,37 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Gets the <a>VpcLinks</a> collection under the caller's account in a selected region.</p>
-    fn get_vpc_links(&self, input: GetVpcLinksRequest) -> RusotoFuture<VpcLinks, GetVpcLinksError> {
+impl ServiceRequest for GetVpcLinksRequest {
+    type Output = GetVpcLinksResponse;
+    type Error = GetVpcLinksError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/vpclinks";
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.position {
+        if let Some(ref x) = self.position {
             params.put("position", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<VpcLinks, _>()?;
+                        .deserialize::<GetVpcLinksResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13456,33 +17173,39 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Import API keys from an external source, such as a CSV-formatted file.</p>
-    fn import_api_keys(
-        &self,
-        input: ImportApiKeysRequest,
-    ) -> RusotoFuture<ApiKeyIds, ImportApiKeysError> {
+impl ServiceRequest for ImportApiKeysRequest {
+    type Output = ImportApiKeysResponse;
+    type Error = ImportApiKeysError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/apikeys";
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(input.body.to_owned());
+        let encoded = Some(self.body.to_owned());
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.fail_on_warnings {
+        if let Some(ref x) = self.fail_on_warnings {
             params.put("failonwarnings", x);
         }
-        params.put("format", &input.format);
+        params.put("format", &self.format);
         params.put("mode", "import");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ApiKeyIds, _>()?;
+                        .deserialize::<ImportApiKeysResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13496,36 +17219,43 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    fn import_documentation_parts(
-        &self,
-        input: ImportDocumentationPartsRequest,
-    ) -> RusotoFuture<DocumentationPartIds, ImportDocumentationPartsError> {
+impl ServiceRequest for ImportDocumentationPartsRequest {
+    type Output = ImportDocumentationPartsResponse;
+    type Error = ImportDocumentationPartsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts",
-            restapi_id = input.rest_api_id
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(input.body.to_owned());
+        let encoded = Some(self.body.to_owned());
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.fail_on_warnings {
+        if let Some(ref x) = self.fail_on_warnings {
             params.put("failonwarnings", x);
         }
-        if let Some(ref x) = input.mode {
+        if let Some(ref x) = self.mode {
             params.put("mode", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DocumentationPartIds, _>()?;
+                        .deserialize::<ImportDocumentationPartsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13536,25 +17266,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>A feature of the API Gateway control service for creating a new API from an external API definition file.</p>
-    fn import_rest_api(
-        &self,
-        input: ImportRestApiRequest,
-    ) -> RusotoFuture<RestApi, ImportRestApiError> {
+impl ServiceRequest for ImportRestApiRequest {
+    type Output = ImportRestApiResponse;
+    type Error = ImportRestApiError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/restapis";
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(input.body.to_owned());
+        let encoded = Some(self.body.to_owned());
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.fail_on_warnings {
+        if let Some(ref x) = self.fail_on_warnings {
             params.put("failonwarnings", x);
         }
-        if let Some(ref x) = input.parameters {
+        if let Some(ref x) = self.parameters {
             for (key, val) in x.iter() {
                 params.put(key, val);
             }
@@ -13562,11 +17298,11 @@ impl ApiGateway for ApiGatewayClient {
         params.put("mode", "import");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ImportRestApiResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13580,29 +17316,35 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>
-    fn put_gateway_response(
-        &self,
-        input: PutGatewayResponseRequest,
-    ) -> RusotoFuture<GatewayResponse, PutGatewayResponseError> {
+impl ServiceRequest for PutGatewayResponseRequest {
+    type Output = PutGatewayResponseResponse;
+    type Error = PutGatewayResponseError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses/{response_type}",
-            response_type = input.response_type,
-            restapi_id = input.rest_api_id
+            response_type = self.response_type,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GatewayResponse, _>()?;
+                        .deserialize::<PutGatewayResponseResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13616,30 +17358,36 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Sets up a method's integration.</p>
-    fn put_integration(
-        &self,
-        input: PutIntegrationRequest,
-    ) -> RusotoFuture<Integration, PutIntegrationError> {
+impl ServiceRequest for PutIntegrationRequest {
+    type Output = PutIntegrationResponse;
+    type Error = PutIntegrationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
-            http_method = input.http_method,
-            resource_id = input.resource_id,
-            restapi_id = input.rest_api_id
+            http_method = self.http_method,
+            resource_id = self.resource_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<Integration, _>()?;
+                        .deserialize::<PutIntegrationResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13653,25 +17401,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Represents a put integration.</p>
-    fn put_integration_response(
-        &self,
-        input: PutIntegrationResponseRequest,
-    ) -> RusotoFuture<IntegrationResponse, PutIntegrationResponseError> {
-        let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
+impl ServiceRequest for PutIntegrationResponseRequest {
+    type Output = PutIntegrationResponseResponse;
+    type Error = PutIntegrationResponseError;
 
-        let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = self.http_method, resource_id = self.resource_id, restapi_id = self.rest_api_id, status_code = self.status_code);
+
+        let mut request = SignedRequest::new("PUT", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<IntegrationResponse, _>()?;
+                        .deserialize::<PutIntegrationResponseResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13684,27 +17438,36 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Add a method to an existing <a>Resource</a> resource.</p>
-    fn put_method(&self, input: PutMethodRequest) -> RusotoFuture<Method, PutMethodError> {
+impl ServiceRequest for PutMethodRequest {
+    type Output = PutMethodResponse;
+    type Error = PutMethodError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
-            http_method = input.http_method,
-            resource_id = input.resource_id,
-            restapi_id = input.rest_api_id
+            http_method = self.http_method,
+            resource_id = self.resource_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<Method, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutMethodResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13718,25 +17481,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Adds a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>
-    fn put_method_response(
-        &self,
-        input: PutMethodResponseRequest,
-    ) -> RusotoFuture<MethodResponse, PutMethodResponseError> {
-        let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
+impl ServiceRequest for PutMethodResponseRequest {
+    type Output = PutMethodResponseResponse;
+    type Error = PutMethodResponseError;
 
-        let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = self.http_method, resource_id = self.resource_id, restapi_id = self.rest_api_id, status_code = self.status_code);
+
+        let mut request = SignedRequest::new("PUT", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<MethodResponse, _>()?;
+                        .deserialize::<PutMethodResponseResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13750,36 +17519,45 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>A feature of the API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>
-    fn put_rest_api(&self, input: PutRestApiRequest) -> RusotoFuture<RestApi, PutRestApiError> {
-        let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
+impl ServiceRequest for PutRestApiRequest {
+    type Output = PutRestApiResponse;
+    type Error = PutRestApiError;
 
-        let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/restapis/{restapi_id}", restapi_id = self.rest_api_id);
+
+        let mut request = SignedRequest::new("PUT", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(input.body.to_owned());
+        let encoded = Some(self.body.to_owned());
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.fail_on_warnings {
+        if let Some(ref x) = self.fail_on_warnings {
             params.put("failonwarnings", x);
         }
-        if let Some(ref x) = input.mode {
+        if let Some(ref x) = self.mode {
             params.put("mode", x);
         }
-        if let Some(ref x) = input.parameters {
+        if let Some(ref x) = self.parameters {
             for (key, val) in x.iter() {
                 params.put(key, val);
             }
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutRestApiResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13793,21 +17571,30 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Adds or updates a tag on a given resource.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
-        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
 
-        let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("PUT", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = TagResourceResponse {};
 
                     Ok(result)
                 }))
@@ -13821,25 +17608,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p><p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorizers</a> </div></p>
-    fn test_invoke_authorizer(
-        &self,
-        input: TestInvokeAuthorizerRequest,
-    ) -> RusotoFuture<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError> {
+impl ServiceRequest for TestInvokeAuthorizerRequest {
+    type Output = TestInvokeAuthorizerResponse;
+    type Error = TestInvokeAuthorizerError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers/{authorizer_id}",
-            authorizer_id = input.authorizer_id,
-            restapi_id = input.rest_api_id
+            authorizer_id = self.authorizer_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -13856,26 +17649,32 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Simulate the execution of a <a>Method</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p>
-    fn test_invoke_method(
-        &self,
-        input: TestInvokeMethodRequest,
-    ) -> RusotoFuture<TestInvokeMethodResponse, TestInvokeMethodError> {
+impl ServiceRequest for TestInvokeMethodRequest {
+    type Output = TestInvokeMethodResponse;
+    type Error = TestInvokeMethodError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
-            http_method = input.http_method,
-            resource_id = input.resource_id,
-            restapi_id = input.rest_api_id
+            http_method = self.http_method,
+            resource_id = self.resource_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -13893,24 +17692,33 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Removes a tag from a given resource.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
-        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        for item in input.tag_keys.iter() {
+        for item in self.tag_keys.iter() {
             params.put("tagKeys", item);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UntagResourceResponse {};
 
                     Ok(result)
                 }))
@@ -13924,25 +17732,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Changes information about the current <a>Account</a> resource.</p>
-    fn update_account(
-        &self,
-        input: UpdateAccountRequest,
-    ) -> RusotoFuture<Account, UpdateAccountError> {
+impl ServiceRequest for UpdateAccountRequest {
+    type Output = UpdateAccountResponse;
+    type Error = UpdateAccountError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/account";
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<Account, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateAccountResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13956,25 +17770,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Changes information about an <a>ApiKey</a> resource.</p>
-    fn update_api_key(
-        &self,
-        input: UpdateApiKeyRequest,
-    ) -> RusotoFuture<ApiKey, UpdateApiKeyError> {
-        let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
+impl ServiceRequest for UpdateApiKeyRequest {
+    type Output = UpdateApiKeyResponse;
+    type Error = UpdateApiKeyError;
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/apikeys/{api_key}", api_key = self.api_key);
+
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<ApiKey, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateApiKeyResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -13988,29 +17808,35 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p><p>Updates an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/update-authorizer.html">AWS CLI</a></div></p>
-    fn update_authorizer(
-        &self,
-        input: UpdateAuthorizerRequest,
-    ) -> RusotoFuture<Authorizer, UpdateAuthorizerError> {
+impl ServiceRequest for UpdateAuthorizerRequest {
+    type Output = UpdateAuthorizerResponse;
+    type Error = UpdateAuthorizerError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers/{authorizer_id}",
-            authorizer_id = input.authorizer_id,
-            restapi_id = input.rest_api_id
+            authorizer_id = self.authorizer_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<Authorizer, _>()?;
+                        .deserialize::<UpdateAuthorizerResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -14024,29 +17850,35 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Changes information about the <a>BasePathMapping</a> resource.</p>
-    fn update_base_path_mapping(
-        &self,
-        input: UpdateBasePathMappingRequest,
-    ) -> RusotoFuture<BasePathMapping, UpdateBasePathMappingError> {
+impl ServiceRequest for UpdateBasePathMappingRequest {
+    type Output = UpdateBasePathMappingResponse;
+    type Error = UpdateBasePathMappingError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings/{base_path}",
-            base_path = input.base_path,
-            domain_name = input.domain_name
+            base_path = self.base_path,
+            domain_name = self.domain_name
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BasePathMapping, _>()?;
+                        .deserialize::<UpdateBasePathMappingResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -14059,28 +17891,34 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Changes information about an <a>ClientCertificate</a> resource.</p>
-    fn update_client_certificate(
-        &self,
-        input: UpdateClientCertificateRequest,
-    ) -> RusotoFuture<ClientCertificate, UpdateClientCertificateError> {
+impl ServiceRequest for UpdateClientCertificateRequest {
+    type Output = UpdateClientCertificateResponse;
+    type Error = UpdateClientCertificateError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/clientcertificates/{clientcertificate_id}",
-            clientcertificate_id = input.client_certificate_id
+            clientcertificate_id = self.client_certificate_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ClientCertificate, _>()?;
+                        .deserialize::<UpdateClientCertificateResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -14091,29 +17929,35 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Changes information about a <a>Deployment</a> resource.</p>
-    fn update_deployment(
-        &self,
-        input: UpdateDeploymentRequest,
-    ) -> RusotoFuture<Deployment, UpdateDeploymentError> {
+impl ServiceRequest for UpdateDeploymentRequest {
+    type Output = UpdateDeploymentResponse;
+    type Error = UpdateDeploymentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments/{deployment_id}",
-            deployment_id = input.deployment_id,
-            restapi_id = input.rest_api_id
+            deployment_id = self.deployment_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<Deployment, _>()?;
+                        .deserialize::<UpdateDeploymentResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -14127,28 +17971,35 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    fn update_documentation_part(
-        &self,
-        input: UpdateDocumentationPartRequest,
-    ) -> RusotoFuture<DocumentationPart, UpdateDocumentationPartError> {
+impl ServiceRequest for UpdateDocumentationPartRequest {
+    type Output = UpdateDocumentationPartResponse;
+    type Error = UpdateDocumentationPartError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts/{part_id}",
-            part_id = input.documentation_part_id,
-            restapi_id = input.rest_api_id
+            part_id = self.documentation_part_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DocumentationPart, _>()?;
+                        .deserialize::<UpdateDocumentationPartResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -14159,28 +18010,35 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    fn update_documentation_version(
-        &self,
-        input: UpdateDocumentationVersionRequest,
-    ) -> RusotoFuture<DocumentationVersion, UpdateDocumentationVersionError> {
+impl ServiceRequest for UpdateDocumentationVersionRequest {
+    type Output = UpdateDocumentationVersionResponse;
+    type Error = UpdateDocumentationVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions/{doc_version}",
-            doc_version = input.documentation_version,
-            restapi_id = input.rest_api_id
+            doc_version = self.documentation_version,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DocumentationVersion, _>()?;
+                        .deserialize::<UpdateDocumentationVersionResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -14191,28 +18049,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Changes information about the <a>DomainName</a> resource.</p>
-    fn update_domain_name(
-        &self,
-        input: UpdateDomainNameRequest,
-    ) -> RusotoFuture<DomainName, UpdateDomainNameError> {
-        let request_uri = format!(
-            "/domainnames/{domain_name}",
-            domain_name = input.domain_name
-        );
+impl ServiceRequest for UpdateDomainNameRequest {
+    type Output = UpdateDomainNameResponse;
+    type Error = UpdateDomainNameError;
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/domainnames/{domain_name}", domain_name = self.domain_name);
+
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DomainName, _>()?;
+                        .deserialize::<UpdateDomainNameResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -14226,29 +18087,35 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
-    fn update_gateway_response(
-        &self,
-        input: UpdateGatewayResponseRequest,
-    ) -> RusotoFuture<GatewayResponse, UpdateGatewayResponseError> {
+impl ServiceRequest for UpdateGatewayResponseRequest {
+    type Output = UpdateGatewayResponseResponse;
+    type Error = UpdateGatewayResponseError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses/{response_type}",
-            response_type = input.response_type,
-            restapi_id = input.rest_api_id
+            response_type = self.response_type,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GatewayResponse, _>()?;
+                        .deserialize::<UpdateGatewayResponseResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -14261,30 +18128,36 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Represents an update integration.</p>
-    fn update_integration(
-        &self,
-        input: UpdateIntegrationRequest,
-    ) -> RusotoFuture<Integration, UpdateIntegrationError> {
+impl ServiceRequest for UpdateIntegrationRequest {
+    type Output = UpdateIntegrationResponse;
+    type Error = UpdateIntegrationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
-            http_method = input.http_method,
-            resource_id = input.resource_id,
-            restapi_id = input.rest_api_id
+            http_method = self.http_method,
+            resource_id = self.resource_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<Integration, _>()?;
+                        .deserialize::<UpdateIntegrationResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -14298,25 +18171,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Represents an update integration response.</p>
-    fn update_integration_response(
-        &self,
-        input: UpdateIntegrationResponseRequest,
-    ) -> RusotoFuture<IntegrationResponse, UpdateIntegrationResponseError> {
-        let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
+impl ServiceRequest for UpdateIntegrationResponseRequest {
+    type Output = UpdateIntegrationResponseResponse;
+    type Error = UpdateIntegrationResponseError;
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = self.http_method, resource_id = self.resource_id, restapi_id = self.rest_api_id, status_code = self.status_code);
+
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<IntegrationResponse, _>()?;
+                        .deserialize::<UpdateIntegrationResponseResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -14327,27 +18206,36 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Updates an existing <a>Method</a> resource.</p>
-    fn update_method(&self, input: UpdateMethodRequest) -> RusotoFuture<Method, UpdateMethodError> {
+impl ServiceRequest for UpdateMethodRequest {
+    type Output = UpdateMethodResponse;
+    type Error = UpdateMethodError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
-            http_method = input.http_method,
-            resource_id = input.resource_id,
-            restapi_id = input.rest_api_id
+            http_method = self.http_method,
+            resource_id = self.resource_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<Method, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateMethodResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -14361,25 +18249,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Updates an existing <a>MethodResponse</a> resource.</p>
-    fn update_method_response(
-        &self,
-        input: UpdateMethodResponseRequest,
-    ) -> RusotoFuture<MethodResponse, UpdateMethodResponseError> {
-        let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
+impl ServiceRequest for UpdateMethodResponseRequest {
+    type Output = UpdateMethodResponseResponse;
+    type Error = UpdateMethodResponseError;
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = self.http_method, resource_id = self.resource_id, restapi_id = self.rest_api_id, status_code = self.status_code);
+
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<MethodResponse, _>()?;
+                        .deserialize::<UpdateMethodResponseResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -14392,26 +18286,35 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Changes information about a model.</p>
-    fn update_model(&self, input: UpdateModelRequest) -> RusotoFuture<Model, UpdateModelError> {
+impl ServiceRequest for UpdateModelRequest {
+    type Output = UpdateModelResponse;
+    type Error = UpdateModelError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}",
-            model_name = input.model_name,
-            restapi_id = input.rest_api_id
+            model_name = self.model_name,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<Model, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateModelResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -14425,29 +18328,35 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
-    fn update_request_validator(
-        &self,
-        input: UpdateRequestValidatorRequest,
-    ) -> RusotoFuture<RequestValidator, UpdateRequestValidatorError> {
+impl ServiceRequest for UpdateRequestValidatorRequest {
+    type Output = UpdateRequestValidatorResponse;
+    type Error = UpdateRequestValidatorError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}",
-            requestvalidator_id = input.request_validator_id,
-            restapi_id = input.rest_api_id
+            requestvalidator_id = self.request_validator_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RequestValidator, _>()?;
+                        .deserialize::<UpdateRequestValidatorResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -14460,29 +18369,35 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Changes information about a <a>Resource</a> resource.</p>
-    fn update_resource(
-        &self,
-        input: UpdateResourceRequest,
-    ) -> RusotoFuture<Resource, UpdateResourceError> {
+impl ServiceRequest for UpdateResourceRequest {
+    type Output = UpdateResourceResponse;
+    type Error = UpdateResourceError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}",
-            resource_id = input.resource_id,
-            restapi_id = input.rest_api_id
+            resource_id = self.resource_id,
+            restapi_id = self.rest_api_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<Resource, _>()?;
+                        .deserialize::<UpdateResourceResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -14496,25 +18411,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Changes information about the specified API.</p>
-    fn update_rest_api(
-        &self,
-        input: UpdateRestApiRequest,
-    ) -> RusotoFuture<RestApi, UpdateRestApiError> {
-        let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
+impl ServiceRequest for UpdateRestApiRequest {
+    type Output = UpdateRestApiResponse;
+    type Error = UpdateRestApiError;
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/restapis/{restapi_id}", restapi_id = self.rest_api_id);
+
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateRestApiResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -14528,26 +18449,35 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Changes information about a <a>Stage</a> resource.</p>
-    fn update_stage(&self, input: UpdateStageRequest) -> RusotoFuture<Stage, UpdateStageError> {
+impl ServiceRequest for UpdateStageRequest {
+    type Output = UpdateStageResponse;
+    type Error = UpdateStageError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}",
-            restapi_id = input.rest_api_id,
-            stage_name = input.stage_name
+            restapi_id = self.rest_api_id,
+            stage_name = self.stage_name
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<Stage, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateStageResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -14561,26 +18491,35 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Grants a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>
-    fn update_usage(&self, input: UpdateUsageRequest) -> RusotoFuture<Usage, UpdateUsageError> {
+impl ServiceRequest for UpdateUsageRequest {
+    type Output = UpdateUsageResponse;
+    type Error = UpdateUsageError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys/{key_id}/usage",
-            key_id = input.key_id,
-            usageplan_id = input.usage_plan_id
+            key_id = self.key_id,
+            usageplan_id = self.usage_plan_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<Usage, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateUsageResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -14594,28 +18533,34 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Updates a usage plan of a given plan Id.</p>
-    fn update_usage_plan(
-        &self,
-        input: UpdateUsagePlanRequest,
-    ) -> RusotoFuture<UsagePlan, UpdateUsagePlanError> {
+impl ServiceRequest for UpdateUsagePlanRequest {
+    type Output = UpdateUsagePlanResponse;
+    type Error = UpdateUsagePlanError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}",
-            usageplan_id = input.usage_plan_id
+            usageplan_id = self.usage_plan_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UsagePlan, _>()?;
+                        .deserialize::<UpdateUsagePlanResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -14629,25 +18574,31 @@ impl ApiGateway for ApiGatewayClient {
             }
         })
     }
+}
 
-    /// <p>Updates an existing <a>VpcLink</a> of a specified identifier.</p>
-    fn update_vpc_link(
-        &self,
-        input: UpdateVpcLinkRequest,
-    ) -> RusotoFuture<VpcLink, UpdateVpcLinkError> {
-        let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = input.vpc_link_id);
+impl ServiceRequest for UpdateVpcLinkRequest {
+    type Output = UpdateVpcLinkResponse;
+    type Error = UpdateVpcLinkError;
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = self.vpc_link_id);
+
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result =
-                        proto::json::ResponsePayload::new(&response).deserialize::<VpcLink, _>()?;
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateVpcLinkResponse, _>()?;
 
                     Ok(result)
                 }))

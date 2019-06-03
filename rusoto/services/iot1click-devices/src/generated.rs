@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -327,6 +328,10 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UnclaimDeviceRequest {
     /// <p>The unique identifier of the device.</p>
@@ -352,6 +357,10 @@ pub struct UntagResourceRequest {
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDeviceStateRequest {
@@ -1006,14 +1015,11 @@ pub trait Iot1ClickDevices {
     fn claim_devices_by_claim_code(
         &self,
         input: ClaimDevicesByClaimCodeRequest,
-    ) -> RusotoFuture<ClaimDevicesByClaimCodeResponse, ClaimDevicesByClaimCodeError>;
+    ) -> Request<ClaimDevicesByClaimCodeRequest>;
 
     /// <p>Given a device ID, returns a DescribeDeviceResponse object describing the
     /// details of the device.</p>
-    fn describe_device(
-        &self,
-        input: DescribeDeviceRequest,
-    ) -> RusotoFuture<DescribeDeviceResponse, DescribeDeviceError>;
+    fn describe_device(&self, input: DescribeDeviceRequest) -> Request<DescribeDeviceRequest>;
 
     /// <p>Given a device ID, finalizes the claim request for the associated device.</p><note>
     /// <p>Claiming a device consists of initiating a claim, then publishing a device event,
@@ -1024,13 +1030,13 @@ pub trait Iot1ClickDevices {
     fn finalize_device_claim(
         &self,
         input: FinalizeDeviceClaimRequest,
-    ) -> RusotoFuture<FinalizeDeviceClaimResponse, FinalizeDeviceClaimError>;
+    ) -> Request<FinalizeDeviceClaimRequest>;
 
     /// <p>Given a device ID, returns the invokable methods associated with the device.</p>
     fn get_device_methods(
         &self,
         input: GetDeviceMethodsRequest,
-    ) -> RusotoFuture<GetDeviceMethodsResponse, GetDeviceMethodsError>;
+    ) -> Request<GetDeviceMethodsRequest>;
 
     /// <p>Given a device ID, initiates a claim request for the associated device.</p><note>
     /// <p>Claiming a device consists of initiating a claim, then publishing a device event,
@@ -1041,54 +1047,48 @@ pub trait Iot1ClickDevices {
     fn initiate_device_claim(
         &self,
         input: InitiateDeviceClaimRequest,
-    ) -> RusotoFuture<InitiateDeviceClaimResponse, InitiateDeviceClaimError>;
+    ) -> Request<InitiateDeviceClaimRequest>;
 
     /// <p>Given a device ID, issues a request to invoke a named device method (with possible
     /// parameters). See the "Example POST" code snippet below.</p>
     fn invoke_device_method(
         &self,
         input: InvokeDeviceMethodRequest,
-    ) -> RusotoFuture<InvokeDeviceMethodResponse, InvokeDeviceMethodError>;
+    ) -> Request<InvokeDeviceMethodRequest>;
 
     /// <p>Using a device ID, returns a DeviceEventsResponse object containing an
     /// array of events for the device.</p>
     fn list_device_events(
         &self,
         input: ListDeviceEventsRequest,
-    ) -> RusotoFuture<ListDeviceEventsResponse, ListDeviceEventsError>;
+    ) -> Request<ListDeviceEventsRequest>;
 
     /// <p>Lists the 1-Click compatible devices associated with your AWS account.</p>
-    fn list_devices(
-        &self,
-        input: ListDevicesRequest,
-    ) -> RusotoFuture<ListDevicesResponse, ListDevicesError>;
+    fn list_devices(&self, input: ListDevicesRequest) -> Request<ListDevicesRequest>;
 
     /// <p>Lists the tags associated with the specified resource ARN.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Adds or updates the tags associated with the resource ARN. See <a href="https://docs.aws.amazon.com/iot-1-click/latest/developerguide/1click-appendix.html#1click-limits">AWS IoT 1-Click Service Limits</a> for the maximum number of tags allowed per
     /// resource.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Disassociates a device from your AWS account using its device ID.</p>
-    fn unclaim_device(
-        &self,
-        input: UnclaimDeviceRequest,
-    ) -> RusotoFuture<UnclaimDeviceResponse, UnclaimDeviceError>;
+    fn unclaim_device(&self, input: UnclaimDeviceRequest) -> Request<UnclaimDeviceRequest>;
 
     /// <p>Using tag keys, deletes the tags (key/value pairs) associated with the specified
     /// resource ARN.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Using a Boolean value (true or false), this operation
     /// enables or disables the device given a device ID.</p>
     fn update_device_state(
         &self,
         input: UpdateDeviceStateRequest,
-    ) -> RusotoFuture<UpdateDeviceStateResponse, UpdateDeviceStateError>;
+    ) -> Request<UpdateDeviceStateRequest>;
 }
 /// A client for the AWS IoT 1-Click Devices Service API.
 #[derive(Clone)]
@@ -1132,15 +1132,126 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
     fn claim_devices_by_claim_code(
         &self,
         input: ClaimDevicesByClaimCodeRequest,
-    ) -> RusotoFuture<ClaimDevicesByClaimCodeResponse, ClaimDevicesByClaimCodeError> {
-        let request_uri = format!("/claims/{claim_code}", claim_code = input.claim_code);
+    ) -> Request<ClaimDevicesByClaimCodeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
 
-        let mut request = SignedRequest::new("PUT", "iot1click", &self.region, &request_uri);
+    /// <p>Given a device ID, returns a DescribeDeviceResponse object describing the
+    /// details of the device.</p>
+    fn describe_device(&self, input: DescribeDeviceRequest) -> Request<DescribeDeviceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Given a device ID, finalizes the claim request for the associated device.</p><note>
+    /// <p>Claiming a device consists of initiating a claim, then publishing a device event,
+    /// and finalizing the claim. For a device of type button, a device event can
+    /// be published by simply clicking the device.</p>
+    ///
+    /// <p></note></p>
+    fn finalize_device_claim(
+        &self,
+        input: FinalizeDeviceClaimRequest,
+    ) -> Request<FinalizeDeviceClaimRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Given a device ID, returns the invokable methods associated with the device.</p>
+    fn get_device_methods(
+        &self,
+        input: GetDeviceMethodsRequest,
+    ) -> Request<GetDeviceMethodsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Given a device ID, initiates a claim request for the associated device.</p><note>
+    /// <p>Claiming a device consists of initiating a claim, then publishing a device event,
+    /// and finalizing the claim. For a device of type button, a device event can
+    /// be published by simply clicking the device.</p>
+    ///
+    /// <p></note></p>
+    fn initiate_device_claim(
+        &self,
+        input: InitiateDeviceClaimRequest,
+    ) -> Request<InitiateDeviceClaimRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Given a device ID, issues a request to invoke a named device method (with possible
+    /// parameters). See the "Example POST" code snippet below.</p>
+    fn invoke_device_method(
+        &self,
+        input: InvokeDeviceMethodRequest,
+    ) -> Request<InvokeDeviceMethodRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Using a device ID, returns a DeviceEventsResponse object containing an
+    /// array of events for the device.</p>
+    fn list_device_events(
+        &self,
+        input: ListDeviceEventsRequest,
+    ) -> Request<ListDeviceEventsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the 1-Click compatible devices associated with your AWS account.</p>
+    fn list_devices(&self, input: ListDevicesRequest) -> Request<ListDevicesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the tags associated with the specified resource ARN.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds or updates the tags associated with the resource ARN. See <a href="https://docs.aws.amazon.com/iot-1-click/latest/developerguide/1click-appendix.html#1click-limits">AWS IoT 1-Click Service Limits</a> for the maximum number of tags allowed per
+    /// resource.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disassociates a device from your AWS account using its device ID.</p>
+    fn unclaim_device(&self, input: UnclaimDeviceRequest) -> Request<UnclaimDeviceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Using tag keys, deletes the tags (key/value pairs) associated with the specified
+    /// resource ARN.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Using a Boolean value (true or false), this operation
+    /// enables or disables the device given a device ID.</p>
+    fn update_device_state(
+        &self,
+        input: UpdateDeviceStateRequest,
+    ) -> Request<UpdateDeviceStateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for ClaimDevicesByClaimCodeRequest {
+    type Output = ClaimDevicesByClaimCodeResponse;
+    type Error = ClaimDevicesByClaimCodeError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/claims/{claim_code}", claim_code = self.claim_code);
+
+        let mut request = SignedRequest::new("PUT", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("devices.iot1click".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1155,21 +1266,26 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             }
         })
     }
+}
 
-    /// <p>Given a device ID, returns a DescribeDeviceResponse object describing the
-    /// details of the device.</p>
-    fn describe_device(
-        &self,
-        input: DescribeDeviceRequest,
-    ) -> RusotoFuture<DescribeDeviceResponse, DescribeDeviceError> {
-        let request_uri = format!("/devices/{device_id}", device_id = input.device_id);
+impl ServiceRequest for DescribeDeviceRequest {
+    type Output = DescribeDeviceResponse;
+    type Error = DescribeDeviceError;
 
-        let mut request = SignedRequest::new("GET", "iot1click", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/devices/{device_id}", device_id = self.device_id);
+
+        let mut request = SignedRequest::new("GET", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("devices.iot1click".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1187,30 +1303,31 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             }
         })
     }
+}
 
-    /// <p>Given a device ID, finalizes the claim request for the associated device.</p><note>
-    /// <p>Claiming a device consists of initiating a claim, then publishing a device event,
-    /// and finalizing the claim. For a device of type button, a device event can
-    /// be published by simply clicking the device.</p>
-    ///
-    /// <p></note></p>
-    fn finalize_device_claim(
-        &self,
-        input: FinalizeDeviceClaimRequest,
-    ) -> RusotoFuture<FinalizeDeviceClaimResponse, FinalizeDeviceClaimError> {
+impl ServiceRequest for FinalizeDeviceClaimRequest {
+    type Output = FinalizeDeviceClaimResponse;
+    type Error = FinalizeDeviceClaimError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/devices/{device_id}/finalize-claim",
-            device_id = input.device_id
+            device_id = self.device_id
         );
 
-        let mut request = SignedRequest::new("PUT", "iot1click", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("devices.iot1click".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1227,20 +1344,26 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             }
         })
     }
+}
 
-    /// <p>Given a device ID, returns the invokable methods associated with the device.</p>
-    fn get_device_methods(
-        &self,
-        input: GetDeviceMethodsRequest,
-    ) -> RusotoFuture<GetDeviceMethodsResponse, GetDeviceMethodsError> {
-        let request_uri = format!("/devices/{device_id}/methods", device_id = input.device_id);
+impl ServiceRequest for GetDeviceMethodsRequest {
+    type Output = GetDeviceMethodsResponse;
+    type Error = GetDeviceMethodsError;
 
-        let mut request = SignedRequest::new("GET", "iot1click", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/devices/{device_id}/methods", device_id = self.device_id);
+
+        let mut request = SignedRequest::new("GET", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("devices.iot1click".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1258,28 +1381,29 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             }
         })
     }
+}
 
-    /// <p>Given a device ID, initiates a claim request for the associated device.</p><note>
-    /// <p>Claiming a device consists of initiating a claim, then publishing a device event,
-    /// and finalizing the claim. For a device of type button, a device event can
-    /// be published by simply clicking the device.</p>
-    ///
-    /// <p></note></p>
-    fn initiate_device_claim(
-        &self,
-        input: InitiateDeviceClaimRequest,
-    ) -> RusotoFuture<InitiateDeviceClaimResponse, InitiateDeviceClaimError> {
+impl ServiceRequest for InitiateDeviceClaimRequest {
+    type Output = InitiateDeviceClaimResponse;
+    type Error = InitiateDeviceClaimError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/devices/{device_id}/initiate-claim",
-            device_id = input.device_id
+            device_id = self.device_id
         );
 
-        let mut request = SignedRequest::new("PUT", "iot1click", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("devices.iot1click".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1296,23 +1420,28 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             }
         })
     }
+}
 
-    /// <p>Given a device ID, issues a request to invoke a named device method (with possible
-    /// parameters). See the "Example POST" code snippet below.</p>
-    fn invoke_device_method(
-        &self,
-        input: InvokeDeviceMethodRequest,
-    ) -> RusotoFuture<InvokeDeviceMethodResponse, InvokeDeviceMethodError> {
-        let request_uri = format!("/devices/{device_id}/methods", device_id = input.device_id);
+impl ServiceRequest for InvokeDeviceMethodRequest {
+    type Output = InvokeDeviceMethodResponse;
+    type Error = InvokeDeviceMethodError;
 
-        let mut request = SignedRequest::new("POST", "iot1click", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/devices/{device_id}/methods", device_id = self.device_id);
+
+        let mut request = SignedRequest::new("POST", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("devices.iot1click".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1330,32 +1459,37 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             }
         })
     }
+}
 
-    /// <p>Using a device ID, returns a DeviceEventsResponse object containing an
-    /// array of events for the device.</p>
-    fn list_device_events(
-        &self,
-        input: ListDeviceEventsRequest,
-    ) -> RusotoFuture<ListDeviceEventsResponse, ListDeviceEventsError> {
-        let request_uri = format!("/devices/{device_id}/events", device_id = input.device_id);
+impl ServiceRequest for ListDeviceEventsRequest {
+    type Output = ListDeviceEventsResponse;
+    type Error = ListDeviceEventsError;
 
-        let mut request = SignedRequest::new("GET", "iot1click", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/devices/{device_id}/events", device_id = self.device_id);
+
+        let mut request = SignedRequest::new("GET", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("devices.iot1click".to_string());
 
         let mut params = Params::new();
-        params.put("fromTimeStamp", &input.from_time_stamp);
-        if let Some(ref x) = input.max_results {
+        params.put("fromTimeStamp", &self.from_time_stamp);
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        params.put("toTimeStamp", &input.to_time_stamp);
+        params.put("toTimeStamp", &self.to_time_stamp);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1373,32 +1507,38 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             }
         })
     }
+}
 
-    /// <p>Lists the 1-Click compatible devices associated with your AWS account.</p>
-    fn list_devices(
-        &self,
-        input: ListDevicesRequest,
-    ) -> RusotoFuture<ListDevicesResponse, ListDevicesError> {
+impl ServiceRequest for ListDevicesRequest {
+    type Output = ListDevicesResponse;
+    type Error = ListDevicesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/devices";
 
-        let mut request = SignedRequest::new("GET", "iot1click", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("devices.iot1click".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.device_type {
+        if let Some(ref x) = self.device_type {
             params.put("deviceType", x);
         }
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1416,20 +1556,26 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             }
         })
     }
+}
 
-    /// <p>Lists the tags associated with the specified resource ARN.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
 
-        let mut request = SignedRequest::new("GET", "iot1click", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("devices.iot1click".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1446,23 +1592,31 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             }
         })
     }
+}
 
-    /// <p>Adds or updates the tags associated with the resource ARN. See <a href="https://docs.aws.amazon.com/iot-1-click/latest/developerguide/1click-appendix.html#1click-limits">AWS IoT 1-Click Service Limits</a> for the maximum number of tags allowed per
-    /// resource.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
-        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
 
-        let mut request = SignedRequest::new("POST", "iot1click", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("devices.iot1click".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = TagResourceResponse {};
 
                     Ok(result)
                 }))
@@ -1476,20 +1630,26 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             }
         })
     }
+}
 
-    /// <p>Disassociates a device from your AWS account using its device ID.</p>
-    fn unclaim_device(
-        &self,
-        input: UnclaimDeviceRequest,
-    ) -> RusotoFuture<UnclaimDeviceResponse, UnclaimDeviceError> {
-        let request_uri = format!("/devices/{device_id}/unclaim", device_id = input.device_id);
+impl ServiceRequest for UnclaimDeviceRequest {
+    type Output = UnclaimDeviceResponse;
+    type Error = UnclaimDeviceError;
 
-        let mut request = SignedRequest::new("PUT", "iot1click", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/devices/{device_id}/unclaim", device_id = self.device_id);
+
+        let mut request = SignedRequest::new("PUT", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("devices.iot1click".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1507,27 +1667,35 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             }
         })
     }
+}
 
-    /// <p>Using tag keys, deletes the tags (key/value pairs) associated with the specified
-    /// resource ARN.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
-        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
 
-        let mut request = SignedRequest::new("DELETE", "iot1click", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("devices.iot1click".to_string());
 
         let mut params = Params::new();
-        for item in input.tag_keys.iter() {
+        for item in self.tag_keys.iter() {
             params.put("tagKeys", item);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UntagResourceResponse {};
 
                     Ok(result)
                 }))
@@ -1541,23 +1709,28 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             }
         })
     }
+}
 
-    /// <p>Using a Boolean value (true or false), this operation
-    /// enables or disables the device given a device ID.</p>
-    fn update_device_state(
-        &self,
-        input: UpdateDeviceStateRequest,
-    ) -> RusotoFuture<UpdateDeviceStateResponse, UpdateDeviceStateError> {
-        let request_uri = format!("/devices/{device_id}/state", device_id = input.device_id);
+impl ServiceRequest for UpdateDeviceStateRequest {
+    type Output = UpdateDeviceStateResponse;
+    type Error = UpdateDeviceStateError;
 
-        let mut request = SignedRequest::new("PUT", "iot1click", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/devices/{device_id}/state", device_id = self.device_id);
+
+        let mut request = SignedRequest::new("PUT", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("devices.iot1click".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)

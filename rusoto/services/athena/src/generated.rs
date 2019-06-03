@@ -19,13 +19,14 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct BatchGetNamedQueryInput {
+pub struct BatchGetNamedQueryRequest {
     /// <p>An array of query IDs.</p>
     #[serde(rename = "NamedQueryIds")]
     pub named_query_ids: Vec<String>,
@@ -33,7 +34,7 @@ pub struct BatchGetNamedQueryInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct BatchGetNamedQueryOutput {
+pub struct BatchGetNamedQueryResponse {
     /// <p>Information about the named query IDs submitted.</p>
     #[serde(rename = "NamedQueries")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -45,7 +46,7 @@ pub struct BatchGetNamedQueryOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct BatchGetQueryExecutionInput {
+pub struct BatchGetQueryExecutionRequest {
     /// <p>An array of query execution IDs.</p>
     #[serde(rename = "QueryExecutionIds")]
     pub query_execution_ids: Vec<String>,
@@ -53,7 +54,7 @@ pub struct BatchGetQueryExecutionInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct BatchGetQueryExecutionOutput {
+pub struct BatchGetQueryExecutionResponse {
     /// <p>Information about a query execution.</p>
     #[serde(rename = "QueryExecutions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -109,7 +110,7 @@ pub struct ColumnInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateNamedQueryInput {
+pub struct CreateNamedQueryRequest {
     /// <p><p>A unique case-sensitive string used to ensure the request to create the query is idempotent (executes only once). If another <code>CreateNamedQuery</code> request is received, the same response is returned and another query is not created. If a parameter has changed, for example, the <code>QueryString</code>, an error is returned.</p> <important> <p>This token is listed as not required because AWS SDKs (for example the AWS SDK for Java) auto-generate the token for users. If you are not using the AWS SDK or the AWS CLI, you must provide this token or the action will fail.</p> </important></p>
     #[serde(rename = "ClientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -135,7 +136,7 @@ pub struct CreateNamedQueryInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateNamedQueryOutput {
+pub struct CreateNamedQueryResponse {
     /// <p>The unique ID of the query.</p>
     #[serde(rename = "NamedQueryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -143,7 +144,7 @@ pub struct CreateNamedQueryOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateWorkGroupInput {
+pub struct CreateWorkGroupRequest {
     /// <p>The configuration for the workgroup, which includes the location in Amazon S3 where query results are stored, the encryption configuration, if any, used for encrypting query results, whether the Amazon CloudWatch Metrics are enabled for the workgroup, the limit for the amount of bytes scanned (cutoff) per query, if it is specified, and whether workgroup's settings (specified with EnforceWorkGroupConfiguration) in the WorkGroupConfiguration override client-side settings. See <a>WorkGroupConfiguration$EnforceWorkGroupConfiguration</a>.</p>
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -163,7 +164,7 @@ pub struct CreateWorkGroupInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateWorkGroupOutput {}
+pub struct CreateWorkGroupResponse {}
 
 /// <p>A piece of data (a field in the table).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -176,7 +177,7 @@ pub struct Datum {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteNamedQueryInput {
+pub struct DeleteNamedQueryRequest {
     /// <p>The unique ID of the query to delete.</p>
     #[serde(rename = "NamedQueryId")]
     pub named_query_id: String,
@@ -184,10 +185,10 @@ pub struct DeleteNamedQueryInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteNamedQueryOutput {}
+pub struct DeleteNamedQueryResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteWorkGroupInput {
+pub struct DeleteWorkGroupRequest {
     /// <p>The option to delete the workgroup and its contents even if the workgroup contains any named queries.</p>
     #[serde(rename = "RecursiveDeleteOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -199,7 +200,7 @@ pub struct DeleteWorkGroupInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteWorkGroupOutput {}
+pub struct DeleteWorkGroupResponse {}
 
 /// <p>If query results are encrypted in Amazon S3, indicates the encryption option used (for example, <code>SSE-KMS</code> or <code>CSE-KMS</code>) and key information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -214,7 +215,7 @@ pub struct EncryptionConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetNamedQueryInput {
+pub struct GetNamedQueryRequest {
     /// <p>The unique ID of the query. Use <a>ListNamedQueries</a> to get query IDs.</p>
     #[serde(rename = "NamedQueryId")]
     pub named_query_id: String,
@@ -222,7 +223,7 @@ pub struct GetNamedQueryInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetNamedQueryOutput {
+pub struct GetNamedQueryResponse {
     /// <p>Information about the query.</p>
     #[serde(rename = "NamedQuery")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -230,7 +231,7 @@ pub struct GetNamedQueryOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetQueryExecutionInput {
+pub struct GetQueryExecutionRequest {
     /// <p>The unique ID of the query execution.</p>
     #[serde(rename = "QueryExecutionId")]
     pub query_execution_id: String,
@@ -238,7 +239,7 @@ pub struct GetQueryExecutionInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetQueryExecutionOutput {
+pub struct GetQueryExecutionResponse {
     /// <p>Information about the query execution.</p>
     #[serde(rename = "QueryExecution")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -246,7 +247,7 @@ pub struct GetQueryExecutionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetQueryResultsInput {
+pub struct GetQueryResultsRequest {
     /// <p>The maximum number of results (rows) to return in this request.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -262,7 +263,7 @@ pub struct GetQueryResultsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetQueryResultsOutput {
+pub struct GetQueryResultsResponse {
     /// <p>A token to be used by the next request if this request is truncated.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -278,7 +279,7 @@ pub struct GetQueryResultsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetWorkGroupInput {
+pub struct GetWorkGroupRequest {
     /// <p>The name of the workgroup.</p>
     #[serde(rename = "WorkGroup")]
     pub work_group: String,
@@ -286,7 +287,7 @@ pub struct GetWorkGroupInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetWorkGroupOutput {
+pub struct GetWorkGroupResponse {
     /// <p>Information about the workgroup.</p>
     #[serde(rename = "WorkGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -294,7 +295,7 @@ pub struct GetWorkGroupOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListNamedQueriesInput {
+pub struct ListNamedQueriesRequest {
     /// <p>The maximum number of queries to return in this request.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -311,7 +312,7 @@ pub struct ListNamedQueriesInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListNamedQueriesOutput {
+pub struct ListNamedQueriesResponse {
     /// <p>The list of unique query IDs.</p>
     #[serde(rename = "NamedQueryIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -323,7 +324,7 @@ pub struct ListNamedQueriesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListQueryExecutionsInput {
+pub struct ListQueryExecutionsRequest {
     /// <p>The maximum number of query executions to return in this request.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -340,7 +341,7 @@ pub struct ListQueryExecutionsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListQueryExecutionsOutput {
+pub struct ListQueryExecutionsResponse {
     /// <p>A token to be used by the next request if this request is truncated.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -352,7 +353,7 @@ pub struct ListQueryExecutionsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListTagsForResourceInput {
+pub struct ListTagsForResourceRequest {
     /// <p>The maximum number of results to be returned per request that lists the tags for the workgroup resource.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -368,7 +369,7 @@ pub struct ListTagsForResourceInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListTagsForResourceOutput {
+pub struct ListTagsForResourceResponse {
     /// <p>A token to be used by the next request if this request is truncated.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -380,7 +381,7 @@ pub struct ListTagsForResourceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListWorkGroupsInput {
+pub struct ListWorkGroupsRequest {
     /// <p>The maximum number of workgroups to return in this request.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -393,7 +394,7 @@ pub struct ListWorkGroupsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListWorkGroupsOutput {
+pub struct ListWorkGroupsResponse {
     /// <p>A token to be used by the next request if this request is truncated.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -583,7 +584,7 @@ pub struct Row {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct StartQueryExecutionInput {
+pub struct StartQueryExecutionRequest {
     /// <p><p>A unique case-sensitive string used to ensure the request to create the query is idempotent (executes only once). If another <code>StartQueryExecution</code> request is received, the same response is returned and another query is not created. If a parameter has changed, for example, the <code>QueryString</code>, an error is returned.</p> <important> <p>This token is listed as not required because AWS SDKs (for example the AWS SDK for Java) auto-generate the token for users. If you are not using the AWS SDK or the AWS CLI, you must provide this token or the action will fail.</p> </important></p>
     #[serde(rename = "ClientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -607,7 +608,7 @@ pub struct StartQueryExecutionInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct StartQueryExecutionOutput {
+pub struct StartQueryExecutionResponse {
     /// <p>The unique ID of the query that ran as a result of this request.</p>
     #[serde(rename = "QueryExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -615,7 +616,7 @@ pub struct StartQueryExecutionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct StopQueryExecutionInput {
+pub struct StopQueryExecutionRequest {
     /// <p>The unique ID of the query execution to stop.</p>
     #[serde(rename = "QueryExecutionId")]
     pub query_execution_id: String,
@@ -623,7 +624,7 @@ pub struct StopQueryExecutionInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct StopQueryExecutionOutput {}
+pub struct StopQueryExecutionResponse {}
 
 /// <p>A tag that you can add to a resource. A tag is a label that you assign to an AWS Athena resource (a workgroup). Each tag consists of a key and an optional value, both of which you define. Tags enable you to categorize workgroups in Athena, for example, by purpose, owner, or environment. Use a consistent set of tag keys to make it easier to search and filter workgroups in your account. The maximum tag key length is 128 Unicode characters in UTF-8. The maximum tag value length is 256 Unicode characters in UTF-8. You can use letters and numbers representable in UTF-8, and the following characters: + - = . _ : / @. Tag keys and values are case-sensitive. Tag keys must be unique per resource. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -639,7 +640,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct TagResourceInput {
+pub struct TagResourceRequest {
     /// <p>Requests that one or more tags are added to the resource (such as a workgroup) for the specified ARN.</p>
     #[serde(rename = "ResourceARN")]
     pub resource_arn: String,
@@ -650,7 +651,7 @@ pub struct TagResourceInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct TagResourceOutput {}
+pub struct TagResourceResponse {}
 
 /// <p>Information about a named query ID that could not be processed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -689,7 +690,7 @@ pub struct UnprocessedQueryExecutionId {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UntagResourceInput {
+pub struct UntagResourceRequest {
     /// <p>Removes one or more tags from the workgroup resource for the specified ARN.</p>
     #[serde(rename = "ResourceARN")]
     pub resource_arn: String,
@@ -700,10 +701,10 @@ pub struct UntagResourceInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UntagResourceOutput {}
+pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateWorkGroupInput {
+pub struct UpdateWorkGroupRequest {
     /// <p>The workgroup configuration that will be updated for the given workgroup.</p>
     #[serde(rename = "ConfigurationUpdates")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -723,7 +724,7 @@ pub struct UpdateWorkGroupInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateWorkGroupOutput {}
+pub struct UpdateWorkGroupResponse {}
 
 /// <p>A workgroup, which contains a name, description, creation time, state, and other configuration, listed under <a>WorkGroup$Configuration</a>. Each workgroup enables you to isolate queries for you or your group of users from other queries in the same account, to configure the query results location and the encryption configuration (known as workgroup settings), to enable sending query metrics to Amazon CloudWatch, and to establish per-query data usage control limits for all queries in a workgroup. The workgroup settings override is specified in EnforceWorkGroupConfiguration (true/false) in the WorkGroupConfiguration. See <a>WorkGroupConfiguration$EnforceWorkGroupConfiguration</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1594,116 +1595,89 @@ pub trait Athena {
     /// <p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Requires you to have access to the workgroup in which the queries were saved. Use <a>ListNamedQueriesInput</a> to get the list of named query IDs in the specified workgroup. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries differ from executed queries. Use <a>BatchGetQueryExecutionInput</a> to get details about each unique query execution, and <a>ListQueryExecutionsInput</a> to get a list of query execution IDs.</p>
     fn batch_get_named_query(
         &self,
-        input: BatchGetNamedQueryInput,
-    ) -> RusotoFuture<BatchGetNamedQueryOutput, BatchGetNamedQueryError>;
+        input: BatchGetNamedQueryRequest,
+    ) -> Request<BatchGetNamedQueryRequest>;
 
     /// <p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. Requires you to have access to the workgroup in which the queries ran. To get a list of query execution IDs, use <a>ListQueryExecutionsInput$WorkGroup</a>. Query executions differ from named (saved) queries. Use <a>BatchGetNamedQueryInput</a> to get details about named queries.</p>
     fn batch_get_query_execution(
         &self,
-        input: BatchGetQueryExecutionInput,
-    ) -> RusotoFuture<BatchGetQueryExecutionOutput, BatchGetQueryExecutionError>;
+        input: BatchGetQueryExecutionRequest,
+    ) -> Request<BatchGetQueryExecutionRequest>;
 
     /// <p>Creates a named query in the specified workgroup. Requires that you have access to the workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn create_named_query(
         &self,
-        input: CreateNamedQueryInput,
-    ) -> RusotoFuture<CreateNamedQueryOutput, CreateNamedQueryError>;
+        input: CreateNamedQueryRequest,
+    ) -> Request<CreateNamedQueryRequest>;
 
     /// <p>Creates a workgroup with the specified name.</p>
-    fn create_work_group(
-        &self,
-        input: CreateWorkGroupInput,
-    ) -> RusotoFuture<CreateWorkGroupOutput, CreateWorkGroupError>;
+    fn create_work_group(&self, input: CreateWorkGroupRequest) -> Request<CreateWorkGroupRequest>;
 
     /// <p>Deletes the named query if you have access to the workgroup in which the query was saved.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn delete_named_query(
         &self,
-        input: DeleteNamedQueryInput,
-    ) -> RusotoFuture<DeleteNamedQueryOutput, DeleteNamedQueryError>;
+        input: DeleteNamedQueryRequest,
+    ) -> Request<DeleteNamedQueryRequest>;
 
     /// <p>Deletes the workgroup with the specified name. The primary workgroup cannot be deleted.</p>
-    fn delete_work_group(
-        &self,
-        input: DeleteWorkGroupInput,
-    ) -> RusotoFuture<DeleteWorkGroupOutput, DeleteWorkGroupError>;
+    fn delete_work_group(&self, input: DeleteWorkGroupRequest) -> Request<DeleteWorkGroupRequest>;
 
     /// <p>Returns information about a single query. Requires that you have access to the workgroup in which the query was saved.</p>
-    fn get_named_query(
-        &self,
-        input: GetNamedQueryInput,
-    ) -> RusotoFuture<GetNamedQueryOutput, GetNamedQueryError>;
+    fn get_named_query(&self, input: GetNamedQueryRequest) -> Request<GetNamedQueryRequest>;
 
     /// <p>Returns information about a single execution of a query if you have access to the workgroup in which the query ran. Each time a query executes, information about the query execution is saved with a unique ID.</p>
     fn get_query_execution(
         &self,
-        input: GetQueryExecutionInput,
-    ) -> RusotoFuture<GetQueryExecutionOutput, GetQueryExecutionError>;
+        input: GetQueryExecutionRequest,
+    ) -> Request<GetQueryExecutionRequest>;
 
     /// <p>Returns the results of a single query execution specified by <code>QueryExecutionId</code> if you have access to the workgroup in which the query ran. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p>
-    fn get_query_results(
-        &self,
-        input: GetQueryResultsInput,
-    ) -> RusotoFuture<GetQueryResultsOutput, GetQueryResultsError>;
+    fn get_query_results(&self, input: GetQueryResultsRequest) -> Request<GetQueryResultsRequest>;
 
     /// <p>Returns information about the workgroup with the specified name.</p>
-    fn get_work_group(
-        &self,
-        input: GetWorkGroupInput,
-    ) -> RusotoFuture<GetWorkGroupOutput, GetWorkGroupError>;
+    fn get_work_group(&self, input: GetWorkGroupRequest) -> Request<GetWorkGroupRequest>;
 
     /// <p>Provides a list of available query IDs only for queries saved in the specified workgroup. Requires that you have access to the workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn list_named_queries(
         &self,
-        input: ListNamedQueriesInput,
-    ) -> RusotoFuture<ListNamedQueriesOutput, ListNamedQueriesError>;
+        input: ListNamedQueriesRequest,
+    ) -> Request<ListNamedQueriesRequest>;
 
     /// <p>Provides a list of available query execution IDs for the queries in the specified workgroup. Requires you to have access to the workgroup in which the queries ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn list_query_executions(
         &self,
-        input: ListQueryExecutionsInput,
-    ) -> RusotoFuture<ListQueryExecutionsOutput, ListQueryExecutionsError>;
+        input: ListQueryExecutionsRequest,
+    ) -> Request<ListQueryExecutionsRequest>;
 
     /// <p>Lists the tags associated with this workgroup.</p>
     fn list_tags_for_resource(
         &self,
-        input: ListTagsForResourceInput,
-    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError>;
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Lists available workgroups for the account.</p>
-    fn list_work_groups(
-        &self,
-        input: ListWorkGroupsInput,
-    ) -> RusotoFuture<ListWorkGroupsOutput, ListWorkGroupsError>;
+    fn list_work_groups(&self, input: ListWorkGroupsRequest) -> Request<ListWorkGroupsRequest>;
 
     /// <p>Runs the SQL query statements contained in the <code>Query</code>. Requires you to have access to the workgroup in which the query ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn start_query_execution(
         &self,
-        input: StartQueryExecutionInput,
-    ) -> RusotoFuture<StartQueryExecutionOutput, StartQueryExecutionError>;
+        input: StartQueryExecutionRequest,
+    ) -> Request<StartQueryExecutionRequest>;
 
     /// <p>Stops a query execution. Requires you to have access to the workgroup in which the query ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn stop_query_execution(
         &self,
-        input: StopQueryExecutionInput,
-    ) -> RusotoFuture<StopQueryExecutionOutput, StopQueryExecutionError>;
+        input: StopQueryExecutionRequest,
+    ) -> Request<StopQueryExecutionRequest>;
 
     /// <p>Adds one or more tags to the resource, such as a workgroup. A tag is a label that you assign to an AWS Athena resource (a workgroup). Each tag consists of a key and an optional value, both of which you define. Tags enable you to categorize resources (workgroups) in Athena, for example, by purpose, owner, or environment. Use a consistent set of tag keys to make it easier to search and filter workgroups in your account. For best practices, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>. The key length is from 1 (minimum) to 128 (maximum) Unicode characters in UTF-8. The tag value length is from 0 (minimum) to 256 (maximum) Unicode characters in UTF-8. You can use letters and numbers representable in UTF-8, and the following characters: + - = . _ : / @. Tag keys and values are case-sensitive. Tag keys must be unique per resource. If you specify more than one, separate them by commas.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceInput,
-    ) -> RusotoFuture<TagResourceOutput, TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Removes one or more tags from the workgroup resource. Takes as an input a list of TagKey Strings separated by commas, and removes their tags at the same time.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceInput,
-    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Updates the workgroup with the specified name. The workgroup's name cannot be changed.</p>
-    fn update_work_group(
-        &self,
-        input: UpdateWorkGroupInput,
-    ) -> RusotoFuture<UpdateWorkGroupOutput, UpdateWorkGroupError>;
+    fn update_work_group(&self, input: UpdateWorkGroupRequest) -> Request<UpdateWorkGroupRequest>;
 }
 /// A client for the Amazon Athena API.
 #[derive(Clone)]
@@ -1745,20 +1719,150 @@ impl Athena for AthenaClient {
     /// <p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Requires you to have access to the workgroup in which the queries were saved. Use <a>ListNamedQueriesInput</a> to get the list of named query IDs in the specified workgroup. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries differ from executed queries. Use <a>BatchGetQueryExecutionInput</a> to get details about each unique query execution, and <a>ListQueryExecutionsInput</a> to get a list of query execution IDs.</p>
     fn batch_get_named_query(
         &self,
-        input: BatchGetNamedQueryInput,
-    ) -> RusotoFuture<BatchGetNamedQueryOutput, BatchGetNamedQueryError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+        input: BatchGetNamedQueryRequest,
+    ) -> Request<BatchGetNamedQueryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. Requires you to have access to the workgroup in which the queries ran. To get a list of query execution IDs, use <a>ListQueryExecutionsInput$WorkGroup</a>. Query executions differ from named (saved) queries. Use <a>BatchGetNamedQueryInput</a> to get details about named queries.</p>
+    fn batch_get_query_execution(
+        &self,
+        input: BatchGetQueryExecutionRequest,
+    ) -> Request<BatchGetQueryExecutionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a named query in the specified workgroup. Requires that you have access to the workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    fn create_named_query(
+        &self,
+        input: CreateNamedQueryRequest,
+    ) -> Request<CreateNamedQueryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a workgroup with the specified name.</p>
+    fn create_work_group(&self, input: CreateWorkGroupRequest) -> Request<CreateWorkGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the named query if you have access to the workgroup in which the query was saved.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    fn delete_named_query(
+        &self,
+        input: DeleteNamedQueryRequest,
+    ) -> Request<DeleteNamedQueryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the workgroup with the specified name. The primary workgroup cannot be deleted.</p>
+    fn delete_work_group(&self, input: DeleteWorkGroupRequest) -> Request<DeleteWorkGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a single query. Requires that you have access to the workgroup in which the query was saved.</p>
+    fn get_named_query(&self, input: GetNamedQueryRequest) -> Request<GetNamedQueryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a single execution of a query if you have access to the workgroup in which the query ran. Each time a query executes, information about the query execution is saved with a unique ID.</p>
+    fn get_query_execution(
+        &self,
+        input: GetQueryExecutionRequest,
+    ) -> Request<GetQueryExecutionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the results of a single query execution specified by <code>QueryExecutionId</code> if you have access to the workgroup in which the query ran. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p>
+    fn get_query_results(&self, input: GetQueryResultsRequest) -> Request<GetQueryResultsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about the workgroup with the specified name.</p>
+    fn get_work_group(&self, input: GetWorkGroupRequest) -> Request<GetWorkGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Provides a list of available query IDs only for queries saved in the specified workgroup. Requires that you have access to the workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    fn list_named_queries(
+        &self,
+        input: ListNamedQueriesRequest,
+    ) -> Request<ListNamedQueriesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Provides a list of available query execution IDs for the queries in the specified workgroup. Requires you to have access to the workgroup in which the queries ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    fn list_query_executions(
+        &self,
+        input: ListQueryExecutionsRequest,
+    ) -> Request<ListQueryExecutionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the tags associated with this workgroup.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists available workgroups for the account.</p>
+    fn list_work_groups(&self, input: ListWorkGroupsRequest) -> Request<ListWorkGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Runs the SQL query statements contained in the <code>Query</code>. Requires you to have access to the workgroup in which the query ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    fn start_query_execution(
+        &self,
+        input: StartQueryExecutionRequest,
+    ) -> Request<StartQueryExecutionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops a query execution. Requires you to have access to the workgroup in which the query ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    fn stop_query_execution(
+        &self,
+        input: StopQueryExecutionRequest,
+    ) -> Request<StopQueryExecutionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds one or more tags to the resource, such as a workgroup. A tag is a label that you assign to an AWS Athena resource (a workgroup). Each tag consists of a key and an optional value, both of which you define. Tags enable you to categorize resources (workgroups) in Athena, for example, by purpose, owner, or environment. Use a consistent set of tag keys to make it easier to search and filter workgroups in your account. For best practices, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>. The key length is from 1 (minimum) to 128 (maximum) Unicode characters in UTF-8. The tag value length is from 0 (minimum) to 256 (maximum) Unicode characters in UTF-8. You can use letters and numbers representable in UTF-8, and the following characters: + - = . _ : / @. Tag keys and values are case-sensitive. Tag keys must be unique per resource. If you specify more than one, separate them by commas.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes one or more tags from the workgroup resource. Takes as an input a list of TagKey Strings separated by commas, and removes their tags at the same time.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the workgroup with the specified name. The workgroup's name cannot be changed.</p>
+    fn update_work_group(&self, input: UpdateWorkGroupRequest) -> Request<UpdateWorkGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for BatchGetNamedQueryRequest {
+    type Output = BatchGetNamedQueryResponse;
+    type Error = BatchGetNamedQueryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "athena", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.BatchGetNamedQuery");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchGetNamedQueryOutput, _>()
+                        .deserialize::<BatchGetNamedQueryResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1770,24 +1874,29 @@ impl Athena for AthenaClient {
             }
         })
     }
+}
 
-    /// <p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. Requires you to have access to the workgroup in which the queries ran. To get a list of query execution IDs, use <a>ListQueryExecutionsInput$WorkGroup</a>. Query executions differ from named (saved) queries. Use <a>BatchGetNamedQueryInput</a> to get details about named queries.</p>
-    fn batch_get_query_execution(
-        &self,
-        input: BatchGetQueryExecutionInput,
-    ) -> RusotoFuture<BatchGetQueryExecutionOutput, BatchGetQueryExecutionError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+impl ServiceRequest for BatchGetQueryExecutionRequest {
+    type Output = BatchGetQueryExecutionResponse;
+    type Error = BatchGetQueryExecutionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "athena", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.BatchGetQueryExecution");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchGetQueryExecutionOutput, _>()
+                        .deserialize::<BatchGetQueryExecutionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1798,24 +1907,29 @@ impl Athena for AthenaClient {
             }
         })
     }
+}
 
-    /// <p>Creates a named query in the specified workgroup. Requires that you have access to the workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
-    fn create_named_query(
-        &self,
-        input: CreateNamedQueryInput,
-    ) -> RusotoFuture<CreateNamedQueryOutput, CreateNamedQueryError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+impl ServiceRequest for CreateNamedQueryRequest {
+    type Output = CreateNamedQueryResponse;
+    type Error = CreateNamedQueryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "athena", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.CreateNamedQuery");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateNamedQueryOutput, _>()
+                        .deserialize::<CreateNamedQueryResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1827,24 +1941,29 @@ impl Athena for AthenaClient {
             }
         })
     }
+}
 
-    /// <p>Creates a workgroup with the specified name.</p>
-    fn create_work_group(
-        &self,
-        input: CreateWorkGroupInput,
-    ) -> RusotoFuture<CreateWorkGroupOutput, CreateWorkGroupError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+impl ServiceRequest for CreateWorkGroupRequest {
+    type Output = CreateWorkGroupResponse;
+    type Error = CreateWorkGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "athena", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.CreateWorkGroup");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateWorkGroupOutput, _>()
+                        .deserialize::<CreateWorkGroupResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1856,24 +1975,29 @@ impl Athena for AthenaClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the named query if you have access to the workgroup in which the query was saved.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
-    fn delete_named_query(
-        &self,
-        input: DeleteNamedQueryInput,
-    ) -> RusotoFuture<DeleteNamedQueryOutput, DeleteNamedQueryError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+impl ServiceRequest for DeleteNamedQueryRequest {
+    type Output = DeleteNamedQueryResponse;
+    type Error = DeleteNamedQueryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "athena", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.DeleteNamedQuery");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteNamedQueryOutput, _>()
+                        .deserialize::<DeleteNamedQueryResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1885,24 +2009,29 @@ impl Athena for AthenaClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the workgroup with the specified name. The primary workgroup cannot be deleted.</p>
-    fn delete_work_group(
-        &self,
-        input: DeleteWorkGroupInput,
-    ) -> RusotoFuture<DeleteWorkGroupOutput, DeleteWorkGroupError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+impl ServiceRequest for DeleteWorkGroupRequest {
+    type Output = DeleteWorkGroupResponse;
+    type Error = DeleteWorkGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "athena", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.DeleteWorkGroup");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteWorkGroupOutput, _>()
+                        .deserialize::<DeleteWorkGroupResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1914,24 +2043,29 @@ impl Athena for AthenaClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a single query. Requires that you have access to the workgroup in which the query was saved.</p>
-    fn get_named_query(
-        &self,
-        input: GetNamedQueryInput,
-    ) -> RusotoFuture<GetNamedQueryOutput, GetNamedQueryError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+impl ServiceRequest for GetNamedQueryRequest {
+    type Output = GetNamedQueryResponse;
+    type Error = GetNamedQueryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "athena", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.GetNamedQuery");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetNamedQueryOutput, _>()
+                        .deserialize::<GetNamedQueryResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1943,24 +2077,29 @@ impl Athena for AthenaClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a single execution of a query if you have access to the workgroup in which the query ran. Each time a query executes, information about the query execution is saved with a unique ID.</p>
-    fn get_query_execution(
-        &self,
-        input: GetQueryExecutionInput,
-    ) -> RusotoFuture<GetQueryExecutionOutput, GetQueryExecutionError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+impl ServiceRequest for GetQueryExecutionRequest {
+    type Output = GetQueryExecutionResponse;
+    type Error = GetQueryExecutionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "athena", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.GetQueryExecution");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetQueryExecutionOutput, _>()
+                        .deserialize::<GetQueryExecutionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1972,24 +2111,29 @@ impl Athena for AthenaClient {
             }
         })
     }
+}
 
-    /// <p>Returns the results of a single query execution specified by <code>QueryExecutionId</code> if you have access to the workgroup in which the query ran. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p>
-    fn get_query_results(
-        &self,
-        input: GetQueryResultsInput,
-    ) -> RusotoFuture<GetQueryResultsOutput, GetQueryResultsError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+impl ServiceRequest for GetQueryResultsRequest {
+    type Output = GetQueryResultsResponse;
+    type Error = GetQueryResultsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "athena", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.GetQueryResults");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetQueryResultsOutput, _>()
+                        .deserialize::<GetQueryResultsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2001,24 +2145,29 @@ impl Athena for AthenaClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about the workgroup with the specified name.</p>
-    fn get_work_group(
-        &self,
-        input: GetWorkGroupInput,
-    ) -> RusotoFuture<GetWorkGroupOutput, GetWorkGroupError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+impl ServiceRequest for GetWorkGroupRequest {
+    type Output = GetWorkGroupResponse;
+    type Error = GetWorkGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "athena", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.GetWorkGroup");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetWorkGroupOutput, _>()
+                        .deserialize::<GetWorkGroupResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2030,24 +2179,29 @@ impl Athena for AthenaClient {
             }
         })
     }
+}
 
-    /// <p>Provides a list of available query IDs only for queries saved in the specified workgroup. Requires that you have access to the workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
-    fn list_named_queries(
-        &self,
-        input: ListNamedQueriesInput,
-    ) -> RusotoFuture<ListNamedQueriesOutput, ListNamedQueriesError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+impl ServiceRequest for ListNamedQueriesRequest {
+    type Output = ListNamedQueriesResponse;
+    type Error = ListNamedQueriesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "athena", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.ListNamedQueries");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListNamedQueriesOutput, _>()
+                        .deserialize::<ListNamedQueriesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2059,24 +2213,29 @@ impl Athena for AthenaClient {
             }
         })
     }
+}
 
-    /// <p>Provides a list of available query execution IDs for the queries in the specified workgroup. Requires you to have access to the workgroup in which the queries ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
-    fn list_query_executions(
-        &self,
-        input: ListQueryExecutionsInput,
-    ) -> RusotoFuture<ListQueryExecutionsOutput, ListQueryExecutionsError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+impl ServiceRequest for ListQueryExecutionsRequest {
+    type Output = ListQueryExecutionsResponse;
+    type Error = ListQueryExecutionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "athena", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.ListQueryExecutions");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListQueryExecutionsOutput, _>()
+                        .deserialize::<ListQueryExecutionsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2087,24 +2246,29 @@ impl Athena for AthenaClient {
             }
         })
     }
+}
 
-    /// <p>Lists the tags associated with this workgroup.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceInput,
-    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "athena", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.ListTagsForResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsForResourceOutput, _>()
+                        .deserialize::<ListTagsForResourceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2115,24 +2279,29 @@ impl Athena for AthenaClient {
             }
         })
     }
+}
 
-    /// <p>Lists available workgroups for the account.</p>
-    fn list_work_groups(
-        &self,
-        input: ListWorkGroupsInput,
-    ) -> RusotoFuture<ListWorkGroupsOutput, ListWorkGroupsError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+impl ServiceRequest for ListWorkGroupsRequest {
+    type Output = ListWorkGroupsResponse;
+    type Error = ListWorkGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "athena", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.ListWorkGroups");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListWorkGroupsOutput, _>()
+                        .deserialize::<ListWorkGroupsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2144,24 +2313,29 @@ impl Athena for AthenaClient {
             }
         })
     }
+}
 
-    /// <p>Runs the SQL query statements contained in the <code>Query</code>. Requires you to have access to the workgroup in which the query ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
-    fn start_query_execution(
-        &self,
-        input: StartQueryExecutionInput,
-    ) -> RusotoFuture<StartQueryExecutionOutput, StartQueryExecutionError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+impl ServiceRequest for StartQueryExecutionRequest {
+    type Output = StartQueryExecutionResponse;
+    type Error = StartQueryExecutionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "athena", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.StartQueryExecution");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartQueryExecutionOutput, _>()
+                        .deserialize::<StartQueryExecutionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2172,24 +2346,29 @@ impl Athena for AthenaClient {
             }
         })
     }
+}
 
-    /// <p>Stops a query execution. Requires you to have access to the workgroup in which the query ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
-    fn stop_query_execution(
-        &self,
-        input: StopQueryExecutionInput,
-    ) -> RusotoFuture<StopQueryExecutionOutput, StopQueryExecutionError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+impl ServiceRequest for StopQueryExecutionRequest {
+    type Output = StopQueryExecutionResponse;
+    type Error = StopQueryExecutionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "athena", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.StopQueryExecution");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StopQueryExecutionOutput, _>()
+                        .deserialize::<StopQueryExecutionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2201,24 +2380,29 @@ impl Athena for AthenaClient {
             }
         })
     }
+}
 
-    /// <p>Adds one or more tags to the resource, such as a workgroup. A tag is a label that you assign to an AWS Athena resource (a workgroup). Each tag consists of a key and an optional value, both of which you define. Tags enable you to categorize resources (workgroups) in Athena, for example, by purpose, owner, or environment. Use a consistent set of tag keys to make it easier to search and filter workgroups in your account. For best practices, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>. The key length is from 1 (minimum) to 128 (maximum) Unicode characters in UTF-8. The tag value length is from 0 (minimum) to 256 (maximum) Unicode characters in UTF-8. You can use letters and numbers representable in UTF-8, and the following characters: + - = . _ : / @. Tag keys and values are case-sensitive. Tag keys must be unique per resource. If you specify more than one, separate them by commas.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceInput,
-    ) -> RusotoFuture<TagResourceOutput, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "athena", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.TagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TagResourceOutput, _>()
+                        .deserialize::<TagResourceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2230,24 +2414,29 @@ impl Athena for AthenaClient {
             }
         })
     }
+}
 
-    /// <p>Removes one or more tags from the workgroup resource. Takes as an input a list of TagKey Strings separated by commas, and removes their tags at the same time.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceInput,
-    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "athena", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.UntagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UntagResourceOutput, _>()
+                        .deserialize::<UntagResourceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2259,24 +2448,29 @@ impl Athena for AthenaClient {
             }
         })
     }
+}
 
-    /// <p>Updates the workgroup with the specified name. The workgroup's name cannot be changed.</p>
-    fn update_work_group(
-        &self,
-        input: UpdateWorkGroupInput,
-    ) -> RusotoFuture<UpdateWorkGroupOutput, UpdateWorkGroupError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+impl ServiceRequest for UpdateWorkGroupRequest {
+    type Output = UpdateWorkGroupResponse;
+    type Error = UpdateWorkGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "athena", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.UpdateWorkGroup");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateWorkGroupOutput, _>()
+                        .deserialize::<UpdateWorkGroupResponse, _>()
                 }))
             } else {
                 Box::new(

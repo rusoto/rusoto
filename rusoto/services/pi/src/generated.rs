@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -347,13 +348,13 @@ pub trait PerformanceInsights {
     fn describe_dimension_keys(
         &self,
         input: DescribeDimensionKeysRequest,
-    ) -> RusotoFuture<DescribeDimensionKeysResponse, DescribeDimensionKeysError>;
+    ) -> Request<DescribeDimensionKeysRequest>;
 
     /// <p>Retrieve Performance Insights metrics for a set of data sources, over a time period. You can provide specific dimension groups and dimensions, and provide aggregation and filtering criteria for each group.</p>
     fn get_resource_metrics(
         &self,
         input: GetResourceMetricsRequest,
-    ) -> RusotoFuture<GetResourceMetricsResponse, GetResourceMetricsError>;
+    ) -> Request<GetResourceMetricsRequest>;
 }
 /// A client for the AWS PI API.
 #[derive(Clone)]
@@ -396,18 +397,39 @@ impl PerformanceInsights for PerformanceInsightsClient {
     fn describe_dimension_keys(
         &self,
         input: DescribeDimensionKeysRequest,
-    ) -> RusotoFuture<DescribeDimensionKeysResponse, DescribeDimensionKeysError> {
-        let mut request = SignedRequest::new("POST", "pi", &self.region, "/");
+    ) -> Request<DescribeDimensionKeysRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieve Performance Insights metrics for a set of data sources, over a time period. You can provide specific dimension groups and dimensions, and provide aggregation and filtering criteria for each group.</p>
+    fn get_resource_metrics(
+        &self,
+        input: GetResourceMetricsRequest,
+    ) -> Request<GetResourceMetricsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for DescribeDimensionKeysRequest {
+    type Output = DescribeDimensionKeysResponse;
+    type Error = DescribeDimensionKeysError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "pi", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PerformanceInsightsv20180227.DescribeDimensionKeys",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -422,23 +444,28 @@ impl PerformanceInsights for PerformanceInsightsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieve Performance Insights metrics for a set of data sources, over a time period. You can provide specific dimension groups and dimensions, and provide aggregation and filtering criteria for each group.</p>
-    fn get_resource_metrics(
-        &self,
-        input: GetResourceMetricsRequest,
-    ) -> RusotoFuture<GetResourceMetricsResponse, GetResourceMetricsError> {
-        let mut request = SignedRequest::new("POST", "pi", &self.region, "/");
+impl ServiceRequest for GetResourceMetricsRequest {
+    type Output = GetResourceMetricsResponse;
+    type Error = GetResourceMetricsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "pi", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PerformanceInsightsv20180227.GetResourceMetrics",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)

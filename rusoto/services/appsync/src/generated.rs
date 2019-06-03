@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -3396,217 +3397,145 @@ impl Error for UpdateTypeError {
 /// Trait representing the capabilities of the AWSAppSync API. AWSAppSync clients implement this trait.
 pub trait AppSync {
     /// <p>Creates a unique key that you can distribute to clients who are executing your API.</p>
-    fn create_api_key(
-        &self,
-        input: CreateApiKeyRequest,
-    ) -> RusotoFuture<CreateApiKeyResponse, CreateApiKeyError>;
+    fn create_api_key(&self, input: CreateApiKeyRequest) -> Request<CreateApiKeyRequest>;
 
     /// <p>Creates a <code>DataSource</code> object.</p>
     fn create_data_source(
         &self,
         input: CreateDataSourceRequest,
-    ) -> RusotoFuture<CreateDataSourceResponse, CreateDataSourceError>;
+    ) -> Request<CreateDataSourceRequest>;
 
     /// <p>Creates a <code>Function</code> object.</p> <p>A function is a reusable entity. Multiple functions can be used to compose the resolver logic.</p>
-    fn create_function(
-        &self,
-        input: CreateFunctionRequest,
-    ) -> RusotoFuture<CreateFunctionResponse, CreateFunctionError>;
+    fn create_function(&self, input: CreateFunctionRequest) -> Request<CreateFunctionRequest>;
 
     /// <p>Creates a <code>GraphqlApi</code> object.</p>
     fn create_graphql_api(
         &self,
         input: CreateGraphqlApiRequest,
-    ) -> RusotoFuture<CreateGraphqlApiResponse, CreateGraphqlApiError>;
+    ) -> Request<CreateGraphqlApiRequest>;
 
     /// <p>Creates a <code>Resolver</code> object.</p> <p>A resolver converts incoming requests into a format that a data source can understand and converts the data source's responses into GraphQL.</p>
-    fn create_resolver(
-        &self,
-        input: CreateResolverRequest,
-    ) -> RusotoFuture<CreateResolverResponse, CreateResolverError>;
+    fn create_resolver(&self, input: CreateResolverRequest) -> Request<CreateResolverRequest>;
 
     /// <p>Creates a <code>Type</code> object.</p>
-    fn create_type(
-        &self,
-        input: CreateTypeRequest,
-    ) -> RusotoFuture<CreateTypeResponse, CreateTypeError>;
+    fn create_type(&self, input: CreateTypeRequest) -> Request<CreateTypeRequest>;
 
     /// <p>Deletes an API key.</p>
-    fn delete_api_key(
-        &self,
-        input: DeleteApiKeyRequest,
-    ) -> RusotoFuture<DeleteApiKeyResponse, DeleteApiKeyError>;
+    fn delete_api_key(&self, input: DeleteApiKeyRequest) -> Request<DeleteApiKeyRequest>;
 
     /// <p>Deletes a <code>DataSource</code> object.</p>
     fn delete_data_source(
         &self,
         input: DeleteDataSourceRequest,
-    ) -> RusotoFuture<DeleteDataSourceResponse, DeleteDataSourceError>;
+    ) -> Request<DeleteDataSourceRequest>;
 
     /// <p>Deletes a <code>Function</code>.</p>
-    fn delete_function(
-        &self,
-        input: DeleteFunctionRequest,
-    ) -> RusotoFuture<DeleteFunctionResponse, DeleteFunctionError>;
+    fn delete_function(&self, input: DeleteFunctionRequest) -> Request<DeleteFunctionRequest>;
 
     /// <p>Deletes a <code>GraphqlApi</code> object.</p>
     fn delete_graphql_api(
         &self,
         input: DeleteGraphqlApiRequest,
-    ) -> RusotoFuture<DeleteGraphqlApiResponse, DeleteGraphqlApiError>;
+    ) -> Request<DeleteGraphqlApiRequest>;
 
     /// <p>Deletes a <code>Resolver</code> object.</p>
-    fn delete_resolver(
-        &self,
-        input: DeleteResolverRequest,
-    ) -> RusotoFuture<DeleteResolverResponse, DeleteResolverError>;
+    fn delete_resolver(&self, input: DeleteResolverRequest) -> Request<DeleteResolverRequest>;
 
     /// <p>Deletes a <code>Type</code> object.</p>
-    fn delete_type(
-        &self,
-        input: DeleteTypeRequest,
-    ) -> RusotoFuture<DeleteTypeResponse, DeleteTypeError>;
+    fn delete_type(&self, input: DeleteTypeRequest) -> Request<DeleteTypeRequest>;
 
     /// <p>Retrieves a <code>DataSource</code> object.</p>
-    fn get_data_source(
-        &self,
-        input: GetDataSourceRequest,
-    ) -> RusotoFuture<GetDataSourceResponse, GetDataSourceError>;
+    fn get_data_source(&self, input: GetDataSourceRequest) -> Request<GetDataSourceRequest>;
 
     /// <p>Get a <code>Function</code>.</p>
-    fn get_function(
-        &self,
-        input: GetFunctionRequest,
-    ) -> RusotoFuture<GetFunctionResponse, GetFunctionError>;
+    fn get_function(&self, input: GetFunctionRequest) -> Request<GetFunctionRequest>;
 
     /// <p>Retrieves a <code>GraphqlApi</code> object.</p>
-    fn get_graphql_api(
-        &self,
-        input: GetGraphqlApiRequest,
-    ) -> RusotoFuture<GetGraphqlApiResponse, GetGraphqlApiError>;
+    fn get_graphql_api(&self, input: GetGraphqlApiRequest) -> Request<GetGraphqlApiRequest>;
 
     /// <p>Retrieves the introspection schema for a GraphQL API.</p>
     fn get_introspection_schema(
         &self,
         input: GetIntrospectionSchemaRequest,
-    ) -> RusotoFuture<GetIntrospectionSchemaResponse, GetIntrospectionSchemaError>;
+    ) -> Request<GetIntrospectionSchemaRequest>;
 
     /// <p>Retrieves a <code>Resolver</code> object.</p>
-    fn get_resolver(
-        &self,
-        input: GetResolverRequest,
-    ) -> RusotoFuture<GetResolverResponse, GetResolverError>;
+    fn get_resolver(&self, input: GetResolverRequest) -> Request<GetResolverRequest>;
 
     /// <p>Retrieves the current status of a schema creation operation.</p>
     fn get_schema_creation_status(
         &self,
         input: GetSchemaCreationStatusRequest,
-    ) -> RusotoFuture<GetSchemaCreationStatusResponse, GetSchemaCreationStatusError>;
+    ) -> Request<GetSchemaCreationStatusRequest>;
 
     /// <p>Retrieves a <code>Type</code> object.</p>
-    fn get_type(&self, input: GetTypeRequest) -> RusotoFuture<GetTypeResponse, GetTypeError>;
+    fn get_type(&self, input: GetTypeRequest) -> Request<GetTypeRequest>;
 
     /// <p><p>Lists the API keys for a given API.</p> <note> <p>API keys are deleted automatically sometime after they expire. However, they may still be included in the response until they have actually been deleted. You can safely call <code>DeleteApiKey</code> to manually delete a key before it&#39;s automatically deleted.</p> </note></p>
-    fn list_api_keys(
-        &self,
-        input: ListApiKeysRequest,
-    ) -> RusotoFuture<ListApiKeysResponse, ListApiKeysError>;
+    fn list_api_keys(&self, input: ListApiKeysRequest) -> Request<ListApiKeysRequest>;
 
     /// <p>Lists the data sources for a given API.</p>
-    fn list_data_sources(
-        &self,
-        input: ListDataSourcesRequest,
-    ) -> RusotoFuture<ListDataSourcesResponse, ListDataSourcesError>;
+    fn list_data_sources(&self, input: ListDataSourcesRequest) -> Request<ListDataSourcesRequest>;
 
     /// <p>List multiple functions.</p>
-    fn list_functions(
-        &self,
-        input: ListFunctionsRequest,
-    ) -> RusotoFuture<ListFunctionsResponse, ListFunctionsError>;
+    fn list_functions(&self, input: ListFunctionsRequest) -> Request<ListFunctionsRequest>;
 
     /// <p>Lists your GraphQL APIs.</p>
-    fn list_graphql_apis(
-        &self,
-        input: ListGraphqlApisRequest,
-    ) -> RusotoFuture<ListGraphqlApisResponse, ListGraphqlApisError>;
+    fn list_graphql_apis(&self, input: ListGraphqlApisRequest) -> Request<ListGraphqlApisRequest>;
 
     /// <p>Lists the resolvers for a given API and type.</p>
-    fn list_resolvers(
-        &self,
-        input: ListResolversRequest,
-    ) -> RusotoFuture<ListResolversResponse, ListResolversError>;
+    fn list_resolvers(&self, input: ListResolversRequest) -> Request<ListResolversRequest>;
 
     /// <p>List the resolvers that are associated with a specific function.</p>
     fn list_resolvers_by_function(
         &self,
         input: ListResolversByFunctionRequest,
-    ) -> RusotoFuture<ListResolversByFunctionResponse, ListResolversByFunctionError>;
+    ) -> Request<ListResolversByFunctionRequest>;
 
     /// <p>Lists the tags for a resource.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Lists the types for a given API.</p>
-    fn list_types(
-        &self,
-        input: ListTypesRequest,
-    ) -> RusotoFuture<ListTypesResponse, ListTypesError>;
+    fn list_types(&self, input: ListTypesRequest) -> Request<ListTypesRequest>;
 
     /// <p>Adds a new schema to your GraphQL API.</p> <p>This operation is asynchronous. Use to determine when it has completed.</p>
     fn start_schema_creation(
         &self,
         input: StartSchemaCreationRequest,
-    ) -> RusotoFuture<StartSchemaCreationResponse, StartSchemaCreationError>;
+    ) -> Request<StartSchemaCreationRequest>;
 
     /// <p>Tags a resource with user-supplied tags.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Untags a resource.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Updates an API key.</p>
-    fn update_api_key(
-        &self,
-        input: UpdateApiKeyRequest,
-    ) -> RusotoFuture<UpdateApiKeyResponse, UpdateApiKeyError>;
+    fn update_api_key(&self, input: UpdateApiKeyRequest) -> Request<UpdateApiKeyRequest>;
 
     /// <p>Updates a <code>DataSource</code> object.</p>
     fn update_data_source(
         &self,
         input: UpdateDataSourceRequest,
-    ) -> RusotoFuture<UpdateDataSourceResponse, UpdateDataSourceError>;
+    ) -> Request<UpdateDataSourceRequest>;
 
     /// <p>Updates a <code>Function</code> object.</p>
-    fn update_function(
-        &self,
-        input: UpdateFunctionRequest,
-    ) -> RusotoFuture<UpdateFunctionResponse, UpdateFunctionError>;
+    fn update_function(&self, input: UpdateFunctionRequest) -> Request<UpdateFunctionRequest>;
 
     /// <p>Updates a <code>GraphqlApi</code> object.</p>
     fn update_graphql_api(
         &self,
         input: UpdateGraphqlApiRequest,
-    ) -> RusotoFuture<UpdateGraphqlApiResponse, UpdateGraphqlApiError>;
+    ) -> Request<UpdateGraphqlApiRequest>;
 
     /// <p>Updates a <code>Resolver</code> object.</p>
-    fn update_resolver(
-        &self,
-        input: UpdateResolverRequest,
-    ) -> RusotoFuture<UpdateResolverResponse, UpdateResolverError>;
+    fn update_resolver(&self, input: UpdateResolverRequest) -> Request<UpdateResolverRequest>;
 
     /// <p>Updates a <code>Type</code> object.</p>
-    fn update_type(
-        &self,
-        input: UpdateTypeRequest,
-    ) -> RusotoFuture<UpdateTypeResponse, UpdateTypeError>;
+    fn update_type(&self, input: UpdateTypeRequest) -> Request<UpdateTypeRequest>;
 }
 /// A client for the AWSAppSync API.
 #[derive(Clone)]
@@ -3646,19 +3575,238 @@ impl AppSyncClient {
 
 impl AppSync for AppSyncClient {
     /// <p>Creates a unique key that you can distribute to clients who are executing your API.</p>
-    fn create_api_key(
-        &self,
-        input: CreateApiKeyRequest,
-    ) -> RusotoFuture<CreateApiKeyResponse, CreateApiKeyError> {
-        let request_uri = format!("/v1/apis/{api_id}/apikeys", api_id = input.api_id);
+    fn create_api_key(&self, input: CreateApiKeyRequest) -> Request<CreateApiKeyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
 
-        let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
+    /// <p>Creates a <code>DataSource</code> object.</p>
+    fn create_data_source(
+        &self,
+        input: CreateDataSourceRequest,
+    ) -> Request<CreateDataSourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a <code>Function</code> object.</p> <p>A function is a reusable entity. Multiple functions can be used to compose the resolver logic.</p>
+    fn create_function(&self, input: CreateFunctionRequest) -> Request<CreateFunctionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a <code>GraphqlApi</code> object.</p>
+    fn create_graphql_api(
+        &self,
+        input: CreateGraphqlApiRequest,
+    ) -> Request<CreateGraphqlApiRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a <code>Resolver</code> object.</p> <p>A resolver converts incoming requests into a format that a data source can understand and converts the data source's responses into GraphQL.</p>
+    fn create_resolver(&self, input: CreateResolverRequest) -> Request<CreateResolverRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a <code>Type</code> object.</p>
+    fn create_type(&self, input: CreateTypeRequest) -> Request<CreateTypeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an API key.</p>
+    fn delete_api_key(&self, input: DeleteApiKeyRequest) -> Request<DeleteApiKeyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a <code>DataSource</code> object.</p>
+    fn delete_data_source(
+        &self,
+        input: DeleteDataSourceRequest,
+    ) -> Request<DeleteDataSourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a <code>Function</code>.</p>
+    fn delete_function(&self, input: DeleteFunctionRequest) -> Request<DeleteFunctionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a <code>GraphqlApi</code> object.</p>
+    fn delete_graphql_api(
+        &self,
+        input: DeleteGraphqlApiRequest,
+    ) -> Request<DeleteGraphqlApiRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a <code>Resolver</code> object.</p>
+    fn delete_resolver(&self, input: DeleteResolverRequest) -> Request<DeleteResolverRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a <code>Type</code> object.</p>
+    fn delete_type(&self, input: DeleteTypeRequest) -> Request<DeleteTypeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a <code>DataSource</code> object.</p>
+    fn get_data_source(&self, input: GetDataSourceRequest) -> Request<GetDataSourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Get a <code>Function</code>.</p>
+    fn get_function(&self, input: GetFunctionRequest) -> Request<GetFunctionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a <code>GraphqlApi</code> object.</p>
+    fn get_graphql_api(&self, input: GetGraphqlApiRequest) -> Request<GetGraphqlApiRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the introspection schema for a GraphQL API.</p>
+    fn get_introspection_schema(
+        &self,
+        input: GetIntrospectionSchemaRequest,
+    ) -> Request<GetIntrospectionSchemaRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a <code>Resolver</code> object.</p>
+    fn get_resolver(&self, input: GetResolverRequest) -> Request<GetResolverRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the current status of a schema creation operation.</p>
+    fn get_schema_creation_status(
+        &self,
+        input: GetSchemaCreationStatusRequest,
+    ) -> Request<GetSchemaCreationStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a <code>Type</code> object.</p>
+    fn get_type(&self, input: GetTypeRequest) -> Request<GetTypeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Lists the API keys for a given API.</p> <note> <p>API keys are deleted automatically sometime after they expire. However, they may still be included in the response until they have actually been deleted. You can safely call <code>DeleteApiKey</code> to manually delete a key before it&#39;s automatically deleted.</p> </note></p>
+    fn list_api_keys(&self, input: ListApiKeysRequest) -> Request<ListApiKeysRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the data sources for a given API.</p>
+    fn list_data_sources(&self, input: ListDataSourcesRequest) -> Request<ListDataSourcesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>List multiple functions.</p>
+    fn list_functions(&self, input: ListFunctionsRequest) -> Request<ListFunctionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists your GraphQL APIs.</p>
+    fn list_graphql_apis(&self, input: ListGraphqlApisRequest) -> Request<ListGraphqlApisRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the resolvers for a given API and type.</p>
+    fn list_resolvers(&self, input: ListResolversRequest) -> Request<ListResolversRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>List the resolvers that are associated with a specific function.</p>
+    fn list_resolvers_by_function(
+        &self,
+        input: ListResolversByFunctionRequest,
+    ) -> Request<ListResolversByFunctionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the tags for a resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the types for a given API.</p>
+    fn list_types(&self, input: ListTypesRequest) -> Request<ListTypesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds a new schema to your GraphQL API.</p> <p>This operation is asynchronous. Use to determine when it has completed.</p>
+    fn start_schema_creation(
+        &self,
+        input: StartSchemaCreationRequest,
+    ) -> Request<StartSchemaCreationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Tags a resource with user-supplied tags.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Untags a resource.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an API key.</p>
+    fn update_api_key(&self, input: UpdateApiKeyRequest) -> Request<UpdateApiKeyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a <code>DataSource</code> object.</p>
+    fn update_data_source(
+        &self,
+        input: UpdateDataSourceRequest,
+    ) -> Request<UpdateDataSourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a <code>Function</code> object.</p>
+    fn update_function(&self, input: UpdateFunctionRequest) -> Request<UpdateFunctionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a <code>GraphqlApi</code> object.</p>
+    fn update_graphql_api(
+        &self,
+        input: UpdateGraphqlApiRequest,
+    ) -> Request<UpdateGraphqlApiRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a <code>Resolver</code> object.</p>
+    fn update_resolver(&self, input: UpdateResolverRequest) -> Request<UpdateResolverRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a <code>Type</code> object.</p>
+    fn update_type(&self, input: UpdateTypeRequest) -> Request<UpdateTypeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CreateApiKeyRequest {
+    type Output = CreateApiKeyResponse;
+    type Error = CreateApiKeyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/apis/{api_id}/apikeys", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("POST", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3676,21 +3824,27 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Creates a <code>DataSource</code> object.</p>
-    fn create_data_source(
-        &self,
-        input: CreateDataSourceRequest,
-    ) -> RusotoFuture<CreateDataSourceResponse, CreateDataSourceError> {
-        let request_uri = format!("/v1/apis/{api_id}/datasources", api_id = input.api_id);
+impl ServiceRequest for CreateDataSourceRequest {
+    type Output = CreateDataSourceResponse;
+    type Error = CreateDataSourceError;
 
-        let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/apis/{api_id}/datasources", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("POST", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3708,21 +3862,27 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Creates a <code>Function</code> object.</p> <p>A function is a reusable entity. Multiple functions can be used to compose the resolver logic.</p>
-    fn create_function(
-        &self,
-        input: CreateFunctionRequest,
-    ) -> RusotoFuture<CreateFunctionResponse, CreateFunctionError> {
-        let request_uri = format!("/v1/apis/{api_id}/functions", api_id = input.api_id);
+impl ServiceRequest for CreateFunctionRequest {
+    type Output = CreateFunctionResponse;
+    type Error = CreateFunctionError;
 
-        let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/apis/{api_id}/functions", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("POST", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3740,21 +3900,27 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Creates a <code>GraphqlApi</code> object.</p>
-    fn create_graphql_api(
-        &self,
-        input: CreateGraphqlApiRequest,
-    ) -> RusotoFuture<CreateGraphqlApiResponse, CreateGraphqlApiError> {
+impl ServiceRequest for CreateGraphqlApiRequest {
+    type Output = CreateGraphqlApiResponse;
+    type Error = CreateGraphqlApiError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/apis";
 
-        let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3772,25 +3938,31 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Creates a <code>Resolver</code> object.</p> <p>A resolver converts incoming requests into a format that a data source can understand and converts the data source's responses into GraphQL.</p>
-    fn create_resolver(
-        &self,
-        input: CreateResolverRequest,
-    ) -> RusotoFuture<CreateResolverResponse, CreateResolverError> {
+impl ServiceRequest for CreateResolverRequest {
+    type Output = CreateResolverResponse;
+    type Error = CreateResolverError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}/resolvers",
-            api_id = input.api_id,
-            type_name = input.type_name
+            api_id = self.api_id,
+            type_name = self.type_name
         );
 
-        let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3808,21 +3980,27 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Creates a <code>Type</code> object.</p>
-    fn create_type(
-        &self,
-        input: CreateTypeRequest,
-    ) -> RusotoFuture<CreateTypeResponse, CreateTypeError> {
-        let request_uri = format!("/v1/apis/{api_id}/types", api_id = input.api_id);
+impl ServiceRequest for CreateTypeRequest {
+    type Output = CreateTypeResponse;
+    type Error = CreateTypeError;
 
-        let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/apis/{api_id}/types", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("POST", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3840,22 +4018,28 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an API key.</p>
-    fn delete_api_key(
-        &self,
-        input: DeleteApiKeyRequest,
-    ) -> RusotoFuture<DeleteApiKeyResponse, DeleteApiKeyError> {
+impl ServiceRequest for DeleteApiKeyRequest {
+    type Output = DeleteApiKeyResponse;
+    type Error = DeleteApiKeyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v1/apis/{api_id}/apikeys/{id}",
-            api_id = input.api_id,
-            id = input.id
+            api_id = self.api_id,
+            id = self.id
         );
 
-        let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3873,22 +4057,28 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a <code>DataSource</code> object.</p>
-    fn delete_data_source(
-        &self,
-        input: DeleteDataSourceRequest,
-    ) -> RusotoFuture<DeleteDataSourceResponse, DeleteDataSourceError> {
+impl ServiceRequest for DeleteDataSourceRequest {
+    type Output = DeleteDataSourceResponse;
+    type Error = DeleteDataSourceError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v1/apis/{api_id}/datasources/{name}",
-            api_id = input.api_id,
-            name = input.name
+            api_id = self.api_id,
+            name = self.name
         );
 
-        let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3906,22 +4096,28 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a <code>Function</code>.</p>
-    fn delete_function(
-        &self,
-        input: DeleteFunctionRequest,
-    ) -> RusotoFuture<DeleteFunctionResponse, DeleteFunctionError> {
+impl ServiceRequest for DeleteFunctionRequest {
+    type Output = DeleteFunctionResponse;
+    type Error = DeleteFunctionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v1/apis/{api_id}/functions/{function_id}",
-            api_id = input.api_id,
-            function_id = input.function_id
+            api_id = self.api_id,
+            function_id = self.function_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3939,18 +4135,24 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a <code>GraphqlApi</code> object.</p>
-    fn delete_graphql_api(
-        &self,
-        input: DeleteGraphqlApiRequest,
-    ) -> RusotoFuture<DeleteGraphqlApiResponse, DeleteGraphqlApiError> {
-        let request_uri = format!("/v1/apis/{api_id}", api_id = input.api_id);
+impl ServiceRequest for DeleteGraphqlApiRequest {
+    type Output = DeleteGraphqlApiResponse;
+    type Error = DeleteGraphqlApiError;
 
-        let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/apis/{api_id}", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("DELETE", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3968,23 +4170,29 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a <code>Resolver</code> object.</p>
-    fn delete_resolver(
-        &self,
-        input: DeleteResolverRequest,
-    ) -> RusotoFuture<DeleteResolverResponse, DeleteResolverError> {
+impl ServiceRequest for DeleteResolverRequest {
+    type Output = DeleteResolverResponse;
+    type Error = DeleteResolverError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}/resolvers/{field_name}",
-            api_id = input.api_id,
-            field_name = input.field_name,
-            type_name = input.type_name
+            api_id = self.api_id,
+            field_name = self.field_name,
+            type_name = self.type_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4002,22 +4210,28 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a <code>Type</code> object.</p>
-    fn delete_type(
-        &self,
-        input: DeleteTypeRequest,
-    ) -> RusotoFuture<DeleteTypeResponse, DeleteTypeError> {
+impl ServiceRequest for DeleteTypeRequest {
+    type Output = DeleteTypeResponse;
+    type Error = DeleteTypeError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}",
-            api_id = input.api_id,
-            type_name = input.type_name
+            api_id = self.api_id,
+            type_name = self.type_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4035,22 +4249,28 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a <code>DataSource</code> object.</p>
-    fn get_data_source(
-        &self,
-        input: GetDataSourceRequest,
-    ) -> RusotoFuture<GetDataSourceResponse, GetDataSourceError> {
+impl ServiceRequest for GetDataSourceRequest {
+    type Output = GetDataSourceResponse;
+    type Error = GetDataSourceError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v1/apis/{api_id}/datasources/{name}",
-            api_id = input.api_id,
-            name = input.name
+            api_id = self.api_id,
+            name = self.name
         );
 
-        let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4068,22 +4288,28 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Get a <code>Function</code>.</p>
-    fn get_function(
-        &self,
-        input: GetFunctionRequest,
-    ) -> RusotoFuture<GetFunctionResponse, GetFunctionError> {
+impl ServiceRequest for GetFunctionRequest {
+    type Output = GetFunctionResponse;
+    type Error = GetFunctionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v1/apis/{api_id}/functions/{function_id}",
-            api_id = input.api_id,
-            function_id = input.function_id
+            api_id = self.api_id,
+            function_id = self.function_id
         );
 
-        let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4101,18 +4327,24 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a <code>GraphqlApi</code> object.</p>
-    fn get_graphql_api(
-        &self,
-        input: GetGraphqlApiRequest,
-    ) -> RusotoFuture<GetGraphqlApiResponse, GetGraphqlApiError> {
-        let request_uri = format!("/v1/apis/{api_id}", api_id = input.api_id);
+impl ServiceRequest for GetGraphqlApiRequest {
+    type Output = GetGraphqlApiResponse;
+    type Error = GetGraphqlApiError;
 
-        let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/apis/{api_id}", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("GET", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4130,25 +4362,31 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the introspection schema for a GraphQL API.</p>
-    fn get_introspection_schema(
-        &self,
-        input: GetIntrospectionSchemaRequest,
-    ) -> RusotoFuture<GetIntrospectionSchemaResponse, GetIntrospectionSchemaError> {
-        let request_uri = format!("/v1/apis/{api_id}/schema", api_id = input.api_id);
+impl ServiceRequest for GetIntrospectionSchemaRequest {
+    type Output = GetIntrospectionSchemaResponse;
+    type Error = GetIntrospectionSchemaError;
 
-        let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/apis/{api_id}/schema", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("GET", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        params.put("format", &input.format);
-        if let Some(ref x) = input.include_directives {
+        params.put("format", &self.format);
+        if let Some(ref x) = self.include_directives {
             params.put("includeDirectives", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let mut result = GetIntrospectionSchemaResponse::default();
@@ -4165,23 +4403,29 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a <code>Resolver</code> object.</p>
-    fn get_resolver(
-        &self,
-        input: GetResolverRequest,
-    ) -> RusotoFuture<GetResolverResponse, GetResolverError> {
+impl ServiceRequest for GetResolverRequest {
+    type Output = GetResolverResponse;
+    type Error = GetResolverError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}/resolvers/{field_name}",
-            api_id = input.api_id,
-            field_name = input.field_name,
-            type_name = input.type_name
+            api_id = self.api_id,
+            field_name = self.field_name,
+            type_name = self.type_name
         );
 
-        let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4199,18 +4443,24 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the current status of a schema creation operation.</p>
-    fn get_schema_creation_status(
-        &self,
-        input: GetSchemaCreationStatusRequest,
-    ) -> RusotoFuture<GetSchemaCreationStatusResponse, GetSchemaCreationStatusError> {
-        let request_uri = format!("/v1/apis/{api_id}/schemacreation", api_id = input.api_id);
+impl ServiceRequest for GetSchemaCreationStatusRequest {
+    type Output = GetSchemaCreationStatusResponse;
+    type Error = GetSchemaCreationStatusError;
 
-        let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/apis/{api_id}/schemacreation", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("GET", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4225,23 +4475,32 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a <code>Type</code> object.</p>
-    fn get_type(&self, input: GetTypeRequest) -> RusotoFuture<GetTypeResponse, GetTypeError> {
+impl ServiceRequest for GetTypeRequest {
+    type Output = GetTypeResponse;
+    type Error = GetTypeError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}",
-            api_id = input.api_id,
-            type_name = input.type_name
+            api_id = self.api_id,
+            type_name = self.type_name
         );
 
-        let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        params.put("format", &input.format);
+        params.put("format", &self.format);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4259,27 +4518,33 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p><p>Lists the API keys for a given API.</p> <note> <p>API keys are deleted automatically sometime after they expire. However, they may still be included in the response until they have actually been deleted. You can safely call <code>DeleteApiKey</code> to manually delete a key before it&#39;s automatically deleted.</p> </note></p>
-    fn list_api_keys(
-        &self,
-        input: ListApiKeysRequest,
-    ) -> RusotoFuture<ListApiKeysResponse, ListApiKeysError> {
-        let request_uri = format!("/v1/apis/{api_id}/apikeys", api_id = input.api_id);
+impl ServiceRequest for ListApiKeysRequest {
+    type Output = ListApiKeysResponse;
+    type Error = ListApiKeysError;
 
-        let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/apis/{api_id}/apikeys", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("GET", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4297,27 +4562,33 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Lists the data sources for a given API.</p>
-    fn list_data_sources(
-        &self,
-        input: ListDataSourcesRequest,
-    ) -> RusotoFuture<ListDataSourcesResponse, ListDataSourcesError> {
-        let request_uri = format!("/v1/apis/{api_id}/datasources", api_id = input.api_id);
+impl ServiceRequest for ListDataSourcesRequest {
+    type Output = ListDataSourcesResponse;
+    type Error = ListDataSourcesError;
 
-        let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/apis/{api_id}/datasources", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("GET", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4335,27 +4606,33 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>List multiple functions.</p>
-    fn list_functions(
-        &self,
-        input: ListFunctionsRequest,
-    ) -> RusotoFuture<ListFunctionsResponse, ListFunctionsError> {
-        let request_uri = format!("/v1/apis/{api_id}/functions", api_id = input.api_id);
+impl ServiceRequest for ListFunctionsRequest {
+    type Output = ListFunctionsResponse;
+    type Error = ListFunctionsError;
 
-        let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/apis/{api_id}/functions", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("GET", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4373,27 +4650,33 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Lists your GraphQL APIs.</p>
-    fn list_graphql_apis(
-        &self,
-        input: ListGraphqlApisRequest,
-    ) -> RusotoFuture<ListGraphqlApisResponse, ListGraphqlApisError> {
+impl ServiceRequest for ListGraphqlApisRequest {
+    type Output = ListGraphqlApisResponse;
+    type Error = ListGraphqlApisError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/apis";
 
-        let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4411,31 +4694,37 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Lists the resolvers for a given API and type.</p>
-    fn list_resolvers(
-        &self,
-        input: ListResolversRequest,
-    ) -> RusotoFuture<ListResolversResponse, ListResolversError> {
+impl ServiceRequest for ListResolversRequest {
+    type Output = ListResolversResponse;
+    type Error = ListResolversError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}/resolvers",
-            api_id = input.api_id,
-            type_name = input.type_name
+            api_id = self.api_id,
+            type_name = self.type_name
         );
 
-        let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4453,31 +4742,37 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>List the resolvers that are associated with a specific function.</p>
-    fn list_resolvers_by_function(
-        &self,
-        input: ListResolversByFunctionRequest,
-    ) -> RusotoFuture<ListResolversByFunctionResponse, ListResolversByFunctionError> {
+impl ServiceRequest for ListResolversByFunctionRequest {
+    type Output = ListResolversByFunctionResponse;
+    type Error = ListResolversByFunctionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v1/apis/{api_id}/functions/{function_id}/resolvers",
-            api_id = input.api_id,
-            function_id = input.function_id
+            api_id = self.api_id,
+            function_id = self.function_id
         );
 
-        let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4492,18 +4787,24 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Lists the tags for a resource.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
 
-        let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4520,28 +4821,34 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Lists the types for a given API.</p>
-    fn list_types(
-        &self,
-        input: ListTypesRequest,
-    ) -> RusotoFuture<ListTypesResponse, ListTypesError> {
-        let request_uri = format!("/v1/apis/{api_id}/types", api_id = input.api_id);
+impl ServiceRequest for ListTypesRequest {
+    type Output = ListTypesResponse;
+    type Error = ListTypesError;
 
-        let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/apis/{api_id}/types", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("GET", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        params.put("format", &input.format);
-        if let Some(ref x) = input.max_results {
+        params.put("format", &self.format);
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4559,21 +4866,27 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Adds a new schema to your GraphQL API.</p> <p>This operation is asynchronous. Use to determine when it has completed.</p>
-    fn start_schema_creation(
-        &self,
-        input: StartSchemaCreationRequest,
-    ) -> RusotoFuture<StartSchemaCreationResponse, StartSchemaCreationError> {
-        let request_uri = format!("/v1/apis/{api_id}/schemacreation", api_id = input.api_id);
+impl ServiceRequest for StartSchemaCreationRequest {
+    type Output = StartSchemaCreationResponse;
+    type Error = StartSchemaCreationError;
 
-        let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/apis/{api_id}/schemacreation", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("POST", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4590,21 +4903,27 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Tags a resource with user-supplied tags.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
-        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
 
-        let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4622,24 +4941,30 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Untags a resource.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
-        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
 
-        let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        for item in input.tag_keys.iter() {
+        for item in self.tag_keys.iter() {
             params.put("tagKeys", item);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4657,25 +4982,31 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Updates an API key.</p>
-    fn update_api_key(
-        &self,
-        input: UpdateApiKeyRequest,
-    ) -> RusotoFuture<UpdateApiKeyResponse, UpdateApiKeyError> {
+impl ServiceRequest for UpdateApiKeyRequest {
+    type Output = UpdateApiKeyResponse;
+    type Error = UpdateApiKeyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v1/apis/{api_id}/apikeys/{id}",
-            api_id = input.api_id,
-            id = input.id
+            api_id = self.api_id,
+            id = self.id
         );
 
-        let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4693,25 +5024,31 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Updates a <code>DataSource</code> object.</p>
-    fn update_data_source(
-        &self,
-        input: UpdateDataSourceRequest,
-    ) -> RusotoFuture<UpdateDataSourceResponse, UpdateDataSourceError> {
+impl ServiceRequest for UpdateDataSourceRequest {
+    type Output = UpdateDataSourceResponse;
+    type Error = UpdateDataSourceError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v1/apis/{api_id}/datasources/{name}",
-            api_id = input.api_id,
-            name = input.name
+            api_id = self.api_id,
+            name = self.name
         );
 
-        let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4729,25 +5066,31 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Updates a <code>Function</code> object.</p>
-    fn update_function(
-        &self,
-        input: UpdateFunctionRequest,
-    ) -> RusotoFuture<UpdateFunctionResponse, UpdateFunctionError> {
+impl ServiceRequest for UpdateFunctionRequest {
+    type Output = UpdateFunctionResponse;
+    type Error = UpdateFunctionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v1/apis/{api_id}/functions/{function_id}",
-            api_id = input.api_id,
-            function_id = input.function_id
+            api_id = self.api_id,
+            function_id = self.function_id
         );
 
-        let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4765,21 +5108,27 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Updates a <code>GraphqlApi</code> object.</p>
-    fn update_graphql_api(
-        &self,
-        input: UpdateGraphqlApiRequest,
-    ) -> RusotoFuture<UpdateGraphqlApiResponse, UpdateGraphqlApiError> {
-        let request_uri = format!("/v1/apis/{api_id}", api_id = input.api_id);
+impl ServiceRequest for UpdateGraphqlApiRequest {
+    type Output = UpdateGraphqlApiResponse;
+    type Error = UpdateGraphqlApiError;
 
-        let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/apis/{api_id}", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("POST", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4797,26 +5146,32 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Updates a <code>Resolver</code> object.</p>
-    fn update_resolver(
-        &self,
-        input: UpdateResolverRequest,
-    ) -> RusotoFuture<UpdateResolverResponse, UpdateResolverError> {
+impl ServiceRequest for UpdateResolverRequest {
+    type Output = UpdateResolverResponse;
+    type Error = UpdateResolverError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}/resolvers/{field_name}",
-            api_id = input.api_id,
-            field_name = input.field_name,
-            type_name = input.type_name
+            api_id = self.api_id,
+            field_name = self.field_name,
+            type_name = self.type_name
         );
 
-        let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4834,25 +5189,31 @@ impl AppSync for AppSyncClient {
             }
         })
     }
+}
 
-    /// <p>Updates a <code>Type</code> object.</p>
-    fn update_type(
-        &self,
-        input: UpdateTypeRequest,
-    ) -> RusotoFuture<UpdateTypeResponse, UpdateTypeError> {
+impl ServiceRequest for UpdateTypeRequest {
+    type Output = UpdateTypeResponse;
+    type Error = UpdateTypeError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}",
-            api_id = input.api_id,
-            type_name = input.type_name
+            api_id = self.api_id,
+            type_name = self.type_name
         );
 
-        let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "appsync", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)

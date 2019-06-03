@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -68,7 +69,7 @@ impl AddHeaderActionDeserializer {
 /// Serialize `AddHeaderAction` contents to a `SignedRequest`.
 struct AddHeaderActionSerializer;
 impl AddHeaderActionSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AddHeaderAction) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &AddHeaderAction) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -111,7 +112,7 @@ impl AddressListDeserializer {
 /// Serialize `AddressList` contents to a `SignedRequest`.
 struct AddressListSerializer;
 impl AddressListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -153,7 +154,7 @@ pub struct Body {
 /// Serialize `Body` contents to a `SignedRequest`.
 struct BodySerializer;
 impl BodySerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Body) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Body) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -223,7 +224,7 @@ impl BounceActionDeserializer {
 /// Serialize `BounceAction` contents to a `SignedRequest`.
 struct BounceActionSerializer;
 impl BounceActionSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &BounceAction) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &BounceAction) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -293,7 +294,7 @@ pub struct BouncedRecipientInfo {
 /// Serialize `BouncedRecipientInfo` contents to a `SignedRequest`.
 struct BouncedRecipientInfoSerializer;
 impl BouncedRecipientInfoSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &BouncedRecipientInfo) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &BouncedRecipientInfo) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -319,7 +320,7 @@ impl BouncedRecipientInfoSerializer {
 /// Serialize `BouncedRecipientInfoList` contents to a `SignedRequest`.
 struct BouncedRecipientInfoListSerializer;
 impl BouncedRecipientInfoListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<BouncedRecipientInfo>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<BouncedRecipientInfo>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             BouncedRecipientInfoSerializer::serialize(params, &key, obj);
@@ -340,7 +341,7 @@ pub struct BulkEmailDestination {
 /// Serialize `BulkEmailDestination` contents to a `SignedRequest`.
 struct BulkEmailDestinationSerializer;
 impl BulkEmailDestinationSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &BulkEmailDestination) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &BulkEmailDestination) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -370,7 +371,7 @@ impl BulkEmailDestinationSerializer {
 /// Serialize `BulkEmailDestinationList` contents to a `SignedRequest`.
 struct BulkEmailDestinationListSerializer;
 impl BulkEmailDestinationListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<BulkEmailDestination>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<BulkEmailDestination>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             BulkEmailDestinationSerializer::serialize(params, &key, obj);
@@ -472,7 +473,7 @@ pub struct CloneReceiptRuleSetRequest {
 /// Serialize `CloneReceiptRuleSetRequest` contents to a `SignedRequest`.
 struct CloneReceiptRuleSetRequestSerializer;
 impl CloneReceiptRuleSetRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CloneReceiptRuleSetRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CloneReceiptRuleSetRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -540,7 +541,7 @@ impl CloudWatchDestinationDeserializer {
 /// Serialize `CloudWatchDestination` contents to a `SignedRequest`.
 struct CloudWatchDestinationSerializer;
 impl CloudWatchDestinationSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CloudWatchDestination) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CloudWatchDestination) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -605,7 +606,11 @@ impl CloudWatchDimensionConfigurationDeserializer {
 /// Serialize `CloudWatchDimensionConfiguration` contents to a `SignedRequest`.
 struct CloudWatchDimensionConfigurationSerializer;
 impl CloudWatchDimensionConfigurationSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CloudWatchDimensionConfiguration) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CloudWatchDimensionConfiguration,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -649,7 +654,11 @@ impl CloudWatchDimensionConfigurationsDeserializer {
 /// Serialize `CloudWatchDimensionConfigurations` contents to a `SignedRequest`.
 struct CloudWatchDimensionConfigurationsSerializer;
 impl CloudWatchDimensionConfigurationsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<CloudWatchDimensionConfiguration>) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &Vec<CloudWatchDimensionConfiguration>,
+    ) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             CloudWatchDimensionConfigurationSerializer::serialize(params, &key, obj);
@@ -686,7 +695,7 @@ impl ConfigurationSetDeserializer {
 /// Serialize `ConfigurationSet` contents to a `SignedRequest`.
 struct ConfigurationSetSerializer;
 impl ConfigurationSetSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ConfigurationSet) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ConfigurationSet) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -699,7 +708,7 @@ impl ConfigurationSetSerializer {
 /// Serialize `ConfigurationSetAttributeList` contents to a `SignedRequest`.
 struct ConfigurationSetAttributeListSerializer;
 impl ConfigurationSetAttributeListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -747,7 +756,7 @@ pub struct Content {
 /// Serialize `Content` contents to a `SignedRequest`.
 struct ContentSerializer;
 impl ContentSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Content) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Content) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -784,7 +793,7 @@ pub struct CreateConfigurationSetEventDestinationRequest {
 struct CreateConfigurationSetEventDestinationRequestSerializer;
 impl CreateConfigurationSetEventDestinationRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &CreateConfigurationSetEventDestinationRequest,
     ) {
@@ -835,7 +844,7 @@ pub struct CreateConfigurationSetRequest {
 /// Serialize `CreateConfigurationSetRequest` contents to a `SignedRequest`.
 struct CreateConfigurationSetRequestSerializer;
 impl CreateConfigurationSetRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateConfigurationSetRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateConfigurationSetRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -881,7 +890,7 @@ pub struct CreateConfigurationSetTrackingOptionsRequest {
 struct CreateConfigurationSetTrackingOptionsRequestSerializer;
 impl CreateConfigurationSetTrackingOptionsRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &CreateConfigurationSetTrackingOptionsRequest,
     ) {
@@ -943,7 +952,7 @@ pub struct CreateCustomVerificationEmailTemplateRequest {
 struct CreateCustomVerificationEmailTemplateRequestSerializer;
 impl CreateCustomVerificationEmailTemplateRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &CreateCustomVerificationEmailTemplateRequest,
     ) {
@@ -976,6 +985,19 @@ impl CreateCustomVerificationEmailTemplateRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateCustomVerificationEmailTemplateResponse {}
+
+struct CreateCustomVerificationEmailTemplateResponseDeserializer;
+impl CreateCustomVerificationEmailTemplateResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateCustomVerificationEmailTemplateResponse, XmlParseError> {
+        Ok(CreateCustomVerificationEmailTemplateResponse::default())
+    }
+}
 /// <p>Represents a request to create a new IP address filter. You use IP address filters when you receive email with Amazon SES. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateReceiptFilterRequest {
@@ -986,7 +1008,7 @@ pub struct CreateReceiptFilterRequest {
 /// Serialize `CreateReceiptFilterRequest` contents to a `SignedRequest`.
 struct CreateReceiptFilterRequestSerializer;
 impl CreateReceiptFilterRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateReceiptFilterRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateReceiptFilterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1030,7 +1052,7 @@ pub struct CreateReceiptRuleRequest {
 /// Serialize `CreateReceiptRuleRequest` contents to a `SignedRequest`.
 struct CreateReceiptRuleRequestSerializer;
 impl CreateReceiptRuleRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateReceiptRuleRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateReceiptRuleRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1074,7 +1096,7 @@ pub struct CreateReceiptRuleSetRequest {
 /// Serialize `CreateReceiptRuleSetRequest` contents to a `SignedRequest`.
 struct CreateReceiptRuleSetRequestSerializer;
 impl CreateReceiptRuleSetRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateReceiptRuleSetRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateReceiptRuleSetRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1114,7 +1136,7 @@ pub struct CreateTemplateRequest {
 /// Serialize `CreateTemplateRequest` contents to a `SignedRequest`.
 struct CreateTemplateRequestSerializer;
 impl CreateTemplateRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateTemplateRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateTemplateRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1272,7 +1294,7 @@ pub struct DeleteConfigurationSetEventDestinationRequest {
 struct DeleteConfigurationSetEventDestinationRequestSerializer;
 impl DeleteConfigurationSetEventDestinationRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &DeleteConfigurationSetEventDestinationRequest,
     ) {
@@ -1322,7 +1344,7 @@ pub struct DeleteConfigurationSetRequest {
 /// Serialize `DeleteConfigurationSetRequest` contents to a `SignedRequest`.
 struct DeleteConfigurationSetRequestSerializer;
 impl DeleteConfigurationSetRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteConfigurationSetRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteConfigurationSetRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1366,7 +1388,7 @@ pub struct DeleteConfigurationSetTrackingOptionsRequest {
 struct DeleteConfigurationSetTrackingOptionsRequestSerializer;
 impl DeleteConfigurationSetTrackingOptionsRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &DeleteConfigurationSetTrackingOptionsRequest,
     ) {
@@ -1413,7 +1435,7 @@ pub struct DeleteCustomVerificationEmailTemplateRequest {
 struct DeleteCustomVerificationEmailTemplateRequestSerializer;
 impl DeleteCustomVerificationEmailTemplateRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &DeleteCustomVerificationEmailTemplateRequest,
     ) {
@@ -1426,6 +1448,19 @@ impl DeleteCustomVerificationEmailTemplateRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteCustomVerificationEmailTemplateResponse {}
+
+struct DeleteCustomVerificationEmailTemplateResponseDeserializer;
+impl DeleteCustomVerificationEmailTemplateResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteCustomVerificationEmailTemplateResponse, XmlParseError> {
+        Ok(DeleteCustomVerificationEmailTemplateResponse::default())
+    }
+}
 /// <p>Represents a request to delete a sending authorization policy for an identity. Sending authorization is an Amazon SES feature that enables you to authorize other senders to use your identities. For information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteIdentityPolicyRequest {
@@ -1438,7 +1473,7 @@ pub struct DeleteIdentityPolicyRequest {
 /// Serialize `DeleteIdentityPolicyRequest` contents to a `SignedRequest`.
 struct DeleteIdentityPolicyRequestSerializer;
 impl DeleteIdentityPolicyRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteIdentityPolicyRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteIdentityPolicyRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1479,7 +1514,7 @@ pub struct DeleteIdentityRequest {
 /// Serialize `DeleteIdentityRequest` contents to a `SignedRequest`.
 struct DeleteIdentityRequestSerializer;
 impl DeleteIdentityRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteIdentityRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteIdentityRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1519,7 +1554,7 @@ pub struct DeleteReceiptFilterRequest {
 /// Serialize `DeleteReceiptFilterRequest` contents to a `SignedRequest`.
 struct DeleteReceiptFilterRequestSerializer;
 impl DeleteReceiptFilterRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteReceiptFilterRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteReceiptFilterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1561,7 +1596,7 @@ pub struct DeleteReceiptRuleRequest {
 /// Serialize `DeleteReceiptRuleRequest` contents to a `SignedRequest`.
 struct DeleteReceiptRuleRequestSerializer;
 impl DeleteReceiptRuleRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteReceiptRuleRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteReceiptRuleRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1602,7 +1637,7 @@ pub struct DeleteReceiptRuleSetRequest {
 /// Serialize `DeleteReceiptRuleSetRequest` contents to a `SignedRequest`.
 struct DeleteReceiptRuleSetRequestSerializer;
 impl DeleteReceiptRuleSetRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteReceiptRuleSetRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteReceiptRuleSetRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1642,7 +1677,7 @@ pub struct DeleteTemplateRequest {
 /// Serialize `DeleteTemplateRequest` contents to a `SignedRequest`.
 struct DeleteTemplateRequestSerializer;
 impl DeleteTemplateRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteTemplateRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteTemplateRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1681,7 +1716,11 @@ pub struct DeleteVerifiedEmailAddressRequest {
 /// Serialize `DeleteVerifiedEmailAddressRequest` contents to a `SignedRequest`.
 struct DeleteVerifiedEmailAddressRequestSerializer;
 impl DeleteVerifiedEmailAddressRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteVerifiedEmailAddressRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DeleteVerifiedEmailAddressRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1691,6 +1730,19 @@ impl DeleteVerifiedEmailAddressRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteVerifiedEmailAddressResponse {}
+
+struct DeleteVerifiedEmailAddressResponseDeserializer;
+impl DeleteVerifiedEmailAddressResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteVerifiedEmailAddressResponse, XmlParseError> {
+        Ok(DeleteVerifiedEmailAddressResponse::default())
+    }
+}
 /// <p>Represents a request to return the metadata and receipt rules for the receipt rule set that is currently active. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeActiveReceiptRuleSetRequest {}
@@ -1698,7 +1750,11 @@ pub struct DescribeActiveReceiptRuleSetRequest {}
 /// Serialize `DescribeActiveReceiptRuleSetRequest` contents to a `SignedRequest`.
 struct DescribeActiveReceiptRuleSetRequestSerializer;
 impl DescribeActiveReceiptRuleSetRequestSerializer {
-    fn serialize(_params: &mut Params, name: &str, _obj: &DescribeActiveReceiptRuleSetRequest) {
+    fn serialize(
+        _params: &mut impl ServiceParams,
+        name: &str,
+        _obj: &DescribeActiveReceiptRuleSetRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1756,7 +1812,11 @@ pub struct DescribeConfigurationSetRequest {
 /// Serialize `DescribeConfigurationSetRequest` contents to a `SignedRequest`.
 struct DescribeConfigurationSetRequestSerializer;
 impl DescribeConfigurationSetRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeConfigurationSetRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeConfigurationSetRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1843,7 +1903,7 @@ pub struct DescribeReceiptRuleRequest {
 /// Serialize `DescribeReceiptRuleRequest` contents to a `SignedRequest`.
 struct DescribeReceiptRuleRequestSerializer;
 impl DescribeReceiptRuleRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeReceiptRuleRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeReceiptRuleRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1893,7 +1953,7 @@ pub struct DescribeReceiptRuleSetRequest {
 /// Serialize `DescribeReceiptRuleSetRequest` contents to a `SignedRequest`.
 struct DescribeReceiptRuleSetRequestSerializer;
 impl DescribeReceiptRuleSetRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeReceiptRuleSetRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeReceiptRuleSetRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1955,7 +2015,7 @@ pub struct Destination {
 /// Serialize `Destination` contents to a `SignedRequest`.
 struct DestinationSerializer;
 impl DestinationSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Destination) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Destination) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2121,7 +2181,7 @@ impl EventDestinationDeserializer {
 /// Serialize `EventDestination` contents to a `SignedRequest`.
 struct EventDestinationSerializer;
 impl EventDestinationSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &EventDestination) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &EventDestination) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2220,7 +2280,7 @@ impl EventTypesDeserializer {
 /// Serialize `EventTypes` contents to a `SignedRequest`.
 struct EventTypesSerializer;
 impl EventTypesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -2240,7 +2300,7 @@ pub struct ExtensionField {
 /// Serialize `ExtensionField` contents to a `SignedRequest`.
 struct ExtensionFieldSerializer;
 impl ExtensionFieldSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ExtensionField) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ExtensionField) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2254,7 +2314,7 @@ impl ExtensionFieldSerializer {
 /// Serialize `ExtensionFieldList` contents to a `SignedRequest`.
 struct ExtensionFieldListSerializer;
 impl ExtensionFieldListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<ExtensionField>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<ExtensionField>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             ExtensionFieldSerializer::serialize(params, &key, obj);
@@ -2284,6 +2344,24 @@ impl FromAddressDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetAccountSendingEnabledRequest {}
+
+/// Serialize `GetAccountSendingEnabledRequest` contents to a `SignedRequest`.
+struct GetAccountSendingEnabledRequestSerializer;
+impl GetAccountSendingEnabledRequestSerializer {
+    fn serialize(
+        _params: &mut impl ServiceParams,
+        name: &str,
+        _obj: &GetAccountSendingEnabledRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
 /// <p>Represents a request to return the email sending status for your Amazon SES account in the current AWS Region.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetAccountSendingEnabledResponse {
@@ -2323,7 +2401,11 @@ pub struct GetCustomVerificationEmailTemplateRequest {
 /// Serialize `GetCustomVerificationEmailTemplateRequest` contents to a `SignedRequest`.
 struct GetCustomVerificationEmailTemplateRequestSerializer;
 impl GetCustomVerificationEmailTemplateRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GetCustomVerificationEmailTemplateRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &GetCustomVerificationEmailTemplateRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2415,7 +2497,11 @@ pub struct GetIdentityDkimAttributesRequest {
 /// Serialize `GetIdentityDkimAttributesRequest` contents to a `SignedRequest`.
 struct GetIdentityDkimAttributesRequestSerializer;
 impl GetIdentityDkimAttributesRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GetIdentityDkimAttributesRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &GetIdentityDkimAttributesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2470,7 +2556,7 @@ pub struct GetIdentityMailFromDomainAttributesRequest {
 struct GetIdentityMailFromDomainAttributesRequestSerializer;
 impl GetIdentityMailFromDomainAttributesRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &GetIdentityMailFromDomainAttributesRequest,
     ) {
@@ -2531,7 +2617,11 @@ pub struct GetIdentityNotificationAttributesRequest {
 /// Serialize `GetIdentityNotificationAttributesRequest` contents to a `SignedRequest`.
 struct GetIdentityNotificationAttributesRequestSerializer;
 impl GetIdentityNotificationAttributesRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GetIdentityNotificationAttributesRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &GetIdentityNotificationAttributesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2591,7 +2681,7 @@ pub struct GetIdentityPoliciesRequest {
 /// Serialize `GetIdentityPoliciesRequest` contents to a `SignedRequest`.
 struct GetIdentityPoliciesRequestSerializer;
 impl GetIdentityPoliciesRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GetIdentityPoliciesRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &GetIdentityPoliciesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2645,7 +2735,11 @@ pub struct GetIdentityVerificationAttributesRequest {
 /// Serialize `GetIdentityVerificationAttributesRequest` contents to a `SignedRequest`.
 struct GetIdentityVerificationAttributesRequestSerializer;
 impl GetIdentityVerificationAttributesRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GetIdentityVerificationAttributesRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &GetIdentityVerificationAttributesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2693,6 +2787,20 @@ impl GetIdentityVerificationAttributesResponseDeserializer {
         )
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetSendQuotaRequest {}
+
+/// Serialize `GetSendQuotaRequest` contents to a `SignedRequest`.
+struct GetSendQuotaRequestSerializer;
+impl GetSendQuotaRequestSerializer {
+    fn serialize(_params: &mut impl ServiceParams, name: &str, _obj: &GetSendQuotaRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
 /// <p>Represents your Amazon SES daily sending quota, maximum send rate, and the number of emails you have sent in the last 24 hours.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetSendQuotaResponse {
@@ -2735,6 +2843,20 @@ impl GetSendQuotaResponseDeserializer {
         })
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetSendStatisticsRequest {}
+
+/// Serialize `GetSendStatisticsRequest` contents to a `SignedRequest`.
+struct GetSendStatisticsRequestSerializer;
+impl GetSendStatisticsRequestSerializer {
+    fn serialize(_params: &mut impl ServiceParams, name: &str, _obj: &GetSendStatisticsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
 /// <p>Represents a list of data points. This list contains aggregated data from the previous two weeks of your sending activity with Amazon SES.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetSendStatisticsResponse {
@@ -2775,7 +2897,7 @@ pub struct GetTemplateRequest {
 /// Serialize `GetTemplateRequest` contents to a `SignedRequest`.
 struct GetTemplateRequestSerializer;
 impl GetTemplateRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GetTemplateRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &GetTemplateRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2913,7 +3035,7 @@ impl IdentityListDeserializer {
 /// Serialize `IdentityList` contents to a `SignedRequest`.
 struct IdentityListSerializer;
 impl IdentityListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -3136,7 +3258,7 @@ impl KinesisFirehoseDestinationDeserializer {
 /// Serialize `KinesisFirehoseDestination` contents to a `SignedRequest`.
 struct KinesisFirehoseDestinationSerializer;
 impl KinesisFirehoseDestinationSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &KinesisFirehoseDestination) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &KinesisFirehoseDestination) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3195,7 +3317,7 @@ impl LambdaActionDeserializer {
 /// Serialize `LambdaAction` contents to a `SignedRequest`.
 struct LambdaActionSerializer;
 impl LambdaActionSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &LambdaAction) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &LambdaAction) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3234,7 +3356,7 @@ pub struct ListConfigurationSetsRequest {
 /// Serialize `ListConfigurationSetsRequest` contents to a `SignedRequest`.
 struct ListConfigurationSetsRequestSerializer;
 impl ListConfigurationSetsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListConfigurationSetsRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ListConfigurationSetsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3299,7 +3421,7 @@ pub struct ListCustomVerificationEmailTemplatesRequest {
 struct ListCustomVerificationEmailTemplatesRequestSerializer;
 impl ListCustomVerificationEmailTemplatesRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &ListCustomVerificationEmailTemplatesRequest,
     ) {
@@ -3371,7 +3493,7 @@ pub struct ListIdentitiesRequest {
 /// Serialize `ListIdentitiesRequest` contents to a `SignedRequest`.
 struct ListIdentitiesRequestSerializer;
 impl ListIdentitiesRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListIdentitiesRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ListIdentitiesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3430,7 +3552,7 @@ pub struct ListIdentityPoliciesRequest {
 /// Serialize `ListIdentityPoliciesRequest` contents to a `SignedRequest`.
 struct ListIdentityPoliciesRequestSerializer;
 impl ListIdentityPoliciesRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListIdentityPoliciesRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ListIdentityPoliciesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3480,7 +3602,7 @@ pub struct ListReceiptFiltersRequest {}
 /// Serialize `ListReceiptFiltersRequest` contents to a `SignedRequest`.
 struct ListReceiptFiltersRequestSerializer;
 impl ListReceiptFiltersRequestSerializer {
-    fn serialize(_params: &mut Params, name: &str, _obj: &ListReceiptFiltersRequest) {
+    fn serialize(_params: &mut impl ServiceParams, name: &str, _obj: &ListReceiptFiltersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3529,7 +3651,7 @@ pub struct ListReceiptRuleSetsRequest {
 /// Serialize `ListReceiptRuleSetsRequest` contents to a `SignedRequest`.
 struct ListReceiptRuleSetsRequestSerializer;
 impl ListReceiptRuleSetsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListReceiptRuleSetsRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ListReceiptRuleSetsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3589,7 +3711,7 @@ pub struct ListTemplatesRequest {
 /// Serialize `ListTemplatesRequest` contents to a `SignedRequest`.
 struct ListTemplatesRequestSerializer;
 impl ListTemplatesRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListTemplatesRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ListTemplatesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3635,6 +3757,24 @@ impl ListTemplatesResponseDeserializer {
         })
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ListVerifiedEmailAddressesRequest {}
+
+/// Serialize `ListVerifiedEmailAddressesRequest` contents to a `SignedRequest`.
+struct ListVerifiedEmailAddressesRequestSerializer;
+impl ListVerifiedEmailAddressesRequestSerializer {
+    fn serialize(
+        _params: &mut impl ServiceParams,
+        name: &str,
+        _obj: &ListVerifiedEmailAddressesRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
 /// <p>A list of email addresses that you have verified with Amazon SES under your AWS account.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListVerifiedEmailAddressesResponse {
@@ -3735,7 +3875,7 @@ pub struct Message {
 /// Serialize `Message` contents to a `SignedRequest`.
 struct MessageSerializer;
 impl MessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Message) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Message) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3760,7 +3900,7 @@ pub struct MessageDsn {
 /// Serialize `MessageDsn` contents to a `SignedRequest`.
 struct MessageDsnSerializer;
 impl MessageDsnSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &MessageDsn) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &MessageDsn) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3803,7 +3943,7 @@ pub struct MessageTag {
 /// Serialize `MessageTag` contents to a `SignedRequest`.
 struct MessageTagSerializer;
 impl MessageTagSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &MessageTag) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &MessageTag) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3817,7 +3957,7 @@ impl MessageTagSerializer {
 /// Serialize `MessageTagList` contents to a `SignedRequest`.
 struct MessageTagListSerializer;
 impl MessageTagListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<MessageTag>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<MessageTag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             MessageTagSerializer::serialize(params, &key, obj);
@@ -3937,7 +4077,7 @@ impl PolicyNameListDeserializer {
 /// Serialize `PolicyNameList` contents to a `SignedRequest`.
 struct PolicyNameListSerializer;
 impl PolicyNameListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -3959,7 +4099,7 @@ pub struct PutIdentityPolicyRequest {
 /// Serialize `PutIdentityPolicyRequest` contents to a `SignedRequest`.
 struct PutIdentityPolicyRequestSerializer;
 impl PutIdentityPolicyRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PutIdentityPolicyRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &PutIdentityPolicyRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4001,7 +4141,7 @@ pub struct RawMessage {
 /// Serialize `RawMessage` contents to a `SignedRequest`.
 struct RawMessageSerializer;
 impl RawMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RawMessage) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &RawMessage) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4086,7 +4226,7 @@ impl ReceiptActionDeserializer {
 /// Serialize `ReceiptAction` contents to a `SignedRequest`.
 struct ReceiptActionSerializer;
 impl ReceiptActionSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ReceiptAction) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ReceiptAction) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4165,7 +4305,7 @@ impl ReceiptActionsListDeserializer {
 /// Serialize `ReceiptActionsList` contents to a `SignedRequest`.
 struct ReceiptActionsListSerializer;
 impl ReceiptActionsListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<ReceiptAction>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<ReceiptAction>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             ReceiptActionSerializer::serialize(params, &key, obj);
@@ -4207,7 +4347,7 @@ impl ReceiptFilterDeserializer {
 /// Serialize `ReceiptFilter` contents to a `SignedRequest`.
 struct ReceiptFilterSerializer;
 impl ReceiptFilterSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ReceiptFilter) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ReceiptFilter) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4295,7 +4435,7 @@ impl ReceiptIpFilterDeserializer {
 /// Serialize `ReceiptIpFilter` contents to a `SignedRequest`.
 struct ReceiptIpFilterSerializer;
 impl ReceiptIpFilterSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ReceiptIpFilter) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ReceiptIpFilter) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4365,7 +4505,7 @@ impl ReceiptRuleDeserializer {
 /// Serialize `ReceiptRule` contents to a `SignedRequest`.
 struct ReceiptRuleSerializer;
 impl ReceiptRuleSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ReceiptRule) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ReceiptRule) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4413,7 +4553,7 @@ impl ReceiptRuleNameDeserializer {
 /// Serialize `ReceiptRuleNamesList` contents to a `SignedRequest`.
 struct ReceiptRuleNamesListSerializer;
 impl ReceiptRuleNamesListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4534,7 +4674,7 @@ pub struct RecipientDsnFields {
 /// Serialize `RecipientDsnFields` contents to a `SignedRequest`.
 struct RecipientDsnFieldsSerializer;
 impl RecipientDsnFieldsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RecipientDsnFields) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &RecipientDsnFields) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4585,7 +4725,7 @@ impl RecipientsListDeserializer {
 /// Serialize `RecipientsList` contents to a `SignedRequest`.
 struct RecipientsListSerializer;
 impl RecipientsListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4616,7 +4756,7 @@ pub struct ReorderReceiptRuleSetRequest {
 /// Serialize `ReorderReceiptRuleSetRequest` contents to a `SignedRequest`.
 struct ReorderReceiptRuleSetRequestSerializer;
 impl ReorderReceiptRuleSetRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ReorderReceiptRuleSetRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ReorderReceiptRuleSetRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4745,7 +4885,7 @@ impl S3ActionDeserializer {
 /// Serialize `S3Action` contents to a `SignedRequest`.
 struct S3ActionSerializer;
 impl S3ActionSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &S3Action) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &S3Action) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4822,7 +4962,7 @@ impl SNSActionDeserializer {
 /// Serialize `SNSAction` contents to a `SignedRequest`.
 struct SNSActionSerializer;
 impl SNSActionSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SNSAction) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SNSAction) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4875,7 +5015,7 @@ impl SNSDestinationDeserializer {
 /// Serialize `SNSDestination` contents to a `SignedRequest`.
 struct SNSDestinationSerializer;
 impl SNSDestinationSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SNSDestination) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SNSDestination) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4905,7 +5045,7 @@ pub struct SendBounceRequest {
 /// Serialize `SendBounceRequest` contents to a `SignedRequest`.
 struct SendBounceRequestSerializer;
 impl SendBounceRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SendBounceRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SendBounceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4992,7 +5132,7 @@ pub struct SendBulkTemplatedEmailRequest {
 /// Serialize `SendBulkTemplatedEmailRequest` contents to a `SignedRequest`.
 struct SendBulkTemplatedEmailRequestSerializer;
 impl SendBulkTemplatedEmailRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SendBulkTemplatedEmailRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SendBulkTemplatedEmailRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5091,7 +5231,11 @@ pub struct SendCustomVerificationEmailRequest {
 /// Serialize `SendCustomVerificationEmailRequest` contents to a `SignedRequest`.
 struct SendCustomVerificationEmailRequestSerializer;
 impl SendCustomVerificationEmailRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SendCustomVerificationEmailRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &SendCustomVerificationEmailRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5227,7 +5371,7 @@ pub struct SendEmailRequest {
 /// Serialize `SendEmailRequest` contents to a `SignedRequest`.
 struct SendEmailRequestSerializer;
 impl SendEmailRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SendEmailRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SendEmailRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5321,7 +5465,7 @@ pub struct SendRawEmailRequest {
 /// Serialize `SendRawEmailRequest` contents to a `SignedRequest`.
 struct SendRawEmailRequestSerializer;
 impl SendRawEmailRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SendRawEmailRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SendRawEmailRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5422,7 +5566,7 @@ pub struct SendTemplatedEmailRequest {
 /// Serialize `SendTemplatedEmailRequest` contents to a `SignedRequest`.
 struct SendTemplatedEmailRequestSerializer;
 impl SendTemplatedEmailRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SendTemplatedEmailRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SendTemplatedEmailRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5520,7 +5664,11 @@ pub struct SetActiveReceiptRuleSetRequest {
 /// Serialize `SetActiveReceiptRuleSetRequest` contents to a `SignedRequest`.
 struct SetActiveReceiptRuleSetRequestSerializer;
 impl SetActiveReceiptRuleSetRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetActiveReceiptRuleSetRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &SetActiveReceiptRuleSetRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5564,7 +5712,7 @@ pub struct SetIdentityDkimEnabledRequest {
 /// Serialize `SetIdentityDkimEnabledRequest` contents to a `SignedRequest`.
 struct SetIdentityDkimEnabledRequestSerializer;
 impl SetIdentityDkimEnabledRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetIdentityDkimEnabledRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SetIdentityDkimEnabledRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5608,7 +5756,7 @@ pub struct SetIdentityFeedbackForwardingEnabledRequest {
 struct SetIdentityFeedbackForwardingEnabledRequestSerializer;
 impl SetIdentityFeedbackForwardingEnabledRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &SetIdentityFeedbackForwardingEnabledRequest,
     ) {
@@ -5660,7 +5808,7 @@ pub struct SetIdentityHeadersInNotificationsEnabledRequest {
 struct SetIdentityHeadersInNotificationsEnabledRequestSerializer;
 impl SetIdentityHeadersInNotificationsEnabledRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &SetIdentityHeadersInNotificationsEnabledRequest,
     ) {
@@ -5712,7 +5860,11 @@ pub struct SetIdentityMailFromDomainRequest {
 /// Serialize `SetIdentityMailFromDomainRequest` contents to a `SignedRequest`.
 struct SetIdentityMailFromDomainRequestSerializer;
 impl SetIdentityMailFromDomainRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetIdentityMailFromDomainRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &SetIdentityMailFromDomainRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5765,7 +5917,11 @@ pub struct SetIdentityNotificationTopicRequest {
 /// Serialize `SetIdentityNotificationTopicRequest` contents to a `SignedRequest`.
 struct SetIdentityNotificationTopicRequestSerializer;
 impl SetIdentityNotificationTopicRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetIdentityNotificationTopicRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &SetIdentityNotificationTopicRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5816,7 +5972,7 @@ pub struct SetReceiptRulePositionRequest {
 /// Serialize `SetReceiptRulePositionRequest` contents to a `SignedRequest`.
 struct SetReceiptRulePositionRequestSerializer;
 impl SetReceiptRulePositionRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetReceiptRulePositionRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SetReceiptRulePositionRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5886,7 +6042,7 @@ impl StopActionDeserializer {
 /// Serialize `StopAction` contents to a `SignedRequest`.
 struct StopActionSerializer;
 impl StopActionSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &StopAction) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &StopAction) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5989,7 +6145,7 @@ impl TemplateDeserializer {
 /// Serialize `Template` contents to a `SignedRequest`.
 struct TemplateSerializer;
 impl TemplateSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Template) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Template) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6091,7 +6247,7 @@ pub struct TestRenderTemplateRequest {
 /// Serialize `TestRenderTemplateRequest` contents to a `SignedRequest`.
 struct TestRenderTemplateRequestSerializer;
 impl TestRenderTemplateRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TestRenderTemplateRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &TestRenderTemplateRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6199,7 +6355,7 @@ impl TrackingOptionsDeserializer {
 /// Serialize `TrackingOptions` contents to a `SignedRequest`.
 struct TrackingOptionsSerializer;
 impl TrackingOptionsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TrackingOptions) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &TrackingOptions) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6224,7 +6380,11 @@ pub struct UpdateAccountSendingEnabledRequest {
 /// Serialize `UpdateAccountSendingEnabledRequest` contents to a `SignedRequest`.
 struct UpdateAccountSendingEnabledRequestSerializer;
 impl UpdateAccountSendingEnabledRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &UpdateAccountSendingEnabledRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &UpdateAccountSendingEnabledRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6236,6 +6396,19 @@ impl UpdateAccountSendingEnabledRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateAccountSendingEnabledResponse {}
+
+struct UpdateAccountSendingEnabledResponseDeserializer;
+impl UpdateAccountSendingEnabledResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateAccountSendingEnabledResponse, XmlParseError> {
+        Ok(UpdateAccountSendingEnabledResponse::default())
+    }
+}
 /// <p>Represents a request to update the event destination of a configuration set. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateConfigurationSetEventDestinationRequest {
@@ -6249,7 +6422,7 @@ pub struct UpdateConfigurationSetEventDestinationRequest {
 struct UpdateConfigurationSetEventDestinationRequestSerializer;
 impl UpdateConfigurationSetEventDestinationRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &UpdateConfigurationSetEventDestinationRequest,
     ) {
@@ -6303,7 +6476,7 @@ pub struct UpdateConfigurationSetReputationMetricsEnabledRequest {
 struct UpdateConfigurationSetReputationMetricsEnabledRequestSerializer;
 impl UpdateConfigurationSetReputationMetricsEnabledRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &UpdateConfigurationSetReputationMetricsEnabledRequest,
     ) {
@@ -6320,6 +6493,19 @@ impl UpdateConfigurationSetReputationMetricsEnabledRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateConfigurationSetReputationMetricsEnabledResponse {}
+
+struct UpdateConfigurationSetReputationMetricsEnabledResponseDeserializer;
+impl UpdateConfigurationSetReputationMetricsEnabledResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateConfigurationSetReputationMetricsEnabledResponse, XmlParseError> {
+        Ok(UpdateConfigurationSetReputationMetricsEnabledResponse::default())
+    }
+}
 /// <p>Represents a request to enable or disable the email sending capabilities for a specific configuration set.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateConfigurationSetSendingEnabledRequest {
@@ -6333,7 +6519,7 @@ pub struct UpdateConfigurationSetSendingEnabledRequest {
 struct UpdateConfigurationSetSendingEnabledRequestSerializer;
 impl UpdateConfigurationSetSendingEnabledRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &UpdateConfigurationSetSendingEnabledRequest,
     ) {
@@ -6350,6 +6536,19 @@ impl UpdateConfigurationSetSendingEnabledRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateConfigurationSetSendingEnabledResponse {}
+
+struct UpdateConfigurationSetSendingEnabledResponseDeserializer;
+impl UpdateConfigurationSetSendingEnabledResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateConfigurationSetSendingEnabledResponse, XmlParseError> {
+        Ok(UpdateConfigurationSetSendingEnabledResponse::default())
+    }
+}
 /// <p>Represents a request to update the tracking options for a configuration set. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateConfigurationSetTrackingOptionsRequest {
@@ -6362,7 +6561,7 @@ pub struct UpdateConfigurationSetTrackingOptionsRequest {
 struct UpdateConfigurationSetTrackingOptionsRequestSerializer;
 impl UpdateConfigurationSetTrackingOptionsRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &UpdateConfigurationSetTrackingOptionsRequest,
     ) {
@@ -6424,7 +6623,7 @@ pub struct UpdateCustomVerificationEmailTemplateRequest {
 struct UpdateCustomVerificationEmailTemplateRequestSerializer;
 impl UpdateCustomVerificationEmailTemplateRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &UpdateCustomVerificationEmailTemplateRequest,
     ) {
@@ -6458,6 +6657,19 @@ impl UpdateCustomVerificationEmailTemplateRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateCustomVerificationEmailTemplateResponse {}
+
+struct UpdateCustomVerificationEmailTemplateResponseDeserializer;
+impl UpdateCustomVerificationEmailTemplateResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateCustomVerificationEmailTemplateResponse, XmlParseError> {
+        Ok(UpdateCustomVerificationEmailTemplateResponse::default())
+    }
+}
 /// <p>Represents a request to update a receipt rule. You use receipt rules to receive email with Amazon SES. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateReceiptRuleRequest {
@@ -6470,7 +6682,7 @@ pub struct UpdateReceiptRuleRequest {
 /// Serialize `UpdateReceiptRuleRequest` contents to a `SignedRequest`.
 struct UpdateReceiptRuleRequestSerializer;
 impl UpdateReceiptRuleRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &UpdateReceiptRuleRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &UpdateReceiptRuleRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6509,7 +6721,7 @@ pub struct UpdateTemplateRequest {
 /// Serialize `UpdateTemplateRequest` contents to a `SignedRequest`.
 struct UpdateTemplateRequestSerializer;
 impl UpdateTemplateRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &UpdateTemplateRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &UpdateTemplateRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6611,7 +6823,7 @@ pub struct VerifyDomainDkimRequest {
 /// Serialize `VerifyDomainDkimRequest` contents to a `SignedRequest`.
 struct VerifyDomainDkimRequestSerializer;
 impl VerifyDomainDkimRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &VerifyDomainDkimRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &VerifyDomainDkimRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6664,7 +6876,7 @@ pub struct VerifyDomainIdentityRequest {
 /// Serialize `VerifyDomainIdentityRequest` contents to a `SignedRequest`.
 struct VerifyDomainIdentityRequestSerializer;
 impl VerifyDomainIdentityRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &VerifyDomainIdentityRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &VerifyDomainIdentityRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6714,7 +6926,7 @@ pub struct VerifyEmailAddressRequest {
 /// Serialize `VerifyEmailAddressRequest` contents to a `SignedRequest`.
 struct VerifyEmailAddressRequestSerializer;
 impl VerifyEmailAddressRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &VerifyEmailAddressRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &VerifyEmailAddressRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6724,6 +6936,19 @@ impl VerifyEmailAddressRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct VerifyEmailAddressResponse {}
+
+struct VerifyEmailAddressResponseDeserializer;
+impl VerifyEmailAddressResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<VerifyEmailAddressResponse, XmlParseError> {
+        Ok(VerifyEmailAddressResponse::default())
+    }
+}
 /// <p>Represents a request to begin email address verification with Amazon SES. For information about email address verification, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-email-addresses.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct VerifyEmailIdentityRequest {
@@ -6734,7 +6959,7 @@ pub struct VerifyEmailIdentityRequest {
 /// Serialize `VerifyEmailIdentityRequest` contents to a `SignedRequest`.
 struct VerifyEmailIdentityRequestSerializer;
 impl VerifyEmailIdentityRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &VerifyEmailIdentityRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &VerifyEmailIdentityRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6801,7 +7026,7 @@ impl WorkmailActionDeserializer {
 /// Serialize `WorkmailAction` contents to a `SignedRequest`.
 struct WorkmailActionSerializer;
 impl WorkmailActionSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &WorkmailAction) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &WorkmailAction) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -10379,454 +10604,373 @@ pub trait Ses {
     fn clone_receipt_rule_set(
         &self,
         input: CloneReceiptRuleSetRequest,
-    ) -> RusotoFuture<CloneReceiptRuleSetResponse, CloneReceiptRuleSetError>;
+    ) -> Request<CloneReceiptRuleSetRequest>;
 
     /// <p>Creates a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn create_configuration_set(
         &self,
         input: CreateConfigurationSetRequest,
-    ) -> RusotoFuture<CreateConfigurationSetResponse, CreateConfigurationSetError>;
+    ) -> Request<CreateConfigurationSetRequest>;
 
     /// <p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn create_configuration_set_event_destination(
         &self,
         input: CreateConfigurationSetEventDestinationRequest,
-    ) -> RusotoFuture<
-        CreateConfigurationSetEventDestinationResponse,
-        CreateConfigurationSetEventDestinationError,
-    >;
+    ) -> Request<CreateConfigurationSetEventDestinationRequest>;
 
     /// <p>Creates an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p>
     fn create_configuration_set_tracking_options(
         &self,
         input: CreateConfigurationSetTrackingOptionsRequest,
-    ) -> RusotoFuture<
-        CreateConfigurationSetTrackingOptionsResponse,
-        CreateConfigurationSetTrackingOptionsError,
-    >;
+    ) -> Request<CreateConfigurationSetTrackingOptionsRequest>;
 
     /// <p>Creates a new custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
     fn create_custom_verification_email_template(
         &self,
         input: CreateCustomVerificationEmailTemplateRequest,
-    ) -> RusotoFuture<(), CreateCustomVerificationEmailTemplateError>;
+    ) -> Request<CreateCustomVerificationEmailTemplateRequest>;
 
     /// <p>Creates a new IP address filter.</p> <p>For information about setting up IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn create_receipt_filter(
         &self,
         input: CreateReceiptFilterRequest,
-    ) -> RusotoFuture<CreateReceiptFilterResponse, CreateReceiptFilterError>;
+    ) -> Request<CreateReceiptFilterRequest>;
 
     /// <p>Creates a receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn create_receipt_rule(
         &self,
         input: CreateReceiptRuleRequest,
-    ) -> RusotoFuture<CreateReceiptRuleResponse, CreateReceiptRuleError>;
+    ) -> Request<CreateReceiptRuleRequest>;
 
     /// <p>Creates an empty receipt rule set.</p> <p>For information about setting up receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn create_receipt_rule_set(
         &self,
         input: CreateReceiptRuleSetRequest,
-    ) -> RusotoFuture<CreateReceiptRuleSetResponse, CreateReceiptRuleSetError>;
+    ) -> Request<CreateReceiptRuleSetRequest>;
 
     /// <p>Creates an email template. Email templates enable you to send personalized email to one or more destinations in a single API operation. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_template(
-        &self,
-        input: CreateTemplateRequest,
-    ) -> RusotoFuture<CreateTemplateResponse, CreateTemplateError>;
+    fn create_template(&self, input: CreateTemplateRequest) -> Request<CreateTemplateRequest>;
 
     /// <p>Deletes a configuration set. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_configuration_set(
         &self,
         input: DeleteConfigurationSetRequest,
-    ) -> RusotoFuture<DeleteConfigurationSetResponse, DeleteConfigurationSetError>;
+    ) -> Request<DeleteConfigurationSetRequest>;
 
     /// <p>Deletes a configuration set event destination. Configuration set event destinations are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_configuration_set_event_destination(
         &self,
         input: DeleteConfigurationSetEventDestinationRequest,
-    ) -> RusotoFuture<
-        DeleteConfigurationSetEventDestinationResponse,
-        DeleteConfigurationSetEventDestinationError,
-    >;
+    ) -> Request<DeleteConfigurationSetEventDestinationRequest>;
 
     /// <p><p>Deletes an association between a configuration set and a custom domain for open and click event tracking.</p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p> <note> <p>Deleting this kind of association will result in emails sent using the specified configuration set to capture open and click events using the standard, Amazon SES-operated domains.</p> </note></p>
     fn delete_configuration_set_tracking_options(
         &self,
         input: DeleteConfigurationSetTrackingOptionsRequest,
-    ) -> RusotoFuture<
-        DeleteConfigurationSetTrackingOptionsResponse,
-        DeleteConfigurationSetTrackingOptionsError,
-    >;
+    ) -> Request<DeleteConfigurationSetTrackingOptionsRequest>;
 
     /// <p>Deletes an existing custom verification email template. </p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_custom_verification_email_template(
         &self,
         input: DeleteCustomVerificationEmailTemplateRequest,
-    ) -> RusotoFuture<(), DeleteCustomVerificationEmailTemplateError>;
+    ) -> Request<DeleteCustomVerificationEmailTemplateRequest>;
 
     /// <p>Deletes the specified identity (an email address or a domain) from the list of verified identities.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_identity(
-        &self,
-        input: DeleteIdentityRequest,
-    ) -> RusotoFuture<DeleteIdentityResponse, DeleteIdentityError>;
+    fn delete_identity(&self, input: DeleteIdentityRequest) -> Request<DeleteIdentityRequest>;
 
     /// <p>Deletes the specified sending authorization policy for the given identity (an email address or a domain). This API returns successfully even if a policy with the specified name does not exist.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_identity_policy(
         &self,
         input: DeleteIdentityPolicyRequest,
-    ) -> RusotoFuture<DeleteIdentityPolicyResponse, DeleteIdentityPolicyError>;
+    ) -> Request<DeleteIdentityPolicyRequest>;
 
     /// <p>Deletes the specified IP address filter.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_receipt_filter(
         &self,
         input: DeleteReceiptFilterRequest,
-    ) -> RusotoFuture<DeleteReceiptFilterResponse, DeleteReceiptFilterError>;
+    ) -> Request<DeleteReceiptFilterRequest>;
 
     /// <p>Deletes the specified receipt rule.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_receipt_rule(
         &self,
         input: DeleteReceiptRuleRequest,
-    ) -> RusotoFuture<DeleteReceiptRuleResponse, DeleteReceiptRuleError>;
+    ) -> Request<DeleteReceiptRuleRequest>;
 
     /// <p>Deletes the specified receipt rule set and all of the receipt rules it contains.</p> <note> <p>The currently active rule set cannot be deleted.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_receipt_rule_set(
         &self,
         input: DeleteReceiptRuleSetRequest,
-    ) -> RusotoFuture<DeleteReceiptRuleSetResponse, DeleteReceiptRuleSetError>;
+    ) -> Request<DeleteReceiptRuleSetRequest>;
 
     /// <p>Deletes an email template.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_template(
-        &self,
-        input: DeleteTemplateRequest,
-    ) -> RusotoFuture<DeleteTemplateResponse, DeleteTemplateError>;
+    fn delete_template(&self, input: DeleteTemplateRequest) -> Request<DeleteTemplateRequest>;
 
     /// <p>Deprecated. Use the <code>DeleteIdentity</code> operation to delete email addresses and domains.</p>
     fn delete_verified_email_address(
         &self,
         input: DeleteVerifiedEmailAddressRequest,
-    ) -> RusotoFuture<(), DeleteVerifiedEmailAddressError>;
+    ) -> Request<DeleteVerifiedEmailAddressRequest>;
 
     /// <p>Returns the metadata and receipt rules for the receipt rule set that is currently active.</p> <p>For information about setting up receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn describe_active_receipt_rule_set(
-        &self,
-        input: DescribeActiveReceiptRuleSetRequest,
-    ) -> RusotoFuture<DescribeActiveReceiptRuleSetResponse, DescribeActiveReceiptRuleSetError>;
+    fn describe_active_receipt_rule_set(&self) -> Request<DescribeActiveReceiptRuleSetRequest>;
 
     /// <p>Returns the details of the specified configuration set. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn describe_configuration_set(
         &self,
         input: DescribeConfigurationSetRequest,
-    ) -> RusotoFuture<DescribeConfigurationSetResponse, DescribeConfigurationSetError>;
+    ) -> Request<DescribeConfigurationSetRequest>;
 
     /// <p>Returns the details of the specified receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn describe_receipt_rule(
         &self,
         input: DescribeReceiptRuleRequest,
-    ) -> RusotoFuture<DescribeReceiptRuleResponse, DescribeReceiptRuleError>;
+    ) -> Request<DescribeReceiptRuleRequest>;
 
     /// <p>Returns the details of the specified receipt rule set.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn describe_receipt_rule_set(
         &self,
         input: DescribeReceiptRuleSetRequest,
-    ) -> RusotoFuture<DescribeReceiptRuleSetResponse, DescribeReceiptRuleSetError>;
+    ) -> Request<DescribeReceiptRuleSetRequest>;
 
     /// <p>Returns the email sending status of the Amazon SES account for the current region.</p> <p>You can execute this operation no more than once per second.</p>
-    fn get_account_sending_enabled(
-        &self,
-    ) -> RusotoFuture<GetAccountSendingEnabledResponse, GetAccountSendingEnabledError>;
+    fn get_account_sending_enabled(&self) -> Request<GetAccountSendingEnabledRequest>;
 
     /// <p>Returns the custom email verification template for the template name you specify.</p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
     fn get_custom_verification_email_template(
         &self,
         input: GetCustomVerificationEmailTemplateRequest,
-    ) -> RusotoFuture<
-        GetCustomVerificationEmailTemplateResponse,
-        GetCustomVerificationEmailTemplateError,
-    >;
+    ) -> Request<GetCustomVerificationEmailTemplateRequest>;
 
     /// <p>Returns the current status of Easy DKIM signing for an entity. For domain name identities, this operation also returns the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES has successfully verified that these tokens have been published.</p> <p>This operation takes a list of identities as input and returns the following information for each:</p> <ul> <li> <p>Whether Easy DKIM signing is enabled or disabled.</p> </li> <li> <p>A set of DKIM tokens that represent the identity. If the identity is an email address, the tokens represent the domain of that address.</p> </li> <li> <p>Whether Amazon SES has successfully verified the DKIM tokens published in the domain's DNS. This information is only returned for domain name identities, not for email addresses.</p> </li> </ul> <p>This operation is throttled at one request per second and can only get DKIM attributes for up to 100 identities at a time.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html">Amazon SES Developer Guide</a>.</p>
     fn get_identity_dkim_attributes(
         &self,
         input: GetIdentityDkimAttributesRequest,
-    ) -> RusotoFuture<GetIdentityDkimAttributesResponse, GetIdentityDkimAttributesError>;
+    ) -> Request<GetIdentityDkimAttributesRequest>;
 
     /// <p>Returns the custom MAIL FROM attributes for a list of identities (email addresses : domains).</p> <p>This operation is throttled at one request per second and can only get custom MAIL FROM attributes for up to 100 identities at a time.</p>
     fn get_identity_mail_from_domain_attributes(
         &self,
         input: GetIdentityMailFromDomainAttributesRequest,
-    ) -> RusotoFuture<
-        GetIdentityMailFromDomainAttributesResponse,
-        GetIdentityMailFromDomainAttributesError,
-    >;
+    ) -> Request<GetIdentityMailFromDomainAttributesRequest>;
 
     /// <p>Given a list of verified identities (email addresses and/or domains), returns a structure describing identity notification attributes.</p> <p>This operation is throttled at one request per second and can only get notification attributes for up to 100 identities at a time.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn get_identity_notification_attributes(
         &self,
         input: GetIdentityNotificationAttributesRequest,
-    ) -> RusotoFuture<
-        GetIdentityNotificationAttributesResponse,
-        GetIdentityNotificationAttributesError,
-    >;
+    ) -> Request<GetIdentityNotificationAttributesRequest>;
 
     /// <p>Returns the requested sending authorization policies for the given identity (an email address or a domain). The policies are returned as a map of policy names to policy contents. You can retrieve a maximum of 20 policies at a time.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn get_identity_policies(
         &self,
         input: GetIdentityPoliciesRequest,
-    ) -> RusotoFuture<GetIdentityPoliciesResponse, GetIdentityPoliciesError>;
+    ) -> Request<GetIdentityPoliciesRequest>;
 
     /// <p>Given a list of identities (email addresses and/or domains), returns the verification status and (for domain identities) the verification token for each identity.</p> <p>The verification status of an email address is "Pending" until the email address owner clicks the link within the verification email that Amazon SES sent to that address. If the email address owner clicks the link within 24 hours, the verification status of the email address changes to "Success". If the link is not clicked within 24 hours, the verification status changes to "Failed." In that case, if you still want to verify the email address, you must restart the verification process from the beginning.</p> <p>For domain identities, the domain's verification status is "Pending" as Amazon SES searches for the required TXT record in the DNS settings of the domain. When Amazon SES detects the record, the domain's verification status changes to "Success". If Amazon SES is unable to detect the record within 72 hours, the domain's verification status changes to "Failed." In that case, if you still want to verify the domain, you must restart the verification process from the beginning.</p> <p>This operation is throttled at one request per second and can only get verification attributes for up to 100 identities at a time.</p>
     fn get_identity_verification_attributes(
         &self,
         input: GetIdentityVerificationAttributesRequest,
-    ) -> RusotoFuture<
-        GetIdentityVerificationAttributesResponse,
-        GetIdentityVerificationAttributesError,
-    >;
+    ) -> Request<GetIdentityVerificationAttributesRequest>;
 
     /// <p>Provides the sending limits for the Amazon SES account. </p> <p>You can execute this operation no more than once per second.</p>
-    fn get_send_quota(&self) -> RusotoFuture<GetSendQuotaResponse, GetSendQuotaError>;
+    fn get_send_quota(&self) -> Request<GetSendQuotaRequest>;
 
     /// <p>Provides sending statistics for the current AWS Region. The result is a list of data points, representing the last two weeks of sending activity. Each data point in the list contains statistics for a 15-minute period of time.</p> <p>You can execute this operation no more than once per second.</p>
-    fn get_send_statistics(
-        &self,
-    ) -> RusotoFuture<GetSendStatisticsResponse, GetSendStatisticsError>;
+    fn get_send_statistics(&self) -> Request<GetSendStatisticsRequest>;
 
     /// <p>Displays the template object (which includes the Subject line, HTML part and text part) for the template you specify.</p> <p>You can execute this operation no more than once per second.</p>
-    fn get_template(
-        &self,
-        input: GetTemplateRequest,
-    ) -> RusotoFuture<GetTemplateResponse, GetTemplateError>;
+    fn get_template(&self, input: GetTemplateRequest) -> Request<GetTemplateRequest>;
 
     /// <p>Provides a list of the configuration sets associated with your Amazon SES account in the current AWS Region. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Monitoring Your Amazon SES Sending Activity</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second. This operation will return up to 1,000 configuration sets each time it is run. If your Amazon SES account has more than 1,000 configuration sets, this operation will also return a NextToken element. You can then execute the <code>ListConfigurationSets</code> operation again, passing the <code>NextToken</code> parameter and the value of the NextToken element to retrieve additional results.</p>
     fn list_configuration_sets(
         &self,
         input: ListConfigurationSetsRequest,
-    ) -> RusotoFuture<ListConfigurationSetsResponse, ListConfigurationSetsError>;
+    ) -> Request<ListConfigurationSetsRequest>;
 
     /// <p>Lists the existing custom verification email templates for your account in the current AWS Region.</p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_custom_verification_email_templates(
         &self,
         input: ListCustomVerificationEmailTemplatesRequest,
-    ) -> RusotoFuture<
-        ListCustomVerificationEmailTemplatesResponse,
-        ListCustomVerificationEmailTemplatesError,
-    >;
+    ) -> Request<ListCustomVerificationEmailTemplatesRequest>;
 
     /// <p>Returns a list containing all of the identities (email addresses and domains) for your AWS account in the current AWS Region, regardless of verification status.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_identities(
-        &self,
-        input: ListIdentitiesRequest,
-    ) -> RusotoFuture<ListIdentitiesResponse, ListIdentitiesError>;
+    fn list_identities(&self, input: ListIdentitiesRequest) -> Request<ListIdentitiesRequest>;
 
     /// <p>Returns a list of sending authorization policies that are attached to the given identity (an email address or a domain). This API returns only a list. If you want the actual policy content, you can use <code>GetIdentityPolicies</code>.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_identity_policies(
         &self,
         input: ListIdentityPoliciesRequest,
-    ) -> RusotoFuture<ListIdentityPoliciesResponse, ListIdentityPoliciesError>;
+    ) -> Request<ListIdentityPoliciesRequest>;
 
     /// <p>Lists the IP address filters associated with your AWS account in the current AWS Region.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_receipt_filters(
-        &self,
-        input: ListReceiptFiltersRequest,
-    ) -> RusotoFuture<ListReceiptFiltersResponse, ListReceiptFiltersError>;
+    fn list_receipt_filters(&self) -> Request<ListReceiptFiltersRequest>;
 
     /// <p>Lists the receipt rule sets that exist under your AWS account in the current AWS Region. If there are additional receipt rule sets to be retrieved, you will receive a <code>NextToken</code> that you can provide to the next call to <code>ListReceiptRuleSets</code> to retrieve the additional entries.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_receipt_rule_sets(
         &self,
         input: ListReceiptRuleSetsRequest,
-    ) -> RusotoFuture<ListReceiptRuleSetsResponse, ListReceiptRuleSetsError>;
+    ) -> Request<ListReceiptRuleSetsRequest>;
 
     /// <p>Lists the email templates present in your Amazon SES account in the current AWS Region.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_templates(
-        &self,
-        input: ListTemplatesRequest,
-    ) -> RusotoFuture<ListTemplatesResponse, ListTemplatesError>;
+    fn list_templates(&self, input: ListTemplatesRequest) -> Request<ListTemplatesRequest>;
 
     /// <p>Deprecated. Use the <code>ListIdentities</code> operation to list the email addresses and domains associated with your account.</p>
-    fn list_verified_email_addresses(
-        &self,
-    ) -> RusotoFuture<ListVerifiedEmailAddressesResponse, ListVerifiedEmailAddressesError>;
+    fn list_verified_email_addresses(&self) -> Request<ListVerifiedEmailAddressesRequest>;
 
     /// <p>Adds or updates a sending authorization policy for the specified identity (an email address or a domain).</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn put_identity_policy(
         &self,
         input: PutIdentityPolicyRequest,
-    ) -> RusotoFuture<PutIdentityPolicyResponse, PutIdentityPolicyError>;
+    ) -> Request<PutIdentityPolicyRequest>;
 
     /// <p>Reorders the receipt rules within a receipt rule set.</p> <note> <p>All of the rules in the rule set must be represented in this request. That is, this API will return an error if the reorder request doesn't explicitly position all of the rules.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn reorder_receipt_rule_set(
         &self,
         input: ReorderReceiptRuleSetRequest,
-    ) -> RusotoFuture<ReorderReceiptRuleSetResponse, ReorderReceiptRuleSetError>;
+    ) -> Request<ReorderReceiptRuleSetRequest>;
 
     /// <p>Generates and sends a bounce message to the sender of an email you received through Amazon SES. You can only use this API on an email up to 24 hours after you receive it.</p> <note> <p>You cannot use this API to send generic bounces for mail that was not received by Amazon SES.</p> </note> <p>For information about receiving email through Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn send_bounce(
-        &self,
-        input: SendBounceRequest,
-    ) -> RusotoFuture<SendBounceResponse, SendBounceError>;
+    fn send_bounce(&self, input: SendBounceRequest) -> Request<SendBounceRequest>;
 
     /// <p><p>Composes an email message to multiple destinations. The message body is created using an email template.</p> <p>In order to send email using the <code>SendBulkTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>Each <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendBulkTemplatedEmail</code> operation several times to send the message to each group.</p> </li> <li> <p>The number of destinations you can contact in a single call to the API may be limited by your account&#39;s maximum sending rate.</p> </li> </ul></p>
     fn send_bulk_templated_email(
         &self,
         input: SendBulkTemplatedEmailRequest,
-    ) -> RusotoFuture<SendBulkTemplatedEmailResponse, SendBulkTemplatedEmailError>;
+    ) -> Request<SendBulkTemplatedEmailRequest>;
 
     /// <p>Adds an email address to the list of identities for your Amazon SES account in the current AWS Region and attempts to verify it. As a result of executing this operation, a customized verification email is sent to the specified address.</p> <p>To use this operation, you must first create a custom verification email template. For more information about creating and using custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
     fn send_custom_verification_email(
         &self,
         input: SendCustomVerificationEmailRequest,
-    ) -> RusotoFuture<SendCustomVerificationEmailResponse, SendCustomVerificationEmailError>;
+    ) -> Request<SendCustomVerificationEmailRequest>;
 
     /// <p><p>Composes an email message and immediately queues it for sending. In order to send email using the <code>SendEmail</code> operation, your message must meet the following requirements:</p> <ul> <li> <p>The message must be sent from a verified email address or domain. If you attempt to send email using a non-verified address or domain, the operation will result in an &quot;Email address not verified&quot; error. </p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>The message must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendEmail</code> operation several times to send the message to each group.</p> </li> </ul> <important> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </important></p>
-    fn send_email(
-        &self,
-        input: SendEmailRequest,
-    ) -> RusotoFuture<SendEmailResponse, SendEmailError>;
+    fn send_email(&self, input: SendEmailRequest) -> Request<SendEmailRequest>;
 
     /// <p><p>Composes an email message and immediately queues it for sending.</p> <p>This operation is more flexible than the <code>SendEmail</code> API operation. When you use the <code>SendRawEmail</code> operation, you can specify the headers of the message as well as its content. This flexibility is useful, for example, when you want to send a multipart MIME email (such a message that contains both a text and an HTML version). You can also use this operation to send messages that include attachments.</p> <p>The <code>SendRawEmail</code> operation has the following requirements:</p> <ul> <li> <p>You can only send email from <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">verified email addresses or domains</a>. If you try to send email from an address that isn&#39;t verified, the operation results in an &quot;Email address not verified&quot; error.</p> </li> <li> <p>If your account is still in the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html">Amazon SES sandbox</a>, you can only send email to other verified addresses in your account, or to addresses that are associated with the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mailbox-simulator.html">Amazon SES mailbox simulator</a>.</p> </li> <li> <p>The maximum message size, including attachments, is 10 MB.</p> </li> <li> <p>Each message has to include at least one recipient address. A recipient address includes any address on the To:, CC:, or BCC: lines.</p> </li> <li> <p>If you send a single message to more than one recipient address, and one of the recipient addresses isn&#39;t in a valid format (that is, it&#39;s not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), Amazon SES rejects the entire message, even if the other addresses are valid.</p> </li> <li> <p>Each message can include up to 50 recipient addresses across the To:, CC:, or BCC: lines. If you need to send a single message to more than 50 recipients, you have to split the list of recipient addresses into groups of less than 50 recipients, and send separate messages to each group.</p> </li> <li> <p>Amazon SES allows you to specify 8-bit Content-Transfer-Encoding for MIME message parts. However, if Amazon SES has to modify the contents of your message (for example, if you use open and click tracking), 8-bit content isn&#39;t preserved. For this reason, we highly recommend that you encode all content that isn&#39;t 7-bit ASCII. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html#send-email-mime-encoding">MIME Encoding</a> in the <i>Amazon SES Developer Guide</i>.</p> </li> </ul> <p>Additionally, keep the following considerations in mind when using the <code>SendRawEmail</code> operation:</p> <ul> <li> <p>Although you can customize the message headers when using the <code>SendRawEmail</code> operation, Amazon SES will automatically apply its own <code>Message-ID</code> and <code>Date</code> headers; if you passed these headers when creating the message, they will be overwritten by the values that Amazon SES provides.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email&#39;s Source, From, and Return-Path parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature; Amazon SES will remove them before sending the email.</p> </important> <p>For most common sending authorization scenarios, we recommend that you specify the <code>SourceIdentityArn</code> parameter and not the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code> parameters. If you only specify the <code>SourceIdentityArn</code> parameter, Amazon SES will set the From and Return Path addresses to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Using Sending Authorization with Amazon SES</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> </ul></p>
-    fn send_raw_email(
-        &self,
-        input: SendRawEmailRequest,
-    ) -> RusotoFuture<SendRawEmailResponse, SendRawEmailError>;
+    fn send_raw_email(&self, input: SendRawEmailRequest) -> Request<SendRawEmailRequest>;
 
     /// <p><p>Composes an email message using an email template and immediately queues it for sending.</p> <p>In order to send email using the <code>SendTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>Calls to the <code>SendTemplatedEmail</code> operation may only include one <code>Destination</code> parameter. A destination is a set of recipients who will receive the same version of the email. The <code>Destination</code> parameter can include up to 50 recipients, across the To:, CC: and BCC: fields.</p> </li> <li> <p>The <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> </ul> <important> <p>If your call to the <code>SendTemplatedEmail</code> operation includes all of the required parameters, Amazon SES accepts it and returns a Message ID. However, if Amazon SES can&#39;t render the email because the template contains errors, it doesn&#39;t send the email. Additionally, because it already accepted the message, Amazon SES doesn&#39;t return a message stating that it was unable to send the email.</p> <p>For these reasons, we highly recommend that you set up Amazon SES to send you notifications when Rendering Failure events occur. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Sending Personalized Email Using the Amazon SES API</a> in the <i>Amazon Simple Email Service Developer Guide</i>.</p> </important></p>
     fn send_templated_email(
         &self,
         input: SendTemplatedEmailRequest,
-    ) -> RusotoFuture<SendTemplatedEmailResponse, SendTemplatedEmailError>;
+    ) -> Request<SendTemplatedEmailRequest>;
 
     /// <p>Sets the specified receipt rule set as the active receipt rule set.</p> <note> <p>To disable your email-receiving through Amazon SES completely, you can call this API with RuleSetName set to null.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn set_active_receipt_rule_set(
         &self,
         input: SetActiveReceiptRuleSetRequest,
-    ) -> RusotoFuture<SetActiveReceiptRuleSetResponse, SetActiveReceiptRuleSetError>;
+    ) -> Request<SetActiveReceiptRuleSetRequest>;
 
     /// <p>Enables or disables Easy DKIM signing of email sent from an identity:</p> <ul> <li> <p>If Easy DKIM signing is enabled for a domain name identity (such as <code>example.com</code>), then Amazon SES will DKIM-sign all email sent by addresses under that domain name (for example, <code>user@example.com</code>).</p> </li> <li> <p>If Easy DKIM signing is enabled for an email address, then Amazon SES will DKIM-sign all email sent by that email address.</p> </li> </ul> <p>For email addresses (for example, <code>user@example.com</code>), you can only enable Easy DKIM signing if the corresponding domain (in this case, <code>example.com</code>) has been set up for Easy DKIM using the AWS Console or the <code>VerifyDomainDkim</code> operation.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about Easy DKIM signing, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_dkim_enabled(
         &self,
         input: SetIdentityDkimEnabledRequest,
-    ) -> RusotoFuture<SetIdentityDkimEnabledResponse, SetIdentityDkimEnabledError>;
+    ) -> Request<SetIdentityDkimEnabledRequest>;
 
     /// <p>Given an identity (an email address or a domain), enables or disables whether Amazon SES forwards bounce and complaint notifications as email. Feedback forwarding can only be disabled when Amazon Simple Notification Service (Amazon SNS) topics are specified for both bounces and complaints.</p> <note> <p>Feedback forwarding does not apply to delivery notifications. Delivery notifications are only available through Amazon SNS.</p> </note> <p>You can execute this operation no more than once per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_feedback_forwarding_enabled(
         &self,
         input: SetIdentityFeedbackForwardingEnabledRequest,
-    ) -> RusotoFuture<
-        SetIdentityFeedbackForwardingEnabledResponse,
-        SetIdentityFeedbackForwardingEnabledError,
-    >;
+    ) -> Request<SetIdentityFeedbackForwardingEnabledRequest>;
 
     /// <p>Given an identity (an email address or a domain), sets whether Amazon SES includes the original email headers in the Amazon Simple Notification Service (Amazon SNS) notifications of a specified type.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_headers_in_notifications_enabled(
         &self,
         input: SetIdentityHeadersInNotificationsEnabledRequest,
-    ) -> RusotoFuture<
-        SetIdentityHeadersInNotificationsEnabledResponse,
-        SetIdentityHeadersInNotificationsEnabledError,
-    >;
+    ) -> Request<SetIdentityHeadersInNotificationsEnabledRequest>;
 
     /// <p>Enables or disables the custom MAIL FROM domain setup for a verified identity (an email address or a domain).</p> <important> <p>To send emails using the specified MAIL FROM domain, you must add an MX record to your MAIL FROM domain's DNS settings. If you want your emails to pass Sender Policy Framework (SPF) checks, you must also add or update an SPF record. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-set.html">Amazon SES Developer Guide</a>.</p> </important> <p>You can execute this operation no more than once per second.</p>
     fn set_identity_mail_from_domain(
         &self,
         input: SetIdentityMailFromDomainRequest,
-    ) -> RusotoFuture<SetIdentityMailFromDomainResponse, SetIdentityMailFromDomainError>;
+    ) -> Request<SetIdentityMailFromDomainRequest>;
 
     /// <p>Sets an Amazon Simple Notification Service (Amazon SNS) topic to use when delivering notifications. When you use this operation, you specify a verified identity, such as an email address or domain. When you send an email that uses the chosen identity in the Source field, Amazon SES sends notifications to the topic you specified. You can send bounce, complaint, or delivery notifications (or any combination of the three) to the Amazon SNS topic that you specify.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about feedback notification, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_notification_topic(
         &self,
         input: SetIdentityNotificationTopicRequest,
-    ) -> RusotoFuture<SetIdentityNotificationTopicResponse, SetIdentityNotificationTopicError>;
+    ) -> Request<SetIdentityNotificationTopicRequest>;
 
     /// <p>Sets the position of the specified receipt rule in the receipt rule set.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn set_receipt_rule_position(
         &self,
         input: SetReceiptRulePositionRequest,
-    ) -> RusotoFuture<SetReceiptRulePositionResponse, SetReceiptRulePositionError>;
+    ) -> Request<SetReceiptRulePositionRequest>;
 
     /// <p>Creates a preview of the MIME content of an email when provided with a template and a set of replacement data.</p> <p>You can execute this operation no more than once per second.</p>
     fn test_render_template(
         &self,
         input: TestRenderTemplateRequest,
-    ) -> RusotoFuture<TestRenderTemplateResponse, TestRenderTemplateError>;
+    ) -> Request<TestRenderTemplateRequest>;
 
     /// <p>Enables or disables email sending across your entire Amazon SES account in the current AWS Region. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending across your Amazon SES account in a given AWS Region when reputation metrics (such as your bounce or complaint rates) reach certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
     fn update_account_sending_enabled(
         &self,
         input: UpdateAccountSendingEnabledRequest,
-    ) -> RusotoFuture<(), UpdateAccountSendingEnabledError>;
+    ) -> Request<UpdateAccountSendingEnabledRequest>;
 
     /// <p>Updates the event destination of a configuration set. Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Monitoring Your Amazon SES Sending Activity</a> in the <i>Amazon SES Developer Guide.</i> </p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>You can execute this operation no more than once per second.</p>
     fn update_configuration_set_event_destination(
         &self,
         input: UpdateConfigurationSetEventDestinationRequest,
-    ) -> RusotoFuture<
-        UpdateConfigurationSetEventDestinationResponse,
-        UpdateConfigurationSetEventDestinationError,
-    >;
+    ) -> Request<UpdateConfigurationSetEventDestinationRequest>;
 
     /// <p>Enables or disables the publishing of reputation metrics for emails sent using a specific configuration set in a given AWS Region. Reputation metrics include bounce and complaint rates. These metrics are published to Amazon CloudWatch. By using CloudWatch, you can create alarms when bounce or complaint rates exceed certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
     fn update_configuration_set_reputation_metrics_enabled(
         &self,
         input: UpdateConfigurationSetReputationMetricsEnabledRequest,
-    ) -> RusotoFuture<(), UpdateConfigurationSetReputationMetricsEnabledError>;
+    ) -> Request<UpdateConfigurationSetReputationMetricsEnabledRequest>;
 
     /// <p>Enables or disables email sending for messages sent using a specific configuration set in a given AWS Region. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending for a configuration set when the reputation metrics for that configuration set (such as your bounce on complaint rate) exceed certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
     fn update_configuration_set_sending_enabled(
         &self,
         input: UpdateConfigurationSetSendingEnabledRequest,
-    ) -> RusotoFuture<(), UpdateConfigurationSetSendingEnabledError>;
+    ) -> Request<UpdateConfigurationSetSendingEnabledRequest>;
 
     /// <p>Modifies an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p>
     fn update_configuration_set_tracking_options(
         &self,
         input: UpdateConfigurationSetTrackingOptionsRequest,
-    ) -> RusotoFuture<
-        UpdateConfigurationSetTrackingOptionsResponse,
-        UpdateConfigurationSetTrackingOptionsError,
-    >;
+    ) -> Request<UpdateConfigurationSetTrackingOptionsRequest>;
 
     /// <p>Updates an existing custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
     fn update_custom_verification_email_template(
         &self,
         input: UpdateCustomVerificationEmailTemplateRequest,
-    ) -> RusotoFuture<(), UpdateCustomVerificationEmailTemplateError>;
+    ) -> Request<UpdateCustomVerificationEmailTemplateRequest>;
 
     /// <p>Updates a receipt rule.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn update_receipt_rule(
         &self,
         input: UpdateReceiptRuleRequest,
-    ) -> RusotoFuture<UpdateReceiptRuleResponse, UpdateReceiptRuleError>;
+    ) -> Request<UpdateReceiptRuleRequest>;
 
     /// <p>Updates an email template. Email templates enable you to send personalized email to one or more destinations in a single API operation. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn update_template(
-        &self,
-        input: UpdateTemplateRequest,
-    ) -> RusotoFuture<UpdateTemplateResponse, UpdateTemplateError>;
+    fn update_template(&self, input: UpdateTemplateRequest) -> Request<UpdateTemplateRequest>;
 
     /// <p>Returns a set of DKIM tokens for a domain. DKIM <i>tokens</i> are character strings that represent your domain's identity. Using these tokens, you will need to create DNS CNAME records that point to DKIM public keys hosted by Amazon SES. Amazon Web Services will eventually detect that you have updated your DNS records; this detection process may take up to 72 hours. Upon successful detection, Amazon SES will be able to DKIM-sign email originating from that domain.</p> <p>You can execute this operation no more than once per second.</p> <p>To enable or disable Easy DKIM signing for a domain, use the <code>SetIdentityDkimEnabled</code> operation.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html">Amazon SES Developer Guide</a>.</p>
     fn verify_domain_dkim(
         &self,
         input: VerifyDomainDkimRequest,
-    ) -> RusotoFuture<VerifyDomainDkimResponse, VerifyDomainDkimError>;
+    ) -> Request<VerifyDomainDkimRequest>;
 
     /// <p>Adds a domain to the list of identities for your Amazon SES account in the current AWS Region and attempts to verify it. For more information about verifying domains, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second.</p>
     fn verify_domain_identity(
         &self,
         input: VerifyDomainIdentityRequest,
-    ) -> RusotoFuture<VerifyDomainIdentityResponse, VerifyDomainIdentityError>;
+    ) -> Request<VerifyDomainIdentityRequest>;
 
     /// <p>Deprecated. Use the <code>VerifyEmailIdentity</code> operation to verify a new email address.</p>
     fn verify_email_address(
         &self,
         input: VerifyEmailAddressRequest,
-    ) -> RusotoFuture<(), VerifyEmailAddressError>;
+    ) -> Request<VerifyEmailAddressRequest>;
 
     /// <p>Adds an email address to the list of identities for your Amazon SES account in the current AWS region and attempts to verify it. As a result of executing this operation, a verification email is sent to the specified address.</p> <p>You can execute this operation no more than once per second.</p>
     fn verify_email_identity(
         &self,
         input: VerifyEmailIdentityRequest,
-    ) -> RusotoFuture<VerifyEmailIdentityResponse, VerifyEmailIdentityError>;
+    ) -> Request<VerifyEmailIdentityRequest>;
 }
 /// A client for the Amazon SES API.
 #[derive(Clone)]
@@ -10869,17 +11013,558 @@ impl Ses for SesClient {
     fn clone_receipt_rule_set(
         &self,
         input: CloneReceiptRuleSetRequest,
-    ) -> RusotoFuture<CloneReceiptRuleSetResponse, CloneReceiptRuleSetError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+    ) -> Request<CloneReceiptRuleSetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn create_configuration_set(
+        &self,
+        input: CreateConfigurationSetRequest,
+    ) -> Request<CreateConfigurationSetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn create_configuration_set_event_destination(
+        &self,
+        input: CreateConfigurationSetEventDestinationRequest,
+    ) -> Request<CreateConfigurationSetEventDestinationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p>
+    fn create_configuration_set_tracking_options(
+        &self,
+        input: CreateConfigurationSetTrackingOptionsRequest,
+    ) -> Request<CreateConfigurationSetTrackingOptionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn create_custom_verification_email_template(
+        &self,
+        input: CreateCustomVerificationEmailTemplateRequest,
+    ) -> Request<CreateCustomVerificationEmailTemplateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new IP address filter.</p> <p>For information about setting up IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn create_receipt_filter(
+        &self,
+        input: CreateReceiptFilterRequest,
+    ) -> Request<CreateReceiptFilterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn create_receipt_rule(
+        &self,
+        input: CreateReceiptRuleRequest,
+    ) -> Request<CreateReceiptRuleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an empty receipt rule set.</p> <p>For information about setting up receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn create_receipt_rule_set(
+        &self,
+        input: CreateReceiptRuleSetRequest,
+    ) -> Request<CreateReceiptRuleSetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an email template. Email templates enable you to send personalized email to one or more destinations in a single API operation. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn create_template(&self, input: CreateTemplateRequest) -> Request<CreateTemplateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a configuration set. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn delete_configuration_set(
+        &self,
+        input: DeleteConfigurationSetRequest,
+    ) -> Request<DeleteConfigurationSetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a configuration set event destination. Configuration set event destinations are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn delete_configuration_set_event_destination(
+        &self,
+        input: DeleteConfigurationSetEventDestinationRequest,
+    ) -> Request<DeleteConfigurationSetEventDestinationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes an association between a configuration set and a custom domain for open and click event tracking.</p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p> <note> <p>Deleting this kind of association will result in emails sent using the specified configuration set to capture open and click events using the standard, Amazon SES-operated domains.</p> </note></p>
+    fn delete_configuration_set_tracking_options(
+        &self,
+        input: DeleteConfigurationSetTrackingOptionsRequest,
+    ) -> Request<DeleteConfigurationSetTrackingOptionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an existing custom verification email template. </p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn delete_custom_verification_email_template(
+        &self,
+        input: DeleteCustomVerificationEmailTemplateRequest,
+    ) -> Request<DeleteCustomVerificationEmailTemplateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified identity (an email address or a domain) from the list of verified identities.</p> <p>You can execute this operation no more than once per second.</p>
+    fn delete_identity(&self, input: DeleteIdentityRequest) -> Request<DeleteIdentityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified sending authorization policy for the given identity (an email address or a domain). This API returns successfully even if a policy with the specified name does not exist.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn delete_identity_policy(
+        &self,
+        input: DeleteIdentityPolicyRequest,
+    ) -> Request<DeleteIdentityPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified IP address filter.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn delete_receipt_filter(
+        &self,
+        input: DeleteReceiptFilterRequest,
+    ) -> Request<DeleteReceiptFilterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified receipt rule.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn delete_receipt_rule(
+        &self,
+        input: DeleteReceiptRuleRequest,
+    ) -> Request<DeleteReceiptRuleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified receipt rule set and all of the receipt rules it contains.</p> <note> <p>The currently active rule set cannot be deleted.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn delete_receipt_rule_set(
+        &self,
+        input: DeleteReceiptRuleSetRequest,
+    ) -> Request<DeleteReceiptRuleSetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an email template.</p> <p>You can execute this operation no more than once per second.</p>
+    fn delete_template(&self, input: DeleteTemplateRequest) -> Request<DeleteTemplateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deprecated. Use the <code>DeleteIdentity</code> operation to delete email addresses and domains.</p>
+    fn delete_verified_email_address(
+        &self,
+        input: DeleteVerifiedEmailAddressRequest,
+    ) -> Request<DeleteVerifiedEmailAddressRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the metadata and receipt rules for the receipt rule set that is currently active.</p> <p>For information about setting up receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn describe_active_receipt_rule_set(&self) -> Request<DescribeActiveReceiptRuleSetRequest> {
+        Request::new(
+            DescribeActiveReceiptRuleSetRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Returns the details of the specified configuration set. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn describe_configuration_set(
+        &self,
+        input: DescribeConfigurationSetRequest,
+    ) -> Request<DescribeConfigurationSetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the details of the specified receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn describe_receipt_rule(
+        &self,
+        input: DescribeReceiptRuleRequest,
+    ) -> Request<DescribeReceiptRuleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the details of the specified receipt rule set.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn describe_receipt_rule_set(
+        &self,
+        input: DescribeReceiptRuleSetRequest,
+    ) -> Request<DescribeReceiptRuleSetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the email sending status of the Amazon SES account for the current region.</p> <p>You can execute this operation no more than once per second.</p>
+    fn get_account_sending_enabled(&self) -> Request<GetAccountSendingEnabledRequest> {
+        Request::new(
+            GetAccountSendingEnabledRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Returns the custom email verification template for the template name you specify.</p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn get_custom_verification_email_template(
+        &self,
+        input: GetCustomVerificationEmailTemplateRequest,
+    ) -> Request<GetCustomVerificationEmailTemplateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the current status of Easy DKIM signing for an entity. For domain name identities, this operation also returns the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES has successfully verified that these tokens have been published.</p> <p>This operation takes a list of identities as input and returns the following information for each:</p> <ul> <li> <p>Whether Easy DKIM signing is enabled or disabled.</p> </li> <li> <p>A set of DKIM tokens that represent the identity. If the identity is an email address, the tokens represent the domain of that address.</p> </li> <li> <p>Whether Amazon SES has successfully verified the DKIM tokens published in the domain's DNS. This information is only returned for domain name identities, not for email addresses.</p> </li> </ul> <p>This operation is throttled at one request per second and can only get DKIM attributes for up to 100 identities at a time.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html">Amazon SES Developer Guide</a>.</p>
+    fn get_identity_dkim_attributes(
+        &self,
+        input: GetIdentityDkimAttributesRequest,
+    ) -> Request<GetIdentityDkimAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the custom MAIL FROM attributes for a list of identities (email addresses : domains).</p> <p>This operation is throttled at one request per second and can only get custom MAIL FROM attributes for up to 100 identities at a time.</p>
+    fn get_identity_mail_from_domain_attributes(
+        &self,
+        input: GetIdentityMailFromDomainAttributesRequest,
+    ) -> Request<GetIdentityMailFromDomainAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Given a list of verified identities (email addresses and/or domains), returns a structure describing identity notification attributes.</p> <p>This operation is throttled at one request per second and can only get notification attributes for up to 100 identities at a time.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
+    fn get_identity_notification_attributes(
+        &self,
+        input: GetIdentityNotificationAttributesRequest,
+    ) -> Request<GetIdentityNotificationAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the requested sending authorization policies for the given identity (an email address or a domain). The policies are returned as a map of policy names to policy contents. You can retrieve a maximum of 20 policies at a time.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn get_identity_policies(
+        &self,
+        input: GetIdentityPoliciesRequest,
+    ) -> Request<GetIdentityPoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Given a list of identities (email addresses and/or domains), returns the verification status and (for domain identities) the verification token for each identity.</p> <p>The verification status of an email address is "Pending" until the email address owner clicks the link within the verification email that Amazon SES sent to that address. If the email address owner clicks the link within 24 hours, the verification status of the email address changes to "Success". If the link is not clicked within 24 hours, the verification status changes to "Failed." In that case, if you still want to verify the email address, you must restart the verification process from the beginning.</p> <p>For domain identities, the domain's verification status is "Pending" as Amazon SES searches for the required TXT record in the DNS settings of the domain. When Amazon SES detects the record, the domain's verification status changes to "Success". If Amazon SES is unable to detect the record within 72 hours, the domain's verification status changes to "Failed." In that case, if you still want to verify the domain, you must restart the verification process from the beginning.</p> <p>This operation is throttled at one request per second and can only get verification attributes for up to 100 identities at a time.</p>
+    fn get_identity_verification_attributes(
+        &self,
+        input: GetIdentityVerificationAttributesRequest,
+    ) -> Request<GetIdentityVerificationAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Provides the sending limits for the Amazon SES account. </p> <p>You can execute this operation no more than once per second.</p>
+    fn get_send_quota(&self) -> Request<GetSendQuotaRequest> {
+        Request::new(
+            GetSendQuotaRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Provides sending statistics for the current AWS Region. The result is a list of data points, representing the last two weeks of sending activity. Each data point in the list contains statistics for a 15-minute period of time.</p> <p>You can execute this operation no more than once per second.</p>
+    fn get_send_statistics(&self) -> Request<GetSendStatisticsRequest> {
+        Request::new(
+            GetSendStatisticsRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Displays the template object (which includes the Subject line, HTML part and text part) for the template you specify.</p> <p>You can execute this operation no more than once per second.</p>
+    fn get_template(&self, input: GetTemplateRequest) -> Request<GetTemplateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Provides a list of the configuration sets associated with your Amazon SES account in the current AWS Region. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Monitoring Your Amazon SES Sending Activity</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second. This operation will return up to 1,000 configuration sets each time it is run. If your Amazon SES account has more than 1,000 configuration sets, this operation will also return a NextToken element. You can then execute the <code>ListConfigurationSets</code> operation again, passing the <code>NextToken</code> parameter and the value of the NextToken element to retrieve additional results.</p>
+    fn list_configuration_sets(
+        &self,
+        input: ListConfigurationSetsRequest,
+    ) -> Request<ListConfigurationSetsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the existing custom verification email templates for your account in the current AWS Region.</p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn list_custom_verification_email_templates(
+        &self,
+        input: ListCustomVerificationEmailTemplatesRequest,
+    ) -> Request<ListCustomVerificationEmailTemplatesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list containing all of the identities (email addresses and domains) for your AWS account in the current AWS Region, regardless of verification status.</p> <p>You can execute this operation no more than once per second.</p>
+    fn list_identities(&self, input: ListIdentitiesRequest) -> Request<ListIdentitiesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of sending authorization policies that are attached to the given identity (an email address or a domain). This API returns only a list. If you want the actual policy content, you can use <code>GetIdentityPolicies</code>.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn list_identity_policies(
+        &self,
+        input: ListIdentityPoliciesRequest,
+    ) -> Request<ListIdentityPoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the IP address filters associated with your AWS account in the current AWS Region.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn list_receipt_filters(&self) -> Request<ListReceiptFiltersRequest> {
+        Request::new(
+            ListReceiptFiltersRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Lists the receipt rule sets that exist under your AWS account in the current AWS Region. If there are additional receipt rule sets to be retrieved, you will receive a <code>NextToken</code> that you can provide to the next call to <code>ListReceiptRuleSets</code> to retrieve the additional entries.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn list_receipt_rule_sets(
+        &self,
+        input: ListReceiptRuleSetsRequest,
+    ) -> Request<ListReceiptRuleSetsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the email templates present in your Amazon SES account in the current AWS Region.</p> <p>You can execute this operation no more than once per second.</p>
+    fn list_templates(&self, input: ListTemplatesRequest) -> Request<ListTemplatesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deprecated. Use the <code>ListIdentities</code> operation to list the email addresses and domains associated with your account.</p>
+    fn list_verified_email_addresses(&self) -> Request<ListVerifiedEmailAddressesRequest> {
+        Request::new(
+            ListVerifiedEmailAddressesRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Adds or updates a sending authorization policy for the specified identity (an email address or a domain).</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn put_identity_policy(
+        &self,
+        input: PutIdentityPolicyRequest,
+    ) -> Request<PutIdentityPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Reorders the receipt rules within a receipt rule set.</p> <note> <p>All of the rules in the rule set must be represented in this request. That is, this API will return an error if the reorder request doesn't explicitly position all of the rules.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn reorder_receipt_rule_set(
+        &self,
+        input: ReorderReceiptRuleSetRequest,
+    ) -> Request<ReorderReceiptRuleSetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Generates and sends a bounce message to the sender of an email you received through Amazon SES. You can only use this API on an email up to 24 hours after you receive it.</p> <note> <p>You cannot use this API to send generic bounces for mail that was not received by Amazon SES.</p> </note> <p>For information about receiving email through Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn send_bounce(&self, input: SendBounceRequest) -> Request<SendBounceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Composes an email message to multiple destinations. The message body is created using an email template.</p> <p>In order to send email using the <code>SendBulkTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>Each <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendBulkTemplatedEmail</code> operation several times to send the message to each group.</p> </li> <li> <p>The number of destinations you can contact in a single call to the API may be limited by your account&#39;s maximum sending rate.</p> </li> </ul></p>
+    fn send_bulk_templated_email(
+        &self,
+        input: SendBulkTemplatedEmailRequest,
+    ) -> Request<SendBulkTemplatedEmailRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds an email address to the list of identities for your Amazon SES account in the current AWS Region and attempts to verify it. As a result of executing this operation, a customized verification email is sent to the specified address.</p> <p>To use this operation, you must first create a custom verification email template. For more information about creating and using custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn send_custom_verification_email(
+        &self,
+        input: SendCustomVerificationEmailRequest,
+    ) -> Request<SendCustomVerificationEmailRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Composes an email message and immediately queues it for sending. In order to send email using the <code>SendEmail</code> operation, your message must meet the following requirements:</p> <ul> <li> <p>The message must be sent from a verified email address or domain. If you attempt to send email using a non-verified address or domain, the operation will result in an &quot;Email address not verified&quot; error. </p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>The message must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendEmail</code> operation several times to send the message to each group.</p> </li> </ul> <important> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </important></p>
+    fn send_email(&self, input: SendEmailRequest) -> Request<SendEmailRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Composes an email message and immediately queues it for sending.</p> <p>This operation is more flexible than the <code>SendEmail</code> API operation. When you use the <code>SendRawEmail</code> operation, you can specify the headers of the message as well as its content. This flexibility is useful, for example, when you want to send a multipart MIME email (such a message that contains both a text and an HTML version). You can also use this operation to send messages that include attachments.</p> <p>The <code>SendRawEmail</code> operation has the following requirements:</p> <ul> <li> <p>You can only send email from <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">verified email addresses or domains</a>. If you try to send email from an address that isn&#39;t verified, the operation results in an &quot;Email address not verified&quot; error.</p> </li> <li> <p>If your account is still in the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html">Amazon SES sandbox</a>, you can only send email to other verified addresses in your account, or to addresses that are associated with the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mailbox-simulator.html">Amazon SES mailbox simulator</a>.</p> </li> <li> <p>The maximum message size, including attachments, is 10 MB.</p> </li> <li> <p>Each message has to include at least one recipient address. A recipient address includes any address on the To:, CC:, or BCC: lines.</p> </li> <li> <p>If you send a single message to more than one recipient address, and one of the recipient addresses isn&#39;t in a valid format (that is, it&#39;s not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), Amazon SES rejects the entire message, even if the other addresses are valid.</p> </li> <li> <p>Each message can include up to 50 recipient addresses across the To:, CC:, or BCC: lines. If you need to send a single message to more than 50 recipients, you have to split the list of recipient addresses into groups of less than 50 recipients, and send separate messages to each group.</p> </li> <li> <p>Amazon SES allows you to specify 8-bit Content-Transfer-Encoding for MIME message parts. However, if Amazon SES has to modify the contents of your message (for example, if you use open and click tracking), 8-bit content isn&#39;t preserved. For this reason, we highly recommend that you encode all content that isn&#39;t 7-bit ASCII. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html#send-email-mime-encoding">MIME Encoding</a> in the <i>Amazon SES Developer Guide</i>.</p> </li> </ul> <p>Additionally, keep the following considerations in mind when using the <code>SendRawEmail</code> operation:</p> <ul> <li> <p>Although you can customize the message headers when using the <code>SendRawEmail</code> operation, Amazon SES will automatically apply its own <code>Message-ID</code> and <code>Date</code> headers; if you passed these headers when creating the message, they will be overwritten by the values that Amazon SES provides.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email&#39;s Source, From, and Return-Path parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature; Amazon SES will remove them before sending the email.</p> </important> <p>For most common sending authorization scenarios, we recommend that you specify the <code>SourceIdentityArn</code> parameter and not the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code> parameters. If you only specify the <code>SourceIdentityArn</code> parameter, Amazon SES will set the From and Return Path addresses to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Using Sending Authorization with Amazon SES</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> </ul></p>
+    fn send_raw_email(&self, input: SendRawEmailRequest) -> Request<SendRawEmailRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Composes an email message using an email template and immediately queues it for sending.</p> <p>In order to send email using the <code>SendTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>Calls to the <code>SendTemplatedEmail</code> operation may only include one <code>Destination</code> parameter. A destination is a set of recipients who will receive the same version of the email. The <code>Destination</code> parameter can include up to 50 recipients, across the To:, CC: and BCC: fields.</p> </li> <li> <p>The <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> </ul> <important> <p>If your call to the <code>SendTemplatedEmail</code> operation includes all of the required parameters, Amazon SES accepts it and returns a Message ID. However, if Amazon SES can&#39;t render the email because the template contains errors, it doesn&#39;t send the email. Additionally, because it already accepted the message, Amazon SES doesn&#39;t return a message stating that it was unable to send the email.</p> <p>For these reasons, we highly recommend that you set up Amazon SES to send you notifications when Rendering Failure events occur. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Sending Personalized Email Using the Amazon SES API</a> in the <i>Amazon Simple Email Service Developer Guide</i>.</p> </important></p>
+    fn send_templated_email(
+        &self,
+        input: SendTemplatedEmailRequest,
+    ) -> Request<SendTemplatedEmailRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the specified receipt rule set as the active receipt rule set.</p> <note> <p>To disable your email-receiving through Amazon SES completely, you can call this API with RuleSetName set to null.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn set_active_receipt_rule_set(
+        &self,
+        input: SetActiveReceiptRuleSetRequest,
+    ) -> Request<SetActiveReceiptRuleSetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Enables or disables Easy DKIM signing of email sent from an identity:</p> <ul> <li> <p>If Easy DKIM signing is enabled for a domain name identity (such as <code>example.com</code>), then Amazon SES will DKIM-sign all email sent by addresses under that domain name (for example, <code>user@example.com</code>).</p> </li> <li> <p>If Easy DKIM signing is enabled for an email address, then Amazon SES will DKIM-sign all email sent by that email address.</p> </li> </ul> <p>For email addresses (for example, <code>user@example.com</code>), you can only enable Easy DKIM signing if the corresponding domain (in this case, <code>example.com</code>) has been set up for Easy DKIM using the AWS Console or the <code>VerifyDomainDkim</code> operation.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about Easy DKIM signing, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Amazon SES Developer Guide</a>.</p>
+    fn set_identity_dkim_enabled(
+        &self,
+        input: SetIdentityDkimEnabledRequest,
+    ) -> Request<SetIdentityDkimEnabledRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Given an identity (an email address or a domain), enables or disables whether Amazon SES forwards bounce and complaint notifications as email. Feedback forwarding can only be disabled when Amazon Simple Notification Service (Amazon SNS) topics are specified for both bounces and complaints.</p> <note> <p>Feedback forwarding does not apply to delivery notifications. Delivery notifications are only available through Amazon SNS.</p> </note> <p>You can execute this operation no more than once per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
+    fn set_identity_feedback_forwarding_enabled(
+        &self,
+        input: SetIdentityFeedbackForwardingEnabledRequest,
+    ) -> Request<SetIdentityFeedbackForwardingEnabledRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Given an identity (an email address or a domain), sets whether Amazon SES includes the original email headers in the Amazon Simple Notification Service (Amazon SNS) notifications of a specified type.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
+    fn set_identity_headers_in_notifications_enabled(
+        &self,
+        input: SetIdentityHeadersInNotificationsEnabledRequest,
+    ) -> Request<SetIdentityHeadersInNotificationsEnabledRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Enables or disables the custom MAIL FROM domain setup for a verified identity (an email address or a domain).</p> <important> <p>To send emails using the specified MAIL FROM domain, you must add an MX record to your MAIL FROM domain's DNS settings. If you want your emails to pass Sender Policy Framework (SPF) checks, you must also add or update an SPF record. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-set.html">Amazon SES Developer Guide</a>.</p> </important> <p>You can execute this operation no more than once per second.</p>
+    fn set_identity_mail_from_domain(
+        &self,
+        input: SetIdentityMailFromDomainRequest,
+    ) -> Request<SetIdentityMailFromDomainRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets an Amazon Simple Notification Service (Amazon SNS) topic to use when delivering notifications. When you use this operation, you specify a verified identity, such as an email address or domain. When you send an email that uses the chosen identity in the Source field, Amazon SES sends notifications to the topic you specified. You can send bounce, complaint, or delivery notifications (or any combination of the three) to the Amazon SNS topic that you specify.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about feedback notification, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
+    fn set_identity_notification_topic(
+        &self,
+        input: SetIdentityNotificationTopicRequest,
+    ) -> Request<SetIdentityNotificationTopicRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the position of the specified receipt rule in the receipt rule set.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn set_receipt_rule_position(
+        &self,
+        input: SetReceiptRulePositionRequest,
+    ) -> Request<SetReceiptRulePositionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a preview of the MIME content of an email when provided with a template and a set of replacement data.</p> <p>You can execute this operation no more than once per second.</p>
+    fn test_render_template(
+        &self,
+        input: TestRenderTemplateRequest,
+    ) -> Request<TestRenderTemplateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Enables or disables email sending across your entire Amazon SES account in the current AWS Region. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending across your Amazon SES account in a given AWS Region when reputation metrics (such as your bounce or complaint rates) reach certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
+    fn update_account_sending_enabled(
+        &self,
+        input: UpdateAccountSendingEnabledRequest,
+    ) -> Request<UpdateAccountSendingEnabledRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the event destination of a configuration set. Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Monitoring Your Amazon SES Sending Activity</a> in the <i>Amazon SES Developer Guide.</i> </p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>You can execute this operation no more than once per second.</p>
+    fn update_configuration_set_event_destination(
+        &self,
+        input: UpdateConfigurationSetEventDestinationRequest,
+    ) -> Request<UpdateConfigurationSetEventDestinationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Enables or disables the publishing of reputation metrics for emails sent using a specific configuration set in a given AWS Region. Reputation metrics include bounce and complaint rates. These metrics are published to Amazon CloudWatch. By using CloudWatch, you can create alarms when bounce or complaint rates exceed certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
+    fn update_configuration_set_reputation_metrics_enabled(
+        &self,
+        input: UpdateConfigurationSetReputationMetricsEnabledRequest,
+    ) -> Request<UpdateConfigurationSetReputationMetricsEnabledRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Enables or disables email sending for messages sent using a specific configuration set in a given AWS Region. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending for a configuration set when the reputation metrics for that configuration set (such as your bounce on complaint rate) exceed certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
+    fn update_configuration_set_sending_enabled(
+        &self,
+        input: UpdateConfigurationSetSendingEnabledRequest,
+    ) -> Request<UpdateConfigurationSetSendingEnabledRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p>
+    fn update_configuration_set_tracking_options(
+        &self,
+        input: UpdateConfigurationSetTrackingOptionsRequest,
+    ) -> Request<UpdateConfigurationSetTrackingOptionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an existing custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn update_custom_verification_email_template(
+        &self,
+        input: UpdateCustomVerificationEmailTemplateRequest,
+    ) -> Request<UpdateCustomVerificationEmailTemplateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a receipt rule.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn update_receipt_rule(
+        &self,
+        input: UpdateReceiptRuleRequest,
+    ) -> Request<UpdateReceiptRuleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an email template. Email templates enable you to send personalized email to one or more destinations in a single API operation. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn update_template(&self, input: UpdateTemplateRequest) -> Request<UpdateTemplateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a set of DKIM tokens for a domain. DKIM <i>tokens</i> are character strings that represent your domain's identity. Using these tokens, you will need to create DNS CNAME records that point to DKIM public keys hosted by Amazon SES. Amazon Web Services will eventually detect that you have updated your DNS records; this detection process may take up to 72 hours. Upon successful detection, Amazon SES will be able to DKIM-sign email originating from that domain.</p> <p>You can execute this operation no more than once per second.</p> <p>To enable or disable Easy DKIM signing for a domain, use the <code>SetIdentityDkimEnabled</code> operation.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html">Amazon SES Developer Guide</a>.</p>
+    fn verify_domain_dkim(
+        &self,
+        input: VerifyDomainDkimRequest,
+    ) -> Request<VerifyDomainDkimRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds a domain to the list of identities for your Amazon SES account in the current AWS Region and attempts to verify it. For more information about verifying domains, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second.</p>
+    fn verify_domain_identity(
+        &self,
+        input: VerifyDomainIdentityRequest,
+    ) -> Request<VerifyDomainIdentityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deprecated. Use the <code>VerifyEmailIdentity</code> operation to verify a new email address.</p>
+    fn verify_email_address(
+        &self,
+        input: VerifyEmailAddressRequest,
+    ) -> Request<VerifyEmailAddressRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds an email address to the list of identities for your Amazon SES account in the current AWS region and attempts to verify it. As a result of executing this operation, a verification email is sent to the specified address.</p> <p>You can execute this operation no more than once per second.</p>
+    fn verify_email_identity(
+        &self,
+        input: VerifyEmailIdentityRequest,
+    ) -> Request<VerifyEmailIdentityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CloneReceiptRuleSetRequest {
+    type Output = CloneReceiptRuleSetResponse;
+    type Error = CloneReceiptRuleSetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CloneReceiptRuleSet");
         params.put("Version", "2010-12-01");
-        CloneReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
+        CloneReceiptRuleSetRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -10914,22 +11599,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_configuration_set(
-        &self,
-        input: CreateConfigurationSetRequest,
-    ) -> RusotoFuture<CreateConfigurationSetResponse, CreateConfigurationSetError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for CreateConfigurationSetRequest {
+    type Output = CreateConfigurationSetResponse;
+    type Error = CreateConfigurationSetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateConfigurationSet");
         params.put("Version", "2010-12-01");
-        CreateConfigurationSetRequestSerializer::serialize(&mut params, "", &input);
+        CreateConfigurationSetRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateConfigurationSetError::from_response(response))
@@ -10962,25 +11652,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_configuration_set_event_destination(
-        &self,
-        input: CreateConfigurationSetEventDestinationRequest,
-    ) -> RusotoFuture<
-        CreateConfigurationSetEventDestinationResponse,
-        CreateConfigurationSetEventDestinationError,
-    > {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for CreateConfigurationSetEventDestinationRequest {
+    type Output = CreateConfigurationSetEventDestinationResponse;
+    type Error = CreateConfigurationSetEventDestinationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateConfigurationSetEventDestination");
         params.put("Version", "2010-12-01");
-        CreateConfigurationSetEventDestinationRequestSerializer::serialize(&mut params, "", &input);
+        CreateConfigurationSetEventDestinationRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateConfigurationSetEventDestinationError::from_response(
@@ -11016,25 +11708,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Creates an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p>
-    fn create_configuration_set_tracking_options(
-        &self,
-        input: CreateConfigurationSetTrackingOptionsRequest,
-    ) -> RusotoFuture<
-        CreateConfigurationSetTrackingOptionsResponse,
-        CreateConfigurationSetTrackingOptionsError,
-    > {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for CreateConfigurationSetTrackingOptionsRequest {
+    type Output = CreateConfigurationSetTrackingOptionsResponse;
+    type Error = CreateConfigurationSetTrackingOptionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateConfigurationSetTrackingOptions");
         params.put("Version", "2010-12-01");
-        CreateConfigurationSetTrackingOptionsRequestSerializer::serialize(&mut params, "", &input);
+        CreateConfigurationSetTrackingOptionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateConfigurationSetTrackingOptionsError::from_response(
@@ -11070,22 +11764,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_custom_verification_email_template(
-        &self,
-        input: CreateCustomVerificationEmailTemplateRequest,
-    ) -> RusotoFuture<(), CreateCustomVerificationEmailTemplateError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for CreateCustomVerificationEmailTemplateRequest {
+    type Output = CreateCustomVerificationEmailTemplateResponse;
+    type Error = CreateCustomVerificationEmailTemplateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateCustomVerificationEmailTemplate");
         params.put("Version", "2010-12-01");
-        CreateCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &input);
+        CreateCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateCustomVerificationEmailTemplateError::from_response(
@@ -11094,25 +11793,51 @@ impl Ses for SesClient {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = CreateCustomVerificationEmailTemplateResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        CreateCustomVerificationEmailTemplateResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Creates a new IP address filter.</p> <p>For information about setting up IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_receipt_filter(
-        &self,
-        input: CreateReceiptFilterRequest,
-    ) -> RusotoFuture<CreateReceiptFilterResponse, CreateReceiptFilterError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for CreateReceiptFilterRequest {
+    type Output = CreateReceiptFilterResponse;
+    type Error = CreateReceiptFilterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateReceiptFilter");
         params.put("Version", "2010-12-01");
-        CreateReceiptFilterRequestSerializer::serialize(&mut params, "", &input);
+        CreateReceiptFilterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -11147,22 +11872,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_receipt_rule(
-        &self,
-        input: CreateReceiptRuleRequest,
-    ) -> RusotoFuture<CreateReceiptRuleResponse, CreateReceiptRuleError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for CreateReceiptRuleRequest {
+    type Output = CreateReceiptRuleResponse;
+    type Error = CreateReceiptRuleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateReceiptRule");
         params.put("Version", "2010-12-01");
-        CreateReceiptRuleRequestSerializer::serialize(&mut params, "", &input);
+        CreateReceiptRuleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -11198,22 +11928,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Creates an empty receipt rule set.</p> <p>For information about setting up receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_receipt_rule_set(
-        &self,
-        input: CreateReceiptRuleSetRequest,
-    ) -> RusotoFuture<CreateReceiptRuleSetResponse, CreateReceiptRuleSetError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for CreateReceiptRuleSetRequest {
+    type Output = CreateReceiptRuleSetResponse;
+    type Error = CreateReceiptRuleSetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateReceiptRuleSet");
         params.put("Version", "2010-12-01");
-        CreateReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
+        CreateReceiptRuleSetRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -11248,22 +11983,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Creates an email template. Email templates enable you to send personalized email to one or more destinations in a single API operation. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_template(
-        &self,
-        input: CreateTemplateRequest,
-    ) -> RusotoFuture<CreateTemplateResponse, CreateTemplateError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for CreateTemplateRequest {
+    type Output = CreateTemplateResponse;
+    type Error = CreateTemplateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateTemplate");
         params.put("Version", "2010-12-01");
-        CreateTemplateRequestSerializer::serialize(&mut params, "", &input);
+        CreateTemplateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -11299,22 +12039,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes a configuration set. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_configuration_set(
-        &self,
-        input: DeleteConfigurationSetRequest,
-    ) -> RusotoFuture<DeleteConfigurationSetResponse, DeleteConfigurationSetError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for DeleteConfigurationSetRequest {
+    type Output = DeleteConfigurationSetResponse;
+    type Error = DeleteConfigurationSetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteConfigurationSet");
         params.put("Version", "2010-12-01");
-        DeleteConfigurationSetRequestSerializer::serialize(&mut params, "", &input);
+        DeleteConfigurationSetRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteConfigurationSetError::from_response(response))
@@ -11347,25 +12092,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes a configuration set event destination. Configuration set event destinations are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_configuration_set_event_destination(
-        &self,
-        input: DeleteConfigurationSetEventDestinationRequest,
-    ) -> RusotoFuture<
-        DeleteConfigurationSetEventDestinationResponse,
-        DeleteConfigurationSetEventDestinationError,
-    > {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for DeleteConfigurationSetEventDestinationRequest {
+    type Output = DeleteConfigurationSetEventDestinationResponse;
+    type Error = DeleteConfigurationSetEventDestinationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteConfigurationSetEventDestination");
         params.put("Version", "2010-12-01");
-        DeleteConfigurationSetEventDestinationRequestSerializer::serialize(&mut params, "", &input);
+        DeleteConfigurationSetEventDestinationRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteConfigurationSetEventDestinationError::from_response(
@@ -11401,25 +12148,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p><p>Deletes an association between a configuration set and a custom domain for open and click event tracking.</p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p> <note> <p>Deleting this kind of association will result in emails sent using the specified configuration set to capture open and click events using the standard, Amazon SES-operated domains.</p> </note></p>
-    fn delete_configuration_set_tracking_options(
-        &self,
-        input: DeleteConfigurationSetTrackingOptionsRequest,
-    ) -> RusotoFuture<
-        DeleteConfigurationSetTrackingOptionsResponse,
-        DeleteConfigurationSetTrackingOptionsError,
-    > {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for DeleteConfigurationSetTrackingOptionsRequest {
+    type Output = DeleteConfigurationSetTrackingOptionsResponse;
+    type Error = DeleteConfigurationSetTrackingOptionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteConfigurationSetTrackingOptions");
         params.put("Version", "2010-12-01");
-        DeleteConfigurationSetTrackingOptionsRequestSerializer::serialize(&mut params, "", &input);
+        DeleteConfigurationSetTrackingOptionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteConfigurationSetTrackingOptionsError::from_response(
@@ -11455,22 +12204,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes an existing custom verification email template. </p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_custom_verification_email_template(
-        &self,
-        input: DeleteCustomVerificationEmailTemplateRequest,
-    ) -> RusotoFuture<(), DeleteCustomVerificationEmailTemplateError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for DeleteCustomVerificationEmailTemplateRequest {
+    type Output = DeleteCustomVerificationEmailTemplateResponse;
+    type Error = DeleteCustomVerificationEmailTemplateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteCustomVerificationEmailTemplate");
         params.put("Version", "2010-12-01");
-        DeleteCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &input);
+        DeleteCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteCustomVerificationEmailTemplateError::from_response(
@@ -11479,25 +12233,51 @@ impl Ses for SesClient {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteCustomVerificationEmailTemplateResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        DeleteCustomVerificationEmailTemplateResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the specified identity (an email address or a domain) from the list of verified identities.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_identity(
-        &self,
-        input: DeleteIdentityRequest,
-    ) -> RusotoFuture<DeleteIdentityResponse, DeleteIdentityError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for DeleteIdentityRequest {
+    type Output = DeleteIdentityResponse;
+    type Error = DeleteIdentityError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteIdentity");
         params.put("Version", "2010-12-01");
-        DeleteIdentityRequestSerializer::serialize(&mut params, "", &input);
+        DeleteIdentityRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -11533,22 +12313,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes the specified sending authorization policy for the given identity (an email address or a domain). This API returns successfully even if a policy with the specified name does not exist.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_identity_policy(
-        &self,
-        input: DeleteIdentityPolicyRequest,
-    ) -> RusotoFuture<DeleteIdentityPolicyResponse, DeleteIdentityPolicyError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for DeleteIdentityPolicyRequest {
+    type Output = DeleteIdentityPolicyResponse;
+    type Error = DeleteIdentityPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteIdentityPolicy");
         params.put("Version", "2010-12-01");
-        DeleteIdentityPolicyRequestSerializer::serialize(&mut params, "", &input);
+        DeleteIdentityPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -11583,22 +12368,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes the specified IP address filter.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_receipt_filter(
-        &self,
-        input: DeleteReceiptFilterRequest,
-    ) -> RusotoFuture<DeleteReceiptFilterResponse, DeleteReceiptFilterError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for DeleteReceiptFilterRequest {
+    type Output = DeleteReceiptFilterResponse;
+    type Error = DeleteReceiptFilterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteReceiptFilter");
         params.put("Version", "2010-12-01");
-        DeleteReceiptFilterRequestSerializer::serialize(&mut params, "", &input);
+        DeleteReceiptFilterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -11633,22 +12423,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes the specified receipt rule.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_receipt_rule(
-        &self,
-        input: DeleteReceiptRuleRequest,
-    ) -> RusotoFuture<DeleteReceiptRuleResponse, DeleteReceiptRuleError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for DeleteReceiptRuleRequest {
+    type Output = DeleteReceiptRuleResponse;
+    type Error = DeleteReceiptRuleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteReceiptRule");
         params.put("Version", "2010-12-01");
-        DeleteReceiptRuleRequestSerializer::serialize(&mut params, "", &input);
+        DeleteReceiptRuleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -11684,22 +12479,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes the specified receipt rule set and all of the receipt rules it contains.</p> <note> <p>The currently active rule set cannot be deleted.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_receipt_rule_set(
-        &self,
-        input: DeleteReceiptRuleSetRequest,
-    ) -> RusotoFuture<DeleteReceiptRuleSetResponse, DeleteReceiptRuleSetError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for DeleteReceiptRuleSetRequest {
+    type Output = DeleteReceiptRuleSetResponse;
+    type Error = DeleteReceiptRuleSetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteReceiptRuleSet");
         params.put("Version", "2010-12-01");
-        DeleteReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
+        DeleteReceiptRuleSetRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -11734,22 +12534,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes an email template.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_template(
-        &self,
-        input: DeleteTemplateRequest,
-    ) -> RusotoFuture<DeleteTemplateResponse, DeleteTemplateError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for DeleteTemplateRequest {
+    type Output = DeleteTemplateResponse;
+    type Error = DeleteTemplateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteTemplate");
         params.put("Version", "2010-12-01");
-        DeleteTemplateRequestSerializer::serialize(&mut params, "", &input);
+        DeleteTemplateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -11785,47 +12590,77 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Deprecated. Use the <code>DeleteIdentity</code> operation to delete email addresses and domains.</p>
-    fn delete_verified_email_address(
-        &self,
-        input: DeleteVerifiedEmailAddressRequest,
-    ) -> RusotoFuture<(), DeleteVerifiedEmailAddressError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for DeleteVerifiedEmailAddressRequest {
+    type Output = DeleteVerifiedEmailAddressResponse;
+    type Error = DeleteVerifiedEmailAddressError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteVerifiedEmailAddress");
         params.put("Version", "2010-12-01");
-        DeleteVerifiedEmailAddressRequestSerializer::serialize(&mut params, "", &input);
+        DeleteVerifiedEmailAddressRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteVerifiedEmailAddressError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteVerifiedEmailAddressResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteVerifiedEmailAddressResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Returns the metadata and receipt rules for the receipt rule set that is currently active.</p> <p>For information about setting up receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn describe_active_receipt_rule_set(
-        &self,
-        input: DescribeActiveReceiptRuleSetRequest,
-    ) -> RusotoFuture<DescribeActiveReceiptRuleSetResponse, DescribeActiveReceiptRuleSetError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for DescribeActiveReceiptRuleSetRequest {
+    type Output = DescribeActiveReceiptRuleSetResponse;
+    type Error = DescribeActiveReceiptRuleSetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeActiveReceiptRuleSet");
         params.put("Version", "2010-12-01");
-        DescribeActiveReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
+        DescribeActiveReceiptRuleSetRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeActiveReceiptRuleSetError::from_response(response))
@@ -11858,22 +12693,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Returns the details of the specified configuration set. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn describe_configuration_set(
-        &self,
-        input: DescribeConfigurationSetRequest,
-    ) -> RusotoFuture<DescribeConfigurationSetResponse, DescribeConfigurationSetError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for DescribeConfigurationSetRequest {
+    type Output = DescribeConfigurationSetResponse;
+    type Error = DescribeConfigurationSetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeConfigurationSet");
         params.put("Version", "2010-12-01");
-        DescribeConfigurationSetRequestSerializer::serialize(&mut params, "", &input);
+        DescribeConfigurationSetRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeConfigurationSetError::from_response(response))
@@ -11906,22 +12746,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Returns the details of the specified receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn describe_receipt_rule(
-        &self,
-        input: DescribeReceiptRuleRequest,
-    ) -> RusotoFuture<DescribeReceiptRuleResponse, DescribeReceiptRuleError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for DescribeReceiptRuleRequest {
+    type Output = DescribeReceiptRuleResponse;
+    type Error = DescribeReceiptRuleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeReceiptRule");
         params.put("Version", "2010-12-01");
-        DescribeReceiptRuleRequestSerializer::serialize(&mut params, "", &input);
+        DescribeReceiptRuleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -11956,22 +12801,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Returns the details of the specified receipt rule set.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn describe_receipt_rule_set(
-        &self,
-        input: DescribeReceiptRuleSetRequest,
-    ) -> RusotoFuture<DescribeReceiptRuleSetResponse, DescribeReceiptRuleSetError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for DescribeReceiptRuleSetRequest {
+    type Output = DescribeReceiptRuleSetResponse;
+    type Error = DescribeReceiptRuleSetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeReceiptRuleSet");
         params.put("Version", "2010-12-01");
-        DescribeReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
+        DescribeReceiptRuleSetRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReceiptRuleSetError::from_response(response))
@@ -12004,21 +12854,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Returns the email sending status of the Amazon SES account for the current region.</p> <p>You can execute this operation no more than once per second.</p>
-    fn get_account_sending_enabled(
-        &self,
-    ) -> RusotoFuture<GetAccountSendingEnabledResponse, GetAccountSendingEnabledError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for GetAccountSendingEnabledRequest {
+    type Output = GetAccountSendingEnabledResponse;
+    type Error = GetAccountSendingEnabledError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetAccountSendingEnabled");
         params.put("Version", "2010-12-01");
-
+        GetAccountSendingEnabledRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetAccountSendingEnabledError::from_response(response))
@@ -12051,25 +12907,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Returns the custom email verification template for the template name you specify.</p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn get_custom_verification_email_template(
-        &self,
-        input: GetCustomVerificationEmailTemplateRequest,
-    ) -> RusotoFuture<
-        GetCustomVerificationEmailTemplateResponse,
-        GetCustomVerificationEmailTemplateError,
-    > {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for GetCustomVerificationEmailTemplateRequest {
+    type Output = GetCustomVerificationEmailTemplateResponse;
+    type Error = GetCustomVerificationEmailTemplateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetCustomVerificationEmailTemplate");
         params.put("Version", "2010-12-01");
-        GetCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &input);
+        GetCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetCustomVerificationEmailTemplateError::from_response(
@@ -12104,22 +12962,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Returns the current status of Easy DKIM signing for an entity. For domain name identities, this operation also returns the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES has successfully verified that these tokens have been published.</p> <p>This operation takes a list of identities as input and returns the following information for each:</p> <ul> <li> <p>Whether Easy DKIM signing is enabled or disabled.</p> </li> <li> <p>A set of DKIM tokens that represent the identity. If the identity is an email address, the tokens represent the domain of that address.</p> </li> <li> <p>Whether Amazon SES has successfully verified the DKIM tokens published in the domain's DNS. This information is only returned for domain name identities, not for email addresses.</p> </li> </ul> <p>This operation is throttled at one request per second and can only get DKIM attributes for up to 100 identities at a time.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html">Amazon SES Developer Guide</a>.</p>
-    fn get_identity_dkim_attributes(
-        &self,
-        input: GetIdentityDkimAttributesRequest,
-    ) -> RusotoFuture<GetIdentityDkimAttributesResponse, GetIdentityDkimAttributesError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for GetIdentityDkimAttributesRequest {
+    type Output = GetIdentityDkimAttributesResponse;
+    type Error = GetIdentityDkimAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetIdentityDkimAttributes");
         params.put("Version", "2010-12-01");
-        GetIdentityDkimAttributesRequestSerializer::serialize(&mut params, "", &input);
+        GetIdentityDkimAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetIdentityDkimAttributesError::from_response(response))
@@ -12152,25 +13015,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Returns the custom MAIL FROM attributes for a list of identities (email addresses : domains).</p> <p>This operation is throttled at one request per second and can only get custom MAIL FROM attributes for up to 100 identities at a time.</p>
-    fn get_identity_mail_from_domain_attributes(
-        &self,
-        input: GetIdentityMailFromDomainAttributesRequest,
-    ) -> RusotoFuture<
-        GetIdentityMailFromDomainAttributesResponse,
-        GetIdentityMailFromDomainAttributesError,
-    > {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for GetIdentityMailFromDomainAttributesRequest {
+    type Output = GetIdentityMailFromDomainAttributesResponse;
+    type Error = GetIdentityMailFromDomainAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetIdentityMailFromDomainAttributes");
         params.put("Version", "2010-12-01");
-        GetIdentityMailFromDomainAttributesRequestSerializer::serialize(&mut params, "", &input);
+        GetIdentityMailFromDomainAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetIdentityMailFromDomainAttributesError::from_response(
@@ -12205,25 +13070,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Given a list of verified identities (email addresses and/or domains), returns a structure describing identity notification attributes.</p> <p>This operation is throttled at one request per second and can only get notification attributes for up to 100 identities at a time.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
-    fn get_identity_notification_attributes(
-        &self,
-        input: GetIdentityNotificationAttributesRequest,
-    ) -> RusotoFuture<
-        GetIdentityNotificationAttributesResponse,
-        GetIdentityNotificationAttributesError,
-    > {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for GetIdentityNotificationAttributesRequest {
+    type Output = GetIdentityNotificationAttributesResponse;
+    type Error = GetIdentityNotificationAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetIdentityNotificationAttributes");
         params.put("Version", "2010-12-01");
-        GetIdentityNotificationAttributesRequestSerializer::serialize(&mut params, "", &input);
+        GetIdentityNotificationAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetIdentityNotificationAttributesError::from_response(
@@ -12258,22 +13125,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Returns the requested sending authorization policies for the given identity (an email address or a domain). The policies are returned as a map of policy names to policy contents. You can retrieve a maximum of 20 policies at a time.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn get_identity_policies(
-        &self,
-        input: GetIdentityPoliciesRequest,
-    ) -> RusotoFuture<GetIdentityPoliciesResponse, GetIdentityPoliciesError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for GetIdentityPoliciesRequest {
+    type Output = GetIdentityPoliciesResponse;
+    type Error = GetIdentityPoliciesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetIdentityPolicies");
         params.put("Version", "2010-12-01");
-        GetIdentityPoliciesRequestSerializer::serialize(&mut params, "", &input);
+        GetIdentityPoliciesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -12308,25 +13180,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Given a list of identities (email addresses and/or domains), returns the verification status and (for domain identities) the verification token for each identity.</p> <p>The verification status of an email address is "Pending" until the email address owner clicks the link within the verification email that Amazon SES sent to that address. If the email address owner clicks the link within 24 hours, the verification status of the email address changes to "Success". If the link is not clicked within 24 hours, the verification status changes to "Failed." In that case, if you still want to verify the email address, you must restart the verification process from the beginning.</p> <p>For domain identities, the domain's verification status is "Pending" as Amazon SES searches for the required TXT record in the DNS settings of the domain. When Amazon SES detects the record, the domain's verification status changes to "Success". If Amazon SES is unable to detect the record within 72 hours, the domain's verification status changes to "Failed." In that case, if you still want to verify the domain, you must restart the verification process from the beginning.</p> <p>This operation is throttled at one request per second and can only get verification attributes for up to 100 identities at a time.</p>
-    fn get_identity_verification_attributes(
-        &self,
-        input: GetIdentityVerificationAttributesRequest,
-    ) -> RusotoFuture<
-        GetIdentityVerificationAttributesResponse,
-        GetIdentityVerificationAttributesError,
-    > {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for GetIdentityVerificationAttributesRequest {
+    type Output = GetIdentityVerificationAttributesResponse;
+    type Error = GetIdentityVerificationAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetIdentityVerificationAttributes");
         params.put("Version", "2010-12-01");
-        GetIdentityVerificationAttributesRequestSerializer::serialize(&mut params, "", &input);
+        GetIdentityVerificationAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetIdentityVerificationAttributesError::from_response(
@@ -12361,19 +13235,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Provides the sending limits for the Amazon SES account. </p> <p>You can execute this operation no more than once per second.</p>
-    fn get_send_quota(&self) -> RusotoFuture<GetSendQuotaResponse, GetSendQuotaError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for GetSendQuotaRequest {
+    type Output = GetSendQuotaResponse;
+    type Error = GetSendQuotaError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetSendQuota");
         params.put("Version", "2010-12-01");
-
+        GetSendQuotaRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -12409,21 +13291,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Provides sending statistics for the current AWS Region. The result is a list of data points, representing the last two weeks of sending activity. Each data point in the list contains statistics for a 15-minute period of time.</p> <p>You can execute this operation no more than once per second.</p>
-    fn get_send_statistics(
-        &self,
-    ) -> RusotoFuture<GetSendStatisticsResponse, GetSendStatisticsError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for GetSendStatisticsRequest {
+    type Output = GetSendStatisticsResponse;
+    type Error = GetSendStatisticsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetSendStatistics");
         params.put("Version", "2010-12-01");
-
+        GetSendStatisticsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -12459,22 +13347,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Displays the template object (which includes the Subject line, HTML part and text part) for the template you specify.</p> <p>You can execute this operation no more than once per second.</p>
-    fn get_template(
-        &self,
-        input: GetTemplateRequest,
-    ) -> RusotoFuture<GetTemplateResponse, GetTemplateError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for GetTemplateRequest {
+    type Output = GetTemplateResponse;
+    type Error = GetTemplateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetTemplate");
         params.put("Version", "2010-12-01");
-        GetTemplateRequestSerializer::serialize(&mut params, "", &input);
+        GetTemplateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -12510,22 +13403,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Provides a list of the configuration sets associated with your Amazon SES account in the current AWS Region. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Monitoring Your Amazon SES Sending Activity</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second. This operation will return up to 1,000 configuration sets each time it is run. If your Amazon SES account has more than 1,000 configuration sets, this operation will also return a NextToken element. You can then execute the <code>ListConfigurationSets</code> operation again, passing the <code>NextToken</code> parameter and the value of the NextToken element to retrieve additional results.</p>
-    fn list_configuration_sets(
-        &self,
-        input: ListConfigurationSetsRequest,
-    ) -> RusotoFuture<ListConfigurationSetsResponse, ListConfigurationSetsError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for ListConfigurationSetsRequest {
+    type Output = ListConfigurationSetsResponse;
+    type Error = ListConfigurationSetsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListConfigurationSets");
         params.put("Version", "2010-12-01");
-        ListConfigurationSetsRequestSerializer::serialize(&mut params, "", &input);
+        ListConfigurationSetsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListConfigurationSetsError::from_response(response))
@@ -12558,25 +13456,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the existing custom verification email templates for your account in the current AWS Region.</p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_custom_verification_email_templates(
-        &self,
-        input: ListCustomVerificationEmailTemplatesRequest,
-    ) -> RusotoFuture<
-        ListCustomVerificationEmailTemplatesResponse,
-        ListCustomVerificationEmailTemplatesError,
-    > {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for ListCustomVerificationEmailTemplatesRequest {
+    type Output = ListCustomVerificationEmailTemplatesResponse;
+    type Error = ListCustomVerificationEmailTemplatesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListCustomVerificationEmailTemplates");
         params.put("Version", "2010-12-01");
-        ListCustomVerificationEmailTemplatesRequestSerializer::serialize(&mut params, "", &input);
+        ListCustomVerificationEmailTemplatesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListCustomVerificationEmailTemplatesError::from_response(
@@ -12611,22 +13511,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list containing all of the identities (email addresses and domains) for your AWS account in the current AWS Region, regardless of verification status.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_identities(
-        &self,
-        input: ListIdentitiesRequest,
-    ) -> RusotoFuture<ListIdentitiesResponse, ListIdentitiesError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for ListIdentitiesRequest {
+    type Output = ListIdentitiesResponse;
+    type Error = ListIdentitiesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListIdentities");
         params.put("Version", "2010-12-01");
-        ListIdentitiesRequestSerializer::serialize(&mut params, "", &input);
+        ListIdentitiesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -12662,22 +13567,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of sending authorization policies that are attached to the given identity (an email address or a domain). This API returns only a list. If you want the actual policy content, you can use <code>GetIdentityPolicies</code>.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_identity_policies(
-        &self,
-        input: ListIdentityPoliciesRequest,
-    ) -> RusotoFuture<ListIdentityPoliciesResponse, ListIdentityPoliciesError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for ListIdentityPoliciesRequest {
+    type Output = ListIdentityPoliciesResponse;
+    type Error = ListIdentityPoliciesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListIdentityPolicies");
         params.put("Version", "2010-12-01");
-        ListIdentityPoliciesRequestSerializer::serialize(&mut params, "", &input);
+        ListIdentityPoliciesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -12712,22 +13622,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the IP address filters associated with your AWS account in the current AWS Region.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_receipt_filters(
-        &self,
-        input: ListReceiptFiltersRequest,
-    ) -> RusotoFuture<ListReceiptFiltersResponse, ListReceiptFiltersError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for ListReceiptFiltersRequest {
+    type Output = ListReceiptFiltersResponse;
+    type Error = ListReceiptFiltersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListReceiptFilters");
         params.put("Version", "2010-12-01");
-        ListReceiptFiltersRequestSerializer::serialize(&mut params, "", &input);
+        ListReceiptFiltersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -12763,22 +13678,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the receipt rule sets that exist under your AWS account in the current AWS Region. If there are additional receipt rule sets to be retrieved, you will receive a <code>NextToken</code> that you can provide to the next call to <code>ListReceiptRuleSets</code> to retrieve the additional entries.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_receipt_rule_sets(
-        &self,
-        input: ListReceiptRuleSetsRequest,
-    ) -> RusotoFuture<ListReceiptRuleSetsResponse, ListReceiptRuleSetsError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for ListReceiptRuleSetsRequest {
+    type Output = ListReceiptRuleSetsResponse;
+    type Error = ListReceiptRuleSetsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListReceiptRuleSets");
         params.put("Version", "2010-12-01");
-        ListReceiptRuleSetsRequestSerializer::serialize(&mut params, "", &input);
+        ListReceiptRuleSetsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -12813,22 +13733,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the email templates present in your Amazon SES account in the current AWS Region.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_templates(
-        &self,
-        input: ListTemplatesRequest,
-    ) -> RusotoFuture<ListTemplatesResponse, ListTemplatesError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for ListTemplatesRequest {
+    type Output = ListTemplatesResponse;
+    type Error = ListTemplatesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListTemplates");
         params.put("Version", "2010-12-01");
-        ListTemplatesRequestSerializer::serialize(&mut params, "", &input);
+        ListTemplatesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -12864,21 +13789,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Deprecated. Use the <code>ListIdentities</code> operation to list the email addresses and domains associated with your account.</p>
-    fn list_verified_email_addresses(
-        &self,
-    ) -> RusotoFuture<ListVerifiedEmailAddressesResponse, ListVerifiedEmailAddressesError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for ListVerifiedEmailAddressesRequest {
+    type Output = ListVerifiedEmailAddressesResponse;
+    type Error = ListVerifiedEmailAddressesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListVerifiedEmailAddresses");
         params.put("Version", "2010-12-01");
-
+        ListVerifiedEmailAddressesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListVerifiedEmailAddressesError::from_response(response))
@@ -12911,22 +13842,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Adds or updates a sending authorization policy for the specified identity (an email address or a domain).</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn put_identity_policy(
-        &self,
-        input: PutIdentityPolicyRequest,
-    ) -> RusotoFuture<PutIdentityPolicyResponse, PutIdentityPolicyError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for PutIdentityPolicyRequest {
+    type Output = PutIdentityPolicyResponse;
+    type Error = PutIdentityPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutIdentityPolicy");
         params.put("Version", "2010-12-01");
-        PutIdentityPolicyRequestSerializer::serialize(&mut params, "", &input);
+        PutIdentityPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -12962,22 +13898,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Reorders the receipt rules within a receipt rule set.</p> <note> <p>All of the rules in the rule set must be represented in this request. That is, this API will return an error if the reorder request doesn't explicitly position all of the rules.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn reorder_receipt_rule_set(
-        &self,
-        input: ReorderReceiptRuleSetRequest,
-    ) -> RusotoFuture<ReorderReceiptRuleSetResponse, ReorderReceiptRuleSetError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for ReorderReceiptRuleSetRequest {
+    type Output = ReorderReceiptRuleSetResponse;
+    type Error = ReorderReceiptRuleSetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ReorderReceiptRuleSet");
         params.put("Version", "2010-12-01");
-        ReorderReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
+        ReorderReceiptRuleSetRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ReorderReceiptRuleSetError::from_response(response))
@@ -13010,22 +13951,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Generates and sends a bounce message to the sender of an email you received through Amazon SES. You can only use this API on an email up to 24 hours after you receive it.</p> <note> <p>You cannot use this API to send generic bounces for mail that was not received by Amazon SES.</p> </note> <p>For information about receiving email through Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn send_bounce(
-        &self,
-        input: SendBounceRequest,
-    ) -> RusotoFuture<SendBounceResponse, SendBounceError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for SendBounceRequest {
+    type Output = SendBounceResponse;
+    type Error = SendBounceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SendBounce");
         params.put("Version", "2010-12-01");
-        SendBounceRequestSerializer::serialize(&mut params, "", &input);
+        SendBounceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -13061,22 +14007,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p><p>Composes an email message to multiple destinations. The message body is created using an email template.</p> <p>In order to send email using the <code>SendBulkTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>Each <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendBulkTemplatedEmail</code> operation several times to send the message to each group.</p> </li> <li> <p>The number of destinations you can contact in a single call to the API may be limited by your account&#39;s maximum sending rate.</p> </li> </ul></p>
-    fn send_bulk_templated_email(
-        &self,
-        input: SendBulkTemplatedEmailRequest,
-    ) -> RusotoFuture<SendBulkTemplatedEmailResponse, SendBulkTemplatedEmailError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for SendBulkTemplatedEmailRequest {
+    type Output = SendBulkTemplatedEmailResponse;
+    type Error = SendBulkTemplatedEmailError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SendBulkTemplatedEmail");
         params.put("Version", "2010-12-01");
-        SendBulkTemplatedEmailRequestSerializer::serialize(&mut params, "", &input);
+        SendBulkTemplatedEmailRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SendBulkTemplatedEmailError::from_response(response))
@@ -13109,22 +14060,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Adds an email address to the list of identities for your Amazon SES account in the current AWS Region and attempts to verify it. As a result of executing this operation, a customized verification email is sent to the specified address.</p> <p>To use this operation, you must first create a custom verification email template. For more information about creating and using custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn send_custom_verification_email(
-        &self,
-        input: SendCustomVerificationEmailRequest,
-    ) -> RusotoFuture<SendCustomVerificationEmailResponse, SendCustomVerificationEmailError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for SendCustomVerificationEmailRequest {
+    type Output = SendCustomVerificationEmailResponse;
+    type Error = SendCustomVerificationEmailError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SendCustomVerificationEmail");
         params.put("Version", "2010-12-01");
-        SendCustomVerificationEmailRequestSerializer::serialize(&mut params, "", &input);
+        SendCustomVerificationEmailRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SendCustomVerificationEmailError::from_response(response))
@@ -13157,22 +14113,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p><p>Composes an email message and immediately queues it for sending. In order to send email using the <code>SendEmail</code> operation, your message must meet the following requirements:</p> <ul> <li> <p>The message must be sent from a verified email address or domain. If you attempt to send email using a non-verified address or domain, the operation will result in an &quot;Email address not verified&quot; error. </p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>The message must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendEmail</code> operation several times to send the message to each group.</p> </li> </ul> <important> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </important></p>
-    fn send_email(
-        &self,
-        input: SendEmailRequest,
-    ) -> RusotoFuture<SendEmailResponse, SendEmailError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for SendEmailRequest {
+    type Output = SendEmailResponse;
+    type Error = SendEmailError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SendEmail");
         params.put("Version", "2010-12-01");
-        SendEmailRequestSerializer::serialize(&mut params, "", &input);
+        SendEmailRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -13206,22 +14167,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p><p>Composes an email message and immediately queues it for sending.</p> <p>This operation is more flexible than the <code>SendEmail</code> API operation. When you use the <code>SendRawEmail</code> operation, you can specify the headers of the message as well as its content. This flexibility is useful, for example, when you want to send a multipart MIME email (such a message that contains both a text and an HTML version). You can also use this operation to send messages that include attachments.</p> <p>The <code>SendRawEmail</code> operation has the following requirements:</p> <ul> <li> <p>You can only send email from <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">verified email addresses or domains</a>. If you try to send email from an address that isn&#39;t verified, the operation results in an &quot;Email address not verified&quot; error.</p> </li> <li> <p>If your account is still in the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html">Amazon SES sandbox</a>, you can only send email to other verified addresses in your account, or to addresses that are associated with the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mailbox-simulator.html">Amazon SES mailbox simulator</a>.</p> </li> <li> <p>The maximum message size, including attachments, is 10 MB.</p> </li> <li> <p>Each message has to include at least one recipient address. A recipient address includes any address on the To:, CC:, or BCC: lines.</p> </li> <li> <p>If you send a single message to more than one recipient address, and one of the recipient addresses isn&#39;t in a valid format (that is, it&#39;s not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), Amazon SES rejects the entire message, even if the other addresses are valid.</p> </li> <li> <p>Each message can include up to 50 recipient addresses across the To:, CC:, or BCC: lines. If you need to send a single message to more than 50 recipients, you have to split the list of recipient addresses into groups of less than 50 recipients, and send separate messages to each group.</p> </li> <li> <p>Amazon SES allows you to specify 8-bit Content-Transfer-Encoding for MIME message parts. However, if Amazon SES has to modify the contents of your message (for example, if you use open and click tracking), 8-bit content isn&#39;t preserved. For this reason, we highly recommend that you encode all content that isn&#39;t 7-bit ASCII. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html#send-email-mime-encoding">MIME Encoding</a> in the <i>Amazon SES Developer Guide</i>.</p> </li> </ul> <p>Additionally, keep the following considerations in mind when using the <code>SendRawEmail</code> operation:</p> <ul> <li> <p>Although you can customize the message headers when using the <code>SendRawEmail</code> operation, Amazon SES will automatically apply its own <code>Message-ID</code> and <code>Date</code> headers; if you passed these headers when creating the message, they will be overwritten by the values that Amazon SES provides.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email&#39;s Source, From, and Return-Path parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature; Amazon SES will remove them before sending the email.</p> </important> <p>For most common sending authorization scenarios, we recommend that you specify the <code>SourceIdentityArn</code> parameter and not the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code> parameters. If you only specify the <code>SourceIdentityArn</code> parameter, Amazon SES will set the From and Return Path addresses to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Using Sending Authorization with Amazon SES</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> </ul></p>
-    fn send_raw_email(
-        &self,
-        input: SendRawEmailRequest,
-    ) -> RusotoFuture<SendRawEmailResponse, SendRawEmailError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for SendRawEmailRequest {
+    type Output = SendRawEmailResponse;
+    type Error = SendRawEmailError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SendRawEmail");
         params.put("Version", "2010-12-01");
-        SendRawEmailRequestSerializer::serialize(&mut params, "", &input);
+        SendRawEmailRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -13257,22 +14223,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p><p>Composes an email message using an email template and immediately queues it for sending.</p> <p>In order to send email using the <code>SendTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>Calls to the <code>SendTemplatedEmail</code> operation may only include one <code>Destination</code> parameter. A destination is a set of recipients who will receive the same version of the email. The <code>Destination</code> parameter can include up to 50 recipients, across the To:, CC: and BCC: fields.</p> </li> <li> <p>The <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> </ul> <important> <p>If your call to the <code>SendTemplatedEmail</code> operation includes all of the required parameters, Amazon SES accepts it and returns a Message ID. However, if Amazon SES can&#39;t render the email because the template contains errors, it doesn&#39;t send the email. Additionally, because it already accepted the message, Amazon SES doesn&#39;t return a message stating that it was unable to send the email.</p> <p>For these reasons, we highly recommend that you set up Amazon SES to send you notifications when Rendering Failure events occur. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Sending Personalized Email Using the Amazon SES API</a> in the <i>Amazon Simple Email Service Developer Guide</i>.</p> </important></p>
-    fn send_templated_email(
-        &self,
-        input: SendTemplatedEmailRequest,
-    ) -> RusotoFuture<SendTemplatedEmailResponse, SendTemplatedEmailError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for SendTemplatedEmailRequest {
+    type Output = SendTemplatedEmailResponse;
+    type Error = SendTemplatedEmailError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SendTemplatedEmail");
         params.put("Version", "2010-12-01");
-        SendTemplatedEmailRequestSerializer::serialize(&mut params, "", &input);
+        SendTemplatedEmailRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -13308,22 +14279,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Sets the specified receipt rule set as the active receipt rule set.</p> <note> <p>To disable your email-receiving through Amazon SES completely, you can call this API with RuleSetName set to null.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn set_active_receipt_rule_set(
-        &self,
-        input: SetActiveReceiptRuleSetRequest,
-    ) -> RusotoFuture<SetActiveReceiptRuleSetResponse, SetActiveReceiptRuleSetError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for SetActiveReceiptRuleSetRequest {
+    type Output = SetActiveReceiptRuleSetResponse;
+    type Error = SetActiveReceiptRuleSetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetActiveReceiptRuleSet");
         params.put("Version", "2010-12-01");
-        SetActiveReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
+        SetActiveReceiptRuleSetRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetActiveReceiptRuleSetError::from_response(response))
@@ -13356,22 +14332,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Enables or disables Easy DKIM signing of email sent from an identity:</p> <ul> <li> <p>If Easy DKIM signing is enabled for a domain name identity (such as <code>example.com</code>), then Amazon SES will DKIM-sign all email sent by addresses under that domain name (for example, <code>user@example.com</code>).</p> </li> <li> <p>If Easy DKIM signing is enabled for an email address, then Amazon SES will DKIM-sign all email sent by that email address.</p> </li> </ul> <p>For email addresses (for example, <code>user@example.com</code>), you can only enable Easy DKIM signing if the corresponding domain (in this case, <code>example.com</code>) has been set up for Easy DKIM using the AWS Console or the <code>VerifyDomainDkim</code> operation.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about Easy DKIM signing, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Amazon SES Developer Guide</a>.</p>
-    fn set_identity_dkim_enabled(
-        &self,
-        input: SetIdentityDkimEnabledRequest,
-    ) -> RusotoFuture<SetIdentityDkimEnabledResponse, SetIdentityDkimEnabledError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for SetIdentityDkimEnabledRequest {
+    type Output = SetIdentityDkimEnabledResponse;
+    type Error = SetIdentityDkimEnabledError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetIdentityDkimEnabled");
         params.put("Version", "2010-12-01");
-        SetIdentityDkimEnabledRequestSerializer::serialize(&mut params, "", &input);
+        SetIdentityDkimEnabledRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetIdentityDkimEnabledError::from_response(response))
@@ -13404,25 +14385,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Given an identity (an email address or a domain), enables or disables whether Amazon SES forwards bounce and complaint notifications as email. Feedback forwarding can only be disabled when Amazon Simple Notification Service (Amazon SNS) topics are specified for both bounces and complaints.</p> <note> <p>Feedback forwarding does not apply to delivery notifications. Delivery notifications are only available through Amazon SNS.</p> </note> <p>You can execute this operation no more than once per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
-    fn set_identity_feedback_forwarding_enabled(
-        &self,
-        input: SetIdentityFeedbackForwardingEnabledRequest,
-    ) -> RusotoFuture<
-        SetIdentityFeedbackForwardingEnabledResponse,
-        SetIdentityFeedbackForwardingEnabledError,
-    > {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for SetIdentityFeedbackForwardingEnabledRequest {
+    type Output = SetIdentityFeedbackForwardingEnabledResponse;
+    type Error = SetIdentityFeedbackForwardingEnabledError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetIdentityFeedbackForwardingEnabled");
         params.put("Version", "2010-12-01");
-        SetIdentityFeedbackForwardingEnabledRequestSerializer::serialize(&mut params, "", &input);
+        SetIdentityFeedbackForwardingEnabledRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetIdentityFeedbackForwardingEnabledError::from_response(
@@ -13457,16 +14440,18 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Given an identity (an email address or a domain), sets whether Amazon SES includes the original email headers in the Amazon Simple Notification Service (Amazon SNS) notifications of a specified type.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
-    fn set_identity_headers_in_notifications_enabled(
-        &self,
-        input: SetIdentityHeadersInNotificationsEnabledRequest,
-    ) -> RusotoFuture<
-        SetIdentityHeadersInNotificationsEnabledResponse,
-        SetIdentityHeadersInNotificationsEnabledError,
-    > {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for SetIdentityHeadersInNotificationsEnabledRequest {
+    type Output = SetIdentityHeadersInNotificationsEnabledResponse;
+    type Error = SetIdentityHeadersInNotificationsEnabledError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetIdentityHeadersInNotificationsEnabled");
@@ -13474,12 +14459,12 @@ impl Ses for SesClient {
         SetIdentityHeadersInNotificationsEnabledRequestSerializer::serialize(
             &mut params,
             "",
-            &input,
+            &self,
         );
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetIdentityHeadersInNotificationsEnabledError::from_response(response))
@@ -13513,22 +14498,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Enables or disables the custom MAIL FROM domain setup for a verified identity (an email address or a domain).</p> <important> <p>To send emails using the specified MAIL FROM domain, you must add an MX record to your MAIL FROM domain's DNS settings. If you want your emails to pass Sender Policy Framework (SPF) checks, you must also add or update an SPF record. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-set.html">Amazon SES Developer Guide</a>.</p> </important> <p>You can execute this operation no more than once per second.</p>
-    fn set_identity_mail_from_domain(
-        &self,
-        input: SetIdentityMailFromDomainRequest,
-    ) -> RusotoFuture<SetIdentityMailFromDomainResponse, SetIdentityMailFromDomainError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for SetIdentityMailFromDomainRequest {
+    type Output = SetIdentityMailFromDomainResponse;
+    type Error = SetIdentityMailFromDomainError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetIdentityMailFromDomain");
         params.put("Version", "2010-12-01");
-        SetIdentityMailFromDomainRequestSerializer::serialize(&mut params, "", &input);
+        SetIdentityMailFromDomainRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetIdentityMailFromDomainError::from_response(response))
@@ -13561,22 +14551,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Sets an Amazon Simple Notification Service (Amazon SNS) topic to use when delivering notifications. When you use this operation, you specify a verified identity, such as an email address or domain. When you send an email that uses the chosen identity in the Source field, Amazon SES sends notifications to the topic you specified. You can send bounce, complaint, or delivery notifications (or any combination of the three) to the Amazon SNS topic that you specify.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about feedback notification, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
-    fn set_identity_notification_topic(
-        &self,
-        input: SetIdentityNotificationTopicRequest,
-    ) -> RusotoFuture<SetIdentityNotificationTopicResponse, SetIdentityNotificationTopicError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for SetIdentityNotificationTopicRequest {
+    type Output = SetIdentityNotificationTopicResponse;
+    type Error = SetIdentityNotificationTopicError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetIdentityNotificationTopic");
         params.put("Version", "2010-12-01");
-        SetIdentityNotificationTopicRequestSerializer::serialize(&mut params, "", &input);
+        SetIdentityNotificationTopicRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetIdentityNotificationTopicError::from_response(response))
@@ -13609,22 +14604,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Sets the position of the specified receipt rule in the receipt rule set.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn set_receipt_rule_position(
-        &self,
-        input: SetReceiptRulePositionRequest,
-    ) -> RusotoFuture<SetReceiptRulePositionResponse, SetReceiptRulePositionError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for SetReceiptRulePositionRequest {
+    type Output = SetReceiptRulePositionResponse;
+    type Error = SetReceiptRulePositionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetReceiptRulePosition");
         params.put("Version", "2010-12-01");
-        SetReceiptRulePositionRequestSerializer::serialize(&mut params, "", &input);
+        SetReceiptRulePositionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetReceiptRulePositionError::from_response(response))
@@ -13657,22 +14657,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a preview of the MIME content of an email when provided with a template and a set of replacement data.</p> <p>You can execute this operation no more than once per second.</p>
-    fn test_render_template(
-        &self,
-        input: TestRenderTemplateRequest,
-    ) -> RusotoFuture<TestRenderTemplateResponse, TestRenderTemplateError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for TestRenderTemplateRequest {
+    type Output = TestRenderTemplateResponse;
+    type Error = TestRenderTemplateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "TestRenderTemplate");
         params.put("Version", "2010-12-01");
-        TestRenderTemplateRequestSerializer::serialize(&mut params, "", &input);
+        TestRenderTemplateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -13708,50 +14713,77 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Enables or disables email sending across your entire Amazon SES account in the current AWS Region. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending across your Amazon SES account in a given AWS Region when reputation metrics (such as your bounce or complaint rates) reach certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
-    fn update_account_sending_enabled(
-        &self,
-        input: UpdateAccountSendingEnabledRequest,
-    ) -> RusotoFuture<(), UpdateAccountSendingEnabledError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for UpdateAccountSendingEnabledRequest {
+    type Output = UpdateAccountSendingEnabledResponse;
+    type Error = UpdateAccountSendingEnabledError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateAccountSendingEnabled");
         params.put("Version", "2010-12-01");
-        UpdateAccountSendingEnabledRequestSerializer::serialize(&mut params, "", &input);
+        UpdateAccountSendingEnabledRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateAccountSendingEnabledError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = UpdateAccountSendingEnabledResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = UpdateAccountSendingEnabledResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Updates the event destination of a configuration set. Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Monitoring Your Amazon SES Sending Activity</a> in the <i>Amazon SES Developer Guide.</i> </p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>You can execute this operation no more than once per second.</p>
-    fn update_configuration_set_event_destination(
-        &self,
-        input: UpdateConfigurationSetEventDestinationRequest,
-    ) -> RusotoFuture<
-        UpdateConfigurationSetEventDestinationResponse,
-        UpdateConfigurationSetEventDestinationError,
-    > {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for UpdateConfigurationSetEventDestinationRequest {
+    type Output = UpdateConfigurationSetEventDestinationResponse;
+    type Error = UpdateConfigurationSetEventDestinationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateConfigurationSetEventDestination");
         params.put("Version", "2010-12-01");
-        UpdateConfigurationSetEventDestinationRequestSerializer::serialize(&mut params, "", &input);
+        UpdateConfigurationSetEventDestinationRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateConfigurationSetEventDestinationError::from_response(
@@ -13787,13 +14819,18 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Enables or disables the publishing of reputation metrics for emails sent using a specific configuration set in a given AWS Region. Reputation metrics include bounce and complaint rates. These metrics are published to Amazon CloudWatch. By using CloudWatch, you can create alarms when bounce or complaint rates exceed certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
-    fn update_configuration_set_reputation_metrics_enabled(
-        &self,
-        input: UpdateConfigurationSetReputationMetricsEnabledRequest,
-    ) -> RusotoFuture<(), UpdateConfigurationSetReputationMetricsEnabledError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for UpdateConfigurationSetReputationMetricsEnabledRequest {
+    type Output = UpdateConfigurationSetReputationMetricsEnabledResponse;
+    type Error = UpdateConfigurationSetReputationMetricsEnabledError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateConfigurationSetReputationMetricsEnabled");
@@ -13801,41 +14838,59 @@ impl Ses for SesClient {
         UpdateConfigurationSetReputationMetricsEnabledRequestSerializer::serialize(
             &mut params,
             "",
-            &input,
+            &self,
         );
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(
-                        UpdateConfigurationSetReputationMetricsEnabledError::from_response(
-                            response,
-                        ),
-                    )
-                }));
+        dispatcher.dispatch(request, |response| {
+                            if !response.status.is_success() {
+                                return Box::new(response.buffer().from_err().and_then(|response| {
+                                    Err(UpdateConfigurationSetReputationMetricsEnabledError::from_response(response))
+                                }));
+                            }
+
+                            Box::new(response.buffer().from_err().and_then(move |response| {
+            let result;
+
+            if response.body.is_empty() {
+                result = UpdateConfigurationSetReputationMetricsEnabledResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                result = UpdateConfigurationSetReputationMetricsEnabledResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
             }
-
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+             // parse non-payload
+            Ok(result)
+        }))
+                        })
     }
+}
 
-    /// <p>Enables or disables email sending for messages sent using a specific configuration set in a given AWS Region. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending for a configuration set when the reputation metrics for that configuration set (such as your bounce on complaint rate) exceed certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
-    fn update_configuration_set_sending_enabled(
-        &self,
-        input: UpdateConfigurationSetSendingEnabledRequest,
-    ) -> RusotoFuture<(), UpdateConfigurationSetSendingEnabledError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for UpdateConfigurationSetSendingEnabledRequest {
+    type Output = UpdateConfigurationSetSendingEnabledResponse;
+    type Error = UpdateConfigurationSetSendingEnabledError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateConfigurationSetSendingEnabled");
         params.put("Version", "2010-12-01");
-        UpdateConfigurationSetSendingEnabledRequestSerializer::serialize(&mut params, "", &input);
+        UpdateConfigurationSetSendingEnabledRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateConfigurationSetSendingEnabledError::from_response(
@@ -13844,28 +14899,50 @@ impl Ses for SesClient {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = UpdateConfigurationSetSendingEnabledResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = UpdateConfigurationSetSendingEnabledResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Modifies an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p>
-    fn update_configuration_set_tracking_options(
-        &self,
-        input: UpdateConfigurationSetTrackingOptionsRequest,
-    ) -> RusotoFuture<
-        UpdateConfigurationSetTrackingOptionsResponse,
-        UpdateConfigurationSetTrackingOptionsError,
-    > {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for UpdateConfigurationSetTrackingOptionsRequest {
+    type Output = UpdateConfigurationSetTrackingOptionsResponse;
+    type Error = UpdateConfigurationSetTrackingOptionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateConfigurationSetTrackingOptions");
         params.put("Version", "2010-12-01");
-        UpdateConfigurationSetTrackingOptionsRequestSerializer::serialize(&mut params, "", &input);
+        UpdateConfigurationSetTrackingOptionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateConfigurationSetTrackingOptionsError::from_response(
@@ -13901,22 +14978,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Updates an existing custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn update_custom_verification_email_template(
-        &self,
-        input: UpdateCustomVerificationEmailTemplateRequest,
-    ) -> RusotoFuture<(), UpdateCustomVerificationEmailTemplateError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for UpdateCustomVerificationEmailTemplateRequest {
+    type Output = UpdateCustomVerificationEmailTemplateResponse;
+    type Error = UpdateCustomVerificationEmailTemplateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateCustomVerificationEmailTemplate");
         params.put("Version", "2010-12-01");
-        UpdateCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &input);
+        UpdateCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateCustomVerificationEmailTemplateError::from_response(
@@ -13925,25 +15007,51 @@ impl Ses for SesClient {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = UpdateCustomVerificationEmailTemplateResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        UpdateCustomVerificationEmailTemplateResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Updates a receipt rule.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn update_receipt_rule(
-        &self,
-        input: UpdateReceiptRuleRequest,
-    ) -> RusotoFuture<UpdateReceiptRuleResponse, UpdateReceiptRuleError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for UpdateReceiptRuleRequest {
+    type Output = UpdateReceiptRuleResponse;
+    type Error = UpdateReceiptRuleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateReceiptRule");
         params.put("Version", "2010-12-01");
-        UpdateReceiptRuleRequestSerializer::serialize(&mut params, "", &input);
+        UpdateReceiptRuleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -13979,22 +15087,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Updates an email template. Email templates enable you to send personalized email to one or more destinations in a single API operation. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn update_template(
-        &self,
-        input: UpdateTemplateRequest,
-    ) -> RusotoFuture<UpdateTemplateResponse, UpdateTemplateError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for UpdateTemplateRequest {
+    type Output = UpdateTemplateResponse;
+    type Error = UpdateTemplateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateTemplate");
         params.put("Version", "2010-12-01");
-        UpdateTemplateRequestSerializer::serialize(&mut params, "", &input);
+        UpdateTemplateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -14030,22 +15143,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a set of DKIM tokens for a domain. DKIM <i>tokens</i> are character strings that represent your domain's identity. Using these tokens, you will need to create DNS CNAME records that point to DKIM public keys hosted by Amazon SES. Amazon Web Services will eventually detect that you have updated your DNS records; this detection process may take up to 72 hours. Upon successful detection, Amazon SES will be able to DKIM-sign email originating from that domain.</p> <p>You can execute this operation no more than once per second.</p> <p>To enable or disable Easy DKIM signing for a domain, use the <code>SetIdentityDkimEnabled</code> operation.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html">Amazon SES Developer Guide</a>.</p>
-    fn verify_domain_dkim(
-        &self,
-        input: VerifyDomainDkimRequest,
-    ) -> RusotoFuture<VerifyDomainDkimResponse, VerifyDomainDkimError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for VerifyDomainDkimRequest {
+    type Output = VerifyDomainDkimResponse;
+    type Error = VerifyDomainDkimError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "VerifyDomainDkim");
         params.put("Version", "2010-12-01");
-        VerifyDomainDkimRequestSerializer::serialize(&mut params, "", &input);
+        VerifyDomainDkimRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -14081,22 +15199,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Adds a domain to the list of identities for your Amazon SES account in the current AWS Region and attempts to verify it. For more information about verifying domains, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second.</p>
-    fn verify_domain_identity(
-        &self,
-        input: VerifyDomainIdentityRequest,
-    ) -> RusotoFuture<VerifyDomainIdentityResponse, VerifyDomainIdentityError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for VerifyDomainIdentityRequest {
+    type Output = VerifyDomainIdentityResponse;
+    type Error = VerifyDomainIdentityError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "VerifyDomainIdentity");
         params.put("Version", "2010-12-01");
-        VerifyDomainIdentityRequestSerializer::serialize(&mut params, "", &input);
+        VerifyDomainIdentityRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -14131,22 +15254,27 @@ impl Ses for SesClient {
             }))
         })
     }
+}
 
-    /// <p>Deprecated. Use the <code>VerifyEmailIdentity</code> operation to verify a new email address.</p>
-    fn verify_email_address(
-        &self,
-        input: VerifyEmailAddressRequest,
-    ) -> RusotoFuture<(), VerifyEmailAddressError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for VerifyEmailAddressRequest {
+    type Output = VerifyEmailAddressResponse;
+    type Error = VerifyEmailAddressError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "VerifyEmailAddress");
         params.put("Version", "2010-12-01");
-        VerifyEmailAddressRequestSerializer::serialize(&mut params, "", &input);
+        VerifyEmailAddressRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -14156,25 +15284,50 @@ impl Ses for SesClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = VerifyEmailAddressResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = VerifyEmailAddressResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Adds an email address to the list of identities for your Amazon SES account in the current AWS region and attempts to verify it. As a result of executing this operation, a verification email is sent to the specified address.</p> <p>You can execute this operation no more than once per second.</p>
-    fn verify_email_identity(
-        &self,
-        input: VerifyEmailIdentityRequest,
-    ) -> RusotoFuture<VerifyEmailIdentityResponse, VerifyEmailIdentityError> {
-        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+impl ServiceRequest for VerifyEmailIdentityRequest {
+    type Output = VerifyEmailIdentityResponse;
+    type Error = VerifyEmailIdentityError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "email", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "VerifyEmailIdentity");
         params.put("Version", "2010-12-01");
-        VerifyEmailIdentityRequestSerializer::serialize(&mut params, "", &input);
+        VerifyEmailIdentityRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {

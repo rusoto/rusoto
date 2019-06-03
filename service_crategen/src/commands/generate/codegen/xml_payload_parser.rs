@@ -206,7 +206,7 @@ fn xml_body_parser(
 
 fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service<'_>) -> String {
     match (service.endpoint_prefix(), name) {
-        ("s3", "GetBucketLocationOutput") => {
+        ("s3", "GetBucketLocationResponse") => {
             // override custom deserializer
             let struct_field_deserializers = shape
                 .members
@@ -384,6 +384,10 @@ fn generate_primitive_deserializer(shape: &Shape, percent_decode: bool) -> Strin
 }
 
 fn generate_struct_deserializer(name: &str, service: &Service<'_>, shape: &Shape) -> String {
+    if shape.members.is_none() {
+        return format!("Ok({}::default())", name);
+    }
+    
     // Handling of payload delegate deserialization - this is needed for shapes which
     // have a payload representing a single member. An example of this is the member
     // CopyPartResult of the S3 UploadPartCopyOutput shape; the XML itself represents

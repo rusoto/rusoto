@@ -4,12 +4,12 @@ extern crate rusoto_core;
 extern crate rusoto_emr;
 
 use rusoto_core::{Region, RusotoError};
-use rusoto_emr::{DescribeJobFlowsInput, Emr, EmrClient, ListClustersInput};
+use rusoto_emr::{DescribeJobFlowsRequest, Emr, EmrClient, ListClustersRequest};
 
 #[test]
 fn should_list_clusters() {
     let client = EmrClient::new(Region::UsEast1);
-    let request = ListClustersInput::default();
+    let request = ListClustersRequest::default();
 
     client.list_clusters(request).sync().unwrap();
 }
@@ -17,7 +17,7 @@ fn should_list_clusters() {
 #[test]
 fn should_handle_deprecation_gracefully() {
     let client = EmrClient::new(Region::UsEast1);
-    let request = DescribeJobFlowsInput::default();
+    let request = DescribeJobFlowsRequest::default();
 
     match client.describe_job_flows(request).sync() {
         Err(RusotoError::Validation(msg)) => {

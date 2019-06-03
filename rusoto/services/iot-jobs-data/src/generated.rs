@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -522,25 +523,25 @@ pub trait IotJobsData {
     fn describe_job_execution(
         &self,
         input: DescribeJobExecutionRequest,
-    ) -> RusotoFuture<DescribeJobExecutionResponse, DescribeJobExecutionError>;
+    ) -> Request<DescribeJobExecutionRequest>;
 
     /// <p>Gets the list of all jobs for a thing that are not in a terminal status.</p>
     fn get_pending_job_executions(
         &self,
         input: GetPendingJobExecutionsRequest,
-    ) -> RusotoFuture<GetPendingJobExecutionsResponse, GetPendingJobExecutionsError>;
+    ) -> Request<GetPendingJobExecutionsRequest>;
 
     /// <p>Gets and starts the next pending (status IN_PROGRESS or QUEUED) job execution for a thing.</p>
     fn start_next_pending_job_execution(
         &self,
         input: StartNextPendingJobExecutionRequest,
-    ) -> RusotoFuture<StartNextPendingJobExecutionResponse, StartNextPendingJobExecutionError>;
+    ) -> Request<StartNextPendingJobExecutionRequest>;
 
     /// <p>Updates the status of a job execution.</p>
     fn update_job_execution(
         &self,
         input: UpdateJobExecutionRequest,
-    ) -> RusotoFuture<UpdateJobExecutionResponse, UpdateJobExecutionError>;
+    ) -> Request<UpdateJobExecutionRequest>;
 }
 /// A client for the AWS IoT Jobs Data Plane API.
 #[derive(Clone)]
@@ -583,28 +584,66 @@ impl IotJobsData for IotJobsDataClient {
     fn describe_job_execution(
         &self,
         input: DescribeJobExecutionRequest,
-    ) -> RusotoFuture<DescribeJobExecutionResponse, DescribeJobExecutionError> {
+    ) -> Request<DescribeJobExecutionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the list of all jobs for a thing that are not in a terminal status.</p>
+    fn get_pending_job_executions(
+        &self,
+        input: GetPendingJobExecutionsRequest,
+    ) -> Request<GetPendingJobExecutionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets and starts the next pending (status IN_PROGRESS or QUEUED) job execution for a thing.</p>
+    fn start_next_pending_job_execution(
+        &self,
+        input: StartNextPendingJobExecutionRequest,
+    ) -> Request<StartNextPendingJobExecutionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the status of a job execution.</p>
+    fn update_job_execution(
+        &self,
+        input: UpdateJobExecutionRequest,
+    ) -> Request<UpdateJobExecutionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for DescribeJobExecutionRequest {
+    type Output = DescribeJobExecutionResponse;
+    type Error = DescribeJobExecutionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/things/{thing_name}/jobs/{job_id}",
-            job_id = input.job_id,
-            thing_name = input.thing_name
+            job_id = self.job_id,
+            thing_name = self.thing_name
         );
 
-        let mut request = SignedRequest::new("GET", "iot-jobs-data", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "iot-jobs-data", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("data.jobs.iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.execution_number {
+        if let Some(ref x) = self.execution_number {
             params.put("executionNumber", x);
         }
-        if let Some(ref x) = input.include_job_document {
+        if let Some(ref x) = self.include_job_document {
             params.put("includeJobDocument", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -621,20 +660,26 @@ impl IotJobsData for IotJobsDataClient {
             }
         })
     }
+}
 
-    /// <p>Gets the list of all jobs for a thing that are not in a terminal status.</p>
-    fn get_pending_job_executions(
-        &self,
-        input: GetPendingJobExecutionsRequest,
-    ) -> RusotoFuture<GetPendingJobExecutionsResponse, GetPendingJobExecutionsError> {
-        let request_uri = format!("/things/{thing_name}/jobs", thing_name = input.thing_name);
+impl ServiceRequest for GetPendingJobExecutionsRequest {
+    type Output = GetPendingJobExecutionsResponse;
+    type Error = GetPendingJobExecutionsError;
 
-        let mut request = SignedRequest::new("GET", "iot-jobs-data", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/things/{thing_name}/jobs", thing_name = self.thing_name);
+
+        let mut request = SignedRequest::new("GET", "iot-jobs-data", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("data.jobs.iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -649,25 +694,31 @@ impl IotJobsData for IotJobsDataClient {
             }
         })
     }
+}
 
-    /// <p>Gets and starts the next pending (status IN_PROGRESS or QUEUED) job execution for a thing.</p>
-    fn start_next_pending_job_execution(
-        &self,
-        input: StartNextPendingJobExecutionRequest,
-    ) -> RusotoFuture<StartNextPendingJobExecutionResponse, StartNextPendingJobExecutionError> {
+impl ServiceRequest for StartNextPendingJobExecutionRequest {
+    type Output = StartNextPendingJobExecutionResponse;
+    type Error = StartNextPendingJobExecutionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/things/{thing_name}/jobs/$next",
-            thing_name = input.thing_name
+            thing_name = self.thing_name
         );
 
-        let mut request = SignedRequest::new("PUT", "iot-jobs-data", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "iot-jobs-data", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("data.jobs.iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -682,26 +733,32 @@ impl IotJobsData for IotJobsDataClient {
             }
         })
     }
+}
 
-    /// <p>Updates the status of a job execution.</p>
-    fn update_job_execution(
-        &self,
-        input: UpdateJobExecutionRequest,
-    ) -> RusotoFuture<UpdateJobExecutionResponse, UpdateJobExecutionError> {
+impl ServiceRequest for UpdateJobExecutionRequest {
+    type Output = UpdateJobExecutionResponse;
+    type Error = UpdateJobExecutionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/things/{thing_name}/jobs/{job_id}",
-            job_id = input.job_id,
-            thing_name = input.thing_name
+            job_id = self.job_id,
+            thing_name = self.thing_name
         );
 
-        let mut request = SignedRequest::new("POST", "iot-jobs-data", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "iot-jobs-data", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("data.jobs.iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)

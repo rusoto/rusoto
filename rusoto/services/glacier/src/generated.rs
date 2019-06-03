@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -27,7 +28,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Provides options to abort a multipart upload identified by the upload ID.</p> <p>For information about the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-abort-upload.html">Abort Multipart Upload</a>. For conceptual information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon Glacier</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct AbortMultipartUploadInput {
+pub struct AbortMultipartUploadRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -39,9 +40,13 @@ pub struct AbortMultipartUploadInput {
     pub vault_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AbortMultipartUploadResponse {}
+
 /// <p>The input values for <code>AbortVaultLock</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct AbortVaultLockInput {
+pub struct AbortVaultLockRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID. This value must match the AWS account ID associated with the credentials used to sign the request. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you specify your account ID, do not include any hyphens ('-') in the ID.</p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -50,9 +55,13 @@ pub struct AbortVaultLockInput {
     pub vault_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AbortVaultLockResponse {}
+
 /// <p>The input values for <code>AddTagsToVault</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct AddTagsToVaultInput {
+pub struct AddTagsToVaultRequest {
     /// <p>The tags to add to the vault. Each tag is composed of a key and a value. The value can be an empty string.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -65,23 +74,9 @@ pub struct AddTagsToVaultInput {
     pub vault_name: String,
 }
 
-/// <p>Contains the Amazon Glacier response to your request.</p> <p>For information about the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-archive-post.html">Upload Archive</a>. For conceptual information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon Glacier</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ArchiveCreationOutput {
-    /// <p>The ID of the archive. This value is also included as part of the location.</p>
-    #[serde(rename = "archiveId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub archive_id: Option<String>,
-    /// <p>The checksum of the archive computed by Amazon Glacier.</p>
-    #[serde(rename = "checksum")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub checksum: Option<String>,
-    /// <p>The relative URI path of the newly added archive resource.</p>
-    #[serde(rename = "location")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub location: Option<String>,
-}
+pub struct AddTagsToVaultResponse {}
 
 /// <p>Contains information about the comma-separated value (CSV) file to select from.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -139,7 +134,7 @@ pub struct CSVOutput {
 
 /// <p>Provides options to complete a multipart upload operation. This informs Amazon Glacier that all the archive parts have been uploaded and Amazon Glacier can now assemble the archive from the uploaded parts. After assembling and saving the archive to the vault, Amazon Glacier returns the URI path of the newly created archive resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CompleteMultipartUploadInput {
+pub struct CompleteMultipartUploadRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -159,9 +154,27 @@ pub struct CompleteMultipartUploadInput {
     pub vault_name: String,
 }
 
+/// <p>Contains the Amazon Glacier response to your request.</p> <p>For information about the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-archive-post.html">Upload Archive</a>. For conceptual information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon Glacier</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CompleteMultipartUploadResponse {
+    /// <p>The ID of the archive. This value is also included as part of the location.</p>
+    #[serde(rename = "archiveId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub archive_id: Option<String>,
+    /// <p>The checksum of the archive computed by Amazon Glacier.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub checksum: Option<String>,
+    /// <p>The relative URI path of the newly added archive resource.</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<String>,
+}
+
 /// <p>The input values for <code>CompleteVaultLock</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CompleteVaultLockInput {
+pub struct CompleteVaultLockRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID. This value must match the AWS account ID associated with the credentials used to sign the request. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you specify your account ID, do not include any hyphens ('-') in the ID.</p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -173,9 +186,13 @@ pub struct CompleteVaultLockInput {
     pub vault_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CompleteVaultLockResponse {}
+
 /// <p>Provides options to create a vault.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateVaultInput {
+pub struct CreateVaultRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID. This value must match the AWS account ID associated with the credentials used to sign the request. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you specify your account ID, do not include any hyphens ('-') in the ID.</p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -187,7 +204,7 @@ pub struct CreateVaultInput {
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateVaultOutput {
+pub struct CreateVaultResponse {
     /// <p>The URI of the vault that was created.</p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -218,7 +235,7 @@ pub struct DataRetrievalRule {
 
 /// <p>Provides options for deleting an archive from an Amazon Glacier vault.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteArchiveInput {
+pub struct DeleteArchiveRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -230,9 +247,13 @@ pub struct DeleteArchiveInput {
     pub vault_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteArchiveResponse {}
+
 /// <p>DeleteVaultAccessPolicy input.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteVaultAccessPolicyInput {
+pub struct DeleteVaultAccessPolicyRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -241,9 +262,28 @@ pub struct DeleteVaultAccessPolicyInput {
     pub vault_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteVaultAccessPolicyResponse {}
+
+/// <p>Provides options for deleting a vault notification configuration from an Amazon Glacier vault.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteVaultNotificationsRequest {
+    /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>
+    #[serde(rename = "accountId")]
+    pub account_id: String,
+    /// <p>The name of the vault.</p>
+    #[serde(rename = "vaultName")]
+    pub vault_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteVaultNotificationsResponse {}
+
 /// <p>Provides options for deleting a vault from Amazon Glacier.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteVaultInput {
+pub struct DeleteVaultRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -252,20 +292,13 @@ pub struct DeleteVaultInput {
     pub vault_name: String,
 }
 
-/// <p>Provides options for deleting a vault notification configuration from an Amazon Glacier vault.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteVaultNotificationsInput {
-    /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>
-    #[serde(rename = "accountId")]
-    pub account_id: String,
-    /// <p>The name of the vault.</p>
-    #[serde(rename = "vaultName")]
-    pub vault_name: String,
-}
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteVaultResponse {}
 
 /// <p>Provides options for retrieving a job description.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeJobInput {
+pub struct DescribeJobRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -277,9 +310,129 @@ pub struct DescribeJobInput {
     pub vault_name: String,
 }
 
+/// <p>Contains the description of an Amazon Glacier job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeJobResponse {
+    /// <p>The job type. This value is either <code>ArchiveRetrieval</code>, <code>InventoryRetrieval</code>, or <code>Select</code>. </p>
+    #[serde(rename = "Action")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action: Option<String>,
+    /// <p>The archive ID requested for a select job or archive retrieval. Otherwise, this field is null.</p>
+    #[serde(rename = "ArchiveId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub archive_id: Option<String>,
+    /// <p>The SHA256 tree hash of the entire archive for an archive retrieval. For inventory retrieval or select jobs, this field is null.</p>
+    #[serde(rename = "ArchiveSHA256TreeHash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub archive_sha256_tree_hash: Option<String>,
+    /// <p>For an archive retrieval job, this value is the size in bytes of the archive being requested for download. For an inventory retrieval or select job, this value is null.</p>
+    #[serde(rename = "ArchiveSizeInBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub archive_size_in_bytes: Option<i64>,
+    /// <p>The job status. When a job is completed, you get the job's output using Get Job Output (GET output).</p>
+    #[serde(rename = "Completed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub completed: Option<bool>,
+    /// <p>The UTC time that the job request completed. While the job is in progress, the value is null.</p>
+    #[serde(rename = "CompletionDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub completion_date: Option<String>,
+    /// <p>The UTC date when the job was created. This value is a string representation of ISO 8601 date format, for example <code>"2012-03-20T17:03:43.221Z"</code>.</p>
+    #[serde(rename = "CreationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<String>,
+    /// <p>Parameters used for range inventory retrieval.</p>
+    #[serde(rename = "InventoryRetrievalParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inventory_retrieval_parameters: Option<InventoryRetrievalJobDescription>,
+    /// <p>For an inventory retrieval job, this value is the size in bytes of the inventory requested for download. For an archive retrieval or select job, this value is null.</p>
+    #[serde(rename = "InventorySizeInBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inventory_size_in_bytes: Option<i64>,
+    /// <p>The job description provided when initiating the job.</p>
+    #[serde(rename = "JobDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_description: Option<String>,
+    /// <p>An opaque string that identifies an Amazon Glacier job.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p>Contains the job output location.</p>
+    #[serde(rename = "JobOutputPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_output_path: Option<String>,
+    /// <p>Contains the location where the data from the select job is stored.</p>
+    #[serde(rename = "OutputLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_location: Option<OutputLocation>,
+    /// <p>The retrieved byte range for archive retrieval jobs in the form <i>StartByteValue</i>-<i>EndByteValue</i>. If no range was specified in the archive retrieval, then the whole archive is retrieved. In this case, <i>StartByteValue</i> equals 0 and <i>EndByteValue</i> equals the size of the archive minus 1. For inventory retrieval or select jobs, this field is null. </p>
+    #[serde(rename = "RetrievalByteRange")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retrieval_byte_range: Option<String>,
+    /// <p><p>For an archive retrieval job, this value is the checksum of the archive. Otherwise, this value is null.</p> <p>The SHA256 tree hash value for the requested range of an archive. If the <b>InitiateJob</b> request for an archive specified a tree-hash aligned range, then this field returns a value.</p> <p>If the whole archive is retrieved, this value is the same as the ArchiveSHA256TreeHash value.</p> <p>This field is null for the following:</p> <ul> <li> <p>Archive retrieval jobs that specify a range that is not tree-hash aligned</p> </li> </ul> <ul> <li> <p>Archival jobs that specify a range that is equal to the whole archive, when the job status is <code>InProgress</code> </p> </li> </ul> <ul> <li> <p>Inventory jobs</p> </li> <li> <p>Select jobs</p> </li> </ul></p>
+    #[serde(rename = "SHA256TreeHash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sha256_tree_hash: Option<String>,
+    /// <p>An Amazon SNS topic that receives notification.</p>
+    #[serde(rename = "SNSTopic")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sns_topic: Option<String>,
+    /// <p>Contains the parameters used for a select.</p>
+    #[serde(rename = "SelectParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub select_parameters: Option<SelectParameters>,
+    /// <p>The status code can be <code>InProgress</code>, <code>Succeeded</code>, or <code>Failed</code>, and indicates the status of the job.</p>
+    #[serde(rename = "StatusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_code: Option<String>,
+    /// <p>A friendly message that describes the job status.</p>
+    #[serde(rename = "StatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_message: Option<String>,
+    /// <p>The tier to use for a select or an archive retrieval. Valid values are <code>Expedited</code>, <code>Standard</code>, or <code>Bulk</code>. <code>Standard</code> is the default.</p>
+    #[serde(rename = "Tier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tier: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the vault from which an archive retrieval was requested.</p>
+    #[serde(rename = "VaultARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vault_arn: Option<String>,
+}
+
+/// <p>Contains the Amazon Glacier response to your request.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeVaultOutput {
+    /// <p>The Universal Coordinated Time (UTC) date when the vault was created. This value should be a string in the ISO 8601 date format, for example <code>2012-03-20T17:03:43.221Z</code>.</p>
+    #[serde(rename = "CreationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<String>,
+    /// <p>The Universal Coordinated Time (UTC) date when Amazon Glacier completed the last vault inventory. This value should be a string in the ISO 8601 date format, for example <code>2012-03-20T17:03:43.221Z</code>.</p>
+    #[serde(rename = "LastInventoryDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_inventory_date: Option<String>,
+    /// <p>The number of archives in the vault as of the last inventory date. This field will return <code>null</code> if an inventory has not yet run on the vault, for example if you just created the vault.</p>
+    #[serde(rename = "NumberOfArchives")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_archives: Option<i64>,
+    /// <p>Total size, in bytes, of the archives in the vault as of the last inventory date. This field will return null if an inventory has not yet run on the vault, for example if you just created the vault.</p>
+    #[serde(rename = "SizeInBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub size_in_bytes: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) of the vault.</p>
+    #[serde(rename = "VaultARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vault_arn: Option<String>,
+    /// <p>The name of the vault.</p>
+    #[serde(rename = "VaultName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vault_name: Option<String>,
+}
+
 /// <p>Provides options for retrieving metadata for a specific vault in Amazon Glacier.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeVaultInput {
+pub struct DescribeVaultRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -291,7 +444,7 @@ pub struct DescribeVaultInput {
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeVaultOutput {
+pub struct DescribeVaultResponse {
     /// <p>The Universal Coordinated Time (UTC) date when the vault was created. This value should be a string in the ISO 8601 date format, for example <code>2012-03-20T17:03:43.221Z</code>.</p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -337,7 +490,7 @@ pub struct Encryption {
 
 /// <p>Input for GetDataRetrievalPolicy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetDataRetrievalPolicyInput {
+pub struct GetDataRetrievalPolicyRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID. This value must match the AWS account ID associated with the credentials used to sign the request. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you specify your account ID, do not include any hyphens ('-') in the ID. </p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -346,7 +499,7 @@ pub struct GetDataRetrievalPolicyInput {
 /// <p>Contains the Amazon Glacier response to the <code>GetDataRetrievalPolicy</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetDataRetrievalPolicyOutput {
+pub struct GetDataRetrievalPolicyResponse {
     /// <p>Contains the returned data retrieval policy in JSON format.</p>
     #[serde(rename = "Policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -355,7 +508,7 @@ pub struct GetDataRetrievalPolicyOutput {
 
 /// <p>Provides options for downloading output of an Amazon Glacier job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetJobOutputInput {
+pub struct GetJobOutputRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -373,7 +526,7 @@ pub struct GetJobOutputInput {
 
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetJobOutputOutput {
+pub struct GetJobOutputResponse {
     /// <p>Indicates the range units accepted. For more information, see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html">RFC2616</a>. </p>
     pub accept_ranges: Option<String>,
     /// <p>The description of an archive.</p>
@@ -392,7 +545,7 @@ pub struct GetJobOutputOutput {
 
 /// <p>Input for GetVaultAccessPolicy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetVaultAccessPolicyInput {
+pub struct GetVaultAccessPolicyRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -404,7 +557,7 @@ pub struct GetVaultAccessPolicyInput {
 /// <p>Output for GetVaultAccessPolicy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetVaultAccessPolicyOutput {
+pub struct GetVaultAccessPolicyResponse {
     /// <p>Contains the returned vault access policy as a JSON string.</p>
     #[serde(rename = "policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -413,7 +566,7 @@ pub struct GetVaultAccessPolicyOutput {
 
 /// <p>The input values for <code>GetVaultLock</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetVaultLockInput {
+pub struct GetVaultLockRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -425,7 +578,7 @@ pub struct GetVaultLockInput {
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetVaultLockOutput {
+pub struct GetVaultLockResponse {
     /// <p>The UTC date and time at which the vault lock was put into the <code>InProgress</code> state.</p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -446,7 +599,7 @@ pub struct GetVaultLockOutput {
 
 /// <p>Provides options for retrieving the notification configuration set on an Amazon Glacier vault.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetVaultNotificationsInput {
+pub struct GetVaultNotificationsRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -458,7 +611,7 @@ pub struct GetVaultNotificationsInput {
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetVaultNotificationsOutput {
+pub struct GetVaultNotificationsResponse {
     /// <p>Returns the notification configuration set on the vault.</p>
     #[serde(rename = "vaultNotificationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -594,7 +747,7 @@ pub struct Grantee {
 
 /// <p>Provides options for initiating an Amazon Glacier job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct InitiateJobInput {
+pub struct InitiateJobRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -610,7 +763,7 @@ pub struct InitiateJobInput {
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct InitiateJobOutput {
+pub struct InitiateJobResponse {
     /// <p>The ID of the job.</p>
     #[serde(rename = "jobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -627,7 +780,7 @@ pub struct InitiateJobOutput {
 
 /// <p>Provides options for initiating a multipart upload to an Amazon Glacier vault.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct InitiateMultipartUploadInput {
+pub struct InitiateMultipartUploadRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -647,7 +800,7 @@ pub struct InitiateMultipartUploadInput {
 /// <p>The Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct InitiateMultipartUploadOutput {
+pub struct InitiateMultipartUploadResponse {
     /// <p>The relative URI path of the multipart upload ID Amazon Glacier created.</p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -660,7 +813,7 @@ pub struct InitiateMultipartUploadOutput {
 
 /// <p>The input values for <code>InitiateVaultLock</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct InitiateVaultLockInput {
+pub struct InitiateVaultLockRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID. This value must match the AWS account ID associated with the credentials used to sign the request. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you specify your account ID, do not include any hyphens ('-') in the ID.</p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -676,7 +829,7 @@ pub struct InitiateVaultLockInput {
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct InitiateVaultLockOutput {
+pub struct InitiateVaultLockResponse {
     /// <p>The lock ID, which is used to complete the vault locking process.</p>
     #[serde(rename = "lockId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -786,7 +939,7 @@ pub struct JobParameters {
 
 /// <p>Provides options for retrieving a job list for an Amazon Glacier vault.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListJobsInput {
+pub struct ListJobsRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -814,7 +967,7 @@ pub struct ListJobsInput {
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListJobsOutput {
+pub struct ListJobsResponse {
     /// <p>A list of job objects. Each job object contains metadata describing the job.</p>
     #[serde(rename = "JobList")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -827,7 +980,7 @@ pub struct ListJobsOutput {
 
 /// <p>Provides options for retrieving list of in-progress multipart uploads for an Amazon Glacier vault.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListMultipartUploadsInput {
+pub struct ListMultipartUploadsRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -847,7 +1000,7 @@ pub struct ListMultipartUploadsInput {
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListMultipartUploadsOutput {
+pub struct ListMultipartUploadsResponse {
     /// <p>An opaque string that represents where to continue pagination of the results. You use the marker in a new List Multipart Uploads request to obtain more uploads in the list. If there are no more uploads, this value is <code>null</code>.</p>
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -860,7 +1013,7 @@ pub struct ListMultipartUploadsOutput {
 
 /// <p>Provides options for retrieving a list of parts of an archive that have been uploaded in a specific multipart upload.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListPartsInput {
+pub struct ListPartsRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -883,7 +1036,7 @@ pub struct ListPartsInput {
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListPartsOutput {
+pub struct ListPartsResponse {
     /// <p>The description of the archive that was specified in the Initiate Multipart Upload request.</p>
     #[serde(rename = "ArchiveDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -915,7 +1068,7 @@ pub struct ListPartsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListProvisionedCapacityInput {
+pub struct ListProvisionedCapacityRequest {
     /// <p>The AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '-' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, don't include any hyphens ('-') in the ID. </p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -923,7 +1076,7 @@ pub struct ListProvisionedCapacityInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListProvisionedCapacityOutput {
+pub struct ListProvisionedCapacityResponse {
     /// <p>The response body contains the following JSON fields.</p>
     #[serde(rename = "ProvisionedCapacityList")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -932,7 +1085,7 @@ pub struct ListProvisionedCapacityOutput {
 
 /// <p>The input value for <code>ListTagsForVaultInput</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListTagsForVaultInput {
+pub struct ListTagsForVaultRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -944,7 +1097,7 @@ pub struct ListTagsForVaultInput {
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListTagsForVaultOutput {
+pub struct ListTagsForVaultResponse {
     /// <p>The tags attached to the vault. Each tag is composed of a key and a value.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -953,7 +1106,7 @@ pub struct ListTagsForVaultOutput {
 
 /// <p>Provides options to retrieve the vault list owned by the calling user's account. The list provides metadata information for each vault.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListVaultsInput {
+pub struct ListVaultsRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID. This value must match the AWS account ID associated with the credentials used to sign the request. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you specify your account ID, do not include any hyphens ('-') in the ID.</p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -970,7 +1123,7 @@ pub struct ListVaultsInput {
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListVaultsOutput {
+pub struct ListVaultsResponse {
     /// <p>The vault ARN at which to continue pagination of the results. You use the marker in another List Vaults request to obtain more vaults in the list.</p>
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1032,7 +1185,7 @@ pub struct ProvisionedCapacityDescription {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PurchaseProvisionedCapacityInput {
+pub struct PurchaseProvisionedCapacityRequest {
     /// <p>The AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '-' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, don't include any hyphens ('-') in the ID. </p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -1040,7 +1193,7 @@ pub struct PurchaseProvisionedCapacityInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct PurchaseProvisionedCapacityOutput {
+pub struct PurchaseProvisionedCapacityResponse {
     /// <p>The ID that identifies the provisioned capacity unit.</p>
     #[serde(rename = "capacityId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1049,7 +1202,7 @@ pub struct PurchaseProvisionedCapacityOutput {
 
 /// <p>The input value for <code>RemoveTagsFromVaultInput</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct RemoveTagsFromVaultInput {
+pub struct RemoveTagsFromVaultRequest {
     /// <p>A list of tag keys. Each corresponding tag is removed from the vault.</p>
     #[serde(rename = "TagKeys")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1061,6 +1214,10 @@ pub struct RemoveTagsFromVaultInput {
     #[serde(rename = "vaultName")]
     pub vault_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RemoveTagsFromVaultResponse {}
 
 /// <p>Contains information about the location in Amazon S3 where the select job results are stored.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1122,7 +1279,7 @@ pub struct SelectParameters {
 
 /// <p>SetDataRetrievalPolicy input.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct SetDataRetrievalPolicyInput {
+pub struct SetDataRetrievalPolicyRequest {
     /// <p>The data retrieval policy in JSON format.</p>
     #[serde(rename = "Policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1132,9 +1289,13 @@ pub struct SetDataRetrievalPolicyInput {
     pub account_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SetDataRetrievalPolicyResponse {}
+
 /// <p>SetVaultAccessPolicy input.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct SetVaultAccessPolicyInput {
+pub struct SetVaultAccessPolicyRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -1147,9 +1308,13 @@ pub struct SetVaultAccessPolicyInput {
     pub vault_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SetVaultAccessPolicyResponse {}
+
 /// <p>Provides options to configure notifications that will be sent when specific events happen to a vault.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct SetVaultNotificationsInput {
+pub struct SetVaultNotificationsRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -1162,9 +1327,13 @@ pub struct SetVaultNotificationsInput {
     pub vault_notification_config: Option<VaultNotificationConfig>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SetVaultNotificationsResponse {}
+
 /// <p>Provides options to add an archive to a vault.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UploadArchiveInput {
+pub struct UploadArchiveRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -1188,6 +1357,24 @@ pub struct UploadArchiveInput {
     /// <p>The name of the vault.</p>
     #[serde(rename = "vaultName")]
     pub vault_name: String,
+}
+
+/// <p>Contains the Amazon Glacier response to your request.</p> <p>For information about the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-archive-post.html">Upload Archive</a>. For conceptual information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon Glacier</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UploadArchiveResponse {
+    /// <p>The ID of the archive. This value is also included as part of the location.</p>
+    #[serde(rename = "archiveId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub archive_id: Option<String>,
+    /// <p>The checksum of the archive computed by Amazon Glacier.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub checksum: Option<String>,
+    /// <p>The relative URI path of the newly added archive resource.</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<String>,
 }
 
 /// <p>A list of in-progress multipart uploads for a vault.</p>
@@ -1218,7 +1405,7 @@ pub struct UploadListElement {
 
 /// <p>Provides options to upload a part of an archive in a multipart upload operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UploadMultipartPartInput {
+pub struct UploadMultipartPartRequest {
     /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>
     #[serde(rename = "accountId")]
     pub account_id: String,
@@ -1250,7 +1437,7 @@ pub struct UploadMultipartPartInput {
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UploadMultipartPartOutput {
+pub struct UploadMultipartPartResponse {
     /// <p>The SHA256 tree hash that Amazon Glacier computed for the uploaded part.</p>
     #[serde(rename = "checksum")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3136,186 +3323,158 @@ pub trait Glacier {
     /// <p>This operation aborts a multipart upload identified by the upload ID.</p> <p>After the Abort Multipart Upload request succeeds, you cannot upload any more parts to the multipart upload or complete the multipart upload. Aborting a completed upload fails. However, aborting an already-aborted upload will succeed, for a short time. For more information about uploading a part and completing a multipart upload, see <a>UploadMultipartPart</a> and <a>CompleteMultipartUpload</a>.</p> <p>This operation is idempotent.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-abort-upload.html">Abort Multipart Upload</a> in the <i>Amazon Glacier Developer Guide</i>. </p>
     fn abort_multipart_upload(
         &self,
-        input: AbortMultipartUploadInput,
-    ) -> RusotoFuture<(), AbortMultipartUploadError>;
+        input: AbortMultipartUploadRequest,
+    ) -> Request<AbortMultipartUploadRequest>;
 
     /// <p>This operation aborts the vault locking process if the vault lock is not in the <code>Locked</code> state. If the vault lock is in the <code>Locked</code> state when this operation is requested, the operation returns an <code>AccessDeniedException</code> error. Aborting the vault locking process removes the vault lock policy from the specified vault. </p> <p>A vault lock is put into the <code>InProgress</code> state by calling <a>InitiateVaultLock</a>. A vault lock is put into the <code>Locked</code> state by calling <a>CompleteVaultLock</a>. You can get the state of a vault lock by calling <a>GetVaultLock</a>. For more information about the vault locking process, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock.html">Amazon Glacier Vault Lock</a>. For more information about vault lock policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock-policy.html">Amazon Glacier Access Control with Vault Lock Policies</a>. </p> <p>This operation is idempotent. You can successfully invoke this operation multiple times, if the vault lock is in the <code>InProgress</code> state or if there is no policy associated with the vault.</p>
-    fn abort_vault_lock(&self, input: AbortVaultLockInput)
-        -> RusotoFuture<(), AbortVaultLockError>;
+    fn abort_vault_lock(&self, input: AbortVaultLockRequest) -> Request<AbortVaultLockRequest>;
 
     /// <p>This operation adds the specified tags to a vault. Each tag is composed of a key and a value. Each vault can have up to 10 tags. If your request would cause the tag limit for the vault to be exceeded, the operation throws the <code>LimitExceededException</code> error. If a tag already exists on the vault under a specified key, the existing key value will be overwritten. For more information about tags, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/tagging.html">Tagging Amazon Glacier Resources</a>. </p>
-    fn add_tags_to_vault(
-        &self,
-        input: AddTagsToVaultInput,
-    ) -> RusotoFuture<(), AddTagsToVaultError>;
+    fn add_tags_to_vault(&self, input: AddTagsToVaultRequest) -> Request<AddTagsToVaultRequest>;
 
     /// <p>You call this operation to inform Amazon Glacier that all the archive parts have been uploaded and that Amazon Glacier can now assemble the archive from the uploaded parts. After assembling and saving the archive to the vault, Amazon Glacier returns the URI path of the newly created archive resource. Using the URI path, you can then access the archive. After you upload an archive, you should save the archive ID returned to retrieve the archive at a later point. You can also get the vault inventory to obtain a list of archive IDs in a vault. For more information, see <a>InitiateJob</a>.</p> <p>In the request, you must include the computed SHA256 tree hash of the entire archive you have uploaded. For information about computing a SHA256 tree hash, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/checksum-calculations.html">Computing Checksums</a>. On the server side, Amazon Glacier also constructs the SHA256 tree hash of the assembled archive. If the values match, Amazon Glacier saves the archive to the vault; otherwise, it returns an error, and the operation fails. The <a>ListParts</a> operation returns a list of parts uploaded for a specific multipart upload. It includes checksum information for each uploaded part that can be used to debug a bad checksum issue.</p> <p>Additionally, Amazon Glacier also checks for any missing content ranges when assembling the archive, if missing content ranges are found, Amazon Glacier returns an error and the operation fails.</p> <p>Complete Multipart Upload is an idempotent operation. After your first successful complete multipart upload, if you call the operation again within a short period, the operation will succeed and return the same archive ID. This is useful in the event you experience a network issue that causes an aborted connection or receive a 500 server error, in which case you can repeat your Complete Multipart Upload request and get the same archive ID without creating duplicate archives. Note, however, that after the multipart upload completes, you cannot call the List Parts operation and the multipart upload will not appear in List Multipart Uploads response, even if idempotent complete is possible.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/uploading-archive-mpu.html">Uploading Large Archives in Parts (Multipart Upload)</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-complete-upload.html">Complete Multipart Upload</a> in the <i>Amazon Glacier Developer Guide</i>. </p>
     fn complete_multipart_upload(
         &self,
-        input: CompleteMultipartUploadInput,
-    ) -> RusotoFuture<ArchiveCreationOutput, CompleteMultipartUploadError>;
+        input: CompleteMultipartUploadRequest,
+    ) -> Request<CompleteMultipartUploadRequest>;
 
     /// <p>This operation completes the vault locking process by transitioning the vault lock from the <code>InProgress</code> state to the <code>Locked</code> state, which causes the vault lock policy to become unchangeable. A vault lock is put into the <code>InProgress</code> state by calling <a>InitiateVaultLock</a>. You can obtain the state of the vault lock by calling <a>GetVaultLock</a>. For more information about the vault locking process, <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock.html">Amazon Glacier Vault Lock</a>. </p> <p>This operation is idempotent. This request is always successful if the vault lock is in the <code>Locked</code> state and the provided lock ID matches the lock ID originally used to lock the vault.</p> <p>If an invalid lock ID is passed in the request when the vault lock is in the <code>Locked</code> state, the operation returns an <code>AccessDeniedException</code> error. If an invalid lock ID is passed in the request when the vault lock is in the <code>InProgress</code> state, the operation throws an <code>InvalidParameter</code> error.</p>
     fn complete_vault_lock(
         &self,
-        input: CompleteVaultLockInput,
-    ) -> RusotoFuture<(), CompleteVaultLockError>;
+        input: CompleteVaultLockRequest,
+    ) -> Request<CompleteVaultLockRequest>;
 
     /// <p>This operation creates a new vault with the specified name. The name of the vault must be unique within a region for an AWS account. You can create up to 1,000 vaults per account. If you need to create more vaults, contact Amazon Glacier.</p> <p>You must use the following guidelines when naming a vault.</p> <ul> <li> <p>Names can be between 1 and 255 characters long.</p> </li> <li> <p>Allowed characters are a-z, A-Z, 0-9, '_' (underscore), '-' (hyphen), and '.' (period).</p> </li> </ul> <p>This operation is idempotent.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/creating-vaults.html">Creating a Vault in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vault-put.html">Create Vault </a> in the <i>Amazon Glacier Developer Guide</i>. </p>
-    fn create_vault(
-        &self,
-        input: CreateVaultInput,
-    ) -> RusotoFuture<CreateVaultOutput, CreateVaultError>;
+    fn create_vault(&self, input: CreateVaultRequest) -> Request<CreateVaultRequest>;
 
     /// <p>This operation deletes an archive from a vault. Subsequent requests to initiate a retrieval of this archive will fail. Archive retrievals that are in progress for this archive ID may or may not succeed according to the following scenarios:</p> <ul> <li> <p>If the archive retrieval job is actively preparing the data for download when Amazon Glacier receives the delete archive request, the archival retrieval operation might fail.</p> </li> <li> <p>If the archive retrieval job has successfully prepared the archive for download when Amazon Glacier receives the delete archive request, you will be able to download the output.</p> </li> </ul> <p>This operation is idempotent. Attempting to delete an already-deleted archive does not result in an error.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/deleting-an-archive.html">Deleting an Archive in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-archive-delete.html">Delete Archive</a> in the <i>Amazon Glacier Developer Guide</i>. </p>
-    fn delete_archive(&self, input: DeleteArchiveInput) -> RusotoFuture<(), DeleteArchiveError>;
+    fn delete_archive(&self, input: DeleteArchiveRequest) -> Request<DeleteArchiveRequest>;
 
     /// <p>This operation deletes a vault. Amazon Glacier will delete a vault only if there are no archives in the vault as of the last inventory and there have been no writes to the vault since the last inventory. If either of these conditions is not satisfied, the vault deletion fails (that is, the vault is not removed) and Amazon Glacier returns an error. You can use <a>DescribeVault</a> to return the number of archives in a vault, and you can use <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-initiate-job-post.html">Initiate a Job (POST jobs)</a> to initiate a new inventory retrieval for a vault. The inventory contains the archive IDs you use to delete archives using <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-archive-delete.html">Delete Archive (DELETE archive)</a>.</p> <p>This operation is idempotent.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/deleting-vaults.html">Deleting a Vault in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vault-delete.html">Delete Vault </a> in the <i>Amazon Glacier Developer Guide</i>. </p>
-    fn delete_vault(&self, input: DeleteVaultInput) -> RusotoFuture<(), DeleteVaultError>;
+    fn delete_vault(&self, input: DeleteVaultRequest) -> Request<DeleteVaultRequest>;
 
     /// <p>This operation deletes the access policy associated with the specified vault. The operation is eventually consistent; that is, it might take some time for Amazon Glacier to completely remove the access policy, and you might still see the effect of the policy for a short time after you send the delete request.</p> <p>This operation is idempotent. You can invoke delete multiple times, even if there is no policy associated with the vault. For more information about vault access policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-access-policy.html">Amazon Glacier Access Control with Vault Access Policies</a>. </p>
     fn delete_vault_access_policy(
         &self,
-        input: DeleteVaultAccessPolicyInput,
-    ) -> RusotoFuture<(), DeleteVaultAccessPolicyError>;
+        input: DeleteVaultAccessPolicyRequest,
+    ) -> Request<DeleteVaultAccessPolicyRequest>;
 
     /// <p>This operation deletes the notification configuration set for a vault. The operation is eventually consistent; that is, it might take some time for Amazon Glacier to completely disable the notifications and you might still receive some notifications for a short time after you send the delete request.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/configuring-notifications.html">Configuring Vault Notifications in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vault-notifications-delete.html">Delete Vault Notification Configuration </a> in the Amazon Glacier Developer Guide. </p>
     fn delete_vault_notifications(
         &self,
-        input: DeleteVaultNotificationsInput,
-    ) -> RusotoFuture<(), DeleteVaultNotificationsError>;
+        input: DeleteVaultNotificationsRequest,
+    ) -> Request<DeleteVaultNotificationsRequest>;
 
     /// <p>This operation returns information about a job you previously initiated, including the job initiation date, the user who initiated the job, the job status code/message and the Amazon SNS topic to notify after Amazon Glacier completes the job. For more information about initiating a job, see <a>InitiateJob</a>. </p> <note> <p>This operation enables you to check the status of your job. However, it is strongly recommended that you set up an Amazon SNS topic and specify it in your initiate job request so that Amazon Glacier can notify the topic after it completes the job.</p> </note> <p>A job ID will not expire for at least 24 hours after Amazon Glacier completes the job.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For more information about using this operation, see the documentation for the underlying REST API <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-describe-job-get.html">Describe Job</a> in the <i>Amazon Glacier Developer Guide</i>. </p>
-    fn describe_job(
-        &self,
-        input: DescribeJobInput,
-    ) -> RusotoFuture<GlacierJobDescription, DescribeJobError>;
+    fn describe_job(&self, input: DescribeJobRequest) -> Request<DescribeJobRequest>;
 
     /// <p>This operation returns information about a vault, including the vault's Amazon Resource Name (ARN), the date the vault was created, the number of archives it contains, and the total size of all the archives in the vault. The number of archives and their total size are as of the last inventory generation. This means that if you add or remove an archive from a vault, and then immediately use Describe Vault, the change in contents will not be immediately reflected. If you want to retrieve the latest inventory of the vault, use <a>InitiateJob</a>. Amazon Glacier generates vault inventories approximately daily. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-inventory.html">Downloading a Vault Inventory in Amazon Glacier</a>. </p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/retrieving-vault-info.html">Retrieving Vault Metadata in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vault-get.html">Describe Vault </a> in the <i>Amazon Glacier Developer Guide</i>. </p>
-    fn describe_vault(
-        &self,
-        input: DescribeVaultInput,
-    ) -> RusotoFuture<DescribeVaultOutput, DescribeVaultError>;
+    fn describe_vault(&self, input: DescribeVaultRequest) -> Request<DescribeVaultRequest>;
 
     /// <p>This operation returns the current data retrieval policy for the account and region specified in the GET request. For more information about data retrieval policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/data-retrieval-policy.html">Amazon Glacier Data Retrieval Policies</a>.</p>
     fn get_data_retrieval_policy(
         &self,
-        input: GetDataRetrievalPolicyInput,
-    ) -> RusotoFuture<GetDataRetrievalPolicyOutput, GetDataRetrievalPolicyError>;
+        input: GetDataRetrievalPolicyRequest,
+    ) -> Request<GetDataRetrievalPolicyRequest>;
 
     /// <p>This operation downloads the output of the job you initiated using <a>InitiateJob</a>. Depending on the job type you specified when you initiated the job, the output will be either the content of an archive or a vault inventory.</p> <p>You can download all the job output or download a portion of the output by specifying a byte range. In the case of an archive retrieval job, depending on the byte range you specify, Amazon Glacier returns the checksum for the portion of the data. You can compute the checksum on the client and verify that the values match to ensure the portion you downloaded is the correct data.</p> <p>A job ID will not expire for at least 24 hours after Amazon Glacier completes the job. That a byte range. For both archive and inventory retrieval jobs, you should verify the downloaded size against the size returned in the headers from the <b>Get Job Output</b> response.</p> <p>For archive retrieval jobs, you should also verify that the size is what you expected. If you download a portion of the output, the expected size is based on the range of bytes you specified. For example, if you specify a range of <code>bytes=0-1048575</code>, you should verify your download size is 1,048,576 bytes. If you download an entire archive, the expected size is the size of the archive when you uploaded it to Amazon Glacier The expected size is also returned in the headers from the <b>Get Job Output</b> response.</p> <p>In the case of an archive retrieval job, depending on the byte range you specify, Amazon Glacier returns the checksum for the portion of the data. To ensure the portion you downloaded is the correct data, compute the checksum on the client, verify that the values match, and verify that the size is what you expected.</p> <p>A job ID does not expire for at least 24 hours after Amazon Glacier completes the job. That is, you can download the job output within the 24 hours period after Amazon Glacier completes the job.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-inventory.html">Downloading a Vault Inventory</a>, <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/downloading-an-archive.html">Downloading an Archive</a>, and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-job-output-get.html">Get Job Output </a> </p>
-    fn get_job_output(
-        &self,
-        input: GetJobOutputInput,
-    ) -> RusotoFuture<GetJobOutputOutput, GetJobOutputError>;
+    fn get_job_output(&self, input: GetJobOutputRequest) -> Request<GetJobOutputRequest>;
 
     /// <p>This operation retrieves the <code>access-policy</code> subresource set on the vault; for more information on setting this subresource, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-SetVaultAccessPolicy.html">Set Vault Access Policy (PUT access-policy)</a>. If there is no access policy set on the vault, the operation returns a <code>404 Not found</code> error. For more information about vault access policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-access-policy.html">Amazon Glacier Access Control with Vault Access Policies</a>.</p>
     fn get_vault_access_policy(
         &self,
-        input: GetVaultAccessPolicyInput,
-    ) -> RusotoFuture<GetVaultAccessPolicyOutput, GetVaultAccessPolicyError>;
+        input: GetVaultAccessPolicyRequest,
+    ) -> Request<GetVaultAccessPolicyRequest>;
 
     /// <p>This operation retrieves the following attributes from the <code>lock-policy</code> subresource set on the specified vault: </p> <ul> <li> <p>The vault lock policy set on the vault.</p> </li> <li> <p>The state of the vault lock, which is either <code>InProgess</code> or <code>Locked</code>.</p> </li> <li> <p>When the lock ID expires. The lock ID is used to complete the vault locking process.</p> </li> <li> <p>When the vault lock was initiated and put into the <code>InProgress</code> state.</p> </li> </ul> <p>A vault lock is put into the <code>InProgress</code> state by calling <a>InitiateVaultLock</a>. A vault lock is put into the <code>Locked</code> state by calling <a>CompleteVaultLock</a>. You can abort the vault locking process by calling <a>AbortVaultLock</a>. For more information about the vault locking process, <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock.html">Amazon Glacier Vault Lock</a>. </p> <p>If there is no vault lock policy set on the vault, the operation returns a <code>404 Not found</code> error. For more information about vault lock policies, <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock-policy.html">Amazon Glacier Access Control with Vault Lock Policies</a>. </p>
-    fn get_vault_lock(
-        &self,
-        input: GetVaultLockInput,
-    ) -> RusotoFuture<GetVaultLockOutput, GetVaultLockError>;
+    fn get_vault_lock(&self, input: GetVaultLockRequest) -> Request<GetVaultLockRequest>;
 
     /// <p>This operation retrieves the <code>notification-configuration</code> subresource of the specified vault.</p> <p>For information about setting a notification configuration on a vault, see <a>SetVaultNotifications</a>. If a notification configuration for a vault is not set, the operation returns a <code>404 Not Found</code> error. For more information about vault notifications, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/configuring-notifications.html">Configuring Vault Notifications in Amazon Glacier</a>. </p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/configuring-notifications.html">Configuring Vault Notifications in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vault-notifications-get.html">Get Vault Notification Configuration </a> in the <i>Amazon Glacier Developer Guide</i>. </p>
     fn get_vault_notifications(
         &self,
-        input: GetVaultNotificationsInput,
-    ) -> RusotoFuture<GetVaultNotificationsOutput, GetVaultNotificationsError>;
+        input: GetVaultNotificationsRequest,
+    ) -> Request<GetVaultNotificationsRequest>;
 
     /// <p>This operation initiates a job of the specified type, which can be a select, an archival retrieval, or a vault retrieval. For more information about using this operation, see the documentation for the underlying REST API <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-initiate-job-post.html">Initiate a Job</a>. </p>
-    fn initiate_job(
-        &self,
-        input: InitiateJobInput,
-    ) -> RusotoFuture<InitiateJobOutput, InitiateJobError>;
+    fn initiate_job(&self, input: InitiateJobRequest) -> Request<InitiateJobRequest>;
 
     /// <p>This operation initiates a multipart upload. Amazon Glacier creates a multipart upload resource and returns its ID in the response. The multipart upload ID is used in subsequent requests to upload parts of an archive (see <a>UploadMultipartPart</a>).</p> <p>When you initiate a multipart upload, you specify the part size in number of bytes. The part size must be a megabyte (1024 KB) multiplied by a power of 2-for example, 1048576 (1 MB), 2097152 (2 MB), 4194304 (4 MB), 8388608 (8 MB), and so on. The minimum allowable part size is 1 MB, and the maximum is 4 GB.</p> <p>Every part you upload to this resource (see <a>UploadMultipartPart</a>), except the last one, must have the same size. The last one can be the same size or smaller. For example, suppose you want to upload a 16.2 MB file. If you initiate the multipart upload with a part size of 4 MB, you will upload four parts of 4 MB each and one part of 0.2 MB. </p> <note> <p>You don't need to know the size of the archive when you start a multipart upload because Amazon Glacier does not require you to specify the overall archive size.</p> </note> <p>After you complete the multipart upload, Amazon Glacier removes the multipart upload resource referenced by the ID. Amazon Glacier also removes the multipart upload resource if you cancel the multipart upload or it may be removed if there is no activity for a period of 24 hours.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/uploading-archive-mpu.html">Uploading Large Archives in Parts (Multipart Upload)</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-initiate-upload.html">Initiate Multipart Upload</a> in the <i>Amazon Glacier Developer Guide</i>.</p>
     fn initiate_multipart_upload(
         &self,
-        input: InitiateMultipartUploadInput,
-    ) -> RusotoFuture<InitiateMultipartUploadOutput, InitiateMultipartUploadError>;
+        input: InitiateMultipartUploadRequest,
+    ) -> Request<InitiateMultipartUploadRequest>;
 
     /// <p>This operation initiates the vault locking process by doing the following:</p> <ul> <li> <p>Installing a vault lock policy on the specified vault.</p> </li> <li> <p>Setting the lock state of vault lock to <code>InProgress</code>.</p> </li> <li> <p>Returning a lock ID, which is used to complete the vault locking process.</p> </li> </ul> <p>You can set one vault lock policy for each vault and this policy can be up to 20 KB in size. For more information about vault lock policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock-policy.html">Amazon Glacier Access Control with Vault Lock Policies</a>. </p> <p>You must complete the vault locking process within 24 hours after the vault lock enters the <code>InProgress</code> state. After the 24 hour window ends, the lock ID expires, the vault automatically exits the <code>InProgress</code> state, and the vault lock policy is removed from the vault. You call <a>CompleteVaultLock</a> to complete the vault locking process by setting the state of the vault lock to <code>Locked</code>. </p> <p>After a vault lock is in the <code>Locked</code> state, you cannot initiate a new vault lock for the vault.</p> <p>You can abort the vault locking process by calling <a>AbortVaultLock</a>. You can get the state of the vault lock by calling <a>GetVaultLock</a>. For more information about the vault locking process, <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock.html">Amazon Glacier Vault Lock</a>.</p> <p>If this operation is called when the vault lock is in the <code>InProgress</code> state, the operation returns an <code>AccessDeniedException</code> error. When the vault lock is in the <code>InProgress</code> state you must call <a>AbortVaultLock</a> before you can initiate a new vault lock policy. </p>
     fn initiate_vault_lock(
         &self,
-        input: InitiateVaultLockInput,
-    ) -> RusotoFuture<InitiateVaultLockOutput, InitiateVaultLockError>;
+        input: InitiateVaultLockRequest,
+    ) -> Request<InitiateVaultLockRequest>;
 
     /// <p>This operation lists jobs for a vault, including jobs that are in-progress and jobs that have recently finished. The List Job operation returns a list of these jobs sorted by job initiation time.</p> <note> <p>Amazon Glacier retains recently completed jobs for a period before deleting them; however, it eventually removes completed jobs. The output of completed jobs can be retrieved. Retaining completed jobs for a period of time after they have completed enables you to get a job output in the event you miss the job completion notification or your first attempt to download it fails. For example, suppose you start an archive retrieval job to download an archive. After the job completes, you start to download the archive but encounter a network error. In this scenario, you can retry and download the archive while the job exists.</p> </note> <p>The List Jobs operation supports pagination. You should always check the response <code>Marker</code> field. If there are no more jobs to list, the <code>Marker</code> field is set to <code>null</code>. If there are more jobs to list, the <code>Marker</code> field is set to a non-null value, which you can use to continue the pagination of the list. To return a list of jobs that begins at a specific job, set the marker request parameter to the <code>Marker</code> value for that job that you obtained from a previous List Jobs request.</p> <p>You can set a maximum limit for the number of jobs returned in the response by specifying the <code>limit</code> parameter in the request. The default limit is 50. The number of jobs returned might be fewer than the limit, but the number of returned jobs never exceeds the limit.</p> <p>Additionally, you can filter the jobs list returned by specifying the optional <code>statuscode</code> parameter or <code>completed</code> parameter, or both. Using the <code>statuscode</code> parameter, you can specify to return only jobs that match either the <code>InProgress</code>, <code>Succeeded</code>, or <code>Failed</code> status. Using the <code>completed</code> parameter, you can specify to return only jobs that were completed (<code>true</code>) or jobs that were not completed (<code>false</code>).</p> <p>For more information about using this operation, see the documentation for the underlying REST API <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-jobs-get.html">List Jobs</a>. </p>
-    fn list_jobs(&self, input: ListJobsInput) -> RusotoFuture<ListJobsOutput, ListJobsError>;
+    fn list_jobs(&self, input: ListJobsRequest) -> Request<ListJobsRequest>;
 
     /// <p>This operation lists in-progress multipart uploads for the specified vault. An in-progress multipart upload is a multipart upload that has been initiated by an <a>InitiateMultipartUpload</a> request, but has not yet been completed or aborted. The list returned in the List Multipart Upload response has no guaranteed order. </p> <p>The List Multipart Uploads operation supports pagination. By default, this operation returns up to 50 multipart uploads in the response. You should always check the response for a <code>marker</code> at which to continue the list; if there are no more items the <code>marker</code> is <code>null</code>. To return a list of multipart uploads that begins at a specific upload, set the <code>marker</code> request parameter to the value you obtained from a previous List Multipart Upload request. You can also limit the number of uploads returned in the response by specifying the <code>limit</code> parameter in the request.</p> <p>Note the difference between this operation and listing parts (<a>ListParts</a>). The List Multipart Uploads operation lists all multipart uploads for a vault and does not require a multipart upload ID. The List Parts operation requires a multipart upload ID since parts are associated with a single upload.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-list-uploads.html">List Multipart Uploads </a> in the <i>Amazon Glacier Developer Guide</i>.</p>
     fn list_multipart_uploads(
         &self,
-        input: ListMultipartUploadsInput,
-    ) -> RusotoFuture<ListMultipartUploadsOutput, ListMultipartUploadsError>;
+        input: ListMultipartUploadsRequest,
+    ) -> Request<ListMultipartUploadsRequest>;
 
     /// <p>This operation lists the parts of an archive that have been uploaded in a specific multipart upload. You can make this request at any time during an in-progress multipart upload before you complete the upload (see <a>CompleteMultipartUpload</a>. List Parts returns an error for completed uploads. The list returned in the List Parts response is sorted by part range. </p> <p>The List Parts operation supports pagination. By default, this operation returns up to 50 uploaded parts in the response. You should always check the response for a <code>marker</code> at which to continue the list; if there are no more items the <code>marker</code> is <code>null</code>. To return a list of parts that begins at a specific part, set the <code>marker</code> request parameter to the value you obtained from a previous List Parts request. You can also limit the number of parts returned in the response by specifying the <code>limit</code> parameter in the request. </p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-list-parts.html">List Parts</a> in the <i>Amazon Glacier Developer Guide</i>.</p>
-    fn list_parts(&self, input: ListPartsInput) -> RusotoFuture<ListPartsOutput, ListPartsError>;
+    fn list_parts(&self, input: ListPartsRequest) -> Request<ListPartsRequest>;
 
     /// <p>This operation lists the provisioned capacity units for the specified AWS account.</p>
     fn list_provisioned_capacity(
         &self,
-        input: ListProvisionedCapacityInput,
-    ) -> RusotoFuture<ListProvisionedCapacityOutput, ListProvisionedCapacityError>;
+        input: ListProvisionedCapacityRequest,
+    ) -> Request<ListProvisionedCapacityRequest>;
 
     /// <p>This operation lists all the tags attached to a vault. The operation returns an empty map if there are no tags. For more information about tags, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/tagging.html">Tagging Amazon Glacier Resources</a>.</p>
     fn list_tags_for_vault(
         &self,
-        input: ListTagsForVaultInput,
-    ) -> RusotoFuture<ListTagsForVaultOutput, ListTagsForVaultError>;
+        input: ListTagsForVaultRequest,
+    ) -> Request<ListTagsForVaultRequest>;
 
     /// <p>This operation lists all vaults owned by the calling user's account. The list returned in the response is ASCII-sorted by vault name.</p> <p>By default, this operation returns up to 10 items. If there are more vaults to list, the response <code>marker</code> field contains the vault Amazon Resource Name (ARN) at which to continue the list with a new List Vaults request; otherwise, the <code>marker</code> field is <code>null</code>. To return a list of vaults that begins at a specific vault, set the <code>marker</code> request parameter to the vault ARN you obtained from a previous List Vaults request. You can also limit the number of vaults returned in the response by specifying the <code>limit</code> parameter in the request. </p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/retrieving-vault-info.html">Retrieving Vault Metadata in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vaults-get.html">List Vaults </a> in the <i>Amazon Glacier Developer Guide</i>. </p>
-    fn list_vaults(
-        &self,
-        input: ListVaultsInput,
-    ) -> RusotoFuture<ListVaultsOutput, ListVaultsError>;
+    fn list_vaults(&self, input: ListVaultsRequest) -> Request<ListVaultsRequest>;
 
     /// <p>This operation purchases a provisioned capacity unit for an AWS account. </p>
     fn purchase_provisioned_capacity(
         &self,
-        input: PurchaseProvisionedCapacityInput,
-    ) -> RusotoFuture<PurchaseProvisionedCapacityOutput, PurchaseProvisionedCapacityError>;
+        input: PurchaseProvisionedCapacityRequest,
+    ) -> Request<PurchaseProvisionedCapacityRequest>;
 
     /// <p>This operation removes one or more tags from the set of tags attached to a vault. For more information about tags, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/tagging.html">Tagging Amazon Glacier Resources</a>. This operation is idempotent. The operation will be successful, even if there are no tags attached to the vault. </p>
     fn remove_tags_from_vault(
         &self,
-        input: RemoveTagsFromVaultInput,
-    ) -> RusotoFuture<(), RemoveTagsFromVaultError>;
+        input: RemoveTagsFromVaultRequest,
+    ) -> Request<RemoveTagsFromVaultRequest>;
 
     /// <p>This operation sets and then enacts a data retrieval policy in the region specified in the PUT request. You can set one policy per region for an AWS account. The policy is enacted within a few minutes of a successful PUT operation.</p> <p>The set policy operation does not affect retrieval jobs that were in progress before the policy was enacted. For more information about data retrieval policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/data-retrieval-policy.html">Amazon Glacier Data Retrieval Policies</a>. </p>
     fn set_data_retrieval_policy(
         &self,
-        input: SetDataRetrievalPolicyInput,
-    ) -> RusotoFuture<(), SetDataRetrievalPolicyError>;
+        input: SetDataRetrievalPolicyRequest,
+    ) -> Request<SetDataRetrievalPolicyRequest>;
 
     /// <p>This operation configures an access policy for a vault and will overwrite an existing policy. To configure a vault access policy, send a PUT request to the <code>access-policy</code> subresource of the vault. An access policy is specific to a vault and is also called a vault subresource. You can set one access policy per vault and the policy can be up to 20 KB in size. For more information about vault access policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-access-policy.html">Amazon Glacier Access Control with Vault Access Policies</a>. </p>
     fn set_vault_access_policy(
         &self,
-        input: SetVaultAccessPolicyInput,
-    ) -> RusotoFuture<(), SetVaultAccessPolicyError>;
+        input: SetVaultAccessPolicyRequest,
+    ) -> Request<SetVaultAccessPolicyRequest>;
 
     /// <p>This operation configures notifications that will be sent when specific events happen to a vault. By default, you don't get any notifications.</p> <p>To configure vault notifications, send a PUT request to the <code>notification-configuration</code> subresource of the vault. The request should include a JSON document that provides an Amazon SNS topic and specific events for which you want Amazon Glacier to send notifications to the topic.</p> <p>Amazon SNS topics must grant permission to the vault to be allowed to publish notifications to the topic. You can configure a vault to publish a notification for the following vault events:</p> <ul> <li> <p> <b>ArchiveRetrievalCompleted</b> This event occurs when a job that was initiated for an archive retrieval is completed (<a>InitiateJob</a>). The status of the completed job can be "Succeeded" or "Failed". The notification sent to the SNS topic is the same output as returned from <a>DescribeJob</a>. </p> </li> <li> <p> <b>InventoryRetrievalCompleted</b> This event occurs when a job that was initiated for an inventory retrieval is completed (<a>InitiateJob</a>). The status of the completed job can be "Succeeded" or "Failed". The notification sent to the SNS topic is the same output as returned from <a>DescribeJob</a>. </p> </li> </ul> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/configuring-notifications.html">Configuring Vault Notifications in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vault-notifications-put.html">Set Vault Notification Configuration </a> in the <i>Amazon Glacier Developer Guide</i>. </p>
     fn set_vault_notifications(
         &self,
-        input: SetVaultNotificationsInput,
-    ) -> RusotoFuture<(), SetVaultNotificationsError>;
+        input: SetVaultNotificationsRequest,
+    ) -> Request<SetVaultNotificationsRequest>;
 
     /// <p>This operation adds an archive to a vault. This is a synchronous operation, and for a successful upload, your data is durably persisted. Amazon Glacier returns the archive ID in the <code>x-amz-archive-id</code> header of the response. </p> <p>You must use the archive ID to access your data in Amazon Glacier. After you upload an archive, you should save the archive ID returned so that you can retrieve or delete the archive later. Besides saving the archive ID, you can also index it and give it a friendly name to allow for better searching. You can also use the optional archive description field to specify how the archive is referred to in an external index of archives, such as you might create in Amazon DynamoDB. You can also get the vault inventory to obtain a list of archive IDs in a vault. For more information, see <a>InitiateJob</a>. </p> <p>You must provide a SHA256 tree hash of the data you are uploading. For information about computing a SHA256 tree hash, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/checksum-calculations.html">Computing Checksums</a>. </p> <p>You can optionally specify an archive description of up to 1,024 printable ASCII characters. You can get the archive description when you either retrieve the archive or get the vault inventory. For more information, see <a>InitiateJob</a>. Amazon Glacier does not interpret the description in any way. An archive description does not need to be unique. You cannot use the description to retrieve or sort the archive list. </p> <p>Archives are immutable. After you upload an archive, you cannot edit the archive or its description.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/uploading-an-archive.html">Uploading an Archive in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-archive-post.html">Upload Archive</a> in the <i>Amazon Glacier Developer Guide</i>. </p>
-    fn upload_archive(
-        &self,
-        input: UploadArchiveInput,
-    ) -> RusotoFuture<ArchiveCreationOutput, UploadArchiveError>;
+    fn upload_archive(&self, input: UploadArchiveRequest) -> Request<UploadArchiveRequest>;
 
     /// <p>This operation uploads a part of an archive. You can upload archive parts in any order. You can also upload them in parallel. You can upload up to 10,000 parts for a multipart upload.</p> <p>Amazon Glacier rejects your upload part request if any of the following conditions is true:</p> <ul> <li> <p> <b>SHA256 tree hash does not match</b>To ensure that part data is not corrupted in transmission, you compute a SHA256 tree hash of the part and include it in your request. Upon receiving the part data, Amazon Glacier also computes a SHA256 tree hash. If these hash values don't match, the operation fails. For information about computing a SHA256 tree hash, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/checksum-calculations.html">Computing Checksums</a>.</p> </li> <li> <p> <b>Part size does not match</b>The size of each part except the last must match the size specified in the corresponding <a>InitiateMultipartUpload</a> request. The size of the last part must be the same size as, or smaller than, the specified size.</p> <note> <p>If you upload a part whose size is smaller than the part size you specified in your initiate multipart upload request and that part is not the last part, then the upload part request will succeed. However, the subsequent Complete Multipart Upload request will fail.</p> </note> </li> <li> <p> <b>Range does not align</b>The byte range value in the request does not align with the part size specified in the corresponding initiate request. For example, if you specify a part size of 4194304 bytes (4 MB), then 0 to 4194303 bytes (4 MB - 1) and 4194304 (4 MB) to 8388607 (8 MB - 1) are valid part ranges. However, if you set a range value of 2 MB to 6 MB, the range does not align with the part size and the upload will fail. </p> </li> </ul> <p>This operation is idempotent. If you upload the same part multiple times, the data included in the most recent request overwrites the previously uploaded data.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/uploading-archive-mpu.html">Uploading Large Archives in Parts (Multipart Upload)</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-upload-part.html">Upload Part </a> in the <i>Amazon Glacier Developer Guide</i>.</p>
     fn upload_multipart_part(
         &self,
-        input: UploadMultipartPartInput,
-    ) -> RusotoFuture<UploadMultipartPartOutput, UploadMultipartPartError>;
+        input: UploadMultipartPartRequest,
+    ) -> Request<UploadMultipartPartRequest>;
 }
 /// A client for the Amazon Glacier API.
 #[derive(Clone)]
@@ -3357,23 +3516,251 @@ impl Glacier for GlacierClient {
     /// <p>This operation aborts a multipart upload identified by the upload ID.</p> <p>After the Abort Multipart Upload request succeeds, you cannot upload any more parts to the multipart upload or complete the multipart upload. Aborting a completed upload fails. However, aborting an already-aborted upload will succeed, for a short time. For more information about uploading a part and completing a multipart upload, see <a>UploadMultipartPart</a> and <a>CompleteMultipartUpload</a>.</p> <p>This operation is idempotent.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-abort-upload.html">Abort Multipart Upload</a> in the <i>Amazon Glacier Developer Guide</i>. </p>
     fn abort_multipart_upload(
         &self,
-        input: AbortMultipartUploadInput,
-    ) -> RusotoFuture<(), AbortMultipartUploadError> {
+        input: AbortMultipartUploadRequest,
+    ) -> Request<AbortMultipartUploadRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation aborts the vault locking process if the vault lock is not in the <code>Locked</code> state. If the vault lock is in the <code>Locked</code> state when this operation is requested, the operation returns an <code>AccessDeniedException</code> error. Aborting the vault locking process removes the vault lock policy from the specified vault. </p> <p>A vault lock is put into the <code>InProgress</code> state by calling <a>InitiateVaultLock</a>. A vault lock is put into the <code>Locked</code> state by calling <a>CompleteVaultLock</a>. You can get the state of a vault lock by calling <a>GetVaultLock</a>. For more information about the vault locking process, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock.html">Amazon Glacier Vault Lock</a>. For more information about vault lock policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock-policy.html">Amazon Glacier Access Control with Vault Lock Policies</a>. </p> <p>This operation is idempotent. You can successfully invoke this operation multiple times, if the vault lock is in the <code>InProgress</code> state or if there is no policy associated with the vault.</p>
+    fn abort_vault_lock(&self, input: AbortVaultLockRequest) -> Request<AbortVaultLockRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation adds the specified tags to a vault. Each tag is composed of a key and a value. Each vault can have up to 10 tags. If your request would cause the tag limit for the vault to be exceeded, the operation throws the <code>LimitExceededException</code> error. If a tag already exists on the vault under a specified key, the existing key value will be overwritten. For more information about tags, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/tagging.html">Tagging Amazon Glacier Resources</a>. </p>
+    fn add_tags_to_vault(&self, input: AddTagsToVaultRequest) -> Request<AddTagsToVaultRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>You call this operation to inform Amazon Glacier that all the archive parts have been uploaded and that Amazon Glacier can now assemble the archive from the uploaded parts. After assembling and saving the archive to the vault, Amazon Glacier returns the URI path of the newly created archive resource. Using the URI path, you can then access the archive. After you upload an archive, you should save the archive ID returned to retrieve the archive at a later point. You can also get the vault inventory to obtain a list of archive IDs in a vault. For more information, see <a>InitiateJob</a>.</p> <p>In the request, you must include the computed SHA256 tree hash of the entire archive you have uploaded. For information about computing a SHA256 tree hash, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/checksum-calculations.html">Computing Checksums</a>. On the server side, Amazon Glacier also constructs the SHA256 tree hash of the assembled archive. If the values match, Amazon Glacier saves the archive to the vault; otherwise, it returns an error, and the operation fails. The <a>ListParts</a> operation returns a list of parts uploaded for a specific multipart upload. It includes checksum information for each uploaded part that can be used to debug a bad checksum issue.</p> <p>Additionally, Amazon Glacier also checks for any missing content ranges when assembling the archive, if missing content ranges are found, Amazon Glacier returns an error and the operation fails.</p> <p>Complete Multipart Upload is an idempotent operation. After your first successful complete multipart upload, if you call the operation again within a short period, the operation will succeed and return the same archive ID. This is useful in the event you experience a network issue that causes an aborted connection or receive a 500 server error, in which case you can repeat your Complete Multipart Upload request and get the same archive ID without creating duplicate archives. Note, however, that after the multipart upload completes, you cannot call the List Parts operation and the multipart upload will not appear in List Multipart Uploads response, even if idempotent complete is possible.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/uploading-archive-mpu.html">Uploading Large Archives in Parts (Multipart Upload)</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-complete-upload.html">Complete Multipart Upload</a> in the <i>Amazon Glacier Developer Guide</i>. </p>
+    fn complete_multipart_upload(
+        &self,
+        input: CompleteMultipartUploadRequest,
+    ) -> Request<CompleteMultipartUploadRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation completes the vault locking process by transitioning the vault lock from the <code>InProgress</code> state to the <code>Locked</code> state, which causes the vault lock policy to become unchangeable. A vault lock is put into the <code>InProgress</code> state by calling <a>InitiateVaultLock</a>. You can obtain the state of the vault lock by calling <a>GetVaultLock</a>. For more information about the vault locking process, <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock.html">Amazon Glacier Vault Lock</a>. </p> <p>This operation is idempotent. This request is always successful if the vault lock is in the <code>Locked</code> state and the provided lock ID matches the lock ID originally used to lock the vault.</p> <p>If an invalid lock ID is passed in the request when the vault lock is in the <code>Locked</code> state, the operation returns an <code>AccessDeniedException</code> error. If an invalid lock ID is passed in the request when the vault lock is in the <code>InProgress</code> state, the operation throws an <code>InvalidParameter</code> error.</p>
+    fn complete_vault_lock(
+        &self,
+        input: CompleteVaultLockRequest,
+    ) -> Request<CompleteVaultLockRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation creates a new vault with the specified name. The name of the vault must be unique within a region for an AWS account. You can create up to 1,000 vaults per account. If you need to create more vaults, contact Amazon Glacier.</p> <p>You must use the following guidelines when naming a vault.</p> <ul> <li> <p>Names can be between 1 and 255 characters long.</p> </li> <li> <p>Allowed characters are a-z, A-Z, 0-9, '_' (underscore), '-' (hyphen), and '.' (period).</p> </li> </ul> <p>This operation is idempotent.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/creating-vaults.html">Creating a Vault in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vault-put.html">Create Vault </a> in the <i>Amazon Glacier Developer Guide</i>. </p>
+    fn create_vault(&self, input: CreateVaultRequest) -> Request<CreateVaultRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation deletes an archive from a vault. Subsequent requests to initiate a retrieval of this archive will fail. Archive retrievals that are in progress for this archive ID may or may not succeed according to the following scenarios:</p> <ul> <li> <p>If the archive retrieval job is actively preparing the data for download when Amazon Glacier receives the delete archive request, the archival retrieval operation might fail.</p> </li> <li> <p>If the archive retrieval job has successfully prepared the archive for download when Amazon Glacier receives the delete archive request, you will be able to download the output.</p> </li> </ul> <p>This operation is idempotent. Attempting to delete an already-deleted archive does not result in an error.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/deleting-an-archive.html">Deleting an Archive in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-archive-delete.html">Delete Archive</a> in the <i>Amazon Glacier Developer Guide</i>. </p>
+    fn delete_archive(&self, input: DeleteArchiveRequest) -> Request<DeleteArchiveRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation deletes a vault. Amazon Glacier will delete a vault only if there are no archives in the vault as of the last inventory and there have been no writes to the vault since the last inventory. If either of these conditions is not satisfied, the vault deletion fails (that is, the vault is not removed) and Amazon Glacier returns an error. You can use <a>DescribeVault</a> to return the number of archives in a vault, and you can use <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-initiate-job-post.html">Initiate a Job (POST jobs)</a> to initiate a new inventory retrieval for a vault. The inventory contains the archive IDs you use to delete archives using <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-archive-delete.html">Delete Archive (DELETE archive)</a>.</p> <p>This operation is idempotent.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/deleting-vaults.html">Deleting a Vault in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vault-delete.html">Delete Vault </a> in the <i>Amazon Glacier Developer Guide</i>. </p>
+    fn delete_vault(&self, input: DeleteVaultRequest) -> Request<DeleteVaultRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation deletes the access policy associated with the specified vault. The operation is eventually consistent; that is, it might take some time for Amazon Glacier to completely remove the access policy, and you might still see the effect of the policy for a short time after you send the delete request.</p> <p>This operation is idempotent. You can invoke delete multiple times, even if there is no policy associated with the vault. For more information about vault access policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-access-policy.html">Amazon Glacier Access Control with Vault Access Policies</a>. </p>
+    fn delete_vault_access_policy(
+        &self,
+        input: DeleteVaultAccessPolicyRequest,
+    ) -> Request<DeleteVaultAccessPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation deletes the notification configuration set for a vault. The operation is eventually consistent; that is, it might take some time for Amazon Glacier to completely disable the notifications and you might still receive some notifications for a short time after you send the delete request.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/configuring-notifications.html">Configuring Vault Notifications in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vault-notifications-delete.html">Delete Vault Notification Configuration </a> in the Amazon Glacier Developer Guide. </p>
+    fn delete_vault_notifications(
+        &self,
+        input: DeleteVaultNotificationsRequest,
+    ) -> Request<DeleteVaultNotificationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation returns information about a job you previously initiated, including the job initiation date, the user who initiated the job, the job status code/message and the Amazon SNS topic to notify after Amazon Glacier completes the job. For more information about initiating a job, see <a>InitiateJob</a>. </p> <note> <p>This operation enables you to check the status of your job. However, it is strongly recommended that you set up an Amazon SNS topic and specify it in your initiate job request so that Amazon Glacier can notify the topic after it completes the job.</p> </note> <p>A job ID will not expire for at least 24 hours after Amazon Glacier completes the job.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For more information about using this operation, see the documentation for the underlying REST API <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-describe-job-get.html">Describe Job</a> in the <i>Amazon Glacier Developer Guide</i>. </p>
+    fn describe_job(&self, input: DescribeJobRequest) -> Request<DescribeJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation returns information about a vault, including the vault's Amazon Resource Name (ARN), the date the vault was created, the number of archives it contains, and the total size of all the archives in the vault. The number of archives and their total size are as of the last inventory generation. This means that if you add or remove an archive from a vault, and then immediately use Describe Vault, the change in contents will not be immediately reflected. If you want to retrieve the latest inventory of the vault, use <a>InitiateJob</a>. Amazon Glacier generates vault inventories approximately daily. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-inventory.html">Downloading a Vault Inventory in Amazon Glacier</a>. </p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/retrieving-vault-info.html">Retrieving Vault Metadata in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vault-get.html">Describe Vault </a> in the <i>Amazon Glacier Developer Guide</i>. </p>
+    fn describe_vault(&self, input: DescribeVaultRequest) -> Request<DescribeVaultRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation returns the current data retrieval policy for the account and region specified in the GET request. For more information about data retrieval policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/data-retrieval-policy.html">Amazon Glacier Data Retrieval Policies</a>.</p>
+    fn get_data_retrieval_policy(
+        &self,
+        input: GetDataRetrievalPolicyRequest,
+    ) -> Request<GetDataRetrievalPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation downloads the output of the job you initiated using <a>InitiateJob</a>. Depending on the job type you specified when you initiated the job, the output will be either the content of an archive or a vault inventory.</p> <p>You can download all the job output or download a portion of the output by specifying a byte range. In the case of an archive retrieval job, depending on the byte range you specify, Amazon Glacier returns the checksum for the portion of the data. You can compute the checksum on the client and verify that the values match to ensure the portion you downloaded is the correct data.</p> <p>A job ID will not expire for at least 24 hours after Amazon Glacier completes the job. That a byte range. For both archive and inventory retrieval jobs, you should verify the downloaded size against the size returned in the headers from the <b>Get Job Output</b> response.</p> <p>For archive retrieval jobs, you should also verify that the size is what you expected. If you download a portion of the output, the expected size is based on the range of bytes you specified. For example, if you specify a range of <code>bytes=0-1048575</code>, you should verify your download size is 1,048,576 bytes. If you download an entire archive, the expected size is the size of the archive when you uploaded it to Amazon Glacier The expected size is also returned in the headers from the <b>Get Job Output</b> response.</p> <p>In the case of an archive retrieval job, depending on the byte range you specify, Amazon Glacier returns the checksum for the portion of the data. To ensure the portion you downloaded is the correct data, compute the checksum on the client, verify that the values match, and verify that the size is what you expected.</p> <p>A job ID does not expire for at least 24 hours after Amazon Glacier completes the job. That is, you can download the job output within the 24 hours period after Amazon Glacier completes the job.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-inventory.html">Downloading a Vault Inventory</a>, <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/downloading-an-archive.html">Downloading an Archive</a>, and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-job-output-get.html">Get Job Output </a> </p>
+    fn get_job_output(&self, input: GetJobOutputRequest) -> Request<GetJobOutputRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation retrieves the <code>access-policy</code> subresource set on the vault; for more information on setting this subresource, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-SetVaultAccessPolicy.html">Set Vault Access Policy (PUT access-policy)</a>. If there is no access policy set on the vault, the operation returns a <code>404 Not found</code> error. For more information about vault access policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-access-policy.html">Amazon Glacier Access Control with Vault Access Policies</a>.</p>
+    fn get_vault_access_policy(
+        &self,
+        input: GetVaultAccessPolicyRequest,
+    ) -> Request<GetVaultAccessPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation retrieves the following attributes from the <code>lock-policy</code> subresource set on the specified vault: </p> <ul> <li> <p>The vault lock policy set on the vault.</p> </li> <li> <p>The state of the vault lock, which is either <code>InProgess</code> or <code>Locked</code>.</p> </li> <li> <p>When the lock ID expires. The lock ID is used to complete the vault locking process.</p> </li> <li> <p>When the vault lock was initiated and put into the <code>InProgress</code> state.</p> </li> </ul> <p>A vault lock is put into the <code>InProgress</code> state by calling <a>InitiateVaultLock</a>. A vault lock is put into the <code>Locked</code> state by calling <a>CompleteVaultLock</a>. You can abort the vault locking process by calling <a>AbortVaultLock</a>. For more information about the vault locking process, <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock.html">Amazon Glacier Vault Lock</a>. </p> <p>If there is no vault lock policy set on the vault, the operation returns a <code>404 Not found</code> error. For more information about vault lock policies, <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock-policy.html">Amazon Glacier Access Control with Vault Lock Policies</a>. </p>
+    fn get_vault_lock(&self, input: GetVaultLockRequest) -> Request<GetVaultLockRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation retrieves the <code>notification-configuration</code> subresource of the specified vault.</p> <p>For information about setting a notification configuration on a vault, see <a>SetVaultNotifications</a>. If a notification configuration for a vault is not set, the operation returns a <code>404 Not Found</code> error. For more information about vault notifications, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/configuring-notifications.html">Configuring Vault Notifications in Amazon Glacier</a>. </p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/configuring-notifications.html">Configuring Vault Notifications in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vault-notifications-get.html">Get Vault Notification Configuration </a> in the <i>Amazon Glacier Developer Guide</i>. </p>
+    fn get_vault_notifications(
+        &self,
+        input: GetVaultNotificationsRequest,
+    ) -> Request<GetVaultNotificationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation initiates a job of the specified type, which can be a select, an archival retrieval, or a vault retrieval. For more information about using this operation, see the documentation for the underlying REST API <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-initiate-job-post.html">Initiate a Job</a>. </p>
+    fn initiate_job(&self, input: InitiateJobRequest) -> Request<InitiateJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation initiates a multipart upload. Amazon Glacier creates a multipart upload resource and returns its ID in the response. The multipart upload ID is used in subsequent requests to upload parts of an archive (see <a>UploadMultipartPart</a>).</p> <p>When you initiate a multipart upload, you specify the part size in number of bytes. The part size must be a megabyte (1024 KB) multiplied by a power of 2-for example, 1048576 (1 MB), 2097152 (2 MB), 4194304 (4 MB), 8388608 (8 MB), and so on. The minimum allowable part size is 1 MB, and the maximum is 4 GB.</p> <p>Every part you upload to this resource (see <a>UploadMultipartPart</a>), except the last one, must have the same size. The last one can be the same size or smaller. For example, suppose you want to upload a 16.2 MB file. If you initiate the multipart upload with a part size of 4 MB, you will upload four parts of 4 MB each and one part of 0.2 MB. </p> <note> <p>You don't need to know the size of the archive when you start a multipart upload because Amazon Glacier does not require you to specify the overall archive size.</p> </note> <p>After you complete the multipart upload, Amazon Glacier removes the multipart upload resource referenced by the ID. Amazon Glacier also removes the multipart upload resource if you cancel the multipart upload or it may be removed if there is no activity for a period of 24 hours.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/uploading-archive-mpu.html">Uploading Large Archives in Parts (Multipart Upload)</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-initiate-upload.html">Initiate Multipart Upload</a> in the <i>Amazon Glacier Developer Guide</i>.</p>
+    fn initiate_multipart_upload(
+        &self,
+        input: InitiateMultipartUploadRequest,
+    ) -> Request<InitiateMultipartUploadRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation initiates the vault locking process by doing the following:</p> <ul> <li> <p>Installing a vault lock policy on the specified vault.</p> </li> <li> <p>Setting the lock state of vault lock to <code>InProgress</code>.</p> </li> <li> <p>Returning a lock ID, which is used to complete the vault locking process.</p> </li> </ul> <p>You can set one vault lock policy for each vault and this policy can be up to 20 KB in size. For more information about vault lock policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock-policy.html">Amazon Glacier Access Control with Vault Lock Policies</a>. </p> <p>You must complete the vault locking process within 24 hours after the vault lock enters the <code>InProgress</code> state. After the 24 hour window ends, the lock ID expires, the vault automatically exits the <code>InProgress</code> state, and the vault lock policy is removed from the vault. You call <a>CompleteVaultLock</a> to complete the vault locking process by setting the state of the vault lock to <code>Locked</code>. </p> <p>After a vault lock is in the <code>Locked</code> state, you cannot initiate a new vault lock for the vault.</p> <p>You can abort the vault locking process by calling <a>AbortVaultLock</a>. You can get the state of the vault lock by calling <a>GetVaultLock</a>. For more information about the vault locking process, <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock.html">Amazon Glacier Vault Lock</a>.</p> <p>If this operation is called when the vault lock is in the <code>InProgress</code> state, the operation returns an <code>AccessDeniedException</code> error. When the vault lock is in the <code>InProgress</code> state you must call <a>AbortVaultLock</a> before you can initiate a new vault lock policy. </p>
+    fn initiate_vault_lock(
+        &self,
+        input: InitiateVaultLockRequest,
+    ) -> Request<InitiateVaultLockRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation lists jobs for a vault, including jobs that are in-progress and jobs that have recently finished. The List Job operation returns a list of these jobs sorted by job initiation time.</p> <note> <p>Amazon Glacier retains recently completed jobs for a period before deleting them; however, it eventually removes completed jobs. The output of completed jobs can be retrieved. Retaining completed jobs for a period of time after they have completed enables you to get a job output in the event you miss the job completion notification or your first attempt to download it fails. For example, suppose you start an archive retrieval job to download an archive. After the job completes, you start to download the archive but encounter a network error. In this scenario, you can retry and download the archive while the job exists.</p> </note> <p>The List Jobs operation supports pagination. You should always check the response <code>Marker</code> field. If there are no more jobs to list, the <code>Marker</code> field is set to <code>null</code>. If there are more jobs to list, the <code>Marker</code> field is set to a non-null value, which you can use to continue the pagination of the list. To return a list of jobs that begins at a specific job, set the marker request parameter to the <code>Marker</code> value for that job that you obtained from a previous List Jobs request.</p> <p>You can set a maximum limit for the number of jobs returned in the response by specifying the <code>limit</code> parameter in the request. The default limit is 50. The number of jobs returned might be fewer than the limit, but the number of returned jobs never exceeds the limit.</p> <p>Additionally, you can filter the jobs list returned by specifying the optional <code>statuscode</code> parameter or <code>completed</code> parameter, or both. Using the <code>statuscode</code> parameter, you can specify to return only jobs that match either the <code>InProgress</code>, <code>Succeeded</code>, or <code>Failed</code> status. Using the <code>completed</code> parameter, you can specify to return only jobs that were completed (<code>true</code>) or jobs that were not completed (<code>false</code>).</p> <p>For more information about using this operation, see the documentation for the underlying REST API <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-jobs-get.html">List Jobs</a>. </p>
+    fn list_jobs(&self, input: ListJobsRequest) -> Request<ListJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation lists in-progress multipart uploads for the specified vault. An in-progress multipart upload is a multipart upload that has been initiated by an <a>InitiateMultipartUpload</a> request, but has not yet been completed or aborted. The list returned in the List Multipart Upload response has no guaranteed order. </p> <p>The List Multipart Uploads operation supports pagination. By default, this operation returns up to 50 multipart uploads in the response. You should always check the response for a <code>marker</code> at which to continue the list; if there are no more items the <code>marker</code> is <code>null</code>. To return a list of multipart uploads that begins at a specific upload, set the <code>marker</code> request parameter to the value you obtained from a previous List Multipart Upload request. You can also limit the number of uploads returned in the response by specifying the <code>limit</code> parameter in the request.</p> <p>Note the difference between this operation and listing parts (<a>ListParts</a>). The List Multipart Uploads operation lists all multipart uploads for a vault and does not require a multipart upload ID. The List Parts operation requires a multipart upload ID since parts are associated with a single upload.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-list-uploads.html">List Multipart Uploads </a> in the <i>Amazon Glacier Developer Guide</i>.</p>
+    fn list_multipart_uploads(
+        &self,
+        input: ListMultipartUploadsRequest,
+    ) -> Request<ListMultipartUploadsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation lists the parts of an archive that have been uploaded in a specific multipart upload. You can make this request at any time during an in-progress multipart upload before you complete the upload (see <a>CompleteMultipartUpload</a>. List Parts returns an error for completed uploads. The list returned in the List Parts response is sorted by part range. </p> <p>The List Parts operation supports pagination. By default, this operation returns up to 50 uploaded parts in the response. You should always check the response for a <code>marker</code> at which to continue the list; if there are no more items the <code>marker</code> is <code>null</code>. To return a list of parts that begins at a specific part, set the <code>marker</code> request parameter to the value you obtained from a previous List Parts request. You can also limit the number of parts returned in the response by specifying the <code>limit</code> parameter in the request. </p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-list-parts.html">List Parts</a> in the <i>Amazon Glacier Developer Guide</i>.</p>
+    fn list_parts(&self, input: ListPartsRequest) -> Request<ListPartsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation lists the provisioned capacity units for the specified AWS account.</p>
+    fn list_provisioned_capacity(
+        &self,
+        input: ListProvisionedCapacityRequest,
+    ) -> Request<ListProvisionedCapacityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation lists all the tags attached to a vault. The operation returns an empty map if there are no tags. For more information about tags, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/tagging.html">Tagging Amazon Glacier Resources</a>.</p>
+    fn list_tags_for_vault(
+        &self,
+        input: ListTagsForVaultRequest,
+    ) -> Request<ListTagsForVaultRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation lists all vaults owned by the calling user's account. The list returned in the response is ASCII-sorted by vault name.</p> <p>By default, this operation returns up to 10 items. If there are more vaults to list, the response <code>marker</code> field contains the vault Amazon Resource Name (ARN) at which to continue the list with a new List Vaults request; otherwise, the <code>marker</code> field is <code>null</code>. To return a list of vaults that begins at a specific vault, set the <code>marker</code> request parameter to the vault ARN you obtained from a previous List Vaults request. You can also limit the number of vaults returned in the response by specifying the <code>limit</code> parameter in the request. </p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/retrieving-vault-info.html">Retrieving Vault Metadata in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vaults-get.html">List Vaults </a> in the <i>Amazon Glacier Developer Guide</i>. </p>
+    fn list_vaults(&self, input: ListVaultsRequest) -> Request<ListVaultsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation purchases a provisioned capacity unit for an AWS account. </p>
+    fn purchase_provisioned_capacity(
+        &self,
+        input: PurchaseProvisionedCapacityRequest,
+    ) -> Request<PurchaseProvisionedCapacityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation removes one or more tags from the set of tags attached to a vault. For more information about tags, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/tagging.html">Tagging Amazon Glacier Resources</a>. This operation is idempotent. The operation will be successful, even if there are no tags attached to the vault. </p>
+    fn remove_tags_from_vault(
+        &self,
+        input: RemoveTagsFromVaultRequest,
+    ) -> Request<RemoveTagsFromVaultRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation sets and then enacts a data retrieval policy in the region specified in the PUT request. You can set one policy per region for an AWS account. The policy is enacted within a few minutes of a successful PUT operation.</p> <p>The set policy operation does not affect retrieval jobs that were in progress before the policy was enacted. For more information about data retrieval policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/data-retrieval-policy.html">Amazon Glacier Data Retrieval Policies</a>. </p>
+    fn set_data_retrieval_policy(
+        &self,
+        input: SetDataRetrievalPolicyRequest,
+    ) -> Request<SetDataRetrievalPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation configures an access policy for a vault and will overwrite an existing policy. To configure a vault access policy, send a PUT request to the <code>access-policy</code> subresource of the vault. An access policy is specific to a vault and is also called a vault subresource. You can set one access policy per vault and the policy can be up to 20 KB in size. For more information about vault access policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-access-policy.html">Amazon Glacier Access Control with Vault Access Policies</a>. </p>
+    fn set_vault_access_policy(
+        &self,
+        input: SetVaultAccessPolicyRequest,
+    ) -> Request<SetVaultAccessPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation configures notifications that will be sent when specific events happen to a vault. By default, you don't get any notifications.</p> <p>To configure vault notifications, send a PUT request to the <code>notification-configuration</code> subresource of the vault. The request should include a JSON document that provides an Amazon SNS topic and specific events for which you want Amazon Glacier to send notifications to the topic.</p> <p>Amazon SNS topics must grant permission to the vault to be allowed to publish notifications to the topic. You can configure a vault to publish a notification for the following vault events:</p> <ul> <li> <p> <b>ArchiveRetrievalCompleted</b> This event occurs when a job that was initiated for an archive retrieval is completed (<a>InitiateJob</a>). The status of the completed job can be "Succeeded" or "Failed". The notification sent to the SNS topic is the same output as returned from <a>DescribeJob</a>. </p> </li> <li> <p> <b>InventoryRetrievalCompleted</b> This event occurs when a job that was initiated for an inventory retrieval is completed (<a>InitiateJob</a>). The status of the completed job can be "Succeeded" or "Failed". The notification sent to the SNS topic is the same output as returned from <a>DescribeJob</a>. </p> </li> </ul> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/configuring-notifications.html">Configuring Vault Notifications in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vault-notifications-put.html">Set Vault Notification Configuration </a> in the <i>Amazon Glacier Developer Guide</i>. </p>
+    fn set_vault_notifications(
+        &self,
+        input: SetVaultNotificationsRequest,
+    ) -> Request<SetVaultNotificationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation adds an archive to a vault. This is a synchronous operation, and for a successful upload, your data is durably persisted. Amazon Glacier returns the archive ID in the <code>x-amz-archive-id</code> header of the response. </p> <p>You must use the archive ID to access your data in Amazon Glacier. After you upload an archive, you should save the archive ID returned so that you can retrieve or delete the archive later. Besides saving the archive ID, you can also index it and give it a friendly name to allow for better searching. You can also use the optional archive description field to specify how the archive is referred to in an external index of archives, such as you might create in Amazon DynamoDB. You can also get the vault inventory to obtain a list of archive IDs in a vault. For more information, see <a>InitiateJob</a>. </p> <p>You must provide a SHA256 tree hash of the data you are uploading. For information about computing a SHA256 tree hash, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/checksum-calculations.html">Computing Checksums</a>. </p> <p>You can optionally specify an archive description of up to 1,024 printable ASCII characters. You can get the archive description when you either retrieve the archive or get the vault inventory. For more information, see <a>InitiateJob</a>. Amazon Glacier does not interpret the description in any way. An archive description does not need to be unique. You cannot use the description to retrieve or sort the archive list. </p> <p>Archives are immutable. After you upload an archive, you cannot edit the archive or its description.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/uploading-an-archive.html">Uploading an Archive in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-archive-post.html">Upload Archive</a> in the <i>Amazon Glacier Developer Guide</i>. </p>
+    fn upload_archive(&self, input: UploadArchiveRequest) -> Request<UploadArchiveRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This operation uploads a part of an archive. You can upload archive parts in any order. You can also upload them in parallel. You can upload up to 10,000 parts for a multipart upload.</p> <p>Amazon Glacier rejects your upload part request if any of the following conditions is true:</p> <ul> <li> <p> <b>SHA256 tree hash does not match</b>To ensure that part data is not corrupted in transmission, you compute a SHA256 tree hash of the part and include it in your request. Upon receiving the part data, Amazon Glacier also computes a SHA256 tree hash. If these hash values don't match, the operation fails. For information about computing a SHA256 tree hash, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/checksum-calculations.html">Computing Checksums</a>.</p> </li> <li> <p> <b>Part size does not match</b>The size of each part except the last must match the size specified in the corresponding <a>InitiateMultipartUpload</a> request. The size of the last part must be the same size as, or smaller than, the specified size.</p> <note> <p>If you upload a part whose size is smaller than the part size you specified in your initiate multipart upload request and that part is not the last part, then the upload part request will succeed. However, the subsequent Complete Multipart Upload request will fail.</p> </note> </li> <li> <p> <b>Range does not align</b>The byte range value in the request does not align with the part size specified in the corresponding initiate request. For example, if you specify a part size of 4194304 bytes (4 MB), then 0 to 4194303 bytes (4 MB - 1) and 4194304 (4 MB) to 8388607 (8 MB - 1) are valid part ranges. However, if you set a range value of 2 MB to 6 MB, the range does not align with the part size and the upload will fail. </p> </li> </ul> <p>This operation is idempotent. If you upload the same part multiple times, the data included in the most recent request overwrites the previously uploaded data.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/uploading-archive-mpu.html">Uploading Large Archives in Parts (Multipart Upload)</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-upload-part.html">Upload Part </a> in the <i>Amazon Glacier Developer Guide</i>.</p>
+    fn upload_multipart_part(
+        &self,
+        input: UploadMultipartPartRequest,
+    ) -> Request<UploadMultipartPartRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AbortMultipartUploadRequest {
+    type Output = AbortMultipartUploadResponse;
+    type Error = AbortMultipartUploadError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/multipart-uploads/{upload_id}",
-            account_id = input.account_id,
-            upload_id = input.upload_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            upload_id = self.upload_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = AbortMultipartUploadResponse {};
 
                     Ok(result)
                 }))
@@ -3386,26 +3773,32 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation aborts the vault locking process if the vault lock is not in the <code>Locked</code> state. If the vault lock is in the <code>Locked</code> state when this operation is requested, the operation returns an <code>AccessDeniedException</code> error. Aborting the vault locking process removes the vault lock policy from the specified vault. </p> <p>A vault lock is put into the <code>InProgress</code> state by calling <a>InitiateVaultLock</a>. A vault lock is put into the <code>Locked</code> state by calling <a>CompleteVaultLock</a>. You can get the state of a vault lock by calling <a>GetVaultLock</a>. For more information about the vault locking process, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock.html">Amazon Glacier Vault Lock</a>. For more information about vault lock policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock-policy.html">Amazon Glacier Access Control with Vault Lock Policies</a>. </p> <p>This operation is idempotent. You can successfully invoke this operation multiple times, if the vault lock is in the <code>InProgress</code> state or if there is no policy associated with the vault.</p>
-    fn abort_vault_lock(
-        &self,
-        input: AbortVaultLockInput,
-    ) -> RusotoFuture<(), AbortVaultLockError> {
+impl ServiceRequest for AbortVaultLockRequest {
+    type Output = AbortVaultLockResponse;
+    type Error = AbortVaultLockError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/lock-policy",
-            account_id = input.account_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = AbortVaultLockResponse {};
 
                     Ok(result)
                 }))
@@ -3419,33 +3812,39 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation adds the specified tags to a vault. Each tag is composed of a key and a value. Each vault can have up to 10 tags. If your request would cause the tag limit for the vault to be exceeded, the operation throws the <code>LimitExceededException</code> error. If a tag already exists on the vault under a specified key, the existing key value will be overwritten. For more information about tags, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/tagging.html">Tagging Amazon Glacier Resources</a>. </p>
-    fn add_tags_to_vault(
-        &self,
-        input: AddTagsToVaultInput,
-    ) -> RusotoFuture<(), AddTagsToVaultError> {
+impl ServiceRequest for AddTagsToVaultRequest {
+    type Output = AddTagsToVaultResponse;
+    type Error = AddTagsToVaultError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/tags",
-            account_id = input.account_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("POST", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
         params.put("operation", "add");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = AddTagsToVaultResponse {};
 
                     Ok(result)
                 }))
@@ -3459,36 +3858,42 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>You call this operation to inform Amazon Glacier that all the archive parts have been uploaded and that Amazon Glacier can now assemble the archive from the uploaded parts. After assembling and saving the archive to the vault, Amazon Glacier returns the URI path of the newly created archive resource. Using the URI path, you can then access the archive. After you upload an archive, you should save the archive ID returned to retrieve the archive at a later point. You can also get the vault inventory to obtain a list of archive IDs in a vault. For more information, see <a>InitiateJob</a>.</p> <p>In the request, you must include the computed SHA256 tree hash of the entire archive you have uploaded. For information about computing a SHA256 tree hash, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/checksum-calculations.html">Computing Checksums</a>. On the server side, Amazon Glacier also constructs the SHA256 tree hash of the assembled archive. If the values match, Amazon Glacier saves the archive to the vault; otherwise, it returns an error, and the operation fails. The <a>ListParts</a> operation returns a list of parts uploaded for a specific multipart upload. It includes checksum information for each uploaded part that can be used to debug a bad checksum issue.</p> <p>Additionally, Amazon Glacier also checks for any missing content ranges when assembling the archive, if missing content ranges are found, Amazon Glacier returns an error and the operation fails.</p> <p>Complete Multipart Upload is an idempotent operation. After your first successful complete multipart upload, if you call the operation again within a short period, the operation will succeed and return the same archive ID. This is useful in the event you experience a network issue that causes an aborted connection or receive a 500 server error, in which case you can repeat your Complete Multipart Upload request and get the same archive ID without creating duplicate archives. Note, however, that after the multipart upload completes, you cannot call the List Parts operation and the multipart upload will not appear in List Multipart Uploads response, even if idempotent complete is possible.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/uploading-archive-mpu.html">Uploading Large Archives in Parts (Multipart Upload)</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-complete-upload.html">Complete Multipart Upload</a> in the <i>Amazon Glacier Developer Guide</i>. </p>
-    fn complete_multipart_upload(
-        &self,
-        input: CompleteMultipartUploadInput,
-    ) -> RusotoFuture<ArchiveCreationOutput, CompleteMultipartUploadError> {
+impl ServiceRequest for CompleteMultipartUploadRequest {
+    type Output = CompleteMultipartUploadResponse;
+    type Error = CompleteMultipartUploadError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/multipart-uploads/{upload_id}",
-            account_id = input.account_id,
-            upload_id = input.upload_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            upload_id = self.upload_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("POST", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        if let Some(ref archive_size) = input.archive_size {
+        if let Some(ref archive_size) = self.archive_size {
             request.add_header("x-amz-archive-size", &archive_size.to_string());
         }
 
-        if let Some(ref checksum) = input.checksum {
+        if let Some(ref checksum) = self.checksum {
             request.add_header("x-amz-sha256-tree-hash", &checksum.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let mut result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ArchiveCreationOutput, _>()?;
+                        .deserialize::<CompleteMultipartUploadResponse, _>()?;
                     if let Some(archive_id) = response.headers.get("x-amz-archive-id") {
                         let value = archive_id.to_owned();
                         result.archive_id = Some(value)
@@ -3511,27 +3916,33 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation completes the vault locking process by transitioning the vault lock from the <code>InProgress</code> state to the <code>Locked</code> state, which causes the vault lock policy to become unchangeable. A vault lock is put into the <code>InProgress</code> state by calling <a>InitiateVaultLock</a>. You can obtain the state of the vault lock by calling <a>GetVaultLock</a>. For more information about the vault locking process, <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock.html">Amazon Glacier Vault Lock</a>. </p> <p>This operation is idempotent. This request is always successful if the vault lock is in the <code>Locked</code> state and the provided lock ID matches the lock ID originally used to lock the vault.</p> <p>If an invalid lock ID is passed in the request when the vault lock is in the <code>Locked</code> state, the operation returns an <code>AccessDeniedException</code> error. If an invalid lock ID is passed in the request when the vault lock is in the <code>InProgress</code> state, the operation throws an <code>InvalidParameter</code> error.</p>
-    fn complete_vault_lock(
-        &self,
-        input: CompleteVaultLockInput,
-    ) -> RusotoFuture<(), CompleteVaultLockError> {
+impl ServiceRequest for CompleteVaultLockRequest {
+    type Output = CompleteVaultLockResponse;
+    type Error = CompleteVaultLockError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/lock-policy/{lock_id}",
-            account_id = input.account_id,
-            lock_id = input.lock_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            lock_id = self.lock_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("POST", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = CompleteVaultLockResponse {};
 
                     Ok(result)
                 }))
@@ -3545,27 +3956,33 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation creates a new vault with the specified name. The name of the vault must be unique within a region for an AWS account. You can create up to 1,000 vaults per account. If you need to create more vaults, contact Amazon Glacier.</p> <p>You must use the following guidelines when naming a vault.</p> <ul> <li> <p>Names can be between 1 and 255 characters long.</p> </li> <li> <p>Allowed characters are a-z, A-Z, 0-9, '_' (underscore), '-' (hyphen), and '.' (period).</p> </li> </ul> <p>This operation is idempotent.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/creating-vaults.html">Creating a Vault in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vault-put.html">Create Vault </a> in the <i>Amazon Glacier Developer Guide</i>. </p>
-    fn create_vault(
-        &self,
-        input: CreateVaultInput,
-    ) -> RusotoFuture<CreateVaultOutput, CreateVaultError> {
+impl ServiceRequest for CreateVaultRequest {
+    type Output = CreateVaultResponse;
+    type Error = CreateVaultError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}",
-            account_id = input.account_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("PUT", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let mut result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateVaultOutput, _>()?;
+                        .deserialize::<CreateVaultResponse, _>()?;
                     if let Some(location) = response.headers.get("Location") {
                         let value = location.to_owned();
                         result.location = Some(value)
@@ -3583,24 +4000,33 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation deletes an archive from a vault. Subsequent requests to initiate a retrieval of this archive will fail. Archive retrievals that are in progress for this archive ID may or may not succeed according to the following scenarios:</p> <ul> <li> <p>If the archive retrieval job is actively preparing the data for download when Amazon Glacier receives the delete archive request, the archival retrieval operation might fail.</p> </li> <li> <p>If the archive retrieval job has successfully prepared the archive for download when Amazon Glacier receives the delete archive request, you will be able to download the output.</p> </li> </ul> <p>This operation is idempotent. Attempting to delete an already-deleted archive does not result in an error.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/deleting-an-archive.html">Deleting an Archive in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-archive-delete.html">Delete Archive</a> in the <i>Amazon Glacier Developer Guide</i>. </p>
-    fn delete_archive(&self, input: DeleteArchiveInput) -> RusotoFuture<(), DeleteArchiveError> {
+impl ServiceRequest for DeleteArchiveRequest {
+    type Output = DeleteArchiveResponse;
+    type Error = DeleteArchiveError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/archives/{archive_id}",
-            account_id = input.account_id,
-            archive_id = input.archive_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            archive_id = self.archive_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteArchiveResponse {};
 
                     Ok(result)
                 }))
@@ -3614,23 +4040,32 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation deletes a vault. Amazon Glacier will delete a vault only if there are no archives in the vault as of the last inventory and there have been no writes to the vault since the last inventory. If either of these conditions is not satisfied, the vault deletion fails (that is, the vault is not removed) and Amazon Glacier returns an error. You can use <a>DescribeVault</a> to return the number of archives in a vault, and you can use <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-initiate-job-post.html">Initiate a Job (POST jobs)</a> to initiate a new inventory retrieval for a vault. The inventory contains the archive IDs you use to delete archives using <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-archive-delete.html">Delete Archive (DELETE archive)</a>.</p> <p>This operation is idempotent.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/deleting-vaults.html">Deleting a Vault in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vault-delete.html">Delete Vault </a> in the <i>Amazon Glacier Developer Guide</i>. </p>
-    fn delete_vault(&self, input: DeleteVaultInput) -> RusotoFuture<(), DeleteVaultError> {
+impl ServiceRequest for DeleteVaultRequest {
+    type Output = DeleteVaultResponse;
+    type Error = DeleteVaultError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}",
-            account_id = input.account_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteVaultResponse {};
 
                     Ok(result)
                 }))
@@ -3644,26 +4079,32 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation deletes the access policy associated with the specified vault. The operation is eventually consistent; that is, it might take some time for Amazon Glacier to completely remove the access policy, and you might still see the effect of the policy for a short time after you send the delete request.</p> <p>This operation is idempotent. You can invoke delete multiple times, even if there is no policy associated with the vault. For more information about vault access policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-access-policy.html">Amazon Glacier Access Control with Vault Access Policies</a>. </p>
-    fn delete_vault_access_policy(
-        &self,
-        input: DeleteVaultAccessPolicyInput,
-    ) -> RusotoFuture<(), DeleteVaultAccessPolicyError> {
+impl ServiceRequest for DeleteVaultAccessPolicyRequest {
+    type Output = DeleteVaultAccessPolicyResponse;
+    type Error = DeleteVaultAccessPolicyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/access-policy",
-            account_id = input.account_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteVaultAccessPolicyResponse {};
 
                     Ok(result)
                 }))
@@ -3674,26 +4115,32 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation deletes the notification configuration set for a vault. The operation is eventually consistent; that is, it might take some time for Amazon Glacier to completely disable the notifications and you might still receive some notifications for a short time after you send the delete request.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/configuring-notifications.html">Configuring Vault Notifications in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vault-notifications-delete.html">Delete Vault Notification Configuration </a> in the Amazon Glacier Developer Guide. </p>
-    fn delete_vault_notifications(
-        &self,
-        input: DeleteVaultNotificationsInput,
-    ) -> RusotoFuture<(), DeleteVaultNotificationsError> {
+impl ServiceRequest for DeleteVaultNotificationsRequest {
+    type Output = DeleteVaultNotificationsResponse;
+    type Error = DeleteVaultNotificationsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/notification-configuration",
-            account_id = input.account_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteVaultNotificationsResponse {};
 
                     Ok(result)
                 }))
@@ -3704,28 +4151,34 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation returns information about a job you previously initiated, including the job initiation date, the user who initiated the job, the job status code/message and the Amazon SNS topic to notify after Amazon Glacier completes the job. For more information about initiating a job, see <a>InitiateJob</a>. </p> <note> <p>This operation enables you to check the status of your job. However, it is strongly recommended that you set up an Amazon SNS topic and specify it in your initiate job request so that Amazon Glacier can notify the topic after it completes the job.</p> </note> <p>A job ID will not expire for at least 24 hours after Amazon Glacier completes the job.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For more information about using this operation, see the documentation for the underlying REST API <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-describe-job-get.html">Describe Job</a> in the <i>Amazon Glacier Developer Guide</i>. </p>
-    fn describe_job(
-        &self,
-        input: DescribeJobInput,
-    ) -> RusotoFuture<GlacierJobDescription, DescribeJobError> {
+impl ServiceRequest for DescribeJobRequest {
+    type Output = DescribeJobResponse;
+    type Error = DescribeJobError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/jobs/{job_id}",
-            account_id = input.account_id,
-            job_id = input.job_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            job_id = self.job_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GlacierJobDescription, _>()?;
+                        .deserialize::<DescribeJobResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -3739,27 +4192,33 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation returns information about a vault, including the vault's Amazon Resource Name (ARN), the date the vault was created, the number of archives it contains, and the total size of all the archives in the vault. The number of archives and their total size are as of the last inventory generation. This means that if you add or remove an archive from a vault, and then immediately use Describe Vault, the change in contents will not be immediately reflected. If you want to retrieve the latest inventory of the vault, use <a>InitiateJob</a>. Amazon Glacier generates vault inventories approximately daily. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-inventory.html">Downloading a Vault Inventory in Amazon Glacier</a>. </p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/retrieving-vault-info.html">Retrieving Vault Metadata in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vault-get.html">Describe Vault </a> in the <i>Amazon Glacier Developer Guide</i>. </p>
-    fn describe_vault(
-        &self,
-        input: DescribeVaultInput,
-    ) -> RusotoFuture<DescribeVaultOutput, DescribeVaultError> {
+impl ServiceRequest for DescribeVaultRequest {
+    type Output = DescribeVaultResponse;
+    type Error = DescribeVaultError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}",
-            account_id = input.account_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeVaultOutput, _>()?;
+                        .deserialize::<DescribeVaultResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -3773,26 +4232,32 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation returns the current data retrieval policy for the account and region specified in the GET request. For more information about data retrieval policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/data-retrieval-policy.html">Amazon Glacier Data Retrieval Policies</a>.</p>
-    fn get_data_retrieval_policy(
-        &self,
-        input: GetDataRetrievalPolicyInput,
-    ) -> RusotoFuture<GetDataRetrievalPolicyOutput, GetDataRetrievalPolicyError> {
+impl ServiceRequest for GetDataRetrievalPolicyRequest {
+    type Output = GetDataRetrievalPolicyResponse;
+    type Error = GetDataRetrievalPolicyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/policies/data-retrieval",
-            account_id = input.account_id
+            account_id = self.account_id
         );
 
-        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetDataRetrievalPolicyOutput, _>()?;
+                        .deserialize::<GetDataRetrievalPolicyResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -3805,31 +4270,37 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation downloads the output of the job you initiated using <a>InitiateJob</a>. Depending on the job type you specified when you initiated the job, the output will be either the content of an archive or a vault inventory.</p> <p>You can download all the job output or download a portion of the output by specifying a byte range. In the case of an archive retrieval job, depending on the byte range you specify, Amazon Glacier returns the checksum for the portion of the data. You can compute the checksum on the client and verify that the values match to ensure the portion you downloaded is the correct data.</p> <p>A job ID will not expire for at least 24 hours after Amazon Glacier completes the job. That a byte range. For both archive and inventory retrieval jobs, you should verify the downloaded size against the size returned in the headers from the <b>Get Job Output</b> response.</p> <p>For archive retrieval jobs, you should also verify that the size is what you expected. If you download a portion of the output, the expected size is based on the range of bytes you specified. For example, if you specify a range of <code>bytes=0-1048575</code>, you should verify your download size is 1,048,576 bytes. If you download an entire archive, the expected size is the size of the archive when you uploaded it to Amazon Glacier The expected size is also returned in the headers from the <b>Get Job Output</b> response.</p> <p>In the case of an archive retrieval job, depending on the byte range you specify, Amazon Glacier returns the checksum for the portion of the data. To ensure the portion you downloaded is the correct data, compute the checksum on the client, verify that the values match, and verify that the size is what you expected.</p> <p>A job ID does not expire for at least 24 hours after Amazon Glacier completes the job. That is, you can download the job output within the 24 hours period after Amazon Glacier completes the job.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-inventory.html">Downloading a Vault Inventory</a>, <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/downloading-an-archive.html">Downloading an Archive</a>, and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-job-output-get.html">Get Job Output </a> </p>
-    fn get_job_output(
-        &self,
-        input: GetJobOutputInput,
-    ) -> RusotoFuture<GetJobOutputOutput, GetJobOutputError> {
+impl ServiceRequest for GetJobOutputRequest {
+    type Output = GetJobOutputResponse;
+    type Error = GetJobOutputError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/jobs/{job_id}/output",
-            account_id = input.account_id,
-            job_id = input.job_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            job_id = self.job_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        if let Some(ref range) = input.range {
+        if let Some(ref range) = self.range {
             request.add_header("Range", &range.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let mut result = GetJobOutputOutput::default();
+                    let mut result = GetJobOutputResponse::default();
                     result.body = Some(response.body);
 
                     if let Some(accept_ranges) = response.headers.get("Accept-Ranges") {
@@ -3867,27 +4338,33 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation retrieves the <code>access-policy</code> subresource set on the vault; for more information on setting this subresource, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-SetVaultAccessPolicy.html">Set Vault Access Policy (PUT access-policy)</a>. If there is no access policy set on the vault, the operation returns a <code>404 Not found</code> error. For more information about vault access policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-access-policy.html">Amazon Glacier Access Control with Vault Access Policies</a>.</p>
-    fn get_vault_access_policy(
-        &self,
-        input: GetVaultAccessPolicyInput,
-    ) -> RusotoFuture<GetVaultAccessPolicyOutput, GetVaultAccessPolicyError> {
+impl ServiceRequest for GetVaultAccessPolicyRequest {
+    type Output = GetVaultAccessPolicyResponse;
+    type Error = GetVaultAccessPolicyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/access-policy",
-            account_id = input.account_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetVaultAccessPolicyOutput, _>()?;
+                        .deserialize::<GetVaultAccessPolicyResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -3900,27 +4377,33 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation retrieves the following attributes from the <code>lock-policy</code> subresource set on the specified vault: </p> <ul> <li> <p>The vault lock policy set on the vault.</p> </li> <li> <p>The state of the vault lock, which is either <code>InProgess</code> or <code>Locked</code>.</p> </li> <li> <p>When the lock ID expires. The lock ID is used to complete the vault locking process.</p> </li> <li> <p>When the vault lock was initiated and put into the <code>InProgress</code> state.</p> </li> </ul> <p>A vault lock is put into the <code>InProgress</code> state by calling <a>InitiateVaultLock</a>. A vault lock is put into the <code>Locked</code> state by calling <a>CompleteVaultLock</a>. You can abort the vault locking process by calling <a>AbortVaultLock</a>. For more information about the vault locking process, <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock.html">Amazon Glacier Vault Lock</a>. </p> <p>If there is no vault lock policy set on the vault, the operation returns a <code>404 Not found</code> error. For more information about vault lock policies, <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock-policy.html">Amazon Glacier Access Control with Vault Lock Policies</a>. </p>
-    fn get_vault_lock(
-        &self,
-        input: GetVaultLockInput,
-    ) -> RusotoFuture<GetVaultLockOutput, GetVaultLockError> {
+impl ServiceRequest for GetVaultLockRequest {
+    type Output = GetVaultLockResponse;
+    type Error = GetVaultLockError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/lock-policy",
-            account_id = input.account_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetVaultLockOutput, _>()?;
+                        .deserialize::<GetVaultLockResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -3934,27 +4417,33 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation retrieves the <code>notification-configuration</code> subresource of the specified vault.</p> <p>For information about setting a notification configuration on a vault, see <a>SetVaultNotifications</a>. If a notification configuration for a vault is not set, the operation returns a <code>404 Not Found</code> error. For more information about vault notifications, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/configuring-notifications.html">Configuring Vault Notifications in Amazon Glacier</a>. </p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/configuring-notifications.html">Configuring Vault Notifications in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vault-notifications-get.html">Get Vault Notification Configuration </a> in the <i>Amazon Glacier Developer Guide</i>. </p>
-    fn get_vault_notifications(
-        &self,
-        input: GetVaultNotificationsInput,
-    ) -> RusotoFuture<GetVaultNotificationsOutput, GetVaultNotificationsError> {
+impl ServiceRequest for GetVaultNotificationsRequest {
+    type Output = GetVaultNotificationsResponse;
+    type Error = GetVaultNotificationsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/notification-configuration",
-            account_id = input.account_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetVaultNotificationsOutput, _>()?;
+                        .deserialize::<GetVaultNotificationsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -3967,30 +4456,36 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation initiates a job of the specified type, which can be a select, an archival retrieval, or a vault retrieval. For more information about using this operation, see the documentation for the underlying REST API <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-initiate-job-post.html">Initiate a Job</a>. </p>
-    fn initiate_job(
-        &self,
-        input: InitiateJobInput,
-    ) -> RusotoFuture<InitiateJobOutput, InitiateJobError> {
+impl ServiceRequest for InitiateJobRequest {
+    type Output = InitiateJobResponse;
+    type Error = InitiateJobError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/jobs",
-            account_id = input.account_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("POST", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let encoded = Some(serde_json::to_vec(&input.job_parameters).unwrap());
+        let encoded = Some(serde_json::to_vec(&self.job_parameters).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let mut result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<InitiateJobOutput, _>()?;
+                        .deserialize::<InitiateJobResponse, _>()?;
                     if let Some(job_id) = response.headers.get("x-amz-job-id") {
                         let value = job_id.to_owned();
                         result.job_id = Some(value)
@@ -4016,38 +4511,44 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation initiates a multipart upload. Amazon Glacier creates a multipart upload resource and returns its ID in the response. The multipart upload ID is used in subsequent requests to upload parts of an archive (see <a>UploadMultipartPart</a>).</p> <p>When you initiate a multipart upload, you specify the part size in number of bytes. The part size must be a megabyte (1024 KB) multiplied by a power of 2-for example, 1048576 (1 MB), 2097152 (2 MB), 4194304 (4 MB), 8388608 (8 MB), and so on. The minimum allowable part size is 1 MB, and the maximum is 4 GB.</p> <p>Every part you upload to this resource (see <a>UploadMultipartPart</a>), except the last one, must have the same size. The last one can be the same size or smaller. For example, suppose you want to upload a 16.2 MB file. If you initiate the multipart upload with a part size of 4 MB, you will upload four parts of 4 MB each and one part of 0.2 MB. </p> <note> <p>You don't need to know the size of the archive when you start a multipart upload because Amazon Glacier does not require you to specify the overall archive size.</p> </note> <p>After you complete the multipart upload, Amazon Glacier removes the multipart upload resource referenced by the ID. Amazon Glacier also removes the multipart upload resource if you cancel the multipart upload or it may be removed if there is no activity for a period of 24 hours.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/uploading-archive-mpu.html">Uploading Large Archives in Parts (Multipart Upload)</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-initiate-upload.html">Initiate Multipart Upload</a> in the <i>Amazon Glacier Developer Guide</i>.</p>
-    fn initiate_multipart_upload(
-        &self,
-        input: InitiateMultipartUploadInput,
-    ) -> RusotoFuture<InitiateMultipartUploadOutput, InitiateMultipartUploadError> {
+impl ServiceRequest for InitiateMultipartUploadRequest {
+    type Output = InitiateMultipartUploadResponse;
+    type Error = InitiateMultipartUploadError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/multipart-uploads",
-            account_id = input.account_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("POST", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        if let Some(ref archive_description) = input.archive_description {
+        if let Some(ref archive_description) = self.archive_description {
             request.add_header(
                 "x-amz-archive-description",
                 &archive_description.to_string(),
             );
         }
 
-        if let Some(ref part_size) = input.part_size {
+        if let Some(ref part_size) = self.part_size {
             request.add_header("x-amz-part-size", &part_size.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let mut result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<InitiateMultipartUploadOutput, _>()?;
+                        .deserialize::<InitiateMultipartUploadResponse, _>()?;
                     if let Some(location) = response.headers.get("Location") {
                         let value = location.to_owned();
                         result.location = Some(value)
@@ -4066,30 +4567,36 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation initiates the vault locking process by doing the following:</p> <ul> <li> <p>Installing a vault lock policy on the specified vault.</p> </li> <li> <p>Setting the lock state of vault lock to <code>InProgress</code>.</p> </li> <li> <p>Returning a lock ID, which is used to complete the vault locking process.</p> </li> </ul> <p>You can set one vault lock policy for each vault and this policy can be up to 20 KB in size. For more information about vault lock policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock-policy.html">Amazon Glacier Access Control with Vault Lock Policies</a>. </p> <p>You must complete the vault locking process within 24 hours after the vault lock enters the <code>InProgress</code> state. After the 24 hour window ends, the lock ID expires, the vault automatically exits the <code>InProgress</code> state, and the vault lock policy is removed from the vault. You call <a>CompleteVaultLock</a> to complete the vault locking process by setting the state of the vault lock to <code>Locked</code>. </p> <p>After a vault lock is in the <code>Locked</code> state, you cannot initiate a new vault lock for the vault.</p> <p>You can abort the vault locking process by calling <a>AbortVaultLock</a>. You can get the state of the vault lock by calling <a>GetVaultLock</a>. For more information about the vault locking process, <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock.html">Amazon Glacier Vault Lock</a>.</p> <p>If this operation is called when the vault lock is in the <code>InProgress</code> state, the operation returns an <code>AccessDeniedException</code> error. When the vault lock is in the <code>InProgress</code> state you must call <a>AbortVaultLock</a> before you can initiate a new vault lock policy. </p>
-    fn initiate_vault_lock(
-        &self,
-        input: InitiateVaultLockInput,
-    ) -> RusotoFuture<InitiateVaultLockOutput, InitiateVaultLockError> {
+impl ServiceRequest for InitiateVaultLockRequest {
+    type Output = InitiateVaultLockResponse;
+    type Error = InitiateVaultLockError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/lock-policy",
-            account_id = input.account_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("POST", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let encoded = Some(serde_json::to_vec(&input.policy).unwrap());
+        let encoded = Some(serde_json::to_vec(&self.policy).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let mut result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<InitiateVaultLockOutput, _>()?;
+                        .deserialize::<InitiateVaultLockResponse, _>()?;
                     if let Some(lock_id) = response.headers.get("x-amz-lock-id") {
                         let value = lock_id.to_owned();
                         result.lock_id = Some(value)
@@ -4107,39 +4614,48 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation lists jobs for a vault, including jobs that are in-progress and jobs that have recently finished. The List Job operation returns a list of these jobs sorted by job initiation time.</p> <note> <p>Amazon Glacier retains recently completed jobs for a period before deleting them; however, it eventually removes completed jobs. The output of completed jobs can be retrieved. Retaining completed jobs for a period of time after they have completed enables you to get a job output in the event you miss the job completion notification or your first attempt to download it fails. For example, suppose you start an archive retrieval job to download an archive. After the job completes, you start to download the archive but encounter a network error. In this scenario, you can retry and download the archive while the job exists.</p> </note> <p>The List Jobs operation supports pagination. You should always check the response <code>Marker</code> field. If there are no more jobs to list, the <code>Marker</code> field is set to <code>null</code>. If there are more jobs to list, the <code>Marker</code> field is set to a non-null value, which you can use to continue the pagination of the list. To return a list of jobs that begins at a specific job, set the marker request parameter to the <code>Marker</code> value for that job that you obtained from a previous List Jobs request.</p> <p>You can set a maximum limit for the number of jobs returned in the response by specifying the <code>limit</code> parameter in the request. The default limit is 50. The number of jobs returned might be fewer than the limit, but the number of returned jobs never exceeds the limit.</p> <p>Additionally, you can filter the jobs list returned by specifying the optional <code>statuscode</code> parameter or <code>completed</code> parameter, or both. Using the <code>statuscode</code> parameter, you can specify to return only jobs that match either the <code>InProgress</code>, <code>Succeeded</code>, or <code>Failed</code> status. Using the <code>completed</code> parameter, you can specify to return only jobs that were completed (<code>true</code>) or jobs that were not completed (<code>false</code>).</p> <p>For more information about using this operation, see the documentation for the underlying REST API <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-jobs-get.html">List Jobs</a>. </p>
-    fn list_jobs(&self, input: ListJobsInput) -> RusotoFuture<ListJobsOutput, ListJobsError> {
+impl ServiceRequest for ListJobsRequest {
+    type Output = ListJobsResponse;
+    type Error = ListJobsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/jobs",
-            account_id = input.account_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
         let mut params = Params::new();
-        if let Some(ref x) = input.completed {
+        if let Some(ref x) = self.completed {
             params.put("completed", x);
         }
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
-        if let Some(ref x) = input.statuscode {
+        if let Some(ref x) = self.statuscode {
             params.put("statuscode", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListJobsOutput, _>()?;
+                        .deserialize::<ListJobsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -4153,36 +4669,42 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation lists in-progress multipart uploads for the specified vault. An in-progress multipart upload is a multipart upload that has been initiated by an <a>InitiateMultipartUpload</a> request, but has not yet been completed or aborted. The list returned in the List Multipart Upload response has no guaranteed order. </p> <p>The List Multipart Uploads operation supports pagination. By default, this operation returns up to 50 multipart uploads in the response. You should always check the response for a <code>marker</code> at which to continue the list; if there are no more items the <code>marker</code> is <code>null</code>. To return a list of multipart uploads that begins at a specific upload, set the <code>marker</code> request parameter to the value you obtained from a previous List Multipart Upload request. You can also limit the number of uploads returned in the response by specifying the <code>limit</code> parameter in the request.</p> <p>Note the difference between this operation and listing parts (<a>ListParts</a>). The List Multipart Uploads operation lists all multipart uploads for a vault and does not require a multipart upload ID. The List Parts operation requires a multipart upload ID since parts are associated with a single upload.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-list-uploads.html">List Multipart Uploads </a> in the <i>Amazon Glacier Developer Guide</i>.</p>
-    fn list_multipart_uploads(
-        &self,
-        input: ListMultipartUploadsInput,
-    ) -> RusotoFuture<ListMultipartUploadsOutput, ListMultipartUploadsError> {
+impl ServiceRequest for ListMultipartUploadsRequest {
+    type Output = ListMultipartUploadsResponse;
+    type Error = ListMultipartUploadsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/multipart-uploads",
-            account_id = input.account_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListMultipartUploadsOutput, _>()?;
+                        .deserialize::<ListMultipartUploadsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -4195,34 +4717,43 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation lists the parts of an archive that have been uploaded in a specific multipart upload. You can make this request at any time during an in-progress multipart upload before you complete the upload (see <a>CompleteMultipartUpload</a>. List Parts returns an error for completed uploads. The list returned in the List Parts response is sorted by part range. </p> <p>The List Parts operation supports pagination. By default, this operation returns up to 50 uploaded parts in the response. You should always check the response for a <code>marker</code> at which to continue the list; if there are no more items the <code>marker</code> is <code>null</code>. To return a list of parts that begins at a specific part, set the <code>marker</code> request parameter to the value you obtained from a previous List Parts request. You can also limit the number of parts returned in the response by specifying the <code>limit</code> parameter in the request. </p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-list-parts.html">List Parts</a> in the <i>Amazon Glacier Developer Guide</i>.</p>
-    fn list_parts(&self, input: ListPartsInput) -> RusotoFuture<ListPartsOutput, ListPartsError> {
+impl ServiceRequest for ListPartsRequest {
+    type Output = ListPartsResponse;
+    type Error = ListPartsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/multipart-uploads/{upload_id}",
-            account_id = input.account_id,
-            upload_id = input.upload_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            upload_id = self.upload_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPartsOutput, _>()?;
+                        .deserialize::<ListPartsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -4236,26 +4767,32 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation lists the provisioned capacity units for the specified AWS account.</p>
-    fn list_provisioned_capacity(
-        &self,
-        input: ListProvisionedCapacityInput,
-    ) -> RusotoFuture<ListProvisionedCapacityOutput, ListProvisionedCapacityError> {
+impl ServiceRequest for ListProvisionedCapacityRequest {
+    type Output = ListProvisionedCapacityResponse;
+    type Error = ListProvisionedCapacityError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/provisioned-capacity",
-            account_id = input.account_id
+            account_id = self.account_id
         );
 
-        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListProvisionedCapacityOutput, _>()?;
+                        .deserialize::<ListProvisionedCapacityResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -4266,27 +4803,33 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation lists all the tags attached to a vault. The operation returns an empty map if there are no tags. For more information about tags, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/tagging.html">Tagging Amazon Glacier Resources</a>.</p>
-    fn list_tags_for_vault(
-        &self,
-        input: ListTagsForVaultInput,
-    ) -> RusotoFuture<ListTagsForVaultOutput, ListTagsForVaultError> {
+impl ServiceRequest for ListTagsForVaultRequest {
+    type Output = ListTagsForVaultResponse;
+    type Error = ListTagsForVaultError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/tags",
-            account_id = input.account_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsForVaultOutput, _>()?;
+                        .deserialize::<ListTagsForVaultResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -4300,32 +4843,38 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation lists all vaults owned by the calling user's account. The list returned in the response is ASCII-sorted by vault name.</p> <p>By default, this operation returns up to 10 items. If there are more vaults to list, the response <code>marker</code> field contains the vault Amazon Resource Name (ARN) at which to continue the list with a new List Vaults request; otherwise, the <code>marker</code> field is <code>null</code>. To return a list of vaults that begins at a specific vault, set the <code>marker</code> request parameter to the vault ARN you obtained from a previous List Vaults request. You can also limit the number of vaults returned in the response by specifying the <code>limit</code> parameter in the request. </p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/retrieving-vault-info.html">Retrieving Vault Metadata in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vaults-get.html">List Vaults </a> in the <i>Amazon Glacier Developer Guide</i>. </p>
-    fn list_vaults(
-        &self,
-        input: ListVaultsInput,
-    ) -> RusotoFuture<ListVaultsOutput, ListVaultsError> {
-        let request_uri = format!("/{account_id}/vaults", account_id = input.account_id);
+impl ServiceRequest for ListVaultsRequest {
+    type Output = ListVaultsResponse;
+    type Error = ListVaultsError;
 
-        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/{account_id}/vaults", account_id = self.account_id);
+
+        let mut request = SignedRequest::new("GET", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListVaultsOutput, _>()?;
+                        .deserialize::<ListVaultsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -4339,26 +4888,32 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation purchases a provisioned capacity unit for an AWS account. </p>
-    fn purchase_provisioned_capacity(
-        &self,
-        input: PurchaseProvisionedCapacityInput,
-    ) -> RusotoFuture<PurchaseProvisionedCapacityOutput, PurchaseProvisionedCapacityError> {
+impl ServiceRequest for PurchaseProvisionedCapacityRequest {
+    type Output = PurchaseProvisionedCapacityResponse;
+    type Error = PurchaseProvisionedCapacityError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/provisioned-capacity",
-            account_id = input.account_id
+            account_id = self.account_id
         );
 
-        let mut request = SignedRequest::new("POST", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let mut result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PurchaseProvisionedCapacityOutput, _>()?;
+                        .deserialize::<PurchaseProvisionedCapacityResponse, _>()?;
                     if let Some(capacity_id) = response.headers.get("x-amz-capacity-id") {
                         let value = capacity_id.to_owned();
                         result.capacity_id = Some(value)
@@ -4373,33 +4928,39 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation removes one or more tags from the set of tags attached to a vault. For more information about tags, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/tagging.html">Tagging Amazon Glacier Resources</a>. This operation is idempotent. The operation will be successful, even if there are no tags attached to the vault. </p>
-    fn remove_tags_from_vault(
-        &self,
-        input: RemoveTagsFromVaultInput,
-    ) -> RusotoFuture<(), RemoveTagsFromVaultError> {
+impl ServiceRequest for RemoveTagsFromVaultRequest {
+    type Output = RemoveTagsFromVaultResponse;
+    type Error = RemoveTagsFromVaultError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/tags",
-            account_id = input.account_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("POST", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
         params.put("operation", "remove");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = RemoveTagsFromVaultResponse {};
 
                     Ok(result)
                 }))
@@ -4412,28 +4973,34 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation sets and then enacts a data retrieval policy in the region specified in the PUT request. You can set one policy per region for an AWS account. The policy is enacted within a few minutes of a successful PUT operation.</p> <p>The set policy operation does not affect retrieval jobs that were in progress before the policy was enacted. For more information about data retrieval policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/data-retrieval-policy.html">Amazon Glacier Data Retrieval Policies</a>. </p>
-    fn set_data_retrieval_policy(
-        &self,
-        input: SetDataRetrievalPolicyInput,
-    ) -> RusotoFuture<(), SetDataRetrievalPolicyError> {
+impl ServiceRequest for SetDataRetrievalPolicyRequest {
+    type Output = SetDataRetrievalPolicyResponse;
+    type Error = SetDataRetrievalPolicyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/policies/data-retrieval",
-            account_id = input.account_id
+            account_id = self.account_id
         );
 
-        let mut request = SignedRequest::new("PUT", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = SetDataRetrievalPolicyResponse {};
 
                     Ok(result)
                 }))
@@ -4446,29 +5013,35 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation configures an access policy for a vault and will overwrite an existing policy. To configure a vault access policy, send a PUT request to the <code>access-policy</code> subresource of the vault. An access policy is specific to a vault and is also called a vault subresource. You can set one access policy per vault and the policy can be up to 20 KB in size. For more information about vault access policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-access-policy.html">Amazon Glacier Access Control with Vault Access Policies</a>. </p>
-    fn set_vault_access_policy(
-        &self,
-        input: SetVaultAccessPolicyInput,
-    ) -> RusotoFuture<(), SetVaultAccessPolicyError> {
+impl ServiceRequest for SetVaultAccessPolicyRequest {
+    type Output = SetVaultAccessPolicyResponse;
+    type Error = SetVaultAccessPolicyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/access-policy",
-            account_id = input.account_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("PUT", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let encoded = Some(serde_json::to_vec(&input.policy).unwrap());
+        let encoded = Some(serde_json::to_vec(&self.policy).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = SetVaultAccessPolicyResponse {};
 
                     Ok(result)
                 }))
@@ -4481,29 +5054,35 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation configures notifications that will be sent when specific events happen to a vault. By default, you don't get any notifications.</p> <p>To configure vault notifications, send a PUT request to the <code>notification-configuration</code> subresource of the vault. The request should include a JSON document that provides an Amazon SNS topic and specific events for which you want Amazon Glacier to send notifications to the topic.</p> <p>Amazon SNS topics must grant permission to the vault to be allowed to publish notifications to the topic. You can configure a vault to publish a notification for the following vault events:</p> <ul> <li> <p> <b>ArchiveRetrievalCompleted</b> This event occurs when a job that was initiated for an archive retrieval is completed (<a>InitiateJob</a>). The status of the completed job can be "Succeeded" or "Failed". The notification sent to the SNS topic is the same output as returned from <a>DescribeJob</a>. </p> </li> <li> <p> <b>InventoryRetrievalCompleted</b> This event occurs when a job that was initiated for an inventory retrieval is completed (<a>InitiateJob</a>). The status of the completed job can be "Succeeded" or "Failed". The notification sent to the SNS topic is the same output as returned from <a>DescribeJob</a>. </p> </li> </ul> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/configuring-notifications.html">Configuring Vault Notifications in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vault-notifications-put.html">Set Vault Notification Configuration </a> in the <i>Amazon Glacier Developer Guide</i>. </p>
-    fn set_vault_notifications(
-        &self,
-        input: SetVaultNotificationsInput,
-    ) -> RusotoFuture<(), SetVaultNotificationsError> {
+impl ServiceRequest for SetVaultNotificationsRequest {
+    type Output = SetVaultNotificationsResponse;
+    type Error = SetVaultNotificationsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/notification-configuration",
-            account_id = input.account_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("PUT", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let encoded = Some(serde_json::to_vec(&input.vault_notification_config).unwrap());
+        let encoded = Some(serde_json::to_vec(&self.vault_notification_config).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = SetVaultNotificationsResponse {};
 
                     Ok(result)
                 }))
@@ -4516,45 +5095,51 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation adds an archive to a vault. This is a synchronous operation, and for a successful upload, your data is durably persisted. Amazon Glacier returns the archive ID in the <code>x-amz-archive-id</code> header of the response. </p> <p>You must use the archive ID to access your data in Amazon Glacier. After you upload an archive, you should save the archive ID returned so that you can retrieve or delete the archive later. Besides saving the archive ID, you can also index it and give it a friendly name to allow for better searching. You can also use the optional archive description field to specify how the archive is referred to in an external index of archives, such as you might create in Amazon DynamoDB. You can also get the vault inventory to obtain a list of archive IDs in a vault. For more information, see <a>InitiateJob</a>. </p> <p>You must provide a SHA256 tree hash of the data you are uploading. For information about computing a SHA256 tree hash, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/checksum-calculations.html">Computing Checksums</a>. </p> <p>You can optionally specify an archive description of up to 1,024 printable ASCII characters. You can get the archive description when you either retrieve the archive or get the vault inventory. For more information, see <a>InitiateJob</a>. Amazon Glacier does not interpret the description in any way. An archive description does not need to be unique. You cannot use the description to retrieve or sort the archive list. </p> <p>Archives are immutable. After you upload an archive, you cannot edit the archive or its description.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/uploading-an-archive.html">Uploading an Archive in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-archive-post.html">Upload Archive</a> in the <i>Amazon Glacier Developer Guide</i>. </p>
-    fn upload_archive(
-        &self,
-        input: UploadArchiveInput,
-    ) -> RusotoFuture<ArchiveCreationOutput, UploadArchiveError> {
+impl ServiceRequest for UploadArchiveRequest {
+    type Output = UploadArchiveResponse;
+    type Error = UploadArchiveError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/archives",
-            account_id = input.account_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("POST", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let encoded = if let Some(ref payload) = input.body {
+        let encoded = if let Some(ref payload) = self.body {
             Some(payload.to_owned())
         } else {
             None
         };
         request.set_payload(encoded);
 
-        if let Some(ref archive_description) = input.archive_description {
+        if let Some(ref archive_description) = self.archive_description {
             request.add_header(
                 "x-amz-archive-description",
                 &archive_description.to_string(),
             );
         }
 
-        if let Some(ref checksum) = input.checksum {
+        if let Some(ref checksum) = self.checksum {
             request.add_header("x-amz-sha256-tree-hash", &checksum.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let mut result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ArchiveCreationOutput, _>()?;
+                        .deserialize::<UploadArchiveResponse, _>()?;
                     if let Some(archive_id) = response.headers.get("x-amz-archive-id") {
                         let value = archive_id.to_owned();
                         result.archive_id = Some(value)
@@ -4580,43 +5165,49 @@ impl Glacier for GlacierClient {
             }
         })
     }
+}
 
-    /// <p>This operation uploads a part of an archive. You can upload archive parts in any order. You can also upload them in parallel. You can upload up to 10,000 parts for a multipart upload.</p> <p>Amazon Glacier rejects your upload part request if any of the following conditions is true:</p> <ul> <li> <p> <b>SHA256 tree hash does not match</b>To ensure that part data is not corrupted in transmission, you compute a SHA256 tree hash of the part and include it in your request. Upon receiving the part data, Amazon Glacier also computes a SHA256 tree hash. If these hash values don't match, the operation fails. For information about computing a SHA256 tree hash, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/checksum-calculations.html">Computing Checksums</a>.</p> </li> <li> <p> <b>Part size does not match</b>The size of each part except the last must match the size specified in the corresponding <a>InitiateMultipartUpload</a> request. The size of the last part must be the same size as, or smaller than, the specified size.</p> <note> <p>If you upload a part whose size is smaller than the part size you specified in your initiate multipart upload request and that part is not the last part, then the upload part request will succeed. However, the subsequent Complete Multipart Upload request will fail.</p> </note> </li> <li> <p> <b>Range does not align</b>The byte range value in the request does not align with the part size specified in the corresponding initiate request. For example, if you specify a part size of 4194304 bytes (4 MB), then 0 to 4194303 bytes (4 MB - 1) and 4194304 (4 MB) to 8388607 (8 MB - 1) are valid part ranges. However, if you set a range value of 2 MB to 6 MB, the range does not align with the part size and the upload will fail. </p> </li> </ul> <p>This operation is idempotent. If you upload the same part multiple times, the data included in the most recent request overwrites the previously uploaded data.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/uploading-archive-mpu.html">Uploading Large Archives in Parts (Multipart Upload)</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-upload-part.html">Upload Part </a> in the <i>Amazon Glacier Developer Guide</i>.</p>
-    fn upload_multipart_part(
-        &self,
-        input: UploadMultipartPartInput,
-    ) -> RusotoFuture<UploadMultipartPartOutput, UploadMultipartPartError> {
+impl ServiceRequest for UploadMultipartPartRequest {
+    type Output = UploadMultipartPartResponse;
+    type Error = UploadMultipartPartError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/multipart-uploads/{upload_id}",
-            account_id = input.account_id,
-            upload_id = input.upload_id,
-            vault_name = input.vault_name
+            account_id = self.account_id,
+            upload_id = self.upload_id,
+            vault_name = self.vault_name
         );
 
-        let mut request = SignedRequest::new("PUT", "glacier", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "glacier", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let encoded = if let Some(ref payload) = input.body {
+        let encoded = if let Some(ref payload) = self.body {
             Some(payload.to_owned())
         } else {
             None
         };
         request.set_payload(encoded);
 
-        if let Some(ref checksum) = input.checksum {
+        if let Some(ref checksum) = self.checksum {
             request.add_header("x-amz-sha256-tree-hash", &checksum.to_string());
         }
 
-        if let Some(ref range) = input.range {
+        if let Some(ref range) = self.range {
             request.add_header("Content-Range", &range.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let mut result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UploadMultipartPartOutput, _>()?;
+                        .deserialize::<UploadMultipartPartResponse, _>()?;
                     if let Some(checksum) = response.headers.get("x-amz-sha256-tree-hash") {
                         let value = checksum.to_owned();
                         result.checksum = Some(value)

@@ -177,6 +177,7 @@ fn sqs_timeout_test() {
     };
     let result = sqs
         .receive_message(receive_request)
+        .send()
         .with_timeout(Duration::from_secs(2))
         .sync();
     println!("sqs receive result: {:?}", result);

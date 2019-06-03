@@ -68,10 +68,12 @@ pub fn generate_services(
             return;
         }
 
-        let service = match ServiceDefinition::load(name, &service_config.protocol_version) {
+        let mut service = match ServiceDefinition::load(name, &service_config.protocol_version) {
             Ok(sd) => Service::new(service_config, sd),
             Err(_) => panic!("Failed to load service {}. Make sure the botocore submodule has been initialized!", name),
         };
+
+        service.normalize_input_output_shapes();
 
         let crate_dir = out_dir.join(&name);
         let crate_name = format!("rusoto_{}", &name.replace('-', "_"));

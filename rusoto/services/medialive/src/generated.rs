@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -894,6 +895,10 @@ pub struct CreateTagsRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateTagsResponse {}
+
 /// <p>Placeholder documentation for DeleteChannelRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteChannelRequest {
@@ -1097,6 +1102,10 @@ pub struct DeleteTagsRequest {
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteTagsResponse {}
 
 /// <p>Placeholder documentation for DescribeChannelRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -6725,181 +6734,131 @@ pub trait MediaLive {
     fn batch_update_schedule(
         &self,
         input: BatchUpdateScheduleRequest,
-    ) -> RusotoFuture<BatchUpdateScheduleResponse, BatchUpdateScheduleError>;
+    ) -> Request<BatchUpdateScheduleRequest>;
 
     /// <p>Creates a new channel</p>
-    fn create_channel(
-        &self,
-        input: CreateChannelRequest,
-    ) -> RusotoFuture<CreateChannelResponse, CreateChannelError>;
+    fn create_channel(&self, input: CreateChannelRequest) -> Request<CreateChannelRequest>;
 
     /// <p>Create an input</p>
-    fn create_input(
-        &self,
-        input: CreateInputRequest,
-    ) -> RusotoFuture<CreateInputResponse, CreateInputError>;
+    fn create_input(&self, input: CreateInputRequest) -> Request<CreateInputRequest>;
 
     /// <p>Creates a Input Security Group</p>
     fn create_input_security_group(
         &self,
         input: CreateInputSecurityGroupRequest,
-    ) -> RusotoFuture<CreateInputSecurityGroupResponse, CreateInputSecurityGroupError>;
+    ) -> Request<CreateInputSecurityGroupRequest>;
 
     /// <p>Create tags for a resource</p>
-    fn create_tags(&self, input: CreateTagsRequest) -> RusotoFuture<(), CreateTagsError>;
+    fn create_tags(&self, input: CreateTagsRequest) -> Request<CreateTagsRequest>;
 
     /// <p>Starts deletion of channel. The associated outputs are also deleted.</p>
-    fn delete_channel(
-        &self,
-        input: DeleteChannelRequest,
-    ) -> RusotoFuture<DeleteChannelResponse, DeleteChannelError>;
+    fn delete_channel(&self, input: DeleteChannelRequest) -> Request<DeleteChannelRequest>;
 
     /// <p>Deletes the input end point</p>
-    fn delete_input(
-        &self,
-        input: DeleteInputRequest,
-    ) -> RusotoFuture<DeleteInputResponse, DeleteInputError>;
+    fn delete_input(&self, input: DeleteInputRequest) -> Request<DeleteInputRequest>;
 
     /// <p>Deletes an Input Security Group</p>
     fn delete_input_security_group(
         &self,
         input: DeleteInputSecurityGroupRequest,
-    ) -> RusotoFuture<DeleteInputSecurityGroupResponse, DeleteInputSecurityGroupError>;
+    ) -> Request<DeleteInputSecurityGroupRequest>;
 
     /// <p>Delete an expired reservation.</p>
     fn delete_reservation(
         &self,
         input: DeleteReservationRequest,
-    ) -> RusotoFuture<DeleteReservationResponse, DeleteReservationError>;
+    ) -> Request<DeleteReservationRequest>;
 
     /// <p>Delete all schedule actions on a channel.</p>
-    fn delete_schedule(
-        &self,
-        input: DeleteScheduleRequest,
-    ) -> RusotoFuture<DeleteScheduleResponse, DeleteScheduleError>;
+    fn delete_schedule(&self, input: DeleteScheduleRequest) -> Request<DeleteScheduleRequest>;
 
     /// <p>Removes tags for a resource</p>
-    fn delete_tags(&self, input: DeleteTagsRequest) -> RusotoFuture<(), DeleteTagsError>;
+    fn delete_tags(&self, input: DeleteTagsRequest) -> Request<DeleteTagsRequest>;
 
     /// <p>Gets details about a channel</p>
-    fn describe_channel(
-        &self,
-        input: DescribeChannelRequest,
-    ) -> RusotoFuture<DescribeChannelResponse, DescribeChannelError>;
+    fn describe_channel(&self, input: DescribeChannelRequest) -> Request<DescribeChannelRequest>;
 
     /// <p>Produces details about an input</p>
-    fn describe_input(
-        &self,
-        input: DescribeInputRequest,
-    ) -> RusotoFuture<DescribeInputResponse, DescribeInputError>;
+    fn describe_input(&self, input: DescribeInputRequest) -> Request<DescribeInputRequest>;
 
     /// <p>Produces a summary of an Input Security Group</p>
     fn describe_input_security_group(
         &self,
         input: DescribeInputSecurityGroupRequest,
-    ) -> RusotoFuture<DescribeInputSecurityGroupResponse, DescribeInputSecurityGroupError>;
+    ) -> Request<DescribeInputSecurityGroupRequest>;
 
     /// <p>Get details for an offering.</p>
-    fn describe_offering(
-        &self,
-        input: DescribeOfferingRequest,
-    ) -> RusotoFuture<DescribeOfferingResponse, DescribeOfferingError>;
+    fn describe_offering(&self, input: DescribeOfferingRequest)
+        -> Request<DescribeOfferingRequest>;
 
     /// <p>Get details for a reservation.</p>
     fn describe_reservation(
         &self,
         input: DescribeReservationRequest,
-    ) -> RusotoFuture<DescribeReservationResponse, DescribeReservationError>;
+    ) -> Request<DescribeReservationRequest>;
 
     /// <p>Get a channel schedule</p>
-    fn describe_schedule(
-        &self,
-        input: DescribeScheduleRequest,
-    ) -> RusotoFuture<DescribeScheduleResponse, DescribeScheduleError>;
+    fn describe_schedule(&self, input: DescribeScheduleRequest)
+        -> Request<DescribeScheduleRequest>;
 
     /// <p>Produces list of channels that have been created</p>
-    fn list_channels(
-        &self,
-        input: ListChannelsRequest,
-    ) -> RusotoFuture<ListChannelsResponse, ListChannelsError>;
+    fn list_channels(&self, input: ListChannelsRequest) -> Request<ListChannelsRequest>;
 
     /// <p>Produces a list of Input Security Groups for an account</p>
     fn list_input_security_groups(
         &self,
         input: ListInputSecurityGroupsRequest,
-    ) -> RusotoFuture<ListInputSecurityGroupsResponse, ListInputSecurityGroupsError>;
+    ) -> Request<ListInputSecurityGroupsRequest>;
 
     /// <p>Produces list of inputs that have been created</p>
-    fn list_inputs(
-        &self,
-        input: ListInputsRequest,
-    ) -> RusotoFuture<ListInputsResponse, ListInputsError>;
+    fn list_inputs(&self, input: ListInputsRequest) -> Request<ListInputsRequest>;
 
     /// <p>List offerings available for purchase.</p>
-    fn list_offerings(
-        &self,
-        input: ListOfferingsRequest,
-    ) -> RusotoFuture<ListOfferingsResponse, ListOfferingsError>;
+    fn list_offerings(&self, input: ListOfferingsRequest) -> Request<ListOfferingsRequest>;
 
     /// <p>List purchased reservations.</p>
-    fn list_reservations(
-        &self,
-        input: ListReservationsRequest,
-    ) -> RusotoFuture<ListReservationsResponse, ListReservationsError>;
+    fn list_reservations(&self, input: ListReservationsRequest)
+        -> Request<ListReservationsRequest>;
 
     /// <p>Produces list of tags that have been created for a resource</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Purchase an offering and create a reservation.</p>
-    fn purchase_offering(
-        &self,
-        input: PurchaseOfferingRequest,
-    ) -> RusotoFuture<PurchaseOfferingResponse, PurchaseOfferingError>;
+    fn purchase_offering(&self, input: PurchaseOfferingRequest)
+        -> Request<PurchaseOfferingRequest>;
 
     /// <p>Starts an existing channel</p>
-    fn start_channel(
-        &self,
-        input: StartChannelRequest,
-    ) -> RusotoFuture<StartChannelResponse, StartChannelError>;
+    fn start_channel(&self, input: StartChannelRequest) -> Request<StartChannelRequest>;
 
     /// <p>Stops a running channel</p>
-    fn stop_channel(
-        &self,
-        input: StopChannelRequest,
-    ) -> RusotoFuture<StopChannelResponse, StopChannelError>;
+    fn stop_channel(&self, input: StopChannelRequest) -> Request<StopChannelRequest>;
 
     /// <p>Updates a channel.</p>
-    fn update_channel(
-        &self,
-        input: UpdateChannelRequest,
-    ) -> RusotoFuture<UpdateChannelResponse, UpdateChannelError>;
+    fn update_channel(&self, input: UpdateChannelRequest) -> Request<UpdateChannelRequest>;
 
     /// <p>Changes the class of the channel.</p>
     fn update_channel_class(
         &self,
         input: UpdateChannelClassRequest,
-    ) -> RusotoFuture<UpdateChannelClassResponse, UpdateChannelClassError>;
+    ) -> Request<UpdateChannelClassRequest>;
 
     /// <p>Updates an input.</p>
-    fn update_input(
-        &self,
-        input: UpdateInputRequest,
-    ) -> RusotoFuture<UpdateInputResponse, UpdateInputError>;
+    fn update_input(&self, input: UpdateInputRequest) -> Request<UpdateInputRequest>;
 
     /// <p>Update an Input Security Group&#39;s Whilelists.</p>
     fn update_input_security_group(
         &self,
         input: UpdateInputSecurityGroupRequest,
-    ) -> RusotoFuture<UpdateInputSecurityGroupResponse, UpdateInputSecurityGroupError>;
+    ) -> Request<UpdateInputSecurityGroupRequest>;
 
     /// <p>Update reservation.</p>
     fn update_reservation(
         &self,
         input: UpdateReservationRequest,
-    ) -> RusotoFuture<UpdateReservationResponse, UpdateReservationError>;
+    ) -> Request<UpdateReservationRequest>;
 }
 /// A client for the MediaLive API.
 #[derive(Clone)]
@@ -6942,19 +6901,225 @@ impl MediaLive for MediaLiveClient {
     fn batch_update_schedule(
         &self,
         input: BatchUpdateScheduleRequest,
-    ) -> RusotoFuture<BatchUpdateScheduleResponse, BatchUpdateScheduleError> {
+    ) -> Request<BatchUpdateScheduleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new channel</p>
+    fn create_channel(&self, input: CreateChannelRequest) -> Request<CreateChannelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Create an input</p>
+    fn create_input(&self, input: CreateInputRequest) -> Request<CreateInputRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a Input Security Group</p>
+    fn create_input_security_group(
+        &self,
+        input: CreateInputSecurityGroupRequest,
+    ) -> Request<CreateInputSecurityGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Create tags for a resource</p>
+    fn create_tags(&self, input: CreateTagsRequest) -> Request<CreateTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts deletion of channel. The associated outputs are also deleted.</p>
+    fn delete_channel(&self, input: DeleteChannelRequest) -> Request<DeleteChannelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the input end point</p>
+    fn delete_input(&self, input: DeleteInputRequest) -> Request<DeleteInputRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an Input Security Group</p>
+    fn delete_input_security_group(
+        &self,
+        input: DeleteInputSecurityGroupRequest,
+    ) -> Request<DeleteInputSecurityGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Delete an expired reservation.</p>
+    fn delete_reservation(
+        &self,
+        input: DeleteReservationRequest,
+    ) -> Request<DeleteReservationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Delete all schedule actions on a channel.</p>
+    fn delete_schedule(&self, input: DeleteScheduleRequest) -> Request<DeleteScheduleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes tags for a resource</p>
+    fn delete_tags(&self, input: DeleteTagsRequest) -> Request<DeleteTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets details about a channel</p>
+    fn describe_channel(&self, input: DescribeChannelRequest) -> Request<DescribeChannelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Produces details about an input</p>
+    fn describe_input(&self, input: DescribeInputRequest) -> Request<DescribeInputRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Produces a summary of an Input Security Group</p>
+    fn describe_input_security_group(
+        &self,
+        input: DescribeInputSecurityGroupRequest,
+    ) -> Request<DescribeInputSecurityGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Get details for an offering.</p>
+    fn describe_offering(
+        &self,
+        input: DescribeOfferingRequest,
+    ) -> Request<DescribeOfferingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Get details for a reservation.</p>
+    fn describe_reservation(
+        &self,
+        input: DescribeReservationRequest,
+    ) -> Request<DescribeReservationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Get a channel schedule</p>
+    fn describe_schedule(
+        &self,
+        input: DescribeScheduleRequest,
+    ) -> Request<DescribeScheduleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Produces list of channels that have been created</p>
+    fn list_channels(&self, input: ListChannelsRequest) -> Request<ListChannelsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Produces a list of Input Security Groups for an account</p>
+    fn list_input_security_groups(
+        &self,
+        input: ListInputSecurityGroupsRequest,
+    ) -> Request<ListInputSecurityGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Produces list of inputs that have been created</p>
+    fn list_inputs(&self, input: ListInputsRequest) -> Request<ListInputsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>List offerings available for purchase.</p>
+    fn list_offerings(&self, input: ListOfferingsRequest) -> Request<ListOfferingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>List purchased reservations.</p>
+    fn list_reservations(
+        &self,
+        input: ListReservationsRequest,
+    ) -> Request<ListReservationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Produces list of tags that have been created for a resource</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Purchase an offering and create a reservation.</p>
+    fn purchase_offering(
+        &self,
+        input: PurchaseOfferingRequest,
+    ) -> Request<PurchaseOfferingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts an existing channel</p>
+    fn start_channel(&self, input: StartChannelRequest) -> Request<StartChannelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops a running channel</p>
+    fn stop_channel(&self, input: StopChannelRequest) -> Request<StopChannelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a channel.</p>
+    fn update_channel(&self, input: UpdateChannelRequest) -> Request<UpdateChannelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes the class of the channel.</p>
+    fn update_channel_class(
+        &self,
+        input: UpdateChannelClassRequest,
+    ) -> Request<UpdateChannelClassRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an input.</p>
+    fn update_input(&self, input: UpdateInputRequest) -> Request<UpdateInputRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Update an Input Security Group&#39;s Whilelists.</p>
+    fn update_input_security_group(
+        &self,
+        input: UpdateInputSecurityGroupRequest,
+    ) -> Request<UpdateInputSecurityGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Update reservation.</p>
+    fn update_reservation(
+        &self,
+        input: UpdateReservationRequest,
+    ) -> Request<UpdateReservationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for BatchUpdateScheduleRequest {
+    type Output = BatchUpdateScheduleResponse;
+    type Error = BatchUpdateScheduleError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/prod/channels/{channel_id}/schedule",
-            channel_id = input.channel_id
+            channel_id = self.channel_id
         );
 
-        let mut request = SignedRequest::new("PUT", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -6971,21 +7136,27 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new channel</p>
-    fn create_channel(
-        &self,
-        input: CreateChannelRequest,
-    ) -> RusotoFuture<CreateChannelResponse, CreateChannelError> {
+impl ServiceRequest for CreateChannelRequest {
+    type Output = CreateChannelResponse;
+    type Error = CreateChannelError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/prod/channels";
 
-        let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7003,21 +7174,27 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Create an input</p>
-    fn create_input(
-        &self,
-        input: CreateInputRequest,
-    ) -> RusotoFuture<CreateInputResponse, CreateInputError> {
+impl ServiceRequest for CreateInputRequest {
+    type Output = CreateInputResponse;
+    type Error = CreateInputError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/prod/inputs";
 
-        let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7035,21 +7212,27 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Creates a Input Security Group</p>
-    fn create_input_security_group(
-        &self,
-        input: CreateInputSecurityGroupRequest,
-    ) -> RusotoFuture<CreateInputSecurityGroupResponse, CreateInputSecurityGroupError> {
+impl ServiceRequest for CreateInputSecurityGroupRequest {
+    type Output = CreateInputSecurityGroupResponse;
+    type Error = CreateInputSecurityGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/prod/inputSecurityGroups";
 
-        let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7064,24 +7247,33 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Create tags for a resource</p>
-    fn create_tags(&self, input: CreateTagsRequest) -> RusotoFuture<(), CreateTagsError> {
+impl ServiceRequest for CreateTagsRequest {
+    type Output = CreateTagsResponse;
+    type Error = CreateTagsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/prod/tags/{resource_arn}",
-            resource_arn = input.resource_arn
+            resource_arn = self.resource_arn
         );
 
-        let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = CreateTagsResponse {};
 
                     Ok(result)
                 }))
@@ -7095,18 +7287,24 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Starts deletion of channel. The associated outputs are also deleted.</p>
-    fn delete_channel(
-        &self,
-        input: DeleteChannelRequest,
-    ) -> RusotoFuture<DeleteChannelResponse, DeleteChannelError> {
-        let request_uri = format!("/prod/channels/{channel_id}", channel_id = input.channel_id);
+impl ServiceRequest for DeleteChannelRequest {
+    type Output = DeleteChannelResponse;
+    type Error = DeleteChannelError;
 
-        let mut request = SignedRequest::new("DELETE", "medialive", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/prod/channels/{channel_id}", channel_id = self.channel_id);
+
+        let mut request = SignedRequest::new("DELETE", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7124,18 +7322,24 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the input end point</p>
-    fn delete_input(
-        &self,
-        input: DeleteInputRequest,
-    ) -> RusotoFuture<DeleteInputResponse, DeleteInputError> {
-        let request_uri = format!("/prod/inputs/{input_id}", input_id = input.input_id);
+impl ServiceRequest for DeleteInputRequest {
+    type Output = DeleteInputResponse;
+    type Error = DeleteInputError;
 
-        let mut request = SignedRequest::new("DELETE", "medialive", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/prod/inputs/{input_id}", input_id = self.input_id);
+
+        let mut request = SignedRequest::new("DELETE", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7153,21 +7357,27 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an Input Security Group</p>
-    fn delete_input_security_group(
-        &self,
-        input: DeleteInputSecurityGroupRequest,
-    ) -> RusotoFuture<DeleteInputSecurityGroupResponse, DeleteInputSecurityGroupError> {
+impl ServiceRequest for DeleteInputSecurityGroupRequest {
+    type Output = DeleteInputSecurityGroupResponse;
+    type Error = DeleteInputSecurityGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/prod/inputSecurityGroups/{input_security_group_id}",
-            input_security_group_id = input.input_security_group_id
+            input_security_group_id = self.input_security_group_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7182,21 +7392,27 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Delete an expired reservation.</p>
-    fn delete_reservation(
-        &self,
-        input: DeleteReservationRequest,
-    ) -> RusotoFuture<DeleteReservationResponse, DeleteReservationError> {
+impl ServiceRequest for DeleteReservationRequest {
+    type Output = DeleteReservationResponse;
+    type Error = DeleteReservationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/prod/reservations/{reservation_id}",
-            reservation_id = input.reservation_id
+            reservation_id = self.reservation_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7214,21 +7430,27 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Delete all schedule actions on a channel.</p>
-    fn delete_schedule(
-        &self,
-        input: DeleteScheduleRequest,
-    ) -> RusotoFuture<DeleteScheduleResponse, DeleteScheduleError> {
+impl ServiceRequest for DeleteScheduleRequest {
+    type Output = DeleteScheduleResponse;
+    type Error = DeleteScheduleError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/prod/channels/{channel_id}/schedule",
-            channel_id = input.channel_id
+            channel_id = self.channel_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7246,27 +7468,36 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Removes tags for a resource</p>
-    fn delete_tags(&self, input: DeleteTagsRequest) -> RusotoFuture<(), DeleteTagsError> {
+impl ServiceRequest for DeleteTagsRequest {
+    type Output = DeleteTagsResponse;
+    type Error = DeleteTagsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/prod/tags/{resource_arn}",
-            resource_arn = input.resource_arn
+            resource_arn = self.resource_arn
         );
 
-        let mut request = SignedRequest::new("DELETE", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        for item in input.tag_keys.iter() {
+        for item in self.tag_keys.iter() {
             params.put("tagKeys", item);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteTagsResponse {};
 
                     Ok(result)
                 }))
@@ -7280,18 +7511,24 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Gets details about a channel</p>
-    fn describe_channel(
-        &self,
-        input: DescribeChannelRequest,
-    ) -> RusotoFuture<DescribeChannelResponse, DescribeChannelError> {
-        let request_uri = format!("/prod/channels/{channel_id}", channel_id = input.channel_id);
+impl ServiceRequest for DescribeChannelRequest {
+    type Output = DescribeChannelResponse;
+    type Error = DescribeChannelError;
 
-        let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/prod/channels/{channel_id}", channel_id = self.channel_id);
+
+        let mut request = SignedRequest::new("GET", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7309,18 +7546,24 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Produces details about an input</p>
-    fn describe_input(
-        &self,
-        input: DescribeInputRequest,
-    ) -> RusotoFuture<DescribeInputResponse, DescribeInputError> {
-        let request_uri = format!("/prod/inputs/{input_id}", input_id = input.input_id);
+impl ServiceRequest for DescribeInputRequest {
+    type Output = DescribeInputResponse;
+    type Error = DescribeInputError;
 
-        let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/prod/inputs/{input_id}", input_id = self.input_id);
+
+        let mut request = SignedRequest::new("GET", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7338,21 +7581,27 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Produces a summary of an Input Security Group</p>
-    fn describe_input_security_group(
-        &self,
-        input: DescribeInputSecurityGroupRequest,
-    ) -> RusotoFuture<DescribeInputSecurityGroupResponse, DescribeInputSecurityGroupError> {
+impl ServiceRequest for DescribeInputSecurityGroupRequest {
+    type Output = DescribeInputSecurityGroupResponse;
+    type Error = DescribeInputSecurityGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/prod/inputSecurityGroups/{input_security_group_id}",
-            input_security_group_id = input.input_security_group_id
+            input_security_group_id = self.input_security_group_id
         );
 
-        let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7367,21 +7616,27 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Get details for an offering.</p>
-    fn describe_offering(
-        &self,
-        input: DescribeOfferingRequest,
-    ) -> RusotoFuture<DescribeOfferingResponse, DescribeOfferingError> {
+impl ServiceRequest for DescribeOfferingRequest {
+    type Output = DescribeOfferingResponse;
+    type Error = DescribeOfferingError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/prod/offerings/{offering_id}",
-            offering_id = input.offering_id
+            offering_id = self.offering_id
         );
 
-        let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7399,21 +7654,27 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Get details for a reservation.</p>
-    fn describe_reservation(
-        &self,
-        input: DescribeReservationRequest,
-    ) -> RusotoFuture<DescribeReservationResponse, DescribeReservationError> {
+impl ServiceRequest for DescribeReservationRequest {
+    type Output = DescribeReservationResponse;
+    type Error = DescribeReservationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/prod/reservations/{reservation_id}",
-            reservation_id = input.reservation_id
+            reservation_id = self.reservation_id
         );
 
-        let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7430,30 +7691,36 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Get a channel schedule</p>
-    fn describe_schedule(
-        &self,
-        input: DescribeScheduleRequest,
-    ) -> RusotoFuture<DescribeScheduleResponse, DescribeScheduleError> {
+impl ServiceRequest for DescribeScheduleRequest {
+    type Output = DescribeScheduleResponse;
+    type Error = DescribeScheduleError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/prod/channels/{channel_id}/schedule",
-            channel_id = input.channel_id
+            channel_id = self.channel_id
         );
 
-        let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7471,27 +7738,33 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Produces list of channels that have been created</p>
-    fn list_channels(
-        &self,
-        input: ListChannelsRequest,
-    ) -> RusotoFuture<ListChannelsResponse, ListChannelsError> {
+impl ServiceRequest for ListChannelsRequest {
+    type Output = ListChannelsResponse;
+    type Error = ListChannelsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/prod/channels";
 
-        let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7509,27 +7782,33 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Produces a list of Input Security Groups for an account</p>
-    fn list_input_security_groups(
-        &self,
-        input: ListInputSecurityGroupsRequest,
-    ) -> RusotoFuture<ListInputSecurityGroupsResponse, ListInputSecurityGroupsError> {
+impl ServiceRequest for ListInputSecurityGroupsRequest {
+    type Output = ListInputSecurityGroupsResponse;
+    type Error = ListInputSecurityGroupsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/prod/inputSecurityGroups";
 
-        let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7544,27 +7823,33 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Produces list of inputs that have been created</p>
-    fn list_inputs(
-        &self,
-        input: ListInputsRequest,
-    ) -> RusotoFuture<ListInputsResponse, ListInputsError> {
+impl ServiceRequest for ListInputsRequest {
+    type Output = ListInputsResponse;
+    type Error = ListInputsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/prod/inputs";
 
-        let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7582,54 +7867,60 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>List offerings available for purchase.</p>
-    fn list_offerings(
-        &self,
-        input: ListOfferingsRequest,
-    ) -> RusotoFuture<ListOfferingsResponse, ListOfferingsError> {
+impl ServiceRequest for ListOfferingsRequest {
+    type Output = ListOfferingsResponse;
+    type Error = ListOfferingsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/prod/offerings";
 
-        let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.channel_class {
+        if let Some(ref x) = self.channel_class {
             params.put("channelClass", x);
         }
-        if let Some(ref x) = input.channel_configuration {
+        if let Some(ref x) = self.channel_configuration {
             params.put("channelConfiguration", x);
         }
-        if let Some(ref x) = input.codec {
+        if let Some(ref x) = self.codec {
             params.put("codec", x);
         }
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.maximum_bitrate {
+        if let Some(ref x) = self.maximum_bitrate {
             params.put("maximumBitrate", x);
         }
-        if let Some(ref x) = input.maximum_framerate {
+        if let Some(ref x) = self.maximum_framerate {
             params.put("maximumFramerate", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        if let Some(ref x) = input.resolution {
+        if let Some(ref x) = self.resolution {
             params.put("resolution", x);
         }
-        if let Some(ref x) = input.resource_type {
+        if let Some(ref x) = self.resource_type {
             params.put("resourceType", x);
         }
-        if let Some(ref x) = input.special_feature {
+        if let Some(ref x) = self.special_feature {
             params.put("specialFeature", x);
         }
-        if let Some(ref x) = input.video_quality {
+        if let Some(ref x) = self.video_quality {
             params.put("videoQuality", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7647,51 +7938,57 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>List purchased reservations.</p>
-    fn list_reservations(
-        &self,
-        input: ListReservationsRequest,
-    ) -> RusotoFuture<ListReservationsResponse, ListReservationsError> {
+impl ServiceRequest for ListReservationsRequest {
+    type Output = ListReservationsResponse;
+    type Error = ListReservationsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/prod/reservations";
 
-        let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.channel_class {
+        if let Some(ref x) = self.channel_class {
             params.put("channelClass", x);
         }
-        if let Some(ref x) = input.codec {
+        if let Some(ref x) = self.codec {
             params.put("codec", x);
         }
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.maximum_bitrate {
+        if let Some(ref x) = self.maximum_bitrate {
             params.put("maximumBitrate", x);
         }
-        if let Some(ref x) = input.maximum_framerate {
+        if let Some(ref x) = self.maximum_framerate {
             params.put("maximumFramerate", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        if let Some(ref x) = input.resolution {
+        if let Some(ref x) = self.resolution {
             params.put("resolution", x);
         }
-        if let Some(ref x) = input.resource_type {
+        if let Some(ref x) = self.resource_type {
             params.put("resourceType", x);
         }
-        if let Some(ref x) = input.special_feature {
+        if let Some(ref x) = self.special_feature {
             params.put("specialFeature", x);
         }
-        if let Some(ref x) = input.video_quality {
+        if let Some(ref x) = self.video_quality {
             params.put("videoQuality", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7709,21 +8006,27 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Produces list of tags that have been created for a resource</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/prod/tags/{resource_arn}",
-            resource_arn = input.resource_arn
+            resource_arn = self.resource_arn
         );
 
-        let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7740,24 +8043,30 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Purchase an offering and create a reservation.</p>
-    fn purchase_offering(
-        &self,
-        input: PurchaseOfferingRequest,
-    ) -> RusotoFuture<PurchaseOfferingResponse, PurchaseOfferingError> {
+impl ServiceRequest for PurchaseOfferingRequest {
+    type Output = PurchaseOfferingResponse;
+    type Error = PurchaseOfferingError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/prod/offerings/{offering_id}/purchase",
-            offering_id = input.offering_id
+            offering_id = self.offering_id
         );
 
-        let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7775,21 +8084,27 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Starts an existing channel</p>
-    fn start_channel(
-        &self,
-        input: StartChannelRequest,
-    ) -> RusotoFuture<StartChannelResponse, StartChannelError> {
+impl ServiceRequest for StartChannelRequest {
+    type Output = StartChannelResponse;
+    type Error = StartChannelError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/prod/channels/{channel_id}/start",
-            channel_id = input.channel_id
+            channel_id = self.channel_id
         );
 
-        let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7807,21 +8122,27 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Stops a running channel</p>
-    fn stop_channel(
-        &self,
-        input: StopChannelRequest,
-    ) -> RusotoFuture<StopChannelResponse, StopChannelError> {
+impl ServiceRequest for StopChannelRequest {
+    type Output = StopChannelResponse;
+    type Error = StopChannelError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/prod/channels/{channel_id}/stop",
-            channel_id = input.channel_id
+            channel_id = self.channel_id
         );
 
-        let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7839,21 +8160,27 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Updates a channel.</p>
-    fn update_channel(
-        &self,
-        input: UpdateChannelRequest,
-    ) -> RusotoFuture<UpdateChannelResponse, UpdateChannelError> {
-        let request_uri = format!("/prod/channels/{channel_id}", channel_id = input.channel_id);
+impl ServiceRequest for UpdateChannelRequest {
+    type Output = UpdateChannelResponse;
+    type Error = UpdateChannelError;
 
-        let mut request = SignedRequest::new("PUT", "medialive", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/prod/channels/{channel_id}", channel_id = self.channel_id);
+
+        let mut request = SignedRequest::new("PUT", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7871,24 +8198,30 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Changes the class of the channel.</p>
-    fn update_channel_class(
-        &self,
-        input: UpdateChannelClassRequest,
-    ) -> RusotoFuture<UpdateChannelClassResponse, UpdateChannelClassError> {
+impl ServiceRequest for UpdateChannelClassRequest {
+    type Output = UpdateChannelClassResponse;
+    type Error = UpdateChannelClassError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/prod/channels/{channel_id}/channelClass",
-            channel_id = input.channel_id
+            channel_id = self.channel_id
         );
 
-        let mut request = SignedRequest::new("PUT", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7906,21 +8239,27 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Updates an input.</p>
-    fn update_input(
-        &self,
-        input: UpdateInputRequest,
-    ) -> RusotoFuture<UpdateInputResponse, UpdateInputError> {
-        let request_uri = format!("/prod/inputs/{input_id}", input_id = input.input_id);
+impl ServiceRequest for UpdateInputRequest {
+    type Output = UpdateInputResponse;
+    type Error = UpdateInputError;
 
-        let mut request = SignedRequest::new("PUT", "medialive", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/prod/inputs/{input_id}", input_id = self.input_id);
+
+        let mut request = SignedRequest::new("PUT", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7938,24 +8277,30 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Update an Input Security Group&#39;s Whilelists.</p>
-    fn update_input_security_group(
-        &self,
-        input: UpdateInputSecurityGroupRequest,
-    ) -> RusotoFuture<UpdateInputSecurityGroupResponse, UpdateInputSecurityGroupError> {
+impl ServiceRequest for UpdateInputSecurityGroupRequest {
+    type Output = UpdateInputSecurityGroupResponse;
+    type Error = UpdateInputSecurityGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/prod/inputSecurityGroups/{input_security_group_id}",
-            input_security_group_id = input.input_security_group_id
+            input_security_group_id = self.input_security_group_id
         );
 
-        let mut request = SignedRequest::new("PUT", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7970,24 +8315,30 @@ impl MediaLive for MediaLiveClient {
             }
         })
     }
+}
 
-    /// <p>Update reservation.</p>
-    fn update_reservation(
-        &self,
-        input: UpdateReservationRequest,
-    ) -> RusotoFuture<UpdateReservationResponse, UpdateReservationError> {
+impl ServiceRequest for UpdateReservationRequest {
+    type Output = UpdateReservationResponse;
+    type Error = UpdateReservationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/prod/reservations/{reservation_id}",
-            reservation_id = input.reservation_id
+            reservation_id = self.reservation_id
         );
 
-        let mut request = SignedRequest::new("PUT", "medialive", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "medialive", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)

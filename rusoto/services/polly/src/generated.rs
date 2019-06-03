@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -26,7 +27,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteLexiconInput {
+pub struct DeleteLexiconRequest {
     /// <p>The name of the lexicon to delete. Must be an existing lexicon in the region.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -34,10 +35,10 @@ pub struct DeleteLexiconInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteLexiconOutput {}
+pub struct DeleteLexiconResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeVoicesInput {
+pub struct DescribeVoicesRequest {
     /// <p>Boolean value indicating whether to return any bilingual voices that use the specified language as an additional language. For instance, if you request all languages that use US English (es-US), and there is an Italian voice that speaks both Italian (it-IT) and US English, that voice will be included if you specify <code>yes</code> but not if you specify <code>no</code>.</p>
     #[serde(rename = "IncludeAdditionalLanguageCodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -54,7 +55,7 @@ pub struct DescribeVoicesInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeVoicesOutput {
+pub struct DescribeVoicesResponse {
     /// <p>The pagination token to use in the next request to continue the listing of voices. <code>NextToken</code> is returned only if the response is truncated.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -66,7 +67,7 @@ pub struct DescribeVoicesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetLexiconInput {
+pub struct GetLexiconRequest {
     /// <p>Name of the lexicon.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -74,7 +75,7 @@ pub struct GetLexiconInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetLexiconOutput {
+pub struct GetLexiconResponse {
     /// <p>Lexicon object that provides name and the string content of the lexicon. </p>
     #[serde(rename = "Lexicon")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -86,7 +87,7 @@ pub struct GetLexiconOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetSpeechSynthesisTaskInput {
+pub struct GetSpeechSynthesisTaskRequest {
     /// <p>The Amazon Polly generated identifier for a speech synthesis task.</p>
     #[serde(rename = "TaskId")]
     pub task_id: String,
@@ -94,7 +95,7 @@ pub struct GetSpeechSynthesisTaskInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetSpeechSynthesisTaskOutput {
+pub struct GetSpeechSynthesisTaskResponse {
     /// <p>SynthesisTask object that provides information from the requested task, including output format, creation time, task status, and so on.</p>
     #[serde(rename = "SynthesisTask")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -160,7 +161,7 @@ pub struct LexiconDescription {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListLexiconsInput {
+pub struct ListLexiconsRequest {
     /// <p>An opaque pagination token returned from previous <code>ListLexicons</code> operation. If present, indicates where to continue the list of lexicons.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -169,7 +170,7 @@ pub struct ListLexiconsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListLexiconsOutput {
+pub struct ListLexiconsResponse {
     /// <p>A list of lexicon names and attributes.</p>
     #[serde(rename = "Lexicons")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -181,7 +182,7 @@ pub struct ListLexiconsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListSpeechSynthesisTasksInput {
+pub struct ListSpeechSynthesisTasksRequest {
     /// <p>Maximum number of speech synthesis tasks returned in a List operation.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -198,7 +199,7 @@ pub struct ListSpeechSynthesisTasksInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListSpeechSynthesisTasksOutput {
+pub struct ListSpeechSynthesisTasksResponse {
     /// <p>An opaque pagination token returned from the previous List operation in this request. If present, this indicates where to continue the listing.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -210,7 +211,7 @@ pub struct ListSpeechSynthesisTasksOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PutLexiconInput {
+pub struct PutLexiconRequest {
     /// <p>Content of the PLS lexicon as string data.</p>
     #[serde(rename = "Content")]
     pub content: String,
@@ -221,10 +222,10 @@ pub struct PutLexiconInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct PutLexiconOutput {}
+pub struct PutLexiconResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct StartSpeechSynthesisTaskInput {
+pub struct StartSpeechSynthesisTaskRequest {
     /// <p>Optional language code for the Speech Synthesis request. This is only necessary if using a bilingual voice, such as Aditi, which can be used for either Indian English (en-IN) or Hindi (hi-IN). </p> <p>If a bilingual voice is used and no language code is specified, Amazon Polly will use the default language of the bilingual voice. The default language for any voice is the one returned by the <a href="https://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html">DescribeVoices</a> operation for the <code>LanguageCode</code> parameter. For example, if no language code is specified, Aditi will use Indian English rather than Hindi.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -269,7 +270,7 @@ pub struct StartSpeechSynthesisTaskInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct StartSpeechSynthesisTaskOutput {
+pub struct StartSpeechSynthesisTaskResponse {
     /// <p>SynthesisTask object that provides information and attributes about a newly submitted speech synthesis task.</p>
     #[serde(rename = "SynthesisTask")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -339,7 +340,7 @@ pub struct SynthesisTask {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct SynthesizeSpeechInput {
+pub struct SynthesizeSpeechRequest {
     /// <p>Optional language code for the Synthesize Speech request. This is only necessary if using a bilingual voice, such as Aditi, which can be used for either Indian English (en-IN) or Hindi (hi-IN). </p> <p>If a bilingual voice is used and no language code is specified, Amazon Polly will use the default language of the bilingual voice. The default language for any voice is the one returned by the <a href="https://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html">DescribeVoices</a> operation for the <code>LanguageCode</code> parameter. For example, if no language code is specified, Aditi will use Indian English rather than Hindi.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -372,7 +373,7 @@ pub struct SynthesizeSpeechInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SynthesizeSpeechOutput {
+pub struct SynthesizeSpeechResponse {
     /// <p> Stream containing the synthesized speech. </p>
     pub audio_stream: Option<bytes::Bytes>,
     /// <p> Specifies the type audio stream. This should reflect the <code>OutputFormat</code> parameter in your request. </p> <ul> <li> <p> If you request <code>mp3</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/mpeg. </p> </li> <li> <p> If you request <code>ogg_vorbis</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/ogg. </p> </li> <li> <p> If you request <code>pcm</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/pcm in a signed 16-bit, 1 channel (mono), little-endian format. </p> </li> <li> <p>If you request <code>json</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/json.</p> </li> </ul> <p> </p>
@@ -931,58 +932,41 @@ impl Error for SynthesizeSpeechError {
 /// Trait representing the capabilities of the Amazon Polly API. Amazon Polly clients implement this trait.
 pub trait Polly {
     /// <p>Deletes the specified pronunciation lexicon stored in an AWS Region. A lexicon which has been deleted is not available for speech synthesis, nor is it possible to retrieve it using either the <code>GetLexicon</code> or <code>ListLexicon</code> APIs.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
-    fn delete_lexicon(
-        &self,
-        input: DeleteLexiconInput,
-    ) -> RusotoFuture<DeleteLexiconOutput, DeleteLexiconError>;
+    fn delete_lexicon(&self, input: DeleteLexiconRequest) -> Request<DeleteLexiconRequest>;
 
     /// <p>Returns the list of voices that are available for use when requesting speech synthesis. Each voice speaks a specified language, is either male or female, and is identified by an ID, which is the ASCII version of the voice name. </p> <p>When synthesizing speech ( <code>SynthesizeSpeech</code> ), you provide the voice ID for the voice you want from the list of voices returned by <code>DescribeVoices</code>.</p> <p>For example, you want your news reader application to read news in a specific language, but giving a user the option to choose the voice. Using the <code>DescribeVoices</code> operation you can provide the user with a list of available voices to select from.</p> <p> You can optionally specify a language code to filter the available voices. For example, if you specify <code>en-US</code>, the operation returns a list of all available US English voices. </p> <p>This operation requires permissions to perform the <code>polly:DescribeVoices</code> action.</p>
-    fn describe_voices(
-        &self,
-        input: DescribeVoicesInput,
-    ) -> RusotoFuture<DescribeVoicesOutput, DescribeVoicesError>;
+    fn describe_voices(&self, input: DescribeVoicesRequest) -> Request<DescribeVoicesRequest>;
 
     /// <p>Returns the content of the specified pronunciation lexicon stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
-    fn get_lexicon(
-        &self,
-        input: GetLexiconInput,
-    ) -> RusotoFuture<GetLexiconOutput, GetLexiconError>;
+    fn get_lexicon(&self, input: GetLexiconRequest) -> Request<GetLexiconRequest>;
 
     /// <p>Retrieves a specific SpeechSynthesisTask object based on its TaskID. This object contains information about the given speech synthesis task, including the status of the task, and a link to the S3 bucket containing the output of the task.</p>
     fn get_speech_synthesis_task(
         &self,
-        input: GetSpeechSynthesisTaskInput,
-    ) -> RusotoFuture<GetSpeechSynthesisTaskOutput, GetSpeechSynthesisTaskError>;
+        input: GetSpeechSynthesisTaskRequest,
+    ) -> Request<GetSpeechSynthesisTaskRequest>;
 
     /// <p>Returns a list of pronunciation lexicons stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
-    fn list_lexicons(
-        &self,
-        input: ListLexiconsInput,
-    ) -> RusotoFuture<ListLexiconsOutput, ListLexiconsError>;
+    fn list_lexicons(&self, input: ListLexiconsRequest) -> Request<ListLexiconsRequest>;
 
     /// <p>Returns a list of SpeechSynthesisTask objects ordered by their creation date. This operation can filter the tasks by their status, for example, allowing users to list only tasks that are completed.</p>
     fn list_speech_synthesis_tasks(
         &self,
-        input: ListSpeechSynthesisTasksInput,
-    ) -> RusotoFuture<ListSpeechSynthesisTasksOutput, ListSpeechSynthesisTasksError>;
+        input: ListSpeechSynthesisTasksRequest,
+    ) -> Request<ListSpeechSynthesisTasksRequest>;
 
     /// <p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
-    fn put_lexicon(
-        &self,
-        input: PutLexiconInput,
-    ) -> RusotoFuture<PutLexiconOutput, PutLexiconError>;
+    fn put_lexicon(&self, input: PutLexiconRequest) -> Request<PutLexiconRequest>;
 
     /// <p>Allows the creation of an asynchronous synthesis task, by starting a new <code>SpeechSynthesisTask</code>. This operation requires all the standard information needed for speech synthesis, plus the name of an Amazon S3 bucket for the service to store the output of the synthesis task and two optional parameters (OutputS3KeyPrefix and SnsTopicArn). Once the synthesis task is created, this operation will return a SpeechSynthesisTask object, which will include an identifier of this task as well as the current status.</p>
     fn start_speech_synthesis_task(
         &self,
-        input: StartSpeechSynthesisTaskInput,
-    ) -> RusotoFuture<StartSpeechSynthesisTaskOutput, StartSpeechSynthesisTaskError>;
+        input: StartSpeechSynthesisTaskRequest,
+    ) -> Request<StartSpeechSynthesisTaskRequest>;
 
     /// <p>Synthesizes UTF-8 input, plain text or SSML, to a stream of bytes. SSML input must be valid, well-formed SSML. Some alphabets might not be available with all the voices (for example, Cyrillic might not be read at all by English voices) unless phoneme mapping is used. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/how-text-to-speech-works.html">How it Works</a>.</p>
-    fn synthesize_speech(
-        &self,
-        input: SynthesizeSpeechInput,
-    ) -> RusotoFuture<SynthesizeSpeechOutput, SynthesizeSpeechError>;
+    fn synthesize_speech(&self, input: SynthesizeSpeechRequest)
+        -> Request<SynthesizeSpeechRequest>;
 }
 /// A client for the Amazon Polly API.
 #[derive(Clone)]
@@ -1022,20 +1006,83 @@ impl PollyClient {
 
 impl Polly for PollyClient {
     /// <p>Deletes the specified pronunciation lexicon stored in an AWS Region. A lexicon which has been deleted is not available for speech synthesis, nor is it possible to retrieve it using either the <code>GetLexicon</code> or <code>ListLexicon</code> APIs.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
-    fn delete_lexicon(
-        &self,
-        input: DeleteLexiconInput,
-    ) -> RusotoFuture<DeleteLexiconOutput, DeleteLexiconError> {
-        let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
+    fn delete_lexicon(&self, input: DeleteLexiconRequest) -> Request<DeleteLexiconRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
 
-        let mut request = SignedRequest::new("DELETE", "polly", &self.region, &request_uri);
+    /// <p>Returns the list of voices that are available for use when requesting speech synthesis. Each voice speaks a specified language, is either male or female, and is identified by an ID, which is the ASCII version of the voice name. </p> <p>When synthesizing speech ( <code>SynthesizeSpeech</code> ), you provide the voice ID for the voice you want from the list of voices returned by <code>DescribeVoices</code>.</p> <p>For example, you want your news reader application to read news in a specific language, but giving a user the option to choose the voice. Using the <code>DescribeVoices</code> operation you can provide the user with a list of available voices to select from.</p> <p> You can optionally specify a language code to filter the available voices. For example, if you specify <code>en-US</code>, the operation returns a list of all available US English voices. </p> <p>This operation requires permissions to perform the <code>polly:DescribeVoices</code> action.</p>
+    fn describe_voices(&self, input: DescribeVoicesRequest) -> Request<DescribeVoicesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the content of the specified pronunciation lexicon stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
+    fn get_lexicon(&self, input: GetLexiconRequest) -> Request<GetLexiconRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a specific SpeechSynthesisTask object based on its TaskID. This object contains information about the given speech synthesis task, including the status of the task, and a link to the S3 bucket containing the output of the task.</p>
+    fn get_speech_synthesis_task(
+        &self,
+        input: GetSpeechSynthesisTaskRequest,
+    ) -> Request<GetSpeechSynthesisTaskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of pronunciation lexicons stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
+    fn list_lexicons(&self, input: ListLexiconsRequest) -> Request<ListLexiconsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of SpeechSynthesisTask objects ordered by their creation date. This operation can filter the tasks by their status, for example, allowing users to list only tasks that are completed.</p>
+    fn list_speech_synthesis_tasks(
+        &self,
+        input: ListSpeechSynthesisTasksRequest,
+    ) -> Request<ListSpeechSynthesisTasksRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
+    fn put_lexicon(&self, input: PutLexiconRequest) -> Request<PutLexiconRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Allows the creation of an asynchronous synthesis task, by starting a new <code>SpeechSynthesisTask</code>. This operation requires all the standard information needed for speech synthesis, plus the name of an Amazon S3 bucket for the service to store the output of the synthesis task and two optional parameters (OutputS3KeyPrefix and SnsTopicArn). Once the synthesis task is created, this operation will return a SpeechSynthesisTask object, which will include an identifier of this task as well as the current status.</p>
+    fn start_speech_synthesis_task(
+        &self,
+        input: StartSpeechSynthesisTaskRequest,
+    ) -> Request<StartSpeechSynthesisTaskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Synthesizes UTF-8 input, plain text or SSML, to a stream of bytes. SSML input must be valid, well-formed SSML. Some alphabets might not be available with all the voices (for example, Cyrillic might not be read at all by English voices) unless phoneme mapping is used. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/how-text-to-speech-works.html">How it Works</a>.</p>
+    fn synthesize_speech(
+        &self,
+        input: SynthesizeSpeechRequest,
+    ) -> Request<SynthesizeSpeechRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for DeleteLexiconRequest {
+    type Output = DeleteLexiconResponse;
+    type Error = DeleteLexiconError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = self.name);
+
+        let mut request = SignedRequest::new("DELETE", "polly", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteLexiconOutput, _>()?;
+                        .deserialize::<DeleteLexiconResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1049,34 +1096,40 @@ impl Polly for PollyClient {
             }
         })
     }
+}
 
-    /// <p>Returns the list of voices that are available for use when requesting speech synthesis. Each voice speaks a specified language, is either male or female, and is identified by an ID, which is the ASCII version of the voice name. </p> <p>When synthesizing speech ( <code>SynthesizeSpeech</code> ), you provide the voice ID for the voice you want from the list of voices returned by <code>DescribeVoices</code>.</p> <p>For example, you want your news reader application to read news in a specific language, but giving a user the option to choose the voice. Using the <code>DescribeVoices</code> operation you can provide the user with a list of available voices to select from.</p> <p> You can optionally specify a language code to filter the available voices. For example, if you specify <code>en-US</code>, the operation returns a list of all available US English voices. </p> <p>This operation requires permissions to perform the <code>polly:DescribeVoices</code> action.</p>
-    fn describe_voices(
-        &self,
-        input: DescribeVoicesInput,
-    ) -> RusotoFuture<DescribeVoicesOutput, DescribeVoicesError> {
+impl ServiceRequest for DescribeVoicesRequest {
+    type Output = DescribeVoicesResponse;
+    type Error = DescribeVoicesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/voices";
 
-        let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "polly", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.include_additional_language_codes {
+        if let Some(ref x) = self.include_additional_language_codes {
             params.put("IncludeAdditionalLanguageCodes", x);
         }
-        if let Some(ref x) = input.language_code {
+        if let Some(ref x) = self.language_code {
             params.put("LanguageCode", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeVoicesOutput, _>()?;
+                        .deserialize::<DescribeVoicesResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1090,22 +1143,28 @@ impl Polly for PollyClient {
             }
         })
     }
+}
 
-    /// <p>Returns the content of the specified pronunciation lexicon stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
-    fn get_lexicon(
-        &self,
-        input: GetLexiconInput,
-    ) -> RusotoFuture<GetLexiconOutput, GetLexiconError> {
-        let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
+impl ServiceRequest for GetLexiconRequest {
+    type Output = GetLexiconResponse;
+    type Error = GetLexiconError;
 
-        let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = self.name);
+
+        let mut request = SignedRequest::new("GET", "polly", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetLexiconOutput, _>()?;
+                        .deserialize::<GetLexiconResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1119,22 +1178,28 @@ impl Polly for PollyClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a specific SpeechSynthesisTask object based on its TaskID. This object contains information about the given speech synthesis task, including the status of the task, and a link to the S3 bucket containing the output of the task.</p>
-    fn get_speech_synthesis_task(
-        &self,
-        input: GetSpeechSynthesisTaskInput,
-    ) -> RusotoFuture<GetSpeechSynthesisTaskOutput, GetSpeechSynthesisTaskError> {
-        let request_uri = format!("/v1/synthesisTasks/{task_id}", task_id = input.task_id);
+impl ServiceRequest for GetSpeechSynthesisTaskRequest {
+    type Output = GetSpeechSynthesisTaskResponse;
+    type Error = GetSpeechSynthesisTaskError;
 
-        let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/synthesisTasks/{task_id}", task_id = self.task_id);
+
+        let mut request = SignedRequest::new("GET", "polly", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetSpeechSynthesisTaskOutput, _>()?;
+                        .deserialize::<GetSpeechSynthesisTaskResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1147,28 +1212,34 @@ impl Polly for PollyClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of pronunciation lexicons stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
-    fn list_lexicons(
-        &self,
-        input: ListLexiconsInput,
-    ) -> RusotoFuture<ListLexiconsOutput, ListLexiconsError> {
+impl ServiceRequest for ListLexiconsRequest {
+    type Output = ListLexiconsResponse;
+    type Error = ListLexiconsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/lexicons";
 
-        let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "polly", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListLexiconsOutput, _>()?;
+                        .deserialize::<ListLexiconsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1182,34 +1253,40 @@ impl Polly for PollyClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of SpeechSynthesisTask objects ordered by their creation date. This operation can filter the tasks by their status, for example, allowing users to list only tasks that are completed.</p>
-    fn list_speech_synthesis_tasks(
-        &self,
-        input: ListSpeechSynthesisTasksInput,
-    ) -> RusotoFuture<ListSpeechSynthesisTasksOutput, ListSpeechSynthesisTasksError> {
+impl ServiceRequest for ListSpeechSynthesisTasksRequest {
+    type Output = ListSpeechSynthesisTasksResponse;
+    type Error = ListSpeechSynthesisTasksError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/synthesisTasks";
 
-        let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "polly", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
-        if let Some(ref x) = input.status {
+        if let Some(ref x) = self.status {
             params.put("Status", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListSpeechSynthesisTasksOutput, _>()?;
+                        .deserialize::<ListSpeechSynthesisTasksResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1220,25 +1297,31 @@ impl Polly for PollyClient {
             }
         })
     }
+}
 
-    /// <p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
-    fn put_lexicon(
-        &self,
-        input: PutLexiconInput,
-    ) -> RusotoFuture<PutLexiconOutput, PutLexiconError> {
-        let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
+impl ServiceRequest for PutLexiconRequest {
+    type Output = PutLexiconResponse;
+    type Error = PutLexiconError;
 
-        let mut request = SignedRequest::new("PUT", "polly", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = self.name);
+
+        let mut request = SignedRequest::new("PUT", "polly", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutLexiconOutput, _>()?;
+                        .deserialize::<PutLexiconResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1252,25 +1335,31 @@ impl Polly for PollyClient {
             }
         })
     }
+}
 
-    /// <p>Allows the creation of an asynchronous synthesis task, by starting a new <code>SpeechSynthesisTask</code>. This operation requires all the standard information needed for speech synthesis, plus the name of an Amazon S3 bucket for the service to store the output of the synthesis task and two optional parameters (OutputS3KeyPrefix and SnsTopicArn). Once the synthesis task is created, this operation will return a SpeechSynthesisTask object, which will include an identifier of this task as well as the current status.</p>
-    fn start_speech_synthesis_task(
-        &self,
-        input: StartSpeechSynthesisTaskInput,
-    ) -> RusotoFuture<StartSpeechSynthesisTaskOutput, StartSpeechSynthesisTaskError> {
+impl ServiceRequest for StartSpeechSynthesisTaskRequest {
+    type Output = StartSpeechSynthesisTaskResponse;
+    type Error = StartSpeechSynthesisTaskError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/synthesisTasks";
 
-        let mut request = SignedRequest::new("POST", "polly", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "polly", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartSpeechSynthesisTaskOutput, _>()?;
+                        .deserialize::<StartSpeechSynthesisTaskResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1281,24 +1370,30 @@ impl Polly for PollyClient {
             }
         })
     }
+}
 
-    /// <p>Synthesizes UTF-8 input, plain text or SSML, to a stream of bytes. SSML input must be valid, well-formed SSML. Some alphabets might not be available with all the voices (for example, Cyrillic might not be read at all by English voices) unless phoneme mapping is used. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/how-text-to-speech-works.html">How it Works</a>.</p>
-    fn synthesize_speech(
-        &self,
-        input: SynthesizeSpeechInput,
-    ) -> RusotoFuture<SynthesizeSpeechOutput, SynthesizeSpeechError> {
+impl ServiceRequest for SynthesizeSpeechRequest {
+    type Output = SynthesizeSpeechResponse;
+    type Error = SynthesizeSpeechError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v1/speech";
 
-        let mut request = SignedRequest::new("POST", "polly", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "polly", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let mut result = SynthesizeSpeechOutput::default();
+                    let mut result = SynthesizeSpeechResponse::default();
                     result.audio_stream = Some(response.body);
 
                     if let Some(content_type) = response.headers.get("Content-Type") {

@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -895,6 +896,10 @@ pub struct UpdateInstanceCustomHealthStatusRequest {
     #[serde(rename = "Status")]
     pub status: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateInstanceCustomHealthStatusResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateServiceRequest {
@@ -1861,121 +1866,83 @@ pub trait ServiceDiscovery {
     fn create_http_namespace(
         &self,
         input: CreateHttpNamespaceRequest,
-    ) -> RusotoFuture<CreateHttpNamespaceResponse, CreateHttpNamespaceError>;
+    ) -> Request<CreateHttpNamespaceRequest>;
 
     /// <p>Creates a private namespace based on DNS, which will be visible only inside a specified Amazon VPC. The namespace defines your service naming scheme. For example, if you name your namespace <code>example.com</code> and name your service <code>backend</code>, the resulting DNS name for the service will be <code>backend.example.com</code>. For the current limit on the number of namespaces that you can create using the same AWS account, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
     fn create_private_dns_namespace(
         &self,
         input: CreatePrivateDnsNamespaceRequest,
-    ) -> RusotoFuture<CreatePrivateDnsNamespaceResponse, CreatePrivateDnsNamespaceError>;
+    ) -> Request<CreatePrivateDnsNamespaceRequest>;
 
     /// <p>Creates a public namespace based on DNS, which will be visible on the internet. The namespace defines your service naming scheme. For example, if you name your namespace <code>example.com</code> and name your service <code>backend</code>, the resulting DNS name for the service will be <code>backend.example.com</code>. For the current limit on the number of namespaces that you can create using the same AWS account, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
     fn create_public_dns_namespace(
         &self,
         input: CreatePublicDnsNamespaceRequest,
-    ) -> RusotoFuture<CreatePublicDnsNamespaceResponse, CreatePublicDnsNamespaceError>;
+    ) -> Request<CreatePublicDnsNamespaceRequest>;
 
     /// <p>Creates a service, which defines the configuration for the following entities:</p> <ul> <li> <p>For public and private DNS namespaces, one of the following combinations of DNS records in Amazon Route 53:</p> <ul> <li> <p>A</p> </li> <li> <p>AAAA</p> </li> <li> <p>A and AAAA</p> </li> <li> <p>SRV</p> </li> <li> <p>CNAME</p> </li> </ul> </li> <li> <p>Optionally, a health check</p> </li> </ul> <p>After you create the service, you can submit a <a>RegisterInstance</a> request, and AWS Cloud Map uses the values in the configuration to create the specified entities.</p> <p>For the current limit on the number of instances that you can register using the same namespace and using the same service, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
-    fn create_service(
-        &self,
-        input: CreateServiceRequest,
-    ) -> RusotoFuture<CreateServiceResponse, CreateServiceError>;
+    fn create_service(&self, input: CreateServiceRequest) -> Request<CreateServiceRequest>;
 
     /// <p>Deletes a namespace from the current account. If the namespace still contains one or more services, the request fails.</p>
-    fn delete_namespace(
-        &self,
-        input: DeleteNamespaceRequest,
-    ) -> RusotoFuture<DeleteNamespaceResponse, DeleteNamespaceError>;
+    fn delete_namespace(&self, input: DeleteNamespaceRequest) -> Request<DeleteNamespaceRequest>;
 
     /// <p>Deletes a specified service. If the service still contains one or more registered instances, the request fails.</p>
-    fn delete_service(
-        &self,
-        input: DeleteServiceRequest,
-    ) -> RusotoFuture<DeleteServiceResponse, DeleteServiceError>;
+    fn delete_service(&self, input: DeleteServiceRequest) -> Request<DeleteServiceRequest>;
 
     /// <p>Deletes the Amazon Route 53 DNS records and health check, if any, that AWS Cloud Map created for the specified instance.</p>
     fn deregister_instance(
         &self,
         input: DeregisterInstanceRequest,
-    ) -> RusotoFuture<DeregisterInstanceResponse, DeregisterInstanceError>;
+    ) -> Request<DeregisterInstanceRequest>;
 
     /// <p>Discovers registered instances for a specified namespace and service.</p>
     fn discover_instances(
         &self,
         input: DiscoverInstancesRequest,
-    ) -> RusotoFuture<DiscoverInstancesResponse, DiscoverInstancesError>;
+    ) -> Request<DiscoverInstancesRequest>;
 
     /// <p>Gets information about a specified instance.</p>
-    fn get_instance(
-        &self,
-        input: GetInstanceRequest,
-    ) -> RusotoFuture<GetInstanceResponse, GetInstanceError>;
+    fn get_instance(&self, input: GetInstanceRequest) -> Request<GetInstanceRequest>;
 
     /// <p><p>Gets the current health status (<code>Healthy</code>, <code>Unhealthy</code>, or <code>Unknown</code>) of one or more instances that are associated with a specified service.</p> <note> <p>There is a brief delay between when you register an instance and when the health status for the instance is available. </p> </note></p>
     fn get_instances_health_status(
         &self,
         input: GetInstancesHealthStatusRequest,
-    ) -> RusotoFuture<GetInstancesHealthStatusResponse, GetInstancesHealthStatusError>;
+    ) -> Request<GetInstancesHealthStatusRequest>;
 
     /// <p>Gets information about a namespace.</p>
-    fn get_namespace(
-        &self,
-        input: GetNamespaceRequest,
-    ) -> RusotoFuture<GetNamespaceResponse, GetNamespaceError>;
+    fn get_namespace(&self, input: GetNamespaceRequest) -> Request<GetNamespaceRequest>;
 
     /// <p><p>Gets information about any operation that returns an operation ID in the response, such as a <code>CreateService</code> request.</p> <note> <p>To get a list of operations that match specified criteria, see <a>ListOperations</a>.</p> </note></p>
-    fn get_operation(
-        &self,
-        input: GetOperationRequest,
-    ) -> RusotoFuture<GetOperationResponse, GetOperationError>;
+    fn get_operation(&self, input: GetOperationRequest) -> Request<GetOperationRequest>;
 
     /// <p>Gets the settings for a specified service.</p>
-    fn get_service(
-        &self,
-        input: GetServiceRequest,
-    ) -> RusotoFuture<GetServiceResponse, GetServiceError>;
+    fn get_service(&self, input: GetServiceRequest) -> Request<GetServiceRequest>;
 
     /// <p>Lists summary information about the instances that you registered by using a specified service.</p>
-    fn list_instances(
-        &self,
-        input: ListInstancesRequest,
-    ) -> RusotoFuture<ListInstancesResponse, ListInstancesError>;
+    fn list_instances(&self, input: ListInstancesRequest) -> Request<ListInstancesRequest>;
 
     /// <p>Lists summary information about the namespaces that were created by the current AWS account.</p>
-    fn list_namespaces(
-        &self,
-        input: ListNamespacesRequest,
-    ) -> RusotoFuture<ListNamespacesResponse, ListNamespacesError>;
+    fn list_namespaces(&self, input: ListNamespacesRequest) -> Request<ListNamespacesRequest>;
 
     /// <p>Lists operations that match the criteria that you specify.</p>
-    fn list_operations(
-        &self,
-        input: ListOperationsRequest,
-    ) -> RusotoFuture<ListOperationsResponse, ListOperationsError>;
+    fn list_operations(&self, input: ListOperationsRequest) -> Request<ListOperationsRequest>;
 
     /// <p>Lists summary information for all the services that are associated with one or more specified namespaces.</p>
-    fn list_services(
-        &self,
-        input: ListServicesRequest,
-    ) -> RusotoFuture<ListServicesResponse, ListServicesError>;
+    fn list_services(&self, input: ListServicesRequest) -> Request<ListServicesRequest>;
 
     /// <p>Creates or updates one or more records and, optionally, creates a health check based on the settings in a specified service. When you submit a <code>RegisterInstance</code> request, the following occurs:</p> <ul> <li> <p>For each DNS record that you define in the service that is specified by <code>ServiceId</code>, a record is created or updated in the hosted zone that is associated with the corresponding namespace.</p> </li> <li> <p>If the service includes <code>HealthCheckConfig</code>, a health check is created based on the settings in the health check configuration.</p> </li> <li> <p>The health check, if any, is associated with each of the new or updated records.</p> </li> </ul> <important> <p>One <code>RegisterInstance</code> request must complete before you can submit another request and specify the same service ID and instance ID.</p> </important> <p>For more information, see <a>CreateService</a>.</p> <p>When AWS Cloud Map receives a DNS query for the specified DNS name, it returns the applicable value:</p> <ul> <li> <p> <b>If the health check is healthy</b>: returns all the records</p> </li> <li> <p> <b>If the health check is unhealthy</b>: returns the applicable value for the last healthy instance</p> </li> <li> <p> <b>If you didn't specify a health check configuration</b>: returns all the records</p> </li> </ul> <p>For the current limit on the number of instances that you can register using the same namespace and using the same service, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
-    fn register_instance(
-        &self,
-        input: RegisterInstanceRequest,
-    ) -> RusotoFuture<RegisterInstanceResponse, RegisterInstanceError>;
+    fn register_instance(&self, input: RegisterInstanceRequest)
+        -> Request<RegisterInstanceRequest>;
 
     /// <p>Submits a request to change the health status of a custom health check to healthy or unhealthy.</p> <p>You can use <code>UpdateInstanceCustomHealthStatus</code> to change the status only for custom health checks, which you define using <code>HealthCheckCustomConfig</code> when you create a service. You can't use it to change the status for Route 53 health checks, which you define using <code>HealthCheckConfig</code>.</p> <p>For more information, see <a>HealthCheckCustomConfig</a>.</p>
     fn update_instance_custom_health_status(
         &self,
         input: UpdateInstanceCustomHealthStatusRequest,
-    ) -> RusotoFuture<(), UpdateInstanceCustomHealthStatusError>;
+    ) -> Request<UpdateInstanceCustomHealthStatusRequest>;
 
     /// <p>Submits a request to perform the following operations:</p> <ul> <li> <p>Add or delete <code>DnsRecords</code> configurations</p> </li> <li> <p>Update the TTL setting for existing <code>DnsRecords</code> configurations</p> </li> <li> <p>Add, update, or delete <code>HealthCheckConfig</code> for a specified service</p> </li> </ul> <p>For public and private DNS namespaces, you must specify all <code>DnsRecords</code> configurations (and, optionally, <code>HealthCheckConfig</code>) that you want to appear in the updated service. Any current configurations that don't appear in an <code>UpdateService</code> request are deleted.</p> <p>When you update the TTL setting for a service, AWS Cloud Map also updates the corresponding settings in all the records and health checks that were created by using the specified service.</p>
-    fn update_service(
-        &self,
-        input: UpdateServiceRequest,
-    ) -> RusotoFuture<UpdateServiceResponse, UpdateServiceError>;
+    fn update_service(&self, input: UpdateServiceRequest) -> Request<UpdateServiceRequest>;
 }
 /// A client for the ServiceDiscovery API.
 #[derive(Clone)]
@@ -2018,18 +1985,147 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
     fn create_http_namespace(
         &self,
         input: CreateHttpNamespaceRequest,
-    ) -> RusotoFuture<CreateHttpNamespaceResponse, CreateHttpNamespaceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+    ) -> Request<CreateHttpNamespaceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a private namespace based on DNS, which will be visible only inside a specified Amazon VPC. The namespace defines your service naming scheme. For example, if you name your namespace <code>example.com</code> and name your service <code>backend</code>, the resulting DNS name for the service will be <code>backend.example.com</code>. For the current limit on the number of namespaces that you can create using the same AWS account, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
+    fn create_private_dns_namespace(
+        &self,
+        input: CreatePrivateDnsNamespaceRequest,
+    ) -> Request<CreatePrivateDnsNamespaceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a public namespace based on DNS, which will be visible on the internet. The namespace defines your service naming scheme. For example, if you name your namespace <code>example.com</code> and name your service <code>backend</code>, the resulting DNS name for the service will be <code>backend.example.com</code>. For the current limit on the number of namespaces that you can create using the same AWS account, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
+    fn create_public_dns_namespace(
+        &self,
+        input: CreatePublicDnsNamespaceRequest,
+    ) -> Request<CreatePublicDnsNamespaceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a service, which defines the configuration for the following entities:</p> <ul> <li> <p>For public and private DNS namespaces, one of the following combinations of DNS records in Amazon Route 53:</p> <ul> <li> <p>A</p> </li> <li> <p>AAAA</p> </li> <li> <p>A and AAAA</p> </li> <li> <p>SRV</p> </li> <li> <p>CNAME</p> </li> </ul> </li> <li> <p>Optionally, a health check</p> </li> </ul> <p>After you create the service, you can submit a <a>RegisterInstance</a> request, and AWS Cloud Map uses the values in the configuration to create the specified entities.</p> <p>For the current limit on the number of instances that you can register using the same namespace and using the same service, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
+    fn create_service(&self, input: CreateServiceRequest) -> Request<CreateServiceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a namespace from the current account. If the namespace still contains one or more services, the request fails.</p>
+    fn delete_namespace(&self, input: DeleteNamespaceRequest) -> Request<DeleteNamespaceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specified service. If the service still contains one or more registered instances, the request fails.</p>
+    fn delete_service(&self, input: DeleteServiceRequest) -> Request<DeleteServiceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the Amazon Route 53 DNS records and health check, if any, that AWS Cloud Map created for the specified instance.</p>
+    fn deregister_instance(
+        &self,
+        input: DeregisterInstanceRequest,
+    ) -> Request<DeregisterInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Discovers registered instances for a specified namespace and service.</p>
+    fn discover_instances(
+        &self,
+        input: DiscoverInstancesRequest,
+    ) -> Request<DiscoverInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about a specified instance.</p>
+    fn get_instance(&self, input: GetInstanceRequest) -> Request<GetInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Gets the current health status (<code>Healthy</code>, <code>Unhealthy</code>, or <code>Unknown</code>) of one or more instances that are associated with a specified service.</p> <note> <p>There is a brief delay between when you register an instance and when the health status for the instance is available. </p> </note></p>
+    fn get_instances_health_status(
+        &self,
+        input: GetInstancesHealthStatusRequest,
+    ) -> Request<GetInstancesHealthStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about a namespace.</p>
+    fn get_namespace(&self, input: GetNamespaceRequest) -> Request<GetNamespaceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Gets information about any operation that returns an operation ID in the response, such as a <code>CreateService</code> request.</p> <note> <p>To get a list of operations that match specified criteria, see <a>ListOperations</a>.</p> </note></p>
+    fn get_operation(&self, input: GetOperationRequest) -> Request<GetOperationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the settings for a specified service.</p>
+    fn get_service(&self, input: GetServiceRequest) -> Request<GetServiceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists summary information about the instances that you registered by using a specified service.</p>
+    fn list_instances(&self, input: ListInstancesRequest) -> Request<ListInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists summary information about the namespaces that were created by the current AWS account.</p>
+    fn list_namespaces(&self, input: ListNamespacesRequest) -> Request<ListNamespacesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists operations that match the criteria that you specify.</p>
+    fn list_operations(&self, input: ListOperationsRequest) -> Request<ListOperationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists summary information for all the services that are associated with one or more specified namespaces.</p>
+    fn list_services(&self, input: ListServicesRequest) -> Request<ListServicesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates or updates one or more records and, optionally, creates a health check based on the settings in a specified service. When you submit a <code>RegisterInstance</code> request, the following occurs:</p> <ul> <li> <p>For each DNS record that you define in the service that is specified by <code>ServiceId</code>, a record is created or updated in the hosted zone that is associated with the corresponding namespace.</p> </li> <li> <p>If the service includes <code>HealthCheckConfig</code>, a health check is created based on the settings in the health check configuration.</p> </li> <li> <p>The health check, if any, is associated with each of the new or updated records.</p> </li> </ul> <important> <p>One <code>RegisterInstance</code> request must complete before you can submit another request and specify the same service ID and instance ID.</p> </important> <p>For more information, see <a>CreateService</a>.</p> <p>When AWS Cloud Map receives a DNS query for the specified DNS name, it returns the applicable value:</p> <ul> <li> <p> <b>If the health check is healthy</b>: returns all the records</p> </li> <li> <p> <b>If the health check is unhealthy</b>: returns the applicable value for the last healthy instance</p> </li> <li> <p> <b>If you didn't specify a health check configuration</b>: returns all the records</p> </li> </ul> <p>For the current limit on the number of instances that you can register using the same namespace and using the same service, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
+    fn register_instance(
+        &self,
+        input: RegisterInstanceRequest,
+    ) -> Request<RegisterInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Submits a request to change the health status of a custom health check to healthy or unhealthy.</p> <p>You can use <code>UpdateInstanceCustomHealthStatus</code> to change the status only for custom health checks, which you define using <code>HealthCheckCustomConfig</code> when you create a service. You can't use it to change the status for Route 53 health checks, which you define using <code>HealthCheckConfig</code>.</p> <p>For more information, see <a>HealthCheckCustomConfig</a>.</p>
+    fn update_instance_custom_health_status(
+        &self,
+        input: UpdateInstanceCustomHealthStatusRequest,
+    ) -> Request<UpdateInstanceCustomHealthStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Submits a request to perform the following operations:</p> <ul> <li> <p>Add or delete <code>DnsRecords</code> configurations</p> </li> <li> <p>Update the TTL setting for existing <code>DnsRecords</code> configurations</p> </li> <li> <p>Add, update, or delete <code>HealthCheckConfig</code> for a specified service</p> </li> </ul> <p>For public and private DNS namespaces, you must specify all <code>DnsRecords</code> configurations (and, optionally, <code>HealthCheckConfig</code>) that you want to appear in the updated service. Any current configurations that don't appear in an <code>UpdateService</code> request are deleted.</p> <p>When you update the TTL setting for a service, AWS Cloud Map also updates the corresponding settings in all the records and health checks that were created by using the specified service.</p>
+    fn update_service(&self, input: UpdateServiceRequest) -> Request<UpdateServiceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CreateHttpNamespaceRequest {
+    type Output = CreateHttpNamespaceResponse;
+    type Error = CreateHttpNamespaceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.CreateHttpNamespace",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2044,23 +2140,28 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Creates a private namespace based on DNS, which will be visible only inside a specified Amazon VPC. The namespace defines your service naming scheme. For example, if you name your namespace <code>example.com</code> and name your service <code>backend</code>, the resulting DNS name for the service will be <code>backend.example.com</code>. For the current limit on the number of namespaces that you can create using the same AWS account, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
-    fn create_private_dns_namespace(
-        &self,
-        input: CreatePrivateDnsNamespaceRequest,
-    ) -> RusotoFuture<CreatePrivateDnsNamespaceResponse, CreatePrivateDnsNamespaceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+impl ServiceRequest for CreatePrivateDnsNamespaceRequest {
+    type Output = CreatePrivateDnsNamespaceResponse;
+    type Error = CreatePrivateDnsNamespaceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.CreatePrivateDnsNamespace",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2073,23 +2174,28 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Creates a public namespace based on DNS, which will be visible on the internet. The namespace defines your service naming scheme. For example, if you name your namespace <code>example.com</code> and name your service <code>backend</code>, the resulting DNS name for the service will be <code>backend.example.com</code>. For the current limit on the number of namespaces that you can create using the same AWS account, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
-    fn create_public_dns_namespace(
-        &self,
-        input: CreatePublicDnsNamespaceRequest,
-    ) -> RusotoFuture<CreatePublicDnsNamespaceResponse, CreatePublicDnsNamespaceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+impl ServiceRequest for CreatePublicDnsNamespaceRequest {
+    type Output = CreatePublicDnsNamespaceResponse;
+    type Error = CreatePublicDnsNamespaceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.CreatePublicDnsNamespace",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2102,20 +2208,25 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Creates a service, which defines the configuration for the following entities:</p> <ul> <li> <p>For public and private DNS namespaces, one of the following combinations of DNS records in Amazon Route 53:</p> <ul> <li> <p>A</p> </li> <li> <p>AAAA</p> </li> <li> <p>A and AAAA</p> </li> <li> <p>SRV</p> </li> <li> <p>CNAME</p> </li> </ul> </li> <li> <p>Optionally, a health check</p> </li> </ul> <p>After you create the service, you can submit a <a>RegisterInstance</a> request, and AWS Cloud Map uses the values in the configuration to create the specified entities.</p> <p>For the current limit on the number of instances that you can register using the same namespace and using the same service, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
-    fn create_service(
-        &self,
-        input: CreateServiceRequest,
-    ) -> RusotoFuture<CreateServiceResponse, CreateServiceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+impl ServiceRequest for CreateServiceRequest {
+    type Output = CreateServiceResponse;
+    type Error = CreateServiceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.CreateService");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2131,23 +2242,28 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a namespace from the current account. If the namespace still contains one or more services, the request fails.</p>
-    fn delete_namespace(
-        &self,
-        input: DeleteNamespaceRequest,
-    ) -> RusotoFuture<DeleteNamespaceResponse, DeleteNamespaceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+impl ServiceRequest for DeleteNamespaceRequest {
+    type Output = DeleteNamespaceResponse;
+    type Error = DeleteNamespaceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.DeleteNamespace",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2163,20 +2279,25 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specified service. If the service still contains one or more registered instances, the request fails.</p>
-    fn delete_service(
-        &self,
-        input: DeleteServiceRequest,
-    ) -> RusotoFuture<DeleteServiceResponse, DeleteServiceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+impl ServiceRequest for DeleteServiceRequest {
+    type Output = DeleteServiceResponse;
+    type Error = DeleteServiceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.DeleteService");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2192,23 +2313,28 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the Amazon Route 53 DNS records and health check, if any, that AWS Cloud Map created for the specified instance.</p>
-    fn deregister_instance(
-        &self,
-        input: DeregisterInstanceRequest,
-    ) -> RusotoFuture<DeregisterInstanceResponse, DeregisterInstanceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+impl ServiceRequest for DeregisterInstanceRequest {
+    type Output = DeregisterInstanceResponse;
+    type Error = DeregisterInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.DeregisterInstance",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2224,23 +2350,28 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Discovers registered instances for a specified namespace and service.</p>
-    fn discover_instances(
-        &self,
-        input: DiscoverInstancesRequest,
-    ) -> RusotoFuture<DiscoverInstancesResponse, DiscoverInstancesError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+impl ServiceRequest for DiscoverInstancesRequest {
+    type Output = DiscoverInstancesResponse;
+    type Error = DiscoverInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.DiscoverInstances",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2256,20 +2387,25 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about a specified instance.</p>
-    fn get_instance(
-        &self,
-        input: GetInstanceRequest,
-    ) -> RusotoFuture<GetInstanceResponse, GetInstanceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+impl ServiceRequest for GetInstanceRequest {
+    type Output = GetInstanceResponse;
+    type Error = GetInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.GetInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2285,23 +2421,28 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             }
         })
     }
+}
 
-    /// <p><p>Gets the current health status (<code>Healthy</code>, <code>Unhealthy</code>, or <code>Unknown</code>) of one or more instances that are associated with a specified service.</p> <note> <p>There is a brief delay between when you register an instance and when the health status for the instance is available. </p> </note></p>
-    fn get_instances_health_status(
-        &self,
-        input: GetInstancesHealthStatusRequest,
-    ) -> RusotoFuture<GetInstancesHealthStatusResponse, GetInstancesHealthStatusError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+impl ServiceRequest for GetInstancesHealthStatusRequest {
+    type Output = GetInstancesHealthStatusResponse;
+    type Error = GetInstancesHealthStatusError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.GetInstancesHealthStatus",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2314,20 +2455,25 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about a namespace.</p>
-    fn get_namespace(
-        &self,
-        input: GetNamespaceRequest,
-    ) -> RusotoFuture<GetNamespaceResponse, GetNamespaceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+impl ServiceRequest for GetNamespaceRequest {
+    type Output = GetNamespaceResponse;
+    type Error = GetNamespaceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.GetNamespace");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2343,20 +2489,25 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             }
         })
     }
+}
 
-    /// <p><p>Gets information about any operation that returns an operation ID in the response, such as a <code>CreateService</code> request.</p> <note> <p>To get a list of operations that match specified criteria, see <a>ListOperations</a>.</p> </note></p>
-    fn get_operation(
-        &self,
-        input: GetOperationRequest,
-    ) -> RusotoFuture<GetOperationResponse, GetOperationError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+impl ServiceRequest for GetOperationRequest {
+    type Output = GetOperationResponse;
+    type Error = GetOperationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.GetOperation");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2372,20 +2523,25 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Gets the settings for a specified service.</p>
-    fn get_service(
-        &self,
-        input: GetServiceRequest,
-    ) -> RusotoFuture<GetServiceResponse, GetServiceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+impl ServiceRequest for GetServiceRequest {
+    type Output = GetServiceResponse;
+    type Error = GetServiceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.GetService");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2401,20 +2557,25 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Lists summary information about the instances that you registered by using a specified service.</p>
-    fn list_instances(
-        &self,
-        input: ListInstancesRequest,
-    ) -> RusotoFuture<ListInstancesResponse, ListInstancesError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+impl ServiceRequest for ListInstancesRequest {
+    type Output = ListInstancesResponse;
+    type Error = ListInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.ListInstances");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2430,20 +2591,25 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Lists summary information about the namespaces that were created by the current AWS account.</p>
-    fn list_namespaces(
-        &self,
-        input: ListNamespacesRequest,
-    ) -> RusotoFuture<ListNamespacesResponse, ListNamespacesError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+impl ServiceRequest for ListNamespacesRequest {
+    type Output = ListNamespacesResponse;
+    type Error = ListNamespacesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.ListNamespaces");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2459,20 +2625,25 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Lists operations that match the criteria that you specify.</p>
-    fn list_operations(
-        &self,
-        input: ListOperationsRequest,
-    ) -> RusotoFuture<ListOperationsResponse, ListOperationsError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+impl ServiceRequest for ListOperationsRequest {
+    type Output = ListOperationsResponse;
+    type Error = ListOperationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.ListOperations");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2488,20 +2659,25 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Lists summary information for all the services that are associated with one or more specified namespaces.</p>
-    fn list_services(
-        &self,
-        input: ListServicesRequest,
-    ) -> RusotoFuture<ListServicesResponse, ListServicesError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+impl ServiceRequest for ListServicesRequest {
+    type Output = ListServicesResponse;
+    type Error = ListServicesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.ListServices");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2517,23 +2693,28 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Creates or updates one or more records and, optionally, creates a health check based on the settings in a specified service. When you submit a <code>RegisterInstance</code> request, the following occurs:</p> <ul> <li> <p>For each DNS record that you define in the service that is specified by <code>ServiceId</code>, a record is created or updated in the hosted zone that is associated with the corresponding namespace.</p> </li> <li> <p>If the service includes <code>HealthCheckConfig</code>, a health check is created based on the settings in the health check configuration.</p> </li> <li> <p>The health check, if any, is associated with each of the new or updated records.</p> </li> </ul> <important> <p>One <code>RegisterInstance</code> request must complete before you can submit another request and specify the same service ID and instance ID.</p> </important> <p>For more information, see <a>CreateService</a>.</p> <p>When AWS Cloud Map receives a DNS query for the specified DNS name, it returns the applicable value:</p> <ul> <li> <p> <b>If the health check is healthy</b>: returns all the records</p> </li> <li> <p> <b>If the health check is unhealthy</b>: returns the applicable value for the last healthy instance</p> </li> <li> <p> <b>If you didn't specify a health check configuration</b>: returns all the records</p> </li> </ul> <p>For the current limit on the number of instances that you can register using the same namespace and using the same service, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
-    fn register_instance(
-        &self,
-        input: RegisterInstanceRequest,
-    ) -> RusotoFuture<RegisterInstanceResponse, RegisterInstanceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+impl ServiceRequest for RegisterInstanceRequest {
+    type Output = RegisterInstanceResponse;
+    type Error = RegisterInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.RegisterInstance",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2549,25 +2730,33 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Submits a request to change the health status of a custom health check to healthy or unhealthy.</p> <p>You can use <code>UpdateInstanceCustomHealthStatus</code> to change the status only for custom health checks, which you define using <code>HealthCheckCustomConfig</code> when you create a service. You can't use it to change the status for Route 53 health checks, which you define using <code>HealthCheckConfig</code>.</p> <p>For more information, see <a>HealthCheckCustomConfig</a>.</p>
-    fn update_instance_custom_health_status(
-        &self,
-        input: UpdateInstanceCustomHealthStatusRequest,
-    ) -> RusotoFuture<(), UpdateInstanceCustomHealthStatusError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+impl ServiceRequest for UpdateInstanceCustomHealthStatusRequest {
+    type Output = UpdateInstanceCustomHealthStatusResponse;
+    type Error = UpdateInstanceCustomHealthStatusError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.UpdateInstanceCustomHealthStatus",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateInstanceCustomHealthStatusResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateInstanceCustomHealthStatusError::from_response(
@@ -2577,20 +2766,25 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Submits a request to perform the following operations:</p> <ul> <li> <p>Add or delete <code>DnsRecords</code> configurations</p> </li> <li> <p>Update the TTL setting for existing <code>DnsRecords</code> configurations</p> </li> <li> <p>Add, update, or delete <code>HealthCheckConfig</code> for a specified service</p> </li> </ul> <p>For public and private DNS namespaces, you must specify all <code>DnsRecords</code> configurations (and, optionally, <code>HealthCheckConfig</code>) that you want to appear in the updated service. Any current configurations that don't appear in an <code>UpdateService</code> request are deleted.</p> <p>When you update the TTL setting for a service, AWS Cloud Map also updates the corresponding settings in all the records and health checks that were created by using the specified service.</p>
-    fn update_service(
-        &self,
-        input: UpdateServiceRequest,
-    ) -> RusotoFuture<UpdateServiceResponse, UpdateServiceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+impl ServiceRequest for UpdateServiceRequest {
+    type Output = UpdateServiceResponse;
+    type Error = UpdateServiceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.UpdateService");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)

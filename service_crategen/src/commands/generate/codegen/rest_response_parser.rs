@@ -19,6 +19,12 @@ pub fn generate_response_headers_parser(
     let shape = service
         .get_shape(&operation.output.as_ref().unwrap().shape)
         .unwrap();
+
+    // nothing to do if the output struct is empty
+    if shape.members.is_none() {
+        return None;
+    }
+
     let members = shape.members.as_ref().unwrap();
 
     let parser_pieces = members

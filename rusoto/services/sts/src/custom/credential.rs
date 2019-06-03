@@ -90,49 +90,49 @@ where
         &self,
         input: AssumeRoleRequest,
     ) -> RusotoFuture<AssumeRoleResponse, AssumeRoleError> {
-        T::assume_role(self, input)
+        T::assume_role(self, input).send()
     }
 
     fn assume_role_with_saml(
         &self,
         input: AssumeRoleWithSAMLRequest,
     ) -> RusotoFuture<AssumeRoleWithSAMLResponse, AssumeRoleWithSAMLError> {
-        T::assume_role_with_saml(self, input)
+        T::assume_role_with_saml(self, input).send()
     }
 
     fn assume_role_with_web_identity(
         &self,
         input: AssumeRoleWithWebIdentityRequest,
     ) -> RusotoFuture<AssumeRoleWithWebIdentityResponse, AssumeRoleWithWebIdentityError> {
-        T::assume_role_with_web_identity(self, input)
+        T::assume_role_with_web_identity(self, input).send()
     }
 
     fn decode_authorization_message(
         &self,
         input: DecodeAuthorizationMessageRequest,
     ) -> RusotoFuture<DecodeAuthorizationMessageResponse, DecodeAuthorizationMessageError> {
-        T::decode_authorization_message(self, input)
+        T::decode_authorization_message(self, input).send()
     }
 
     fn get_caller_identity(
         &self,
-        input: GetCallerIdentityRequest,
+        _input: GetCallerIdentityRequest,
     ) -> RusotoFuture<GetCallerIdentityResponse, GetCallerIdentityError> {
-        T::get_caller_identity(self, input)
+        T::get_caller_identity(self).send()
     }
 
     fn get_federation_token(
         &self,
         input: GetFederationTokenRequest,
     ) -> RusotoFuture<GetFederationTokenResponse, GetFederationTokenError> {
-        T::get_federation_token(self, input)
+        T::get_federation_token(self, input).send()
     }
 
     fn get_session_token(
         &self,
         input: GetSessionTokenRequest,
     ) -> RusotoFuture<GetSessionTokenResponse, GetSessionTokenError> {
-        T::get_session_token(self, input)
+        T::get_session_token(self, input).send()
     }
 }
 

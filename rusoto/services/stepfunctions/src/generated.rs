@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -123,7 +124,7 @@ pub struct ActivityTimedOutEventDetails {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateActivityInput {
+pub struct CreateActivityRequest {
     /// <p><p>The name of the activity to create. This name must be unique for your AWS account and region for 90 days. For more information, see <a href="https://docs.aws.amazon.com/step-functions/latest/dg/limits.html#service-limits-state-machine-executions"> Limits Related to State Machine Executions</a> in the <i>AWS Step Functions Developer Guide</i>.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
@@ -135,7 +136,7 @@ pub struct CreateActivityInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateActivityOutput {
+pub struct CreateActivityResponse {
     /// <p>The Amazon Resource Name (ARN) that identifies the created activity.</p>
     #[serde(rename = "activityArn")]
     pub activity_arn: String,
@@ -145,7 +146,7 @@ pub struct CreateActivityOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateStateMachineInput {
+pub struct CreateStateMachineRequest {
     /// <p>The Amazon States Language definition of the state machine. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]
     pub definition: String,
@@ -163,7 +164,7 @@ pub struct CreateStateMachineInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateStateMachineOutput {
+pub struct CreateStateMachineResponse {
     /// <p>The date the state machine is created.</p>
     #[serde(rename = "creationDate")]
     pub creation_date: f64,
@@ -173,7 +174,7 @@ pub struct CreateStateMachineOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteActivityInput {
+pub struct DeleteActivityRequest {
     /// <p>The Amazon Resource Name (ARN) of the activity to delete.</p>
     #[serde(rename = "activityArn")]
     pub activity_arn: String,
@@ -181,10 +182,10 @@ pub struct DeleteActivityInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteActivityOutput {}
+pub struct DeleteActivityResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteStateMachineInput {
+pub struct DeleteStateMachineRequest {
     /// <p>The Amazon Resource Name (ARN) of the state machine to delete.</p>
     #[serde(rename = "stateMachineArn")]
     pub state_machine_arn: String,
@@ -192,10 +193,10 @@ pub struct DeleteStateMachineInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteStateMachineOutput {}
+pub struct DeleteStateMachineResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeActivityInput {
+pub struct DescribeActivityRequest {
     /// <p>The Amazon Resource Name (ARN) of the activity to describe.</p>
     #[serde(rename = "activityArn")]
     pub activity_arn: String,
@@ -203,7 +204,7 @@ pub struct DescribeActivityInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeActivityOutput {
+pub struct DescribeActivityResponse {
     /// <p>The Amazon Resource Name (ARN) that identifies the activity.</p>
     #[serde(rename = "activityArn")]
     pub activity_arn: String,
@@ -216,7 +217,7 @@ pub struct DescribeActivityOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeExecutionInput {
+pub struct DescribeExecutionRequest {
     /// <p>The Amazon Resource Name (ARN) of the execution to describe.</p>
     #[serde(rename = "executionArn")]
     pub execution_arn: String,
@@ -224,7 +225,7 @@ pub struct DescribeExecutionInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeExecutionOutput {
+pub struct DescribeExecutionResponse {
     /// <p>The Amazon Resource Name (ARN) that identifies the execution.</p>
     #[serde(rename = "executionArn")]
     pub execution_arn: String,
@@ -255,7 +256,7 @@ pub struct DescribeExecutionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeStateMachineForExecutionInput {
+pub struct DescribeStateMachineForExecutionRequest {
     /// <p>The Amazon Resource Name (ARN) of the execution you want state machine information for.</p>
     #[serde(rename = "executionArn")]
     pub execution_arn: String,
@@ -263,7 +264,7 @@ pub struct DescribeStateMachineForExecutionInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeStateMachineForExecutionOutput {
+pub struct DescribeStateMachineForExecutionResponse {
     /// <p>The Amazon States Language definition of the state machine. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]
     pub definition: String,
@@ -282,7 +283,7 @@ pub struct DescribeStateMachineForExecutionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeStateMachineInput {
+pub struct DescribeStateMachineRequest {
     /// <p>The Amazon Resource Name (ARN) of the state machine to describe.</p>
     #[serde(rename = "stateMachineArn")]
     pub state_machine_arn: String,
@@ -290,7 +291,7 @@ pub struct DescribeStateMachineInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeStateMachineOutput {
+pub struct DescribeStateMachineResponse {
     /// <p>The date the state machine is created.</p>
     #[serde(rename = "creationDate")]
     pub creation_date: f64,
@@ -404,7 +405,7 @@ pub struct ExecutionTimedOutEventDetails {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetActivityTaskInput {
+pub struct GetActivityTaskRequest {
     /// <p>The Amazon Resource Name (ARN) of the activity to retrieve tasks from (assigned when you create the task using <a>CreateActivity</a>.)</p>
     #[serde(rename = "activityArn")]
     pub activity_arn: String,
@@ -416,7 +417,7 @@ pub struct GetActivityTaskInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetActivityTaskOutput {
+pub struct GetActivityTaskResponse {
     /// <p>The string that contains the JSON input data for the task.</p>
     #[serde(rename = "input")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -428,7 +429,7 @@ pub struct GetActivityTaskOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetExecutionHistoryInput {
+pub struct GetExecutionHistoryRequest {
     /// <p>The Amazon Resource Name (ARN) of the execution.</p>
     #[serde(rename = "executionArn")]
     pub execution_arn: String,
@@ -448,7 +449,7 @@ pub struct GetExecutionHistoryInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetExecutionHistoryOutput {
+pub struct GetExecutionHistoryResponse {
     /// <p>The list of events that occurred in the execution.</p>
     #[serde(rename = "events")]
     pub events: Vec<HistoryEvent>,
@@ -654,7 +655,7 @@ pub struct LambdaFunctionTimedOutEventDetails {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListActivitiesInput {
+pub struct ListActivitiesRequest {
     /// <p>The maximum number of results that are returned per call. You can use <code>nextToken</code> to obtain further pages of results. The default is 100 and the maximum allowed page size is 1000. A value of 0 uses the default.</p> <p>This is only an upper limit. The actual number of results returned per call might be fewer than the specified maximum.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -667,7 +668,7 @@ pub struct ListActivitiesInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListActivitiesOutput {
+pub struct ListActivitiesResponse {
     /// <p>The list of activities.</p>
     #[serde(rename = "activities")]
     pub activities: Vec<ActivityListItem>,
@@ -678,7 +679,7 @@ pub struct ListActivitiesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListExecutionsInput {
+pub struct ListExecutionsRequest {
     /// <p>The maximum number of results that are returned per call. You can use <code>nextToken</code> to obtain further pages of results. The default is 100 and the maximum allowed page size is 1000. A value of 0 uses the default.</p> <p>This is only an upper limit. The actual number of results returned per call might be fewer than the specified maximum.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -698,7 +699,7 @@ pub struct ListExecutionsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListExecutionsOutput {
+pub struct ListExecutionsResponse {
     /// <p>The list of matching executions.</p>
     #[serde(rename = "executions")]
     pub executions: Vec<ExecutionListItem>,
@@ -709,7 +710,7 @@ pub struct ListExecutionsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListStateMachinesInput {
+pub struct ListStateMachinesRequest {
     /// <p>The maximum number of results that are returned per call. You can use <code>nextToken</code> to obtain further pages of results. The default is 100 and the maximum allowed page size is 1000. A value of 0 uses the default.</p> <p>This is only an upper limit. The actual number of results returned per call might be fewer than the specified maximum.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -722,7 +723,7 @@ pub struct ListStateMachinesInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListStateMachinesOutput {
+pub struct ListStateMachinesResponse {
     /// <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -732,7 +733,7 @@ pub struct ListStateMachinesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListTagsForResourceInput {
+pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the Step Functions state machine or activity.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
@@ -740,7 +741,7 @@ pub struct ListTagsForResourceInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListTagsForResourceOutput {
+pub struct ListTagsForResourceResponse {
     /// <p>An array of tags associated with the resource.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -748,7 +749,7 @@ pub struct ListTagsForResourceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct SendTaskFailureInput {
+pub struct SendTaskFailureRequest {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -764,10 +765,10 @@ pub struct SendTaskFailureInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct SendTaskFailureOutput {}
+pub struct SendTaskFailureResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct SendTaskHeartbeatInput {
+pub struct SendTaskHeartbeatRequest {
     /// <p>The token that represents this task. Task tokens are generated by the service when the tasks are assigned to a worker (see <a>GetActivityTaskOutput$taskToken</a>).</p>
     #[serde(rename = "taskToken")]
     pub task_token: String,
@@ -775,10 +776,10 @@ pub struct SendTaskHeartbeatInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct SendTaskHeartbeatOutput {}
+pub struct SendTaskHeartbeatResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct SendTaskSuccessInput {
+pub struct SendTaskSuccessRequest {
     /// <p>The JSON output of the task.</p>
     #[serde(rename = "output")]
     pub output: String,
@@ -789,10 +790,10 @@ pub struct SendTaskSuccessInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct SendTaskSuccessOutput {}
+pub struct SendTaskSuccessResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct StartExecutionInput {
+pub struct StartExecutionRequest {
     /// <p><p>The string that contains the JSON input data for the execution, for example:</p> <p> <code>&quot;input&quot;: &quot;{&quot;first_name&quot; : &quot;test&quot;}&quot;</code> </p> <note> <p>If you don&#39;t include any JSON input data, you still must include the two braces, for example: <code>&quot;input&quot;: &quot;{}&quot;</code> </p> </note></p>
     #[serde(rename = "input")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -808,7 +809,7 @@ pub struct StartExecutionInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct StartExecutionOutput {
+pub struct StartExecutionResponse {
     /// <p>The Amazon Resource Name (ARN) that identifies the execution.</p>
     #[serde(rename = "executionArn")]
     pub execution_arn: String,
@@ -859,7 +860,7 @@ pub struct StateMachineListItem {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct StopExecutionInput {
+pub struct StopExecutionRequest {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -875,7 +876,7 @@ pub struct StopExecutionInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct StopExecutionOutput {
+pub struct StopExecutionResponse {
     /// <p>The date the execution is stopped.</p>
     #[serde(rename = "stopDate")]
     pub stop_date: f64,
@@ -895,7 +896,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct TagResourceInput {
+pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the Step Functions state machine or activity.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
@@ -906,7 +907,7 @@ pub struct TagResourceInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct TagResourceOutput {}
+pub struct TagResourceResponse {}
 
 /// <p>Contains details about a task failure event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1055,7 +1056,7 @@ pub struct TaskTimedOutEventDetails {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UntagResourceInput {
+pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the Step Functions state machine or activity.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
@@ -1066,10 +1067,10 @@ pub struct UntagResourceInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UntagResourceOutput {}
+pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateStateMachineInput {
+pub struct UpdateStateMachineRequest {
     /// <p>The Amazon States Language definition of the state machine. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1085,7 +1086,7 @@ pub struct UpdateStateMachineInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateStateMachineOutput {
+pub struct UpdateStateMachineResponse {
     /// <p>The date and time the state machine was updated.</p>
     #[serde(rename = "updateDate")]
     pub update_date: f64,
@@ -2106,136 +2107,101 @@ impl Error for UpdateStateMachineError {
 /// Trait representing the capabilities of the AWS SFN API. AWS SFN clients implement this trait.
 pub trait StepFunctions {
     /// <p><p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    fn create_activity(
-        &self,
-        input: CreateActivityInput,
-    ) -> RusotoFuture<CreateActivityOutput, CreateActivityError>;
+    fn create_activity(&self, input: CreateActivityRequest) -> Request<CreateActivityRequest>;
 
     /// <p><p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn create_state_machine(
         &self,
-        input: CreateStateMachineInput,
-    ) -> RusotoFuture<CreateStateMachineOutput, CreateStateMachineError>;
+        input: CreateStateMachineRequest,
+    ) -> Request<CreateStateMachineRequest>;
 
     /// <p>Deletes an activity.</p>
-    fn delete_activity(
-        &self,
-        input: DeleteActivityInput,
-    ) -> RusotoFuture<DeleteActivityOutput, DeleteActivityError>;
+    fn delete_activity(&self, input: DeleteActivityRequest) -> Request<DeleteActivityRequest>;
 
     /// <p><p>Deletes a state machine. This is an asynchronous operation: It sets the state machine&#39;s status to <code>DELETING</code> and begins the deletion process. Each state machine execution is deleted the next time it makes a state transition.</p> <note> <p>The state machine itself is deleted after all executions are completed or deleted.</p> </note></p>
     fn delete_state_machine(
         &self,
-        input: DeleteStateMachineInput,
-    ) -> RusotoFuture<DeleteStateMachineOutput, DeleteStateMachineError>;
+        input: DeleteStateMachineRequest,
+    ) -> Request<DeleteStateMachineRequest>;
 
     /// <p><p>Describes an activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    fn describe_activity(
-        &self,
-        input: DescribeActivityInput,
-    ) -> RusotoFuture<DescribeActivityOutput, DescribeActivityError>;
+    fn describe_activity(&self, input: DescribeActivityRequest)
+        -> Request<DescribeActivityRequest>;
 
     /// <p><p>Describes an execution.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn describe_execution(
         &self,
-        input: DescribeExecutionInput,
-    ) -> RusotoFuture<DescribeExecutionOutput, DescribeExecutionError>;
+        input: DescribeExecutionRequest,
+    ) -> Request<DescribeExecutionRequest>;
 
     /// <p><p>Describes a state machine.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn describe_state_machine(
         &self,
-        input: DescribeStateMachineInput,
-    ) -> RusotoFuture<DescribeStateMachineOutput, DescribeStateMachineError>;
+        input: DescribeStateMachineRequest,
+    ) -> Request<DescribeStateMachineRequest>;
 
     /// <p><p>Describes the state machine associated with a specific execution.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn describe_state_machine_for_execution(
         &self,
-        input: DescribeStateMachineForExecutionInput,
-    ) -> RusotoFuture<DescribeStateMachineForExecutionOutput, DescribeStateMachineForExecutionError>;
+        input: DescribeStateMachineForExecutionRequest,
+    ) -> Request<DescribeStateMachineForExecutionRequest>;
 
     /// <p><p>Used by workers to retrieve a task (with the specified activity ARN) which has been scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll returns a <code>taskToken</code> with a null string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> <p>Polling with <code>GetActivityTask</code> can cause latency in some implementations. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/bp-activity-pollers.html">Avoid Latency When Polling for Activity Tasks</a> in the Step Functions Developer Guide.</p> </important></p>
-    fn get_activity_task(
-        &self,
-        input: GetActivityTaskInput,
-    ) -> RusotoFuture<GetActivityTaskOutput, GetActivityTaskError>;
+    fn get_activity_task(&self, input: GetActivityTaskRequest) -> Request<GetActivityTaskRequest>;
 
     /// <p>Returns the history of the specified execution as a list of events. By default, the results are returned in ascending order of the <code>timeStamp</code> of the events. Use the <code>reverseOrder</code> parameter to get the latest events first.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p>
     fn get_execution_history(
         &self,
-        input: GetExecutionHistoryInput,
-    ) -> RusotoFuture<GetExecutionHistoryOutput, GetExecutionHistoryError>;
+        input: GetExecutionHistoryRequest,
+    ) -> Request<GetExecutionHistoryRequest>;
 
     /// <p><p>Lists the existing activities.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    fn list_activities(
-        &self,
-        input: ListActivitiesInput,
-    ) -> RusotoFuture<ListActivitiesOutput, ListActivitiesError>;
+    fn list_activities(&self, input: ListActivitiesRequest) -> Request<ListActivitiesRequest>;
 
     /// <p><p>Lists the executions of a state machine that meet the filtering criteria. Results are sorted by time, with the most recent execution first.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    fn list_executions(
-        &self,
-        input: ListExecutionsInput,
-    ) -> RusotoFuture<ListExecutionsOutput, ListExecutionsError>;
+    fn list_executions(&self, input: ListExecutionsRequest) -> Request<ListExecutionsRequest>;
 
     /// <p><p>Lists the existing state machines.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn list_state_machines(
         &self,
-        input: ListStateMachinesInput,
-    ) -> RusotoFuture<ListStateMachinesOutput, ListStateMachinesError>;
+        input: ListStateMachinesRequest,
+    ) -> Request<ListStateMachinesRequest>;
 
     /// <p>List tags for a given resource.</p>
     fn list_tags_for_resource(
         &self,
-        input: ListTagsForResourceInput,
-    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError>;
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Used by workers to report that the task identified by the <code>taskToken</code> failed.</p>
-    fn send_task_failure(
-        &self,
-        input: SendTaskFailureInput,
-    ) -> RusotoFuture<SendTaskFailureOutput, SendTaskFailureError>;
+    fn send_task_failure(&self, input: SendTaskFailureRequest) -> Request<SendTaskFailureRequest>;
 
     /// <p><p>Used by workers to report to the service that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine&#39;s Amazon States Language definition. This action does not in itself create an event in the execution history. However, if the task times out, the execution history contains an <code>ActivityTimedOut</code> event.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine&#39;s Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received.</p> </note> <note> <p>This operation is only useful for long-lived tasks to report the liveliness of the task.</p> </note></p>
     fn send_task_heartbeat(
         &self,
-        input: SendTaskHeartbeatInput,
-    ) -> RusotoFuture<SendTaskHeartbeatOutput, SendTaskHeartbeatError>;
+        input: SendTaskHeartbeatRequest,
+    ) -> Request<SendTaskHeartbeatRequest>;
 
     /// <p>Used by workers to report that the task identified by the <code>taskToken</code> completed successfully.</p>
-    fn send_task_success(
-        &self,
-        input: SendTaskSuccessInput,
-    ) -> RusotoFuture<SendTaskSuccessOutput, SendTaskSuccessError>;
+    fn send_task_success(&self, input: SendTaskSuccessRequest) -> Request<SendTaskSuccessRequest>;
 
     /// <p><p>Starts a state machine execution.</p> <note> <p> <code>StartExecution</code> is idempotent. If <code>StartExecution</code> is called with the same name and input as a running execution, the call will succeed and return the same response as the original request. If the execution is closed or if the input is different, it will return a 400 <code>ExecutionAlreadyExists</code> error. Names can be reused after 90 days. </p> </note></p>
-    fn start_execution(
-        &self,
-        input: StartExecutionInput,
-    ) -> RusotoFuture<StartExecutionOutput, StartExecutionError>;
+    fn start_execution(&self, input: StartExecutionRequest) -> Request<StartExecutionRequest>;
 
     /// <p>Stops an execution.</p>
-    fn stop_execution(
-        &self,
-        input: StopExecutionInput,
-    ) -> RusotoFuture<StopExecutionOutput, StopExecutionError>;
+    fn stop_execution(&self, input: StopExecutionRequest) -> Request<StopExecutionRequest>;
 
     /// <p>Add a tag to a Step Functions resource.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceInput,
-    ) -> RusotoFuture<TagResourceOutput, TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Remove a tag from a Step Functions resource</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceInput,
-    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p><p>Updates an existing state machine by modifying its <code>definition</code> and/or <code>roleArn</code>. Running executions will continue to use the previous <code>definition</code> and <code>roleArn</code>. You must include at least one of <code>definition</code> or <code>roleArn</code> or you will receive a <code>MissingRequiredParameter</code> error.</p> <note> <p>All <code>StartExecution</code> calls within a few seconds will use the updated <code>definition</code> and <code>roleArn</code>. Executions started immediately after calling <code>UpdateStateMachine</code> may use the previous state machine <code>definition</code> and <code>roleArn</code>. </p> </note></p>
     fn update_state_machine(
         &self,
-        input: UpdateStateMachineInput,
-    ) -> RusotoFuture<UpdateStateMachineOutput, UpdateStateMachineError>;
+        input: UpdateStateMachineRequest,
+    ) -> Request<UpdateStateMachineRequest>;
 }
 /// A client for the AWS SFN API.
 #[derive(Clone)]
@@ -2275,22 +2241,170 @@ impl StepFunctionsClient {
 
 impl StepFunctions for StepFunctionsClient {
     /// <p><p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    fn create_activity(
+    fn create_activity(&self, input: CreateActivityRequest) -> Request<CreateActivityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
+    fn create_state_machine(
         &self,
-        input: CreateActivityInput,
-    ) -> RusotoFuture<CreateActivityOutput, CreateActivityError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        input: CreateStateMachineRequest,
+    ) -> Request<CreateStateMachineRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an activity.</p>
+    fn delete_activity(&self, input: DeleteActivityRequest) -> Request<DeleteActivityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a state machine. This is an asynchronous operation: It sets the state machine&#39;s status to <code>DELETING</code> and begins the deletion process. Each state machine execution is deleted the next time it makes a state transition.</p> <note> <p>The state machine itself is deleted after all executions are completed or deleted.</p> </note></p>
+    fn delete_state_machine(
+        &self,
+        input: DeleteStateMachineRequest,
+    ) -> Request<DeleteStateMachineRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Describes an activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
+    fn describe_activity(
+        &self,
+        input: DescribeActivityRequest,
+    ) -> Request<DescribeActivityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Describes an execution.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
+    fn describe_execution(
+        &self,
+        input: DescribeExecutionRequest,
+    ) -> Request<DescribeExecutionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Describes a state machine.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
+    fn describe_state_machine(
+        &self,
+        input: DescribeStateMachineRequest,
+    ) -> Request<DescribeStateMachineRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Describes the state machine associated with a specific execution.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
+    fn describe_state_machine_for_execution(
+        &self,
+        input: DescribeStateMachineForExecutionRequest,
+    ) -> Request<DescribeStateMachineForExecutionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Used by workers to retrieve a task (with the specified activity ARN) which has been scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll returns a <code>taskToken</code> with a null string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> <p>Polling with <code>GetActivityTask</code> can cause latency in some implementations. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/bp-activity-pollers.html">Avoid Latency When Polling for Activity Tasks</a> in the Step Functions Developer Guide.</p> </important></p>
+    fn get_activity_task(&self, input: GetActivityTaskRequest) -> Request<GetActivityTaskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the history of the specified execution as a list of events. By default, the results are returned in ascending order of the <code>timeStamp</code> of the events. Use the <code>reverseOrder</code> parameter to get the latest events first.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p>
+    fn get_execution_history(
+        &self,
+        input: GetExecutionHistoryRequest,
+    ) -> Request<GetExecutionHistoryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Lists the existing activities.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
+    fn list_activities(&self, input: ListActivitiesRequest) -> Request<ListActivitiesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Lists the executions of a state machine that meet the filtering criteria. Results are sorted by time, with the most recent execution first.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
+    fn list_executions(&self, input: ListExecutionsRequest) -> Request<ListExecutionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Lists the existing state machines.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
+    fn list_state_machines(
+        &self,
+        input: ListStateMachinesRequest,
+    ) -> Request<ListStateMachinesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>List tags for a given resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Used by workers to report that the task identified by the <code>taskToken</code> failed.</p>
+    fn send_task_failure(&self, input: SendTaskFailureRequest) -> Request<SendTaskFailureRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Used by workers to report to the service that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine&#39;s Amazon States Language definition. This action does not in itself create an event in the execution history. However, if the task times out, the execution history contains an <code>ActivityTimedOut</code> event.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine&#39;s Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received.</p> </note> <note> <p>This operation is only useful for long-lived tasks to report the liveliness of the task.</p> </note></p>
+    fn send_task_heartbeat(
+        &self,
+        input: SendTaskHeartbeatRequest,
+    ) -> Request<SendTaskHeartbeatRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Used by workers to report that the task identified by the <code>taskToken</code> completed successfully.</p>
+    fn send_task_success(&self, input: SendTaskSuccessRequest) -> Request<SendTaskSuccessRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Starts a state machine execution.</p> <note> <p> <code>StartExecution</code> is idempotent. If <code>StartExecution</code> is called with the same name and input as a running execution, the call will succeed and return the same response as the original request. If the execution is closed or if the input is different, it will return a 400 <code>ExecutionAlreadyExists</code> error. Names can be reused after 90 days. </p> </note></p>
+    fn start_execution(&self, input: StartExecutionRequest) -> Request<StartExecutionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops an execution.</p>
+    fn stop_execution(&self, input: StopExecutionRequest) -> Request<StopExecutionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Add a tag to a Step Functions resource.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Remove a tag from a Step Functions resource</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Updates an existing state machine by modifying its <code>definition</code> and/or <code>roleArn</code>. Running executions will continue to use the previous <code>definition</code> and <code>roleArn</code>. You must include at least one of <code>definition</code> or <code>roleArn</code> or you will receive a <code>MissingRequiredParameter</code> error.</p> <note> <p>All <code>StartExecution</code> calls within a few seconds will use the updated <code>definition</code> and <code>roleArn</code>. Executions started immediately after calling <code>UpdateStateMachine</code> may use the previous state machine <code>definition</code> and <code>roleArn</code>. </p> </note></p>
+    fn update_state_machine(
+        &self,
+        input: UpdateStateMachineRequest,
+    ) -> Request<UpdateStateMachineRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CreateActivityRequest {
+    type Output = CreateActivityResponse;
+    type Error = CreateActivityError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.CreateActivity");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateActivityOutput, _>()
+                        .deserialize::<CreateActivityResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2302,24 +2416,29 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p><p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    fn create_state_machine(
-        &self,
-        input: CreateStateMachineInput,
-    ) -> RusotoFuture<CreateStateMachineOutput, CreateStateMachineError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for CreateStateMachineRequest {
+    type Output = CreateStateMachineResponse;
+    type Error = CreateStateMachineError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.CreateStateMachine");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateStateMachineOutput, _>()
+                        .deserialize::<CreateStateMachineResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2331,24 +2450,29 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an activity.</p>
-    fn delete_activity(
-        &self,
-        input: DeleteActivityInput,
-    ) -> RusotoFuture<DeleteActivityOutput, DeleteActivityError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for DeleteActivityRequest {
+    type Output = DeleteActivityResponse;
+    type Error = DeleteActivityError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.DeleteActivity");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteActivityOutput, _>()
+                        .deserialize::<DeleteActivityResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2360,24 +2484,29 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p><p>Deletes a state machine. This is an asynchronous operation: It sets the state machine&#39;s status to <code>DELETING</code> and begins the deletion process. Each state machine execution is deleted the next time it makes a state transition.</p> <note> <p>The state machine itself is deleted after all executions are completed or deleted.</p> </note></p>
-    fn delete_state_machine(
-        &self,
-        input: DeleteStateMachineInput,
-    ) -> RusotoFuture<DeleteStateMachineOutput, DeleteStateMachineError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for DeleteStateMachineRequest {
+    type Output = DeleteStateMachineResponse;
+    type Error = DeleteStateMachineError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.DeleteStateMachine");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteStateMachineOutput, _>()
+                        .deserialize::<DeleteStateMachineResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2389,24 +2518,29 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p><p>Describes an activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    fn describe_activity(
-        &self,
-        input: DescribeActivityInput,
-    ) -> RusotoFuture<DescribeActivityOutput, DescribeActivityError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for DescribeActivityRequest {
+    type Output = DescribeActivityResponse;
+    type Error = DescribeActivityError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.DescribeActivity");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeActivityOutput, _>()
+                        .deserialize::<DescribeActivityResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2418,24 +2552,29 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p><p>Describes an execution.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    fn describe_execution(
-        &self,
-        input: DescribeExecutionInput,
-    ) -> RusotoFuture<DescribeExecutionOutput, DescribeExecutionError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for DescribeExecutionRequest {
+    type Output = DescribeExecutionResponse;
+    type Error = DescribeExecutionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.DescribeExecution");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeExecutionOutput, _>()
+                        .deserialize::<DescribeExecutionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2447,24 +2586,29 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p><p>Describes a state machine.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    fn describe_state_machine(
-        &self,
-        input: DescribeStateMachineInput,
-    ) -> RusotoFuture<DescribeStateMachineOutput, DescribeStateMachineError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for DescribeStateMachineRequest {
+    type Output = DescribeStateMachineResponse;
+    type Error = DescribeStateMachineError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.DescribeStateMachine");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeStateMachineOutput, _>()
+                        .deserialize::<DescribeStateMachineResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2475,28 +2619,32 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p><p>Describes the state machine associated with a specific execution.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    fn describe_state_machine_for_execution(
-        &self,
-        input: DescribeStateMachineForExecutionInput,
-    ) -> RusotoFuture<DescribeStateMachineForExecutionOutput, DescribeStateMachineForExecutionError>
-    {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for DescribeStateMachineForExecutionRequest {
+    type Output = DescribeStateMachineForExecutionResponse;
+    type Error = DescribeStateMachineForExecutionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSStepFunctions.DescribeStateMachineForExecution",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeStateMachineForExecutionOutput, _>()
+                        .deserialize::<DescribeStateMachineForExecutionResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -2507,24 +2655,29 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p><p>Used by workers to retrieve a task (with the specified activity ARN) which has been scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll returns a <code>taskToken</code> with a null string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> <p>Polling with <code>GetActivityTask</code> can cause latency in some implementations. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/bp-activity-pollers.html">Avoid Latency When Polling for Activity Tasks</a> in the Step Functions Developer Guide.</p> </important></p>
-    fn get_activity_task(
-        &self,
-        input: GetActivityTaskInput,
-    ) -> RusotoFuture<GetActivityTaskOutput, GetActivityTaskError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for GetActivityTaskRequest {
+    type Output = GetActivityTaskResponse;
+    type Error = GetActivityTaskError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.GetActivityTask");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetActivityTaskOutput, _>()
+                        .deserialize::<GetActivityTaskResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2536,24 +2689,29 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p>Returns the history of the specified execution as a list of events. By default, the results are returned in ascending order of the <code>timeStamp</code> of the events. Use the <code>reverseOrder</code> parameter to get the latest events first.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p>
-    fn get_execution_history(
-        &self,
-        input: GetExecutionHistoryInput,
-    ) -> RusotoFuture<GetExecutionHistoryOutput, GetExecutionHistoryError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for GetExecutionHistoryRequest {
+    type Output = GetExecutionHistoryResponse;
+    type Error = GetExecutionHistoryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.GetExecutionHistory");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetExecutionHistoryOutput, _>()
+                        .deserialize::<GetExecutionHistoryResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2564,24 +2722,29 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p><p>Lists the existing activities.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    fn list_activities(
-        &self,
-        input: ListActivitiesInput,
-    ) -> RusotoFuture<ListActivitiesOutput, ListActivitiesError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for ListActivitiesRequest {
+    type Output = ListActivitiesResponse;
+    type Error = ListActivitiesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.ListActivities");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListActivitiesOutput, _>()
+                        .deserialize::<ListActivitiesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2593,24 +2756,29 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p><p>Lists the executions of a state machine that meet the filtering criteria. Results are sorted by time, with the most recent execution first.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    fn list_executions(
-        &self,
-        input: ListExecutionsInput,
-    ) -> RusotoFuture<ListExecutionsOutput, ListExecutionsError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for ListExecutionsRequest {
+    type Output = ListExecutionsResponse;
+    type Error = ListExecutionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.ListExecutions");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListExecutionsOutput, _>()
+                        .deserialize::<ListExecutionsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2622,24 +2790,29 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p><p>Lists the existing state machines.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    fn list_state_machines(
-        &self,
-        input: ListStateMachinesInput,
-    ) -> RusotoFuture<ListStateMachinesOutput, ListStateMachinesError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for ListStateMachinesRequest {
+    type Output = ListStateMachinesResponse;
+    type Error = ListStateMachinesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.ListStateMachines");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListStateMachinesOutput, _>()
+                        .deserialize::<ListStateMachinesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2651,24 +2824,29 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p>List tags for a given resource.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceInput,
-    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.ListTagsForResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsForResourceOutput, _>()
+                        .deserialize::<ListTagsForResourceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2679,24 +2857,29 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p>Used by workers to report that the task identified by the <code>taskToken</code> failed.</p>
-    fn send_task_failure(
-        &self,
-        input: SendTaskFailureInput,
-    ) -> RusotoFuture<SendTaskFailureOutput, SendTaskFailureError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for SendTaskFailureRequest {
+    type Output = SendTaskFailureResponse;
+    type Error = SendTaskFailureError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.SendTaskFailure");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SendTaskFailureOutput, _>()
+                        .deserialize::<SendTaskFailureResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2708,24 +2891,29 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p><p>Used by workers to report to the service that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine&#39;s Amazon States Language definition. This action does not in itself create an event in the execution history. However, if the task times out, the execution history contains an <code>ActivityTimedOut</code> event.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine&#39;s Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received.</p> </note> <note> <p>This operation is only useful for long-lived tasks to report the liveliness of the task.</p> </note></p>
-    fn send_task_heartbeat(
-        &self,
-        input: SendTaskHeartbeatInput,
-    ) -> RusotoFuture<SendTaskHeartbeatOutput, SendTaskHeartbeatError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for SendTaskHeartbeatRequest {
+    type Output = SendTaskHeartbeatResponse;
+    type Error = SendTaskHeartbeatError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.SendTaskHeartbeat");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SendTaskHeartbeatOutput, _>()
+                        .deserialize::<SendTaskHeartbeatResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2737,24 +2925,29 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p>Used by workers to report that the task identified by the <code>taskToken</code> completed successfully.</p>
-    fn send_task_success(
-        &self,
-        input: SendTaskSuccessInput,
-    ) -> RusotoFuture<SendTaskSuccessOutput, SendTaskSuccessError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for SendTaskSuccessRequest {
+    type Output = SendTaskSuccessResponse;
+    type Error = SendTaskSuccessError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.SendTaskSuccess");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SendTaskSuccessOutput, _>()
+                        .deserialize::<SendTaskSuccessResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2766,24 +2959,29 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p><p>Starts a state machine execution.</p> <note> <p> <code>StartExecution</code> is idempotent. If <code>StartExecution</code> is called with the same name and input as a running execution, the call will succeed and return the same response as the original request. If the execution is closed or if the input is different, it will return a 400 <code>ExecutionAlreadyExists</code> error. Names can be reused after 90 days. </p> </note></p>
-    fn start_execution(
-        &self,
-        input: StartExecutionInput,
-    ) -> RusotoFuture<StartExecutionOutput, StartExecutionError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for StartExecutionRequest {
+    type Output = StartExecutionResponse;
+    type Error = StartExecutionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.StartExecution");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartExecutionOutput, _>()
+                        .deserialize::<StartExecutionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2795,24 +2993,29 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p>Stops an execution.</p>
-    fn stop_execution(
-        &self,
-        input: StopExecutionInput,
-    ) -> RusotoFuture<StopExecutionOutput, StopExecutionError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for StopExecutionRequest {
+    type Output = StopExecutionResponse;
+    type Error = StopExecutionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.StopExecution");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StopExecutionOutput, _>()
+                        .deserialize::<StopExecutionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2824,24 +3027,29 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p>Add a tag to a Step Functions resource.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceInput,
-    ) -> RusotoFuture<TagResourceOutput, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.TagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TagResourceOutput, _>()
+                        .deserialize::<TagResourceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2853,24 +3061,29 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p>Remove a tag from a Step Functions resource</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceInput,
-    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.UntagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UntagResourceOutput, _>()
+                        .deserialize::<UntagResourceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2882,24 +3095,29 @@ impl StepFunctions for StepFunctionsClient {
             }
         })
     }
+}
 
-    /// <p><p>Updates an existing state machine by modifying its <code>definition</code> and/or <code>roleArn</code>. Running executions will continue to use the previous <code>definition</code> and <code>roleArn</code>. You must include at least one of <code>definition</code> or <code>roleArn</code> or you will receive a <code>MissingRequiredParameter</code> error.</p> <note> <p>All <code>StartExecution</code> calls within a few seconds will use the updated <code>definition</code> and <code>roleArn</code>. Executions started immediately after calling <code>UpdateStateMachine</code> may use the previous state machine <code>definition</code> and <code>roleArn</code>. </p> </note></p>
-    fn update_state_machine(
-        &self,
-        input: UpdateStateMachineInput,
-    ) -> RusotoFuture<UpdateStateMachineOutput, UpdateStateMachineError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+impl ServiceRequest for UpdateStateMachineRequest {
+    type Output = UpdateStateMachineResponse;
+    type Error = UpdateStateMachineError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "states", region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.UpdateStateMachine");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateStateMachineOutput, _>()
+                        .deserialize::<UpdateStateMachineResponse, _>()
                 }))
             } else {
                 Box::new(

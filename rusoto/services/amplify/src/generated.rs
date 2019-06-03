@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -217,7 +218,7 @@ pub struct CreateAppRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateAppResult {
+pub struct CreateAppResponse {
     #[serde(rename = "app")]
     pub app: App,
 }
@@ -280,7 +281,7 @@ pub struct CreateBranchRequest {
 /// <p> Result structure for create branch request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateBranchResult {
+pub struct CreateBranchResponse {
     /// <p> Branch structure for an Amplify App. </p>
     #[serde(rename = "branch")]
     pub branch: Branch,
@@ -307,7 +308,7 @@ pub struct CreateDomainAssociationRequest {
 /// <p> Result structure for the create Domain Association request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateDomainAssociationResult {
+pub struct CreateDomainAssociationResponse {
     /// <p> Domain Association structure. </p>
     #[serde(rename = "domainAssociation")]
     pub domain_association: DomainAssociation,
@@ -343,7 +344,7 @@ pub struct DeleteAppRequest {
 /// <p> Result structure for an Amplify App delete request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteAppResult {
+pub struct DeleteAppResponse {
     #[serde(rename = "app")]
     pub app: App,
 }
@@ -362,7 +363,7 @@ pub struct DeleteBranchRequest {
 /// <p> Result structure for delete branch request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteBranchResult {
+pub struct DeleteBranchResponse {
     /// <p> Branch structure for an Amplify App. </p>
     #[serde(rename = "branch")]
     pub branch: Branch,
@@ -381,7 +382,7 @@ pub struct DeleteDomainAssociationRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteDomainAssociationResult {
+pub struct DeleteDomainAssociationResponse {
     #[serde(rename = "domainAssociation")]
     pub domain_association: DomainAssociation,
 }
@@ -403,7 +404,7 @@ pub struct DeleteJobRequest {
 /// <p> Result structure for the delete job request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteJobResult {
+pub struct DeleteJobResponse {
     #[serde(rename = "jobSummary")]
     pub job_summary: JobSummary,
 }
@@ -445,7 +446,7 @@ pub struct GetAppRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetAppResult {
+pub struct GetAppResponse {
     #[serde(rename = "app")]
     pub app: App,
 }
@@ -463,7 +464,7 @@ pub struct GetBranchRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetBranchResult {
+pub struct GetBranchResponse {
     #[serde(rename = "branch")]
     pub branch: Branch,
 }
@@ -482,7 +483,7 @@ pub struct GetDomainAssociationRequest {
 /// <p> Result structure for the get Domain Association request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetDomainAssociationResult {
+pub struct GetDomainAssociationResponse {
     /// <p> Domain Association structure. </p>
     #[serde(rename = "domainAssociation")]
     pub domain_association: DomainAssociation,
@@ -504,7 +505,7 @@ pub struct GetJobRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetJobResult {
+pub struct GetJobResponse {
     #[serde(rename = "job")]
     pub job: Job,
 }
@@ -571,7 +572,7 @@ pub struct ListAppsRequest {
 /// <p> Result structure for an Amplify App list request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListAppsResult {
+pub struct ListAppsResponse {
     /// <p> List of Amplify Apps. </p>
     #[serde(rename = "apps")]
     pub apps: Vec<App>,
@@ -600,7 +601,7 @@ pub struct ListBranchesRequest {
 /// <p> Result structure for list branches request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListBranchesResult {
+pub struct ListBranchesResponse {
     /// <p> List of branches for an Amplify App. </p>
     #[serde(rename = "branches")]
     pub branches: Vec<Branch>,
@@ -629,7 +630,7 @@ pub struct ListDomainAssociationsRequest {
 /// <p> Result structure for the list Domain Association request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListDomainAssociationsResult {
+pub struct ListDomainAssociationsResponse {
     /// <p> List of Domain Associations. </p>
     #[serde(rename = "domainAssociations")]
     pub domain_associations: Vec<DomainAssociation>,
@@ -661,7 +662,7 @@ pub struct ListJobsRequest {
 /// <p> Maximum number of records to list in a single response. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListJobsResult {
+pub struct ListJobsResponse {
     /// <p> Result structure for list job result request. </p>
     #[serde(rename = "jobSummaries")]
     pub job_summaries: Vec<JobSummary>,
@@ -730,7 +731,7 @@ pub struct StartJobRequest {
 /// <p> Result structure for run job request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct StartJobResult {
+pub struct StartJobResponse {
     /// <p> Summary for the Job. </p>
     #[serde(rename = "jobSummary")]
     pub job_summary: JobSummary,
@@ -783,7 +784,7 @@ pub struct StopJobRequest {
 /// <p> Result structure for the stop job request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct StopJobResult {
+pub struct StopJobResponse {
     /// <p> Summary for the Job. </p>
     #[serde(rename = "jobSummary")]
     pub job_summary: JobSummary,
@@ -866,7 +867,7 @@ pub struct UpdateAppRequest {
 /// <p> Result structure for an Amplify App update request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateAppResult {
+pub struct UpdateAppResponse {
     /// <p> App structure for the updated App. </p>
     #[serde(rename = "app")]
     pub app: App,
@@ -926,7 +927,7 @@ pub struct UpdateBranchRequest {
 /// <p> Result structure for update branch request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateBranchResult {
+pub struct UpdateBranchResponse {
     /// <p> Branch structure for an Amplify App. </p>
     #[serde(rename = "branch")]
     pub branch: Branch,
@@ -953,7 +954,7 @@ pub struct UpdateDomainAssociationRequest {
 /// <p> Result structure for the update Domain Association request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateDomainAssociationResult {
+pub struct UpdateDomainAssociationResponse {
     /// <p> Domain Association structure. </p>
     #[serde(rename = "domainAssociation")]
     pub domain_association: DomainAssociation,
@@ -2074,91 +2075,79 @@ impl Error for UpdateDomainAssociationError {
 /// Trait representing the capabilities of the Amplify API. Amplify clients implement this trait.
 pub trait Amplify {
     /// <p> Creates a new Amplify App. </p>
-    fn create_app(&self, input: CreateAppRequest) -> RusotoFuture<CreateAppResult, CreateAppError>;
+    fn create_app(&self, input: CreateAppRequest) -> Request<CreateAppRequest>;
 
     /// <p> Creates a new Branch for an Amplify App. </p>
-    fn create_branch(
-        &self,
-        input: CreateBranchRequest,
-    ) -> RusotoFuture<CreateBranchResult, CreateBranchError>;
+    fn create_branch(&self, input: CreateBranchRequest) -> Request<CreateBranchRequest>;
 
     /// <p> Create a new DomainAssociation on an App </p>
     fn create_domain_association(
         &self,
         input: CreateDomainAssociationRequest,
-    ) -> RusotoFuture<CreateDomainAssociationResult, CreateDomainAssociationError>;
+    ) -> Request<CreateDomainAssociationRequest>;
 
     /// <p> Delete an existing Amplify App by appId. </p>
-    fn delete_app(&self, input: DeleteAppRequest) -> RusotoFuture<DeleteAppResult, DeleteAppError>;
+    fn delete_app(&self, input: DeleteAppRequest) -> Request<DeleteAppRequest>;
 
     /// <p> Deletes a branch for an Amplify App. </p>
-    fn delete_branch(
-        &self,
-        input: DeleteBranchRequest,
-    ) -> RusotoFuture<DeleteBranchResult, DeleteBranchError>;
+    fn delete_branch(&self, input: DeleteBranchRequest) -> Request<DeleteBranchRequest>;
 
     /// <p> Deletes a DomainAssociation. </p>
     fn delete_domain_association(
         &self,
         input: DeleteDomainAssociationRequest,
-    ) -> RusotoFuture<DeleteDomainAssociationResult, DeleteDomainAssociationError>;
+    ) -> Request<DeleteDomainAssociationRequest>;
 
     /// <p> Delete a job, for an Amplify branch, part of Amplify App. </p>
-    fn delete_job(&self, input: DeleteJobRequest) -> RusotoFuture<DeleteJobResult, DeleteJobError>;
+    fn delete_job(&self, input: DeleteJobRequest) -> Request<DeleteJobRequest>;
 
     /// <p> Retrieves an existing Amplify App by appId. </p>
-    fn get_app(&self, input: GetAppRequest) -> RusotoFuture<GetAppResult, GetAppError>;
+    fn get_app(&self, input: GetAppRequest) -> Request<GetAppRequest>;
 
     /// <p> Retrieves a branch for an Amplify App. </p>
-    fn get_branch(&self, input: GetBranchRequest) -> RusotoFuture<GetBranchResult, GetBranchError>;
+    fn get_branch(&self, input: GetBranchRequest) -> Request<GetBranchRequest>;
 
     /// <p> Retrieves domain info that corresponds to an appId and domainName. </p>
     fn get_domain_association(
         &self,
         input: GetDomainAssociationRequest,
-    ) -> RusotoFuture<GetDomainAssociationResult, GetDomainAssociationError>;
+    ) -> Request<GetDomainAssociationRequest>;
 
     /// <p> Get a job for a branch, part of an Amplify App. </p>
-    fn get_job(&self, input: GetJobRequest) -> RusotoFuture<GetJobResult, GetJobError>;
+    fn get_job(&self, input: GetJobRequest) -> Request<GetJobRequest>;
 
     /// <p> Lists existing Amplify Apps. </p>
-    fn list_apps(&self, input: ListAppsRequest) -> RusotoFuture<ListAppsResult, ListAppsError>;
+    fn list_apps(&self, input: ListAppsRequest) -> Request<ListAppsRequest>;
 
     /// <p> Lists branches for an Amplify App. </p>
-    fn list_branches(
-        &self,
-        input: ListBranchesRequest,
-    ) -> RusotoFuture<ListBranchesResult, ListBranchesError>;
+    fn list_branches(&self, input: ListBranchesRequest) -> Request<ListBranchesRequest>;
 
     /// <p> List domains with an app </p>
     fn list_domain_associations(
         &self,
         input: ListDomainAssociationsRequest,
-    ) -> RusotoFuture<ListDomainAssociationsResult, ListDomainAssociationsError>;
+    ) -> Request<ListDomainAssociationsRequest>;
 
     /// <p> List Jobs for a branch, part of an Amplify App. </p>
-    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResult, ListJobsError>;
+    fn list_jobs(&self, input: ListJobsRequest) -> Request<ListJobsRequest>;
 
     /// <p> Starts a new job for a branch, part of an Amplify App. </p>
-    fn start_job(&self, input: StartJobRequest) -> RusotoFuture<StartJobResult, StartJobError>;
+    fn start_job(&self, input: StartJobRequest) -> Request<StartJobRequest>;
 
     /// <p> Stop a job that is in progress, for an Amplify branch, part of Amplify App. </p>
-    fn stop_job(&self, input: StopJobRequest) -> RusotoFuture<StopJobResult, StopJobError>;
+    fn stop_job(&self, input: StopJobRequest) -> Request<StopJobRequest>;
 
     /// <p> Updates an existing Amplify App. </p>
-    fn update_app(&self, input: UpdateAppRequest) -> RusotoFuture<UpdateAppResult, UpdateAppError>;
+    fn update_app(&self, input: UpdateAppRequest) -> Request<UpdateAppRequest>;
 
     /// <p> Updates a branch for an Amplify App. </p>
-    fn update_branch(
-        &self,
-        input: UpdateBranchRequest,
-    ) -> RusotoFuture<UpdateBranchResult, UpdateBranchError>;
+    fn update_branch(&self, input: UpdateBranchRequest) -> Request<UpdateBranchRequest>;
 
     /// <p> Create a new DomainAssociation on an App </p>
     fn update_domain_association(
         &self,
         input: UpdateDomainAssociationRequest,
-    ) -> RusotoFuture<UpdateDomainAssociationResult, UpdateDomainAssociationError>;
+    ) -> Request<UpdateDomainAssociationRequest>;
 }
 /// A client for the Amplify API.
 #[derive(Clone)]
@@ -2198,20 +2187,144 @@ impl AmplifyClient {
 
 impl Amplify for AmplifyClient {
     /// <p> Creates a new Amplify App. </p>
-    fn create_app(&self, input: CreateAppRequest) -> RusotoFuture<CreateAppResult, CreateAppError> {
+    fn create_app(&self, input: CreateAppRequest) -> Request<CreateAppRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Creates a new Branch for an Amplify App. </p>
+    fn create_branch(&self, input: CreateBranchRequest) -> Request<CreateBranchRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Create a new DomainAssociation on an App </p>
+    fn create_domain_association(
+        &self,
+        input: CreateDomainAssociationRequest,
+    ) -> Request<CreateDomainAssociationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Delete an existing Amplify App by appId. </p>
+    fn delete_app(&self, input: DeleteAppRequest) -> Request<DeleteAppRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Deletes a branch for an Amplify App. </p>
+    fn delete_branch(&self, input: DeleteBranchRequest) -> Request<DeleteBranchRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Deletes a DomainAssociation. </p>
+    fn delete_domain_association(
+        &self,
+        input: DeleteDomainAssociationRequest,
+    ) -> Request<DeleteDomainAssociationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Delete a job, for an Amplify branch, part of Amplify App. </p>
+    fn delete_job(&self, input: DeleteJobRequest) -> Request<DeleteJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Retrieves an existing Amplify App by appId. </p>
+    fn get_app(&self, input: GetAppRequest) -> Request<GetAppRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Retrieves a branch for an Amplify App. </p>
+    fn get_branch(&self, input: GetBranchRequest) -> Request<GetBranchRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Retrieves domain info that corresponds to an appId and domainName. </p>
+    fn get_domain_association(
+        &self,
+        input: GetDomainAssociationRequest,
+    ) -> Request<GetDomainAssociationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Get a job for a branch, part of an Amplify App. </p>
+    fn get_job(&self, input: GetJobRequest) -> Request<GetJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Lists existing Amplify Apps. </p>
+    fn list_apps(&self, input: ListAppsRequest) -> Request<ListAppsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Lists branches for an Amplify App. </p>
+    fn list_branches(&self, input: ListBranchesRequest) -> Request<ListBranchesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> List domains with an app </p>
+    fn list_domain_associations(
+        &self,
+        input: ListDomainAssociationsRequest,
+    ) -> Request<ListDomainAssociationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> List Jobs for a branch, part of an Amplify App. </p>
+    fn list_jobs(&self, input: ListJobsRequest) -> Request<ListJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Starts a new job for a branch, part of an Amplify App. </p>
+    fn start_job(&self, input: StartJobRequest) -> Request<StartJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Stop a job that is in progress, for an Amplify branch, part of Amplify App. </p>
+    fn stop_job(&self, input: StopJobRequest) -> Request<StopJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Updates an existing Amplify App. </p>
+    fn update_app(&self, input: UpdateAppRequest) -> Request<UpdateAppRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Updates a branch for an Amplify App. </p>
+    fn update_branch(&self, input: UpdateBranchRequest) -> Request<UpdateBranchRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Create a new DomainAssociation on an App </p>
+    fn update_domain_association(
+        &self,
+        input: UpdateDomainAssociationRequest,
+    ) -> Request<UpdateDomainAssociationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CreateAppRequest {
+    type Output = CreateAppResponse;
+    type Error = CreateAppError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/apps";
 
-        let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "amplify", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateAppResult, _>()?;
+                        .deserialize::<CreateAppResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -2225,25 +2338,31 @@ impl Amplify for AmplifyClient {
             }
         })
     }
+}
 
-    /// <p> Creates a new Branch for an Amplify App. </p>
-    fn create_branch(
-        &self,
-        input: CreateBranchRequest,
-    ) -> RusotoFuture<CreateBranchResult, CreateBranchError> {
-        let request_uri = format!("/apps/{app_id}/branches", app_id = input.app_id);
+impl ServiceRequest for CreateBranchRequest {
+    type Output = CreateBranchResponse;
+    type Error = CreateBranchError;
 
-        let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/apps/{app_id}/branches", app_id = self.app_id);
+
+        let mut request = SignedRequest::new("POST", "amplify", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateBranchResult, _>()?;
+                        .deserialize::<CreateBranchResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -2257,25 +2376,31 @@ impl Amplify for AmplifyClient {
             }
         })
     }
+}
 
-    /// <p> Create a new DomainAssociation on an App </p>
-    fn create_domain_association(
-        &self,
-        input: CreateDomainAssociationRequest,
-    ) -> RusotoFuture<CreateDomainAssociationResult, CreateDomainAssociationError> {
-        let request_uri = format!("/apps/{app_id}/domains", app_id = input.app_id);
+impl ServiceRequest for CreateDomainAssociationRequest {
+    type Output = CreateDomainAssociationResponse;
+    type Error = CreateDomainAssociationError;
 
-        let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/apps/{app_id}/domains", app_id = self.app_id);
+
+        let mut request = SignedRequest::new("POST", "amplify", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDomainAssociationResult, _>()?;
+                        .deserialize::<CreateDomainAssociationResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -2286,19 +2411,28 @@ impl Amplify for AmplifyClient {
             }
         })
     }
+}
 
-    /// <p> Delete an existing Amplify App by appId. </p>
-    fn delete_app(&self, input: DeleteAppRequest) -> RusotoFuture<DeleteAppResult, DeleteAppError> {
-        let request_uri = format!("/apps/{app_id}", app_id = input.app_id);
+impl ServiceRequest for DeleteAppRequest {
+    type Output = DeleteAppResponse;
+    type Error = DeleteAppError;
 
-        let mut request = SignedRequest::new("DELETE", "amplify", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/apps/{app_id}", app_id = self.app_id);
+
+        let mut request = SignedRequest::new("DELETE", "amplify", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteAppResult, _>()?;
+                        .deserialize::<DeleteAppResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -2312,26 +2446,32 @@ impl Amplify for AmplifyClient {
             }
         })
     }
+}
 
-    /// <p> Deletes a branch for an Amplify App. </p>
-    fn delete_branch(
-        &self,
-        input: DeleteBranchRequest,
-    ) -> RusotoFuture<DeleteBranchResult, DeleteBranchError> {
+impl ServiceRequest for DeleteBranchRequest {
+    type Output = DeleteBranchResponse;
+    type Error = DeleteBranchError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/apps/{app_id}/branches/{branch_name}",
-            app_id = input.app_id,
-            branch_name = input.branch_name
+            app_id = self.app_id,
+            branch_name = self.branch_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "amplify", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "amplify", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteBranchResult, _>()?;
+                        .deserialize::<DeleteBranchResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -2345,26 +2485,32 @@ impl Amplify for AmplifyClient {
             }
         })
     }
+}
 
-    /// <p> Deletes a DomainAssociation. </p>
-    fn delete_domain_association(
-        &self,
-        input: DeleteDomainAssociationRequest,
-    ) -> RusotoFuture<DeleteDomainAssociationResult, DeleteDomainAssociationError> {
+impl ServiceRequest for DeleteDomainAssociationRequest {
+    type Output = DeleteDomainAssociationResponse;
+    type Error = DeleteDomainAssociationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/apps/{app_id}/domains/{domain_name}",
-            app_id = input.app_id,
-            domain_name = input.domain_name
+            app_id = self.app_id,
+            domain_name = self.domain_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "amplify", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "amplify", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteDomainAssociationResult, _>()?;
+                        .deserialize::<DeleteDomainAssociationResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -2375,24 +2521,33 @@ impl Amplify for AmplifyClient {
             }
         })
     }
+}
 
-    /// <p> Delete a job, for an Amplify branch, part of Amplify App. </p>
-    fn delete_job(&self, input: DeleteJobRequest) -> RusotoFuture<DeleteJobResult, DeleteJobError> {
+impl ServiceRequest for DeleteJobRequest {
+    type Output = DeleteJobResponse;
+    type Error = DeleteJobError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/apps/{app_id}/branches/{branch_name}/jobs/{job_id}",
-            app_id = input.app_id,
-            branch_name = input.branch_name,
-            job_id = input.job_id
+            app_id = self.app_id,
+            branch_name = self.branch_name,
+            job_id = self.job_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "amplify", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "amplify", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteJobResult, _>()?;
+                        .deserialize::<DeleteJobResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -2406,19 +2561,28 @@ impl Amplify for AmplifyClient {
             }
         })
     }
+}
 
-    /// <p> Retrieves an existing Amplify App by appId. </p>
-    fn get_app(&self, input: GetAppRequest) -> RusotoFuture<GetAppResult, GetAppError> {
-        let request_uri = format!("/apps/{app_id}", app_id = input.app_id);
+impl ServiceRequest for GetAppRequest {
+    type Output = GetAppResponse;
+    type Error = GetAppError;
 
-        let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/apps/{app_id}", app_id = self.app_id);
+
+        let mut request = SignedRequest::new("GET", "amplify", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetAppResult, _>()?;
+                        .deserialize::<GetAppResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -2432,23 +2596,32 @@ impl Amplify for AmplifyClient {
             }
         })
     }
+}
 
-    /// <p> Retrieves a branch for an Amplify App. </p>
-    fn get_branch(&self, input: GetBranchRequest) -> RusotoFuture<GetBranchResult, GetBranchError> {
+impl ServiceRequest for GetBranchRequest {
+    type Output = GetBranchResponse;
+    type Error = GetBranchError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/apps/{app_id}/branches/{branch_name}",
-            app_id = input.app_id,
-            branch_name = input.branch_name
+            app_id = self.app_id,
+            branch_name = self.branch_name
         );
 
-        let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "amplify", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetBranchResult, _>()?;
+                        .deserialize::<GetBranchResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -2462,26 +2635,32 @@ impl Amplify for AmplifyClient {
             }
         })
     }
+}
 
-    /// <p> Retrieves domain info that corresponds to an appId and domainName. </p>
-    fn get_domain_association(
-        &self,
-        input: GetDomainAssociationRequest,
-    ) -> RusotoFuture<GetDomainAssociationResult, GetDomainAssociationError> {
+impl ServiceRequest for GetDomainAssociationRequest {
+    type Output = GetDomainAssociationResponse;
+    type Error = GetDomainAssociationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/apps/{app_id}/domains/{domain_name}",
-            app_id = input.app_id,
-            domain_name = input.domain_name
+            app_id = self.app_id,
+            domain_name = self.domain_name
         );
 
-        let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "amplify", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetDomainAssociationResult, _>()?;
+                        .deserialize::<GetDomainAssociationResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -2494,24 +2673,33 @@ impl Amplify for AmplifyClient {
             }
         })
     }
+}
 
-    /// <p> Get a job for a branch, part of an Amplify App. </p>
-    fn get_job(&self, input: GetJobRequest) -> RusotoFuture<GetJobResult, GetJobError> {
+impl ServiceRequest for GetJobRequest {
+    type Output = GetJobResponse;
+    type Error = GetJobError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/apps/{app_id}/branches/{branch_name}/jobs/{job_id}",
-            app_id = input.app_id,
-            branch_name = input.branch_name,
-            job_id = input.job_id
+            app_id = self.app_id,
+            branch_name = self.branch_name,
+            job_id = self.job_id
         );
 
-        let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "amplify", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetJobResult, _>()?;
+                        .deserialize::<GetJobResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -2525,28 +2713,37 @@ impl Amplify for AmplifyClient {
             }
         })
     }
+}
 
-    /// <p> Lists existing Amplify Apps. </p>
-    fn list_apps(&self, input: ListAppsRequest) -> RusotoFuture<ListAppsResult, ListAppsError> {
+impl ServiceRequest for ListAppsRequest {
+    type Output = ListAppsResponse;
+    type Error = ListAppsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/apps";
 
-        let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "amplify", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAppsResult, _>()?;
+                        .deserialize::<ListAppsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -2560,31 +2757,37 @@ impl Amplify for AmplifyClient {
             }
         })
     }
+}
 
-    /// <p> Lists branches for an Amplify App. </p>
-    fn list_branches(
-        &self,
-        input: ListBranchesRequest,
-    ) -> RusotoFuture<ListBranchesResult, ListBranchesError> {
-        let request_uri = format!("/apps/{app_id}/branches", app_id = input.app_id);
+impl ServiceRequest for ListBranchesRequest {
+    type Output = ListBranchesResponse;
+    type Error = ListBranchesError;
 
-        let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/apps/{app_id}/branches", app_id = self.app_id);
+
+        let mut request = SignedRequest::new("GET", "amplify", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListBranchesResult, _>()?;
+                        .deserialize::<ListBranchesResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -2598,31 +2801,37 @@ impl Amplify for AmplifyClient {
             }
         })
     }
+}
 
-    /// <p> List domains with an app </p>
-    fn list_domain_associations(
-        &self,
-        input: ListDomainAssociationsRequest,
-    ) -> RusotoFuture<ListDomainAssociationsResult, ListDomainAssociationsError> {
-        let request_uri = format!("/apps/{app_id}/domains", app_id = input.app_id);
+impl ServiceRequest for ListDomainAssociationsRequest {
+    type Output = ListDomainAssociationsResponse;
+    type Error = ListDomainAssociationsError;
 
-        let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/apps/{app_id}/domains", app_id = self.app_id);
+
+        let mut request = SignedRequest::new("GET", "amplify", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListDomainAssociationsResult, _>()?;
+                        .deserialize::<ListDomainAssociationsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -2635,32 +2844,41 @@ impl Amplify for AmplifyClient {
             }
         })
     }
+}
 
-    /// <p> List Jobs for a branch, part of an Amplify App. </p>
-    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResult, ListJobsError> {
+impl ServiceRequest for ListJobsRequest {
+    type Output = ListJobsResponse;
+    type Error = ListJobsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/apps/{app_id}/branches/{branch_name}/jobs",
-            app_id = input.app_id,
-            branch_name = input.branch_name
+            app_id = self.app_id,
+            branch_name = self.branch_name
         );
 
-        let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "amplify", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListJobsResult, _>()?;
+                        .deserialize::<ListJobsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -2674,26 +2892,35 @@ impl Amplify for AmplifyClient {
             }
         })
     }
+}
 
-    /// <p> Starts a new job for a branch, part of an Amplify App. </p>
-    fn start_job(&self, input: StartJobRequest) -> RusotoFuture<StartJobResult, StartJobError> {
+impl ServiceRequest for StartJobRequest {
+    type Output = StartJobResponse;
+    type Error = StartJobError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/apps/{app_id}/branches/{branch_name}/jobs",
-            app_id = input.app_id,
-            branch_name = input.branch_name
+            app_id = self.app_id,
+            branch_name = self.branch_name
         );
 
-        let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "amplify", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartJobResult, _>()?;
+                        .deserialize::<StartJobResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -2707,24 +2934,33 @@ impl Amplify for AmplifyClient {
             }
         })
     }
+}
 
-    /// <p> Stop a job that is in progress, for an Amplify branch, part of Amplify App. </p>
-    fn stop_job(&self, input: StopJobRequest) -> RusotoFuture<StopJobResult, StopJobError> {
+impl ServiceRequest for StopJobRequest {
+    type Output = StopJobResponse;
+    type Error = StopJobError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/apps/{app_id}/branches/{branch_name}/jobs/{job_id}/stop",
-            app_id = input.app_id,
-            branch_name = input.branch_name,
-            job_id = input.job_id
+            app_id = self.app_id,
+            branch_name = self.branch_name,
+            job_id = self.job_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "amplify", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "amplify", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StopJobResult, _>()?;
+                        .deserialize::<StopJobResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -2738,22 +2974,31 @@ impl Amplify for AmplifyClient {
             }
         })
     }
+}
 
-    /// <p> Updates an existing Amplify App. </p>
-    fn update_app(&self, input: UpdateAppRequest) -> RusotoFuture<UpdateAppResult, UpdateAppError> {
-        let request_uri = format!("/apps/{app_id}", app_id = input.app_id);
+impl ServiceRequest for UpdateAppRequest {
+    type Output = UpdateAppResponse;
+    type Error = UpdateAppError;
 
-        let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/apps/{app_id}", app_id = self.app_id);
+
+        let mut request = SignedRequest::new("POST", "amplify", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateAppResult, _>()?;
+                        .deserialize::<UpdateAppResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -2767,29 +3012,35 @@ impl Amplify for AmplifyClient {
             }
         })
     }
+}
 
-    /// <p> Updates a branch for an Amplify App. </p>
-    fn update_branch(
-        &self,
-        input: UpdateBranchRequest,
-    ) -> RusotoFuture<UpdateBranchResult, UpdateBranchError> {
+impl ServiceRequest for UpdateBranchRequest {
+    type Output = UpdateBranchResponse;
+    type Error = UpdateBranchError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/apps/{app_id}/branches/{branch_name}",
-            app_id = input.app_id,
-            branch_name = input.branch_name
+            app_id = self.app_id,
+            branch_name = self.branch_name
         );
 
-        let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "amplify", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateBranchResult, _>()?;
+                        .deserialize::<UpdateBranchResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -2803,29 +3054,35 @@ impl Amplify for AmplifyClient {
             }
         })
     }
+}
 
-    /// <p> Create a new DomainAssociation on an App </p>
-    fn update_domain_association(
-        &self,
-        input: UpdateDomainAssociationRequest,
-    ) -> RusotoFuture<UpdateDomainAssociationResult, UpdateDomainAssociationError> {
+impl ServiceRequest for UpdateDomainAssociationRequest {
+    type Output = UpdateDomainAssociationResponse;
+    type Error = UpdateDomainAssociationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/apps/{app_id}/domains/{domain_name}",
-            app_id = input.app_id,
-            domain_name = input.domain_name
+            app_id = self.app_id,
+            domain_name = self.domain_name
         );
 
-        let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "amplify", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateDomainAssociationResult, _>()?;
+                        .deserialize::<UpdateDomainAssociationResponse, _>()?;
 
                     Ok(result)
                 }))

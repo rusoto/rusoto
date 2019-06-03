@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -34,12 +35,20 @@ pub struct AssociateKmsKeyRequest {
     pub log_group_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AssociateKmsKeyResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CancelExportTaskRequest {
     /// <p>The ID of the export task.</p>
     #[serde(rename = "taskId")]
     pub task_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CancelExportTaskResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateExportTaskRequest {
@@ -93,6 +102,10 @@ pub struct CreateLogGroupRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateLogGroupResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateLogStreamRequest {
     /// <p>The name of the log group.</p>
@@ -103,6 +116,10 @@ pub struct CreateLogStreamRequest {
     pub log_stream_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateLogStreamResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDestinationRequest {
     /// <p>The name of the destination.</p>
@@ -110,12 +127,20 @@ pub struct DeleteDestinationRequest {
     pub destination_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteDestinationResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteLogGroupRequest {
     /// <p>The name of the log group.</p>
     #[serde(rename = "logGroupName")]
     pub log_group_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteLogGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteLogStreamRequest {
@@ -127,6 +152,10 @@ pub struct DeleteLogStreamRequest {
     pub log_stream_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteLogStreamResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteMetricFilterRequest {
     /// <p>The name of the metric filter.</p>
@@ -137,6 +166,10 @@ pub struct DeleteMetricFilterRequest {
     pub log_group_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteMetricFilterResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteResourcePolicyRequest {
     /// <p>The name of the policy to be revoked. This parameter is required.</p>
@@ -145,12 +178,20 @@ pub struct DeleteResourcePolicyRequest {
     pub policy_name: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteResourcePolicyResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteRetentionPolicyRequest {
     /// <p>The name of the log group.</p>
     #[serde(rename = "logGroupName")]
     pub log_group_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteRetentionPolicyResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteSubscriptionFilterRequest {
@@ -161,6 +202,10 @@ pub struct DeleteSubscriptionFilterRequest {
     #[serde(rename = "logGroupName")]
     pub log_group_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteSubscriptionFilterResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeDestinationsRequest {
@@ -450,6 +495,10 @@ pub struct DisassociateKmsKeyRequest {
     #[serde(rename = "logGroupName")]
     pub log_group_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DisassociateKmsKeyResponse {}
 
 /// <p>Represents an export task.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -911,6 +960,10 @@ pub struct PutDestinationPolicyRequest {
     pub destination_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutDestinationPolicyResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutDestinationRequest {
     /// <p>A name for the destination.</p>
@@ -979,6 +1032,10 @@ pub struct PutMetricFilterRequest {
     pub metric_transformations: Vec<MetricTransformation>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutMetricFilterResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutResourcePolicyRequest {
     /// <p>Details of the new policy, including the identity of the principal that is enabled to put logs to this account. This is formatted as a JSON string.</p> <p>The following example creates a resource policy enabling the Route 53 service to put DNS query logs in to the specified log group. Replace "logArn" with the ARN of your CloudWatch Logs resource, such as a log group or log stream.</p> <p> <code>{ "Version": "2012-10-17", "Statement": [ { "Sid": "Route53LogsToCloudWatchLogs", "Effect": "Allow", "Principal": { "Service": [ "route53.amazonaws.com" ] }, "Action":"logs:PutLogEvents", "Resource": "logArn" } ] } </code> </p>
@@ -1009,6 +1066,10 @@ pub struct PutRetentionPolicyRequest {
     pub retention_in_days: i64,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutRetentionPolicyResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutSubscriptionFilterRequest {
     /// <p><p>The ARN of the destination to deliver matching log events to. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination (specified using an ARN) belonging to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose delivery stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function belonging to the same account as the subscription filter, for same-account delivery.</p> </li> </ul></p>
@@ -1032,6 +1093,10 @@ pub struct PutSubscriptionFilterRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutSubscriptionFilterResponse {}
 
 /// <p>Reserved.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -1246,6 +1311,10 @@ pub struct TagLogGroupRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagLogGroupResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TestMetricFilterRequest {
     #[serde(rename = "filterPattern")]
@@ -1273,6 +1342,10 @@ pub struct UntagLogGroupRequest {
     #[serde(rename = "tags")]
     pub tags: Vec<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagLogGroupResponse {}
 
 /// Errors returned by AssociateKmsKey
 #[derive(Debug, PartialEq)]
@@ -3224,232 +3297,187 @@ impl Error for UntagLogGroupError {
 /// Trait representing the capabilities of the Amazon CloudWatch Logs API. Amazon CloudWatch Logs clients implement this trait.
 pub trait CloudWatchLogs {
     /// <p>Associates the specified AWS Key Management Service (AWS KMS) customer master key (CMK) with the specified log group.</p> <p>Associating an AWS KMS CMK with a log group overrides any existing associations between the log group and a CMK. After a CMK is associated with a log group, all newly ingested data for the log group is encrypted using the CMK. This association is stored as long as the data encrypted with the CMK is still within Amazon CloudWatch Logs. This enables Amazon CloudWatch Logs to decrypt this data whenever it is requested.</p> <p>Note that it can take up to 5 minutes for this operation to take effect.</p> <p>If you attempt to associate a CMK with a log group but the CMK does not exist or the CMK is disabled, you will receive an <code>InvalidParameterException</code> error. </p>
-    fn associate_kms_key(
-        &self,
-        input: AssociateKmsKeyRequest,
-    ) -> RusotoFuture<(), AssociateKmsKeyError>;
+    fn associate_kms_key(&self, input: AssociateKmsKeyRequest) -> Request<AssociateKmsKeyRequest>;
 
     /// <p>Cancels the specified export task.</p> <p>The task must be in the <code>PENDING</code> or <code>RUNNING</code> state.</p>
     fn cancel_export_task(
         &self,
         input: CancelExportTaskRequest,
-    ) -> RusotoFuture<(), CancelExportTaskError>;
+    ) -> Request<CancelExportTaskRequest>;
 
     /// <p>Creates an export task, which allows you to efficiently export data from a log group to an Amazon S3 bucket.</p> <p>This is an asynchronous call. If all the required information is provided, this operation initiates an export task and responds with the ID of the task. After the task has started, you can use <a>DescribeExportTasks</a> to get the status of the export task. Each account can only have one active (<code>RUNNING</code> or <code>PENDING</code>) export task at a time. To cancel an export task, use <a>CancelExportTask</a>.</p> <p>You can export logs from multiple log groups or multiple time ranges to the same S3 bucket. To separate out log data for each export task, you can specify a prefix to be used as the Amazon S3 key prefix for all exported objects.</p>
     fn create_export_task(
         &self,
         input: CreateExportTaskRequest,
-    ) -> RusotoFuture<CreateExportTaskResponse, CreateExportTaskError>;
+    ) -> Request<CreateExportTaskRequest>;
 
     /// <p>Creates a log group with the specified name.</p> <p>You can create up to 5000 log groups per account.</p> <p>You must use the following guidelines when naming a log group:</p> <ul> <li> <p>Log group names must be unique within a region for an AWS account.</p> </li> <li> <p>Log group names can be between 1 and 512 characters long.</p> </li> <li> <p>Log group names consist of the following characters: a-z, A-Z, 0-9, '_' (underscore), '-' (hyphen), '/' (forward slash), and '.' (period).</p> </li> </ul> <p>If you associate a AWS Key Management Service (AWS KMS) customer master key (CMK) with the log group, ingested data is encrypted using the CMK. This association is stored as long as the data encrypted with the CMK is still within Amazon CloudWatch Logs. This enables Amazon CloudWatch Logs to decrypt this data whenever it is requested.</p> <p>If you attempt to associate a CMK with the log group but the CMK does not exist or the CMK is disabled, you will receive an <code>InvalidParameterException</code> error. </p>
-    fn create_log_group(
-        &self,
-        input: CreateLogGroupRequest,
-    ) -> RusotoFuture<(), CreateLogGroupError>;
+    fn create_log_group(&self, input: CreateLogGroupRequest) -> Request<CreateLogGroupRequest>;
 
     /// <p><p>Creates a log stream for the specified log group.</p> <p>There is no limit on the number of log streams that you can create for a log group.</p> <p>You must use the following guidelines when naming a log stream:</p> <ul> <li> <p>Log stream names must be unique within the log group.</p> </li> <li> <p>Log stream names can be between 1 and 512 characters long.</p> </li> <li> <p>The &#39;:&#39; (colon) and &#39;*&#39; (asterisk) characters are not allowed.</p> </li> </ul></p>
-    fn create_log_stream(
-        &self,
-        input: CreateLogStreamRequest,
-    ) -> RusotoFuture<(), CreateLogStreamError>;
+    fn create_log_stream(&self, input: CreateLogStreamRequest) -> Request<CreateLogStreamRequest>;
 
     /// <p>Deletes the specified destination, and eventually disables all the subscription filters that publish to it. This operation does not delete the physical resource encapsulated by the destination.</p>
     fn delete_destination(
         &self,
         input: DeleteDestinationRequest,
-    ) -> RusotoFuture<(), DeleteDestinationError>;
+    ) -> Request<DeleteDestinationRequest>;
 
     /// <p>Deletes the specified log group and permanently deletes all the archived log events associated with the log group.</p>
-    fn delete_log_group(
-        &self,
-        input: DeleteLogGroupRequest,
-    ) -> RusotoFuture<(), DeleteLogGroupError>;
+    fn delete_log_group(&self, input: DeleteLogGroupRequest) -> Request<DeleteLogGroupRequest>;
 
     /// <p>Deletes the specified log stream and permanently deletes all the archived log events associated with the log stream.</p>
-    fn delete_log_stream(
-        &self,
-        input: DeleteLogStreamRequest,
-    ) -> RusotoFuture<(), DeleteLogStreamError>;
+    fn delete_log_stream(&self, input: DeleteLogStreamRequest) -> Request<DeleteLogStreamRequest>;
 
     /// <p>Deletes the specified metric filter.</p>
     fn delete_metric_filter(
         &self,
         input: DeleteMetricFilterRequest,
-    ) -> RusotoFuture<(), DeleteMetricFilterError>;
+    ) -> Request<DeleteMetricFilterRequest>;
 
     /// <p>Deletes a resource policy from this account. This revokes the access of the identities in that policy to put log events to this account.</p>
     fn delete_resource_policy(
         &self,
         input: DeleteResourcePolicyRequest,
-    ) -> RusotoFuture<(), DeleteResourcePolicyError>;
+    ) -> Request<DeleteResourcePolicyRequest>;
 
     /// <p>Deletes the specified retention policy.</p> <p>Log events do not expire if they belong to log groups without a retention policy.</p>
     fn delete_retention_policy(
         &self,
         input: DeleteRetentionPolicyRequest,
-    ) -> RusotoFuture<(), DeleteRetentionPolicyError>;
+    ) -> Request<DeleteRetentionPolicyRequest>;
 
     /// <p>Deletes the specified subscription filter.</p>
     fn delete_subscription_filter(
         &self,
         input: DeleteSubscriptionFilterRequest,
-    ) -> RusotoFuture<(), DeleteSubscriptionFilterError>;
+    ) -> Request<DeleteSubscriptionFilterRequest>;
 
     /// <p>Lists all your destinations. The results are ASCII-sorted by destination name.</p>
     fn describe_destinations(
         &self,
         input: DescribeDestinationsRequest,
-    ) -> RusotoFuture<DescribeDestinationsResponse, DescribeDestinationsError>;
+    ) -> Request<DescribeDestinationsRequest>;
 
     /// <p>Lists the specified export tasks. You can list all your export tasks or filter the results based on task ID or task status.</p>
     fn describe_export_tasks(
         &self,
         input: DescribeExportTasksRequest,
-    ) -> RusotoFuture<DescribeExportTasksResponse, DescribeExportTasksError>;
+    ) -> Request<DescribeExportTasksRequest>;
 
     /// <p>Lists the specified log groups. You can list all your log groups or filter the results by prefix. The results are ASCII-sorted by log group name.</p>
     fn describe_log_groups(
         &self,
         input: DescribeLogGroupsRequest,
-    ) -> RusotoFuture<DescribeLogGroupsResponse, DescribeLogGroupsError>;
+    ) -> Request<DescribeLogGroupsRequest>;
 
     /// <p>Lists the log streams for the specified log group. You can list all the log streams or filter the results by prefix. You can also control how the results are ordered.</p> <p>This operation has a limit of five transactions per second, after which transactions are throttled.</p>
     fn describe_log_streams(
         &self,
         input: DescribeLogStreamsRequest,
-    ) -> RusotoFuture<DescribeLogStreamsResponse, DescribeLogStreamsError>;
+    ) -> Request<DescribeLogStreamsRequest>;
 
     /// <p>Lists the specified metric filters. You can list all the metric filters or filter the results by log name, prefix, metric name, or metric namespace. The results are ASCII-sorted by filter name.</p>
     fn describe_metric_filters(
         &self,
         input: DescribeMetricFiltersRequest,
-    ) -> RusotoFuture<DescribeMetricFiltersResponse, DescribeMetricFiltersError>;
+    ) -> Request<DescribeMetricFiltersRequest>;
 
     /// <p>Returns a list of CloudWatch Logs Insights queries that are scheduled, executing, or have been executed recently in this account. You can request all queries, or limit it to queries of a specific log group or queries with a certain status.</p>
-    fn describe_queries(
-        &self,
-        input: DescribeQueriesRequest,
-    ) -> RusotoFuture<DescribeQueriesResponse, DescribeQueriesError>;
+    fn describe_queries(&self, input: DescribeQueriesRequest) -> Request<DescribeQueriesRequest>;
 
     /// <p>Lists the resource policies in this account.</p>
     fn describe_resource_policies(
         &self,
         input: DescribeResourcePoliciesRequest,
-    ) -> RusotoFuture<DescribeResourcePoliciesResponse, DescribeResourcePoliciesError>;
+    ) -> Request<DescribeResourcePoliciesRequest>;
 
     /// <p>Lists the subscription filters for the specified log group. You can list all the subscription filters or filter the results by prefix. The results are ASCII-sorted by filter name.</p>
     fn describe_subscription_filters(
         &self,
         input: DescribeSubscriptionFiltersRequest,
-    ) -> RusotoFuture<DescribeSubscriptionFiltersResponse, DescribeSubscriptionFiltersError>;
+    ) -> Request<DescribeSubscriptionFiltersRequest>;
 
     /// <p>Disassociates the associated AWS Key Management Service (AWS KMS) customer master key (CMK) from the specified log group.</p> <p>After the AWS KMS CMK is disassociated from the log group, AWS CloudWatch Logs stops encrypting newly ingested data for the log group. All previously ingested data remains encrypted, and AWS CloudWatch Logs requires permissions for the CMK whenever the encrypted data is requested.</p> <p>Note that it can take up to 5 minutes for this operation to take effect.</p>
     fn disassociate_kms_key(
         &self,
         input: DisassociateKmsKeyRequest,
-    ) -> RusotoFuture<(), DisassociateKmsKeyError>;
+    ) -> Request<DisassociateKmsKeyRequest>;
 
     /// <p>Lists log events from the specified log group. You can list all the log events or filter the results using a filter pattern, a time range, and the name of the log stream.</p> <p>By default, this operation returns as many log events as can fit in 1 MB (up to 10,000 log events), or all the events found within the time range that you specify. If the results include a token, then there are more log events available, and you can get additional results by specifying the token in a subsequent call.</p>
-    fn filter_log_events(
-        &self,
-        input: FilterLogEventsRequest,
-    ) -> RusotoFuture<FilterLogEventsResponse, FilterLogEventsError>;
+    fn filter_log_events(&self, input: FilterLogEventsRequest) -> Request<FilterLogEventsRequest>;
 
     /// <p>Lists log events from the specified log stream. You can list all the log events or filter using a time range.</p> <p>By default, this operation returns as many log events as can fit in a response size of 1MB (up to 10,000 log events). You can get additional log events by specifying one of the tokens in a subsequent call.</p>
-    fn get_log_events(
-        &self,
-        input: GetLogEventsRequest,
-    ) -> RusotoFuture<GetLogEventsResponse, GetLogEventsError>;
+    fn get_log_events(&self, input: GetLogEventsRequest) -> Request<GetLogEventsRequest>;
 
     /// <p>Returns a list of the fields that are included in log events in the specified log group, along with the percentage of log events that contain each field. The search is limited to a time period that you specify.</p> <p>In the results, fields that start with @ are fields generated by CloudWatch Logs. For example, <code>@timestamp</code> is the timestamp of each log event.</p> <p>The response results are sorted by the frequency percentage, starting with the highest percentage.</p>
     fn get_log_group_fields(
         &self,
         input: GetLogGroupFieldsRequest,
-    ) -> RusotoFuture<GetLogGroupFieldsResponse, GetLogGroupFieldsError>;
+    ) -> Request<GetLogGroupFieldsRequest>;
 
     /// <p>Retrieves all the fields and values of a single log event. All fields are retrieved, even if the original query that produced the <code>logRecordPointer</code> retrieved only a subset of fields. Fields are returned as field name/field value pairs.</p> <p>Additionally, the entire unparsed log event is returned within <code>@message</code>.</p>
-    fn get_log_record(
-        &self,
-        input: GetLogRecordRequest,
-    ) -> RusotoFuture<GetLogRecordResponse, GetLogRecordError>;
+    fn get_log_record(&self, input: GetLogRecordRequest) -> Request<GetLogRecordRequest>;
 
     /// <p>Returns the results from the specified query. If the query is in progress, partial results of that current execution are returned. Only the fields requested in the query are returned.</p> <p> <code>GetQueryResults</code> does not start a query execution. To run a query, use .</p>
-    fn get_query_results(
-        &self,
-        input: GetQueryResultsRequest,
-    ) -> RusotoFuture<GetQueryResultsResponse, GetQueryResultsError>;
+    fn get_query_results(&self, input: GetQueryResultsRequest) -> Request<GetQueryResultsRequest>;
 
     /// <p>Lists the tags for the specified log group.</p>
     fn list_tags_log_group(
         &self,
         input: ListTagsLogGroupRequest,
-    ) -> RusotoFuture<ListTagsLogGroupResponse, ListTagsLogGroupError>;
+    ) -> Request<ListTagsLogGroupRequest>;
 
     /// <p>Creates or updates a destination. A destination encapsulates a physical resource (such as an Amazon Kinesis stream) and enables you to subscribe to a real-time stream of log events for a different account, ingested using <a>PutLogEvents</a>. Currently, the only supported physical resource is a Kinesis stream belonging to the same account as the destination.</p> <p>Through an access policy, a destination controls what is written to its Kinesis stream. By default, <code>PutDestination</code> does not set any access policy with the destination, which means a cross-account user cannot call <a>PutSubscriptionFilter</a> against this destination. To enable this, the destination owner must call <a>PutDestinationPolicy</a> after <code>PutDestination</code>.</p>
-    fn put_destination(
-        &self,
-        input: PutDestinationRequest,
-    ) -> RusotoFuture<PutDestinationResponse, PutDestinationError>;
+    fn put_destination(&self, input: PutDestinationRequest) -> Request<PutDestinationRequest>;
 
     /// <p>Creates or updates an access policy associated with an existing destination. An access policy is an <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies_overview.html">IAM policy document</a> that is used to authorize claims to register a subscription filter against a given destination.</p>
     fn put_destination_policy(
         &self,
         input: PutDestinationPolicyRequest,
-    ) -> RusotoFuture<(), PutDestinationPolicyError>;
+    ) -> Request<PutDestinationPolicyRequest>;
 
     /// <p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>. If you call <code>PutLogEvents</code> twice within a narrow time period using the same value for <code>sequenceToken</code>, both calls may be successful, or one may be rejected.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their timestamp. The timestamp is the time the event occurred, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. (In AWS Tools for PowerShell and the AWS SDK for .NET, the timestamp is specified in .NET format: yyyy-mm-ddThh:mm:ss. For example, 2017-09-15T13:45:30.) </p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul> <p>If a call to PutLogEvents returns "UnrecognizedClientException" the most likely cause is an invalid AWS access key ID or secret key. </p>
-    fn put_log_events(
-        &self,
-        input: PutLogEventsRequest,
-    ) -> RusotoFuture<PutLogEventsResponse, PutLogEventsError>;
+    fn put_log_events(&self, input: PutLogEventsRequest) -> Request<PutLogEventsRequest>;
 
     /// <p>Creates or updates a metric filter and associates it with the specified log group. Metric filters allow you to configure rules to extract metric data from log events ingested through <a>PutLogEvents</a>.</p> <p>The maximum number of metric filters that can be associated with a log group is 100.</p>
-    fn put_metric_filter(
-        &self,
-        input: PutMetricFilterRequest,
-    ) -> RusotoFuture<(), PutMetricFilterError>;
+    fn put_metric_filter(&self, input: PutMetricFilterRequest) -> Request<PutMetricFilterRequest>;
 
     /// <p>Creates or updates a resource policy allowing other AWS services to put log events to this account, such as Amazon Route 53. An account can have up to 10 resource policies per region.</p>
     fn put_resource_policy(
         &self,
         input: PutResourcePolicyRequest,
-    ) -> RusotoFuture<PutResourcePolicyResponse, PutResourcePolicyError>;
+    ) -> Request<PutResourcePolicyRequest>;
 
     /// <p>Sets the retention of the specified log group. A retention policy allows you to configure the number of days for which to retain log events in the specified log group.</p>
     fn put_retention_policy(
         &self,
         input: PutRetentionPolicyRequest,
-    ) -> RusotoFuture<(), PutRetentionPolicyError>;
+    ) -> Request<PutRetentionPolicyRequest>;
 
     /// <p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose delivery stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call fails because you cannot associate a second filter with a log group.</p>
     fn put_subscription_filter(
         &self,
         input: PutSubscriptionFilterRequest,
-    ) -> RusotoFuture<(), PutSubscriptionFilterError>;
+    ) -> Request<PutSubscriptionFilterRequest>;
 
     /// <p>Schedules a query of a log group using CloudWatch Logs Insights. You specify the log group and time range to query, and the query string to use.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html">CloudWatch Logs Insights Query Syntax</a>.</p>
-    fn start_query(
-        &self,
-        input: StartQueryRequest,
-    ) -> RusotoFuture<StartQueryResponse, StartQueryError>;
+    fn start_query(&self, input: StartQueryRequest) -> Request<StartQueryRequest>;
 
     /// <p>Stops a CloudWatch Logs Insights query that is in progress. If the query has already ended, the operation returns an error indicating that the specified query is not running.</p>
-    fn stop_query(
-        &self,
-        input: StopQueryRequest,
-    ) -> RusotoFuture<StopQueryResponse, StopQueryError>;
+    fn stop_query(&self, input: StopQueryRequest) -> Request<StopQueryRequest>;
 
     /// <p>Adds or updates the specified tags for the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/log-group-tagging.html">Tag Log Groups in Amazon CloudWatch Logs</a> in the <i>Amazon CloudWatch Logs User Guide</i>.</p>
-    fn tag_log_group(&self, input: TagLogGroupRequest) -> RusotoFuture<(), TagLogGroupError>;
+    fn tag_log_group(&self, input: TagLogGroupRequest) -> Request<TagLogGroupRequest>;
 
     /// <p>Tests the filter pattern of a metric filter against a sample of log event messages. You can use this operation to validate the correctness of a metric filter pattern.</p>
     fn test_metric_filter(
         &self,
         input: TestMetricFilterRequest,
-    ) -> RusotoFuture<TestMetricFilterResponse, TestMetricFilterError>;
+    ) -> Request<TestMetricFilterRequest>;
 
     /// <p>Removes the specified tags from the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To add tags, use <a>UntagLogGroup</a>.</p>
-    fn untag_log_group(&self, input: UntagLogGroupRequest) -> RusotoFuture<(), UntagLogGroupError>;
+    fn untag_log_group(&self, input: UntagLogGroupRequest) -> Request<UntagLogGroupRequest>;
 }
 /// A client for the Amazon CloudWatch Logs API.
 #[derive(Clone)]
@@ -3489,20 +3517,289 @@ impl CloudWatchLogsClient {
 
 impl CloudWatchLogs for CloudWatchLogsClient {
     /// <p>Associates the specified AWS Key Management Service (AWS KMS) customer master key (CMK) with the specified log group.</p> <p>Associating an AWS KMS CMK with a log group overrides any existing associations between the log group and a CMK. After a CMK is associated with a log group, all newly ingested data for the log group is encrypted using the CMK. This association is stored as long as the data encrypted with the CMK is still within Amazon CloudWatch Logs. This enables Amazon CloudWatch Logs to decrypt this data whenever it is requested.</p> <p>Note that it can take up to 5 minutes for this operation to take effect.</p> <p>If you attempt to associate a CMK with a log group but the CMK does not exist or the CMK is disabled, you will receive an <code>InvalidParameterException</code> error. </p>
-    fn associate_kms_key(
+    fn associate_kms_key(&self, input: AssociateKmsKeyRequest) -> Request<AssociateKmsKeyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Cancels the specified export task.</p> <p>The task must be in the <code>PENDING</code> or <code>RUNNING</code> state.</p>
+    fn cancel_export_task(
         &self,
-        input: AssociateKmsKeyRequest,
-    ) -> RusotoFuture<(), AssociateKmsKeyError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        input: CancelExportTaskRequest,
+    ) -> Request<CancelExportTaskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an export task, which allows you to efficiently export data from a log group to an Amazon S3 bucket.</p> <p>This is an asynchronous call. If all the required information is provided, this operation initiates an export task and responds with the ID of the task. After the task has started, you can use <a>DescribeExportTasks</a> to get the status of the export task. Each account can only have one active (<code>RUNNING</code> or <code>PENDING</code>) export task at a time. To cancel an export task, use <a>CancelExportTask</a>.</p> <p>You can export logs from multiple log groups or multiple time ranges to the same S3 bucket. To separate out log data for each export task, you can specify a prefix to be used as the Amazon S3 key prefix for all exported objects.</p>
+    fn create_export_task(
+        &self,
+        input: CreateExportTaskRequest,
+    ) -> Request<CreateExportTaskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a log group with the specified name.</p> <p>You can create up to 5000 log groups per account.</p> <p>You must use the following guidelines when naming a log group:</p> <ul> <li> <p>Log group names must be unique within a region for an AWS account.</p> </li> <li> <p>Log group names can be between 1 and 512 characters long.</p> </li> <li> <p>Log group names consist of the following characters: a-z, A-Z, 0-9, '_' (underscore), '-' (hyphen), '/' (forward slash), and '.' (period).</p> </li> </ul> <p>If you associate a AWS Key Management Service (AWS KMS) customer master key (CMK) with the log group, ingested data is encrypted using the CMK. This association is stored as long as the data encrypted with the CMK is still within Amazon CloudWatch Logs. This enables Amazon CloudWatch Logs to decrypt this data whenever it is requested.</p> <p>If you attempt to associate a CMK with the log group but the CMK does not exist or the CMK is disabled, you will receive an <code>InvalidParameterException</code> error. </p>
+    fn create_log_group(&self, input: CreateLogGroupRequest) -> Request<CreateLogGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a log stream for the specified log group.</p> <p>There is no limit on the number of log streams that you can create for a log group.</p> <p>You must use the following guidelines when naming a log stream:</p> <ul> <li> <p>Log stream names must be unique within the log group.</p> </li> <li> <p>Log stream names can be between 1 and 512 characters long.</p> </li> <li> <p>The &#39;:&#39; (colon) and &#39;*&#39; (asterisk) characters are not allowed.</p> </li> </ul></p>
+    fn create_log_stream(&self, input: CreateLogStreamRequest) -> Request<CreateLogStreamRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified destination, and eventually disables all the subscription filters that publish to it. This operation does not delete the physical resource encapsulated by the destination.</p>
+    fn delete_destination(
+        &self,
+        input: DeleteDestinationRequest,
+    ) -> Request<DeleteDestinationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified log group and permanently deletes all the archived log events associated with the log group.</p>
+    fn delete_log_group(&self, input: DeleteLogGroupRequest) -> Request<DeleteLogGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified log stream and permanently deletes all the archived log events associated with the log stream.</p>
+    fn delete_log_stream(&self, input: DeleteLogStreamRequest) -> Request<DeleteLogStreamRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified metric filter.</p>
+    fn delete_metric_filter(
+        &self,
+        input: DeleteMetricFilterRequest,
+    ) -> Request<DeleteMetricFilterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a resource policy from this account. This revokes the access of the identities in that policy to put log events to this account.</p>
+    fn delete_resource_policy(
+        &self,
+        input: DeleteResourcePolicyRequest,
+    ) -> Request<DeleteResourcePolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified retention policy.</p> <p>Log events do not expire if they belong to log groups without a retention policy.</p>
+    fn delete_retention_policy(
+        &self,
+        input: DeleteRetentionPolicyRequest,
+    ) -> Request<DeleteRetentionPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified subscription filter.</p>
+    fn delete_subscription_filter(
+        &self,
+        input: DeleteSubscriptionFilterRequest,
+    ) -> Request<DeleteSubscriptionFilterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all your destinations. The results are ASCII-sorted by destination name.</p>
+    fn describe_destinations(
+        &self,
+        input: DescribeDestinationsRequest,
+    ) -> Request<DescribeDestinationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the specified export tasks. You can list all your export tasks or filter the results based on task ID or task status.</p>
+    fn describe_export_tasks(
+        &self,
+        input: DescribeExportTasksRequest,
+    ) -> Request<DescribeExportTasksRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the specified log groups. You can list all your log groups or filter the results by prefix. The results are ASCII-sorted by log group name.</p>
+    fn describe_log_groups(
+        &self,
+        input: DescribeLogGroupsRequest,
+    ) -> Request<DescribeLogGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the log streams for the specified log group. You can list all the log streams or filter the results by prefix. You can also control how the results are ordered.</p> <p>This operation has a limit of five transactions per second, after which transactions are throttled.</p>
+    fn describe_log_streams(
+        &self,
+        input: DescribeLogStreamsRequest,
+    ) -> Request<DescribeLogStreamsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the specified metric filters. You can list all the metric filters or filter the results by log name, prefix, metric name, or metric namespace. The results are ASCII-sorted by filter name.</p>
+    fn describe_metric_filters(
+        &self,
+        input: DescribeMetricFiltersRequest,
+    ) -> Request<DescribeMetricFiltersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of CloudWatch Logs Insights queries that are scheduled, executing, or have been executed recently in this account. You can request all queries, or limit it to queries of a specific log group or queries with a certain status.</p>
+    fn describe_queries(&self, input: DescribeQueriesRequest) -> Request<DescribeQueriesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the resource policies in this account.</p>
+    fn describe_resource_policies(
+        &self,
+        input: DescribeResourcePoliciesRequest,
+    ) -> Request<DescribeResourcePoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the subscription filters for the specified log group. You can list all the subscription filters or filter the results by prefix. The results are ASCII-sorted by filter name.</p>
+    fn describe_subscription_filters(
+        &self,
+        input: DescribeSubscriptionFiltersRequest,
+    ) -> Request<DescribeSubscriptionFiltersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disassociates the associated AWS Key Management Service (AWS KMS) customer master key (CMK) from the specified log group.</p> <p>After the AWS KMS CMK is disassociated from the log group, AWS CloudWatch Logs stops encrypting newly ingested data for the log group. All previously ingested data remains encrypted, and AWS CloudWatch Logs requires permissions for the CMK whenever the encrypted data is requested.</p> <p>Note that it can take up to 5 minutes for this operation to take effect.</p>
+    fn disassociate_kms_key(
+        &self,
+        input: DisassociateKmsKeyRequest,
+    ) -> Request<DisassociateKmsKeyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists log events from the specified log group. You can list all the log events or filter the results using a filter pattern, a time range, and the name of the log stream.</p> <p>By default, this operation returns as many log events as can fit in 1 MB (up to 10,000 log events), or all the events found within the time range that you specify. If the results include a token, then there are more log events available, and you can get additional results by specifying the token in a subsequent call.</p>
+    fn filter_log_events(&self, input: FilterLogEventsRequest) -> Request<FilterLogEventsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists log events from the specified log stream. You can list all the log events or filter using a time range.</p> <p>By default, this operation returns as many log events as can fit in a response size of 1MB (up to 10,000 log events). You can get additional log events by specifying one of the tokens in a subsequent call.</p>
+    fn get_log_events(&self, input: GetLogEventsRequest) -> Request<GetLogEventsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of the fields that are included in log events in the specified log group, along with the percentage of log events that contain each field. The search is limited to a time period that you specify.</p> <p>In the results, fields that start with @ are fields generated by CloudWatch Logs. For example, <code>@timestamp</code> is the timestamp of each log event.</p> <p>The response results are sorted by the frequency percentage, starting with the highest percentage.</p>
+    fn get_log_group_fields(
+        &self,
+        input: GetLogGroupFieldsRequest,
+    ) -> Request<GetLogGroupFieldsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves all the fields and values of a single log event. All fields are retrieved, even if the original query that produced the <code>logRecordPointer</code> retrieved only a subset of fields. Fields are returned as field name/field value pairs.</p> <p>Additionally, the entire unparsed log event is returned within <code>@message</code>.</p>
+    fn get_log_record(&self, input: GetLogRecordRequest) -> Request<GetLogRecordRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the results from the specified query. If the query is in progress, partial results of that current execution are returned. Only the fields requested in the query are returned.</p> <p> <code>GetQueryResults</code> does not start a query execution. To run a query, use .</p>
+    fn get_query_results(&self, input: GetQueryResultsRequest) -> Request<GetQueryResultsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the tags for the specified log group.</p>
+    fn list_tags_log_group(
+        &self,
+        input: ListTagsLogGroupRequest,
+    ) -> Request<ListTagsLogGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates or updates a destination. A destination encapsulates a physical resource (such as an Amazon Kinesis stream) and enables you to subscribe to a real-time stream of log events for a different account, ingested using <a>PutLogEvents</a>. Currently, the only supported physical resource is a Kinesis stream belonging to the same account as the destination.</p> <p>Through an access policy, a destination controls what is written to its Kinesis stream. By default, <code>PutDestination</code> does not set any access policy with the destination, which means a cross-account user cannot call <a>PutSubscriptionFilter</a> against this destination. To enable this, the destination owner must call <a>PutDestinationPolicy</a> after <code>PutDestination</code>.</p>
+    fn put_destination(&self, input: PutDestinationRequest) -> Request<PutDestinationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates or updates an access policy associated with an existing destination. An access policy is an <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies_overview.html">IAM policy document</a> that is used to authorize claims to register a subscription filter against a given destination.</p>
+    fn put_destination_policy(
+        &self,
+        input: PutDestinationPolicyRequest,
+    ) -> Request<PutDestinationPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>. If you call <code>PutLogEvents</code> twice within a narrow time period using the same value for <code>sequenceToken</code>, both calls may be successful, or one may be rejected.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their timestamp. The timestamp is the time the event occurred, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. (In AWS Tools for PowerShell and the AWS SDK for .NET, the timestamp is specified in .NET format: yyyy-mm-ddThh:mm:ss. For example, 2017-09-15T13:45:30.) </p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul> <p>If a call to PutLogEvents returns "UnrecognizedClientException" the most likely cause is an invalid AWS access key ID or secret key. </p>
+    fn put_log_events(&self, input: PutLogEventsRequest) -> Request<PutLogEventsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates or updates a metric filter and associates it with the specified log group. Metric filters allow you to configure rules to extract metric data from log events ingested through <a>PutLogEvents</a>.</p> <p>The maximum number of metric filters that can be associated with a log group is 100.</p>
+    fn put_metric_filter(&self, input: PutMetricFilterRequest) -> Request<PutMetricFilterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates or updates a resource policy allowing other AWS services to put log events to this account, such as Amazon Route 53. An account can have up to 10 resource policies per region.</p>
+    fn put_resource_policy(
+        &self,
+        input: PutResourcePolicyRequest,
+    ) -> Request<PutResourcePolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the retention of the specified log group. A retention policy allows you to configure the number of days for which to retain log events in the specified log group.</p>
+    fn put_retention_policy(
+        &self,
+        input: PutRetentionPolicyRequest,
+    ) -> Request<PutRetentionPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose delivery stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call fails because you cannot associate a second filter with a log group.</p>
+    fn put_subscription_filter(
+        &self,
+        input: PutSubscriptionFilterRequest,
+    ) -> Request<PutSubscriptionFilterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Schedules a query of a log group using CloudWatch Logs Insights. You specify the log group and time range to query, and the query string to use.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html">CloudWatch Logs Insights Query Syntax</a>.</p>
+    fn start_query(&self, input: StartQueryRequest) -> Request<StartQueryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops a CloudWatch Logs Insights query that is in progress. If the query has already ended, the operation returns an error indicating that the specified query is not running.</p>
+    fn stop_query(&self, input: StopQueryRequest) -> Request<StopQueryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds or updates the specified tags for the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/log-group-tagging.html">Tag Log Groups in Amazon CloudWatch Logs</a> in the <i>Amazon CloudWatch Logs User Guide</i>.</p>
+    fn tag_log_group(&self, input: TagLogGroupRequest) -> Request<TagLogGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Tests the filter pattern of a metric filter against a sample of log event messages. You can use this operation to validate the correctness of a metric filter pattern.</p>
+    fn test_metric_filter(
+        &self,
+        input: TestMetricFilterRequest,
+    ) -> Request<TestMetricFilterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified tags from the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To add tags, use <a>UntagLogGroup</a>.</p>
+    fn untag_log_group(&self, input: UntagLogGroupRequest) -> Request<UntagLogGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AssociateKmsKeyRequest {
+    type Output = AssociateKmsKeyResponse;
+    type Error = AssociateKmsKeyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.AssociateKmsKey");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AssociateKmsKeyResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -3513,22 +3810,30 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Cancels the specified export task.</p> <p>The task must be in the <code>PENDING</code> or <code>RUNNING</code> state.</p>
-    fn cancel_export_task(
-        &self,
-        input: CancelExportTaskRequest,
-    ) -> RusotoFuture<(), CancelExportTaskError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for CancelExportTaskRequest {
+    type Output = CancelExportTaskResponse;
+    type Error = CancelExportTaskError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.CancelExportTask");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CancelExportTaskResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -3539,20 +3844,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Creates an export task, which allows you to efficiently export data from a log group to an Amazon S3 bucket.</p> <p>This is an asynchronous call. If all the required information is provided, this operation initiates an export task and responds with the ID of the task. After the task has started, you can use <a>DescribeExportTasks</a> to get the status of the export task. Each account can only have one active (<code>RUNNING</code> or <code>PENDING</code>) export task at a time. To cancel an export task, use <a>CancelExportTask</a>.</p> <p>You can export logs from multiple log groups or multiple time ranges to the same S3 bucket. To separate out log data for each export task, you can specify a prefix to be used as the Amazon S3 key prefix for all exported objects.</p>
-    fn create_export_task(
-        &self,
-        input: CreateExportTaskRequest,
-    ) -> RusotoFuture<CreateExportTaskResponse, CreateExportTaskError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for CreateExportTaskRequest {
+    type Output = CreateExportTaskResponse;
+    type Error = CreateExportTaskError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.CreateExportTask");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3568,22 +3878,30 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Creates a log group with the specified name.</p> <p>You can create up to 5000 log groups per account.</p> <p>You must use the following guidelines when naming a log group:</p> <ul> <li> <p>Log group names must be unique within a region for an AWS account.</p> </li> <li> <p>Log group names can be between 1 and 512 characters long.</p> </li> <li> <p>Log group names consist of the following characters: a-z, A-Z, 0-9, '_' (underscore), '-' (hyphen), '/' (forward slash), and '.' (period).</p> </li> </ul> <p>If you associate a AWS Key Management Service (AWS KMS) customer master key (CMK) with the log group, ingested data is encrypted using the CMK. This association is stored as long as the data encrypted with the CMK is still within Amazon CloudWatch Logs. This enables Amazon CloudWatch Logs to decrypt this data whenever it is requested.</p> <p>If you attempt to associate a CMK with the log group but the CMK does not exist or the CMK is disabled, you will receive an <code>InvalidParameterException</code> error. </p>
-    fn create_log_group(
-        &self,
-        input: CreateLogGroupRequest,
-    ) -> RusotoFuture<(), CreateLogGroupError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for CreateLogGroupRequest {
+    type Output = CreateLogGroupResponse;
+    type Error = CreateLogGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.CreateLogGroup");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateLogGroupResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -3594,22 +3912,30 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p><p>Creates a log stream for the specified log group.</p> <p>There is no limit on the number of log streams that you can create for a log group.</p> <p>You must use the following guidelines when naming a log stream:</p> <ul> <li> <p>Log stream names must be unique within the log group.</p> </li> <li> <p>Log stream names can be between 1 and 512 characters long.</p> </li> <li> <p>The &#39;:&#39; (colon) and &#39;*&#39; (asterisk) characters are not allowed.</p> </li> </ul></p>
-    fn create_log_stream(
-        &self,
-        input: CreateLogStreamRequest,
-    ) -> RusotoFuture<(), CreateLogStreamError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for CreateLogStreamRequest {
+    type Output = CreateLogStreamResponse;
+    type Error = CreateLogStreamError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.CreateLogStream");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateLogStreamResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -3620,22 +3946,30 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified destination, and eventually disables all the subscription filters that publish to it. This operation does not delete the physical resource encapsulated by the destination.</p>
-    fn delete_destination(
-        &self,
-        input: DeleteDestinationRequest,
-    ) -> RusotoFuture<(), DeleteDestinationError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for DeleteDestinationRequest {
+    type Output = DeleteDestinationResponse;
+    type Error = DeleteDestinationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DeleteDestination");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteDestinationResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -3646,22 +3980,30 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified log group and permanently deletes all the archived log events associated with the log group.</p>
-    fn delete_log_group(
-        &self,
-        input: DeleteLogGroupRequest,
-    ) -> RusotoFuture<(), DeleteLogGroupError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for DeleteLogGroupRequest {
+    type Output = DeleteLogGroupResponse;
+    type Error = DeleteLogGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DeleteLogGroup");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteLogGroupResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -3672,22 +4014,30 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified log stream and permanently deletes all the archived log events associated with the log stream.</p>
-    fn delete_log_stream(
-        &self,
-        input: DeleteLogStreamRequest,
-    ) -> RusotoFuture<(), DeleteLogStreamError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for DeleteLogStreamRequest {
+    type Output = DeleteLogStreamResponse;
+    type Error = DeleteLogStreamError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DeleteLogStream");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteLogStreamResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -3698,22 +4048,30 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified metric filter.</p>
-    fn delete_metric_filter(
-        &self,
-        input: DeleteMetricFilterRequest,
-    ) -> RusotoFuture<(), DeleteMetricFilterError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for DeleteMetricFilterRequest {
+    type Output = DeleteMetricFilterResponse;
+    type Error = DeleteMetricFilterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DeleteMetricFilter");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteMetricFilterResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -3724,22 +4082,30 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a resource policy from this account. This revokes the access of the identities in that policy to put log events to this account.</p>
-    fn delete_resource_policy(
-        &self,
-        input: DeleteResourcePolicyRequest,
-    ) -> RusotoFuture<(), DeleteResourcePolicyError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for DeleteResourcePolicyRequest {
+    type Output = DeleteResourcePolicyResponse;
+    type Error = DeleteResourcePolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DeleteResourcePolicy");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteResourcePolicyResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -3749,22 +4115,30 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified retention policy.</p> <p>Log events do not expire if they belong to log groups without a retention policy.</p>
-    fn delete_retention_policy(
-        &self,
-        input: DeleteRetentionPolicyRequest,
-    ) -> RusotoFuture<(), DeleteRetentionPolicyError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for DeleteRetentionPolicyRequest {
+    type Output = DeleteRetentionPolicyResponse;
+    type Error = DeleteRetentionPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DeleteRetentionPolicy");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteRetentionPolicyResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -3774,22 +4148,30 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified subscription filter.</p>
-    fn delete_subscription_filter(
-        &self,
-        input: DeleteSubscriptionFilterRequest,
-    ) -> RusotoFuture<(), DeleteSubscriptionFilterError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for DeleteSubscriptionFilterRequest {
+    type Output = DeleteSubscriptionFilterResponse;
+    type Error = DeleteSubscriptionFilterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DeleteSubscriptionFilter");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteSubscriptionFilterResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteSubscriptionFilterError::from_response(response))
@@ -3797,20 +4179,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Lists all your destinations. The results are ASCII-sorted by destination name.</p>
-    fn describe_destinations(
-        &self,
-        input: DescribeDestinationsRequest,
-    ) -> RusotoFuture<DescribeDestinationsResponse, DescribeDestinationsError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for DescribeDestinationsRequest {
+    type Output = DescribeDestinationsResponse;
+    type Error = DescribeDestinationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DescribeDestinations");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3825,20 +4212,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Lists the specified export tasks. You can list all your export tasks or filter the results based on task ID or task status.</p>
-    fn describe_export_tasks(
-        &self,
-        input: DescribeExportTasksRequest,
-    ) -> RusotoFuture<DescribeExportTasksResponse, DescribeExportTasksError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for DescribeExportTasksRequest {
+    type Output = DescribeExportTasksResponse;
+    type Error = DescribeExportTasksError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DescribeExportTasks");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3853,20 +4245,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Lists the specified log groups. You can list all your log groups or filter the results by prefix. The results are ASCII-sorted by log group name.</p>
-    fn describe_log_groups(
-        &self,
-        input: DescribeLogGroupsRequest,
-    ) -> RusotoFuture<DescribeLogGroupsResponse, DescribeLogGroupsError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for DescribeLogGroupsRequest {
+    type Output = DescribeLogGroupsResponse;
+    type Error = DescribeLogGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DescribeLogGroups");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3882,20 +4279,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Lists the log streams for the specified log group. You can list all the log streams or filter the results by prefix. You can also control how the results are ordered.</p> <p>This operation has a limit of five transactions per second, after which transactions are throttled.</p>
-    fn describe_log_streams(
-        &self,
-        input: DescribeLogStreamsRequest,
-    ) -> RusotoFuture<DescribeLogStreamsResponse, DescribeLogStreamsError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for DescribeLogStreamsRequest {
+    type Output = DescribeLogStreamsResponse;
+    type Error = DescribeLogStreamsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DescribeLogStreams");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3911,20 +4313,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Lists the specified metric filters. You can list all the metric filters or filter the results by log name, prefix, metric name, or metric namespace. The results are ASCII-sorted by filter name.</p>
-    fn describe_metric_filters(
-        &self,
-        input: DescribeMetricFiltersRequest,
-    ) -> RusotoFuture<DescribeMetricFiltersResponse, DescribeMetricFiltersError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for DescribeMetricFiltersRequest {
+    type Output = DescribeMetricFiltersResponse;
+    type Error = DescribeMetricFiltersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DescribeMetricFilters");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3939,20 +4346,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of CloudWatch Logs Insights queries that are scheduled, executing, or have been executed recently in this account. You can request all queries, or limit it to queries of a specific log group or queries with a certain status.</p>
-    fn describe_queries(
-        &self,
-        input: DescribeQueriesRequest,
-    ) -> RusotoFuture<DescribeQueriesResponse, DescribeQueriesError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for DescribeQueriesRequest {
+    type Output = DescribeQueriesResponse;
+    type Error = DescribeQueriesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DescribeQueries");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3968,20 +4380,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Lists the resource policies in this account.</p>
-    fn describe_resource_policies(
-        &self,
-        input: DescribeResourcePoliciesRequest,
-    ) -> RusotoFuture<DescribeResourcePoliciesResponse, DescribeResourcePoliciesError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for DescribeResourcePoliciesRequest {
+    type Output = DescribeResourcePoliciesResponse;
+    type Error = DescribeResourcePoliciesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DescribeResourcePolicies");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3994,20 +4411,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Lists the subscription filters for the specified log group. You can list all the subscription filters or filter the results by prefix. The results are ASCII-sorted by filter name.</p>
-    fn describe_subscription_filters(
-        &self,
-        input: DescribeSubscriptionFiltersRequest,
-    ) -> RusotoFuture<DescribeSubscriptionFiltersResponse, DescribeSubscriptionFiltersError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for DescribeSubscriptionFiltersRequest {
+    type Output = DescribeSubscriptionFiltersResponse;
+    type Error = DescribeSubscriptionFiltersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DescribeSubscriptionFilters");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -4020,22 +4442,30 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Disassociates the associated AWS Key Management Service (AWS KMS) customer master key (CMK) from the specified log group.</p> <p>After the AWS KMS CMK is disassociated from the log group, AWS CloudWatch Logs stops encrypting newly ingested data for the log group. All previously ingested data remains encrypted, and AWS CloudWatch Logs requires permissions for the CMK whenever the encrypted data is requested.</p> <p>Note that it can take up to 5 minutes for this operation to take effect.</p>
-    fn disassociate_kms_key(
-        &self,
-        input: DisassociateKmsKeyRequest,
-    ) -> RusotoFuture<(), DisassociateKmsKeyError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for DisassociateKmsKeyRequest {
+    type Output = DisassociateKmsKeyResponse;
+    type Error = DisassociateKmsKeyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DisassociateKmsKey");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DisassociateKmsKeyResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -4046,20 +4476,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Lists log events from the specified log group. You can list all the log events or filter the results using a filter pattern, a time range, and the name of the log stream.</p> <p>By default, this operation returns as many log events as can fit in 1 MB (up to 10,000 log events), or all the events found within the time range that you specify. If the results include a token, then there are more log events available, and you can get additional results by specifying the token in a subsequent call.</p>
-    fn filter_log_events(
-        &self,
-        input: FilterLogEventsRequest,
-    ) -> RusotoFuture<FilterLogEventsResponse, FilterLogEventsError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for FilterLogEventsRequest {
+    type Output = FilterLogEventsResponse;
+    type Error = FilterLogEventsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.FilterLogEvents");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -4075,20 +4510,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Lists log events from the specified log stream. You can list all the log events or filter using a time range.</p> <p>By default, this operation returns as many log events as can fit in a response size of 1MB (up to 10,000 log events). You can get additional log events by specifying one of the tokens in a subsequent call.</p>
-    fn get_log_events(
-        &self,
-        input: GetLogEventsRequest,
-    ) -> RusotoFuture<GetLogEventsResponse, GetLogEventsError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for GetLogEventsRequest {
+    type Output = GetLogEventsResponse;
+    type Error = GetLogEventsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.GetLogEvents");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -4104,20 +4544,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of the fields that are included in log events in the specified log group, along with the percentage of log events that contain each field. The search is limited to a time period that you specify.</p> <p>In the results, fields that start with @ are fields generated by CloudWatch Logs. For example, <code>@timestamp</code> is the timestamp of each log event.</p> <p>The response results are sorted by the frequency percentage, starting with the highest percentage.</p>
-    fn get_log_group_fields(
-        &self,
-        input: GetLogGroupFieldsRequest,
-    ) -> RusotoFuture<GetLogGroupFieldsResponse, GetLogGroupFieldsError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for GetLogGroupFieldsRequest {
+    type Output = GetLogGroupFieldsResponse;
+    type Error = GetLogGroupFieldsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.GetLogGroupFields");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -4133,20 +4578,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves all the fields and values of a single log event. All fields are retrieved, even if the original query that produced the <code>logRecordPointer</code> retrieved only a subset of fields. Fields are returned as field name/field value pairs.</p> <p>Additionally, the entire unparsed log event is returned within <code>@message</code>.</p>
-    fn get_log_record(
-        &self,
-        input: GetLogRecordRequest,
-    ) -> RusotoFuture<GetLogRecordResponse, GetLogRecordError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for GetLogRecordRequest {
+    type Output = GetLogRecordResponse;
+    type Error = GetLogRecordError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.GetLogRecord");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -4162,20 +4612,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Returns the results from the specified query. If the query is in progress, partial results of that current execution are returned. Only the fields requested in the query are returned.</p> <p> <code>GetQueryResults</code> does not start a query execution. To run a query, use .</p>
-    fn get_query_results(
-        &self,
-        input: GetQueryResultsRequest,
-    ) -> RusotoFuture<GetQueryResultsResponse, GetQueryResultsError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for GetQueryResultsRequest {
+    type Output = GetQueryResultsResponse;
+    type Error = GetQueryResultsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.GetQueryResults");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -4191,20 +4646,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Lists the tags for the specified log group.</p>
-    fn list_tags_log_group(
-        &self,
-        input: ListTagsLogGroupRequest,
-    ) -> RusotoFuture<ListTagsLogGroupResponse, ListTagsLogGroupError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for ListTagsLogGroupRequest {
+    type Output = ListTagsLogGroupResponse;
+    type Error = ListTagsLogGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.ListTagsLogGroup");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -4220,20 +4680,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Creates or updates a destination. A destination encapsulates a physical resource (such as an Amazon Kinesis stream) and enables you to subscribe to a real-time stream of log events for a different account, ingested using <a>PutLogEvents</a>. Currently, the only supported physical resource is a Kinesis stream belonging to the same account as the destination.</p> <p>Through an access policy, a destination controls what is written to its Kinesis stream. By default, <code>PutDestination</code> does not set any access policy with the destination, which means a cross-account user cannot call <a>PutSubscriptionFilter</a> against this destination. To enable this, the destination owner must call <a>PutDestinationPolicy</a> after <code>PutDestination</code>.</p>
-    fn put_destination(
-        &self,
-        input: PutDestinationRequest,
-    ) -> RusotoFuture<PutDestinationResponse, PutDestinationError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for PutDestinationRequest {
+    type Output = PutDestinationResponse;
+    type Error = PutDestinationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.PutDestination");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -4249,22 +4714,30 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Creates or updates an access policy associated with an existing destination. An access policy is an <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies_overview.html">IAM policy document</a> that is used to authorize claims to register a subscription filter against a given destination.</p>
-    fn put_destination_policy(
-        &self,
-        input: PutDestinationPolicyRequest,
-    ) -> RusotoFuture<(), PutDestinationPolicyError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for PutDestinationPolicyRequest {
+    type Output = PutDestinationPolicyResponse;
+    type Error = PutDestinationPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.PutDestinationPolicy");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutDestinationPolicyResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -4274,20 +4747,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>. If you call <code>PutLogEvents</code> twice within a narrow time period using the same value for <code>sequenceToken</code>, both calls may be successful, or one may be rejected.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their timestamp. The timestamp is the time the event occurred, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. (In AWS Tools for PowerShell and the AWS SDK for .NET, the timestamp is specified in .NET format: yyyy-mm-ddThh:mm:ss. For example, 2017-09-15T13:45:30.) </p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul> <p>If a call to PutLogEvents returns "UnrecognizedClientException" the most likely cause is an invalid AWS access key ID or secret key. </p>
-    fn put_log_events(
-        &self,
-        input: PutLogEventsRequest,
-    ) -> RusotoFuture<PutLogEventsResponse, PutLogEventsError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for PutLogEventsRequest {
+    type Output = PutLogEventsResponse;
+    type Error = PutLogEventsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.PutLogEvents");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -4303,22 +4781,30 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Creates or updates a metric filter and associates it with the specified log group. Metric filters allow you to configure rules to extract metric data from log events ingested through <a>PutLogEvents</a>.</p> <p>The maximum number of metric filters that can be associated with a log group is 100.</p>
-    fn put_metric_filter(
-        &self,
-        input: PutMetricFilterRequest,
-    ) -> RusotoFuture<(), PutMetricFilterError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for PutMetricFilterRequest {
+    type Output = PutMetricFilterResponse;
+    type Error = PutMetricFilterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.PutMetricFilter");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutMetricFilterResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -4329,20 +4815,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Creates or updates a resource policy allowing other AWS services to put log events to this account, such as Amazon Route 53. An account can have up to 10 resource policies per region.</p>
-    fn put_resource_policy(
-        &self,
-        input: PutResourcePolicyRequest,
-    ) -> RusotoFuture<PutResourcePolicyResponse, PutResourcePolicyError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for PutResourcePolicyRequest {
+    type Output = PutResourcePolicyResponse;
+    type Error = PutResourcePolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.PutResourcePolicy");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -4358,22 +4849,30 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Sets the retention of the specified log group. A retention policy allows you to configure the number of days for which to retain log events in the specified log group.</p>
-    fn put_retention_policy(
-        &self,
-        input: PutRetentionPolicyRequest,
-    ) -> RusotoFuture<(), PutRetentionPolicyError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for PutRetentionPolicyRequest {
+    type Output = PutRetentionPolicyResponse;
+    type Error = PutRetentionPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.PutRetentionPolicy");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutRetentionPolicyResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -4384,22 +4883,30 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose delivery stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call fails because you cannot associate a second filter with a log group.</p>
-    fn put_subscription_filter(
-        &self,
-        input: PutSubscriptionFilterRequest,
-    ) -> RusotoFuture<(), PutSubscriptionFilterError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for PutSubscriptionFilterRequest {
+    type Output = PutSubscriptionFilterResponse;
+    type Error = PutSubscriptionFilterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.PutSubscriptionFilter");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutSubscriptionFilterResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -4409,20 +4916,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Schedules a query of a log group using CloudWatch Logs Insights. You specify the log group and time range to query, and the query string to use.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html">CloudWatch Logs Insights Query Syntax</a>.</p>
-    fn start_query(
-        &self,
-        input: StartQueryRequest,
-    ) -> RusotoFuture<StartQueryResponse, StartQueryError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for StartQueryRequest {
+    type Output = StartQueryResponse;
+    type Error = StartQueryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.StartQuery");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -4438,20 +4950,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Stops a CloudWatch Logs Insights query that is in progress. If the query has already ended, the operation returns an error indicating that the specified query is not running.</p>
-    fn stop_query(
-        &self,
-        input: StopQueryRequest,
-    ) -> RusotoFuture<StopQueryResponse, StopQueryError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for StopQueryRequest {
+    type Output = StopQueryResponse;
+    type Error = StopQueryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.StopQuery");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -4467,19 +4984,30 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Adds or updates the specified tags for the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/log-group-tagging.html">Tag Log Groups in Amazon CloudWatch Logs</a> in the <i>Amazon CloudWatch Logs User Guide</i>.</p>
-    fn tag_log_group(&self, input: TagLogGroupRequest) -> RusotoFuture<(), TagLogGroupError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for TagLogGroupRequest {
+    type Output = TagLogGroupResponse;
+    type Error = TagLogGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.TagLogGroup");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<TagLogGroupResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -4490,20 +5018,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Tests the filter pattern of a metric filter against a sample of log event messages. You can use this operation to validate the correctness of a metric filter pattern.</p>
-    fn test_metric_filter(
-        &self,
-        input: TestMetricFilterRequest,
-    ) -> RusotoFuture<TestMetricFilterResponse, TestMetricFilterError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for TestMetricFilterRequest {
+    type Output = TestMetricFilterResponse;
+    type Error = TestMetricFilterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.TestMetricFilter");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -4519,19 +5052,30 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             }
         })
     }
+}
 
-    /// <p>Removes the specified tags from the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To add tags, use <a>UntagLogGroup</a>.</p>
-    fn untag_log_group(&self, input: UntagLogGroupRequest) -> RusotoFuture<(), UntagLogGroupError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+impl ServiceRequest for UntagLogGroupRequest {
+    type Output = UntagLogGroupResponse;
+    type Error = UntagLogGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "logs", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.UntagLogGroup");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UntagLogGroupResponse, _>()
+                }))
             } else {
                 Box::new(
                     response

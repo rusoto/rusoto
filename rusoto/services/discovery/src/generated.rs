@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -539,6 +540,9 @@ pub struct DisassociateConfigurationItemsFromApplicationRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateConfigurationItemsFromApplicationResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ExportConfigurationsRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -2548,154 +2552,124 @@ pub trait Discovery {
     fn associate_configuration_items_to_application(
         &self,
         input: AssociateConfigurationItemsToApplicationRequest,
-    ) -> RusotoFuture<
-        AssociateConfigurationItemsToApplicationResponse,
-        AssociateConfigurationItemsToApplicationError,
-    >;
+    ) -> Request<AssociateConfigurationItemsToApplicationRequest>;
 
     /// <p>Deletes one or more import tasks, each identified by their import ID. Each import task has a number of records that can identify servers or applications. </p> <p>AWS Application Discovery Service has built-in matching logic that will identify when discovered servers match existing entries that you've previously discovered, the information for the already-existing discovered server is updated. When you delete an import task that contains records that were used to match, the information in those matched records that comes from the deleted records will also be deleted.</p>
     fn batch_delete_import_data(
         &self,
         input: BatchDeleteImportDataRequest,
-    ) -> RusotoFuture<BatchDeleteImportDataResponse, BatchDeleteImportDataError>;
+    ) -> Request<BatchDeleteImportDataRequest>;
 
     /// <p>Creates an application with the given name and description.</p>
     fn create_application(
         &self,
         input: CreateApplicationRequest,
-    ) -> RusotoFuture<CreateApplicationResponse, CreateApplicationError>;
+    ) -> Request<CreateApplicationRequest>;
 
     /// <p>Creates one or more tags for configuration items. Tags are metadata that help you categorize IT assets. This API accepts a list of multiple configuration items.</p>
-    fn create_tags(
-        &self,
-        input: CreateTagsRequest,
-    ) -> RusotoFuture<CreateTagsResponse, CreateTagsError>;
+    fn create_tags(&self, input: CreateTagsRequest) -> Request<CreateTagsRequest>;
 
     /// <p>Deletes a list of applications and their associations with configuration items.</p>
     fn delete_applications(
         &self,
         input: DeleteApplicationsRequest,
-    ) -> RusotoFuture<DeleteApplicationsResponse, DeleteApplicationsError>;
+    ) -> Request<DeleteApplicationsRequest>;
 
     /// <p>Deletes the association between configuration items and one or more tags. This API accepts a list of multiple configuration items.</p>
-    fn delete_tags(
-        &self,
-        input: DeleteTagsRequest,
-    ) -> RusotoFuture<DeleteTagsResponse, DeleteTagsError>;
+    fn delete_tags(&self, input: DeleteTagsRequest) -> Request<DeleteTagsRequest>;
 
     /// <p>Lists agents or connectors as specified by ID or other filters. All agents/connectors associated with your user account can be listed if you call <code>DescribeAgents</code> as is without passing any parameters.</p>
-    fn describe_agents(
-        &self,
-        input: DescribeAgentsRequest,
-    ) -> RusotoFuture<DescribeAgentsResponse, DescribeAgentsError>;
+    fn describe_agents(&self, input: DescribeAgentsRequest) -> Request<DescribeAgentsRequest>;
 
     /// <p><p>Retrieves attributes for a list of configuration item IDs.</p> <note> <p>All of the supplied IDs must be for the same asset type from one of the following:</p> <ul> <li> <p>server</p> </li> <li> <p>application</p> </li> <li> <p>process</p> </li> <li> <p>connection</p> </li> </ul> <p>Output fields are specific to the asset type specified. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, number of network cards, etc.</p> <p>For a complete list of outputs for each asset type, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a>.</p> </note></p>
     fn describe_configurations(
         &self,
         input: DescribeConfigurationsRequest,
-    ) -> RusotoFuture<DescribeConfigurationsResponse, DescribeConfigurationsError>;
+    ) -> Request<DescribeConfigurationsRequest>;
 
     /// <p>Lists exports as specified by ID. All continuous exports associated with your user account can be listed if you call <code>DescribeContinuousExports</code> as is without passing any parameters.</p>
     fn describe_continuous_exports(
         &self,
         input: DescribeContinuousExportsRequest,
-    ) -> RusotoFuture<DescribeContinuousExportsResponse, DescribeContinuousExportsError>;
+    ) -> Request<DescribeContinuousExportsRequest>;
 
     /// <p> <code>DescribeExportConfigurations</code> is deprecated. Use <a href="https://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html">DescribeImportTasks</a>, instead.</p>
     fn describe_export_configurations(
         &self,
         input: DescribeExportConfigurationsRequest,
-    ) -> RusotoFuture<DescribeExportConfigurationsResponse, DescribeExportConfigurationsError>;
+    ) -> Request<DescribeExportConfigurationsRequest>;
 
     /// <p>Retrieve status of one or more export tasks. You can retrieve the status of up to 100 export tasks.</p>
     fn describe_export_tasks(
         &self,
         input: DescribeExportTasksRequest,
-    ) -> RusotoFuture<DescribeExportTasksResponse, DescribeExportTasksError>;
+    ) -> Request<DescribeExportTasksRequest>;
 
     /// <p>Returns an array of import tasks for your account, including status information, times, IDs, the Amazon S3 Object URL for the import file, and more.</p>
     fn describe_import_tasks(
         &self,
         input: DescribeImportTasksRequest,
-    ) -> RusotoFuture<DescribeImportTasksResponse, DescribeImportTasksError>;
+    ) -> Request<DescribeImportTasksRequest>;
 
     /// <p>Retrieves a list of configuration items that have tags as specified by the key-value pairs, name and value, passed to the optional parameter <code>filters</code>.</p> <p>There are three valid tag filter names:</p> <ul> <li> <p>tagKey</p> </li> <li> <p>tagValue</p> </li> <li> <p>configurationId</p> </li> </ul> <p>Also, all configuration items associated with your user account that have tags can be listed if you call <code>DescribeTags</code> as is without passing any parameters.</p>
-    fn describe_tags(
-        &self,
-        input: DescribeTagsRequest,
-    ) -> RusotoFuture<DescribeTagsResponse, DescribeTagsError>;
+    fn describe_tags(&self, input: DescribeTagsRequest) -> Request<DescribeTagsRequest>;
 
     /// <p>Disassociates one or more configuration items from an application.</p>
     fn disassociate_configuration_items_from_application(
         &self,
         input: DisassociateConfigurationItemsFromApplicationRequest,
-    ) -> RusotoFuture<
-        DisassociateConfigurationItemsFromApplicationResponse,
-        DisassociateConfigurationItemsFromApplicationError,
-    >;
+    ) -> Request<DisassociateConfigurationItemsFromApplicationRequest>;
 
     /// <p>Deprecated. Use <code>StartExportTask</code> instead.</p> <p>Exports all discovered configuration data to an Amazon S3 bucket or an application that enables you to view and evaluate the data. Data includes tags and tag associations, processes, connections, servers, and system performance. This API returns an export ID that you can query using the <i>DescribeExportConfigurations</i> API. The system imposes a limit of two configuration exports in six hours.</p>
-    fn export_configurations(
-        &self,
-    ) -> RusotoFuture<ExportConfigurationsResponse, ExportConfigurationsError>;
+    fn export_configurations(&self) -> Request<ExportConfigurationsRequest>;
 
     /// <p>Retrieves a short summary of discovered assets.</p> <p>This API operation takes no request parameters and is called as is at the command prompt as shown in the example.</p>
-    fn get_discovery_summary(
-        &self,
-    ) -> RusotoFuture<GetDiscoverySummaryResponse, GetDiscoverySummaryError>;
+    fn get_discovery_summary(&self) -> Request<GetDiscoverySummaryRequest>;
 
     /// <p>Retrieves a list of configuration items as specified by the value passed to the required paramater <code>configurationType</code>. Optional filtering may be applied to refine search results.</p>
     fn list_configurations(
         &self,
         input: ListConfigurationsRequest,
-    ) -> RusotoFuture<ListConfigurationsResponse, ListConfigurationsError>;
+    ) -> Request<ListConfigurationsRequest>;
 
     /// <p>Retrieves a list of servers that are one network hop away from a specified server.</p>
     fn list_server_neighbors(
         &self,
         input: ListServerNeighborsRequest,
-    ) -> RusotoFuture<ListServerNeighborsResponse, ListServerNeighborsError>;
+    ) -> Request<ListServerNeighborsRequest>;
 
     /// <p>Start the continuous flow of agent's discovered data into Amazon Athena.</p>
-    fn start_continuous_export(
-        &self,
-    ) -> RusotoFuture<StartContinuousExportResponse, StartContinuousExportError>;
+    fn start_continuous_export(&self) -> Request<StartContinuousExportRequest>;
 
     /// <p>Instructs the specified agents or connectors to start collecting data.</p>
     fn start_data_collection_by_agent_ids(
         &self,
         input: StartDataCollectionByAgentIdsRequest,
-    ) -> RusotoFuture<StartDataCollectionByAgentIdsResponse, StartDataCollectionByAgentIdsError>;
+    ) -> Request<StartDataCollectionByAgentIdsRequest>;
 
     /// <p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentIds</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentIds</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>
-    fn start_export_task(
-        &self,
-        input: StartExportTaskRequest,
-    ) -> RusotoFuture<StartExportTaskResponse, StartExportTaskError>;
+    fn start_export_task(&self, input: StartExportTaskRequest) -> Request<StartExportTaskRequest>;
 
     /// <p><p>Starts an import task, which allows you to import details of your on-premises environment directly into AWS without having to use the Application Discovery Service (ADS) tools such as the Discovery Connector or Discovery Agent. This gives you the option to perform migration assessment and planning directly from your imported data, including the ability to group your devices as applications and track their migration status.</p> <p>To start an import request, do this:</p> <ol> <li> <p>Download the specially formatted comma separated value (CSV) import template, which you can find here: <a href="https://s3-us-west-2.amazonaws.com/templates-7cffcf56-bd96-4b1c-b45b-a5b42f282e46/import_template.csv">https://s3-us-west-2.amazonaws.com/templates-7cffcf56-bd96-4b1c-b45b-a5b42f282e46/import<em>template.csv</a>.</p> </li> <li> <p>Fill out the template with your server and application data.</p> </li> <li> <p>Upload your import file to an Amazon S3 bucket, and make a note of it&#39;s Object URL. Your import file must be in the CSV format.</p> </li> <li> <p>Use the console or the <code>StartImportTask</code> command with the AWS CLI or one of the AWS SDKs to import the records from your file.</p> </li> </ol> <p>For more information, including step-by-step procedures, see <a href="https://docs.aws.amazon.com/application-discovery/latest/userguide/discovery-import.html">Migration Hub Import</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> <note> <p>There are limits to the number of import tasks you can create (and delete) in an AWS account. For more information, see &lt;a href=&quot;https://docs.aws.amazon.com/application-discovery/latest/userguide/ads</em>service_limits.html&quot;&gt;AWS Application Discovery Service Limits</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> </note></p>
-    fn start_import_task(
-        &self,
-        input: StartImportTaskRequest,
-    ) -> RusotoFuture<StartImportTaskResponse, StartImportTaskError>;
+    fn start_import_task(&self, input: StartImportTaskRequest) -> Request<StartImportTaskRequest>;
 
     /// <p>Stop the continuous flow of agent's discovered data into Amazon Athena.</p>
     fn stop_continuous_export(
         &self,
         input: StopContinuousExportRequest,
-    ) -> RusotoFuture<StopContinuousExportResponse, StopContinuousExportError>;
+    ) -> Request<StopContinuousExportRequest>;
 
     /// <p>Instructs the specified agents or connectors to stop collecting data.</p>
     fn stop_data_collection_by_agent_ids(
         &self,
         input: StopDataCollectionByAgentIdsRequest,
-    ) -> RusotoFuture<StopDataCollectionByAgentIdsResponse, StopDataCollectionByAgentIdsError>;
+    ) -> Request<StopDataCollectionByAgentIdsRequest>;
 
     /// <p>Updates metadata about an application.</p>
     fn update_application(
         &self,
         input: UpdateApplicationRequest,
-    ) -> RusotoFuture<UpdateApplicationResponse, UpdateApplicationError>;
+    ) -> Request<UpdateApplicationRequest>;
 }
 /// A client for the AWS Application Discovery Service API.
 #[derive(Clone)]
@@ -2738,21 +2712,208 @@ impl Discovery for DiscoveryClient {
     fn associate_configuration_items_to_application(
         &self,
         input: AssociateConfigurationItemsToApplicationRequest,
-    ) -> RusotoFuture<
-        AssociateConfigurationItemsToApplicationResponse,
-        AssociateConfigurationItemsToApplicationError,
-    > {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+    ) -> Request<AssociateConfigurationItemsToApplicationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes one or more import tasks, each identified by their import ID. Each import task has a number of records that can identify servers or applications. </p> <p>AWS Application Discovery Service has built-in matching logic that will identify when discovered servers match existing entries that you've previously discovered, the information for the already-existing discovered server is updated. When you delete an import task that contains records that were used to match, the information in those matched records that comes from the deleted records will also be deleted.</p>
+    fn batch_delete_import_data(
+        &self,
+        input: BatchDeleteImportDataRequest,
+    ) -> Request<BatchDeleteImportDataRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an application with the given name and description.</p>
+    fn create_application(
+        &self,
+        input: CreateApplicationRequest,
+    ) -> Request<CreateApplicationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates one or more tags for configuration items. Tags are metadata that help you categorize IT assets. This API accepts a list of multiple configuration items.</p>
+    fn create_tags(&self, input: CreateTagsRequest) -> Request<CreateTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a list of applications and their associations with configuration items.</p>
+    fn delete_applications(
+        &self,
+        input: DeleteApplicationsRequest,
+    ) -> Request<DeleteApplicationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the association between configuration items and one or more tags. This API accepts a list of multiple configuration items.</p>
+    fn delete_tags(&self, input: DeleteTagsRequest) -> Request<DeleteTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists agents or connectors as specified by ID or other filters. All agents/connectors associated with your user account can be listed if you call <code>DescribeAgents</code> as is without passing any parameters.</p>
+    fn describe_agents(&self, input: DescribeAgentsRequest) -> Request<DescribeAgentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Retrieves attributes for a list of configuration item IDs.</p> <note> <p>All of the supplied IDs must be for the same asset type from one of the following:</p> <ul> <li> <p>server</p> </li> <li> <p>application</p> </li> <li> <p>process</p> </li> <li> <p>connection</p> </li> </ul> <p>Output fields are specific to the asset type specified. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, number of network cards, etc.</p> <p>For a complete list of outputs for each asset type, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a>.</p> </note></p>
+    fn describe_configurations(
+        &self,
+        input: DescribeConfigurationsRequest,
+    ) -> Request<DescribeConfigurationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists exports as specified by ID. All continuous exports associated with your user account can be listed if you call <code>DescribeContinuousExports</code> as is without passing any parameters.</p>
+    fn describe_continuous_exports(
+        &self,
+        input: DescribeContinuousExportsRequest,
+    ) -> Request<DescribeContinuousExportsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> <code>DescribeExportConfigurations</code> is deprecated. Use <a href="https://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html">DescribeImportTasks</a>, instead.</p>
+    fn describe_export_configurations(
+        &self,
+        input: DescribeExportConfigurationsRequest,
+    ) -> Request<DescribeExportConfigurationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieve status of one or more export tasks. You can retrieve the status of up to 100 export tasks.</p>
+    fn describe_export_tasks(
+        &self,
+        input: DescribeExportTasksRequest,
+    ) -> Request<DescribeExportTasksRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns an array of import tasks for your account, including status information, times, IDs, the Amazon S3 Object URL for the import file, and more.</p>
+    fn describe_import_tasks(
+        &self,
+        input: DescribeImportTasksRequest,
+    ) -> Request<DescribeImportTasksRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list of configuration items that have tags as specified by the key-value pairs, name and value, passed to the optional parameter <code>filters</code>.</p> <p>There are three valid tag filter names:</p> <ul> <li> <p>tagKey</p> </li> <li> <p>tagValue</p> </li> <li> <p>configurationId</p> </li> </ul> <p>Also, all configuration items associated with your user account that have tags can be listed if you call <code>DescribeTags</code> as is without passing any parameters.</p>
+    fn describe_tags(&self, input: DescribeTagsRequest) -> Request<DescribeTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disassociates one or more configuration items from an application.</p>
+    fn disassociate_configuration_items_from_application(
+        &self,
+        input: DisassociateConfigurationItemsFromApplicationRequest,
+    ) -> Request<DisassociateConfigurationItemsFromApplicationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deprecated. Use <code>StartExportTask</code> instead.</p> <p>Exports all discovered configuration data to an Amazon S3 bucket or an application that enables you to view and evaluate the data. Data includes tags and tag associations, processes, connections, servers, and system performance. This API returns an export ID that you can query using the <i>DescribeExportConfigurations</i> API. The system imposes a limit of two configuration exports in six hours.</p>
+    fn export_configurations(&self) -> Request<ExportConfigurationsRequest> {
+        Request::new(
+            ExportConfigurationsRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Retrieves a short summary of discovered assets.</p> <p>This API operation takes no request parameters and is called as is at the command prompt as shown in the example.</p>
+    fn get_discovery_summary(&self) -> Request<GetDiscoverySummaryRequest> {
+        Request::new(
+            GetDiscoverySummaryRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Retrieves a list of configuration items as specified by the value passed to the required paramater <code>configurationType</code>. Optional filtering may be applied to refine search results.</p>
+    fn list_configurations(
+        &self,
+        input: ListConfigurationsRequest,
+    ) -> Request<ListConfigurationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list of servers that are one network hop away from a specified server.</p>
+    fn list_server_neighbors(
+        &self,
+        input: ListServerNeighborsRequest,
+    ) -> Request<ListServerNeighborsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Start the continuous flow of agent's discovered data into Amazon Athena.</p>
+    fn start_continuous_export(&self) -> Request<StartContinuousExportRequest> {
+        Request::new(
+            StartContinuousExportRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Instructs the specified agents or connectors to start collecting data.</p>
+    fn start_data_collection_by_agent_ids(
+        &self,
+        input: StartDataCollectionByAgentIdsRequest,
+    ) -> Request<StartDataCollectionByAgentIdsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentIds</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentIds</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>
+    fn start_export_task(&self, input: StartExportTaskRequest) -> Request<StartExportTaskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Starts an import task, which allows you to import details of your on-premises environment directly into AWS without having to use the Application Discovery Service (ADS) tools such as the Discovery Connector or Discovery Agent. This gives you the option to perform migration assessment and planning directly from your imported data, including the ability to group your devices as applications and track their migration status.</p> <p>To start an import request, do this:</p> <ol> <li> <p>Download the specially formatted comma separated value (CSV) import template, which you can find here: <a href="https://s3-us-west-2.amazonaws.com/templates-7cffcf56-bd96-4b1c-b45b-a5b42f282e46/import_template.csv">https://s3-us-west-2.amazonaws.com/templates-7cffcf56-bd96-4b1c-b45b-a5b42f282e46/import<em>template.csv</a>.</p> </li> <li> <p>Fill out the template with your server and application data.</p> </li> <li> <p>Upload your import file to an Amazon S3 bucket, and make a note of it&#39;s Object URL. Your import file must be in the CSV format.</p> </li> <li> <p>Use the console or the <code>StartImportTask</code> command with the AWS CLI or one of the AWS SDKs to import the records from your file.</p> </li> </ol> <p>For more information, including step-by-step procedures, see <a href="https://docs.aws.amazon.com/application-discovery/latest/userguide/discovery-import.html">Migration Hub Import</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> <note> <p>There are limits to the number of import tasks you can create (and delete) in an AWS account. For more information, see &lt;a href=&quot;https://docs.aws.amazon.com/application-discovery/latest/userguide/ads</em>service_limits.html&quot;&gt;AWS Application Discovery Service Limits</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> </note></p>
+    fn start_import_task(&self, input: StartImportTaskRequest) -> Request<StartImportTaskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stop the continuous flow of agent's discovered data into Amazon Athena.</p>
+    fn stop_continuous_export(
+        &self,
+        input: StopContinuousExportRequest,
+    ) -> Request<StopContinuousExportRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Instructs the specified agents or connectors to stop collecting data.</p>
+    fn stop_data_collection_by_agent_ids(
+        &self,
+        input: StopDataCollectionByAgentIdsRequest,
+    ) -> Request<StopDataCollectionByAgentIdsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates metadata about an application.</p>
+    fn update_application(
+        &self,
+        input: UpdateApplicationRequest,
+    ) -> Request<UpdateApplicationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AssociateConfigurationItemsToApplicationRequest {
+    type Output = AssociateConfigurationItemsToApplicationResponse;
+    type Error = AssociateConfigurationItemsToApplicationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.AssociateConfigurationItemsToApplication",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2765,23 +2926,28 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Deletes one or more import tasks, each identified by their import ID. Each import task has a number of records that can identify servers or applications. </p> <p>AWS Application Discovery Service has built-in matching logic that will identify when discovered servers match existing entries that you've previously discovered, the information for the already-existing discovered server is updated. When you delete an import task that contains records that were used to match, the information in those matched records that comes from the deleted records will also be deleted.</p>
-    fn batch_delete_import_data(
-        &self,
-        input: BatchDeleteImportDataRequest,
-    ) -> RusotoFuture<BatchDeleteImportDataResponse, BatchDeleteImportDataError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for BatchDeleteImportDataRequest {
+    type Output = BatchDeleteImportDataResponse;
+    type Error = BatchDeleteImportDataError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.BatchDeleteImportData",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2796,23 +2962,28 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Creates an application with the given name and description.</p>
-    fn create_application(
-        &self,
-        input: CreateApplicationRequest,
-    ) -> RusotoFuture<CreateApplicationResponse, CreateApplicationError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for CreateApplicationRequest {
+    type Output = CreateApplicationResponse;
+    type Error = CreateApplicationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.CreateApplication",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2828,20 +2999,25 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Creates one or more tags for configuration items. Tags are metadata that help you categorize IT assets. This API accepts a list of multiple configuration items.</p>
-    fn create_tags(
-        &self,
-        input: CreateTagsRequest,
-    ) -> RusotoFuture<CreateTagsResponse, CreateTagsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for CreateTagsRequest {
+    type Output = CreateTagsResponse;
+    type Error = CreateTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSPoseidonService_V2015_11_01.CreateTags");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2857,23 +3033,28 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a list of applications and their associations with configuration items.</p>
-    fn delete_applications(
-        &self,
-        input: DeleteApplicationsRequest,
-    ) -> RusotoFuture<DeleteApplicationsResponse, DeleteApplicationsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for DeleteApplicationsRequest {
+    type Output = DeleteApplicationsResponse;
+    type Error = DeleteApplicationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DeleteApplications",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2889,20 +3070,25 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the association between configuration items and one or more tags. This API accepts a list of multiple configuration items.</p>
-    fn delete_tags(
-        &self,
-        input: DeleteTagsRequest,
-    ) -> RusotoFuture<DeleteTagsResponse, DeleteTagsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for DeleteTagsRequest {
+    type Output = DeleteTagsResponse;
+    type Error = DeleteTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSPoseidonService_V2015_11_01.DeleteTags");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2918,23 +3104,28 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Lists agents or connectors as specified by ID or other filters. All agents/connectors associated with your user account can be listed if you call <code>DescribeAgents</code> as is without passing any parameters.</p>
-    fn describe_agents(
-        &self,
-        input: DescribeAgentsRequest,
-    ) -> RusotoFuture<DescribeAgentsResponse, DescribeAgentsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for DescribeAgentsRequest {
+    type Output = DescribeAgentsResponse;
+    type Error = DescribeAgentsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DescribeAgents",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2950,23 +3141,28 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p><p>Retrieves attributes for a list of configuration item IDs.</p> <note> <p>All of the supplied IDs must be for the same asset type from one of the following:</p> <ul> <li> <p>server</p> </li> <li> <p>application</p> </li> <li> <p>process</p> </li> <li> <p>connection</p> </li> </ul> <p>Output fields are specific to the asset type specified. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, number of network cards, etc.</p> <p>For a complete list of outputs for each asset type, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a>.</p> </note></p>
-    fn describe_configurations(
-        &self,
-        input: DescribeConfigurationsRequest,
-    ) -> RusotoFuture<DescribeConfigurationsResponse, DescribeConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for DescribeConfigurationsRequest {
+    type Output = DescribeConfigurationsResponse;
+    type Error = DescribeConfigurationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DescribeConfigurations",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2981,23 +3177,28 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Lists exports as specified by ID. All continuous exports associated with your user account can be listed if you call <code>DescribeContinuousExports</code> as is without passing any parameters.</p>
-    fn describe_continuous_exports(
-        &self,
-        input: DescribeContinuousExportsRequest,
-    ) -> RusotoFuture<DescribeContinuousExportsResponse, DescribeContinuousExportsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for DescribeContinuousExportsRequest {
+    type Output = DescribeContinuousExportsResponse;
+    type Error = DescribeContinuousExportsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DescribeContinuousExports",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3010,23 +3211,28 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p> <code>DescribeExportConfigurations</code> is deprecated. Use <a href="https://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html">DescribeImportTasks</a>, instead.</p>
-    fn describe_export_configurations(
-        &self,
-        input: DescribeExportConfigurationsRequest,
-    ) -> RusotoFuture<DescribeExportConfigurationsResponse, DescribeExportConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for DescribeExportConfigurationsRequest {
+    type Output = DescribeExportConfigurationsResponse;
+    type Error = DescribeExportConfigurationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DescribeExportConfigurations",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3039,23 +3245,28 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Retrieve status of one or more export tasks. You can retrieve the status of up to 100 export tasks.</p>
-    fn describe_export_tasks(
-        &self,
-        input: DescribeExportTasksRequest,
-    ) -> RusotoFuture<DescribeExportTasksResponse, DescribeExportTasksError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for DescribeExportTasksRequest {
+    type Output = DescribeExportTasksResponse;
+    type Error = DescribeExportTasksError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DescribeExportTasks",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3070,23 +3281,28 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Returns an array of import tasks for your account, including status information, times, IDs, the Amazon S3 Object URL for the import file, and more.</p>
-    fn describe_import_tasks(
-        &self,
-        input: DescribeImportTasksRequest,
-    ) -> RusotoFuture<DescribeImportTasksResponse, DescribeImportTasksError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for DescribeImportTasksRequest {
+    type Output = DescribeImportTasksResponse;
+    type Error = DescribeImportTasksError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DescribeImportTasks",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3101,23 +3317,28 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list of configuration items that have tags as specified by the key-value pairs, name and value, passed to the optional parameter <code>filters</code>.</p> <p>There are three valid tag filter names:</p> <ul> <li> <p>tagKey</p> </li> <li> <p>tagValue</p> </li> <li> <p>configurationId</p> </li> </ul> <p>Also, all configuration items associated with your user account that have tags can be listed if you call <code>DescribeTags</code> as is without passing any parameters.</p>
-    fn describe_tags(
-        &self,
-        input: DescribeTagsRequest,
-    ) -> RusotoFuture<DescribeTagsResponse, DescribeTagsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for DescribeTagsRequest {
+    type Output = DescribeTagsResponse;
+    type Error = DescribeTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DescribeTags",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3133,43 +3354,51 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Disassociates one or more configuration items from an application.</p>
-    fn disassociate_configuration_items_from_application(
-        &self,
-        input: DisassociateConfigurationItemsFromApplicationRequest,
-    ) -> RusotoFuture<
-        DisassociateConfigurationItemsFromApplicationResponse,
-        DisassociateConfigurationItemsFromApplicationError,
-    > {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for DisassociateConfigurationItemsFromApplicationRequest {
+    type Output = DisassociateConfigurationItemsFromApplicationResponse;
+    type Error = DisassociateConfigurationItemsFromApplicationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DisassociateConfigurationItemsFromApplication",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-                        if response.status.is_success() {
-                            Box::new(response.buffer().from_err().and_then(|response| {
+        dispatcher.dispatch(request, |response| {
+                            if response.status.is_success() {
+                                Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response).deserialize::<DisassociateConfigurationItemsFromApplicationResponse, _>()
                 }))
-                        } else {
-                            Box::new(response.buffer().from_err().and_then(|response| {
-                                Err(DisassociateConfigurationItemsFromApplicationError::from_response(response))
-                            }))
-                        }
-                    })
+                            } else {
+                                Box::new(response.buffer().from_err().and_then(|response| {
+                                    Err(DisassociateConfigurationItemsFromApplicationError::from_response(response))
+                                }))
+                            }
+                        })
     }
+}
 
-    /// <p>Deprecated. Use <code>StartExportTask</code> instead.</p> <p>Exports all discovered configuration data to an Amazon S3 bucket or an application that enables you to view and evaluate the data. Data includes tags and tag associations, processes, connections, servers, and system performance. This API returns an export ID that you can query using the <i>DescribeExportConfigurations</i> API. The system imposes a limit of two configuration exports in six hours.</p>
-    fn export_configurations(
-        &self,
-    ) -> RusotoFuture<ExportConfigurationsResponse, ExportConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for ExportConfigurationsRequest {
+    type Output = ExportConfigurationsResponse;
+    type Error = ExportConfigurationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
@@ -3178,7 +3407,7 @@ impl Discovery for DiscoveryClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3193,12 +3422,18 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a short summary of discovered assets.</p> <p>This API operation takes no request parameters and is called as is at the command prompt as shown in the example.</p>
-    fn get_discovery_summary(
-        &self,
-    ) -> RusotoFuture<GetDiscoverySummaryResponse, GetDiscoverySummaryError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for GetDiscoverySummaryRequest {
+    type Output = GetDiscoverySummaryResponse;
+    type Error = GetDiscoverySummaryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
@@ -3207,7 +3442,7 @@ impl Discovery for DiscoveryClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3222,23 +3457,28 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list of configuration items as specified by the value passed to the required paramater <code>configurationType</code>. Optional filtering may be applied to refine search results.</p>
-    fn list_configurations(
-        &self,
-        input: ListConfigurationsRequest,
-    ) -> RusotoFuture<ListConfigurationsResponse, ListConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for ListConfigurationsRequest {
+    type Output = ListConfigurationsResponse;
+    type Error = ListConfigurationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.ListConfigurations",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3254,23 +3494,28 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list of servers that are one network hop away from a specified server.</p>
-    fn list_server_neighbors(
-        &self,
-        input: ListServerNeighborsRequest,
-    ) -> RusotoFuture<ListServerNeighborsResponse, ListServerNeighborsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for ListServerNeighborsRequest {
+    type Output = ListServerNeighborsResponse;
+    type Error = ListServerNeighborsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.ListServerNeighbors",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3285,12 +3530,18 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Start the continuous flow of agent's discovered data into Amazon Athena.</p>
-    fn start_continuous_export(
-        &self,
-    ) -> RusotoFuture<StartContinuousExportResponse, StartContinuousExportError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for StartContinuousExportRequest {
+    type Output = StartContinuousExportResponse;
+    type Error = StartContinuousExportError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
@@ -3299,7 +3550,7 @@ impl Discovery for DiscoveryClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3314,24 +3565,28 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Instructs the specified agents or connectors to start collecting data.</p>
-    fn start_data_collection_by_agent_ids(
-        &self,
-        input: StartDataCollectionByAgentIdsRequest,
-    ) -> RusotoFuture<StartDataCollectionByAgentIdsResponse, StartDataCollectionByAgentIdsError>
-    {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for StartDataCollectionByAgentIdsRequest {
+    type Output = StartDataCollectionByAgentIdsResponse;
+    type Error = StartDataCollectionByAgentIdsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.StartDataCollectionByAgentIds",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3344,23 +3599,28 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentIds</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentIds</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>
-    fn start_export_task(
-        &self,
-        input: StartExportTaskRequest,
-    ) -> RusotoFuture<StartExportTaskResponse, StartExportTaskError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for StartExportTaskRequest {
+    type Output = StartExportTaskResponse;
+    type Error = StartExportTaskError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.StartExportTask",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3376,23 +3636,28 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p><p>Starts an import task, which allows you to import details of your on-premises environment directly into AWS without having to use the Application Discovery Service (ADS) tools such as the Discovery Connector or Discovery Agent. This gives you the option to perform migration assessment and planning directly from your imported data, including the ability to group your devices as applications and track their migration status.</p> <p>To start an import request, do this:</p> <ol> <li> <p>Download the specially formatted comma separated value (CSV) import template, which you can find here: <a href="https://s3-us-west-2.amazonaws.com/templates-7cffcf56-bd96-4b1c-b45b-a5b42f282e46/import_template.csv">https://s3-us-west-2.amazonaws.com/templates-7cffcf56-bd96-4b1c-b45b-a5b42f282e46/import<em>template.csv</a>.</p> </li> <li> <p>Fill out the template with your server and application data.</p> </li> <li> <p>Upload your import file to an Amazon S3 bucket, and make a note of it&#39;s Object URL. Your import file must be in the CSV format.</p> </li> <li> <p>Use the console or the <code>StartImportTask</code> command with the AWS CLI or one of the AWS SDKs to import the records from your file.</p> </li> </ol> <p>For more information, including step-by-step procedures, see <a href="https://docs.aws.amazon.com/application-discovery/latest/userguide/discovery-import.html">Migration Hub Import</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> <note> <p>There are limits to the number of import tasks you can create (and delete) in an AWS account. For more information, see &lt;a href=&quot;https://docs.aws.amazon.com/application-discovery/latest/userguide/ads</em>service_limits.html&quot;&gt;AWS Application Discovery Service Limits</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> </note></p>
-    fn start_import_task(
-        &self,
-        input: StartImportTaskRequest,
-    ) -> RusotoFuture<StartImportTaskResponse, StartImportTaskError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for StartImportTaskRequest {
+    type Output = StartImportTaskResponse;
+    type Error = StartImportTaskError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.StartImportTask",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3408,23 +3673,28 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Stop the continuous flow of agent's discovered data into Amazon Athena.</p>
-    fn stop_continuous_export(
-        &self,
-        input: StopContinuousExportRequest,
-    ) -> RusotoFuture<StopContinuousExportResponse, StopContinuousExportError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for StopContinuousExportRequest {
+    type Output = StopContinuousExportResponse;
+    type Error = StopContinuousExportError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.StopContinuousExport",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3439,23 +3709,28 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Instructs the specified agents or connectors to stop collecting data.</p>
-    fn stop_data_collection_by_agent_ids(
-        &self,
-        input: StopDataCollectionByAgentIdsRequest,
-    ) -> RusotoFuture<StopDataCollectionByAgentIdsResponse, StopDataCollectionByAgentIdsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for StopDataCollectionByAgentIdsRequest {
+    type Output = StopDataCollectionByAgentIdsResponse;
+    type Error = StopDataCollectionByAgentIdsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.StopDataCollectionByAgentIds",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -3468,23 +3743,28 @@ impl Discovery for DiscoveryClient {
             }
         })
     }
+}
 
-    /// <p>Updates metadata about an application.</p>
-    fn update_application(
-        &self,
-        input: UpdateApplicationRequest,
-    ) -> RusotoFuture<UpdateApplicationResponse, UpdateApplicationError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+impl ServiceRequest for UpdateApplicationRequest {
+    type Output = UpdateApplicationResponse;
+    type Error = UpdateApplicationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "discovery", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.UpdateApplication",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)

@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -41,7 +42,7 @@ pub struct AWSSessionCredentials {
 
 /// <p>Represents the input of an AcknowledgeJob action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct AcknowledgeJobInput {
+pub struct AcknowledgeJobRequest {
     /// <p>The unique system-generated ID of the job for which you want to confirm receipt.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
@@ -53,7 +54,7 @@ pub struct AcknowledgeJobInput {
 /// <p>Represents the output of an AcknowledgeJob action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct AcknowledgeJobOutput {
+pub struct AcknowledgeJobResponse {
     /// <p>Whether the job worker has received the specified job.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -62,7 +63,7 @@ pub struct AcknowledgeJobOutput {
 
 /// <p>Represents the input of an AcknowledgeThirdPartyJob action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct AcknowledgeThirdPartyJobInput {
+pub struct AcknowledgeThirdPartyJobRequest {
     /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
     #[serde(rename = "clientToken")]
     pub client_token: String,
@@ -77,7 +78,7 @@ pub struct AcknowledgeThirdPartyJobInput {
 /// <p>Represents the output of an AcknowledgeThirdPartyJob action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct AcknowledgeThirdPartyJobOutput {
+pub struct AcknowledgeThirdPartyJobResponse {
     /// <p>The status information for the third party job, if any.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -553,7 +554,7 @@ pub struct BlockerDeclaration {
 
 /// <p>Represents the input of a CreateCustomActionType operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateCustomActionTypeInput {
+pub struct CreateCustomActionTypeRequest {
     /// <p><p>The category of the custom action, such as a build action or a test action.</p> <note> <p>Although <code>Source</code> and <code>Approval</code> are listed as valid values, they are not currently functional. These values are reserved for future use.</p> </note></p>
     #[serde(rename = "category")]
     pub category: String,
@@ -586,7 +587,7 @@ pub struct CreateCustomActionTypeInput {
 /// <p>Represents the output of a <code>CreateCustomActionType</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateCustomActionTypeOutput {
+pub struct CreateCustomActionTypeResponse {
     /// <p>Returns information about the details of an action type.</p>
     #[serde(rename = "actionType")]
     pub action_type: ActionType,
@@ -598,7 +599,7 @@ pub struct CreateCustomActionTypeOutput {
 
 /// <p>Represents the input of a <code>CreatePipeline</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreatePipelineInput {
+pub struct CreatePipelineRequest {
     /// <p>Represents the structure of actions and stages to be performed in the pipeline. </p>
     #[serde(rename = "pipeline")]
     pub pipeline: PipelineDeclaration,
@@ -611,7 +612,7 @@ pub struct CreatePipelineInput {
 /// <p>Represents the output of a <code>CreatePipeline</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreatePipelineOutput {
+pub struct CreatePipelineResponse {
     /// <p>Represents the structure of actions and stages to be performed in the pipeline. </p>
     #[serde(rename = "pipeline")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -643,7 +644,7 @@ pub struct CurrentRevision {
 
 /// <p>Represents the input of a <code>DeleteCustomActionType</code> operation. The custom action will be marked as deleted.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteCustomActionTypeInput {
+pub struct DeleteCustomActionTypeRequest {
     /// <p>The category of the custom action that you want to delete, such as source or deploy.</p>
     #[serde(rename = "category")]
     pub category: String,
@@ -655,16 +656,24 @@ pub struct DeleteCustomActionTypeInput {
     pub version: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteCustomActionTypeResponse {}
+
 /// <p>Represents the input of a <code>DeletePipeline</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeletePipelineInput {
+pub struct DeletePipelineRequest {
     /// <p>The name of the pipeline to be deleted.</p>
     #[serde(rename = "name")]
     pub name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeletePipelineResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteWebhookInput {
+pub struct DeleteWebhookRequest {
     /// <p>The name of the webhook you want to delete.</p>
     #[serde(rename = "name")]
     pub name: String,
@@ -672,10 +681,10 @@ pub struct DeleteWebhookInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteWebhookOutput {}
+pub struct DeleteWebhookResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeregisterWebhookWithThirdPartyInput {
+pub struct DeregisterWebhookWithThirdPartyRequest {
     /// <p>The name of the webhook you want to deregister.</p>
     #[serde(rename = "webhookName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -684,11 +693,11 @@ pub struct DeregisterWebhookWithThirdPartyInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeregisterWebhookWithThirdPartyOutput {}
+pub struct DeregisterWebhookWithThirdPartyResponse {}
 
 /// <p>Represents the input of a <code>DisableStageTransition</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DisableStageTransitionInput {
+pub struct DisableStageTransitionRequest {
     /// <p>The name of the pipeline in which you want to disable the flow of artifacts from one stage to another.</p>
     #[serde(rename = "pipelineName")]
     pub pipeline_name: String,
@@ -703,9 +712,13 @@ pub struct DisableStageTransitionInput {
     pub transition_type: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DisableStageTransitionResponse {}
+
 /// <p>Represents the input of an <code>EnableStageTransition</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct EnableStageTransitionInput {
+pub struct EnableStageTransitionRequest {
     /// <p>The name of the pipeline in which you want to enable the flow of artifacts from one stage to another.</p>
     #[serde(rename = "pipelineName")]
     pub pipeline_name: String,
@@ -716,6 +729,10 @@ pub struct EnableStageTransitionInput {
     #[serde(rename = "transitionType")]
     pub transition_type: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct EnableStageTransitionResponse {}
 
 /// <p>Represents information about the key used to encrypt data in the artifact store, such as an AWS Key Management Service (AWS KMS) key.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -776,7 +793,7 @@ pub struct FailureDetails {
 
 /// <p>Represents the input of a <code>GetJobDetails</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetJobDetailsInput {
+pub struct GetJobDetailsRequest {
     /// <p>The unique system-generated ID for the job.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
@@ -785,7 +802,7 @@ pub struct GetJobDetailsInput {
 /// <p>Represents the output of a <code>GetJobDetails</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetJobDetailsOutput {
+pub struct GetJobDetailsResponse {
     /// <p><p>The details of the job.</p> <note> <p>If AWSSessionCredentials is used, a long-running job can call <code>GetJobDetails</code> again to obtain new credentials.</p> </note></p>
     #[serde(rename = "jobDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -794,7 +811,7 @@ pub struct GetJobDetailsOutput {
 
 /// <p>Represents the input of a <code>GetPipelineExecution</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetPipelineExecutionInput {
+pub struct GetPipelineExecutionRequest {
     /// <p>The ID of the pipeline execution about which you want to get execution details.</p>
     #[serde(rename = "pipelineExecutionId")]
     pub pipeline_execution_id: String,
@@ -806,7 +823,7 @@ pub struct GetPipelineExecutionInput {
 /// <p>Represents the output of a <code>GetPipelineExecution</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetPipelineExecutionOutput {
+pub struct GetPipelineExecutionResponse {
     /// <p>Represents information about the execution of a pipeline.</p>
     #[serde(rename = "pipelineExecution")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -815,7 +832,7 @@ pub struct GetPipelineExecutionOutput {
 
 /// <p>Represents the input of a <code>GetPipeline</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetPipelineInput {
+pub struct GetPipelineRequest {
     /// <p>The name of the pipeline for which you want to get information. Pipeline names must be unique under an Amazon Web Services (AWS) user account.</p>
     #[serde(rename = "name")]
     pub name: String,
@@ -828,7 +845,7 @@ pub struct GetPipelineInput {
 /// <p>Represents the output of a <code>GetPipeline</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetPipelineOutput {
+pub struct GetPipelineResponse {
     /// <p>Represents the pipeline metadata information returned as part of the output of a <code>GetPipeline</code> action.</p>
     #[serde(rename = "metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -841,7 +858,7 @@ pub struct GetPipelineOutput {
 
 /// <p>Represents the input of a <code>GetPipelineState</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetPipelineStateInput {
+pub struct GetPipelineStateRequest {
     /// <p>The name of the pipeline about which you want to get information.</p>
     #[serde(rename = "name")]
     pub name: String,
@@ -850,7 +867,7 @@ pub struct GetPipelineStateInput {
 /// <p>Represents the output of a <code>GetPipelineState</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetPipelineStateOutput {
+pub struct GetPipelineStateResponse {
     /// <p>The date and time the pipeline was created, in timestamp format.</p>
     #[serde(rename = "created")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -875,7 +892,7 @@ pub struct GetPipelineStateOutput {
 
 /// <p>Represents the input of a <code>GetThirdPartyJobDetails</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetThirdPartyJobDetailsInput {
+pub struct GetThirdPartyJobDetailsRequest {
     /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
     #[serde(rename = "clientToken")]
     pub client_token: String,
@@ -887,7 +904,7 @@ pub struct GetThirdPartyJobDetailsInput {
 /// <p>Represents the output of a <code>GetThirdPartyJobDetails</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetThirdPartyJobDetailsOutput {
+pub struct GetThirdPartyJobDetailsResponse {
     /// <p>The details of the job, including any protected values defined for the job.</p>
     #[serde(rename = "jobDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -981,7 +998,7 @@ pub struct JobDetails {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListActionExecutionsInput {
+pub struct ListActionExecutionsRequest {
     /// <p>Input information used to filter action execution history.</p>
     #[serde(rename = "filter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1001,7 +1018,7 @@ pub struct ListActionExecutionsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListActionExecutionsOutput {
+pub struct ListActionExecutionsResponse {
     /// <p>The details for a list of recent executions, such as action execution ID.</p>
     #[serde(rename = "actionExecutionDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1014,7 +1031,7 @@ pub struct ListActionExecutionsOutput {
 
 /// <p>Represents the input of a <code>ListActionTypes</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListActionTypesInput {
+pub struct ListActionTypesRequest {
     /// <p>Filters the list of action types to those created by a specified entity.</p>
     #[serde(rename = "actionOwnerFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1028,7 +1045,7 @@ pub struct ListActionTypesInput {
 /// <p>Represents the output of a <code>ListActionTypes</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListActionTypesOutput {
+pub struct ListActionTypesResponse {
     /// <p>Provides details of the action types.</p>
     #[serde(rename = "actionTypes")]
     pub action_types: Vec<ActionType>,
@@ -1040,7 +1057,7 @@ pub struct ListActionTypesOutput {
 
 /// <p>Represents the input of a <code>ListPipelineExecutions</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListPipelineExecutionsInput {
+pub struct ListPipelineExecutionsRequest {
     /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned nextToken value. Pipeline history is limited to the most recent 12 months, based on pipeline execution start times. Default value is 100.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1057,7 +1074,7 @@ pub struct ListPipelineExecutionsInput {
 /// <p>Represents the output of a <code>ListPipelineExecutions</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListPipelineExecutionsOutput {
+pub struct ListPipelineExecutionsResponse {
     /// <p>A token that can be used in the next <code>ListPipelineExecutions</code> call. To view all items in the list, continue to call this operation with each subsequent token until no more nextToken values are returned.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1070,7 +1087,7 @@ pub struct ListPipelineExecutionsOutput {
 
 /// <p>Represents the input of a <code>ListPipelines</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListPipelinesInput {
+pub struct ListPipelinesRequest {
     /// <p>An identifier that was returned from the previous list pipelines call, which can be used to return the next set of pipelines in the list.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1080,7 +1097,7 @@ pub struct ListPipelinesInput {
 /// <p>Represents the output of a <code>ListPipelines</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListPipelinesOutput {
+pub struct ListPipelinesResponse {
     /// <p>If the amount of returned information is significantly large, an identifier is also returned which can be used in a subsequent list pipelines call to return the next set of pipelines in the list.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1092,7 +1109,7 @@ pub struct ListPipelinesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListTagsForResourceInput {
+pub struct ListTagsForResourceRequest {
     /// <p>The maximum number of results to return in a single call.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1108,7 +1125,7 @@ pub struct ListTagsForResourceInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListTagsForResourceOutput {
+pub struct ListTagsForResourceResponse {
     /// <p>If the amount of returned information is significantly large, an identifier is also returned and can be used in a subsequent API call to return the next page of the list. However, the ListTagsforResource call lists all available tags in one call and does not use pagination.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1152,7 +1169,7 @@ pub struct ListWebhookItem {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListWebhooksInput {
+pub struct ListWebhooksRequest {
     /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned nextToken value.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1165,7 +1182,7 @@ pub struct ListWebhooksInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListWebhooksOutput {
+pub struct ListWebhooksResponse {
     /// <p>If the amount of returned information is significantly large, an identifier is also returned and can be used in a subsequent ListWebhooks call to return the next set of webhooks in the list. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1330,7 +1347,7 @@ pub struct PipelineSummary {
 
 /// <p>Represents the input of a <code>PollForJobs</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PollForJobsInput {
+pub struct PollForJobsRequest {
     /// <p>Represents information about an action type.</p>
     #[serde(rename = "actionTypeId")]
     pub action_type_id: ActionTypeId,
@@ -1347,7 +1364,7 @@ pub struct PollForJobsInput {
 /// <p>Represents the output of a <code>PollForJobs</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct PollForJobsOutput {
+pub struct PollForJobsResponse {
     /// <p>Information about the jobs to take action on.</p>
     #[serde(rename = "jobs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1356,7 +1373,7 @@ pub struct PollForJobsOutput {
 
 /// <p>Represents the input of a <code>PollForThirdPartyJobs</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PollForThirdPartyJobsInput {
+pub struct PollForThirdPartyJobsRequest {
     /// <p>Represents information about an action type.</p>
     #[serde(rename = "actionTypeId")]
     pub action_type_id: ActionTypeId,
@@ -1369,7 +1386,7 @@ pub struct PollForThirdPartyJobsInput {
 /// <p>Represents the output of a <code>PollForThirdPartyJobs</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct PollForThirdPartyJobsOutput {
+pub struct PollForThirdPartyJobsResponse {
     /// <p>Information about the jobs to take action on.</p>
     #[serde(rename = "jobs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1378,7 +1395,7 @@ pub struct PollForThirdPartyJobsOutput {
 
 /// <p>Represents the input of a <code>PutActionRevision</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PutActionRevisionInput {
+pub struct PutActionRevisionRequest {
     /// <p>The name of the action that will process the revision.</p>
     #[serde(rename = "actionName")]
     pub action_name: String,
@@ -1396,7 +1413,7 @@ pub struct PutActionRevisionInput {
 /// <p>Represents the output of a <code>PutActionRevision</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct PutActionRevisionOutput {
+pub struct PutActionRevisionResponse {
     /// <p>Indicates whether the artifact revision was previously used in an execution of the specified pipeline.</p>
     #[serde(rename = "newRevision")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1409,7 +1426,7 @@ pub struct PutActionRevisionOutput {
 
 /// <p>Represents the input of a <code>PutApprovalResult</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PutApprovalResultInput {
+pub struct PutApprovalResultRequest {
     /// <p>The name of the action for which approval is requested.</p>
     #[serde(rename = "actionName")]
     pub action_name: String,
@@ -1430,7 +1447,7 @@ pub struct PutApprovalResultInput {
 /// <p>Represents the output of a <code>PutApprovalResult</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct PutApprovalResultOutput {
+pub struct PutApprovalResultResponse {
     /// <p>The timestamp showing when the approval or rejection was submitted.</p>
     #[serde(rename = "approvedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1439,7 +1456,7 @@ pub struct PutApprovalResultOutput {
 
 /// <p>Represents the input of a <code>PutJobFailureResult</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PutJobFailureResultInput {
+pub struct PutJobFailureResultRequest {
     /// <p>The details about the failure of a job.</p>
     #[serde(rename = "failureDetails")]
     pub failure_details: FailureDetails,
@@ -1448,9 +1465,13 @@ pub struct PutJobFailureResultInput {
     pub job_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutJobFailureResultResponse {}
+
 /// <p>Represents the input of a <code>PutJobSuccessResult</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PutJobSuccessResultInput {
+pub struct PutJobSuccessResultRequest {
     /// <p>A token generated by a job worker, such as an AWS CodeDeploy deployment ID, that a successful job provides to identify a custom action in progress. Future jobs will use this token in order to identify the running instance of the action. It can be reused to return additional information about the progress of the custom action. When the action is complete, no continuation token should be supplied.</p>
     #[serde(rename = "continuationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1468,9 +1489,13 @@ pub struct PutJobSuccessResultInput {
     pub job_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutJobSuccessResultResponse {}
+
 /// <p>Represents the input of a <code>PutThirdPartyJobFailureResult</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PutThirdPartyJobFailureResultInput {
+pub struct PutThirdPartyJobFailureResultRequest {
     /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
     #[serde(rename = "clientToken")]
     pub client_token: String,
@@ -1482,9 +1507,13 @@ pub struct PutThirdPartyJobFailureResultInput {
     pub job_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutThirdPartyJobFailureResultResponse {}
+
 /// <p>Represents the input of a <code>PutThirdPartyJobSuccessResult</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PutThirdPartyJobSuccessResultInput {
+pub struct PutThirdPartyJobSuccessResultRequest {
     /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
     #[serde(rename = "clientToken")]
     pub client_token: String,
@@ -1505,8 +1534,12 @@ pub struct PutThirdPartyJobSuccessResultInput {
     pub job_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutThirdPartyJobSuccessResultResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PutWebhookInput {
+pub struct PutWebhookRequest {
     /// <p>The tags for the webhook.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1518,7 +1551,7 @@ pub struct PutWebhookInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct PutWebhookOutput {
+pub struct PutWebhookResponse {
     /// <p>The detail returned from creating the webhook, such as the webhook name, webhook URL, and webhook ARN.</p>
     #[serde(rename = "webhook")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1526,7 +1559,7 @@ pub struct PutWebhookOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct RegisterWebhookWithThirdPartyInput {
+pub struct RegisterWebhookWithThirdPartyRequest {
     /// <p>The name of an existing webhook created with PutWebhook to register with a supported third party. </p>
     #[serde(rename = "webhookName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1535,11 +1568,11 @@ pub struct RegisterWebhookWithThirdPartyInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct RegisterWebhookWithThirdPartyOutput {}
+pub struct RegisterWebhookWithThirdPartyResponse {}
 
 /// <p>Represents the input of a <code>RetryStageExecution</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct RetryStageExecutionInput {
+pub struct RetryStageExecutionRequest {
     /// <p>The ID of the pipeline execution in the failed stage to be retried. Use the <a>GetPipelineState</a> action to retrieve the current pipelineExecutionId of the failed stage</p>
     #[serde(rename = "pipelineExecutionId")]
     pub pipeline_execution_id: String,
@@ -1557,7 +1590,7 @@ pub struct RetryStageExecutionInput {
 /// <p>Represents the output of a <code>RetryStageExecution</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct RetryStageExecutionOutput {
+pub struct RetryStageExecutionResponse {
     /// <p>The ID of the current workflow execution in the failed stage.</p>
     #[serde(rename = "pipelineExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1672,7 +1705,7 @@ pub struct StageState {
 
 /// <p>Represents the input of a <code>StartPipelineExecution</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct StartPipelineExecutionInput {
+pub struct StartPipelineExecutionRequest {
     /// <p>The system-generated unique ID used to identify a unique execution request.</p>
     #[serde(rename = "clientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1685,7 +1718,7 @@ pub struct StartPipelineExecutionInput {
 /// <p>Represents the output of a <code>StartPipelineExecution</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct StartPipelineExecutionOutput {
+pub struct StartPipelineExecutionResponse {
     /// <p>The unique system-generated ID of the pipeline execution that was started.</p>
     #[serde(rename = "pipelineExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1704,7 +1737,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct TagResourceInput {
+pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource you want to add tags to.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
@@ -1715,7 +1748,7 @@ pub struct TagResourceInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct TagResourceOutput {}
+pub struct TagResourceResponse {}
 
 /// <p>A response to a <code>PollForThirdPartyJobs </code>request returned by AWS CodePipeline when there is a job to be worked upon by a partner action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1810,7 +1843,7 @@ pub struct TransitionState {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UntagResourceInput {
+pub struct UntagResourceRequest {
     /// <p> The Amazon Resource Name (ARN) of the resource to remove tags from.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
@@ -1821,11 +1854,11 @@ pub struct UntagResourceInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UntagResourceOutput {}
+pub struct UntagResourceResponse {}
 
 /// <p>Represents the input of an <code>UpdatePipeline</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdatePipelineInput {
+pub struct UpdatePipelineRequest {
     /// <p>The name of the pipeline to be updated.</p>
     #[serde(rename = "pipeline")]
     pub pipeline: PipelineDeclaration,
@@ -1834,7 +1867,7 @@ pub struct UpdatePipelineInput {
 /// <p>Represents the output of an <code>UpdatePipeline</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdatePipelineOutput {
+pub struct UpdatePipelineResponse {
     /// <p>The structure of the updated pipeline.</p>
     #[serde(rename = "pipeline")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3522,217 +3555,178 @@ impl Error for UpdatePipelineError {
 /// Trait representing the capabilities of the CodePipeline API. CodePipeline clients implement this trait.
 pub trait CodePipeline {
     /// <p>Returns information about a specified job and whether that job has been received by the job worker. Only used for custom actions.</p>
-    fn acknowledge_job(
-        &self,
-        input: AcknowledgeJobInput,
-    ) -> RusotoFuture<AcknowledgeJobOutput, AcknowledgeJobError>;
+    fn acknowledge_job(&self, input: AcknowledgeJobRequest) -> Request<AcknowledgeJobRequest>;
 
     /// <p>Confirms a job worker has received the specified job. Only used for partner actions.</p>
     fn acknowledge_third_party_job(
         &self,
-        input: AcknowledgeThirdPartyJobInput,
-    ) -> RusotoFuture<AcknowledgeThirdPartyJobOutput, AcknowledgeThirdPartyJobError>;
+        input: AcknowledgeThirdPartyJobRequest,
+    ) -> Request<AcknowledgeThirdPartyJobRequest>;
 
     /// <p>Creates a new custom action that can be used in all pipelines associated with the AWS account. Only used for custom actions.</p>
     fn create_custom_action_type(
         &self,
-        input: CreateCustomActionTypeInput,
-    ) -> RusotoFuture<CreateCustomActionTypeOutput, CreateCustomActionTypeError>;
+        input: CreateCustomActionTypeRequest,
+    ) -> Request<CreateCustomActionTypeRequest>;
 
     /// <p>Creates a pipeline.</p>
-    fn create_pipeline(
-        &self,
-        input: CreatePipelineInput,
-    ) -> RusotoFuture<CreatePipelineOutput, CreatePipelineError>;
+    fn create_pipeline(&self, input: CreatePipelineRequest) -> Request<CreatePipelineRequest>;
 
     /// <p><p>Marks a custom action as deleted. <code>PollForJobs</code> for the custom action will fail after the action is marked for deletion. Only used for custom actions.</p> <important> <p>To re-create a custom action after it has been deleted you must use a string in the version field that has never been used before. This string can be an incremented version number, for example. To restore a deleted custom action, use a JSON file that is identical to the deleted action, including the original string in the version field.</p> </important></p>
     fn delete_custom_action_type(
         &self,
-        input: DeleteCustomActionTypeInput,
-    ) -> RusotoFuture<(), DeleteCustomActionTypeError>;
+        input: DeleteCustomActionTypeRequest,
+    ) -> Request<DeleteCustomActionTypeRequest>;
 
     /// <p>Deletes the specified pipeline.</p>
-    fn delete_pipeline(&self, input: DeletePipelineInput) -> RusotoFuture<(), DeletePipelineError>;
+    fn delete_pipeline(&self, input: DeletePipelineRequest) -> Request<DeletePipelineRequest>;
 
     /// <p>Deletes a previously created webhook by name. Deleting the webhook stops AWS CodePipeline from starting a pipeline every time an external event occurs. The API will return successfully when trying to delete a webhook that is already deleted. If a deleted webhook is re-created by calling PutWebhook with the same name, it will have a different URL.</p>
-    fn delete_webhook(
-        &self,
-        input: DeleteWebhookInput,
-    ) -> RusotoFuture<DeleteWebhookOutput, DeleteWebhookError>;
+    fn delete_webhook(&self, input: DeleteWebhookRequest) -> Request<DeleteWebhookRequest>;
 
     /// <p>Removes the connection between the webhook that was created by CodePipeline and the external tool with events to be detected. Currently only supported for webhooks that target an action type of GitHub.</p>
     fn deregister_webhook_with_third_party(
         &self,
-        input: DeregisterWebhookWithThirdPartyInput,
-    ) -> RusotoFuture<DeregisterWebhookWithThirdPartyOutput, DeregisterWebhookWithThirdPartyError>;
+        input: DeregisterWebhookWithThirdPartyRequest,
+    ) -> Request<DeregisterWebhookWithThirdPartyRequest>;
 
     /// <p>Prevents artifacts in a pipeline from transitioning to the next stage in the pipeline.</p>
     fn disable_stage_transition(
         &self,
-        input: DisableStageTransitionInput,
-    ) -> RusotoFuture<(), DisableStageTransitionError>;
+        input: DisableStageTransitionRequest,
+    ) -> Request<DisableStageTransitionRequest>;
 
     /// <p>Enables artifacts in a pipeline to transition to a stage in a pipeline.</p>
     fn enable_stage_transition(
         &self,
-        input: EnableStageTransitionInput,
-    ) -> RusotoFuture<(), EnableStageTransitionError>;
+        input: EnableStageTransitionRequest,
+    ) -> Request<EnableStageTransitionRequest>;
 
     /// <p><p>Returns information about a job. Only used for custom actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
-    fn get_job_details(
-        &self,
-        input: GetJobDetailsInput,
-    ) -> RusotoFuture<GetJobDetailsOutput, GetJobDetailsError>;
+    fn get_job_details(&self, input: GetJobDetailsRequest) -> Request<GetJobDetailsRequest>;
 
     /// <p>Returns the metadata, structure, stages, and actions of a pipeline. Can be used to return the entire structure of a pipeline in JSON format, which can then be modified and used to update the pipeline structure with <a>UpdatePipeline</a>.</p>
-    fn get_pipeline(
-        &self,
-        input: GetPipelineInput,
-    ) -> RusotoFuture<GetPipelineOutput, GetPipelineError>;
+    fn get_pipeline(&self, input: GetPipelineRequest) -> Request<GetPipelineRequest>;
 
     /// <p>Returns information about an execution of a pipeline, including details about artifacts, the pipeline execution ID, and the name, version, and status of the pipeline.</p>
     fn get_pipeline_execution(
         &self,
-        input: GetPipelineExecutionInput,
-    ) -> RusotoFuture<GetPipelineExecutionOutput, GetPipelineExecutionError>;
+        input: GetPipelineExecutionRequest,
+    ) -> Request<GetPipelineExecutionRequest>;
 
     /// <p><p>Returns information about the state of a pipeline, including the stages and actions.</p> <note> <p>Values returned in the <code>revisionId</code> and <code>revisionUrl</code> fields indicate the source revision information, such as the commit ID, for the current state.</p> </note></p>
     fn get_pipeline_state(
         &self,
-        input: GetPipelineStateInput,
-    ) -> RusotoFuture<GetPipelineStateOutput, GetPipelineStateError>;
+        input: GetPipelineStateRequest,
+    ) -> Request<GetPipelineStateRequest>;
 
     /// <p><p>Requests the details of a job for a third party action. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
     fn get_third_party_job_details(
         &self,
-        input: GetThirdPartyJobDetailsInput,
-    ) -> RusotoFuture<GetThirdPartyJobDetailsOutput, GetThirdPartyJobDetailsError>;
+        input: GetThirdPartyJobDetailsRequest,
+    ) -> Request<GetThirdPartyJobDetailsRequest>;
 
     /// <p>Lists the action executions that have occurred in a pipeline.</p>
     fn list_action_executions(
         &self,
-        input: ListActionExecutionsInput,
-    ) -> RusotoFuture<ListActionExecutionsOutput, ListActionExecutionsError>;
+        input: ListActionExecutionsRequest,
+    ) -> Request<ListActionExecutionsRequest>;
 
     /// <p>Gets a summary of all AWS CodePipeline action types associated with your account.</p>
-    fn list_action_types(
-        &self,
-        input: ListActionTypesInput,
-    ) -> RusotoFuture<ListActionTypesOutput, ListActionTypesError>;
+    fn list_action_types(&self, input: ListActionTypesRequest) -> Request<ListActionTypesRequest>;
 
     /// <p>Gets a summary of the most recent executions for a pipeline.</p>
     fn list_pipeline_executions(
         &self,
-        input: ListPipelineExecutionsInput,
-    ) -> RusotoFuture<ListPipelineExecutionsOutput, ListPipelineExecutionsError>;
+        input: ListPipelineExecutionsRequest,
+    ) -> Request<ListPipelineExecutionsRequest>;
 
     /// <p>Gets a summary of all of the pipelines associated with your account.</p>
-    fn list_pipelines(
-        &self,
-        input: ListPipelinesInput,
-    ) -> RusotoFuture<ListPipelinesOutput, ListPipelinesError>;
+    fn list_pipelines(&self, input: ListPipelinesRequest) -> Request<ListPipelinesRequest>;
 
     /// <p>Gets the set of key/value pairs (metadata) that are used to manage the resource.</p>
     fn list_tags_for_resource(
         &self,
-        input: ListTagsForResourceInput,
-    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError>;
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Gets a listing of all the webhooks in this region for this account. The output lists all webhooks and includes the webhook URL and ARN, as well the configuration for each webhook.</p>
-    fn list_webhooks(
-        &self,
-        input: ListWebhooksInput,
-    ) -> RusotoFuture<ListWebhooksOutput, ListWebhooksError>;
+    fn list_webhooks(&self, input: ListWebhooksRequest) -> Request<ListWebhooksRequest>;
 
     /// <p><p>Returns information about any jobs for AWS CodePipeline to act upon. <code>PollForJobs</code> is only valid for action types with &quot;Custom&quot; in the owner field. If the action type contains &quot;AWS&quot; or &quot;ThirdParty&quot; in the owner field, the <code>PollForJobs</code> action returns an error.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
-    fn poll_for_jobs(
-        &self,
-        input: PollForJobsInput,
-    ) -> RusotoFuture<PollForJobsOutput, PollForJobsError>;
+    fn poll_for_jobs(&self, input: PollForJobsRequest) -> Request<PollForJobsRequest>;
 
     /// <p><p>Determines whether there are any third party jobs for a job worker to act on. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important></p>
     fn poll_for_third_party_jobs(
         &self,
-        input: PollForThirdPartyJobsInput,
-    ) -> RusotoFuture<PollForThirdPartyJobsOutput, PollForThirdPartyJobsError>;
+        input: PollForThirdPartyJobsRequest,
+    ) -> Request<PollForThirdPartyJobsRequest>;
 
     /// <p>Provides information to AWS CodePipeline about new revisions to a source.</p>
     fn put_action_revision(
         &self,
-        input: PutActionRevisionInput,
-    ) -> RusotoFuture<PutActionRevisionOutput, PutActionRevisionError>;
+        input: PutActionRevisionRequest,
+    ) -> Request<PutActionRevisionRequest>;
 
     /// <p>Provides the response to a manual approval request to AWS CodePipeline. Valid responses include Approved and Rejected.</p>
     fn put_approval_result(
         &self,
-        input: PutApprovalResultInput,
-    ) -> RusotoFuture<PutApprovalResultOutput, PutApprovalResultError>;
+        input: PutApprovalResultRequest,
+    ) -> Request<PutApprovalResultRequest>;
 
     /// <p>Represents the failure of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>
     fn put_job_failure_result(
         &self,
-        input: PutJobFailureResultInput,
-    ) -> RusotoFuture<(), PutJobFailureResultError>;
+        input: PutJobFailureResultRequest,
+    ) -> Request<PutJobFailureResultRequest>;
 
     /// <p>Represents the success of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>
     fn put_job_success_result(
         &self,
-        input: PutJobSuccessResultInput,
-    ) -> RusotoFuture<(), PutJobSuccessResultError>;
+        input: PutJobSuccessResultRequest,
+    ) -> Request<PutJobSuccessResultRequest>;
 
     /// <p>Represents the failure of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>
     fn put_third_party_job_failure_result(
         &self,
-        input: PutThirdPartyJobFailureResultInput,
-    ) -> RusotoFuture<(), PutThirdPartyJobFailureResultError>;
+        input: PutThirdPartyJobFailureResultRequest,
+    ) -> Request<PutThirdPartyJobFailureResultRequest>;
 
     /// <p>Represents the success of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>
     fn put_third_party_job_success_result(
         &self,
-        input: PutThirdPartyJobSuccessResultInput,
-    ) -> RusotoFuture<(), PutThirdPartyJobSuccessResultError>;
+        input: PutThirdPartyJobSuccessResultRequest,
+    ) -> Request<PutThirdPartyJobSuccessResultRequest>;
 
     /// <p>Defines a webhook and returns a unique webhook URL generated by CodePipeline. This URL can be supplied to third party source hosting providers to call every time there's a code change. When CodePipeline receives a POST request on this URL, the pipeline defined in the webhook is started as long as the POST request satisfied the authentication and filtering requirements supplied when defining the webhook. RegisterWebhookWithThirdParty and DeregisterWebhookWithThirdParty APIs can be used to automatically configure supported third parties to call the generated webhook URL.</p>
-    fn put_webhook(
-        &self,
-        input: PutWebhookInput,
-    ) -> RusotoFuture<PutWebhookOutput, PutWebhookError>;
+    fn put_webhook(&self, input: PutWebhookRequest) -> Request<PutWebhookRequest>;
 
     /// <p>Configures a connection between the webhook that was created and the external tool with events to be detected.</p>
     fn register_webhook_with_third_party(
         &self,
-        input: RegisterWebhookWithThirdPartyInput,
-    ) -> RusotoFuture<RegisterWebhookWithThirdPartyOutput, RegisterWebhookWithThirdPartyError>;
+        input: RegisterWebhookWithThirdPartyRequest,
+    ) -> Request<RegisterWebhookWithThirdPartyRequest>;
 
     /// <p>Resumes the pipeline execution by retrying the last failed actions in a stage.</p>
     fn retry_stage_execution(
         &self,
-        input: RetryStageExecutionInput,
-    ) -> RusotoFuture<RetryStageExecutionOutput, RetryStageExecutionError>;
+        input: RetryStageExecutionRequest,
+    ) -> Request<RetryStageExecutionRequest>;
 
     /// <p>Starts the specified pipeline. Specifically, it begins processing the latest commit to the source location specified as part of the pipeline.</p>
     fn start_pipeline_execution(
         &self,
-        input: StartPipelineExecutionInput,
-    ) -> RusotoFuture<StartPipelineExecutionOutput, StartPipelineExecutionError>;
+        input: StartPipelineExecutionRequest,
+    ) -> Request<StartPipelineExecutionRequest>;
 
     /// <p>Adds to or modifies the tags of the given resource. Tags are metadata that can be used to manage a resource. </p>
-    fn tag_resource(
-        &self,
-        input: TagResourceInput,
-    ) -> RusotoFuture<TagResourceOutput, TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Removes tags from an AWS resource.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceInput,
-    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with <code>UpdatePipeline</code> to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>
-    fn update_pipeline(
-        &self,
-        input: UpdatePipelineInput,
-    ) -> RusotoFuture<UpdatePipelineOutput, UpdatePipelineError>;
+    fn update_pipeline(&self, input: UpdatePipelineRequest) -> Request<UpdatePipelineRequest>;
 }
 /// A client for the CodePipeline API.
 #[derive(Clone)]
@@ -3772,22 +3766,273 @@ impl CodePipelineClient {
 
 impl CodePipeline for CodePipelineClient {
     /// <p>Returns information about a specified job and whether that job has been received by the job worker. Only used for custom actions.</p>
-    fn acknowledge_job(
+    fn acknowledge_job(&self, input: AcknowledgeJobRequest) -> Request<AcknowledgeJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Confirms a job worker has received the specified job. Only used for partner actions.</p>
+    fn acknowledge_third_party_job(
         &self,
-        input: AcknowledgeJobInput,
-    ) -> RusotoFuture<AcknowledgeJobOutput, AcknowledgeJobError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        input: AcknowledgeThirdPartyJobRequest,
+    ) -> Request<AcknowledgeThirdPartyJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new custom action that can be used in all pipelines associated with the AWS account. Only used for custom actions.</p>
+    fn create_custom_action_type(
+        &self,
+        input: CreateCustomActionTypeRequest,
+    ) -> Request<CreateCustomActionTypeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a pipeline.</p>
+    fn create_pipeline(&self, input: CreatePipelineRequest) -> Request<CreatePipelineRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Marks a custom action as deleted. <code>PollForJobs</code> for the custom action will fail after the action is marked for deletion. Only used for custom actions.</p> <important> <p>To re-create a custom action after it has been deleted you must use a string in the version field that has never been used before. This string can be an incremented version number, for example. To restore a deleted custom action, use a JSON file that is identical to the deleted action, including the original string in the version field.</p> </important></p>
+    fn delete_custom_action_type(
+        &self,
+        input: DeleteCustomActionTypeRequest,
+    ) -> Request<DeleteCustomActionTypeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified pipeline.</p>
+    fn delete_pipeline(&self, input: DeletePipelineRequest) -> Request<DeletePipelineRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a previously created webhook by name. Deleting the webhook stops AWS CodePipeline from starting a pipeline every time an external event occurs. The API will return successfully when trying to delete a webhook that is already deleted. If a deleted webhook is re-created by calling PutWebhook with the same name, it will have a different URL.</p>
+    fn delete_webhook(&self, input: DeleteWebhookRequest) -> Request<DeleteWebhookRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the connection between the webhook that was created by CodePipeline and the external tool with events to be detected. Currently only supported for webhooks that target an action type of GitHub.</p>
+    fn deregister_webhook_with_third_party(
+        &self,
+        input: DeregisterWebhookWithThirdPartyRequest,
+    ) -> Request<DeregisterWebhookWithThirdPartyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Prevents artifacts in a pipeline from transitioning to the next stage in the pipeline.</p>
+    fn disable_stage_transition(
+        &self,
+        input: DisableStageTransitionRequest,
+    ) -> Request<DisableStageTransitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Enables artifacts in a pipeline to transition to a stage in a pipeline.</p>
+    fn enable_stage_transition(
+        &self,
+        input: EnableStageTransitionRequest,
+    ) -> Request<EnableStageTransitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Returns information about a job. Only used for custom actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
+    fn get_job_details(&self, input: GetJobDetailsRequest) -> Request<GetJobDetailsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the metadata, structure, stages, and actions of a pipeline. Can be used to return the entire structure of a pipeline in JSON format, which can then be modified and used to update the pipeline structure with <a>UpdatePipeline</a>.</p>
+    fn get_pipeline(&self, input: GetPipelineRequest) -> Request<GetPipelineRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about an execution of a pipeline, including details about artifacts, the pipeline execution ID, and the name, version, and status of the pipeline.</p>
+    fn get_pipeline_execution(
+        &self,
+        input: GetPipelineExecutionRequest,
+    ) -> Request<GetPipelineExecutionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Returns information about the state of a pipeline, including the stages and actions.</p> <note> <p>Values returned in the <code>revisionId</code> and <code>revisionUrl</code> fields indicate the source revision information, such as the commit ID, for the current state.</p> </note></p>
+    fn get_pipeline_state(
+        &self,
+        input: GetPipelineStateRequest,
+    ) -> Request<GetPipelineStateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Requests the details of a job for a third party action. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
+    fn get_third_party_job_details(
+        &self,
+        input: GetThirdPartyJobDetailsRequest,
+    ) -> Request<GetThirdPartyJobDetailsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the action executions that have occurred in a pipeline.</p>
+    fn list_action_executions(
+        &self,
+        input: ListActionExecutionsRequest,
+    ) -> Request<ListActionExecutionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a summary of all AWS CodePipeline action types associated with your account.</p>
+    fn list_action_types(&self, input: ListActionTypesRequest) -> Request<ListActionTypesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a summary of the most recent executions for a pipeline.</p>
+    fn list_pipeline_executions(
+        &self,
+        input: ListPipelineExecutionsRequest,
+    ) -> Request<ListPipelineExecutionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a summary of all of the pipelines associated with your account.</p>
+    fn list_pipelines(&self, input: ListPipelinesRequest) -> Request<ListPipelinesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the set of key/value pairs (metadata) that are used to manage the resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a listing of all the webhooks in this region for this account. The output lists all webhooks and includes the webhook URL and ARN, as well the configuration for each webhook.</p>
+    fn list_webhooks(&self, input: ListWebhooksRequest) -> Request<ListWebhooksRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Returns information about any jobs for AWS CodePipeline to act upon. <code>PollForJobs</code> is only valid for action types with &quot;Custom&quot; in the owner field. If the action type contains &quot;AWS&quot; or &quot;ThirdParty&quot; in the owner field, the <code>PollForJobs</code> action returns an error.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
+    fn poll_for_jobs(&self, input: PollForJobsRequest) -> Request<PollForJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Determines whether there are any third party jobs for a job worker to act on. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important></p>
+    fn poll_for_third_party_jobs(
+        &self,
+        input: PollForThirdPartyJobsRequest,
+    ) -> Request<PollForThirdPartyJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Provides information to AWS CodePipeline about new revisions to a source.</p>
+    fn put_action_revision(
+        &self,
+        input: PutActionRevisionRequest,
+    ) -> Request<PutActionRevisionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Provides the response to a manual approval request to AWS CodePipeline. Valid responses include Approved and Rejected.</p>
+    fn put_approval_result(
+        &self,
+        input: PutApprovalResultRequest,
+    ) -> Request<PutApprovalResultRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Represents the failure of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>
+    fn put_job_failure_result(
+        &self,
+        input: PutJobFailureResultRequest,
+    ) -> Request<PutJobFailureResultRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Represents the success of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>
+    fn put_job_success_result(
+        &self,
+        input: PutJobSuccessResultRequest,
+    ) -> Request<PutJobSuccessResultRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Represents the failure of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>
+    fn put_third_party_job_failure_result(
+        &self,
+        input: PutThirdPartyJobFailureResultRequest,
+    ) -> Request<PutThirdPartyJobFailureResultRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Represents the success of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>
+    fn put_third_party_job_success_result(
+        &self,
+        input: PutThirdPartyJobSuccessResultRequest,
+    ) -> Request<PutThirdPartyJobSuccessResultRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Defines a webhook and returns a unique webhook URL generated by CodePipeline. This URL can be supplied to third party source hosting providers to call every time there's a code change. When CodePipeline receives a POST request on this URL, the pipeline defined in the webhook is started as long as the POST request satisfied the authentication and filtering requirements supplied when defining the webhook. RegisterWebhookWithThirdParty and DeregisterWebhookWithThirdParty APIs can be used to automatically configure supported third parties to call the generated webhook URL.</p>
+    fn put_webhook(&self, input: PutWebhookRequest) -> Request<PutWebhookRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Configures a connection between the webhook that was created and the external tool with events to be detected.</p>
+    fn register_webhook_with_third_party(
+        &self,
+        input: RegisterWebhookWithThirdPartyRequest,
+    ) -> Request<RegisterWebhookWithThirdPartyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Resumes the pipeline execution by retrying the last failed actions in a stage.</p>
+    fn retry_stage_execution(
+        &self,
+        input: RetryStageExecutionRequest,
+    ) -> Request<RetryStageExecutionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts the specified pipeline. Specifically, it begins processing the latest commit to the source location specified as part of the pipeline.</p>
+    fn start_pipeline_execution(
+        &self,
+        input: StartPipelineExecutionRequest,
+    ) -> Request<StartPipelineExecutionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds to or modifies the tags of the given resource. Tags are metadata that can be used to manage a resource. </p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes tags from an AWS resource.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with <code>UpdatePipeline</code> to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>
+    fn update_pipeline(&self, input: UpdatePipelineRequest) -> Request<UpdatePipelineRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AcknowledgeJobRequest {
+    type Output = AcknowledgeJobResponse;
+    type Error = AcknowledgeJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.AcknowledgeJob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AcknowledgeJobOutput, _>()
+                        .deserialize::<AcknowledgeJobResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3799,27 +4044,32 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Confirms a job worker has received the specified job. Only used for partner actions.</p>
-    fn acknowledge_third_party_job(
-        &self,
-        input: AcknowledgeThirdPartyJobInput,
-    ) -> RusotoFuture<AcknowledgeThirdPartyJobOutput, AcknowledgeThirdPartyJobError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for AcknowledgeThirdPartyJobRequest {
+    type Output = AcknowledgeThirdPartyJobResponse;
+    type Error = AcknowledgeThirdPartyJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.AcknowledgeThirdPartyJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AcknowledgeThirdPartyJobOutput, _>()
+                        .deserialize::<AcknowledgeThirdPartyJobResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3828,27 +4078,32 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new custom action that can be used in all pipelines associated with the AWS account. Only used for custom actions.</p>
-    fn create_custom_action_type(
-        &self,
-        input: CreateCustomActionTypeInput,
-    ) -> RusotoFuture<CreateCustomActionTypeOutput, CreateCustomActionTypeError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for CreateCustomActionTypeRequest {
+    type Output = CreateCustomActionTypeResponse;
+    type Error = CreateCustomActionTypeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.CreateCustomActionType",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateCustomActionTypeOutput, _>()
+                        .deserialize::<CreateCustomActionTypeResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3859,24 +4114,29 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Creates a pipeline.</p>
-    fn create_pipeline(
-        &self,
-        input: CreatePipelineInput,
-    ) -> RusotoFuture<CreatePipelineOutput, CreatePipelineError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for CreatePipelineRequest {
+    type Output = CreatePipelineResponse;
+    type Error = CreatePipelineError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.CreatePipeline");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreatePipelineOutput, _>()
+                        .deserialize::<CreatePipelineResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3888,25 +4148,33 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p><p>Marks a custom action as deleted. <code>PollForJobs</code> for the custom action will fail after the action is marked for deletion. Only used for custom actions.</p> <important> <p>To re-create a custom action after it has been deleted you must use a string in the version field that has never been used before. This string can be an incremented version number, for example. To restore a deleted custom action, use a JSON file that is identical to the deleted action, including the original string in the version field.</p> </important></p>
-    fn delete_custom_action_type(
-        &self,
-        input: DeleteCustomActionTypeInput,
-    ) -> RusotoFuture<(), DeleteCustomActionTypeError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for DeleteCustomActionTypeRequest {
+    type Output = DeleteCustomActionTypeResponse;
+    type Error = DeleteCustomActionTypeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.DeleteCustomActionType",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteCustomActionTypeResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -3916,19 +4184,30 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified pipeline.</p>
-    fn delete_pipeline(&self, input: DeletePipelineInput) -> RusotoFuture<(), DeletePipelineError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for DeletePipelineRequest {
+    type Output = DeletePipelineResponse;
+    type Error = DeletePipelineError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.DeletePipeline");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeletePipelineResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -3939,24 +4218,29 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a previously created webhook by name. Deleting the webhook stops AWS CodePipeline from starting a pipeline every time an external event occurs. The API will return successfully when trying to delete a webhook that is already deleted. If a deleted webhook is re-created by calling PutWebhook with the same name, it will have a different URL.</p>
-    fn delete_webhook(
-        &self,
-        input: DeleteWebhookInput,
-    ) -> RusotoFuture<DeleteWebhookOutput, DeleteWebhookError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for DeleteWebhookRequest {
+    type Output = DeleteWebhookResponse;
+    type Error = DeleteWebhookError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.DeleteWebhook");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteWebhookOutput, _>()
+                        .deserialize::<DeleteWebhookResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -3968,28 +4252,32 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Removes the connection between the webhook that was created by CodePipeline and the external tool with events to be detected. Currently only supported for webhooks that target an action type of GitHub.</p>
-    fn deregister_webhook_with_third_party(
-        &self,
-        input: DeregisterWebhookWithThirdPartyInput,
-    ) -> RusotoFuture<DeregisterWebhookWithThirdPartyOutput, DeregisterWebhookWithThirdPartyError>
-    {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for DeregisterWebhookWithThirdPartyRequest {
+    type Output = DeregisterWebhookWithThirdPartyResponse;
+    type Error = DeregisterWebhookWithThirdPartyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.DeregisterWebhookWithThirdParty",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeregisterWebhookWithThirdPartyOutput, _>()
+                        .deserialize::<DeregisterWebhookWithThirdPartyResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4000,25 +4288,33 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Prevents artifacts in a pipeline from transitioning to the next stage in the pipeline.</p>
-    fn disable_stage_transition(
-        &self,
-        input: DisableStageTransitionInput,
-    ) -> RusotoFuture<(), DisableStageTransitionError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for DisableStageTransitionRequest {
+    type Output = DisableStageTransitionResponse;
+    type Error = DisableStageTransitionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.DisableStageTransition",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DisableStageTransitionResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -4028,25 +4324,33 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Enables artifacts in a pipeline to transition to a stage in a pipeline.</p>
-    fn enable_stage_transition(
-        &self,
-        input: EnableStageTransitionInput,
-    ) -> RusotoFuture<(), EnableStageTransitionError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for EnableStageTransitionRequest {
+    type Output = EnableStageTransitionResponse;
+    type Error = EnableStageTransitionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.EnableStageTransition",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<EnableStageTransitionResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -4056,24 +4360,29 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p><p>Returns information about a job. Only used for custom actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
-    fn get_job_details(
-        &self,
-        input: GetJobDetailsInput,
-    ) -> RusotoFuture<GetJobDetailsOutput, GetJobDetailsError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for GetJobDetailsRequest {
+    type Output = GetJobDetailsResponse;
+    type Error = GetJobDetailsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.GetJobDetails");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetJobDetailsOutput, _>()
+                        .deserialize::<GetJobDetailsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4085,24 +4394,29 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Returns the metadata, structure, stages, and actions of a pipeline. Can be used to return the entire structure of a pipeline in JSON format, which can then be modified and used to update the pipeline structure with <a>UpdatePipeline</a>.</p>
-    fn get_pipeline(
-        &self,
-        input: GetPipelineInput,
-    ) -> RusotoFuture<GetPipelineOutput, GetPipelineError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for GetPipelineRequest {
+    type Output = GetPipelineResponse;
+    type Error = GetPipelineError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.GetPipeline");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetPipelineOutput, _>()
+                        .deserialize::<GetPipelineResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4114,24 +4428,29 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about an execution of a pipeline, including details about artifacts, the pipeline execution ID, and the name, version, and status of the pipeline.</p>
-    fn get_pipeline_execution(
-        &self,
-        input: GetPipelineExecutionInput,
-    ) -> RusotoFuture<GetPipelineExecutionOutput, GetPipelineExecutionError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for GetPipelineExecutionRequest {
+    type Output = GetPipelineExecutionResponse;
+    type Error = GetPipelineExecutionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.GetPipelineExecution");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetPipelineExecutionOutput, _>()
+                        .deserialize::<GetPipelineExecutionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4142,24 +4461,29 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p><p>Returns information about the state of a pipeline, including the stages and actions.</p> <note> <p>Values returned in the <code>revisionId</code> and <code>revisionUrl</code> fields indicate the source revision information, such as the commit ID, for the current state.</p> </note></p>
-    fn get_pipeline_state(
-        &self,
-        input: GetPipelineStateInput,
-    ) -> RusotoFuture<GetPipelineStateOutput, GetPipelineStateError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for GetPipelineStateRequest {
+    type Output = GetPipelineStateResponse;
+    type Error = GetPipelineStateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.GetPipelineState");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetPipelineStateOutput, _>()
+                        .deserialize::<GetPipelineStateResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4171,27 +4495,32 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p><p>Requests the details of a job for a third party action. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
-    fn get_third_party_job_details(
-        &self,
-        input: GetThirdPartyJobDetailsInput,
-    ) -> RusotoFuture<GetThirdPartyJobDetailsOutput, GetThirdPartyJobDetailsError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for GetThirdPartyJobDetailsRequest {
+    type Output = GetThirdPartyJobDetailsResponse;
+    type Error = GetThirdPartyJobDetailsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.GetThirdPartyJobDetails",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetThirdPartyJobDetailsOutput, _>()
+                        .deserialize::<GetThirdPartyJobDetailsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4200,24 +4529,29 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Lists the action executions that have occurred in a pipeline.</p>
-    fn list_action_executions(
-        &self,
-        input: ListActionExecutionsInput,
-    ) -> RusotoFuture<ListActionExecutionsOutput, ListActionExecutionsError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for ListActionExecutionsRequest {
+    type Output = ListActionExecutionsResponse;
+    type Error = ListActionExecutionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.ListActionExecutions");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListActionExecutionsOutput, _>()
+                        .deserialize::<ListActionExecutionsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4228,24 +4562,29 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Gets a summary of all AWS CodePipeline action types associated with your account.</p>
-    fn list_action_types(
-        &self,
-        input: ListActionTypesInput,
-    ) -> RusotoFuture<ListActionTypesOutput, ListActionTypesError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for ListActionTypesRequest {
+    type Output = ListActionTypesResponse;
+    type Error = ListActionTypesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.ListActionTypes");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListActionTypesOutput, _>()
+                        .deserialize::<ListActionTypesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4257,27 +4596,32 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Gets a summary of the most recent executions for a pipeline.</p>
-    fn list_pipeline_executions(
-        &self,
-        input: ListPipelineExecutionsInput,
-    ) -> RusotoFuture<ListPipelineExecutionsOutput, ListPipelineExecutionsError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for ListPipelineExecutionsRequest {
+    type Output = ListPipelineExecutionsResponse;
+    type Error = ListPipelineExecutionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.ListPipelineExecutions",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPipelineExecutionsOutput, _>()
+                        .deserialize::<ListPipelineExecutionsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4288,24 +4632,29 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Gets a summary of all of the pipelines associated with your account.</p>
-    fn list_pipelines(
-        &self,
-        input: ListPipelinesInput,
-    ) -> RusotoFuture<ListPipelinesOutput, ListPipelinesError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for ListPipelinesRequest {
+    type Output = ListPipelinesResponse;
+    type Error = ListPipelinesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.ListPipelines");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPipelinesOutput, _>()
+                        .deserialize::<ListPipelinesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4317,24 +4666,29 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Gets the set of key/value pairs (metadata) that are used to manage the resource.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceInput,
-    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.ListTagsForResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsForResourceOutput, _>()
+                        .deserialize::<ListTagsForResourceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4345,24 +4699,29 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Gets a listing of all the webhooks in this region for this account. The output lists all webhooks and includes the webhook URL and ARN, as well the configuration for each webhook.</p>
-    fn list_webhooks(
-        &self,
-        input: ListWebhooksInput,
-    ) -> RusotoFuture<ListWebhooksOutput, ListWebhooksError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for ListWebhooksRequest {
+    type Output = ListWebhooksResponse;
+    type Error = ListWebhooksError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.ListWebhooks");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListWebhooksOutput, _>()
+                        .deserialize::<ListWebhooksResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4374,24 +4733,29 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p><p>Returns information about any jobs for AWS CodePipeline to act upon. <code>PollForJobs</code> is only valid for action types with &quot;Custom&quot; in the owner field. If the action type contains &quot;AWS&quot; or &quot;ThirdParty&quot; in the owner field, the <code>PollForJobs</code> action returns an error.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
-    fn poll_for_jobs(
-        &self,
-        input: PollForJobsInput,
-    ) -> RusotoFuture<PollForJobsOutput, PollForJobsError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for PollForJobsRequest {
+    type Output = PollForJobsResponse;
+    type Error = PollForJobsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.PollForJobs");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PollForJobsOutput, _>()
+                        .deserialize::<PollForJobsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4403,27 +4767,32 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p><p>Determines whether there are any third party jobs for a job worker to act on. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important></p>
-    fn poll_for_third_party_jobs(
-        &self,
-        input: PollForThirdPartyJobsInput,
-    ) -> RusotoFuture<PollForThirdPartyJobsOutput, PollForThirdPartyJobsError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for PollForThirdPartyJobsRequest {
+    type Output = PollForThirdPartyJobsResponse;
+    type Error = PollForThirdPartyJobsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.PollForThirdPartyJobs",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PollForThirdPartyJobsOutput, _>()
+                        .deserialize::<PollForThirdPartyJobsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4434,24 +4803,29 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Provides information to AWS CodePipeline about new revisions to a source.</p>
-    fn put_action_revision(
-        &self,
-        input: PutActionRevisionInput,
-    ) -> RusotoFuture<PutActionRevisionOutput, PutActionRevisionError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for PutActionRevisionRequest {
+    type Output = PutActionRevisionResponse;
+    type Error = PutActionRevisionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.PutActionRevision");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutActionRevisionOutput, _>()
+                        .deserialize::<PutActionRevisionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4463,24 +4837,29 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Provides the response to a manual approval request to AWS CodePipeline. Valid responses include Approved and Rejected.</p>
-    fn put_approval_result(
-        &self,
-        input: PutApprovalResultInput,
-    ) -> RusotoFuture<PutApprovalResultOutput, PutApprovalResultError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for PutApprovalResultRequest {
+    type Output = PutApprovalResultResponse;
+    type Error = PutApprovalResultError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.PutApprovalResult");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutApprovalResultOutput, _>()
+                        .deserialize::<PutApprovalResultResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4492,22 +4871,30 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Represents the failure of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>
-    fn put_job_failure_result(
-        &self,
-        input: PutJobFailureResultInput,
-    ) -> RusotoFuture<(), PutJobFailureResultError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for PutJobFailureResultRequest {
+    type Output = PutJobFailureResultResponse;
+    type Error = PutJobFailureResultError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.PutJobFailureResult");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutJobFailureResultResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -4517,22 +4904,30 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Represents the success of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>
-    fn put_job_success_result(
-        &self,
-        input: PutJobSuccessResultInput,
-    ) -> RusotoFuture<(), PutJobSuccessResultError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for PutJobSuccessResultRequest {
+    type Output = PutJobSuccessResultResponse;
+    type Error = PutJobSuccessResultError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.PutJobSuccessResult");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutJobSuccessResultResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -4542,25 +4937,33 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Represents the failure of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>
-    fn put_third_party_job_failure_result(
-        &self,
-        input: PutThirdPartyJobFailureResultInput,
-    ) -> RusotoFuture<(), PutThirdPartyJobFailureResultError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for PutThirdPartyJobFailureResultRequest {
+    type Output = PutThirdPartyJobFailureResultResponse;
+    type Error = PutThirdPartyJobFailureResultError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.PutThirdPartyJobFailureResult",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutThirdPartyJobFailureResultResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutThirdPartyJobFailureResultError::from_response(response))
@@ -4568,25 +4971,33 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Represents the success of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>
-    fn put_third_party_job_success_result(
-        &self,
-        input: PutThirdPartyJobSuccessResultInput,
-    ) -> RusotoFuture<(), PutThirdPartyJobSuccessResultError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for PutThirdPartyJobSuccessResultRequest {
+    type Output = PutThirdPartyJobSuccessResultResponse;
+    type Error = PutThirdPartyJobSuccessResultError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.PutThirdPartyJobSuccessResult",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutThirdPartyJobSuccessResultResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutThirdPartyJobSuccessResultError::from_response(response))
@@ -4594,24 +5005,29 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Defines a webhook and returns a unique webhook URL generated by CodePipeline. This URL can be supplied to third party source hosting providers to call every time there's a code change. When CodePipeline receives a POST request on this URL, the pipeline defined in the webhook is started as long as the POST request satisfied the authentication and filtering requirements supplied when defining the webhook. RegisterWebhookWithThirdParty and DeregisterWebhookWithThirdParty APIs can be used to automatically configure supported third parties to call the generated webhook URL.</p>
-    fn put_webhook(
-        &self,
-        input: PutWebhookInput,
-    ) -> RusotoFuture<PutWebhookOutput, PutWebhookError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for PutWebhookRequest {
+    type Output = PutWebhookResponse;
+    type Error = PutWebhookError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.PutWebhook");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutWebhookOutput, _>()
+                        .deserialize::<PutWebhookResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4623,27 +5039,32 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Configures a connection between the webhook that was created and the external tool with events to be detected.</p>
-    fn register_webhook_with_third_party(
-        &self,
-        input: RegisterWebhookWithThirdPartyInput,
-    ) -> RusotoFuture<RegisterWebhookWithThirdPartyOutput, RegisterWebhookWithThirdPartyError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for RegisterWebhookWithThirdPartyRequest {
+    type Output = RegisterWebhookWithThirdPartyResponse;
+    type Error = RegisterWebhookWithThirdPartyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.RegisterWebhookWithThirdParty",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RegisterWebhookWithThirdPartyOutput, _>()
+                        .deserialize::<RegisterWebhookWithThirdPartyResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4652,24 +5073,29 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Resumes the pipeline execution by retrying the last failed actions in a stage.</p>
-    fn retry_stage_execution(
-        &self,
-        input: RetryStageExecutionInput,
-    ) -> RusotoFuture<RetryStageExecutionOutput, RetryStageExecutionError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for RetryStageExecutionRequest {
+    type Output = RetryStageExecutionResponse;
+    type Error = RetryStageExecutionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.RetryStageExecution");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RetryStageExecutionOutput, _>()
+                        .deserialize::<RetryStageExecutionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4680,27 +5106,32 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Starts the specified pipeline. Specifically, it begins processing the latest commit to the source location specified as part of the pipeline.</p>
-    fn start_pipeline_execution(
-        &self,
-        input: StartPipelineExecutionInput,
-    ) -> RusotoFuture<StartPipelineExecutionOutput, StartPipelineExecutionError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for StartPipelineExecutionRequest {
+    type Output = StartPipelineExecutionResponse;
+    type Error = StartPipelineExecutionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.StartPipelineExecution",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartPipelineExecutionOutput, _>()
+                        .deserialize::<StartPipelineExecutionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4711,24 +5142,29 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Adds to or modifies the tags of the given resource. Tags are metadata that can be used to manage a resource. </p>
-    fn tag_resource(
-        &self,
-        input: TagResourceInput,
-    ) -> RusotoFuture<TagResourceOutput, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.TagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TagResourceOutput, _>()
+                        .deserialize::<TagResourceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4740,24 +5176,29 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Removes tags from an AWS resource.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceInput,
-    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.UntagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UntagResourceOutput, _>()
+                        .deserialize::<UntagResourceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4769,24 +5210,29 @@ impl CodePipeline for CodePipelineClient {
             }
         })
     }
+}
 
-    /// <p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with <code>UpdatePipeline</code> to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>
-    fn update_pipeline(
-        &self,
-        input: UpdatePipelineInput,
-    ) -> RusotoFuture<UpdatePipelineOutput, UpdatePipelineError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+impl ServiceRequest for UpdatePipelineRequest {
+    type Output = UpdatePipelineResponse;
+    type Error = UpdatePipelineError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codepipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.UpdatePipeline");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdatePipelineOutput, _>()
+                        .deserialize::<UpdatePipelineResponse, _>()
                 }))
             } else {
                 Box::new(

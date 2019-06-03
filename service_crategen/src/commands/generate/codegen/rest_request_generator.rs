@@ -7,17 +7,17 @@ use lazy_static::lazy_static;
 
 // Add request headers for any shape members marked as headers
 pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<String> {
-    if operation.input.is_none() {
+    if !service.has_non_empty_input_shape(operation) {
         return None;
     }
 
     let shape = service
-        .get_shape(&operation.input.as_ref().unwrap().shape)
-        .unwrap();
+        .get_shape(operation.input_shape())
+        .expect("input shape not found");
 
     Some(shape.members
         .as_ref()
-        .unwrap()
+        .expect("input shape has no members")
         .iter()
         .filter_map(|(member_name, member)| {
             if member.location.is_none() {
@@ -27,13 +27,13 @@ pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<
                 "header" => {
                     if shape.required(member_name) {
                         Some(format!("request.add_header(\"{location_name}\", 
-                                      &input.{field_name});",
+                                      &self.{field_name});",
                                      location_name = member.location_name.as_ref().unwrap(),
                                      field_name = generate_field_name(member_name)))
                     } else {
                         Some(format!("
                         if let Some(ref {field_name}) = 
-                                      input.{field_name} {{
+                                      self.{field_name} {{
                                       request.add_header(\"{location_name}\", 
                                       &{field_name}.to_string());
                         }}",
@@ -43,7 +43,7 @@ pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<
                 },
                 "headers" => {
                     if shape.required(member_name) {
-                        Some(format!("for (header_name, header_value) in input.{field_name}.iter() {{
+                        Some(format!("for (header_name, header_value) in self.{field_name}.iter() {{
                                               let header = format!(\"{location_name}{{}}\", header_name);
                                               request.add_header(header,
                                                                  header_value);
@@ -54,7 +54,7 @@ pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<
                     } else {
                         Some(format!("
                         if let Some(ref {field_name}) = 
-                                      input.{field_name} {{
+                                      self.{field_name} {{
                                           for (header_name, header_value) in {field_name}.iter() {{
                                               let header = format!(\"{location_name}{{}}\", header_name);
                                               request.add_header(header,
@@ -74,7 +74,7 @@ pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<
 }
 
 pub fn generate_params_loading_string(service: &Service<'_>, operation: &Operation) -> Option<String> {
-    if operation.input.is_none() {
+    if !service.has_non_empty_input_shape(operation) {
         return None;
     }
 
@@ -105,7 +105,7 @@ pub fn generate_uri_formatter(
     service: &Service<'_>,
     operation: &Operation,
 ) -> Option<String> {
-    if operation.input.is_some() {
+    if service.has_non_empty_input_shape(operation) {
         let input_shape = &service.get_shape(operation.input_shape()).unwrap();
         let uri_strings = generate_shape_member_uri_strings(input_shape);
 
@@ -149,12 +149,12 @@ fn generate_member_format_string(member_name: &str, member: &Member) -> Option<S
     match member.location {
         Some(ref x) if x == "uri" => match member.location_name {
             Some(ref loc_name) => Some(format!(
-                "{member_name} = input.{field_name}",
+                "{member_name} = self.{field_name}",
                 field_name = member_name,
                 member_name = loc_name.to_snake_case(),
             )),
             None => Some(format!(
-                "{member_name} = input.{field_name}",
+                "{member_name} = self.{field_name}",
                 field_name = member_name,
                 member_name = member_name.to_snake_case(),
             )),
@@ -253,14 +253,14 @@ fn generate_param_load_string(
     };
     match (member_shape.shape_type, is_required) {
         (ShapeType::List, true) => format!(
-            "for item in input.{field_name}.iter() {{
+            "for item in self.{field_name}.iter() {{
                      params.put(\"{param_name}\", item);
                 }}",
             param_name = param_name,
             field_name = field_name
         ),
         (ShapeType::List, false) => format!(
-            "if let Some(ref x) = input.{field_name} {{
+            "if let Some(ref x) = self.{field_name} {{
                     for item in x.iter() {{
                         params.put(\"{param_name}\", item);
                     }}
@@ -269,13 +269,13 @@ fn generate_param_load_string(
             field_name = field_name,
         ),
         (ShapeType::Map, true) => format!(
-            "for (key, val) in input.{field_name}.iter() {{
+            "for (key, val) in self.{field_name}.iter() {{
                      params.put(key, val);
                 }}",
             field_name = field_name
         ),
         (ShapeType::Map, false) => format!(
-            "if let Some(ref x) = input.{field_name} {{
+            "if let Some(ref x) = self.{field_name} {{
                     for (key, val) in x.iter() {{
                         params.put(key, val);
                     }}
@@ -283,12 +283,12 @@ fn generate_param_load_string(
             field_name = field_name,
         ),
         (_, true) => format!(
-            "params.put(\"{param_name}\", &input.{field_name});",
+            "params.put(\"{param_name}\", &self.{field_name});",
             param_name = param_name,
             field_name = field_name
         ),
         (_, false) => format!(
-            "if let Some(ref x) = input.{field_name} {{
+            "if let Some(ref x) = self.{field_name} {{
                     params.put(\"{param_name}\", x);
                 }}",
             param_name = param_name,
