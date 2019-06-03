@@ -24,7 +24,7 @@ fn main() {
         Err(error) => {
             match error {
                 RusotoError::Unknown(ref e) => {
-                    assert!(str::from_utf8(&e.body).unwrap().contains("<Request>The instance IDs 'i-00000000, i-00000001' do not exist</Request>"), "Missing error message");
+                    assert!(str::from_utf8(&e.body).unwrap().contains("<Message>The instance IDs 'i-00000000, i-00000001' do not exist</Message>"), "Missing error message");
                 }
                 _ => {
                     panic!("Should have a typed error from EC2");
@@ -38,7 +38,7 @@ fn main() {
 #[test]
 #[ignore]
 #[should_panic(
-    expected = "<Request>Request would have succeeded, but DryRun flag is set.</Request>"
+    expected = "<Message>Request would have succeeded, but DryRun flag is set.</Message>"
 )]
 fn dry_run() {
     let ec2 = Ec2Client::new(Region::UsEast1);
