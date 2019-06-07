@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 - Exclude `test_resources` in cargo manifest
+- upgrades botocore version to from `1.12.156` to `1.12.163`
 
 ## [0.39.0] - 2019-05-19
 
