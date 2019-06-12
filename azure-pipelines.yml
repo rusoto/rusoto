@@ -53,8 +53,9 @@ jobs:
       fetchDepth: 5
     - script: |
         set -e
-        curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
+        curl https://sh.rustup.rs -sSf | sh -s -- -y
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+        rustup default nightly
       displayName: 'Install Rust'
     - script: RUST_VERSION=nightly make unit_test
       displayName: 'Run unit tests'
