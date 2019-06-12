@@ -442,7 +442,7 @@ impl SignedRequest {
                     signed_headers,
                     EMPTY_SHA256_HASH
                 );
-                (Some(EMPTY_SHA256_HASH.to_owned()), Some(0))
+                (Some(Cow::Borrowed(EMPTY_SHA256_HASH)), Some(0))
             }
             Some(SignedRequestPayload::Buffer(ref payload)) => {
                 let (digest, len) = digest_payload(&payload);
@@ -455,7 +455,7 @@ impl SignedRequest {
                     signed_headers,
                     &digest
                 );
-                (Some(digest), Some(len))
+                (Some(Cow::Owned(digest)), Some(len))
             }
             Some(SignedRequestPayload::Stream(ref stream)) => {
                 canonical_request = format!(
@@ -467,7 +467,7 @@ impl SignedRequest {
                     signed_headers,
                     UNSIGNED_PAYLOAD
                 );
-                (Some(UNSIGNED_PAYLOAD.to_owned()), stream.size_hint())
+                (Some(Cow::Borrowed(UNSIGNED_PAYLOAD)), stream.size_hint())
             }
         };
 
