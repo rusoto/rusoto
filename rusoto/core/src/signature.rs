@@ -27,6 +27,12 @@ use crate::param::{Params, ServiceParams};
 use crate::region::Region;
 use crate::stream::ByteStream;
 
+/// Payload string to use for unsigned payload
+pub static UNSIGNED_PAYLOAD: &str = "UNSIGNED-PAYLOAD";
+/// Payload string to use for signed empty payload
+pub static EMPTY_SHA256_HASH: &str =
+    "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+
 /// Possible payloads included in a `SignedRequest`.
 pub enum SignedRequestPayload {
     /// Transfer payload in a single chunk
@@ -234,11 +240,15 @@ impl SignedRequest {
         self.params = params;
     }
 
-    /// http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html
+    /// Generate a Presigned URL for AWS
+    ///
+    /// See the [documentation](http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html)
+    /// for more information.
     pub fn generate_presigned_url(
         &mut self,
         creds: &AwsCredentials,
         expires_in: &Duration,
+        should_sha256_sign_payload: bool,
     ) -> String {
         debug!("Presigning request URL");
 
@@ -299,6 +309,13 @@ impl SignedRequest {
         debug!("signed_headers: {:?}", signed_headers);
         debug!("canonical_query_string: {:?}", self.canonical_query_string);
 
+        let payload = if should_sha256_sign_payload {
+            // The body is empty, so we can use the SHA256 hash of an empty body
+            EMPTY_SHA256_HASH
+        } else {
+            UNSIGNED_PAYLOAD
+        };
+
         let canonical_request = format!(
             "{}\n{}\n{}\n{}\n{}\n{}",
             &self.method,
@@ -306,7 +323,7 @@ impl SignedRequest {
             self.canonical_query_string,
             canonical_headers,
             &signed_headers,
-            "UNSIGNED-PAYLOAD"
+            payload
         );
 
         debug!("canonical_request: {:?}", canonical_request);
@@ -437,9 +454,9 @@ impl SignedRequest {
                     self.canonical_query_string,
                     canonical_headers,
                     signed_headers,
-                    "UNSIGNED-PAYLOAD"
+                    UNSIGNED_PAYLOAD
                 );
-                (Some("UNSIGNED-PAYLOAD".to_owned()), stream.size_hint())
+                (Some(UNSIGNED_PAYLOAD.to_owned()), stream.size_hint())
             }
         };
 

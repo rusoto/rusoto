@@ -109,7 +109,7 @@ impl PreSignedRequest for GetObjectRequest {
         );
 
         request.set_params(params);
-        request.generate_presigned_url(credentials, &option.expires_in)
+        request.generate_presigned_url(credentials, &option.expires_in, false)
     }
 }
 
@@ -156,7 +156,7 @@ impl PreSignedRequest for PutObjectRequest {
             }
         }
 
-        request.generate_presigned_url(credentials, &option.expires_in)
+        request.generate_presigned_url(credentials, &option.expires_in, false)
     }
 }
 
@@ -178,7 +178,7 @@ impl PreSignedRequest for DeleteObjectRequest {
         );
 
         request.set_params(params);
-        request.generate_presigned_url(credentials, &option.expires_in)
+        request.generate_presigned_url(credentials, &option.expires_in, false)
     }
 }
 
@@ -201,6 +201,6 @@ impl PreSignedRequest for UploadPartRequest {
             request_payer, "x-amz-request-payer";
         );
 
-        request.generate_presigned_url(credentials, &option.expires_in)
+        request.generate_presigned_url(credentials, &option.expires_in, false)
     }
 }
