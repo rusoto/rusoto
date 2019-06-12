@@ -243,7 +243,7 @@ impl SignedRequest {
 
     /// Generate a Presigned URL for AWS
     ///
-    /// See the [documentation](http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html)
+    /// See the [documentation](https://docs.aws.amazon.com/general/latest/gr/sigv4_signing.html)
     /// for more information.
     pub fn generate_presigned_url(
         &mut self,
@@ -271,9 +271,9 @@ impl SignedRequest {
         self.remove_header("Content-Type");
 
         if let Some(ref token) = *creds.token() {
-            self.remove_header("x-amz-security-token");
+            self.remove_header("X-Amz-Security-Token");
             self.params
-                .put("x-amz-security-token", encode_uri_strict(token));
+                .put("X-Amz-Security-Token", encode_uri_strict(token));
         }
 
         self.remove_header("X-Amz-Algorithm");
