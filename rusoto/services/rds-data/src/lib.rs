@@ -12,7 +12,12 @@
 // =================================================================
 
 #![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
-//! <p>AWS RDS DataService provides Http Endpoint to query RDS databases.</p>
+//! <p><fullname>Amazon RDS Data Service</fullname>
+//! <p>Amazon RDS provides an HTTP endpoint to run SQL statements on an Amazon Aurora
+//! Serverless DB cluster. To run these statements, you work with the Data Service
+//! API.</p>
+//! <p>For more information about the Data Service API, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/data-api.html">Using the Data API for Aurora
+//! Serverless</a> in the <i>Amazon Aurora User Guide</i>.</p></p>
 //!
 //! If you're using the service, you're probably looking for [RdsDataClient](struct.RdsDataClient.html) and [RdsData](trait.RdsData.html).
 

@@ -12,7 +12,8 @@
 // =================================================================
 
 #![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
-//! <p>The operations for managing an Amazon MSK cluster.</p>
+//! <pre><code>           &lt;p&gt;The operations for managing an Amazon MSK cluster.&lt;/p&gt;
+//! </code></pre>
 //!
 //! If you're using the service, you're probably looking for [KafkaClient](struct.KafkaClient.html) and [Kafka](trait.Kafka.html).
 

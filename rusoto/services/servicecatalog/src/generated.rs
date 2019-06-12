@@ -1897,6 +1897,38 @@ pub struct ListServiceActionsOutput {
     pub service_action_summaries: Option<Vec<ServiceActionSummary>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListStackInstancesForProvisionedProductInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>The maximum number of items to return with this call.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// <p>The identifier of the provisioned product.</p>
+    #[serde(rename = "ProvisionedProductId")]
+    pub provisioned_product_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListStackInstancesForProvisionedProductOutput {
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>List of stack instances.</p>
+    #[serde(rename = "StackInstances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_instances: Option<Vec<StackInstance>>,
+}
+
 /// <p>Filters to use when listing TagOptions.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTagOptionsFilters {
@@ -3035,6 +3067,24 @@ pub struct ShareError {
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
+}
+
+/// <p>An AWS CloudFormation stack, in a specific account and region, that's part of a stack set operation. A stack instance is a reference to an attempted or actual stack in a given account within a given region. A stack instance can exist without a stack—for example, if the stack couldn't be created for some reason. A stack instance is associated with only one stack set. Each stack instance contains the ID of its associated stack set, as well as the ID of the actual stack and the stack status. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StackInstance {
+    /// <p>The name of the AWS account that the stack instance is associated with.</p>
+    #[serde(rename = "Account")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account: Option<String>,
+    /// <p>The name of the AWS region that the stack instance is associated with.</p>
+    #[serde(rename = "Region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region: Option<String>,
+    /// <p><p>The status of the stack instance, in terms of its synchronization with its associated stack set. </p> <ul> <li> <p> <code>INOPERABLE</code>: A <code>DeleteStackInstances</code> operation has failed and left the stack in an unstable state. Stacks in this state are excluded from further <code>UpdateStackSet</code> operations. You might need to perform a <code>DeleteStackInstances</code> operation, with <code>RetainStacks</code> set to true, to delete the stack instance, and then delete the stack manually. </p> </li> <li> <p> <code>OUTDATED</code>: The stack isn&#39;t currently up to date with the stack set because either the associated stack failed during a <code>CreateStackSet</code> or <code>UpdateStackSet</code> operation, or the stack was part of a <code>CreateStackSet</code> or <code>UpdateStackSet</code> operation that failed or was stopped before the stack was created or updated.</p> </li> <li> <p> <code>CURRENT</code>: The stack is currently up to date with the stack set.</p> </li> </ul></p>
+    #[serde(rename = "StackInstanceStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_instance_status: Option<String>,
 }
 
 /// <p>Information about a tag. A tag is a key-value pair. Tags are propagated to the resources created when provisioning a product.</p>
@@ -6456,6 +6506,51 @@ impl Error for ListServiceActionsForProvisioningArtifactError {
         }
     }
 }
+/// Errors returned by ListStackInstancesForProvisionedProduct
+#[derive(Debug, PartialEq)]
+pub enum ListStackInstancesForProvisionedProductError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListStackInstancesForProvisionedProductError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListStackInstancesForProvisionedProductError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParametersException" => {
+                    return RusotoError::Service(
+                        ListStackInstancesForProvisionedProductError::InvalidParameters(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        ListStackInstancesForProvisionedProductError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListStackInstancesForProvisionedProductError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListStackInstancesForProvisionedProductError {
+    fn description(&self) -> &str {
+        match *self {
+            ListStackInstancesForProvisionedProductError::InvalidParameters(ref cause) => cause,
+            ListStackInstancesForProvisionedProductError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListTagOptions
 #[derive(Debug, PartialEq)]
 pub enum ListTagOptionsError {
@@ -7543,6 +7638,15 @@ pub trait ServiceCatalog {
     ) -> RusotoFuture<
         ListServiceActionsForProvisioningArtifactOutput,
         ListServiceActionsForProvisioningArtifactError,
+    >;
+
+    /// <p>Returns summary information about stack instances that are associated with the specified <code>CFN_STACKSET</code> type provisioned product. You can filter for stack instances that are associated with a specific AWS account name or region. </p>
+    fn list_stack_instances_for_provisioned_product(
+        &self,
+        input: ListStackInstancesForProvisionedProductInput,
+    ) -> RusotoFuture<
+        ListStackInstancesForProvisionedProductOutput,
+        ListStackInstancesForProvisionedProductError,
     >;
 
     /// <p>Lists the specified TagOptions or all TagOptions.</p>
@@ -9657,6 +9761,40 @@ impl ServiceCatalog for ServiceCatalogClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListServiceActionsForProvisioningArtifactError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns summary information about stack instances that are associated with the specified <code>CFN_STACKSET</code> type provisioned product. You can filter for stack instances that are associated with a specific AWS account name or region. </p>
+    fn list_stack_instances_for_provisioned_product(
+        &self,
+        input: ListStackInstancesForProvisionedProductInput,
+    ) -> RusotoFuture<
+        ListStackInstancesForProvisionedProductOutput,
+        ListStackInstancesForProvisionedProductError,
+    > {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.ListStackInstancesForProvisionedProduct",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListStackInstancesForProvisionedProductOutput, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListStackInstancesForProvisionedProductError::from_response(
+                        response,
+                    ))
                 }))
             }
         })

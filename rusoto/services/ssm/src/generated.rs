@@ -72,10 +72,10 @@ pub struct Activation {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddTagsToResourceRequest {
-    /// <p><p>The resource ID you want to tag.</p> <p>Use the ID of the resource. Here are some examples:</p> <p>ManagedInstance: mi-012345abcde</p> <p>MaintenanceWindow: mw-012345abcde</p> <p>PatchBaseline: pb-012345abcde</p> <p>For the Document and Parameter values, use the name of the resource.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
+    /// <p><p>The resource ID you want to tag.</p> <p>Use the ID of the resource. Here are some examples:</p> <p>ManagedInstance: mi-012345abcde</p> <p>MaintenanceWindow: mw-012345abcde</p> <p>PatchBaseline: pb-012345abcde</p> <p>For the Document and Parameter values, use the name of the resource.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    /// <p><p>Specifies the type of resource you are tagging.</p> <note> <p>The ManagedInstance type for this API action is for on-premises managed instances. You must specify the the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
+    /// <p><p>Specifies the type of resource you are tagging.</p> <note> <p>The ManagedInstance type for this API action is for on-premises managed instances. You must specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceType")]
     pub resource_type: String,
     /// <p><p> One or more tags. The value parameter is required, but if you don&#39;t want the tag to have a value, specify the parameter with no value, and we set the value to an empty string. </p> <important> <p>Do not enter personally identifiable information in this field.</p> </important></p>
@@ -708,7 +708,7 @@ pub struct CancelCommandResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CancelMaintenanceWindowExecutionRequest {
-    /// <p>The ID of the Maintenance Window execution to stop.</p>
+    /// <p>The ID of the maintenance window execution to stop.</p>
     #[serde(rename = "WindowExecutionId")]
     pub window_execution_id: String,
 }
@@ -716,7 +716,7 @@ pub struct CancelMaintenanceWindowExecutionRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CancelMaintenanceWindowExecutionResult {
-    /// <p>The ID of the Maintenance Window execution that has been stopped.</p>
+    /// <p>The ID of the maintenance window execution that has been stopped.</p>
     #[serde(rename = "WindowExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_execution_id: Option<String>,
@@ -1246,7 +1246,7 @@ pub struct CreateAssociationRequest {
     #[serde(rename = "OutputLocation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_location: Option<InstanceAssociationOutputLocation>,
-    /// <p>The parameters for the runtime configuration of the document. </p>
+    /// <p>The parameters for the runtime configuration of the document.</p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
@@ -1314,42 +1314,42 @@ pub struct CreateDocumentResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateMaintenanceWindowRequest {
-    /// <p>Enables a Maintenance Window task to run on managed instances, even if you have not registered those instances as targets. If enabled, then you must specify the unregistered instances (by instance ID) when you register a task with the Maintenance Window </p> <p>If you don't enable this option, then you must specify previously-registered targets when you register a task with the Maintenance Window. </p>
+    /// <p>Enables a maintenance window task to run on managed instances, even if you have not registered those instances as targets. If enabled, then you must specify the unregistered instances (by instance ID) when you register a task with the maintenance window.</p> <p>If you don't enable this option, then you must specify previously-registered targets when you register a task with the maintenance window.</p>
     #[serde(rename = "AllowUnassociatedTargets")]
     pub allow_unassociated_targets: bool,
     /// <p>User-provided idempotency token.</p>
     #[serde(rename = "ClientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>
+    /// <p>The number of hours before the end of the maintenance window that Systems Manager stops scheduling new tasks for execution.</p>
     #[serde(rename = "Cutoff")]
     pub cutoff: i64,
-    /// <p>An optional description for the Maintenance Window. We recommend specifying a description to help you organize your Maintenance Windows. </p>
+    /// <p>An optional description for the maintenance window. We recommend specifying a description to help you organize your maintenance windows. </p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The duration of the Maintenance Window in hours.</p>
+    /// <p>The duration of the maintenance window in hours.</p>
     #[serde(rename = "Duration")]
     pub duration: i64,
-    /// <p>The date and time, in ISO-8601 Extended format, for when you want the Maintenance Window to become inactive. EndDate allows you to set a date and time in the future when the Maintenance Window will no longer run.</p>
+    /// <p>The date and time, in ISO-8601 Extended format, for when you want the maintenance window to become inactive. EndDate allows you to set a date and time in the future when the maintenance window will no longer run.</p>
     #[serde(rename = "EndDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_date: Option<String>,
-    /// <p>The name of the Maintenance Window.</p>
+    /// <p>The name of the maintenance window.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The schedule of the Maintenance Window in the form of a cron or rate expression.</p>
+    /// <p>The schedule of the maintenance window in the form of a cron or rate expression.</p>
     #[serde(rename = "Schedule")]
     pub schedule: String,
-    /// <p>The time zone that the scheduled Maintenance Window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
+    /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
     #[serde(rename = "ScheduleTimezone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_timezone: Option<String>,
-    /// <p>The date and time, in ISO-8601 Extended format, for when you want the Maintenance Window to become active. StartDate allows you to delay activation of the Maintenance Window until the specified future date.</p>
+    /// <p>The date and time, in ISO-8601 Extended format, for when you want the maintenance window to become active. StartDate allows you to delay activation of the maintenance window until the specified future date.</p>
     #[serde(rename = "StartDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_date: Option<String>,
-    /// <p><p>Optional metadata that you assign to a resource. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment. For example, you might want to tag a Maintenance Window to identify the type of tasks it will run, the types of targets, and the environment it will run in. In this case, you could specify the following key name/value pairs:</p> <ul> <li> <p> <code>Key=TaskType,Value=AgentUpdate</code> </p> </li> <li> <p> <code>Key=OS,Value=Windows</code> </p> </li> <li> <p> <code>Key=Environment,Value=Production</code> </p> </li> </ul> <note> <p>To add tags to an existing Maintenance Window, use the <a>AddTagsToResource</a> action.</p> </note></p>
+    /// <p><p>Optional metadata that you assign to a resource. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment. For example, you might want to tag a maintenance window to identify the type of tasks it will run, the types of targets, and the environment it will run in. In this case, you could specify the following key name/value pairs:</p> <ul> <li> <p> <code>Key=TaskType,Value=AgentUpdate</code> </p> </li> <li> <p> <code>Key=OS,Value=Windows</code> </p> </li> <li> <p> <code>Key=Environment,Value=Production</code> </p> </li> </ul> <note> <p>To add tags to an existing maintenance window, use the <a>AddTagsToResource</a> action.</p> </note></p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1358,10 +1358,52 @@ pub struct CreateMaintenanceWindowRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateMaintenanceWindowResult {
-    /// <p>The ID of the created Maintenance Window.</p>
+    /// <p>The ID of the created maintenance window.</p>
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateOpsItemRequest {
+    /// <p>Information about the OpsItem. </p>
+    #[serde(rename = "Description")]
+    pub description: String,
+    /// <p>The Amazon Resource Name (ARN) of an SNS topic where notifications are sent when this OpsItem is edited or changed.</p>
+    #[serde(rename = "Notifications")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notifications: Option<Vec<OpsItemNotification>>,
+    /// <p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <p>This custom data is searchable, but with restrictions. For the <code>Searchable operational data</code> feature, all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. For the <code>Private operational data</code> feature, the data is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p>
+    #[serde(rename = "OperationalData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operational_data: Option<::std::collections::HashMap<String, OpsItemDataValue>>,
+    /// <p>The importance of this OpsItem in relation to other OpsItems in the system.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+    /// <p>One or more OpsItems that share something in common with the current OpsItems. For example, related OpsItems can include OpsItems with similar error messages, impacted resources, or statuses for the impacted resource.</p>
+    #[serde(rename = "RelatedOpsItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub related_ops_items: Option<Vec<RelatedOpsItem>>,
+    /// <p>The origin of the OpsItem, such as Amazon EC2 or AWS Systems Manager.</p>
+    #[serde(rename = "Source")]
+    pub source: String,
+    /// <p><p>Optional metadata that you assign to a resource. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment. For example, you might want to tag an OpsItem to identify the AWS resource or the type of issue. In this case, you could specify the following key name/value pairs:</p> <ul> <li> <p> <code>Key=source,Value=EC2-instance</code> </p> </li> <li> <p> <code>Key=status,Value=stopped</code> </p> </li> </ul> <note> <p>To add tags to an existing OpsItem, use the <a>AddTagsToResource</a> action.</p> </note></p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>A short heading that describes the nature of the OpsItem and the impacted resource.</p>
+    #[serde(rename = "Title")]
+    pub title: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateOpsItemResponse {
+    /// <p>The ID of the OpsItem.</p>
+    #[serde(rename = "OpsItemId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ops_item_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1494,7 +1536,7 @@ pub struct DeleteInventoryRequest {
     #[serde(rename = "DryRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    /// <p>Use the <code>SchemaDeleteOption</code> to delete a custom inventory type (schema). If you don't choose this option, the system only deletes existing inventory data associated with the custom inventory type. Choose one of the following options:</p> <p>DisableSchema: If you choose this option, the system ignores all inventory data for the specified version, and any earlier versions. To enable this schema again, you must call the <code>PutInventory</code> action for a version greater than the disbled version.</p> <p>DeleteSchema: This option deletes the specified custom type from the Inventory service. You can recreate the schema later, if you want.</p>
+    /// <p>Use the <code>SchemaDeleteOption</code> to delete a custom inventory type (schema). If you don't choose this option, the system only deletes existing inventory data associated with the custom inventory type. Choose one of the following options:</p> <p>DisableSchema: If you choose this option, the system ignores all inventory data for the specified version, and any earlier versions. To enable this schema again, you must call the <code>PutInventory</code> action for a version greater than the disabled version.</p> <p>DeleteSchema: This option deletes the specified custom type from the Inventory service. You can recreate the schema later, if you want.</p>
     #[serde(rename = "SchemaDeleteOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_delete_option: Option<String>,
@@ -1522,7 +1564,7 @@ pub struct DeleteInventoryResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteMaintenanceWindowRequest {
-    /// <p>The ID of the Maintenance Window to delete.</p>
+    /// <p>The ID of the maintenance window to delete.</p>
     #[serde(rename = "WindowId")]
     pub window_id: String,
 }
@@ -1530,7 +1572,7 @@ pub struct DeleteMaintenanceWindowRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteMaintenanceWindowResult {
-    /// <p>The ID of the deleted Maintenance Window.</p>
+    /// <p>The ID of the deleted maintenance window.</p>
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
@@ -1630,11 +1672,11 @@ pub struct DeregisterPatchBaselineForPatchGroupResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeregisterTargetFromMaintenanceWindowRequest {
-    /// <p>The system checks if the target is being referenced by a task. If the target is being referenced, the system returns an error and does not deregister the target from the Maintenance Window.</p>
+    /// <p>The system checks if the target is being referenced by a task. If the target is being referenced, the system returns an error and does not deregister the target from the maintenance window.</p>
     #[serde(rename = "Safe")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub safe: Option<bool>,
-    /// <p>The ID of the Maintenance Window the target should be removed from.</p>
+    /// <p>The ID of the maintenance window the target should be removed from.</p>
     #[serde(rename = "WindowId")]
     pub window_id: String,
     /// <p>The ID of the target definition to remove.</p>
@@ -1645,7 +1687,7 @@ pub struct DeregisterTargetFromMaintenanceWindowRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeregisterTargetFromMaintenanceWindowResult {
-    /// <p>The ID of the Maintenance Window the target was removed from.</p>
+    /// <p>The ID of the maintenance window the target was removed from.</p>
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
@@ -1657,10 +1699,10 @@ pub struct DeregisterTargetFromMaintenanceWindowResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeregisterTaskFromMaintenanceWindowRequest {
-    /// <p>The ID of the Maintenance Window the task should be removed from.</p>
+    /// <p>The ID of the maintenance window the task should be removed from.</p>
     #[serde(rename = "WindowId")]
     pub window_id: String,
-    /// <p>The ID of the task to remove from the Maintenance Window.</p>
+    /// <p>The ID of the task to remove from the maintenance window.</p>
     #[serde(rename = "WindowTaskId")]
     pub window_task_id: String,
 }
@@ -1668,11 +1710,11 @@ pub struct DeregisterTaskFromMaintenanceWindowRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeregisterTaskFromMaintenanceWindowResult {
-    /// <p>The ID of the Maintenance Window the task was removed from.</p>
+    /// <p>The ID of the maintenance window the task was removed from.</p>
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
-    /// <p>The ID of the task removed from the Maintenance Window.</p>
+    /// <p>The ID of the task removed from the maintenance window.</p>
     #[serde(rename = "WindowTaskId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_task_id: Option<String>,
@@ -2205,10 +2247,10 @@ pub struct DescribeMaintenanceWindowExecutionTaskInvocationsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The ID of the specific task in the Maintenance Window task that should be retrieved.</p>
+    /// <p>The ID of the specific task in the maintenance window task that should be retrieved.</p>
     #[serde(rename = "TaskId")]
     pub task_id: String,
-    /// <p>The ID of the Maintenance Window execution the task is part of.</p>
+    /// <p>The ID of the maintenance window execution the task is part of.</p>
     #[serde(rename = "WindowExecutionId")]
     pub window_execution_id: String,
 }
@@ -2241,7 +2283,7 @@ pub struct DescribeMaintenanceWindowExecutionTasksRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The ID of the Maintenance Window execution whose task executions should be retrieved.</p>
+    /// <p>The ID of the maintenance window execution whose task executions should be retrieved.</p>
     #[serde(rename = "WindowExecutionId")]
     pub window_execution_id: String,
 }
@@ -2273,7 +2315,7 @@ pub struct DescribeMaintenanceWindowExecutionsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The ID of the Maintenance Window whose executions should be retrieved.</p>
+    /// <p>The ID of the maintenance window whose executions should be retrieved.</p>
     #[serde(rename = "WindowId")]
     pub window_id: String,
 }
@@ -2285,7 +2327,7 @@ pub struct DescribeMaintenanceWindowExecutionsResult {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Information about the Maintenance Windows execution.</p>
+    /// <p>Information about the maintenance window executions.</p>
     #[serde(rename = "WindowExecutions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_executions: Option<Vec<MaintenanceWindowExecution>>,
@@ -2293,7 +2335,7 @@ pub struct DescribeMaintenanceWindowExecutionsResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeMaintenanceWindowScheduleRequest {
-    /// <p>Filters used to limit the range of results. For example, you can limit Maintenance Window executions to only those scheduled before or after a certain date and time.</p>
+    /// <p>Filters used to limit the range of results. For example, you can limit maintenance window executions to only those scheduled before or after a certain date and time.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<PatchOrchestratorFilter>>,
@@ -2313,7 +2355,7 @@ pub struct DescribeMaintenanceWindowScheduleRequest {
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
-    /// <p>The ID of the Maintenance Window to retrieve information about.</p>
+    /// <p>The ID of the maintenance window to retrieve information about.</p>
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
@@ -2326,7 +2368,7 @@ pub struct DescribeMaintenanceWindowScheduleResult {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Information about Maintenance Window executions scheduled for the specified time range.</p>
+    /// <p>Information about maintenance window executions scheduled for the specified time range.</p>
     #[serde(rename = "ScheduledWindowExecutions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scheduled_window_executions: Option<Vec<ScheduledWindowExecution>>,
@@ -2346,7 +2388,7 @@ pub struct DescribeMaintenanceWindowTargetsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The ID of the Maintenance Window whose targets should be retrieved.</p>
+    /// <p>The ID of the maintenance window whose targets should be retrieved.</p>
     #[serde(rename = "WindowId")]
     pub window_id: String,
 }
@@ -2358,7 +2400,7 @@ pub struct DescribeMaintenanceWindowTargetsResult {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Information about the targets in the Maintenance Window.</p>
+    /// <p>Information about the targets in the maintenance window.</p>
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<MaintenanceWindowTarget>>,
@@ -2378,7 +2420,7 @@ pub struct DescribeMaintenanceWindowTasksRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The ID of the Maintenance Window whose tasks should be retrieved.</p>
+    /// <p>The ID of the maintenance window whose tasks should be retrieved.</p>
     #[serde(rename = "WindowId")]
     pub window_id: String,
 }
@@ -2390,7 +2432,7 @@ pub struct DescribeMaintenanceWindowTasksResult {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Information about the tasks in the Maintenance Window.</p>
+    /// <p>Information about the tasks in the maintenance window.</p>
     #[serde(rename = "Tasks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tasks: Option<Vec<MaintenanceWindowTask>>,
@@ -2421,7 +2463,7 @@ pub struct DescribeMaintenanceWindowsForTargetResult {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Information about the Maintenance Window targets and tasks an instance is associated with.</p>
+    /// <p>Information about the maintenance window targets and tasks an instance is associated with.</p>
     #[serde(rename = "WindowIdentities")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_identities: Option<Vec<MaintenanceWindowIdentityForTarget>>,
@@ -2429,7 +2471,7 @@ pub struct DescribeMaintenanceWindowsForTargetResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeMaintenanceWindowsRequest {
-    /// <p>Optional filters used to narrow down the scope of the returned Maintenance Windows. Supported filter keys are <b>Name</b> and <b>Enabled</b>.</p>
+    /// <p>Optional filters used to narrow down the scope of the returned maintenance windows. Supported filter keys are <b>Name</b> and <b>Enabled</b>.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<MaintenanceWindowFilter>>,
@@ -2450,10 +2492,39 @@ pub struct DescribeMaintenanceWindowsResult {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Information about the Maintenance Windows.</p>
+    /// <p>Information about the maintenance windows.</p>
     #[serde(rename = "WindowIdentities")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_identities: Option<Vec<MaintenanceWindowIdentity>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeOpsItemsRequest {
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token to start the list. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p><p>One or more filters to limit the reponse.</p> <ul> <li> <p>Key: CreatedTime</p> <p>Operations: GreaterThan, LessThan</p> </li> <li> <p>Key: LastModifiedBy</p> <p>Operations: Contains, Equals</p> </li> <li> <p>Key: LastModifiedTime</p> <p>Operations: GreaterThan, LessThan</p> </li> <li> <p>Key: Priority</p> <p>Operations: Equals</p> </li> <li> <p>Key: Source</p> <p>Operations: Contains, Equals</p> </li> <li> <p>Key: Status</p> <p>Operations: Equals</p> </li> <li> <p>Key: Title</p> <p>Operations: Contains</p> </li> <li> <p>Key: OperationalData</p> <p>Operations: Equals</p> </li> <li> <p>Key: OperationalDataKey</p> <p>Operations: Equals</p> </li> <li> <p>Key: OperationalDataValue</p> <p>Operations: Equals, Contains</p> </li> <li> <p>Key: OpsItemId</p> <p>Operations: Equals</p> </li> <li> <p>Key: ResourceId</p> <p>Operations: Contains</p> </li> <li> <p>Key: AutomationId</p> <p>Operations: Equals</p> </li> </ul></p>
+    #[serde(rename = "OpsItemFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ops_item_filters: Option<Vec<OpsItemFilter>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeOpsItemsResponse {
+    /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of OpsItems.</p>
+    #[serde(rename = "OpsItemSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ops_item_summaries: Option<Vec<OpsItemSummary>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3257,7 +3328,7 @@ pub struct GetInventorySchemaResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetMaintenanceWindowExecutionRequest {
-    /// <p>The ID of the Maintenance Window execution that includes the task.</p>
+    /// <p>The ID of the maintenance window execution that includes the task.</p>
     #[serde(rename = "WindowExecutionId")]
     pub window_execution_id: String,
 }
@@ -3265,15 +3336,15 @@ pub struct GetMaintenanceWindowExecutionRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetMaintenanceWindowExecutionResult {
-    /// <p>The time the Maintenance Window finished running.</p>
+    /// <p>The time the maintenance window finished running.</p>
     #[serde(rename = "EndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    /// <p>The time the Maintenance Window started running.</p>
+    /// <p>The time the maintenance window started running.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    /// <p>The status of the Maintenance Window execution.</p>
+    /// <p>The status of the maintenance window execution.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -3281,11 +3352,11 @@ pub struct GetMaintenanceWindowExecutionResult {
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
-    /// <p>The ID of the task executions from the Maintenance Window execution.</p>
+    /// <p>The ID of the task executions from the maintenance window execution.</p>
     #[serde(rename = "TaskIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_ids: Option<Vec<String>>,
-    /// <p>The ID of the Maintenance Window execution.</p>
+    /// <p>The ID of the maintenance window execution.</p>
     #[serde(rename = "WindowExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_execution_id: Option<String>,
@@ -3296,10 +3367,10 @@ pub struct GetMaintenanceWindowExecutionTaskInvocationRequest {
     /// <p>The invocation ID to retrieve.</p>
     #[serde(rename = "InvocationId")]
     pub invocation_id: String,
-    /// <p>The ID of the specific task in the Maintenance Window task that should be retrieved. </p>
+    /// <p>The ID of the specific task in the maintenance window task that should be retrieved. </p>
     #[serde(rename = "TaskId")]
     pub task_id: String,
-    /// <p>The ID of the Maintenance Window execution for which the task is a part.</p>
+    /// <p>The ID of the maintenance window execution for which the task is a part.</p>
     #[serde(rename = "WindowExecutionId")]
     pub window_execution_id: String,
 }
@@ -3319,7 +3390,7 @@ pub struct GetMaintenanceWindowExecutionTaskInvocationResult {
     #[serde(rename = "InvocationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invocation_id: Option<String>,
-    /// <p>User-provided value to be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window. </p>
+    /// <p>User-provided value to be included in any CloudWatch events raised while running tasks for these targets in this maintenance window. </p>
     #[serde(rename = "OwnerInformation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_information: Option<String>,
@@ -3343,15 +3414,15 @@ pub struct GetMaintenanceWindowExecutionTaskInvocationResult {
     #[serde(rename = "TaskExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_execution_id: Option<String>,
-    /// <p>Retrieves the task type for a Maintenance Window. Task types include the following: LAMBDA, STEP_FUNCTION, AUTOMATION, RUN_COMMAND.</p>
+    /// <p>Retrieves the task type for a maintenance window. Task types include the following: LAMBDA, STEP_FUNCTION, AUTOMATION, RUN_COMMAND.</p>
     #[serde(rename = "TaskType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_type: Option<String>,
-    /// <p>The Maintenance Window execution ID.</p>
+    /// <p>The maintenance window execution ID.</p>
     #[serde(rename = "WindowExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_execution_id: Option<String>,
-    /// <p>The Maintenance Window target ID.</p>
+    /// <p>The maintenance window target ID.</p>
     #[serde(rename = "WindowTargetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_target_id: Option<String>,
@@ -3359,10 +3430,10 @@ pub struct GetMaintenanceWindowExecutionTaskInvocationResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetMaintenanceWindowExecutionTaskRequest {
-    /// <p>The ID of the specific task execution in the Maintenance Window task that should be retrieved.</p>
+    /// <p>The ID of the specific task execution in the maintenance window task that should be retrieved.</p>
     #[serde(rename = "TaskId")]
     pub task_id: String,
-    /// <p>The ID of the Maintenance Window execution that includes the task.</p>
+    /// <p>The ID of the maintenance window execution that includes the task.</p>
     #[serde(rename = "WindowExecutionId")]
     pub window_execution_id: String,
 }
@@ -3406,11 +3477,11 @@ pub struct GetMaintenanceWindowExecutionTaskResult {
     #[serde(rename = "TaskArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_arn: Option<String>,
-    /// <p>The ID of the specific task execution in the Maintenance Window task that was retrieved.</p>
+    /// <p>The ID of the specific task execution in the maintenance window task that was retrieved.</p>
     #[serde(rename = "TaskExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_execution_id: Option<String>,
-    /// <p>The parameters passed to the task when it was run.</p> <note> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note> <p>The map has the following format:</p> <p>Key: string, between 1 and 255 characters</p> <p>Value: an array of strings, each string is between 1 and 255 characters</p>
+    /// <p>The parameters passed to the task when it was run.</p> <note> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note> <p>The map has the following format:</p> <p>Key: string, between 1 and 255 characters</p> <p>Value: an array of strings, each string is between 1 and 255 characters</p>
     #[serde(rename = "TaskParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_parameters: Option<
@@ -3420,7 +3491,7 @@ pub struct GetMaintenanceWindowExecutionTaskResult {
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    /// <p>The ID of the Maintenance Window execution that includes the task.</p>
+    /// <p>The ID of the maintenance window execution that includes the task.</p>
     #[serde(rename = "WindowExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_execution_id: Option<String>,
@@ -3428,7 +3499,7 @@ pub struct GetMaintenanceWindowExecutionTaskResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetMaintenanceWindowRequest {
-    /// <p>The ID of the desired Maintenance Window.</p>
+    /// <p>The ID of the maintenance window for which you want to retrieve information.</p>
     #[serde(rename = "WindowId")]
     pub window_id: String,
 }
@@ -3436,59 +3507,59 @@ pub struct GetMaintenanceWindowRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetMaintenanceWindowResult {
-    /// <p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>
+    /// <p>Whether targets must be registered with the maintenance window before tasks can be defined for those targets.</p>
     #[serde(rename = "AllowUnassociatedTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allow_unassociated_targets: Option<bool>,
-    /// <p>The date the Maintenance Window was created.</p>
+    /// <p>The date the maintenance window was created.</p>
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    /// <p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>
+    /// <p>The number of hours before the end of the maintenance window that Systems Manager stops scheduling new tasks for execution.</p>
     #[serde(rename = "Cutoff")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cutoff: Option<i64>,
-    /// <p>The description of the Maintenance Window.</p>
+    /// <p>The description of the maintenance window.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The duration of the Maintenance Window in hours.</p>
+    /// <p>The duration of the maintenance window in hours.</p>
     #[serde(rename = "Duration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub duration: Option<i64>,
-    /// <p>Whether the Maintenance Windows is enabled.</p>
+    /// <p>Indicates whether the maintenance window is enabled.</p>
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p>The date and time, in ISO-8601 Extended format, for when the Maintenance Window is scheduled to become inactive. The Maintenance Window will not run after this specified time.</p>
+    /// <p>The date and time, in ISO-8601 Extended format, for when the maintenance window is scheduled to become inactive. The maintenance window will not run after this specified time.</p>
     #[serde(rename = "EndDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_date: Option<String>,
-    /// <p>The date the Maintenance Window was last modified.</p>
+    /// <p>The date the maintenance window was last modified.</p>
     #[serde(rename = "ModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub modified_date: Option<f64>,
-    /// <p>The name of the Maintenance Window.</p>
+    /// <p>The name of the maintenance window.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The next time the Maintenance Window will actually run, taking into account any specified times for the Maintenance Window to become active or inactive.</p>
+    /// <p>The next time the maintenance window will actually run, taking into account any specified times for the maintenance window to become active or inactive.</p>
     #[serde(rename = "NextExecutionTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_execution_time: Option<String>,
-    /// <p>The schedule of the Maintenance Window in the form of a cron or rate expression.</p>
+    /// <p>The schedule of the maintenance window in the form of a cron or rate expression.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
-    /// <p>The time zone that the scheduled Maintenance Window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
+    /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
     #[serde(rename = "ScheduleTimezone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_timezone: Option<String>,
-    /// <p>The date and time, in ISO-8601 Extended format, for when the Maintenance Window is scheduled to become active. The Maintenance Window will not run before this specified time.</p>
+    /// <p>The date and time, in ISO-8601 Extended format, for when the maintenance window is scheduled to become active. The maintenance window will not run before this specified time.</p>
     #[serde(rename = "StartDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_date: Option<String>,
-    /// <p>The ID of the created Maintenance Window.</p>
+    /// <p>The ID of the created maintenance window.</p>
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
@@ -3496,10 +3567,10 @@ pub struct GetMaintenanceWindowResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetMaintenanceWindowTaskRequest {
-    /// <p>The Maintenance Window ID that includes the task to retrieve.</p>
+    /// <p>The maintenance window ID that includes the task to retrieve.</p>
     #[serde(rename = "WindowId")]
     pub window_id: String,
-    /// <p>The Maintenance Window task ID to retrieve.</p>
+    /// <p>The maintenance window task ID to retrieve.</p>
     #[serde(rename = "WindowTaskId")]
     pub window_task_id: String,
 }
@@ -3511,7 +3582,7 @@ pub struct GetMaintenanceWindowTaskResult {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p><p>The location in Amazon S3 where the task results are logged.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
+    /// <p><p>The location in Amazon S3 where the task results are logged.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
     #[serde(rename = "LoggingInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
@@ -3531,7 +3602,7 @@ pub struct GetMaintenanceWindowTaskResult {
     #[serde(rename = "Priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
-    /// <p>The IAM service role to assume during task execution.</p>
+    /// <p>The ARN of the IAM service role to use to publish Amazon Simple Notification Service (Amazon SNS) notifications for maintenance window Run Command tasks.</p>
     #[serde(rename = "ServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
@@ -3547,7 +3618,7 @@ pub struct GetMaintenanceWindowTaskResult {
     #[serde(rename = "TaskInvocationParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_invocation_parameters: Option<MaintenanceWindowTaskInvocationParameters>,
-    /// <p><p>The parameters to pass to the task when it runs.</p> <note> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
+    /// <p><p>The parameters to pass to the task when it runs.</p> <note> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
     #[serde(rename = "TaskParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_parameters:
@@ -3556,14 +3627,62 @@ pub struct GetMaintenanceWindowTaskResult {
     #[serde(rename = "TaskType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_type: Option<String>,
-    /// <p>The retrieved Maintenance Window ID.</p>
+    /// <p>The retrieved maintenance window ID.</p>
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
-    /// <p>The retrieved Maintenance Window task ID.</p>
+    /// <p>The retrieved maintenance window task ID.</p>
     #[serde(rename = "WindowTaskId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_task_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetOpsItemRequest {
+    /// <p>The ID of the OpsItem that you want to get.</p>
+    #[serde(rename = "OpsItemId")]
+    pub ops_item_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetOpsItemResponse {
+    /// <p>The OpsItem.</p>
+    #[serde(rename = "OpsItem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ops_item: Option<OpsItem>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetOpsSummaryRequest {
+    /// <p>Optional aggregators that return counts of OpsItems based on one or more expressions.</p>
+    #[serde(rename = "Aggregators")]
+    pub aggregators: Vec<OpsAggregator>,
+    /// <p>Optional filters used to scope down the returned OpsItems. </p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<OpsFilter>>,
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token to start the list. Use this token to get the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetOpsSummaryResult {
+    /// <p>The list of aggregated and filtered OpsItems.</p>
+    #[serde(rename = "Entities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entities: Option<Vec<OpsEntity>>,
+    /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3672,7 +3791,7 @@ pub struct GetParametersRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetParametersResult {
-    /// <p>A list of parameters that are not formatted correctly or do not run when executed.</p>
+    /// <p>A list of parameters that are not formatted correctly or do not run during an execution.</p>
     #[serde(rename = "InvalidParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invalid_parameters: Option<Vec<String>>,
@@ -3876,7 +3995,7 @@ pub struct InstanceAssociationStatusInfo {
     #[serde(rename = "DetailedStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detailed_status: Option<String>,
-    /// <p>The association document verions.</p>
+    /// <p>The association document versions.</p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
@@ -4121,7 +4240,7 @@ pub struct InventoryDeletionStatusItem {
     #[serde(rename = "DeletionStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deletion_start_time: Option<f64>,
-    /// <p>Information about the delete operation. For more information about this summary, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-delete.html#sysman-inventory-delete-summary">Understanding the Delete Inventory Summary</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>Information about the delete operation. For more information about this summary, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-custom.html#sysman-inventory-delete">Understanding the Delete Inventory Summary</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "DeletionSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deletion_summary: Option<InventoryDeletionSummary>,
@@ -4709,7 +4828,7 @@ pub struct ListTagsForResourceResult {
     pub tag_list: Option<Vec<Tag>>,
 }
 
-/// <p><p>Information about an Amazon S3 bucket to write instance-level logs to.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
+/// <p><p>Information about an Amazon S3 bucket to write instance-level logs to.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoggingInfo {
     /// <p>The name of an Amazon S3 bucket where execution logs are stored .</p>
@@ -4731,13 +4850,13 @@ pub struct MaintenanceWindowAutomationParameters {
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    /// <p><p>The parameters for the AUTOMATION task.</p> <p>For information about specifying and updating task parameters, see <a>RegisterTaskWithMaintenanceWindow</a> and <a>UpdateMaintenanceWindowTask</a>.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p>For AUTOMATION task types, Systems Manager ignores any values specified for these parameters.</p> </note></p>
+    /// <p><p>The parameters for the AUTOMATION task.</p> <p>For information about specifying and updating task parameters, see <a>RegisterTaskWithMaintenanceWindow</a> and <a>UpdateMaintenanceWindowTask</a>.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p>For AUTOMATION task types, Systems Manager ignores any values specified for these parameters.</p> </note></p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
 }
 
-/// <p>Describes the information about an execution of a Maintenance Window. </p>
+/// <p>Describes the information about an execution of a maintenance window. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct MaintenanceWindowExecution {
@@ -4757,17 +4876,17 @@ pub struct MaintenanceWindowExecution {
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
-    /// <p>The ID of the Maintenance Window execution.</p>
+    /// <p>The ID of the maintenance window execution.</p>
     #[serde(rename = "WindowExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_execution_id: Option<String>,
-    /// <p>The ID of the Maintenance Window.</p>
+    /// <p>The ID of the maintenance window.</p>
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
 }
 
-/// <p>Information about a task execution performed as part of a Maintenance Window execution.</p>
+/// <p>Information about a task execution performed as part of a maintenance window execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct MaintenanceWindowExecutionTaskIdentity {
@@ -4791,7 +4910,7 @@ pub struct MaintenanceWindowExecutionTaskIdentity {
     #[serde(rename = "TaskArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_arn: Option<String>,
-    /// <p>The ID of the specific task execution in the Maintenance Window execution.</p>
+    /// <p>The ID of the specific task execution in the maintenance window execution.</p>
     #[serde(rename = "TaskExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_execution_id: Option<String>,
@@ -4799,13 +4918,13 @@ pub struct MaintenanceWindowExecutionTaskIdentity {
     #[serde(rename = "TaskType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_type: Option<String>,
-    /// <p>The ID of the Maintenance Window execution that ran the task.</p>
+    /// <p>The ID of the maintenance window execution that ran the task.</p>
     #[serde(rename = "WindowExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_execution_id: Option<String>,
 }
 
-/// <p>Describes the information about a task invocation for a particular target as part of a task execution performed as part of a Maintenance Window execution.</p>
+/// <p>Describes the information about a task invocation for a particular target as part of a task execution performed as part of a maintenance window execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct MaintenanceWindowExecutionTaskInvocationIdentity {
@@ -4821,7 +4940,7 @@ pub struct MaintenanceWindowExecutionTaskInvocationIdentity {
     #[serde(rename = "InvocationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invocation_id: Option<String>,
-    /// <p>User-provided value that was specified when the target was registered with the Maintenance Window. This was also included in any CloudWatch events raised during the task invocation.</p>
+    /// <p>User-provided value that was specified when the target was registered with the maintenance window. This was also included in any CloudWatch events raised during the task invocation.</p>
     #[serde(rename = "OwnerInformation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_information: Option<String>,
@@ -4841,7 +4960,7 @@ pub struct MaintenanceWindowExecutionTaskInvocationIdentity {
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
-    /// <p>The ID of the specific task execution in the Maintenance Window execution.</p>
+    /// <p>The ID of the specific task execution in the maintenance window execution.</p>
     #[serde(rename = "TaskExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_execution_id: Option<String>,
@@ -4849,11 +4968,11 @@ pub struct MaintenanceWindowExecutionTaskInvocationIdentity {
     #[serde(rename = "TaskType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_type: Option<String>,
-    /// <p>The ID of the Maintenance Window execution that ran the task.</p>
+    /// <p>The ID of the maintenance window execution that ran the task.</p>
     #[serde(rename = "WindowExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_execution_id: Option<String>,
-    /// <p>The ID of the target definition in this Maintenance Window the invocation was performed for.</p>
+    /// <p>The ID of the target definition in this maintenance window the invocation was performed for.</p>
     #[serde(rename = "WindowTargetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_target_id: Option<String>,
@@ -4872,71 +4991,71 @@ pub struct MaintenanceWindowFilter {
     pub values: Option<Vec<String>>,
 }
 
-/// <p>Information about the Maintenance Window.</p>
+/// <p>Information about the maintenance window.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct MaintenanceWindowIdentity {
-    /// <p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>
+    /// <p>The number of hours before the end of the maintenance window that Systems Manager stops scheduling new tasks for execution.</p>
     #[serde(rename = "Cutoff")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cutoff: Option<i64>,
-    /// <p>A description of the Maintenance Window.</p>
+    /// <p>A description of the maintenance window.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The duration of the Maintenance Window in hours.</p>
+    /// <p>The duration of the maintenance window in hours.</p>
     #[serde(rename = "Duration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub duration: Option<i64>,
-    /// <p>Whether the Maintenance Window is enabled.</p>
+    /// <p>Indicates whether the maintenance window is enabled.</p>
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p>The date and time, in ISO-8601 Extended format, for when the Maintenance Window is scheduled to become inactive.</p>
+    /// <p>The date and time, in ISO-8601 Extended format, for when the maintenance window is scheduled to become inactive.</p>
     #[serde(rename = "EndDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_date: Option<String>,
-    /// <p>The name of the Maintenance Window.</p>
+    /// <p>The name of the maintenance window.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The next time the Maintenance Window will actually run, taking into account any specified times for the Maintenance Window to become active or inactive.</p>
+    /// <p>The next time the maintenance window will actually run, taking into account any specified times for the maintenance window to become active or inactive.</p>
     #[serde(rename = "NextExecutionTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_execution_time: Option<String>,
-    /// <p>The schedule of the Maintenance Window in the form of a cron or rate expression.</p>
+    /// <p>The schedule of the maintenance window in the form of a cron or rate expression.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
-    /// <p>The time zone that the scheduled Maintenance Window executions are based on, in Internet Assigned Numbers Authority (IANA) format.</p>
+    /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format.</p>
     #[serde(rename = "ScheduleTimezone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_timezone: Option<String>,
-    /// <p>The date and time, in ISO-8601 Extended format, for when the Maintenance Window is scheduled to become active.</p>
+    /// <p>The date and time, in ISO-8601 Extended format, for when the maintenance window is scheduled to become active.</p>
     #[serde(rename = "StartDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_date: Option<String>,
-    /// <p>The ID of the Maintenance Window.</p>
+    /// <p>The ID of the maintenance window.</p>
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
 }
 
-/// <p>The Maintenance Window to which the specified target belongs.</p>
+/// <p>The maintenance window to which the specified target belongs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct MaintenanceWindowIdentityForTarget {
-    /// <p>The name of the Maintenance Window.</p>
+    /// <p>The name of the maintenance window.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The ID of the Maintenance Window.</p>
+    /// <p>The ID of the maintenance window.</p>
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
 }
 
-/// <p><p>The parameters for a LAMBDA task type.</p> <p>For information about specifying and updating task parameters, see <a>RegisterTaskWithMaintenanceWindow</a> and <a>UpdateMaintenanceWindowTask</a>.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p>For Lambda tasks, Systems Manager ignores any values specified for TaskParameters and LoggingInfo.</p> </note></p>
+/// <p><p>The parameters for a LAMBDA task type.</p> <p>For information about specifying and updating task parameters, see <a>RegisterTaskWithMaintenanceWindow</a> and <a>UpdateMaintenanceWindowTask</a>.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p>For Lambda tasks, Systems Manager ignores any values specified for TaskParameters and LoggingInfo.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MaintenanceWindowLambdaParameters {
     /// <p>Pass client-specific information to the Lambda function that you are invoking. You can then process the client information in your Lambda function as you choose through the context variable.</p>
@@ -4958,10 +5077,10 @@ pub struct MaintenanceWindowLambdaParameters {
     pub qualifier: Option<String>,
 }
 
-/// <p><p>The parameters for a RUN_COMMAND task type.</p> <p>For information about specifying and updating task parameters, see <a>RegisterTaskWithMaintenanceWindow</a> and <a>UpdateMaintenanceWindowTask</a>.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p>For Run Command tasks, Systems Manager uses specified values for <code>TaskParameters</code> and <code>LoggingInfo</code> only if no values are specified for <code>TaskInvocationParameters</code>. </p> </note></p>
+/// <p><p>The parameters for a RUN_COMMAND task type.</p> <p>For information about specifying and updating task parameters, see <a>RegisterTaskWithMaintenanceWindow</a> and <a>UpdateMaintenanceWindowTask</a>.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p>For Run Command tasks, Systems Manager uses specified values for <code>TaskParameters</code> and <code>LoggingInfo</code> only if no values are specified for <code>TaskInvocationParameters</code>. </p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MaintenanceWindowRunCommandParameters {
-    /// <p>Information about the command(s) to run.</p>
+    /// <p>Information about the commands to run.</p>
     #[serde(rename = "Comment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
@@ -4989,7 +5108,7 @@ pub struct MaintenanceWindowRunCommandParameters {
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    /// <p>The IAM service role to assume during task execution.</p>
+    /// <p>The ARN of the IAM service role to use to publish Amazon Simple Notification Service (Amazon SNS) notifications for maintenance window Run Command tasks.</p>
     #[serde(rename = "ServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
@@ -4999,7 +5118,7 @@ pub struct MaintenanceWindowRunCommandParameters {
     pub timeout_seconds: Option<i64>,
 }
 
-/// <p><p>The parameters for a STEP_FUNCTION task.</p> <p>For information about specifying and updating task parameters, see <a>RegisterTaskWithMaintenanceWindow</a> and <a>UpdateMaintenanceWindowTask</a>.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p>For Step Functions tasks, Systems Manager ignores any values specified for <code>TaskParameters</code> and <code>LoggingInfo</code>.</p> </note></p>
+/// <p><p>The parameters for a STEP_FUNCTION task.</p> <p>For information about specifying and updating task parameters, see <a>RegisterTaskWithMaintenanceWindow</a> and <a>UpdateMaintenanceWindowTask</a>.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p>For Step Functions tasks, Systems Manager ignores any values specified for <code>TaskParameters</code> and <code>LoggingInfo</code>.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MaintenanceWindowStepFunctionsParameters {
     /// <p>The inputs for the STEP_FUNCTION task.</p>
@@ -5012,7 +5131,7 @@ pub struct MaintenanceWindowStepFunctionsParameters {
     pub name: Option<String>,
 }
 
-/// <p>The target registered with the Maintenance Window.</p>
+/// <p>The target registered with the maintenance window.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct MaintenanceWindowTarget {
@@ -5020,15 +5139,15 @@ pub struct MaintenanceWindowTarget {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The target name.</p>
+    /// <p>The name for the maintenance window target.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>A user-provided value that will be included in any CloudWatch events that are raised while running tasks for these targets in this Maintenance Window.</p>
+    /// <p>A user-provided value that will be included in any CloudWatch events that are raised while running tasks for these targets in this maintenance window.</p>
     #[serde(rename = "OwnerInformation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_information: Option<String>,
-    /// <p>The type of target that is being registered with the Maintenance Window.</p>
+    /// <p>The type of target that is being registered with the maintenance window.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -5036,7 +5155,7 @@ pub struct MaintenanceWindowTarget {
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
-    /// <p>The ID of the Maintenance Window to register the target with.</p>
+    /// <p>The ID of the maintenance window to register the target with.</p>
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
@@ -5046,7 +5165,7 @@ pub struct MaintenanceWindowTarget {
     pub window_target_id: Option<String>,
 }
 
-/// <p>Information about a task defined for a Maintenance Window.</p>
+/// <p>Information about a task defined for a maintenance window.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct MaintenanceWindowTask {
@@ -5054,7 +5173,7 @@ pub struct MaintenanceWindowTask {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p><p>Information about an Amazon S3 bucket to write task-level logs to.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
+    /// <p><p>Information about an Amazon S3 bucket to write task-level logs to.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
     #[serde(rename = "LoggingInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
@@ -5070,11 +5189,11 @@ pub struct MaintenanceWindowTask {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The priority of the task in the Maintenance Window. The lower the number, the higher the priority. Tasks that have the same priority are scheduled in parallel.</p>
+    /// <p>The priority of the task in the maintenance window. The lower the number, the higher the priority. Tasks that have the same priority are scheduled in parallel.</p>
     #[serde(rename = "Priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
-    /// <p>The role that should be assumed when running the task.</p>
+    /// <p>The ARN of the IAM service role to use to publish Amazon Simple Notification Service (Amazon SNS) notifications for maintenance window Run Command tasks.</p>
     #[serde(rename = "ServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
@@ -5086,7 +5205,7 @@ pub struct MaintenanceWindowTask {
     #[serde(rename = "TaskArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_arn: Option<String>,
-    /// <p><p>The parameters that should be passed to the task when it is run.</p> <note> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
+    /// <p><p>The parameters that should be passed to the task when it is run.</p> <note> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
     #[serde(rename = "TaskParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_parameters:
@@ -5095,7 +5214,7 @@ pub struct MaintenanceWindowTask {
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    /// <p>The ID of the Maintenance Window where the task is registered.</p>
+    /// <p>The ID of the maintenance window where the task is registered.</p>
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
@@ -5174,11 +5293,11 @@ pub struct NonCompliantSummary {
 /// <p>Configurations for sending notifications.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NotificationConfig {
-    /// <p>An Amazon Resource Name (ARN) for a Simple Notification Service (SNS) topic. Run Command pushes notifications about command status changes to this topic.</p>
+    /// <p>An Amazon Resource Name (ARN) for an Amazon Simple Notification Service (Amazon SNS) topic. Run Command pushes notifications about command status changes to this topic.</p>
     #[serde(rename = "NotificationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_arn: Option<String>,
-    /// <p>The different events for which you can receive notifications. These events include the following: All (events), InProgress, Success, TimedOut, Cancelled, Failed. To learn more about these events, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/rc-sns-notifications.html">Configuring Amazon SNS Notifications for Run Command</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>The different events for which you can receive notifications. These events include the following: All (events), InProgress, Success, TimedOut, Cancelled, Failed. To learn more about these events, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitoring-sns-notifications.html">Configuring Amazon SNS Notifications for AWS Systems Manager</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "NotificationEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_events: Option<Vec<String>>,
@@ -5186,6 +5305,218 @@ pub struct NotificationConfig {
     #[serde(rename = "NotificationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_type: Option<String>,
+}
+
+/// <p>One or more aggregators for viewing counts of OpsItems using different dimensions such as <code>Source</code>, <code>CreatedTime</code>, or <code>Source and CreatedTime</code>, to name a few.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct OpsAggregator {
+    /// <p>Either a Range or Count aggregator for limiting an OpsItem summary.</p>
+    #[serde(rename = "AggregatorType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aggregator_type: Option<String>,
+    /// <p>A nested aggregator for viewing counts of OpsItems.</p>
+    #[serde(rename = "Aggregators")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aggregators: Option<Vec<OpsAggregator>>,
+    /// <p>The name of an OpsItem attribute on which to limit the count of OpsItems.</p>
+    #[serde(rename = "AttributeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attribute_name: Option<String>,
+    /// <p>The aggregator filters.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<OpsFilter>>,
+    /// <p>The data type name to use for viewing counts of OpsItems.</p>
+    #[serde(rename = "TypeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_name: Option<String>,
+    /// <p>The aggregator value.</p>
+    #[serde(rename = "Values")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub values: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>The result of the query.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct OpsEntity {
+    /// <p>The data returned by the query.</p>
+    #[serde(rename = "Data")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data: Option<::std::collections::HashMap<String, OpsEntityItem>>,
+    /// <p>The query ID.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+}
+
+/// <p>The OpsItem summaries result item.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct OpsEntityItem {
+    /// <p>The detailed data content for an OpsItem summaries result item.</p>
+    #[serde(rename = "Content")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<Vec<::std::collections::HashMap<String, String>>>,
+}
+
+/// <p>A filter for viewing OpsItem summaries.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct OpsFilter {
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>The type of filter.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p>The filter value.</p>
+    #[serde(rename = "Values")]
+    pub values: Vec<String>,
+}
+
+/// <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct OpsItem {
+    /// <p>The ARN of the AWS account that created the OpsItem.</p>
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<String>,
+    /// <p>The date and time the OpsItem was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<f64>,
+    /// <p>The OpsItem description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The ARN of the AWS account that last updated the OpsItem.</p>
+    #[serde(rename = "LastModifiedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_by: Option<String>,
+    /// <p>The date and time the OpsItem was last updated.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of an SNS topic where notifications are sent when this OpsItem is edited or changed.</p>
+    #[serde(rename = "Notifications")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notifications: Option<Vec<OpsItemNotification>>,
+    /// <p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <p>This custom data is searchable, but with restrictions. For the <code>Searchable operational data</code> feature, all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. For the <code>Private operational data</code> feature, the data is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p>
+    #[serde(rename = "OperationalData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operational_data: Option<::std::collections::HashMap<String, OpsItemDataValue>>,
+    /// <p>The ID of the OpsItem.</p>
+    #[serde(rename = "OpsItemId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ops_item_id: Option<String>,
+    /// <p>The importance of this OpsItem in relation to other OpsItems in the system.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+    /// <p>One or more OpsItems that share something in common with the current OpsItems. For example, related OpsItems can include OpsItems with similar error messages, impacted resources, or statuses for the impacted resource.</p>
+    #[serde(rename = "RelatedOpsItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub related_ops_items: Option<Vec<RelatedOpsItem>>,
+    /// <p>The origin of the OpsItem, such as Amazon EC2 or AWS Systems Manager. The impacted resource is a subset of source.</p>
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<String>,
+    /// <p>The OpsItem status. Status can be <code>Open</code>, <code>In Progress</code>, or <code>Resolved</code>. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-working-with-OpsItems-editing-details.html">Editing OpsItem Details</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A short heading that describes the nature of the OpsItem and the impacted resource.</p>
+    #[serde(rename = "Title")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+    /// <p>The version of this OpsItem. Each time the OpsItem is edited the version number increments by one.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+}
+
+/// <p>An object that defines the value of the key and its type in the OperationalData map.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OpsItemDataValue {
+    /// <p>The type of key-value pair. Valid types include <code>SearchableString</code> and <code>String</code>.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p>The value of the OperationalData key.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+/// <p>Describes an OpsCenter filter.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct OpsItemFilter {
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>The operator used by the filter call.</p>
+    #[serde(rename = "Operator")]
+    pub operator: String,
+    /// <p>The filter value.</p>
+    #[serde(rename = "Values")]
+    pub values: Vec<String>,
+}
+
+/// <p>A notification about the OpsItem.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OpsItemNotification {
+    /// <p>The Amazon Resource Name (ARN) of an SNS topic where notifications are sent when this OpsItem is edited or changed.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+}
+
+/// <p>A count of OpsItems.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct OpsItemSummary {
+    /// <p>The Amazon Resource Name (ARN) of the IAM entity that created the OpsItem.</p>
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<String>,
+    /// <p>The date and time the OpsItem was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the IAM entity that created the OpsItem.</p>
+    #[serde(rename = "LastModifiedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_by: Option<String>,
+    /// <p>The date and time the OpsItem was last updated.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <p>This custom data is searchable, but with restrictions. For the <code>Searchable operational data</code> feature, all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. For the <code>Private operational data</code> feature, the data is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p>
+    #[serde(rename = "OperationalData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operational_data: Option<::std::collections::HashMap<String, OpsItemDataValue>>,
+    /// <p>The ID of the OpsItem.</p>
+    #[serde(rename = "OpsItemId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ops_item_id: Option<String>,
+    /// <p>The importance of this OpsItem in relation to other OpsItems in the system.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+    /// <p>The impacted AWS resource.</p>
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<String>,
+    /// <p>The OpsItem status. Status can be <code>Open</code>, <code>In Progress</code>, or <code>Resolved</code>.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A short heading that describes the nature of the OpsItem and the impacted resource.</p>
+    #[serde(rename = "Title")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
 }
 
 /// <p>Information about the source where the association execution details are stored.</p>
@@ -5272,7 +5603,7 @@ pub struct ParameterHistory {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Information about the policies assigned to a parameter.</p>
+    /// <p>Information about the policies assigned to a parameter.</p> <p> <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-policies.html">Working with Parameter Policies</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Policies")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policies: Option<Vec<ParameterInlinePolicy>>,
@@ -5312,7 +5643,7 @@ pub struct ParameterInlinePolicy {
     pub policy_type: Option<String>,
 }
 
-/// <p>Metada includes information like the ARN of the last user and the date/time the parameter was last used.</p>
+/// <p>Metadata includes information like the ARN of the last user and the date/time the parameter was last used.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ParameterMetadata {
@@ -5773,17 +6104,17 @@ pub struct RegisterTargetWithMaintenanceWindowRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.</p>
+    /// <p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this maintenance window.</p>
     #[serde(rename = "OwnerInformation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_information: Option<String>,
-    /// <p>The type of target being registered with the Maintenance Window.</p>
+    /// <p>The type of target being registered with the maintenance window.</p>
     #[serde(rename = "ResourceType")]
     pub resource_type: String,
-    /// <p>The targets (either instances or tags). </p> <p>Specify instances using the following format:</p> <p> <code>Key=InstanceIds,Values=&lt;instance-id-1&gt;,&lt;instance-id-2&gt;</code> </p> <p>Specify tags using either of the following formats:</p> <p> <code>Key=tag:&lt;tag-key&gt;,Values=&lt;tag-value-1&gt;,&lt;tag-value-2&gt;</code> </p> <p> <code>Key=tag-key,Values=&lt;tag-key-1&gt;,&lt;tag-key-2&gt;</code> </p>
+    /// <p>The targets to register with the maintenance window. In other words, the instances to run commands on when the maintenance window runs.</p> <p>You can specify targets using either instance IDs or tags that have been applied to instances.</p> <p> <b>Example 1</b>: Specify instance IDs</p> <p> <code>Key=InstanceIds,Values=<i>instance-id-1</i>,<i>instance-id-2</i>,<i>instance-id-3</i> </code> </p> <p> <b>Example 2</b>: Use tag key-pairs applied to instances</p> <p> <code>Key=tag:<i>my-tag-key</i>,Values=<i>my-tag-value-1</i>,<i>my-tag-value-2</i> </code> </p> <p> <b>Example 3</b>: Use tag-keys applied to instances</p> <p> <code>Key=tag-key,Values=<i>my-tag-key-1</i>,<i>my-tag-key-2</i> </code> </p> <p>For more information about these examples formats, including the best use case for each one, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/mw-cli-tutorial-targets-examples.html">Examples: Register Targets with a Maintenance Window</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Targets")]
     pub targets: Vec<Target>,
-    /// <p>The ID of the Maintenance Window the target should be registered with.</p>
+    /// <p>The ID of the maintenance window the target should be registered with.</p>
     #[serde(rename = "WindowId")]
     pub window_id: String,
 }
@@ -5791,7 +6122,7 @@ pub struct RegisterTargetWithMaintenanceWindowRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct RegisterTargetWithMaintenanceWindowResult {
-    /// <p>The ID of the target definition in this Maintenance Window.</p>
+    /// <p>The ID of the target definition in this maintenance window.</p>
     #[serde(rename = "WindowTargetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_target_id: Option<String>,
@@ -5807,7 +6138,7 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p><p>A structure containing information about an Amazon S3 bucket to write instance-level logs to. </p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
+    /// <p><p>A structure containing information about an Amazon S3 bucket to write instance-level logs to. </p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
     #[serde(rename = "LoggingInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
@@ -5821,15 +6152,15 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The priority of the task in the Maintenance Window, the lower the number the higher the priority. Tasks in a Maintenance Window are scheduled in priority order with tasks that have the same priority scheduled in parallel.</p>
+    /// <p>The priority of the task in the maintenance window, the lower the number the higher the priority. Tasks in a maintenance window are scheduled in priority order with tasks that have the same priority scheduled in parallel.</p>
     #[serde(rename = "Priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
-    /// <p>The role to assume when running the Maintenance Window task.</p> <p>If you do not specify a service role ARN, Systems Manager will use your account's service-linked role for Systems Manager by default. If no service-linked role for Systems Manager exists in your account, it will be created when you run <code>RegisterTaskWithMaintenanceWindow</code> without specifying a service role ARN.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/using-service-linked-roles.html#slr-permissions">Service-Linked Role Permissions for Systems Manager</a> and <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-maintenance-permissions.html#maintenance-window-tasks-service-role">Should I Use a Service-Linked Role or a Custom Service Role to Run Maintenance Window Tasks? </a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p><p>The ARN of the IAM service role for Systems Manager to assume when running a maintenance window task. If you do not specify a service role ARN, Systems Manager uses your account&#39;s service-linked role. If no service-linked role for Systems Manager exists in your account, it is created when you run <code>RegisterTaskWithMaintenanceWindow</code>.</p> <p>For more information, see the following topics in the in the <i>AWS Systems Manager User Guide</i>:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/using-service-linked-roles.html#slr-permissions">Service-Linked Role Permissions for Systems Manager</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-maintenance-permissions.html#maintenance-window-tasks-service-role">Should I Use a Service-Linked Role or a Custom Service Role to Run Maintenance Window Tasks? </a> </p> </li> </ul></p>
     #[serde(rename = "ServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    /// <p>The targets (either instances or Maintenance Window targets).</p> <p>Specify instances using the following format: </p> <p> <code>Key=InstanceIds,Values=&lt;instance-id-1&gt;,&lt;instance-id-2&gt;</code> </p> <p>Specify Maintenance Window targets using the following format:</p> <p> <code>Key=&lt;WindowTargetIds&gt;,Values=&lt;window-target-id-1&gt;,&lt;window-target-id-2&gt;</code> </p>
+    /// <p>The targets (either instances or maintenance window targets).</p> <p>Specify instances using the following format: </p> <p> <code>Key=InstanceIds,Values=&lt;instance-id-1&gt;,&lt;instance-id-2&gt;</code> </p> <p>Specify maintenance window targets using the following format:</p> <p> <code>Key=&lt;WindowTargetIds&gt;,Values=&lt;window-target-id-1&gt;,&lt;window-target-id-2&gt;</code> </p>
     #[serde(rename = "Targets")]
     pub targets: Vec<Target>,
     /// <p>The ARN of the task to run.</p>
@@ -5839,7 +6170,7 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     #[serde(rename = "TaskInvocationParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_invocation_parameters: Option<MaintenanceWindowTaskInvocationParameters>,
-    /// <p><p>The parameters that should be passed to the task when it is run.</p> <note> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
+    /// <p><p>The parameters that should be passed to the task when it is run.</p> <note> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
     #[serde(rename = "TaskParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_parameters:
@@ -5847,7 +6178,7 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     /// <p>The type of task being registered.</p>
     #[serde(rename = "TaskType")]
     pub task_type: String,
-    /// <p>The ID of the Maintenance Window the task should be added to.</p>
+    /// <p>The ID of the maintenance window the task should be added to.</p>
     #[serde(rename = "WindowId")]
     pub window_id: String,
 }
@@ -5855,18 +6186,26 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct RegisterTaskWithMaintenanceWindowResult {
-    /// <p>The ID of the task in the Maintenance Window.</p>
+    /// <p>The ID of the task in the maintenance window.</p>
     #[serde(rename = "WindowTaskId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_task_id: Option<String>,
 }
 
+/// <p>An OpsItems that shares something in common with the current OpsItems. For example, related OpsItems can include OpsItems with similar error messages, impacted resources, or statuses for the impacted resource.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RelatedOpsItem {
+    /// <p>The ID of an OpsItem related to the current OpsItem.</p>
+    #[serde(rename = "OpsItemId")]
+    pub ops_item_id: String,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemoveTagsFromResourceRequest {
-    /// <p><p>The resource ID for which you want to remove tags. Use the ID of the resource. Here are some examples:</p> <p>ManagedInstance: mi-012345abcde</p> <p>MaintenanceWindow: mw-012345abcde</p> <p>PatchBaseline: pb-012345abcde</p> <p>For the Document and Parameter values, use the name of the resource.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
+    /// <p><p>The resource ID for which you want to remove tags. Use the ID of the resource. Here are some examples:</p> <p>ManagedInstance: mi-012345abcde</p> <p>MaintenanceWindow: mw-012345abcde</p> <p>PatchBaseline: pb-012345abcde</p> <p>For the Document and Parameter values, use the name of the resource.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    /// <p><p>The type of resource of which you want to remove a tag.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
+    /// <p><p>The type of resource of which you want to remove a tag.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceType")]
     pub resource_type: String,
     /// <p>Tag keys that you want to remove from the specified resource.</p>
@@ -5985,7 +6324,7 @@ pub struct ResourceDataSyncItem {
 /// <p>Information about the target Amazon S3 bucket for the Resource Data Sync.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResourceDataSyncS3Destination {
-    /// <p>The ARN of an encryption key for a destination in Amazon S3. Must belong to the same region as the destination Amazon S3 bucket.</p>
+    /// <p>The ARN of an encryption key for a destination in Amazon S3. Must belong to the same Region as the destination Amazon S3 bucket.</p>
     #[serde(rename = "AWSKMSKeyARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub awskms_key_arn: Option<String>,
@@ -6063,19 +6402,19 @@ pub struct S3OutputUrl {
     pub output_url: Option<String>,
 }
 
-/// <p>Information about a scheduled execution for a Maintenance Window.</p>
+/// <p>Information about a scheduled execution for a maintenance window.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ScheduledWindowExecution {
-    /// <p>The time, in ISO-8601 Extended format, that the Maintenance Window is scheduled to be run.</p>
+    /// <p>The time, in ISO-8601 Extended format, that the maintenance window is scheduled to be run.</p>
     #[serde(rename = "ExecutionTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_time: Option<String>,
-    /// <p>The name of the Maintenance Window to be run.</p>
+    /// <p>The name of the maintenance window to be run.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The ID of the Maintenance Window to be run.</p>
+    /// <p>The ID of the maintenance window to be run.</p>
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
@@ -6086,11 +6425,11 @@ pub struct SendAutomationSignalRequest {
     /// <p>The unique identifier for an existing Automation execution that you want to send the signal to.</p>
     #[serde(rename = "AutomationExecutionId")]
     pub automation_execution_id: String,
-    /// <p>The data sent with the signal. The data schema depends on the type of signal used in the request. </p>
+    /// <p>The data sent with the signal. The data schema depends on the type of signal used in the request.</p> <p>For <code>Approve</code> and <code>Reject</code> signal types, the payload is an optional comment that you can send with the signal type. For example:</p> <p> <code>Comment="Looks good"</code> </p> <p>For <code>StartStep</code> and <code>Resume</code> signal types, you must send the name of the Automation step to start or resume as the payload. For example:</p> <p> <code>StepName="step1"</code> </p> <p>For the <code>StopStep</code> signal type, you must send the step execution ID as the payload. For example:</p> <p> <code>StepExecutionId="97fff367-fc5a-4299-aed8-0123456789ab"</code> </p>
     #[serde(rename = "Payload")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub payload: Option<::std::collections::HashMap<String, Vec<String>>>,
-    /// <p>The type of signal. Valid signal types include the following: Approve and Reject </p>
+    /// <p>The type of signal to send to an Automation execution. </p>
     #[serde(rename = "SignalType")]
     pub signal_type: String,
 }
@@ -6156,7 +6495,7 @@ pub struct SendCommandRequest {
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    /// <p>The IAM role that Systems Manager uses to send notifications. </p>
+    /// <p>The ARN of the IAM service role to use to publish Amazon Simple Notification Service (Amazon SNS) notifications for Run Command commands.</p>
     #[serde(rename = "ServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
@@ -6525,7 +6864,7 @@ pub struct StopAutomationExecutionRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct StopAutomationExecutionResult {}
 
-/// <p>Metadata that you assign to your AWS resources. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. In Systems Manager, you can apply tags to documents, managed instances, Maintenance Windows, Parameter Store parameters, and patch baselines.</p>
+/// <p>Metadata that you assign to your AWS resources. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. In Systems Manager, you can apply tags to documents, managed instances, maintenance windows, Parameter Store parameters, and patch baselines.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>The name of the tag.</p>
@@ -6564,11 +6903,11 @@ pub struct TargetLocation {
     #[serde(rename = "Regions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub regions: Option<Vec<String>>,
-    /// <p>The maxium number of AWS accounts and AWS regions allowed to run the Automation concurrently </p>
+    /// <p>The maximum number of AWS accounts and AWS regions allowed to run the Automation concurrently </p>
     #[serde(rename = "TargetLocationMaxConcurrency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_location_max_concurrency: Option<String>,
-    /// <p>The maxium number of errors allowed before the system stops queueing additional Automation executions for the currently running Automation. </p>
+    /// <p>The maximum number of errors allowed before the system stops queueing additional Automation executions for the currently running Automation. </p>
     #[serde(rename = "TargetLocationMaxErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_location_max_errors: Option<String>,
@@ -6736,11 +7075,11 @@ pub struct UpdateDocumentResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateMaintenanceWindowRequest {
-    /// <p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>
+    /// <p>Whether targets must be registered with the maintenance window before tasks can be defined for those targets.</p>
     #[serde(rename = "AllowUnassociatedTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allow_unassociated_targets: Option<bool>,
-    /// <p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>
+    /// <p>The number of hours before the end of the maintenance window that Systems Manager stops scheduling new tasks for execution.</p>
     #[serde(rename = "Cutoff")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cutoff: Option<i64>,
@@ -6748,19 +7087,19 @@ pub struct UpdateMaintenanceWindowRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The duration of the Maintenance Window in hours.</p>
+    /// <p>The duration of the maintenance window in hours.</p>
     #[serde(rename = "Duration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub duration: Option<i64>,
-    /// <p>Whether the Maintenance Window is enabled.</p>
+    /// <p>Whether the maintenance window is enabled.</p>
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p>The date and time, in ISO-8601 Extended format, for when you want the Maintenance Window to become inactive. EndDate allows you to set a date and time in the future when the Maintenance Window will no longer run.</p>
+    /// <p>The date and time, in ISO-8601 Extended format, for when you want the maintenance window to become inactive. EndDate allows you to set a date and time in the future when the maintenance window will no longer run.</p>
     #[serde(rename = "EndDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_date: Option<String>,
-    /// <p>The name of the Maintenance Window.</p>
+    /// <p>The name of the maintenance window.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -6768,19 +7107,19 @@ pub struct UpdateMaintenanceWindowRequest {
     #[serde(rename = "Replace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replace: Option<bool>,
-    /// <p>The schedule of the Maintenance Window in the form of a cron or rate expression.</p>
+    /// <p>The schedule of the maintenance window in the form of a cron or rate expression.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
-    /// <p>The time zone that the scheduled Maintenance Window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
+    /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
     #[serde(rename = "ScheduleTimezone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_timezone: Option<String>,
-    /// <p>The time zone that the scheduled Maintenance Window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
+    /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
     #[serde(rename = "StartDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_date: Option<String>,
-    /// <p>The ID of the Maintenance Window to update.</p>
+    /// <p>The ID of the maintenance window to update.</p>
     #[serde(rename = "WindowId")]
     pub window_id: String,
 }
@@ -6788,11 +7127,11 @@ pub struct UpdateMaintenanceWindowRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateMaintenanceWindowResult {
-    /// <p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>
+    /// <p>Whether targets must be registered with the maintenance window before tasks can be defined for those targets.</p>
     #[serde(rename = "AllowUnassociatedTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allow_unassociated_targets: Option<bool>,
-    /// <p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>
+    /// <p>The number of hours before the end of the maintenance window that Systems Manager stops scheduling new tasks for execution.</p>
     #[serde(rename = "Cutoff")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cutoff: Option<i64>,
@@ -6800,35 +7139,35 @@ pub struct UpdateMaintenanceWindowResult {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The duration of the Maintenance Window in hours.</p>
+    /// <p>The duration of the maintenance window in hours.</p>
     #[serde(rename = "Duration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub duration: Option<i64>,
-    /// <p>Whether the Maintenance Window is enabled.</p>
+    /// <p>Whether the maintenance window is enabled.</p>
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p>The date and time, in ISO-8601 Extended format, for when the Maintenance Window is scheduled to become inactive. The Maintenance Window will not run after this specified time.</p>
+    /// <p>The date and time, in ISO-8601 Extended format, for when the maintenance window is scheduled to become inactive. The maintenance window will not run after this specified time.</p>
     #[serde(rename = "EndDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_date: Option<String>,
-    /// <p>The name of the Maintenance Window.</p>
+    /// <p>The name of the maintenance window.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The schedule of the Maintenance Window in the form of a cron or rate expression.</p>
+    /// <p>The schedule of the maintenance window in the form of a cron or rate expression.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
-    /// <p>The time zone that the scheduled Maintenance Window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
+    /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
     #[serde(rename = "ScheduleTimezone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_timezone: Option<String>,
-    /// <p>The date and time, in ISO-8601 Extended format, for when the Maintenance Window is scheduled to become active. The Maintenance Window will not run before this specified time.</p>
+    /// <p>The date and time, in ISO-8601 Extended format, for when the maintenance window is scheduled to become active. The maintenance window will not run before this specified time.</p>
     #[serde(rename = "StartDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_date: Option<String>,
-    /// <p>The ID of the created Maintenance Window.</p>
+    /// <p>The ID of the created maintenance window.</p>
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
@@ -6844,7 +7183,7 @@ pub struct UpdateMaintenanceWindowTargetRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.</p>
+    /// <p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this maintenance window.</p>
     #[serde(rename = "OwnerInformation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_information: Option<String>,
@@ -6856,7 +7195,7 @@ pub struct UpdateMaintenanceWindowTargetRequest {
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
-    /// <p>The Maintenance Window ID with which to modify the target.</p>
+    /// <p>The maintenance window ID with which to modify the target.</p>
     #[serde(rename = "WindowId")]
     pub window_id: String,
     /// <p>The target ID to modify.</p>
@@ -6883,7 +7222,7 @@ pub struct UpdateMaintenanceWindowTargetResult {
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
-    /// <p>The Maintenance Window ID specified in the update request.</p>
+    /// <p>The maintenance window ID specified in the update request.</p>
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
@@ -6899,7 +7238,7 @@ pub struct UpdateMaintenanceWindowTaskRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p><p>The new logging location in Amazon S3 to specify.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
+    /// <p><p>The new logging location in Amazon S3 to specify.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
     #[serde(rename = "LoggingInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
@@ -6923,7 +7262,7 @@ pub struct UpdateMaintenanceWindowTaskRequest {
     #[serde(rename = "Replace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replace: Option<bool>,
-    /// <p>The IAM service role ARN to modify. The system assumes this role during task execution.</p> <p>If you do not specify a service role ARN, Systems Manager will use your account's service-linked role for Systems Manager by default. If no service-linked role for Systems Manager exists in your account, it will be created when you run <code>RegisterTaskWithMaintenanceWindow</code> without specifying a service role ARN.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/using-service-linked-roles.html#slr-permissions">Service-Linked Role Permissions for Systems Manager</a> and <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-maintenance-permissions.html#maintenance-window-tasks-service-role">Should I Use a Service-Linked Role or a Custom Service Role to Run Maintenance Window Tasks? </a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p><p>The ARN of the IAM service role for Systems Manager to assume when running a maintenance window task. If you do not specify a service role ARN, Systems Manager uses your account&#39;s service-linked role. If no service-linked role for Systems Manager exists in your account, it is created when you run <code>RegisterTaskWithMaintenanceWindow</code>.</p> <p>For more information, see the following topics in the in the <i>AWS Systems Manager User Guide</i>:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/using-service-linked-roles.html#slr-permissions">Service-Linked Role Permissions for Systems Manager</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-maintenance-permissions.html#maintenance-window-tasks-service-role">Should I Use a Service-Linked Role or a Custom Service Role to Run Maintenance Window Tasks? </a> </p> </li> </ul></p>
     #[serde(rename = "ServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
@@ -6939,12 +7278,12 @@ pub struct UpdateMaintenanceWindowTaskRequest {
     #[serde(rename = "TaskInvocationParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_invocation_parameters: Option<MaintenanceWindowTaskInvocationParameters>,
-    /// <p>The parameters to modify.</p> <note> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note> <p>The map has the following format:</p> <p>Key: string, between 1 and 255 characters</p> <p>Value: an array of strings, each string is between 1 and 255 characters</p>
+    /// <p>The parameters to modify.</p> <note> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note> <p>The map has the following format:</p> <p>Key: string, between 1 and 255 characters</p> <p>Value: an array of strings, each string is between 1 and 255 characters</p>
     #[serde(rename = "TaskParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_parameters:
         Option<::std::collections::HashMap<String, MaintenanceWindowTaskParameterValueExpression>>,
-    /// <p>The Maintenance Window ID that contains the task to modify.</p>
+    /// <p>The maintenance window ID that contains the task to modify.</p>
     #[serde(rename = "WindowId")]
     pub window_id: String,
     /// <p>The task ID to modify.</p>
@@ -6959,7 +7298,7 @@ pub struct UpdateMaintenanceWindowTaskResult {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p><p>The updated logging information in Amazon S3.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
+    /// <p><p>The updated logging information in Amazon S3.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
     #[serde(rename = "LoggingInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
@@ -6979,7 +7318,7 @@ pub struct UpdateMaintenanceWindowTaskResult {
     #[serde(rename = "Priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
-    /// <p>The updated service role ARN value.</p>
+    /// <p>The ARN of the IAM service role to use to publish Amazon Simple Notification Service (Amazon SNS) notifications for maintenance window Run Command tasks.</p>
     #[serde(rename = "ServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
@@ -6995,16 +7334,16 @@ pub struct UpdateMaintenanceWindowTaskResult {
     #[serde(rename = "TaskInvocationParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_invocation_parameters: Option<MaintenanceWindowTaskInvocationParameters>,
-    /// <p><p>The updated parameter values.</p> <note> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
+    /// <p><p>The updated parameter values.</p> <note> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
     #[serde(rename = "TaskParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_parameters:
         Option<::std::collections::HashMap<String, MaintenanceWindowTaskParameterValueExpression>>,
-    /// <p>The ID of the Maintenance Window that was updated.</p>
+    /// <p>The ID of the maintenance window that was updated.</p>
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
-    /// <p>The task ID of the Maintenance Window that was updated.</p>
+    /// <p>The task ID of the maintenance window that was updated.</p>
     #[serde(rename = "WindowTaskId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_task_id: Option<String>,
@@ -7023,6 +7362,49 @@ pub struct UpdateManagedInstanceRoleRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateManagedInstanceRoleResult {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateOpsItemRequest {
+    /// <p>Update the information about the OpsItem. Provide enough information so that users reading this OpsItem for the first time understand the issue. </p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of an SNS topic where notifications are sent when this OpsItem is edited or changed.</p>
+    #[serde(rename = "Notifications")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notifications: Option<Vec<OpsItemNotification>>,
+    /// <p>Add new keys or edit existing key-value pairs of the OperationalData map in the OpsItem object.</p> <p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <p>This custom data is searchable, but with restrictions. For the <code>Searchable operational data</code> feature, all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. For the <code>Private operational data</code> feature, the data is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p>
+    #[serde(rename = "OperationalData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operational_data: Option<::std::collections::HashMap<String, OpsItemDataValue>>,
+    /// <p>Keys that you want to remove from the OperationalData map.</p>
+    #[serde(rename = "OperationalDataToDelete")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operational_data_to_delete: Option<Vec<String>>,
+    /// <p>The ID of the OpsItem.</p>
+    #[serde(rename = "OpsItemId")]
+    pub ops_item_id: String,
+    /// <p>The importance of this OpsItem in relation to other OpsItems in the system.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+    /// <p>One or more OpsItems that share something in common with the current OpsItems. For example, related OpsItems can include OpsItems with similar error messages, impacted resources, or statuses for the impacted resource.</p>
+    #[serde(rename = "RelatedOpsItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub related_ops_items: Option<Vec<RelatedOpsItem>>,
+    /// <p>The OpsItem status. Status can be <code>Open</code>, <code>In Progress</code>, or <code>Resolved</code>. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-working-with-OpsItems-editing-details.html">Editing OpsItem Details</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A short heading that describes the nature of the OpsItem and the impacted resource.</p>
+    #[serde(rename = "Title")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateOpsItemResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdatePatchBaselineRequest {
@@ -7267,7 +7649,7 @@ impl Error for CancelCommandError {
 /// Errors returned by CancelMaintenanceWindowExecution
 #[derive(Debug, PartialEq)]
 pub enum CancelMaintenanceWindowExecutionError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -7644,7 +8026,7 @@ pub enum CreateMaintenanceWindowError {
     IdempotentParameterMismatch(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>Error returned when the caller has exceeded the default resource limits. For example, too many Maintenance Windows or Patch baselines have been created.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the caller has exceeded the default resource limits. For example, too many maintenance windows or patch baselines have been created.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     ResourceLimitExceeded(String),
 }
 
@@ -7688,6 +8070,59 @@ impl Error for CreateMaintenanceWindowError {
         }
     }
 }
+/// Errors returned by CreateOpsItem
+#[derive(Debug, PartialEq)]
+pub enum CreateOpsItemError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The OpsItem already exists.</p>
+    OpsItemAlreadyExists(String),
+    /// <p>A specified parameter argument isn't valid. Verify the available arguments and try again.</p>
+    OpsItemInvalidParameter(String),
+    /// <p>The request caused OpsItems to exceed one or more limits. For information about OpsItem limits, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-learn-more.html#OpsItems-learn-more-limits">What are the resource limits for OpsItems?</a>.</p>
+    OpsItemLimitExceeded(String),
+}
+
+impl CreateOpsItemError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateOpsItemError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(CreateOpsItemError::InternalServerError(err.msg))
+                }
+                "OpsItemAlreadyExistsException" => {
+                    return RusotoError::Service(CreateOpsItemError::OpsItemAlreadyExists(err.msg))
+                }
+                "OpsItemInvalidParameterException" => {
+                    return RusotoError::Service(CreateOpsItemError::OpsItemInvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "OpsItemLimitExceededException" => {
+                    return RusotoError::Service(CreateOpsItemError::OpsItemLimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateOpsItemError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateOpsItemError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateOpsItemError::InternalServerError(ref cause) => cause,
+            CreateOpsItemError::OpsItemAlreadyExists(ref cause) => cause,
+            CreateOpsItemError::OpsItemInvalidParameter(ref cause) => cause,
+            CreateOpsItemError::OpsItemLimitExceeded(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreatePatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum CreatePatchBaselineError {
@@ -7695,7 +8130,7 @@ pub enum CreatePatchBaselineError {
     IdempotentParameterMismatch(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>Error returned when the caller has exceeded the default resource limits. For example, too many Maintenance Windows or Patch baselines have been created.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the caller has exceeded the default resource limits. For example, too many maintenance windows or patch baselines have been created.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     ResourceLimitExceeded(String),
 }
 
@@ -8312,7 +8747,7 @@ impl Error for DeregisterPatchBaselineForPatchGroupError {
 /// Errors returned by DeregisterTargetFromMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum DeregisterTargetFromMaintenanceWindowError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -8365,7 +8800,7 @@ impl Error for DeregisterTargetFromMaintenanceWindowError {
 /// Errors returned by DeregisterTaskFromMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum DeregisterTaskFromMaintenanceWindowError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -8962,7 +9397,7 @@ impl Error for DescribeEffectiveInstanceAssociationsError {
 /// Errors returned by DescribeEffectivePatchesForPatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum DescribeEffectivePatchesForPatchBaselineError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -9312,7 +9747,7 @@ impl Error for DescribeInstancePatchesError {
 pub enum DescribeInventoryDeletionsError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The ID specified for the delete operation does not exist or is not valide. Verify the ID and try again.</p>
+    /// <p>The ID specified for the delete operation does not exist or is not valid. Verify the ID and try again.</p>
     InvalidDeletionId(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -9363,7 +9798,7 @@ impl Error for DescribeInventoryDeletionsError {
 /// Errors returned by DescribeMaintenanceWindowExecutionTaskInvocations
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowExecutionTaskInvocationsError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -9416,7 +9851,7 @@ impl Error for DescribeMaintenanceWindowExecutionTaskInvocationsError {
 /// Errors returned by DescribeMaintenanceWindowExecutionTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowExecutionTasksError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -9498,7 +9933,7 @@ impl Error for DescribeMaintenanceWindowExecutionsError {
 /// Errors returned by DescribeMaintenanceWindowSchedule
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowScheduleError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -9543,7 +9978,7 @@ impl Error for DescribeMaintenanceWindowScheduleError {
 /// Errors returned by DescribeMaintenanceWindowTargets
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowTargetsError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -9588,7 +10023,7 @@ impl Error for DescribeMaintenanceWindowTargetsError {
 /// Errors returned by DescribeMaintenanceWindowTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowTasksError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -9701,6 +10136,41 @@ impl Error for DescribeMaintenanceWindowsForTargetError {
     fn description(&self) -> &str {
         match *self {
             DescribeMaintenanceWindowsForTargetError::InternalServerError(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeOpsItems
+#[derive(Debug, PartialEq)]
+pub enum DescribeOpsItemsError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+}
+
+impl DescribeOpsItemsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeOpsItemsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(DescribeOpsItemsError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeOpsItemsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeOpsItemsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeOpsItemsError::InternalServerError(ref cause) => cause,
         }
     }
 }
@@ -10016,7 +10486,7 @@ pub enum GetCommandInvocationError {
     InvalidInstanceId(String),
     /// <p>The plugin name is not valid.</p>
     InvalidPluginName(String),
-    /// <p>The command ID and instance ID you specified did not match any invocations. Verify the command ID adn the instance ID and try again. </p>
+    /// <p>The command ID and instance ID you specified did not match any invocations. Verify the command ID and the instance ID and try again. </p>
     InvocationDoesNotExist(String),
 }
 
@@ -10147,7 +10617,7 @@ impl Error for GetDefaultPatchBaselineError {
 pub enum GetDeployablePatchSnapshotForInstanceError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p><p/></p>
+    /// <p>Microsoft application patching is only available on EC2 instances and Advanced Instances. To patch Microsoft applications on on-premises servers and VMs, you must enable Advanced Instances. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances-advanced.html">Using the Advanced-Instances Tier</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     UnsupportedFeatureRequired(String),
     /// <p>The operating systems you specified is not supported, or the operation is not supported for the operating system. Valid operating systems include: Windows, AmazonLinux, RedhatEnterpriseLinux, and Ubuntu.</p>
     UnsupportedOperatingSystem(String),
@@ -10367,7 +10837,7 @@ impl Error for GetInventorySchemaError {
 /// Errors returned by GetMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -10408,7 +10878,7 @@ impl Error for GetMaintenanceWindowError {
 /// Errors returned by GetMaintenanceWindowExecution
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowExecutionError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -10453,7 +10923,7 @@ impl Error for GetMaintenanceWindowExecutionError {
 /// Errors returned by GetMaintenanceWindowExecutionTask
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowExecutionTaskError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -10498,7 +10968,7 @@ impl Error for GetMaintenanceWindowExecutionTaskError {
 /// Errors returned by GetMaintenanceWindowExecutionTaskInvocation
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowExecutionTaskInvocationError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -10547,7 +11017,7 @@ impl Error for GetMaintenanceWindowExecutionTaskInvocationError {
 /// Errors returned by GetMaintenanceWindowTask
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowTaskError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -10584,6 +11054,102 @@ impl Error for GetMaintenanceWindowTaskError {
         match *self {
             GetMaintenanceWindowTaskError::DoesNotExist(ref cause) => cause,
             GetMaintenanceWindowTaskError::InternalServerError(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetOpsItem
+#[derive(Debug, PartialEq)]
+pub enum GetOpsItemError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The specified OpsItem ID doesn't exist. Verify the ID and try again.</p>
+    OpsItemNotFound(String),
+}
+
+impl GetOpsItemError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOpsItemError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(GetOpsItemError::InternalServerError(err.msg))
+                }
+                "OpsItemNotFoundException" => {
+                    return RusotoError::Service(GetOpsItemError::OpsItemNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetOpsItemError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetOpsItemError {
+    fn description(&self) -> &str {
+        match *self {
+            GetOpsItemError::InternalServerError(ref cause) => cause,
+            GetOpsItemError::OpsItemNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetOpsSummary
+#[derive(Debug, PartialEq)]
+pub enum GetOpsSummaryError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The specified aggregator is not valid for inventory groups. Verify that the aggregator uses a valid inventory type such as <code>AWS:Application</code> or <code>AWS:InstanceInformation</code>.</p>
+    InvalidAggregator(String),
+    /// <p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
+    InvalidFilter(String),
+    /// <p>The specified token is not valid.</p>
+    InvalidNextToken(String),
+    /// <p>The parameter type name is not valid.</p>
+    InvalidTypeName(String),
+}
+
+impl GetOpsSummaryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOpsSummaryError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(GetOpsSummaryError::InternalServerError(err.msg))
+                }
+                "InvalidAggregatorException" => {
+                    return RusotoError::Service(GetOpsSummaryError::InvalidAggregator(err.msg))
+                }
+                "InvalidFilter" => {
+                    return RusotoError::Service(GetOpsSummaryError::InvalidFilter(err.msg))
+                }
+                "InvalidNextToken" => {
+                    return RusotoError::Service(GetOpsSummaryError::InvalidNextToken(err.msg))
+                }
+                "InvalidTypeNameException" => {
+                    return RusotoError::Service(GetOpsSummaryError::InvalidTypeName(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetOpsSummaryError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetOpsSummaryError {
+    fn description(&self) -> &str {
+        match *self {
+            GetOpsSummaryError::InternalServerError(ref cause) => cause,
+            GetOpsSummaryError::InvalidAggregator(ref cause) => cause,
+            GetOpsSummaryError::InvalidFilter(ref cause) => cause,
+            GetOpsSummaryError::InvalidNextToken(ref cause) => cause,
+            GetOpsSummaryError::InvalidTypeName(ref cause) => cause,
         }
     }
 }
@@ -10812,7 +11378,7 @@ impl Error for GetParametersByPathError {
 /// Errors returned by GetPatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum GetPatchBaselineError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -12030,7 +12596,7 @@ impl Error for PutParameterError {
 /// Errors returned by RegisterDefaultPatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum RegisterDefaultPatchBaselineError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -12085,13 +12651,13 @@ impl Error for RegisterDefaultPatchBaselineError {
 pub enum RegisterPatchBaselineForPatchGroupError {
     /// <p>Error returned if an attempt is made to register a patch group with a patch baseline that is already registered with a different patch baseline.</p>
     AlreadyExists(String),
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// <p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
     InvalidResourceId(String),
-    /// <p>Error returned when the caller has exceeded the default resource limits. For example, too many Maintenance Windows or Patch baselines have been created.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the caller has exceeded the default resource limits. For example, too many maintenance windows or patch baselines have been created.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     ResourceLimitExceeded(String),
 }
 
@@ -12152,13 +12718,13 @@ impl Error for RegisterPatchBaselineForPatchGroupError {
 /// Errors returned by RegisterTargetWithMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum RegisterTargetWithMaintenanceWindowError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>Error returned when an idempotent operation is retried and the parameters don't match the original call to the API with the same idempotency token. </p>
     IdempotentParameterMismatch(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>Error returned when the caller has exceeded the default resource limits. For example, too many Maintenance Windows or Patch baselines have been created.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the caller has exceeded the default resource limits. For example, too many maintenance windows or patch baselines have been created.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     ResourceLimitExceeded(String),
 }
 
@@ -12217,7 +12783,7 @@ impl Error for RegisterTargetWithMaintenanceWindowError {
 /// Errors returned by RegisterTaskWithMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum RegisterTaskWithMaintenanceWindowError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>You attempted to register a LAMBDA or STEP_FUNCTION task in a region where the corresponding service is not available. </p>
     FeatureNotAvailable(String),
@@ -12225,7 +12791,7 @@ pub enum RegisterTaskWithMaintenanceWindowError {
     IdempotentParameterMismatch(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>Error returned when the caller has exceeded the default resource limits. For example, too many Maintenance Windows or Patch baselines have been created.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the caller has exceeded the default resource limits. For example, too many maintenance windows or patch baselines have been created.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     ResourceLimitExceeded(String),
 }
 
@@ -12396,7 +12962,7 @@ impl Error for ResetServiceSettingError {
 /// Errors returned by ResumeSession
 #[derive(Debug, PartialEq)]
 pub enum ResumeSessionError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -12813,7 +13379,7 @@ impl Error for StopAutomationExecutionError {
 /// Errors returned by TerminateSession
 #[derive(Debug, PartialEq)]
 pub enum TerminateSessionError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -13204,7 +13770,7 @@ impl Error for UpdateDocumentDefaultVersionError {
 /// Errors returned by UpdateMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum UpdateMaintenanceWindowError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -13247,7 +13813,7 @@ impl Error for UpdateMaintenanceWindowError {
 /// Errors returned by UpdateMaintenanceWindowTarget
 #[derive(Debug, PartialEq)]
 pub enum UpdateMaintenanceWindowTargetError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -13292,7 +13858,7 @@ impl Error for UpdateMaintenanceWindowTargetError {
 /// Errors returned by UpdateMaintenanceWindowTask
 #[derive(Debug, PartialEq)]
 pub enum UpdateMaintenanceWindowTaskError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -13377,10 +13943,69 @@ impl Error for UpdateManagedInstanceRoleError {
         }
     }
 }
+/// Errors returned by UpdateOpsItem
+#[derive(Debug, PartialEq)]
+pub enum UpdateOpsItemError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The OpsItem already exists.</p>
+    OpsItemAlreadyExists(String),
+    /// <p>A specified parameter argument isn't valid. Verify the available arguments and try again.</p>
+    OpsItemInvalidParameter(String),
+    /// <p>The request caused OpsItems to exceed one or more limits. For information about OpsItem limits, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-learn-more.html#OpsItems-learn-more-limits">What are the resource limits for OpsItems?</a>.</p>
+    OpsItemLimitExceeded(String),
+    /// <p>The specified OpsItem ID doesn't exist. Verify the ID and try again.</p>
+    OpsItemNotFound(String),
+}
+
+impl UpdateOpsItemError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateOpsItemError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(UpdateOpsItemError::InternalServerError(err.msg))
+                }
+                "OpsItemAlreadyExistsException" => {
+                    return RusotoError::Service(UpdateOpsItemError::OpsItemAlreadyExists(err.msg))
+                }
+                "OpsItemInvalidParameterException" => {
+                    return RusotoError::Service(UpdateOpsItemError::OpsItemInvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "OpsItemLimitExceededException" => {
+                    return RusotoError::Service(UpdateOpsItemError::OpsItemLimitExceeded(err.msg))
+                }
+                "OpsItemNotFoundException" => {
+                    return RusotoError::Service(UpdateOpsItemError::OpsItemNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateOpsItemError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateOpsItemError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateOpsItemError::InternalServerError(ref cause) => cause,
+            UpdateOpsItemError::OpsItemAlreadyExists(ref cause) => cause,
+            UpdateOpsItemError::OpsItemInvalidParameter(ref cause) => cause,
+            UpdateOpsItemError::OpsItemLimitExceeded(ref cause) => cause,
+            UpdateOpsItemError::OpsItemNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdatePatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum UpdatePatchBaselineError {
-    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -13469,7 +14094,7 @@ impl Error for UpdateServiceSettingError {
 }
 /// Trait representing the capabilities of the Amazon SSM API. Amazon SSM clients implement this trait.
 pub trait Ssm {
-    /// <p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you can assign to your documents, managed instances, Maintenance Windows, Parameter Store parameters, and patch baselines. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 50 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>
+    /// <p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you can assign to your documents, managed instances, maintenance windows, Parameter Store parameters, and patch baselines. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 50 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>
     fn add_tags_to_resource(
         &self,
         input: AddTagsToResourceRequest,
@@ -13481,13 +14106,13 @@ pub trait Ssm {
         input: CancelCommandRequest,
     ) -> RusotoFuture<CancelCommandResult, CancelCommandError>;
 
-    /// <p>Stops a Maintenance Window execution that is already in progress and cancels any tasks in the window that have not already starting running. (Tasks already in progress will continue to completion.)</p>
+    /// <p>Stops a maintenance window execution that is already in progress and cancels any tasks in the window that have not already starting running. (Tasks already in progress will continue to completion.)</p>
     fn cancel_maintenance_window_execution(
         &self,
         input: CancelMaintenanceWindowExecutionRequest,
     ) -> RusotoFuture<CancelMaintenanceWindowExecutionResult, CancelMaintenanceWindowExecutionError>;
 
-    /// <p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">Setting Up Systems Manager in Hybrid Environments</a>.</p>
+    /// <p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">Setting Up AWS Systems Manager for Hybrid Environments</a>.</p>
     fn create_activation(
         &self,
         input: CreateActivationRequest,
@@ -13511,11 +14136,17 @@ pub trait Ssm {
         input: CreateDocumentRequest,
     ) -> RusotoFuture<CreateDocumentResult, CreateDocumentError>;
 
-    /// <p>Creates a new Maintenance Window.</p>
+    /// <p>Creates a new maintenance window.</p>
     fn create_maintenance_window(
         &self,
         input: CreateMaintenanceWindowRequest,
     ) -> RusotoFuture<CreateMaintenanceWindowResult, CreateMaintenanceWindowError>;
+
+    /// <p>Creates a new OpsItem. You must have permission in AWS Identity and Access Management (IAM) to create a new OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    fn create_ops_item(
+        &self,
+        input: CreateOpsItemRequest,
+    ) -> RusotoFuture<CreateOpsItemResponse, CreateOpsItemError>;
 
     /// <p><p>Creates a patch baseline.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
     fn create_patch_baseline(
@@ -13553,7 +14184,7 @@ pub trait Ssm {
         input: DeleteInventoryRequest,
     ) -> RusotoFuture<DeleteInventoryResult, DeleteInventoryError>;
 
-    /// <p>Deletes a Maintenance Window.</p>
+    /// <p>Deletes a maintenance window.</p>
     fn delete_maintenance_window(
         &self,
         input: DeleteMaintenanceWindowRequest,
@@ -13598,7 +14229,7 @@ pub trait Ssm {
         DeregisterPatchBaselineForPatchGroupError,
     >;
 
-    /// <p>Removes a target from a Maintenance Window.</p>
+    /// <p>Removes a target from a maintenance window.</p>
     fn deregister_target_from_maintenance_window(
         &self,
         input: DeregisterTargetFromMaintenanceWindowRequest,
@@ -13607,7 +14238,7 @@ pub trait Ssm {
         DeregisterTargetFromMaintenanceWindowError,
     >;
 
-    /// <p>Removes a task from a Maintenance Window.</p>
+    /// <p>Removes a task from a maintenance window.</p>
     fn deregister_task_from_maintenance_window(
         &self,
         input: DeregisterTaskFromMaintenanceWindowRequest,
@@ -13733,7 +14364,7 @@ pub trait Ssm {
         input: DescribeInventoryDeletionsRequest,
     ) -> RusotoFuture<DescribeInventoryDeletionsResult, DescribeInventoryDeletionsError>;
 
-    /// <p>Retrieves the individual task executions (one per target) for a particular task run as part of a Maintenance Window execution.</p>
+    /// <p>Retrieves the individual task executions (one per target) for a particular task run as part of a maintenance window execution.</p>
     fn describe_maintenance_window_execution_task_invocations(
         &self,
         input: DescribeMaintenanceWindowExecutionTaskInvocationsRequest,
@@ -13742,7 +14373,7 @@ pub trait Ssm {
         DescribeMaintenanceWindowExecutionTaskInvocationsError,
     >;
 
-    /// <p>For a given Maintenance Window execution, lists the tasks that were run.</p>
+    /// <p>For a given maintenance window execution, lists the tasks that were run.</p>
     fn describe_maintenance_window_execution_tasks(
         &self,
         input: DescribeMaintenanceWindowExecutionTasksRequest,
@@ -13751,7 +14382,7 @@ pub trait Ssm {
         DescribeMaintenanceWindowExecutionTasksError,
     >;
 
-    /// <p>Lists the executions of a Maintenance Window. This includes information about when the Maintenance Window was scheduled to be active, and information about tasks registered and run with the Maintenance Window.</p>
+    /// <p>Lists the executions of a maintenance window. This includes information about when the maintenance window was scheduled to be active, and information about tasks registered and run with the maintenance window.</p>
     fn describe_maintenance_window_executions(
         &self,
         input: DescribeMaintenanceWindowExecutionsRequest,
@@ -13760,31 +14391,31 @@ pub trait Ssm {
         DescribeMaintenanceWindowExecutionsError,
     >;
 
-    /// <p>Retrieves information about upcoming executions of a Maintenance Window.</p>
+    /// <p>Retrieves information about upcoming executions of a maintenance window.</p>
     fn describe_maintenance_window_schedule(
         &self,
         input: DescribeMaintenanceWindowScheduleRequest,
     ) -> RusotoFuture<DescribeMaintenanceWindowScheduleResult, DescribeMaintenanceWindowScheduleError>;
 
-    /// <p>Lists the targets registered with the Maintenance Window.</p>
+    /// <p>Lists the targets registered with the maintenance window.</p>
     fn describe_maintenance_window_targets(
         &self,
         input: DescribeMaintenanceWindowTargetsRequest,
     ) -> RusotoFuture<DescribeMaintenanceWindowTargetsResult, DescribeMaintenanceWindowTargetsError>;
 
-    /// <p>Lists the tasks in a Maintenance Window.</p>
+    /// <p>Lists the tasks in a maintenance window.</p>
     fn describe_maintenance_window_tasks(
         &self,
         input: DescribeMaintenanceWindowTasksRequest,
     ) -> RusotoFuture<DescribeMaintenanceWindowTasksResult, DescribeMaintenanceWindowTasksError>;
 
-    /// <p>Retrieves the Maintenance Windows in an AWS account.</p>
+    /// <p>Retrieves the maintenance windows in an AWS account.</p>
     fn describe_maintenance_windows(
         &self,
         input: DescribeMaintenanceWindowsRequest,
     ) -> RusotoFuture<DescribeMaintenanceWindowsResult, DescribeMaintenanceWindowsError>;
 
-    /// <p>Retrieves information about the Maintenance Windows targets or tasks that an instance is associated with.</p>
+    /// <p>Retrieves information about the maintenance window targets or tasks that an instance is associated with.</p>
     fn describe_maintenance_windows_for_target(
         &self,
         input: DescribeMaintenanceWindowsForTargetRequest,
@@ -13792,6 +14423,12 @@ pub trait Ssm {
         DescribeMaintenanceWindowsForTargetResult,
         DescribeMaintenanceWindowsForTargetError,
     >;
+
+    /// <p>Query a set of OpsItems. You must have permission in AWS Identity and Access Management (IAM) to query a list of OpsItems. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    fn describe_ops_items(
+        &self,
+        input: DescribeOpsItemsRequest,
+    ) -> RusotoFuture<DescribeOpsItemsResponse, DescribeOpsItemsError>;
 
     /// <p>Get information about a parameter.</p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>
     fn describe_parameters(
@@ -13880,25 +14517,25 @@ pub trait Ssm {
         input: GetInventorySchemaRequest,
     ) -> RusotoFuture<GetInventorySchemaResult, GetInventorySchemaError>;
 
-    /// <p>Retrieves a Maintenance Window.</p>
+    /// <p>Retrieves a maintenance window.</p>
     fn get_maintenance_window(
         &self,
         input: GetMaintenanceWindowRequest,
     ) -> RusotoFuture<GetMaintenanceWindowResult, GetMaintenanceWindowError>;
 
-    /// <p>Retrieves details about a specific task run as part of a Maintenance Window execution.</p>
+    /// <p>Retrieves details about a specific task run as part of a maintenance window execution.</p>
     fn get_maintenance_window_execution(
         &self,
         input: GetMaintenanceWindowExecutionRequest,
     ) -> RusotoFuture<GetMaintenanceWindowExecutionResult, GetMaintenanceWindowExecutionError>;
 
-    /// <p>Retrieves the details about a specific task run as part of a Maintenance Window execution.</p>
+    /// <p>Retrieves the details about a specific task run as part of a maintenance window execution.</p>
     fn get_maintenance_window_execution_task(
         &self,
         input: GetMaintenanceWindowExecutionTaskRequest,
     ) -> RusotoFuture<GetMaintenanceWindowExecutionTaskResult, GetMaintenanceWindowExecutionTaskError>;
 
-    /// <p>Retrieves a task invocation. A task invocation is a specific task running on a specific target. Maintenance Windows report status for all invocations. </p>
+    /// <p>Retrieves a task invocation. A task invocation is a specific task running on a specific target. maintenance windows report status for all invocations. </p>
     fn get_maintenance_window_execution_task_invocation(
         &self,
         input: GetMaintenanceWindowExecutionTaskInvocationRequest,
@@ -13907,11 +14544,23 @@ pub trait Ssm {
         GetMaintenanceWindowExecutionTaskInvocationError,
     >;
 
-    /// <p>Lists the tasks in a Maintenance Window.</p>
+    /// <p>Lists the tasks in a maintenance window.</p>
     fn get_maintenance_window_task(
         &self,
         input: GetMaintenanceWindowTaskRequest,
     ) -> RusotoFuture<GetMaintenanceWindowTaskResult, GetMaintenanceWindowTaskError>;
+
+    /// <p>Get information about an OpsItem by using the ID. You must have permission in AWS Identity and Access Management (IAM) to view information about an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    fn get_ops_item(
+        &self,
+        input: GetOpsItemRequest,
+    ) -> RusotoFuture<GetOpsItemResponse, GetOpsItemError>;
+
+    /// <p>View a summary of OpsItems based on specified filters and aggregators.</p>
+    fn get_ops_summary(
+        &self,
+        input: GetOpsSummaryRequest,
+    ) -> RusotoFuture<GetOpsSummaryResult, GetOpsSummaryError>;
 
     /// <p>Get information about a parameter by using the parameter name. Don't confuse this API action with the <a>GetParameters</a> API action.</p>
     fn get_parameter(
@@ -14072,7 +14721,7 @@ pub trait Ssm {
         RegisterPatchBaselineForPatchGroupError,
     >;
 
-    /// <p>Registers a target with a Maintenance Window.</p>
+    /// <p>Registers a target with a maintenance window.</p>
     fn register_target_with_maintenance_window(
         &self,
         input: RegisterTargetWithMaintenanceWindowRequest,
@@ -14081,7 +14730,7 @@ pub trait Ssm {
         RegisterTargetWithMaintenanceWindowError,
     >;
 
-    /// <p>Adds a new task to a Maintenance Window.</p>
+    /// <p>Adds a new task to a maintenance window.</p>
     fn register_task_with_maintenance_window(
         &self,
         input: RegisterTaskWithMaintenanceWindowRequest,
@@ -14171,19 +14820,19 @@ pub trait Ssm {
         input: UpdateDocumentDefaultVersionRequest,
     ) -> RusotoFuture<UpdateDocumentDefaultVersionResult, UpdateDocumentDefaultVersionError>;
 
-    /// <p>Updates an existing Maintenance Window. Only specified parameters are modified.</p>
+    /// <p>Updates an existing maintenance window. Only specified parameters are modified.</p>
     fn update_maintenance_window(
         &self,
         input: UpdateMaintenanceWindowRequest,
     ) -> RusotoFuture<UpdateMaintenanceWindowResult, UpdateMaintenanceWindowError>;
 
-    /// <p>Modifies the target of an existing Maintenance Window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>
+    /// <p>Modifies the target of an existing maintenance window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>
     fn update_maintenance_window_target(
         &self,
         input: UpdateMaintenanceWindowTargetRequest,
     ) -> RusotoFuture<UpdateMaintenanceWindowTargetResult, UpdateMaintenanceWindowTargetError>;
 
-    /// <p>Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren't specified are set to null.</p>
+    /// <p>Modifies a task assigned to a maintenance window. You can't change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren't specified are set to null.</p>
     fn update_maintenance_window_task(
         &self,
         input: UpdateMaintenanceWindowTaskRequest,
@@ -14194,6 +14843,12 @@ pub trait Ssm {
         &self,
         input: UpdateManagedInstanceRoleRequest,
     ) -> RusotoFuture<UpdateManagedInstanceRoleResult, UpdateManagedInstanceRoleError>;
+
+    /// <p>Edit or change an OpsItem. You must have permission in AWS Identity and Access Management (IAM) to update an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    fn update_ops_item(
+        &self,
+        input: UpdateOpsItemRequest,
+    ) -> RusotoFuture<UpdateOpsItemResponse, UpdateOpsItemError>;
 
     /// <p><p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
     fn update_patch_baseline(
@@ -14244,7 +14899,7 @@ impl SsmClient {
 }
 
 impl Ssm for SsmClient {
-    /// <p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you can assign to your documents, managed instances, Maintenance Windows, Parameter Store parameters, and patch baselines. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 50 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>
+    /// <p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you can assign to your documents, managed instances, maintenance windows, Parameter Store parameters, and patch baselines. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 50 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>
     fn add_tags_to_resource(
         &self,
         input: AddTagsToResourceRequest,
@@ -14302,7 +14957,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Stops a Maintenance Window execution that is already in progress and cancels any tasks in the window that have not already starting running. (Tasks already in progress will continue to completion.)</p>
+    /// <p>Stops a maintenance window execution that is already in progress and cancels any tasks in the window that have not already starting running. (Tasks already in progress will continue to completion.)</p>
     fn cancel_maintenance_window_execution(
         &self,
         input: CancelMaintenanceWindowExecutionRequest,
@@ -14331,7 +14986,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">Setting Up Systems Manager in Hybrid Environments</a>.</p>
+    /// <p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">Setting Up AWS Systems Manager for Hybrid Environments</a>.</p>
     fn create_activation(
         &self,
         input: CreateActivationRequest,
@@ -14446,7 +15101,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Creates a new Maintenance Window.</p>
+    /// <p>Creates a new maintenance window.</p>
     fn create_maintenance_window(
         &self,
         input: CreateMaintenanceWindowRequest,
@@ -14468,6 +15123,35 @@ impl Ssm for SsmClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateMaintenanceWindowError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Creates a new OpsItem. You must have permission in AWS Identity and Access Management (IAM) to create a new OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    fn create_ops_item(
+        &self,
+        input: CreateOpsItemRequest,
+    ) -> RusotoFuture<CreateOpsItemResponse, CreateOpsItemError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.CreateOpsItem");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateOpsItemResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateOpsItemError::from_response(response))),
+                )
             }
         })
     }
@@ -14644,7 +15328,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Deletes a Maintenance Window.</p>
+    /// <p>Deletes a maintenance window.</p>
     fn delete_maintenance_window(
         &self,
         input: DeleteMaintenanceWindowRequest,
@@ -14844,7 +15528,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Removes a target from a Maintenance Window.</p>
+    /// <p>Removes a target from a maintenance window.</p>
     fn deregister_target_from_maintenance_window(
         &self,
         input: DeregisterTargetFromMaintenanceWindowRequest,
@@ -14878,7 +15562,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Removes a task from a Maintenance Window.</p>
+    /// <p>Removes a task from a maintenance window.</p>
     fn deregister_task_from_maintenance_window(
         &self,
         input: DeregisterTaskFromMaintenanceWindowRequest,
@@ -15400,7 +16084,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Retrieves the individual task executions (one per target) for a particular task run as part of a Maintenance Window execution.</p>
+    /// <p>Retrieves the individual task executions (one per target) for a particular task run as part of a maintenance window execution.</p>
     fn describe_maintenance_window_execution_task_invocations(
         &self,
         input: DescribeMaintenanceWindowExecutionTaskInvocationsRequest,
@@ -15431,7 +16115,7 @@ impl Ssm for SsmClient {
                     })
     }
 
-    /// <p>For a given Maintenance Window execution, lists the tasks that were run.</p>
+    /// <p>For a given maintenance window execution, lists the tasks that were run.</p>
     fn describe_maintenance_window_execution_tasks(
         &self,
         input: DescribeMaintenanceWindowExecutionTasksRequest,
@@ -15465,7 +16149,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Lists the executions of a Maintenance Window. This includes information about when the Maintenance Window was scheduled to be active, and information about tasks registered and run with the Maintenance Window.</p>
+    /// <p>Lists the executions of a maintenance window. This includes information about when the maintenance window was scheduled to be active, and information about tasks registered and run with the maintenance window.</p>
     fn describe_maintenance_window_executions(
         &self,
         input: DescribeMaintenanceWindowExecutionsRequest,
@@ -15499,7 +16183,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Retrieves information about upcoming executions of a Maintenance Window.</p>
+    /// <p>Retrieves information about upcoming executions of a maintenance window.</p>
     fn describe_maintenance_window_schedule(
         &self,
         input: DescribeMaintenanceWindowScheduleRequest,
@@ -15531,7 +16215,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Lists the targets registered with the Maintenance Window.</p>
+    /// <p>Lists the targets registered with the maintenance window.</p>
     fn describe_maintenance_window_targets(
         &self,
         input: DescribeMaintenanceWindowTargetsRequest,
@@ -15560,7 +16244,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Lists the tasks in a Maintenance Window.</p>
+    /// <p>Lists the tasks in a maintenance window.</p>
     fn describe_maintenance_window_tasks(
         &self,
         input: DescribeMaintenanceWindowTasksRequest,
@@ -15587,7 +16271,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Retrieves the Maintenance Windows in an AWS account.</p>
+    /// <p>Retrieves the maintenance windows in an AWS account.</p>
     fn describe_maintenance_windows(
         &self,
         input: DescribeMaintenanceWindowsRequest,
@@ -15613,7 +16297,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Retrieves information about the Maintenance Windows targets or tasks that an instance is associated with.</p>
+    /// <p>Retrieves information about the maintenance window targets or tasks that an instance is associated with.</p>
     fn describe_maintenance_windows_for_target(
         &self,
         input: DescribeMaintenanceWindowsForTargetRequest,
@@ -15643,6 +16327,35 @@ impl Ssm for SsmClient {
                         response,
                     ))
                 }))
+            }
+        })
+    }
+
+    /// <p>Query a set of OpsItems. You must have permission in AWS Identity and Access Management (IAM) to query a list of OpsItems. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    fn describe_ops_items(
+        &self,
+        input: DescribeOpsItemsRequest,
+    ) -> RusotoFuture<DescribeOpsItemsResponse, DescribeOpsItemsError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.DescribeOpsItems");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeOpsItemsResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeOpsItemsError::from_response(response))),
+                )
             }
         })
     }
@@ -16044,7 +16757,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Retrieves a Maintenance Window.</p>
+    /// <p>Retrieves a maintenance window.</p>
     fn get_maintenance_window(
         &self,
         input: GetMaintenanceWindowRequest,
@@ -16072,7 +16785,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Retrieves details about a specific task run as part of a Maintenance Window execution.</p>
+    /// <p>Retrieves details about a specific task run as part of a maintenance window execution.</p>
     fn get_maintenance_window_execution(
         &self,
         input: GetMaintenanceWindowExecutionRequest,
@@ -16098,7 +16811,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Retrieves the details about a specific task run as part of a Maintenance Window execution.</p>
+    /// <p>Retrieves the details about a specific task run as part of a maintenance window execution.</p>
     fn get_maintenance_window_execution_task(
         &self,
         input: GetMaintenanceWindowExecutionTaskRequest,
@@ -16130,7 +16843,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Retrieves a task invocation. A task invocation is a specific task running on a specific target. Maintenance Windows report status for all invocations. </p>
+    /// <p>Retrieves a task invocation. A task invocation is a specific task running on a specific target. maintenance windows report status for all invocations. </p>
     fn get_maintenance_window_execution_task_invocation(
         &self,
         input: GetMaintenanceWindowExecutionTaskInvocationRequest,
@@ -16162,7 +16875,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Lists the tasks in a Maintenance Window.</p>
+    /// <p>Lists the tasks in a maintenance window.</p>
     fn get_maintenance_window_task(
         &self,
         input: GetMaintenanceWindowTaskRequest,
@@ -16184,6 +16897,64 @@ impl Ssm for SsmClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetMaintenanceWindowTaskError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Get information about an OpsItem by using the ID. You must have permission in AWS Identity and Access Management (IAM) to view information about an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    fn get_ops_item(
+        &self,
+        input: GetOpsItemRequest,
+    ) -> RusotoFuture<GetOpsItemResponse, GetOpsItemError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.GetOpsItem");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetOpsItemResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetOpsItemError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>View a summary of OpsItems based on specified filters and aggregators.</p>
+    fn get_ops_summary(
+        &self,
+        input: GetOpsSummaryRequest,
+    ) -> RusotoFuture<GetOpsSummaryResult, GetOpsSummaryError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.GetOpsSummary");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetOpsSummaryResult, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetOpsSummaryError::from_response(response))),
+                )
             }
         })
     }
@@ -16923,7 +17694,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Registers a target with a Maintenance Window.</p>
+    /// <p>Registers a target with a maintenance window.</p>
     fn register_target_with_maintenance_window(
         &self,
         input: RegisterTargetWithMaintenanceWindowRequest,
@@ -16957,7 +17728,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Adds a new task to a Maintenance Window.</p>
+    /// <p>Adds a new task to a maintenance window.</p>
     fn register_task_with_maintenance_window(
         &self,
         input: RegisterTaskWithMaintenanceWindowRequest,
@@ -17379,7 +18150,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Updates an existing Maintenance Window. Only specified parameters are modified.</p>
+    /// <p>Updates an existing maintenance window. Only specified parameters are modified.</p>
     fn update_maintenance_window(
         &self,
         input: UpdateMaintenanceWindowRequest,
@@ -17405,7 +18176,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Modifies the target of an existing Maintenance Window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>
+    /// <p>Modifies the target of an existing maintenance window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>
     fn update_maintenance_window_target(
         &self,
         input: UpdateMaintenanceWindowTargetRequest,
@@ -17431,7 +18202,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren't specified are set to null.</p>
+    /// <p>Modifies a task assigned to a maintenance window. You can't change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren't specified are set to null.</p>
     fn update_maintenance_window_task(
         &self,
         input: UpdateMaintenanceWindowTaskRequest,
@@ -17479,6 +18250,35 @@ impl Ssm for SsmClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateManagedInstanceRoleError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Edit or change an OpsItem. You must have permission in AWS Identity and Access Management (IAM) to update an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    fn update_ops_item(
+        &self,
+        input: UpdateOpsItemRequest,
+    ) -> RusotoFuture<UpdateOpsItemResponse, UpdateOpsItemError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.UpdateOpsItem");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateOpsItemResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateOpsItemError::from_response(response))),
+                )
             }
         })
     }
