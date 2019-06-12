@@ -6,6 +6,7 @@
 //! If needed, the request will be re-issued to a temporary redirect endpoint.  This can happen with
 //! newly created S3 buckets not in us-standard/us-east-1.
 
+use std::borrow::Cow;
 use std::collections::btree_map::Entry;
 use std::collections::BTreeMap;
 use std::fmt;
@@ -310,10 +311,20 @@ impl SignedRequest {
         debug!("canonical_query_string: {:?}", self.canonical_query_string);
 
         let payload = if should_sha256_sign_payload {
-            // The body is empty, so we can use the SHA256 hash of an empty body
-            EMPTY_SHA256_HASH
+            match self.payload {
+                None => {
+                    Cow::Borrowed(EMPTY_SHA256_HASH)
+                }
+                Some(SignedRequestPayload::Buffer(ref payload)) => {
+                    let (digest, _len) = digest_payload(&payload);
+                    Cow::Owned(digest)
+                }
+                Some(SignedRequestPayload::Stream(ref _stream)) => {
+                    Cow::Borrowed(UNSIGNED_PAYLOAD)
+                }
+            }
         } else {
-            UNSIGNED_PAYLOAD
+            Cow::Borrowed(UNSIGNED_PAYLOAD)
         };
 
         let canonical_request = format!(
@@ -429,9 +440,9 @@ impl SignedRequest {
                     self.canonical_query_string,
                     canonical_headers,
                     signed_headers,
-                    &to_hexdigest("")
+                    EMPTY_SHA256_HASH
                 );
-                (Some(to_hexdigest("")), Some(0))
+                (Some(EMPTY_SHA256_HASH.to_owned()), Some(0))
             }
             Some(SignedRequestPayload::Buffer(ref payload)) => {
                 let (digest, len) = digest_payload(&payload);
