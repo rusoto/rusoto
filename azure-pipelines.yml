@@ -34,7 +34,11 @@ jobs:
         set -e
         curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain beta-x86_64-unknown-linux-gnu -y
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
-      displayName: 'Install Rust'
+      displayName: 'Install Rustup'
+    - script: |
+        rustup install beta
+        rustup default beta
+      displayName: 'Install Rust beta'
     - script: RUST_VERSION=beta make unit_test
       displayName: 'Run unit tests'
     - script: RUST_VERSION=beta make rustls_unit_test
@@ -54,7 +58,11 @@ jobs:
         set -e
         curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly-x86_64-unknown-linux-gnu -y
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
-      displayName: 'Install Rust'
+      displayName: 'Install Rustup'
+    - script: |
+        rustup install nightly
+        rustup default nightly
+      displayName: 'Install Rust beta'
     - script: RUST_VERSION=nightly make unit_test
       displayName: 'Run unit tests'
       continueOnError: true
