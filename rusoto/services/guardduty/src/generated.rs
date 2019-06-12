@@ -25,7 +25,6 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-/// <p>AcceptInvitation request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AcceptInvitationRequest {
     /// <p>The unique ID of the detector of the GuardDuty member account.</p>
@@ -34,7 +33,7 @@ pub struct AcceptInvitationRequest {
     /// <p>This value is used to validate the master account to the member account.</p>
     #[serde(rename = "InvitationId")]
     pub invitation_id: String,
-    /// <p>The account ID of the master GuardDuty account whose invitation you&#39;re accepting.</p>
+    /// <p>The account ID of the master GuardDuty account whose invitation you're accepting.</p>
     #[serde(rename = "MasterId")]
     pub master_id: String,
 }
@@ -43,7 +42,6 @@ pub struct AcceptInvitationRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct AcceptInvitationResponse {}
 
-/// <p>The IAM access key details (IAM user information) of a user that engaged in the activity that prompted GuardDuty to generate a finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct AccessKeyDetails {
@@ -65,18 +63,16 @@ pub struct AccessKeyDetails {
     pub user_type: Option<String>,
 }
 
-/// <p>An object containing the member&#39;s accountId and email address.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AccountDetail {
     /// <p>Member account ID.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
-    /// <p>Member account&#39;s email address.</p>
+    /// <p>Member account's email address.</p>
     #[serde(rename = "Email")]
     pub email: String,
 }
 
-/// <p>Information about the activity described in a finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Action {
@@ -84,7 +80,7 @@ pub struct Action {
     #[serde(rename = "ActionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_type: Option<String>,
-    /// <p>Information about the AWS<em>API</em>CALL action described in this finding.</p>
+    /// <p>Information about the AWS_API_CALL action described in this finding.</p>
     #[serde(rename = "AwsApiCallAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_api_call_action: Option<AwsApiCallAction>,
@@ -102,7 +98,6 @@ pub struct Action {
     pub port_probe_action: Option<PortProbeAction>,
 }
 
-/// <p>ArchiveFindings request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ArchiveFindingsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings you want to archive.</p>
@@ -117,7 +112,6 @@ pub struct ArchiveFindingsRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct ArchiveFindingsResponse {}
 
-/// <p>Information about the AWS<em>API</em>CALL action described in this finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct AwsApiCallAction {
@@ -143,7 +137,6 @@ pub struct AwsApiCallAction {
     pub service_name: Option<String>,
 }
 
-/// <p>City information of the remote IP address.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct City {
@@ -153,36 +146,32 @@ pub struct City {
     pub city_name: Option<String>,
 }
 
-/// <p>Finding attribute (for example, accountId) for which conditions and values must be specified when querying findings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Condition {
-    /// <p>Represents the equal condition to be applied to a single field when querying for findings.</p>
-    #[serde(rename = "Eq")]
+    #[serde(rename = "Equals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub eq: Option<Vec<String>>,
-    /// <p>Represents the greater than condition to be applied to a single field when querying for findings.</p>
-    #[serde(rename = "Gt")]
+    pub equals: Option<Vec<String>>,
+    /// <p>Represents a greater than condition to be applied to a single field when querying for findings.</p>
+    #[serde(rename = "GreaterThan")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub gt: Option<i64>,
-    /// <p>Represents the greater than equal condition to be applied to a single field when querying for findings.</p>
-    #[serde(rename = "Gte")]
+    pub greater_than: Option<i64>,
+    /// <p>Represents a greater than equal condition to be applied to a single field when querying for findings.</p>
+    #[serde(rename = "GreaterThanOrEqual")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub gte: Option<i64>,
-    /// <p>Represents the less than condition to be applied to a single field when querying for findings.</p>
-    #[serde(rename = "Lt")]
+    pub greater_than_or_equal: Option<i64>,
+    /// <p>Represents a less than condition to be applied to a single field when querying for findings.</p>
+    #[serde(rename = "LessThan")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub lt: Option<i64>,
-    /// <p>Represents the less than equal condition to be applied to a single field when querying for findings.</p>
-    #[serde(rename = "Lte")]
+    pub less_than: Option<i64>,
+    /// <p>Represents a less than equal condition to be applied to a single field when querying for findings.</p>
+    #[serde(rename = "LessThanOrEqual")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub lte: Option<i64>,
-    /// <p>Represents the not equal condition to be applied to a single field when querying for findings.</p>
-    #[serde(rename = "Neq")]
+    pub less_than_or_equal: Option<i64>,
+    #[serde(rename = "NotEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub neq: Option<Vec<String>>,
+    pub not_equals: Option<Vec<String>>,
 }
 
-/// <p>Country information of the remote IP address.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Country {
@@ -196,7 +185,6 @@ pub struct Country {
     pub country_name: Option<String>,
 }
 
-/// <p>CreateDetector request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDetectorRequest {
     /// <p>The idempotency token for the create request.</p>
@@ -221,7 +209,6 @@ pub struct CreateDetectorResponse {
     pub detector_id: Option<String>,
 }
 
-/// <p>CreateFilterRequest request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateFilterRequest {
     /// <p>Specifies the action that is to be applied to the findings that match the filter.</p>
@@ -236,7 +223,7 @@ pub struct CreateFilterRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The unique ID of the detector that you want to update.</p>
+    /// <p>The unique ID of the detector of the GuardDuty account for which you want to create a filter.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
     /// <p>Represents the criteria to be used in the filter for querying findings.</p>
@@ -256,11 +243,9 @@ pub struct CreateFilterRequest {
 pub struct CreateFilterResponse {
     /// <p>The name of the successfully created filter.</p>
     #[serde(rename = "Name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: String,
 }
 
-/// <p>CreateIPSet request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateIPSetRequest {
     /// <p>A boolean value that indicates whether GuardDuty is to start using the uploaded IPSet.</p>
@@ -270,7 +255,7 @@ pub struct CreateIPSetRequest {
     #[serde(rename = "ClientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p>The unique ID of the detector that you want to update.</p>
+    /// <p>The unique ID of the detector of the GuardDuty account for which you want to create an IPSet.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
     /// <p>The format of the file that contains the IPSet.</p>
@@ -287,12 +272,11 @@ pub struct CreateIPSetRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateIPSetResponse {
+    /// <p>The ID of the IPSet resource.</p>
     #[serde(rename = "IpSetId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub ip_set_id: Option<String>,
+    pub ip_set_id: String,
 }
 
-/// <p>CreateMembers request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateMembersRequest {
     /// <p>A list of account ID and email address pairs of the accounts that you want to associate with the master GuardDuty account.</p>
@@ -308,11 +292,9 @@ pub struct CreateMembersRequest {
 pub struct CreateMembersResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub unprocessed_accounts: Option<Vec<UnprocessedAccount>>,
+    pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-/// <p>CreateSampleFindings request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateSampleFindingsRequest {
     /// <p>The ID of the detector to create sample findings for.</p>
@@ -328,7 +310,6 @@ pub struct CreateSampleFindingsRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateSampleFindingsResponse {}
 
-/// <p>CreateThreatIntelSet request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateThreatIntelSetRequest {
     /// <p>A boolean value that indicates whether GuardDuty is to start using the uploaded ThreatIntelSet.</p>
@@ -338,7 +319,7 @@ pub struct CreateThreatIntelSetRequest {
     #[serde(rename = "ClientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p>The unique ID of the detector that you want to update.</p>
+    /// <p>The unique ID of the detector of the GuardDuty account for which you want to create a threatIntelSet.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
     /// <p>The format of the file that contains the ThreatIntelSet.</p>
@@ -355,12 +336,11 @@ pub struct CreateThreatIntelSetRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateThreatIntelSetResponse {
+    /// <p>The ID of the ThreatIntelSet resource.</p>
     #[serde(rename = "ThreatIntelSetId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub threat_intel_set_id: Option<String>,
+    pub threat_intel_set_id: String,
 }
 
-/// <p>DeclineInvitations request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeclineInvitationsRequest {
     /// <p>A list of account IDs of the AWS accounts that sent invitations to the current member account that you want to decline invitations from.</p>
@@ -373,13 +353,12 @@ pub struct DeclineInvitationsRequest {
 pub struct DeclineInvitationsResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub unprocessed_accounts: Option<Vec<UnprocessedAccount>>,
+    pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDetectorRequest {
-    /// <p>The unique ID that specifies the detector that you want to delete.</p>
+    /// <p>The unique ID of the detector that you want to delete.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
 }
@@ -390,10 +369,10 @@ pub struct DeleteDetectorResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteFilterRequest {
-    /// <p>The unique ID that specifies the detector where you want to delete a filter.</p>
+    /// <p>The unique ID of the detector the filter is associated with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>The name of the filter.</p>
+    /// <p>The name of the filter you want to delete.</p>
     #[serde(rename = "FilterName")]
     pub filter_name: String,
 }
@@ -404,10 +383,10 @@ pub struct DeleteFilterResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteIPSetRequest {
-    /// <p>The detectorID that specifies the GuardDuty service whose IPSet you want to delete.</p>
+    /// <p>The unique ID of the detector the ipSet is associated with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>The unique ID that specifies the IPSet that you want to delete.</p>
+    /// <p>The unique ID of the ipSet you want to delete.</p>
     #[serde(rename = "IpSetId")]
     pub ip_set_id: String,
 }
@@ -416,7 +395,6 @@ pub struct DeleteIPSetRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteIPSetResponse {}
 
-/// <p>DeleteInvitations request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteInvitationsRequest {
     /// <p>A list of account IDs of the AWS accounts that sent invitations to the current member account that you want to delete invitations from.</p>
@@ -429,11 +407,9 @@ pub struct DeleteInvitationsRequest {
 pub struct DeleteInvitationsResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub unprocessed_accounts: Option<Vec<UnprocessedAccount>>,
+    pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-/// <p>DeleteMembers request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts that you want to delete.</p>
@@ -449,16 +425,15 @@ pub struct DeleteMembersRequest {
 pub struct DeleteMembersResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub unprocessed_accounts: Option<Vec<UnprocessedAccount>>,
+    pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteThreatIntelSetRequest {
-    /// <p>The detectorID that specifies the GuardDuty service whose ThreatIntelSet you want to delete.</p>
+    /// <p>The unique ID of the detector the threatIntelSet is associated with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>The unique ID that specifies the ThreatIntelSet that you want to delete.</p>
+    /// <p>The unique ID of the threatIntelSet you want to delete.</p>
     #[serde(rename = "ThreatIntelSetId")]
     pub threat_intel_set_id: String,
 }
@@ -478,7 +453,6 @@ pub struct DisassociateFromMasterAccountRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateFromMasterAccountResponse {}
 
-/// <p>DisassociateMembers request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts that you want to disassociate from master.</p>
@@ -494,11 +468,9 @@ pub struct DisassociateMembersRequest {
 pub struct DisassociateMembersResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub unprocessed_accounts: Option<Vec<UnprocessedAccount>>,
+    pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-/// <p>Information about the DNS_REQUEST action described in this finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DnsRequestAction {
@@ -508,12 +480,15 @@ pub struct DnsRequestAction {
     pub domain: Option<String>,
 }
 
-/// <p>Domain information for the AWS API call.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DomainDetails {}
+pub struct DomainDetails {
+    /// <p>Domain information for the AWS API call.</p>
+    #[serde(rename = "Domain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain: Option<String>,
+}
 
-/// <p>Representation of a abnormal or suspicious activity.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Finding {
@@ -547,7 +522,7 @@ pub struct Finding {
     /// <p>The AWS resource associated with the activity that prompted GuardDuty to generate a finding.</p>
     #[serde(rename = "Resource")]
     pub resource: Resource,
-    /// <p>Findings&#39; schema version.</p>
+    /// <p>Findings' schema version.</p>
     #[serde(rename = "SchemaVersion")]
     pub schema_version: String,
     /// <p>Additional information assigned to the generated finding by GuardDuty.</p>
@@ -569,7 +544,6 @@ pub struct Finding {
     pub updated_at: String,
 }
 
-/// <p>Represents the criteria used for querying findings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FindingCriteria {
     /// <p>Represents a map of finding properties that match specified conditions and values when querying findings.</p>
@@ -578,7 +552,6 @@ pub struct FindingCriteria {
     pub criterion: Option<::std::collections::HashMap<String, Condition>>,
 }
 
-/// <p>Finding statistics object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct FindingStatistics {
@@ -588,7 +561,6 @@ pub struct FindingStatistics {
     pub count_by_severity: Option<::std::collections::HashMap<String, i64>>,
 }
 
-/// <p>Location information of the remote IP address.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GeoLocation {
@@ -604,7 +576,7 @@ pub struct GeoLocation {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDetectorRequest {
-    /// <p>The unique ID of the detector that you want to retrieve.</p>
+    /// <p>The unique ID of the detector that you want to get.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
 }
@@ -612,18 +584,21 @@ pub struct GetDetectorRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetDetectorResponse {
+    /// <p>Detector creation timestamp.</p>
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<String>,
+    /// <p>Finding publishing frequency.</p>
     #[serde(rename = "FindingPublishingFrequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finding_publishing_frequency: Option<String>,
+    /// <p>The GuardDuty service role.</p>
     #[serde(rename = "ServiceRole")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub service_role: Option<String>,
+    pub service_role: String,
+    /// <p>The detector status.</p>
     #[serde(rename = "Status")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: String,
+    /// <p>Detector last update timestamp.</p>
     #[serde(rename = "UpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<String>,
@@ -631,10 +606,10 @@ pub struct GetDetectorResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetFilterRequest {
-    /// <p>The detector ID that specifies the GuardDuty service where you want to list the details of the specified filter.</p>
+    /// <p>The unique ID of the detector the filter is associated with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>The name of the filter whose details you want to get.</p>
+    /// <p>The name of the filter you want to get.</p>
     #[serde(rename = "FilterName")]
     pub filter_name: String,
 }
@@ -644,27 +619,23 @@ pub struct GetFilterRequest {
 pub struct GetFilterResponse {
     /// <p>Specifies the action that is to be applied to the findings that match the filter.</p>
     #[serde(rename = "Action")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub action: Option<String>,
+    pub action: String,
     /// <p>The description of the filter.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// <p>Represents the criteria to be used in the filter for querying findings.</p>
     #[serde(rename = "FindingCriteria")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding_criteria: Option<FindingCriteria>,
+    pub finding_criteria: FindingCriteria,
     /// <p>The name of the filter.</p>
     #[serde(rename = "Name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: String,
     /// <p>Specifies the position of the filter in the list of current filters. Also specifies the order in which this filter is applied to the findings.</p>
     #[serde(rename = "Rank")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rank: Option<i64>,
 }
 
-/// <p>GetFindings request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetFindingsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings you want to retrieve.</p>
@@ -682,15 +653,14 @@ pub struct GetFindingsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetFindingsResponse {
+    /// <p>A list of findings.</p>
     #[serde(rename = "Findings")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub findings: Option<Vec<Finding>>,
+    pub findings: Vec<Finding>,
 }
 
-/// <p>GetFindingsStatistics request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetFindingsStatisticsRequest {
-    /// <p>The ID of the detector that specifies the GuardDuty service whose findings&#39; statistics you want to retrieve.</p>
+    /// <p>The ID of the detector that specifies the GuardDuty service whose findings' statistics you want to retrieve.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
     /// <p>Represents the criteria used for querying findings.</p>
@@ -707,16 +677,15 @@ pub struct GetFindingsStatisticsRequest {
 pub struct GetFindingsStatisticsResponse {
     /// <p>Finding statistics object.</p>
     #[serde(rename = "FindingStatistics")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding_statistics: Option<FindingStatistics>,
+    pub finding_statistics: FindingStatistics,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetIPSetRequest {
-    /// <p>The detectorID that specifies the GuardDuty service whose IPSet you want to retrieve.</p>
+    /// <p>The unique ID of the detector the ipSet is associated with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>The unique ID that specifies the IPSet that you want to describe.</p>
+    /// <p>The unique ID of the ipSet you want to get.</p>
     #[serde(rename = "IpSetId")]
     pub ip_set_id: String,
 }
@@ -726,20 +695,16 @@ pub struct GetIPSetRequest {
 pub struct GetIPSetResponse {
     /// <p>The format of the file that contains the IPSet.</p>
     #[serde(rename = "Format")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub format: Option<String>,
+    pub format: String,
     /// <p>The URI of the file that contains the IPSet. For example (https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key)</p>
     #[serde(rename = "Location")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub location: Option<String>,
+    pub location: String,
     /// <p>The user friendly name to identify the IPSet. This name is displayed in all findings that are triggered by activity that involves IP addresses included in this IPSet.</p>
     #[serde(rename = "Name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: String,
     /// <p>The status of ipSet file uploaded.</p>
     #[serde(rename = "Status")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -764,12 +729,11 @@ pub struct GetMasterAccountRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetMasterAccountResponse {
+    /// <p>Master account details.</p>
     #[serde(rename = "Master")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub master: Option<Master>,
+    pub master: Master,
 }
 
-/// <p>GetMembers request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts that you want to describe.</p>
@@ -783,21 +747,20 @@ pub struct GetMembersRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetMembersResponse {
+    /// <p>A list of members.</p>
     #[serde(rename = "Members")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub members: Option<Vec<Member>>,
+    pub members: Vec<Member>,
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub unprocessed_accounts: Option<Vec<UnprocessedAccount>>,
+    pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetThreatIntelSetRequest {
-    /// <p>The detectorID that specifies the GuardDuty service whose ThreatIntelSet you want to describe.</p>
+    /// <p>The unique ID of the detector the threatIntelSet is associated with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>The unique ID that specifies the ThreatIntelSet that you want to describe.</p>
+    /// <p>The unique ID of the threatIntelSet you want to get.</p>
     #[serde(rename = "ThreatIntelSetId")]
     pub threat_intel_set_id: String,
 }
@@ -807,23 +770,18 @@ pub struct GetThreatIntelSetRequest {
 pub struct GetThreatIntelSetResponse {
     /// <p>The format of the threatIntelSet.</p>
     #[serde(rename = "Format")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub format: Option<String>,
+    pub format: String,
     /// <p>The URI of the file that contains the ThreatIntelSet. For example (https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key).</p>
     #[serde(rename = "Location")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub location: Option<String>,
+    pub location: String,
     /// <p>A user-friendly ThreatIntelSet name that is displayed in all finding generated by activity that involves IP addresses included in this ThreatIntelSet.</p>
     #[serde(rename = "Name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: String,
     /// <p>The status of threatIntelSet file uploaded.</p>
     #[serde(rename = "Status")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: String,
 }
 
-/// <p>The profile information of the EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct IamInstanceProfile {
@@ -837,7 +795,6 @@ pub struct IamInstanceProfile {
     pub id: Option<String>,
 }
 
-/// <p>The information about the EC2 instance associated with the activity that prompted GuardDuty to generate a finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct InstanceDetails {
@@ -845,6 +802,7 @@ pub struct InstanceDetails {
     #[serde(rename = "AvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
+    /// <p>The profile information of the EC2 instance.</p>
     #[serde(rename = "IamInstanceProfile")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_instance_profile: Option<IamInstanceProfile>,
@@ -890,7 +848,6 @@ pub struct InstanceDetails {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// <p>Invitation from an AWS account to become the current account&#39;s master.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Invitation {
@@ -912,7 +869,6 @@ pub struct Invitation {
     pub relationship_status: Option<String>,
 }
 
-/// <p>InviteMembers request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct InviteMembersRequest {
     /// <p>A list of account IDs of the accounts that you want to invite to GuardDuty as members.</p>
@@ -936,17 +892,16 @@ pub struct InviteMembersRequest {
 pub struct InviteMembersResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub unprocessed_accounts: Option<Vec<UnprocessedAccount>>,
+    pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListDetectorsRequest {
-    /// <p>You can use this parameter to indicate the maximum number of detectors that you want in the response.</p>
+    /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 50. The maximum value is 50.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the ListDetectors action. For subsequent calls to the action fill nextToken in the request with the value of nextToken from the previous response to continue listing data.</p>
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -955,9 +910,10 @@ pub struct ListDetectorsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListDetectorsResponse {
+    /// <p>A list of detector Ids.</p>
     #[serde(rename = "DetectorIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub detector_ids: Option<Vec<String>>,
+    pub detector_ids: Vec<String>,
+    /// <p>Pagination parameter to be used on the next list operation to retrieve more items.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -965,14 +921,14 @@ pub struct ListDetectorsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListFiltersRequest {
-    /// <p>The ID of the detector that specifies the GuardDuty service where you want to list filters.</p>
+    /// <p>The unique ID of the detector the filter is associated with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>Indicates the maximum number of items that you want in the response. The maximum value is 50.</p>
+    /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 50. The maximum value is 50.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>Paginates results. Set the value of this parameter to NULL on your first call to the ListFilters operation.For subsequent calls to the operation, fill nextToken in the request with the value of nextToken from the previous response to continue listing data.</p>
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -981,15 +937,15 @@ pub struct ListFiltersRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListFiltersResponse {
+    /// <p>A list of filter names</p>
     #[serde(rename = "FilterNames")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub filter_names: Option<Vec<String>>,
+    pub filter_names: Vec<String>,
+    /// <p>Pagination parameter to be used on the next list operation to retrieve more items.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p>ListFindings request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListFindingsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings you want to list.</p>
@@ -1003,7 +959,7 @@ pub struct ListFindingsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the ListFindings action. For subsequent calls to the action fill nextToken in the request with the value of nextToken from the previous response to continue listing data.</p>
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1016,9 +972,10 @@ pub struct ListFindingsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListFindingsResponse {
+    /// <p>The IDs of the findings you are listing.</p>
     #[serde(rename = "FindingIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding_ids: Option<Vec<String>>,
+    pub finding_ids: Vec<String>,
+    /// <p>Pagination parameter to be used on the next list operation to retrieve more items.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1026,14 +983,14 @@ pub struct ListFindingsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListIPSetsRequest {
-    /// <p>The unique ID of the detector that you want to retrieve.</p>
+    /// <p>The unique ID of the detector the ipSet is associated with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>You can use this parameter to indicate the maximum number of items that you want in the response. The default value is 7. The maximum value is 7.</p>
+    /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 50. The maximum value is 50.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the ListIPSet action. For subsequent calls to the action fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1042,9 +999,10 @@ pub struct ListIPSetsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListIPSetsResponse {
+    /// <p>The IDs of the IPSet resources.</p>
     #[serde(rename = "IpSetIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub ip_set_ids: Option<Vec<String>>,
+    pub ip_set_ids: Vec<String>,
+    /// <p>Pagination parameter to be used on the next list operation to retrieve more items.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1052,11 +1010,11 @@ pub struct ListIPSetsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListInvitationsRequest {
-    /// <p>You can use this parameter to indicate the maximum number of invitations you want in the response. The default value is 50. The maximum value is 50.</p>
+    /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 50. The maximum value is 50.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the ListInvitations action. Subsequent calls to the action fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1065,9 +1023,11 @@ pub struct ListInvitationsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListInvitationsResponse {
+    /// <p>A list of invitation descriptions.</p>
     #[serde(rename = "Invitations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invitations: Option<Vec<Invitation>>,
+    /// <p>Pagination parameter to be used on the next list operation to retrieve more items.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1075,18 +1035,18 @@ pub struct ListInvitationsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListMembersRequest {
-    /// <p>The unique ID of the detector of the GuardDuty account whose members you want to list.</p>
+    /// <p>The unique ID of the detector the member is associated with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 1. The maximum value is 50.</p>
+    /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 50. The maximum value is 50.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the ListMembers action. Subsequent calls to the action fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Specifies what member accounts the response is to include based on their relationship status with the master account. The default value is TRUE. If onlyAssociated is set to TRUE, the response will include member accounts whose relationship status with the master is set to Enabled, Disabled. If onlyAssociated is set to FALSE, the response will include all existing member accounts.</p>
+    /// <p>Specifies whether to only return associated members or to return all members (including members which haven't been invited yet or have been disassociated).</p>
     #[serde(rename = "OnlyAssociated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub only_associated: Option<String>,
@@ -1095,9 +1055,11 @@ pub struct ListMembersRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListMembersResponse {
+    /// <p>A list of members.</p>
     #[serde(rename = "Members")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub members: Option<Vec<Member>>,
+    /// <p>Pagination parameter to be used on the next list operation to retrieve more items.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1105,14 +1067,14 @@ pub struct ListMembersResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListThreatIntelSetsRequest {
-    /// <p>The detectorID that specifies the GuardDuty service whose ThreatIntelSets you want to list.</p>
+    /// <p>The unique ID of the detector the threatIntelSet is associated with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>You can use this parameter to indicate the maximum number of items that you want in the response. The default value is 7. The maximum value is 7.</p>
+    /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 50. The maximum value is 50.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>Pagination token to start retrieving threat intel sets from.</p>
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1121,15 +1083,15 @@ pub struct ListThreatIntelSetsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListThreatIntelSetsResponse {
+    /// <p>Pagination parameter to be used on the next list operation to retrieve more items.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>The IDs of the ThreatIntelSet resources.</p>
     #[serde(rename = "ThreatIntelSetIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub threat_intel_set_ids: Option<Vec<String>>,
+    pub threat_intel_set_ids: Vec<String>,
 }
 
-/// <p>Local port information of the connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct LocalPortDetails {
@@ -1143,7 +1105,6 @@ pub struct LocalPortDetails {
     pub port_name: Option<String>,
 }
 
-/// <p>Contains details about the master account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Master {
@@ -1165,32 +1126,34 @@ pub struct Master {
     pub relationship_status: Option<String>,
 }
 
-/// <p>Contains details about the member account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Member {
+    /// <p>Member account ID.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
+    /// <p>Member account's detector ID.</p>
     #[serde(rename = "DetectorId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detector_id: Option<String>,
-    /// <p>Member account&#39;s email address.</p>
+    /// <p>Member account's email address.</p>
     #[serde(rename = "Email")]
     pub email: String,
     /// <p>Timestamp at which the invitation was sent</p>
     #[serde(rename = "InvitedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invited_at: Option<String>,
+    /// <p>Master account ID.</p>
     #[serde(rename = "MasterId")]
     pub master_id: String,
     /// <p>The status of the relationship between the member and the master.</p>
     #[serde(rename = "RelationshipStatus")]
     pub relationship_status: String,
+    /// <p>Member last updated timestamp.</p>
     #[serde(rename = "UpdatedAt")]
     pub updated_at: String,
 }
 
-/// <p>Information about the NETWORK_CONNECTION action described in this finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct NetworkConnectionAction {
@@ -1220,7 +1183,6 @@ pub struct NetworkConnectionAction {
     pub remote_port_details: Option<RemotePortDetails>,
 }
 
-/// <p>The network interface information of the EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct NetworkInterface {
@@ -1266,7 +1228,6 @@ pub struct NetworkInterface {
     pub vpc_id: Option<String>,
 }
 
-/// <p>ISP Organization information of the remote IP address.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Organization {
@@ -1288,7 +1249,6 @@ pub struct Organization {
     pub org: Option<String>,
 }
 
-/// <p>Information about the PORT_PROBE action described in this finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct PortProbeAction {
@@ -1302,7 +1262,6 @@ pub struct PortProbeAction {
     pub port_probe_details: Option<Vec<PortProbeDetail>>,
 }
 
-/// <p>Details about the port probe finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct PortProbeDetail {
@@ -1316,7 +1275,6 @@ pub struct PortProbeDetail {
     pub remote_ip_details: Option<RemoteIpDetails>,
 }
 
-/// <p>Other private IP address information of the EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct PrivateIpAddressDetails {
@@ -1330,7 +1288,6 @@ pub struct PrivateIpAddressDetails {
     pub private_ip_address: Option<String>,
 }
 
-/// <p>The product code of the EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ProductCode {
@@ -1344,7 +1301,6 @@ pub struct ProductCode {
     pub product_type: Option<String>,
 }
 
-/// <p>Remote IP information of the connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct RemoteIpDetails {
@@ -1370,7 +1326,6 @@ pub struct RemoteIpDetails {
     pub organization: Option<Organization>,
 }
 
-/// <p>Remote port information of the connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct RemotePortDetails {
@@ -1384,13 +1339,14 @@ pub struct RemotePortDetails {
     pub port_name: Option<String>,
 }
 
-/// <p>The AWS resource associated with the activity that prompted GuardDuty to generate a finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Resource {
+    /// <p>The IAM access key details (IAM user information) of a user that engaged in the activity that prompted GuardDuty to generate a finding.</p>
     #[serde(rename = "AccessKeyDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_key_details: Option<AccessKeyDetails>,
+    /// <p>The information about the EC2 instance associated with the activity that prompted GuardDuty to generate a finding.</p>
     #[serde(rename = "InstanceDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_details: Option<InstanceDetails>,
@@ -1400,21 +1356,19 @@ pub struct Resource {
     pub resource_type: Option<String>,
 }
 
-/// <p>Security groups associated with the EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct SecurityGroup {
-    /// <p>EC2 instance&#39;s security group ID.</p>
+    /// <p>EC2 instance's security group ID.</p>
     #[serde(rename = "GroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_id: Option<String>,
-    /// <p>EC2 instance&#39;s security group name.</p>
+    /// <p>EC2 instance's security group name.</p>
     #[serde(rename = "GroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_name: Option<String>,
 }
 
-/// <p>Additional information assigned to the generated finding by GuardDuty.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Service {
@@ -1456,7 +1410,6 @@ pub struct Service {
     pub user_feedback: Option<String>,
 }
 
-/// <p>Represents the criteria used for sorting findings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SortCriteria {
     /// <p>Represents the finding attribute (for example, accountId) by which to sort findings.</p>
@@ -1469,13 +1422,12 @@ pub struct SortCriteria {
     pub order_by: Option<String>,
 }
 
-/// <p>StartMonitoringMembers request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartMonitoringMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts whose findings you want the master account to monitor.</p>
     #[serde(rename = "AccountIds")]
     pub account_ids: Vec<String>,
-    /// <p>The unique ID of the detector of the GuardDuty account whom you want to re-enable to monitor members&#39; findings.</p>
+    /// <p>The unique ID of the detector of the GuardDuty account whom you want to re-enable to monitor members' findings.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
 }
@@ -1485,17 +1437,15 @@ pub struct StartMonitoringMembersRequest {
 pub struct StartMonitoringMembersResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub unprocessed_accounts: Option<Vec<UnprocessedAccount>>,
+    pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-/// <p>StopMonitoringMembers request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopMonitoringMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts whose findings you want the master account to stop monitoring.</p>
     #[serde(rename = "AccountIds")]
     pub account_ids: Vec<String>,
-    /// <p>The unique ID of the detector of the GuardDuty account that you want to stop from monitor members&#39; findings.</p>
+    /// <p>The unique ID of the detector of the GuardDuty account that you want to stop from monitor members' findings.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
 }
@@ -1505,11 +1455,9 @@ pub struct StopMonitoringMembersRequest {
 pub struct StopMonitoringMembersResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub unprocessed_accounts: Option<Vec<UnprocessedAccount>>,
+    pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-/// <p>A tag of the EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Tag {
@@ -1523,7 +1471,6 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-/// <p>UnarchiveFindings request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UnarchiveFindingsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings you want to unarchive.</p>
@@ -1538,19 +1485,17 @@ pub struct UnarchiveFindingsRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct UnarchiveFindingsResponse {}
 
-/// <p>An object containing the unprocessed account and a result string explaining why it was unprocessed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UnprocessedAccount {
     /// <p>AWS Account ID.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
-    /// <p>A reason why the account hasn&#39;t been processed.</p>
+    /// <p>A reason why the account hasn't been processed.</p>
     #[serde(rename = "Result")]
     pub result: String,
 }
 
-/// <p>UpdateDetector request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDetectorRequest {
     /// <p>The unique ID of the detector that you want to update.</p>
@@ -1570,7 +1515,6 @@ pub struct UpdateDetectorRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateDetectorResponse {}
 
-/// <p>UpdateFilterRequest request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateFilterRequest {
     /// <p>Specifies the action that is to be applied to the findings that match the filter.</p>
@@ -1602,11 +1546,9 @@ pub struct UpdateFilterRequest {
 pub struct UpdateFilterResponse {
     /// <p>The name of the filter.</p>
     #[serde(rename = "Name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: String,
 }
 
-/// <p>UpdateFindingsFeedback request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateFindingsFeedbackRequest {
     /// <p>Additional feedback about the GuardDuty findings.</p>
@@ -1628,7 +1570,6 @@ pub struct UpdateFindingsFeedbackRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateFindingsFeedbackResponse {}
 
-/// <p>UpdateIPSet request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateIPSetRequest {
     /// <p>The updated boolean value that specifies whether the IPSet is active or not.</p>
@@ -1655,7 +1596,6 @@ pub struct UpdateIPSetRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateIPSetResponse {}
 
-/// <p>UpdateThreatIntelSet request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateThreatIntelSetRequest {
     /// <p>The updated boolean value that specifies whether the ThreateIntelSet is active or not.</p>
@@ -1685,9 +1625,9 @@ pub struct UpdateThreatIntelSetResponse {}
 /// Errors returned by AcceptInvitation
 #[derive(Debug, PartialEq)]
 pub enum AcceptInvitationError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -1726,9 +1666,9 @@ impl Error for AcceptInvitationError {
 /// Errors returned by ArchiveFindings
 #[derive(Debug, PartialEq)]
 pub enum ArchiveFindingsError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -1765,9 +1705,9 @@ impl Error for ArchiveFindingsError {
 /// Errors returned by CreateDetector
 #[derive(Debug, PartialEq)]
 pub enum CreateDetectorError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -1804,9 +1744,9 @@ impl Error for CreateDetectorError {
 /// Errors returned by CreateFilter
 #[derive(Debug, PartialEq)]
 pub enum CreateFilterError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -1843,9 +1783,9 @@ impl Error for CreateFilterError {
 /// Errors returned by CreateIPSet
 #[derive(Debug, PartialEq)]
 pub enum CreateIPSetError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -1882,9 +1822,9 @@ impl Error for CreateIPSetError {
 /// Errors returned by CreateMembers
 #[derive(Debug, PartialEq)]
 pub enum CreateMembersError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -1921,9 +1861,9 @@ impl Error for CreateMembersError {
 /// Errors returned by CreateSampleFindings
 #[derive(Debug, PartialEq)]
 pub enum CreateSampleFindingsError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -1962,9 +1902,9 @@ impl Error for CreateSampleFindingsError {
 /// Errors returned by CreateThreatIntelSet
 #[derive(Debug, PartialEq)]
 pub enum CreateThreatIntelSetError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2003,9 +1943,9 @@ impl Error for CreateThreatIntelSetError {
 /// Errors returned by DeclineInvitations
 #[derive(Debug, PartialEq)]
 pub enum DeclineInvitationsError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2044,9 +1984,9 @@ impl Error for DeclineInvitationsError {
 /// Errors returned by DeleteDetector
 #[derive(Debug, PartialEq)]
 pub enum DeleteDetectorError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2083,9 +2023,9 @@ impl Error for DeleteDetectorError {
 /// Errors returned by DeleteFilter
 #[derive(Debug, PartialEq)]
 pub enum DeleteFilterError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2122,9 +2062,9 @@ impl Error for DeleteFilterError {
 /// Errors returned by DeleteIPSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteIPSetError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2161,9 +2101,9 @@ impl Error for DeleteIPSetError {
 /// Errors returned by DeleteInvitations
 #[derive(Debug, PartialEq)]
 pub enum DeleteInvitationsError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2202,9 +2142,9 @@ impl Error for DeleteInvitationsError {
 /// Errors returned by DeleteMembers
 #[derive(Debug, PartialEq)]
 pub enum DeleteMembersError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2241,9 +2181,9 @@ impl Error for DeleteMembersError {
 /// Errors returned by DeleteThreatIntelSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteThreatIntelSetError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2282,9 +2222,9 @@ impl Error for DeleteThreatIntelSetError {
 /// Errors returned by DisassociateFromMasterAccount
 #[derive(Debug, PartialEq)]
 pub enum DisassociateFromMasterAccountError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2327,9 +2267,9 @@ impl Error for DisassociateFromMasterAccountError {
 /// Errors returned by DisassociateMembers
 #[derive(Debug, PartialEq)]
 pub enum DisassociateMembersError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2368,9 +2308,9 @@ impl Error for DisassociateMembersError {
 /// Errors returned by GetDetector
 #[derive(Debug, PartialEq)]
 pub enum GetDetectorError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2407,9 +2347,9 @@ impl Error for GetDetectorError {
 /// Errors returned by GetFilter
 #[derive(Debug, PartialEq)]
 pub enum GetFilterError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2446,9 +2386,9 @@ impl Error for GetFilterError {
 /// Errors returned by GetFindings
 #[derive(Debug, PartialEq)]
 pub enum GetFindingsError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2485,9 +2425,9 @@ impl Error for GetFindingsError {
 /// Errors returned by GetFindingsStatistics
 #[derive(Debug, PartialEq)]
 pub enum GetFindingsStatisticsError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2526,9 +2466,9 @@ impl Error for GetFindingsStatisticsError {
 /// Errors returned by GetIPSet
 #[derive(Debug, PartialEq)]
 pub enum GetIPSetError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2565,9 +2505,9 @@ impl Error for GetIPSetError {
 /// Errors returned by GetInvitationsCount
 #[derive(Debug, PartialEq)]
 pub enum GetInvitationsCountError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2606,9 +2546,9 @@ impl Error for GetInvitationsCountError {
 /// Errors returned by GetMasterAccount
 #[derive(Debug, PartialEq)]
 pub enum GetMasterAccountError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2647,9 +2587,9 @@ impl Error for GetMasterAccountError {
 /// Errors returned by GetMembers
 #[derive(Debug, PartialEq)]
 pub enum GetMembersError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2686,9 +2626,9 @@ impl Error for GetMembersError {
 /// Errors returned by GetThreatIntelSet
 #[derive(Debug, PartialEq)]
 pub enum GetThreatIntelSetError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2727,9 +2667,9 @@ impl Error for GetThreatIntelSetError {
 /// Errors returned by InviteMembers
 #[derive(Debug, PartialEq)]
 pub enum InviteMembersError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2766,9 +2706,9 @@ impl Error for InviteMembersError {
 /// Errors returned by ListDetectors
 #[derive(Debug, PartialEq)]
 pub enum ListDetectorsError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2805,9 +2745,9 @@ impl Error for ListDetectorsError {
 /// Errors returned by ListFilters
 #[derive(Debug, PartialEq)]
 pub enum ListFiltersError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2844,9 +2784,9 @@ impl Error for ListFiltersError {
 /// Errors returned by ListFindings
 #[derive(Debug, PartialEq)]
 pub enum ListFindingsError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2883,9 +2823,9 @@ impl Error for ListFindingsError {
 /// Errors returned by ListIPSets
 #[derive(Debug, PartialEq)]
 pub enum ListIPSetsError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2922,9 +2862,9 @@ impl Error for ListIPSetsError {
 /// Errors returned by ListInvitations
 #[derive(Debug, PartialEq)]
 pub enum ListInvitationsError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2961,9 +2901,9 @@ impl Error for ListInvitationsError {
 /// Errors returned by ListMembers
 #[derive(Debug, PartialEq)]
 pub enum ListMembersError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3000,9 +2940,9 @@ impl Error for ListMembersError {
 /// Errors returned by ListThreatIntelSets
 #[derive(Debug, PartialEq)]
 pub enum ListThreatIntelSetsError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3041,9 +2981,9 @@ impl Error for ListThreatIntelSetsError {
 /// Errors returned by StartMonitoringMembers
 #[derive(Debug, PartialEq)]
 pub enum StartMonitoringMembersError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3082,9 +3022,9 @@ impl Error for StartMonitoringMembersError {
 /// Errors returned by StopMonitoringMembers
 #[derive(Debug, PartialEq)]
 pub enum StopMonitoringMembersError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3123,9 +3063,9 @@ impl Error for StopMonitoringMembersError {
 /// Errors returned by UnarchiveFindings
 #[derive(Debug, PartialEq)]
 pub enum UnarchiveFindingsError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3164,9 +3104,9 @@ impl Error for UnarchiveFindingsError {
 /// Errors returned by UpdateDetector
 #[derive(Debug, PartialEq)]
 pub enum UpdateDetectorError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3203,9 +3143,9 @@ impl Error for UpdateDetectorError {
 /// Errors returned by UpdateFilter
 #[derive(Debug, PartialEq)]
 pub enum UpdateFilterError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3242,9 +3182,9 @@ impl Error for UpdateFilterError {
 /// Errors returned by UpdateFindingsFeedback
 #[derive(Debug, PartialEq)]
 pub enum UpdateFindingsFeedbackError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3283,9 +3223,9 @@ impl Error for UpdateFindingsFeedbackError {
 /// Errors returned by UpdateIPSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateIPSetError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3322,9 +3262,9 @@ impl Error for UpdateIPSetError {
 /// Errors returned by UpdateThreatIntelSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateThreatIntelSetError {
-    /// <p>Error response object.</p>
+    /// <p>Bad request exception object.</p>
     BadRequest(String),
-    /// <p>Error response object.</p>
+    /// <p>Internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3398,7 +3338,7 @@ pub trait GuardDuty {
         input: CreateMembersRequest,
     ) -> RusotoFuture<CreateMembersResponse, CreateMembersError>;
 
-    /// <p>Generates example findings of types specified by the list of finding types. If &#39;NULL&#39; is specified for findingTypes, the API generates example findings of all supported finding types.</p>
+    /// <p>Generates example findings of types specified by the list of finding types. If 'NULL' is specified for findingTypes, the API generates example findings of all supported finding types.</p>
     fn create_sample_findings(
         &self,
         input: CreateSampleFindingsRequest,
@@ -3482,7 +3422,7 @@ pub trait GuardDuty {
         input: GetFindingsRequest,
     ) -> RusotoFuture<GetFindingsResponse, GetFindingsError>;
 
-    /// <p>Lists Amazon GuardDuty findings&#39; statistics for the specified detector ID.</p>
+    /// <p>Lists Amazon GuardDuty findings' statistics for the specified detector ID.</p>
     fn get_findings_statistics(
         &self,
         input: GetFindingsStatisticsRequest,
@@ -3514,7 +3454,7 @@ pub trait GuardDuty {
         input: GetThreatIntelSetRequest,
     ) -> RusotoFuture<GetThreatIntelSetResponse, GetThreatIntelSetError>;
 
-    /// <p>Invites other AWS accounts (created as members of the current AWS account by CreateMembers) to enable GuardDuty and allow the current AWS account to view and manage these accounts&#39; GuardDuty findings on their behalf as the master account.</p>
+    /// <p>Invites other AWS accounts (created as members of the current AWS account by CreateMembers) to enable GuardDuty and allow the current AWS account to view and manage these accounts' GuardDuty findings on their behalf as the master account.</p>
     fn invite_members(
         &self,
         input: InviteMembersRequest,
@@ -3562,7 +3502,7 @@ pub trait GuardDuty {
         input: ListThreatIntelSetsRequest,
     ) -> RusotoFuture<ListThreatIntelSetsResponse, ListThreatIntelSetsError>;
 
-    /// <p>Re-enables GuardDuty to monitor findings of the member accounts specified by the account IDs. A master GuardDuty account can run this command after disabling GuardDuty from monitoring these members&#39; findings by running StopMonitoringMembers.</p>
+    /// <p>Re-enables GuardDuty to monitor findings of the member accounts specified by the account IDs. A master GuardDuty account can run this command after disabling GuardDuty from monitoring these members' findings by running StopMonitoringMembers.</p>
     fn start_monitoring_members(
         &self,
         input: StartMonitoringMembersRequest,
@@ -3854,7 +3794,7 @@ impl GuardDuty for GuardDutyClient {
         })
     }
 
-    /// <p>Generates example findings of types specified by the list of finding types. If &#39;NULL&#39; is specified for findingTypes, the API generates example findings of all supported finding types.</p>
+    /// <p>Generates example findings of types specified by the list of finding types. If 'NULL' is specified for findingTypes, the API generates example findings of all supported finding types.</p>
     fn create_sample_findings(
         &self,
         input: CreateSampleFindingsRequest,
@@ -4309,7 +4249,7 @@ impl GuardDuty for GuardDutyClient {
         })
     }
 
-    /// <p>Lists Amazon GuardDuty findings&#39; statistics for the specified detector ID.</p>
+    /// <p>Lists Amazon GuardDuty findings' statistics for the specified detector ID.</p>
     fn get_findings_statistics(
         &self,
         input: GetFindingsStatisticsRequest,
@@ -4500,7 +4440,7 @@ impl GuardDuty for GuardDutyClient {
         })
     }
 
-    /// <p>Invites other AWS accounts (created as members of the current AWS account by CreateMembers) to enable GuardDuty and allow the current AWS account to view and manage these accounts&#39; GuardDuty findings on their behalf as the master account.</p>
+    /// <p>Invites other AWS accounts (created as members of the current AWS account by CreateMembers) to enable GuardDuty and allow the current AWS account to view and manage these accounts' GuardDuty findings on their behalf as the master account.</p>
     fn invite_members(
         &self,
         input: InviteMembersRequest,
@@ -4812,7 +4752,7 @@ impl GuardDuty for GuardDutyClient {
         })
     }
 
-    /// <p>Re-enables GuardDuty to monitor findings of the member accounts specified by the account IDs. A master GuardDuty account can run this command after disabling GuardDuty from monitoring these members&#39; findings by running StopMonitoringMembers.</p>
+    /// <p>Re-enables GuardDuty to monitor findings of the member accounts specified by the account IDs. A master GuardDuty account can run this command after disabling GuardDuty from monitoring these members' findings by running StopMonitoringMembers.</p>
     fn start_monitoring_members(
         &self,
         input: StartMonitoringMembersRequest,

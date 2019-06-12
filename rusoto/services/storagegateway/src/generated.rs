@@ -140,6 +140,25 @@ pub struct AddWorkingStorageOutput {
     pub gateway_arn: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AssignTapePoolInput {
+    /// <p>The ID of the pool that you want to add your tape to for archiving. The tape in this pool is archived in the S3 storage class that is associated with the pool. When you use your backup application to eject the tape, the tape is archived directly into the storage class (Glacier or Deep Archive) that corresponds to the pool.</p> <p>Valid values: "GLACIER", "DEEP_ARCHIVE"</p>
+    #[serde(rename = "PoolId")]
+    pub pool_id: String,
+    /// <p>The unique Amazon Resource Name (ARN) of the virtual tape that you want to add to the tape pool.</p>
+    #[serde(rename = "TapeARN")]
+    pub tape_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AssignTapePoolOutput {
+    /// <p>The unique Amazon Resource Names (ARN) of the virtual tape that was added to the tape pool.</p>
+    #[serde(rename = "TapeARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tape_arn: Option<String>,
+}
+
 /// <p>AttachVolumeInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AttachVolumeInput {
@@ -1001,6 +1020,10 @@ pub struct DescribeGatewayInformationOutput {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+    /// <p>The configuration settings for the virtual private cloud (VPC) endpoint for your gateway. </p>
+    #[serde(rename = "VPCEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_endpoint: Option<String>,
 }
 
 /// <p>A JSON object containing the of the gateway.</p>
@@ -1095,6 +1118,10 @@ pub struct DescribeSMBSettingsOutput {
     #[serde(rename = "SMBGuestPasswordSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub smb_guest_password_set: Option<bool>,
+    /// <p>The type of security strategy that was specified for file gateway.</p> <p>ClientSpecified: SMBv1 is enabled, SMB signing is offered but not required, SMB encryption is offered but not required.</p> <p>MandatorySigning: SMBv1 is disabled, SMB signing is required, SMB encryption is offered but not required.</p> <p>MandatoryEncryption: SMBv1 is disabled, SMB signing is offered but not required, SMB encryption is required.</p>
+    #[serde(rename = "SMBSecurityStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub smb_security_strategy: Option<String>,
 }
 
 /// <p>A JSON object containing the <a>DescribeSnapshotScheduleInput$VolumeARN</a> of the volume.</p>
@@ -2579,6 +2606,23 @@ pub struct UpdateSMBFileShareOutput {
     pub file_share_arn: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateSMBSecurityStrategyInput {
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
+    /// <p>Specifies the type of security strategy.</p> <p>ClientSpecified: SMBv1 is enabled, SMB signing is offered but not required, SMB encryption is offered but not required.</p> <p>MandatorySigning: SMBv1 is disabled, SMB signing is required, SMB encryption is offered but not required.</p> <p>MandatoryEncryption: SMBv1 is disabled, SMB signing is offered but not required, SMB encryption is required.</p>
+    #[serde(rename = "SMBSecurityStrategy")]
+    pub smb_security_strategy: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateSMBSecurityStrategyOutput {
+    #[serde(rename = "GatewayARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateway_arn: Option<String>,
+}
+
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>UpdateSnapshotScheduleInput$Description</a> </p> </li> <li> <p> <a>UpdateSnapshotScheduleInput$RecurrenceInHours</a> </p> </li> <li> <p> <a>UpdateSnapshotScheduleInput$StartAt</a> </p> </li> <li> <p> <a>UpdateSnapshotScheduleInput$VolumeARN</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateSnapshotScheduleInput {
@@ -2942,6 +2986,47 @@ impl Error for AddWorkingStorageError {
         match *self {
             AddWorkingStorageError::InternalServerError(ref cause) => cause,
             AddWorkingStorageError::InvalidGatewayRequest(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AssignTapePool
+#[derive(Debug, PartialEq)]
+pub enum AssignTapePoolError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+}
+
+impl AssignTapePoolError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssignTapePoolError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(AssignTapePoolError::InternalServerError(err.msg))
+                }
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(AssignTapePoolError::InvalidGatewayRequest(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for AssignTapePoolError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssignTapePoolError {
+    fn description(&self) -> &str {
+        match *self {
+            AssignTapePoolError::InternalServerError(ref cause) => cause,
+            AssignTapePoolError::InvalidGatewayRequest(ref cause) => cause,
         }
     }
 }
@@ -5655,6 +5740,49 @@ impl Error for UpdateSMBFileShareError {
         }
     }
 }
+/// Errors returned by UpdateSMBSecurityStrategy
+#[derive(Debug, PartialEq)]
+pub enum UpdateSMBSecurityStrategyError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+}
+
+impl UpdateSMBSecurityStrategyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSMBSecurityStrategyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        UpdateSMBSecurityStrategyError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(
+                        UpdateSMBSecurityStrategyError::InvalidGatewayRequest(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateSMBSecurityStrategyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateSMBSecurityStrategyError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateSMBSecurityStrategyError::InternalServerError(ref cause) => cause,
+            UpdateSMBSecurityStrategyError::InvalidGatewayRequest(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateSnapshotSchedule
 #[derive(Debug, PartialEq)]
 pub enum UpdateSnapshotScheduleError {
@@ -5769,6 +5897,12 @@ pub trait StorageGateway {
         &self,
         input: AddWorkingStorageInput,
     ) -> RusotoFuture<AddWorkingStorageOutput, AddWorkingStorageError>;
+
+    /// <p>Assigns a tape to a tape pool for archiving. The tape assigned to a pool is archived in the S3 storage class that is associated with the pool. When you use your backup application to eject the tape, the tape is archived directly into the S3 storage class (Glacier or Deep Archive) that corresponds to the pool.</p> <p>Valid values: "GLACIER", "DEEP_ARCHIVE"</p>
+    fn assign_tape_pool(
+        &self,
+        input: AssignTapePoolInput,
+    ) -> RusotoFuture<AssignTapePoolOutput, AssignTapePoolError>;
 
     /// <p>Connects a volume to an iSCSI connection and then attaches the volume to the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance.</p>
     fn attach_volume(
@@ -6154,6 +6288,12 @@ pub trait StorageGateway {
         input: UpdateSMBFileShareInput,
     ) -> RusotoFuture<UpdateSMBFileShareOutput, UpdateSMBFileShareError>;
 
+    /// <p>Updates the SMB security strategy on a file gateway. This action is only supported in file gateways.</p>
+    fn update_smb_security_strategy(
+        &self,
+        input: UpdateSMBSecurityStrategyInput,
+    ) -> RusotoFuture<UpdateSMBSecurityStrategyOutput, UpdateSMBSecurityStrategyError>;
+
     /// <p>Updates a snapshot schedule configured for a gateway volume. This operation is only supported in the cached volume and stored volume gateway types.</p> <p>The default snapshot schedule for volume is once every 24 hours, starting at the creation time of the volume. You can use this API to change the snapshot schedule configured for the volume.</p> <p>In the request you must identify the gateway volume whose snapshot schedule you want to update, and the schedule information, including when you want the snapshot to begin on a day and the frequency (in hours) of snapshots.</p>
     fn update_snapshot_schedule(
         &self,
@@ -6339,6 +6479,35 @@ impl StorageGateway for StorageGatewayClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(AddWorkingStorageError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Assigns a tape to a tape pool for archiving. The tape assigned to a pool is archived in the S3 storage class that is associated with the pool. When you use your backup application to eject the tape, the tape is archived directly into the S3 storage class (Glacier or Deep Archive) that corresponds to the pool.</p> <p>Valid values: "GLACIER", "DEEP_ARCHIVE"</p>
+    fn assign_tape_pool(
+        &self,
+        input: AssignTapePoolInput,
+    ) -> RusotoFuture<AssignTapePoolOutput, AssignTapePoolError> {
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "StorageGateway_20130630.AssignTapePool");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AssignTapePoolOutput, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AssignTapePoolError::from_response(response))),
                 )
             }
         })
@@ -8227,6 +8396,35 @@ impl StorageGateway for StorageGatewayClient {
                         .from_err()
                         .and_then(|response| Err(UpdateSMBFileShareError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Updates the SMB security strategy on a file gateway. This action is only supported in file gateways.</p>
+    fn update_smb_security_strategy(
+        &self,
+        input: UpdateSMBSecurityStrategyInput,
+    ) -> RusotoFuture<UpdateSMBSecurityStrategyOutput, UpdateSMBSecurityStrategyError> {
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StorageGateway_20130630.UpdateSMBSecurityStrategy",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateSMBSecurityStrategyOutput, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateSMBSecurityStrategyError::from_response(response))
+                }))
             }
         })
     }

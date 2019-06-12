@@ -707,8 +707,10 @@ pub struct AllocateHostsRequest {
     pub auto_placement: Option<String>,
     /// <p>The Availability Zone in which to allocate the Dedicated Host.</p>
     pub availability_zone: String,
-    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p>
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
+    /// <p>Indicates whether to enable or disable host recovery for the Dedicated Host. Host recovery is disabled by default. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-recovery.html"> Host Recovery</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Default: <code>off</code> </p>
+    pub host_recovery: Option<String>,
     /// <p>Specifies the instance type for which to configure your Dedicated Hosts. When you specify the instance type, that is the only instance type that you can launch onto that host.</p>
     pub instance_type: String,
     /// <p>The number of Dedicated Hosts to allocate to your account with these parameters.</p>
@@ -735,6 +737,9 @@ impl AllocateHostsRequestSerializer {
         );
         if let Some(ref field_value) = obj.client_token {
             params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
+        }
+        if let Some(ref field_value) = obj.host_recovery {
+            params.put(&format!("{}{}", prefix, "HostRecovery"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "InstanceType"), &obj.instance_type);
         params.put(&format!("{}{}", prefix, "Quantity"), &obj.quantity);
@@ -5451,7 +5456,7 @@ pub struct CopyImageRequest {
     pub dry_run: Option<bool>,
     /// <p>Specifies whether the destination snapshots of the copied image should be encrypted. You can encrypt a copy of an unencrypted snapshot, but you cannot create an unencrypted copy of an encrypted snapshot. The default CMK for EBS is used unless you specify a non-default AWS Key Management Service (AWS KMS) CMK using <code>KmsKeyId</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub encrypted: Option<bool>,
-    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use when creating the encrypted volume. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID</p> </li> <li> <p>ARN using key ID. The ID ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. </p> </li> <li> <p>ARN using key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS parses <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. This action will eventually report failure. </p> <p>The specified CMK must exist in the Region that the snapshot is being copied to. </p>
+    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use when creating the encrypted volume. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>To specify a CMK, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. When using an alias name, prefix it with "alias/". For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul> <p>AWS parses <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. This action will eventually report failure. </p> <p>The specified CMK must exist in the Region that the snapshot is being copied to. </p>
     pub kms_key_id: Option<String>,
     /// <p>The name of the new AMI in the destination Region.</p>
     pub name: String,
@@ -5530,7 +5535,7 @@ pub struct CopySnapshotRequest {
     pub dry_run: Option<bool>,
     /// <p>Specifies whether the destination snapshot should be encrypted. You can encrypt a copy of an unencrypted snapshot, but you cannot use it to create an unencrypted copy of an encrypted snapshot. Your default CMK for EBS is used unless you specify a non-default AWS Key Management Service (AWS KMS) CMK using <code>KmsKeyId</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub encrypted: Option<bool>,
-    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use when creating the encrypted volume. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID</p> </li> <li> <p>Key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>.</p> </li> <li> <p>ARN using key ID. The ID ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. </p> </li> <li> <p>ARN using key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS parses <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. The action will eventually fail. </p>
+    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use to encrypt the volume. This parameter is only required if you want to use a customer-managed CMK; if this parameter is not specified, your AWS-managed CMK for the account is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID: For example, key/1234abcd-12ab-34cd-56ef-1234567890ab.</p> </li> <li> <p>Key alias: For example, alias/ExampleAlias. </p> </li> <li> <p>Key ARN: The key ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. </p> </li> <li> <p>Alias ARN: The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS authenticates <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. The action will eventually fail. </p>
     pub kms_key_id: Option<String>,
     /// <p>When you copy an encrypted source snapshot using the Amazon EC2 Query API, you must supply a pre-signed URL. This parameter is optional for unencrypted snapshots. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Query-Requests.html">Query Requests</a>.</p> <p>The <code>PresignedUrl</code> should use the snapshot source endpoint, the <code>CopySnapshot</code> action, and include the <code>SourceRegion</code>, <code>SourceSnapshotId</code>, and <code>DestinationRegion</code> parameters. The <code>PresignedUrl</code> must be signed using AWS Signature Version 4. Because EBS snapshots are stored in Amazon S3, the signing algorithm for this parameter uses the same logic that is described in <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html">Authenticating Requests by Using Query Parameters (AWS Signature Version 4)</a> in the <i>Amazon Simple Storage Service API Reference</i>. An invalid or improperly signed <code>PresignedUrl</code> will cause the copy operation to fail asynchronously, and the snapshot will move to an <code>error</code> state.</p>
     pub presigned_url: Option<String>,
@@ -6741,7 +6746,7 @@ impl CreateFpgaImageResultDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateImageRequest {
-    /// <p>Tthe block device mappings. This parameter cannot be used to modify the encryption status of existing volumes or snapshots. To create an AMI with encrypted snapshots, use the <a>CopyImage</a> action.</p>
+    /// <p>The block device mappings. This parameter cannot be used to modify the encryption status of existing volumes or snapshots. To create an AMI with encrypted snapshots, use the <a>CopyImage</a> action.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     /// <p>A description for the new image.</p>
     pub description: Option<String>,
@@ -7841,6 +7846,79 @@ impl CreateSnapshotRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateSnapshotsRequest {
+    /// <p>Copies the tags from the specified instance to all snapshots.</p>
+    pub copy_tags_from_source: Option<String>,
+    /// <p> A description propagated to every snapshot specified by the instance.</p>
+    pub description: Option<String>,
+    /// <p>Checks whether you have the required permissions for the action without actually making the request. Provides an error response. If you have the required permissions, the error response is DryRunOperation. Otherwise, it is UnauthorizedOperation.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The instance to specify which volumes should be included in the snapshots.</p>
+    pub instance_specification: InstanceSpecification,
+    /// <p>Tags to apply to every snapshot specified by the instance.</p>
+    pub tag_specifications: Option<Vec<TagSpecification>>,
+}
+
+/// Serialize `CreateSnapshotsRequest` contents to a `SignedRequest`.
+struct CreateSnapshotsRequestSerializer;
+impl CreateSnapshotsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateSnapshotsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.copy_tags_from_source {
+            params.put(&format!("{}{}", prefix, "CopyTagsFromSource"), &field_value);
+        }
+        if let Some(ref field_value) = obj.description {
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+        }
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        InstanceSpecificationSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "InstanceSpecification"),
+            &obj.instance_specification,
+        );
+        if let Some(ref field_value) = obj.tag_specifications {
+            TagSpecificationListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TagSpecification"),
+                field_value,
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateSnapshotsResult {
+    /// <p>List of snapshots.</p>
+    pub snapshots: Option<Vec<SnapshotInfo>>,
+}
+
+struct CreateSnapshotsResultDeserializer;
+impl CreateSnapshotsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateSnapshotsResult, XmlParseError> {
+        deserialize_elements::<_, CreateSnapshotsResult, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "snapshotSet" => {
+                    obj.snapshots
+                        .get_or_insert(vec![])
+                        .extend(SnapshotSetDeserializer::deserialize("snapshotSet", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>Contains the parameters for CreateSpotDatafeedSubscription.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateSpotDatafeedSubscriptionRequest {
@@ -8460,11 +8538,11 @@ pub struct CreateVolumeRequest {
     pub availability_zone: String,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>Specifies the encryption state of the volume. The default effect of setting the <code>Encrypted</code> parameter to <code>true</code> through the console, API, or CLI depends on the volume's origin (new or from a snapshot), starting encryption state, ownership, and whether <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/account-level-encryption.html">account-level encryption</a> is enabled. Each default case can be overridden by specifying a customer master key (CMK) with the <code>KmsKeyId</code> parameter in addition to setting <code>Encrypted</code> to <code>true</code>. For a complete list of possible encryption cases, see <a href="AWSEC2/latest/UserGuide/EBSEncryption.htm">Amazon EBS Encryption</a>. </p> <p>Encrypted Amazon EBS volumes may only be attached to instances that support Amazon EBS encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>.</p>
+    /// <p>Specifies the encryption state of the volume. The default effect of setting the <code>Encrypted</code> parameter to <code>true</code> depends on the volume origin (new or from a snapshot), starting encryption state, ownership, and whether <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/account-level-encryption.html">account-level encryption</a> is enabled. Each default case can be overridden by specifying a customer master key (CMK) using the <code>KmsKeyId</code> parameter, in addition to setting <code>Encrypted</code> to <code>true</code>. For a complete list of possible encryption cases, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#encryption-by-default">Amazon EBS Encryption</a>.</p> <p>Encrypted Amazon EBS volumes may only be attached to instances that support Amazon EBS encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>.</p>
     pub encrypted: Option<bool>,
     /// <p>The number of I/O operations per second (IOPS) to provision for the volume, with a maximum ratio of 50 IOPS/GiB. Range is 100 to 64,000 IOPS for volumes in most Regions. Maximum IOPS of 64,000 is guaranteed only on <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances">Nitro-based instances</a>. Other instance families guarantee performance up to 32,000 IOPS. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>This parameter is valid only for Provisioned IOPS SSD (io1) volumes.</p>
     pub iops: Option<i64>,
-    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use to encrypt the volume. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID</p> </li> <li> <p>Key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>.</p> </li> <li> <p>ARN using key ID. The ID ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. </p> </li> <li> <p>ARN using key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS parses <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. The action will eventually fail. </p>
+    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use to encrypt the volume. This parameter is only required if you want to use a customer-managed CMK; if this parameter is not specified, your AWS-managed CMK for the account is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID: For example, key/1234abcd-12ab-34cd-56ef-1234567890ab.</p> </li> <li> <p>Key alias: For example, alias/ExampleAlias. </p> </li> <li> <p>Key ARN: The key ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. </p> </li> <li> <p>Alias ARN: The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS authenticates <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. The action will eventually fail. </p>
     pub kms_key_id: Option<String>,
     /// <p><p>The size of the volume, in GiBs.</p> <p>Constraints: 1-16,384 for <code>gp2</code>, 4-16,384 for <code>io1</code>, 500-16,384 for <code>st1</code>, 500-16,384 for <code>sc1</code>, and 1-1,024 for <code>standard</code>. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p> <p>Default: If you&#39;re creating the volume from a snapshot and don&#39;t specify a volume size, the default is the snapshot size.</p> <note> <p>At least one of Size or SnapshotId is required.</p> </note></p>
     pub size: Option<i64>,
@@ -9768,7 +9846,7 @@ impl DeleteFleetsResultDeserializer {
 pub struct DeleteFlowLogsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>One or more flow log IDs.</p>
+    /// <p>One or more flow log IDs.</p> <p>Constraint: Maximum of 1000 flow log IDs.</p>
     pub flow_log_ids: Vec<String>,
 }
 
@@ -13211,7 +13289,7 @@ pub struct DescribeFlowLogsRequest {
     pub dry_run: Option<bool>,
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>deliver-log-status</code> - The status of the logs delivery (<code>SUCCESS</code> | <code>FAILED</code>).</p> </li> <li> <p> <code>log-destination-type</code> - The type of destination to which the flow log publishes data. Possible destination types include <code>cloud-watch-logs</code> and <code>S3</code>.</p> </li> <li> <p> <code>flow-log-id</code> - The ID of the flow log.</p> </li> <li> <p> <code>log-group-name</code> - The name of the log group.</p> </li> <li> <p> <code>resource-id</code> - The ID of the VPC, subnet, or network interface.</p> </li> <li> <p> <code>traffic-type</code> - The type of traffic (<code>ACCEPT</code> | <code>REJECT</code> | <code>ALL</code>).</p> </li> </ul></p>
     pub filter: Option<Vec<Filter>>,
-    /// <p>One or more flow log IDs.</p>
+    /// <p>One or more flow log IDs.</p> <p>Constraint: Maximum of 1000 flow log IDs.</p>
     pub flow_log_ids: Option<Vec<String>>,
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     pub max_results: Option<i64>,
@@ -13611,9 +13689,9 @@ pub struct DescribeHostsRequest {
     pub filter: Option<Vec<Filter>>,
     /// <p>The IDs of the Dedicated Hosts. The IDs are used for targeted instance launches.</p>
     pub host_ids: Option<Vec<String>>,
-    /// <p>The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the returned <code>nextToken</code> value. This value can be between 5 and 500. If <code>maxResults</code> is given a larger value than 500, you receive an error. You cannot specify this parameter and the host IDs parameter in the same request.</p>
+    /// <p>The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the returned <code>nextToken</code> value. This value can be between 5 and 500. If <code>maxResults</code> is given a larger value than 500, you receive an error.</p> <p>You cannot specify this parameter and the host IDs parameter in the same request.</p>
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next page of results.</p>
+    /// <p>The token to use to retrieve the next page of results.</p>
     pub next_token: Option<String>,
 }
 
@@ -24060,12 +24138,14 @@ pub struct Host {
     pub availability_zone: Option<String>,
     /// <p>The number of new instances that can be launched onto the Dedicated Host.</p>
     pub available_capacity: Option<AvailableCapacity>,
-    /// <p>Unique, case-sensitive identifier that you provide to ensure idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p>
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
     /// <p>The ID of the Dedicated Host.</p>
     pub host_id: Option<String>,
     /// <p>The hardware specifications of the Dedicated Host.</p>
     pub host_properties: Option<HostProperties>,
+    /// <p>Indicates whether host recovery is enabled or disabled for the Dedicated Host.</p>
+    pub host_recovery: Option<String>,
     /// <p>The reservation ID of the Dedicated Host. This returns a <code>null</code> response if the Dedicated Host doesn't have an associated reservation.</p>
     pub host_reservation_id: Option<String>,
     /// <p>The IDs and instance type that are currently running on the Dedicated Host.</p>
@@ -24113,6 +24193,12 @@ impl HostDeserializer {
                 "hostProperties" => {
                     obj.host_properties = Some(HostPropertiesDeserializer::deserialize(
                         "hostProperties",
+                        stack,
+                    )?);
+                }
+                "hostRecovery" => {
+                    obj.host_recovery = Some(HostRecoveryDeserializer::deserialize(
+                        "hostRecovery",
                         stack,
                     )?);
                 }
@@ -24327,6 +24413,17 @@ impl HostPropertiesDeserializer {
             }
             Ok(())
         })
+    }
+}
+struct HostRecoveryDeserializer;
+impl HostRecoveryDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
     }
 }
 /// <p>Details about the Dedicated Host Reservation and associated Dedicated Hosts.</p>
@@ -27481,7 +27578,7 @@ pub struct InstanceNetworkInterfaceSpecification {
     pub device_index: Option<i64>,
     /// <p>The IDs of the security groups for the network interface. Applies only if creating a network interface when launching an instance.</p>
     pub groups: Option<Vec<String>>,
-    /// <p>The type of network interface. To create an Elastic Fabric Adapter (EFA), specify <code>efa</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html">Elastic Fabric Adapter</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>If you are not creating an EFA, specify <code>interface</code> or omit this parameter.</p> <p>Valide values: <code>interface</code> | <code>efa</code> </p>
+    /// <p>The type of network interface. To create an Elastic Fabric Adapter (EFA), specify <code>efa</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html">Elastic Fabric Adapter</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>If you are not creating an EFA, specify <code>interface</code> or omit this parameter.</p> <p>Valid values: <code>interface</code> | <code>efa</code> </p>
     pub interface_type: Option<String>,
     /// <p>A number of IPv6 addresses to assign to the network interface. Amazon EC2 chooses the IPv6 addresses from the range of the subnet. You cannot specify this option and the option to assign specific IPv6 addresses in the same request. You can specify this option if you've specified a minimum number of instances to launch.</p>
     pub ipv_6_address_count: Option<i64>,
@@ -27768,6 +27865,33 @@ impl InstancePrivateIpAddressListDeserializer {
         })
     }
 }
+/// <p>The instance details to specify which volumes should be snapshotted.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InstanceSpecification {
+    /// <p>Excludes the root volume from being snapshotted.</p>
+    pub exclude_boot_volume: Option<bool>,
+    /// <p>The instance to specify which volumes should be snapshotted.</p>
+    pub instance_id: Option<String>,
+}
+
+/// Serialize `InstanceSpecification` contents to a `SignedRequest`.
+struct InstanceSpecificationSerializer;
+impl InstanceSpecificationSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &InstanceSpecification) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.exclude_boot_volume {
+            params.put(&format!("{}{}", prefix, "ExcludeBootVolume"), &field_value);
+        }
+        if let Some(ref field_value) = obj.instance_id {
+            params.put(&format!("{}{}", prefix, "InstanceId"), &field_value);
+        }
+    }
+}
+
 /// <p>Describes the current state of an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceState {
@@ -30054,7 +30178,7 @@ pub struct LaunchTemplateInstanceNetworkInterfaceSpecificationRequest {
     pub device_index: Option<i64>,
     /// <p>The IDs of one or more security groups.</p>
     pub groups: Option<Vec<String>>,
-    /// <p>The type of networking interface.</p>
+    /// <p>The type of network interface. To create an Elastic Fabric Adapter (EFA), specify <code>efa</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html">Elastic Fabric Adapter</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>If you are not creating an EFA, specify <code>interface</code> or omit this parameter.</p> <p>Valid values: <code>interface</code> | <code>efa</code> </p>
     pub interface_type: Option<String>,
     /// <p>The number of IPv6 addresses to assign to a network interface. Amazon EC2 automatically selects the IPv6 addresses from the subnet range. You can't use this option if specifying specific IPv6 addresses.</p>
     pub ipv_6_address_count: Option<i64>,
@@ -31399,7 +31523,7 @@ impl ModifyClientVpnEndpointResultDeserializer {
 pub struct ModifyEbsDefaultKmsKeyIdRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use to encrypt the volume. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID</p> </li> <li> <p>Key alias</p> </li> <li> <p>ARN using key ID. The ID ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. </p> </li> <li> <p>ARN using key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul></p>
+    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use to encrypt the volume. This parameter is only required if you want to use a customer-managed CMK; if this parameter is not specified, your AWS-managed CMK for the account is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID: For example, key/1234abcd-12ab-34cd-56ef-1234567890ab.</p> </li> <li> <p>Key alias: For example, alias/ExampleAlias. </p> </li> <li> <p>Key ARN: The key ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. </p> </li> <li> <p>Alias ARN: The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS authenticates <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. The action will eventually fail. </p>
     pub kms_key_id: String,
 }
 
@@ -31625,9 +31749,11 @@ impl ModifyFpgaImageAttributeResultDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyHostsRequest {
     /// <p>Specify whether to enable or disable auto-placement.</p>
-    pub auto_placement: String,
+    pub auto_placement: Option<String>,
     /// <p>The IDs of the Dedicated Hosts to modify.</p>
     pub host_ids: Vec<String>,
+    /// <p>Indicates whether to enable or disable host recovery for the Dedicated Host. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-recovery.html"> Host Recovery</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    pub host_recovery: Option<String>,
 }
 
 /// Serialize `ModifyHostsRequest` contents to a `SignedRequest`.
@@ -31639,15 +31765,17 @@ impl ModifyHostsRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "AutoPlacement"),
-            &obj.auto_placement,
-        );
+        if let Some(ref field_value) = obj.auto_placement {
+            params.put(&format!("{}{}", prefix, "AutoPlacement"), &field_value);
+        }
         RequestHostIdListSerializer::serialize(
             params,
             &format!("{}{}", prefix, "HostId"),
             &obj.host_ids,
         );
+        if let Some(ref field_value) = obj.host_recovery {
+            params.put(&format!("{}{}", prefix, "HostRecovery"), &field_value);
+        }
     }
 }
 
@@ -36214,7 +36342,7 @@ impl PurchaseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PurchaseHostReservationRequest {
-    /// <p>Unique, case-sensitive identifier you provide to ensure idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
     /// <p>The currency in which the <code>totalUpfrontPrice</code>, <code>LimitPrice</code>, and <code>totalHourlyPrice</code> amounts are specified. At this time, the only supported currency is <code>USD</code>.</p>
     pub currency_code: Option<String>,
@@ -36255,7 +36383,7 @@ impl PurchaseHostReservationRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PurchaseHostReservationResult {
-    /// <p>Unique, case-sensitive identifier you provide to ensure idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
     /// <p>The currency in which the <code>totalUpfrontPrice</code> and <code>totalHourlyPrice</code> amounts are specified. At this time, the only supported currency is <code>USD</code>.</p>
     pub currency_code: Option<String>,
@@ -36709,7 +36837,7 @@ pub struct RegisterImageRequest {
     pub dry_run: Option<bool>,
     /// <p>Set to <code>true</code> to enable enhanced networking with ENA for the AMI and any instances that you launch from the AMI.</p> <p>This option is supported only for HVM AMIs. Specifying this option with a PV AMI can make instances launched from the AMI unreachable.</p>
     pub ena_support: Option<bool>,
-    /// <p>The full path to your AMI manifest in Amazon S3 storage.</p>
+    /// <p>The full path to your AMI manifest in Amazon S3 storage. The specified bucket must have the <code>aws-exec-read</code> canned access control list (ACL) to ensure that it can be accessed by Amazon EC2. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl">Canned ACLs</a> in the <i>Amazon S3 Service Developer Guide</i>.</p>
     pub image_location: Option<String>,
     /// <p>The ID of the kernel.</p>
     pub kernel_id: Option<String>,
@@ -40241,7 +40369,7 @@ impl RunInstancesMonitoringEnabledSerializer {
 pub struct RunInstancesRequest {
     /// <p>Reserved.</p>
     pub additional_info: Option<String>,
-    /// <p>The block device mapping entries. You can't specify both a snapshot ID and an encryption value. This is because only blank volumes can be encrypted on creation. If a snapshot is the basis for a volume, it is not blank and its encryption status is used for the volume encryption status.</p>
+    /// <p>The block device mapping entries.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     /// <p>Information about the Capacity Reservation targeting option. If you do not specify this parameter, the instance's Capacity Reservation preference defaults to <code>open</code>, which enables it to run in any open Capacity Reservation that has matching attributes (instance type, platform, Availability Zone).</p>
     pub capacity_reservation_specification: Option<CapacityReservationSpecification>,
@@ -42408,6 +42536,81 @@ impl SnapshotIdStringListSerializer {
     }
 }
 
+/// <p>Object that contains information about a snapshot.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SnapshotInfo {
+    /// <p>Description specified by the CreateSnapshotRequest that has been applied to all snapshots.</p>
+    pub description: Option<String>,
+    /// <p>Boolean that specifies whether or not this snapshot is encrypted.</p>
+    pub encrypted: Option<bool>,
+    /// <p>Account id used when creating this snapshot.</p>
+    pub owner_id: Option<String>,
+    /// <p>Progress this snapshot has made towards completing.</p>
+    pub progress: Option<String>,
+    /// <p>Snapshot id that can be used to describe this snapshot.</p>
+    pub snapshot_id: Option<String>,
+    /// <p>Time this snapshot was started. This is the same for all snapshots initiated by the same request.</p>
+    pub start_time: Option<String>,
+    /// <p>Current state of the snapshot.</p>
+    pub state: Option<String>,
+    /// <p>Tags associated with this snapshot.</p>
+    pub tags: Option<Vec<Tag>>,
+    /// <p>Source volume from which this snapshot was created.</p>
+    pub volume_id: Option<String>,
+    /// <p>Size of the volume from which this snapshot was created.</p>
+    pub volume_size: Option<i64>,
+}
+
+struct SnapshotInfoDeserializer;
+impl SnapshotInfoDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SnapshotInfo, XmlParseError> {
+        deserialize_elements::<_, SnapshotInfo, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "description" => {
+                    obj.description = Some(StringDeserializer::deserialize("description", stack)?);
+                }
+                "encrypted" => {
+                    obj.encrypted = Some(BooleanDeserializer::deserialize("encrypted", stack)?);
+                }
+                "ownerId" => {
+                    obj.owner_id = Some(StringDeserializer::deserialize("ownerId", stack)?);
+                }
+                "progress" => {
+                    obj.progress = Some(StringDeserializer::deserialize("progress", stack)?);
+                }
+                "snapshotId" => {
+                    obj.snapshot_id = Some(StringDeserializer::deserialize("snapshotId", stack)?);
+                }
+                "startTime" => {
+                    obj.start_time = Some(MillisecondDateTimeDeserializer::deserialize(
+                        "startTime",
+                        stack,
+                    )?);
+                }
+                "state" => {
+                    obj.state = Some(SnapshotStateDeserializer::deserialize("state", stack)?);
+                }
+                "tagSet" => {
+                    obj.tags
+                        .get_or_insert(vec![])
+                        .extend(TagListDeserializer::deserialize("tagSet", stack)?);
+                }
+                "volumeId" => {
+                    obj.volume_id = Some(StringDeserializer::deserialize("volumeId", stack)?);
+                }
+                "volumeSize" => {
+                    obj.volume_size = Some(IntegerDeserializer::deserialize("volumeSize", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 struct SnapshotListDeserializer;
 impl SnapshotListDeserializer {
     #[allow(unused_variables)]
@@ -42418,6 +42621,23 @@ impl SnapshotListDeserializer {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "item" {
                 obj.push(SnapshotDeserializer::deserialize("item", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+struct SnapshotSetDeserializer;
+impl SnapshotSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<SnapshotInfo>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(SnapshotInfoDeserializer::deserialize("item", stack)?);
             } else {
                 skip_tree(stack);
             }
@@ -52146,6 +52366,44 @@ impl fmt::Display for CreateSnapshotError {
     }
 }
 impl Error for CreateSnapshotError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by CreateSnapshots
+#[derive(Debug, PartialEq)]
+pub enum CreateSnapshotsError {}
+
+impl CreateSnapshotsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSnapshotsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateSnapshotsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateSnapshotsError {
     fn description(&self) -> &str {
         match *self {}
     }
@@ -62756,13 +63014,13 @@ pub trait Ec2 {
         input: AuthorizeClientVpnIngressRequest,
     ) -> RusotoFuture<AuthorizeClientVpnIngressResult, AuthorizeClientVpnIngressError>;
 
-    /// <p>[VPC only] Adds the specified egress rules to a security group for use with a VPC.</p> <p>An outbound rule permits instances to send traffic to the specified destination IPv4 or IPv6 CIDR address ranges, or to the specified destination security groups for the same VPC.</p> <p>You specify a protocol for each rule (for example, TCP). For the TCP and UDP protocols, you must also specify the destination port or port range. For the ICMP protocol, you must also specify the ICMP type and code. You can use -1 for the type or code to mean all types or all codes.</p> <p>Rule changes are propagated to affected instances as quickly as possible. However, a small delay might occur.</p> <p>For more information about VPC security group limits, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html">Amazon VPC Limits</a>.</p>
+    /// <p>[VPC only] Adds the specified egress rules to a security group for use with a VPC.</p> <p>An outbound rule permits instances to send traffic to the specified IPv4 or IPv6 CIDR address ranges, or to the instances associated with the specified destination security groups.</p> <p>You specify a protocol for each rule (for example, TCP). For the TCP and UDP protocols, you must also specify the destination port or port range. For the ICMP protocol, you must also specify the ICMP type and code. You can use -1 for the type or code to mean all types or all codes.</p> <p>Rule changes are propagated to affected instances as quickly as possible. However, a small delay might occur.</p> <p>For more information about VPC security group limits, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html">Amazon VPC Limits</a>.</p>
     fn authorize_security_group_egress(
         &self,
         input: AuthorizeSecurityGroupEgressRequest,
     ) -> RusotoFuture<(), AuthorizeSecurityGroupEgressError>;
 
-    /// <p>Adds the specified ingress rules to a security group.</p> <p>An inbound rule permits instances to receive traffic from the specified destination IPv4 or IPv6 CIDR address ranges, or from the specified destination security groups.</p> <p>You specify a protocol for each rule (for example, TCP). For TCP and UDP, you must also specify the destination port or port range. For ICMP/ICMPv6, you must also specify the ICMP/ICMPv6 type and code. You can use -1 to mean all types or all codes.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p> <p>For more information about VPC security group limits, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html">Amazon VPC Limits</a>.</p>
+    /// <p>Adds the specified ingress rules to a security group.</p> <p>An inbound rule permits instances to receive traffic from the specified IPv4 or IPv6 CIDR address ranges, or from the instances associated with the specified destination security groups.</p> <p>You specify a protocol for each rule (for example, TCP). For TCP and UDP, you must also specify the destination port or port range. For ICMP/ICMPv6, you must also specify the ICMP/ICMPv6 type and code. You can use -1 to mean all types or all codes.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p> <p>For more information about VPC security group limits, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html">Amazon VPC Limits</a>.</p>
     fn authorize_security_group_ingress(
         &self,
         input: AuthorizeSecurityGroupIngressRequest,
@@ -63010,6 +63268,12 @@ pub trait Ec2 {
         &self,
         input: CreateSnapshotRequest,
     ) -> RusotoFuture<Snapshot, CreateSnapshotError>;
+
+    /// <p>Creates crash-consistent snapshots of multiple EBS volumes and stores the data in S3. Volumes are chosen by specifying an instance. Any attached volumes will produce one snapshot each that is crash-consistent across the instance. Boot volumes can be excluded by changing the paramaters. </p>
+    fn create_snapshots(
+        &self,
+        input: CreateSnapshotsRequest,
+    ) -> RusotoFuture<CreateSnapshotsResult, CreateSnapshotsError>;
 
     /// <p>Creates a data feed for Spot Instances, enabling you to view Spot Instance usage logs. You can create one data feed per AWS account. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-data-feeds.html">Spot Instance Data Feed</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     fn create_spot_datafeed_subscription(
@@ -64049,7 +64313,7 @@ pub trait Ec2 {
         input: DisassociateVpcCidrBlockRequest,
     ) -> RusotoFuture<DisassociateVpcCidrBlockResult, DisassociateVpcCidrBlockError>;
 
-    /// <p>Enables default encryption for EBS volumes that are created in your account in the current region.</p> <p>Once encryption is enabled with this action, EBS volumes that are created in your account will always be encrypted even if encryption is not specified at launch. This setting overrides the <i>encrypted</i> setting to <i>true</i> in all API calls that create EBS volumes in your account. A volume will be encrypted even if you specify <i>encryption</i> to be <i>false</i> in the API call that creates the volume.</p> <p>If you do not specify a customer master key (CMK) in the API call that creates the EBS volume, then the volume is encrypted to your AWS account's default CMK.</p> <p>You can specify a default CMK of your choice using <a>ModifyEbsDefaultKmsKeyId</a>.</p> <p>Enabling default encryption for EBS volumes has no effect on existing unencrypted volumes in your account. Encrypting the data in these requires manual action. You can either create an encrypted snapshot of an unencrypted volume, or encrypt a copy of an unencrypted snapshot. Any volume restored from an encrypted snapshot is also encrypted. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html">Amazon EBS Snapshots</a>.</p> <p>Once EBS encryption by default is enabled, you can no longer launch older-generation instance types that do not support encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>.</p>
+    /// <p>Enables default encryption for EBS volumes that are created in your account in the current region.</p> <p>Once encryption is enabled with this action, EBS volumes that are created in your account will always be encrypted even if encryption is not specified at launch. This setting overrides the <i>encrypted</i> setting to <i>true</i> in all API calls that create EBS volumes in your account. A volume will be encrypted even if you specify <i>encryption</i> to be <i>false</i> in the API call that creates the volume.</p> <p>If you do not specify a customer master key (CMK) in the API call that creates the EBS volume, then the volume is encrypted to your AWS account's managed CMK.</p> <p>You can specify a CMK of your choice using <a>ModifyEbsDefaultKmsKeyId</a>.</p> <p>Enabling encryption-by-default for EBS volumes has no effect on existing unencrypted volumes in your account. Encrypting the data in these requires manual action. You can either create an encrypted snapshot of an unencrypted volume, or encrypt a copy of an unencrypted snapshot. Any volume restored from an encrypted snapshot is also encrypted. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html">Amazon EBS Snapshots</a>.</p> <p>After EBS encryption-by-default is enabled, you can no longer launch older-generation instance types that do not support encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>.</p>
     fn enable_ebs_encryption_by_default(
         &self,
         input: EnableEbsEncryptionByDefaultRequest,
@@ -64238,7 +64502,7 @@ pub trait Ec2 {
         input: ModifyClientVpnEndpointRequest,
     ) -> RusotoFuture<ModifyClientVpnEndpointResult, ModifyClientVpnEndpointError>;
 
-    /// <p>Changes the default customer master key (CMK) that your account uses to encrypt EBS volumes if you don’t specify a CMK in the API call.</p> <p>Your account has an AWS-managed default CMK that is used for encrypting an EBS volume when no CMK is specified in the API call that creates the volume. By calling this API, you can specify a customer-managed CMK to use in place of the AWS-managed default CMK.</p> <p>Note: Deleting or disabling the custom CMK that you have specified to act as your default CMK will result in instance-launch failures.</p>
+    /// <p>Changes the customer master key (CMK) that your account uses to encrypt EBS volumes if you don't specify a CMK in the API call.</p> <p>By default, your account has an AWS-managed CMK that is used for encrypting an EBS volume when no CMK is specified in the API call that creates the volume. By calling this API, you can specify a customer-managed CMK to use in place of the AWS-managed CMK.</p> <p>Note: Deleting or disabling the CMK that you have specified to act as your default CMK will result in instance-launch failures.</p>
     fn modify_ebs_default_kms_key_id(
         &self,
         input: ModifyEbsDefaultKmsKeyIdRequest,
@@ -65801,7 +66065,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>[VPC only] Adds the specified egress rules to a security group for use with a VPC.</p> <p>An outbound rule permits instances to send traffic to the specified destination IPv4 or IPv6 CIDR address ranges, or to the specified destination security groups for the same VPC.</p> <p>You specify a protocol for each rule (for example, TCP). For the TCP and UDP protocols, you must also specify the destination port or port range. For the ICMP protocol, you must also specify the ICMP type and code. You can use -1 for the type or code to mean all types or all codes.</p> <p>Rule changes are propagated to affected instances as quickly as possible. However, a small delay might occur.</p> <p>For more information about VPC security group limits, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html">Amazon VPC Limits</a>.</p>
+    /// <p>[VPC only] Adds the specified egress rules to a security group for use with a VPC.</p> <p>An outbound rule permits instances to send traffic to the specified IPv4 or IPv6 CIDR address ranges, or to the instances associated with the specified destination security groups.</p> <p>You specify a protocol for each rule (for example, TCP). For the TCP and UDP protocols, you must also specify the destination port or port range. For the ICMP protocol, you must also specify the ICMP type and code. You can use -1 for the type or code to mean all types or all codes.</p> <p>Rule changes are propagated to affected instances as quickly as possible. However, a small delay might occur.</p> <p>For more information about VPC security group limits, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html">Amazon VPC Limits</a>.</p>
     fn authorize_security_group_egress(
         &self,
         input: AuthorizeSecurityGroupEgressRequest,
@@ -65826,7 +66090,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Adds the specified ingress rules to a security group.</p> <p>An inbound rule permits instances to receive traffic from the specified destination IPv4 or IPv6 CIDR address ranges, or from the specified destination security groups.</p> <p>You specify a protocol for each rule (for example, TCP). For TCP and UDP, you must also specify the destination port or port range. For ICMP/ICMPv6, you must also specify the ICMP/ICMPv6 type and code. You can use -1 to mean all types or all codes.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p> <p>For more information about VPC security group limits, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html">Amazon VPC Limits</a>.</p>
+    /// <p>Adds the specified ingress rules to a security group.</p> <p>An inbound rule permits instances to receive traffic from the specified IPv4 or IPv6 CIDR address ranges, or from the instances associated with the specified destination security groups.</p> <p>You specify a protocol for each rule (for example, TCP). For TCP and UDP, you must also specify the destination port or port range. For ICMP/ICMPv6, you must also specify the ICMP/ICMPv6 type and code. You can use -1 to mean all types or all codes.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p> <p>For more information about VPC security group limits, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html">Amazon VPC Limits</a>.</p>
     fn authorize_security_group_ingress(
         &self,
         input: AuthorizeSecurityGroupIngressRequest,
@@ -67665,6 +67929,54 @@ impl Ec2 for Ec2Client {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     result = SnapshotDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Creates crash-consistent snapshots of multiple EBS volumes and stores the data in S3. Volumes are chosen by specifying an instance. Any attached volumes will produce one snapshot each that is crash-consistent across the instance. Boot volumes can be excluded by changing the paramaters. </p>
+    fn create_snapshots(
+        &self,
+        input: CreateSnapshotsRequest,
+    ) -> RusotoFuture<CreateSnapshotsResult, CreateSnapshotsError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateSnapshots");
+        params.put("Version", "2016-11-15");
+        CreateSnapshotsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateSnapshotsError::from_response(response))),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = CreateSnapshotsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = CreateSnapshotsResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
                 }
                 // parse non-payload
                 Ok(result)
@@ -74937,7 +75249,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Enables default encryption for EBS volumes that are created in your account in the current region.</p> <p>Once encryption is enabled with this action, EBS volumes that are created in your account will always be encrypted even if encryption is not specified at launch. This setting overrides the <i>encrypted</i> setting to <i>true</i> in all API calls that create EBS volumes in your account. A volume will be encrypted even if you specify <i>encryption</i> to be <i>false</i> in the API call that creates the volume.</p> <p>If you do not specify a customer master key (CMK) in the API call that creates the EBS volume, then the volume is encrypted to your AWS account's default CMK.</p> <p>You can specify a default CMK of your choice using <a>ModifyEbsDefaultKmsKeyId</a>.</p> <p>Enabling default encryption for EBS volumes has no effect on existing unencrypted volumes in your account. Encrypting the data in these requires manual action. You can either create an encrypted snapshot of an unencrypted volume, or encrypt a copy of an unencrypted snapshot. Any volume restored from an encrypted snapshot is also encrypted. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html">Amazon EBS Snapshots</a>.</p> <p>Once EBS encryption by default is enabled, you can no longer launch older-generation instance types that do not support encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>.</p>
+    /// <p>Enables default encryption for EBS volumes that are created in your account in the current region.</p> <p>Once encryption is enabled with this action, EBS volumes that are created in your account will always be encrypted even if encryption is not specified at launch. This setting overrides the <i>encrypted</i> setting to <i>true</i> in all API calls that create EBS volumes in your account. A volume will be encrypted even if you specify <i>encryption</i> to be <i>false</i> in the API call that creates the volume.</p> <p>If you do not specify a customer master key (CMK) in the API call that creates the EBS volume, then the volume is encrypted to your AWS account's managed CMK.</p> <p>You can specify a CMK of your choice using <a>ModifyEbsDefaultKmsKeyId</a>.</p> <p>Enabling encryption-by-default for EBS volumes has no effect on existing unencrypted volumes in your account. Encrypting the data in these requires manual action. You can either create an encrypted snapshot of an unencrypted volume, or encrypt a copy of an unencrypted snapshot. Any volume restored from an encrypted snapshot is also encrypted. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html">Amazon EBS Snapshots</a>.</p> <p>After EBS encryption-by-default is enabled, you can no longer launch older-generation instance types that do not support encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>.</p>
     fn enable_ebs_encryption_by_default(
         &self,
         input: EnableEbsEncryptionByDefaultRequest,
@@ -76237,7 +76549,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Changes the default customer master key (CMK) that your account uses to encrypt EBS volumes if you don’t specify a CMK in the API call.</p> <p>Your account has an AWS-managed default CMK that is used for encrypting an EBS volume when no CMK is specified in the API call that creates the volume. By calling this API, you can specify a customer-managed CMK to use in place of the AWS-managed default CMK.</p> <p>Note: Deleting or disabling the custom CMK that you have specified to act as your default CMK will result in instance-launch failures.</p>
+    /// <p>Changes the customer master key (CMK) that your account uses to encrypt EBS volumes if you don't specify a CMK in the API call.</p> <p>By default, your account has an AWS-managed CMK that is used for encrypting an EBS volume when no CMK is specified in the API call that creates the volume. By calling this API, you can specify a customer-managed CMK to use in place of the AWS-managed CMK.</p> <p>Note: Deleting or disabling the CMK that you have specified to act as your default CMK will result in instance-launch failures.</p>
     fn modify_ebs_default_kms_key_id(
         &self,
         input: ModifyEbsDefaultKmsKeyIdRequest,

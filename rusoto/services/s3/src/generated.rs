@@ -36,10 +36,10 @@ use xml::reader::ParserConfig;
 use xml::EventReader;
 use xml::EventWriter;
 
-/// <p>Specifies the days since the initiation of an Incomplete Multipart Upload that Lifecycle will wait before permanently removing all parts of the upload.</p>
+/// <p>Specifies the days since the initiation of an incomplete multipart upload that Amazon S3 will wait before permanently removing all parts of the upload. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html#mpu-abort-incomplete-mpu-lifecycle-config"> Aborting Incomplete Multipart Uploads Using a Bucket Lifecycle Policy</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AbortIncompleteMultipartUpload {
-    /// <p>Indicates the number of days that must pass since initiation for Lifecycle to abort an Incomplete Multipart Upload.</p>
+    /// <p>Specifies the number of days after which Amazon S3 aborts an incomplete multipart upload.</p>
     pub days_after_initiation: Option<i64>,
 }
 
@@ -117,19 +117,19 @@ impl AbortMultipartUploadOutputDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AbortMultipartUploadRequest {
-    /// <p><p/></p>
+    /// <p>Name of the bucket to which the multipart upload was initiated.</p>
     pub bucket: String,
-    /// <p><p/></p>
+    /// <p>Key of the object for which the multipart upload was initiated.</p>
     pub key: String,
     pub request_payer: Option<String>,
-    /// <p><p/></p>
+    /// <p>Upload ID that identifies the multipart upload.</p>
     pub upload_id: String,
 }
 
-/// <p><p/></p>
+/// <p>Configures the transfer acceleration state for an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html">Amazon S3 Transfer Acceleration</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccelerateConfiguration {
-    /// <p>The accelerate configuration of the bucket.</p>
+    /// <p>Specifies the transfer acceleration status of the bucket.</p>
     pub status: Option<String>,
 }
 
@@ -157,12 +157,12 @@ impl AccelerateConfigurationSerializer {
     }
 }
 
-/// <p><p/></p>
+/// <p>Contains the elements that set the ACL permissions for an object per grantee.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccessControlPolicy {
     /// <p>A list of grants.</p>
     pub grants: Option<Vec<Grant>>,
-    /// <p><p/></p>
+    /// <p>Container for the bucket owner's display name and ID.</p>
     pub owner: Option<Owner>,
 }
 
@@ -191,7 +191,7 @@ impl AccessControlPolicySerializer {
 /// <p>A container for information about access control for replicas.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccessControlTranslation {
-    /// <p>The override value for the owner of the replica object.</p>
+    /// <p>Specifies the replica ownership. For default and valid values, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTreplication.html">PUT bucket replication</a> in the <i>Amazon Simple Storage Service API Reference</i>.</p>
     pub owner: String,
 }
 
@@ -526,10 +526,10 @@ impl AllowedOriginsSerializer {
     }
 }
 
-/// <p><p/></p>
+/// <p>A conjunction (logical AND) of predicates, which is used in evaluating a metrics filter. The operator must have at least two predicates in any combination, and an object must match all of the predicates for the filter to apply.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AnalyticsAndOperator {
-    /// <p>The prefix to use when evaluating an AND predicate.</p>
+    /// <p>The prefix to use when evaluating an AND predicate: The prefix that an object must have to be included in the metrics results.</p>
     pub prefix: Option<String>,
     /// <p>The list of tags to use when evaluating an AND predicate.</p>
     pub tags: Option<Vec<Tag>>,
@@ -586,14 +586,14 @@ impl AnalyticsAndOperatorSerializer {
     }
 }
 
-/// <p><p/></p>
+/// <p> Specifies the configuration and any analyses for the analytics filter of an Amazon S3 bucket.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETAnalyticsConfig.html">GET Bucket analytics</a> in the <i>Amazon Simple Storage Service API Reference</i>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AnalyticsConfiguration {
     /// <p>The filter used to describe a set of objects for analyses. A filter must have exactly one prefix, one tag, or one conjunction (AnalyticsAndOperator). If no filter is provided, all objects will be considered in any analysis.</p>
     pub filter: Option<AnalyticsFilter>,
-    /// <p>The identifier used to represent an analytics configuration.</p>
+    /// <p>The ID that identifies the analytics configuration.</p>
     pub id: String,
-    /// <p>If present, it indicates that data related to access patterns will be collected and made available to analyze the tradeoffs between different storage classes.</p>
+    /// <p> Contains data related to access patterns to be collected and made available to analyze the tradeoffs between different storage classes. </p>
     pub storage_class_analysis: StorageClassAnalysis,
 }
 
@@ -684,7 +684,7 @@ impl AnalyticsConfigurationListDeserializer {
         Ok(obj)
     }
 }
-/// <p><p/></p>
+/// <p>Where to publish the analytics results.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AnalyticsExportDestination {
     /// <p>A destination signifying output to an S3 bucket.</p>
@@ -840,13 +840,13 @@ impl AnalyticsIdSerializer {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AnalyticsS3BucketDestination {
-    /// <p>The Amazon resource name (ARN) of the bucket to which data is exported.</p>
+    /// <p>The Amazon Resource Name (ARN) of the bucket to which data is exported.</p>
     pub bucket: String,
     /// <p>The account ID that owns the destination bucket. If no account ID is provided, the owner will not be validated prior to exporting data.</p>
     pub bucket_account_id: Option<String>,
-    /// <p>The file format used when exporting data to Amazon S3.</p>
+    /// <p>Specifies the file format used when exporting data to Amazon S3.</p>
     pub format: String,
-    /// <p>The prefix to use when exporting data. The exported data begins with this prefix.</p>
+    /// <p>The prefix to use when exporting data. The prefix is prepended to all results.</p>
     pub prefix: Option<String>,
 }
 
@@ -1060,10 +1060,10 @@ impl BucketAccelerateStatusSerializer {
     }
 }
 
-/// <p><p/></p>
+/// <p>Specifies the lifecycle configuration for objects in an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle Management</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct BucketLifecycleConfiguration {
-    /// <p><p/></p>
+    /// <p>A lifecycle rule for individual objects in an Amazon S3 bucket.</p>
     pub rules: Vec<LifecycleRule>,
 }
 
@@ -1119,6 +1119,7 @@ impl BucketLocationConstraintSerializer {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct BucketLoggingStatus {
+    /// <p><p/></p>
     pub logging_enabled: Option<LoggingEnabled>,
 }
 
@@ -1287,10 +1288,10 @@ impl BytesScannedDeserializer {
         Ok(obj)
     }
 }
-/// <p><p/></p>
+/// <p>Describes the cross-origin access configuration for objects in an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html">Enabling Cross-Origin Resource Sharing</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CORSConfiguration {
-    /// <p><p/></p>
+    /// <p>A set of allowed origins and methods.</p>
     pub cors_rules: Vec<CORSRule>,
 }
 
@@ -1311,16 +1312,16 @@ impl CORSConfigurationSerializer {
     }
 }
 
-/// <p><p/></p>
+/// <p>Specifies a cross-origin access rule for an Amazon S3 bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CORSRule {
-    /// <p>Specifies which headers are allowed in a pre-flight OPTIONS request.</p>
+    /// <p>Headers that are specified in the <code>Access-Control-Request-Headers</code> header. These headers are allowed in a preflight OPTIONS request. In response to any preflight OPTIONS request, Amazon S3 returns any requested headers that are allowed.</p>
     pub allowed_headers: Option<Vec<String>>,
-    /// <p>Identifies HTTP methods that the domain/origin specified in the rule is allowed to execute.</p>
+    /// <p>An HTTP method that you allow the origin to execute. Valid values are <code>GET</code>, <code>PUT</code>, <code>HEAD</code>, <code>POST</code>, and <code>DELETE</code>.</p>
     pub allowed_methods: Vec<String>,
     /// <p>One or more origins you want customers to be able to access the bucket from.</p>
     pub allowed_origins: Vec<String>,
-    /// <p>One or more headers in the response that you want customers to be able to access from their applications (for example, from a JavaScript XMLHttpRequest object).</p>
+    /// <p>One or more headers in the response that you want customers to be able to access from their applications (for example, from a JavaScript <code>XMLHttpRequest</code> object).</p>
     pub expose_headers: Option<Vec<String>>,
     /// <p>The time in seconds that your browser is to cache the preflight response for the specified resource.</p>
     pub max_age_seconds: Option<i64>,
@@ -2028,12 +2029,12 @@ impl CompressionTypeSerializer {
     }
 }
 
-/// <p><p/></p>
+/// <p>Specifies a condition that must be met for a redirect to apply. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Condition {
-    /// <p>The HTTP error code when the redirect is applied. In the event of an error, if the error code equals this value, then the specified redirect is applied. Required when parent element Condition is specified and sibling KeyPrefixEquals is not specified. If both are specified, then both must be true for the redirect to be applied.</p>
+    /// <p>The HTTP error code when the redirect is applied. In the event of an error, if the error code equals this value, then the specified redirect is applied. Required when parent element <code>Condition</code> is specified and sibling <code>KeyPrefixEquals</code> is not specified. If both are specified, then both must be true for the redirect to be applied.</p>
     pub http_error_code_returned_equals: Option<String>,
-    /// <p>The object key name prefix when the redirect is applied. For example, to redirect requests for ExamplePage.html, the key prefix will be ExamplePage.html. To redirect request for all pages with the prefix docs/, the key prefix will be /docs, which identifies all objects in the docs/ folder. Required when the parent element Condition is specified and sibling HttpErrorCodeReturnedEquals is not specified. If both conditions are specified, both must be true for the redirect to be applied.</p>
+    /// <p>The object key name prefix when the redirect is applied. For example, to redirect requests for <code>ExamplePage.html</code>, the key prefix will be <code>ExamplePage.html</code>. To redirect request for all pages with the prefix <code>docs/</code>, the key prefix will be <code>/docs</code>, which identifies all objects in the docs/ folder. Required when the parent element <code>Condition</code> is specified and sibling <code>HttpErrorCodeReturnedEquals</code> is not specified. If both conditions are specified, both must be true for the redirect to be applied.</p>
     pub key_prefix_equals: Option<String>,
 }
 
@@ -2207,9 +2208,9 @@ pub struct CopyObjectRequest {
     pub metadata_directive: Option<String>,
     /// <p>Specifies whether you want to apply a Legal Hold to the copied object.</p>
     pub object_lock_legal_hold_status: Option<String>,
-    /// <p>The Object Lock mode that you want to apply to the copied object.</p>
+    /// <p>The object lock mode that you want to apply to the copied object.</p>
     pub object_lock_mode: Option<String>,
-    /// <p>The date and time when you want the copied object's Object Lock to expire.</p>
+    /// <p>The date and time when you want the copied object's object lock to expire.</p>
     pub object_lock_retain_until_date: Option<String>,
     pub request_payer: Option<String>,
     /// <p>Specifies the algorithm to use to when encrypting the object (e.g., AES256).</p>
@@ -2369,7 +2370,7 @@ pub struct CreateBucketRequest {
     pub grant_write: Option<String>,
     /// <p>Allows grantee to write the ACL for the applicable bucket.</p>
     pub grant_write_acp: Option<String>,
-    /// <p>Specifies whether you want S3 Object Lock to be enabled for the new bucket.</p>
+    /// <p>Specifies whether you want Amazon S3 object lock to be enabled for the new bucket.</p>
     pub object_lock_enabled_for_bucket: Option<bool>,
 }
 
@@ -2458,9 +2459,9 @@ pub struct CreateMultipartUploadRequest {
     pub metadata: Option<::std::collections::HashMap<String, String>>,
     /// <p>Specifies whether you want to apply a Legal Hold to the uploaded object.</p>
     pub object_lock_legal_hold_status: Option<String>,
-    /// <p>Specifies the Object Lock mode that you want to apply to the uploaded object.</p>
+    /// <p>Specifies the object lock mode that you want to apply to the uploaded object.</p>
     pub object_lock_mode: Option<String>,
-    /// <p>Specifies the date and time when you want the Object Lock to expire.</p>
+    /// <p>Specifies the date and time when you want the object lock to expire.</p>
     pub object_lock_retain_until_date: Option<String>,
     pub request_payer: Option<String>,
     /// <p>Specifies the algorithm to use to when encrypting the object (e.g., AES256).</p>
@@ -2588,12 +2589,12 @@ impl DaysAfterInitiationSerializer {
     }
 }
 
-/// <p>The container element for specifying the default Object Lock retention settings for new objects placed in the specified bucket.</p>
+/// <p>The container element for specifying the default object lock retention settings for new objects placed in the specified bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DefaultRetention {
     /// <p>The number of days that you want to specify for the default retention period.</p>
     pub days: Option<i64>,
-    /// <p>The default Object Lock retention mode you want to apply to new objects placed in the specified bucket.</p>
+    /// <p>The default object lock retention mode you want to apply to new objects placed in the specified bucket.</p>
     pub mode: Option<String>,
     /// <p>The number of years that you want to specify for the default retention period.</p>
     pub years: Option<i64>,
@@ -2704,7 +2705,7 @@ impl DeleteSerializer {
 pub struct DeleteBucketAnalyticsConfigurationRequest {
     /// <p>The name of the bucket from which an analytics configuration is deleted.</p>
     pub bucket: String,
-    /// <p>The identifier used to represent an analytics configuration.</p>
+    /// <p>The ID that identifies the analytics configuration.</p>
     pub id: String,
 }
 
@@ -2989,7 +2990,7 @@ impl DeleteObjectOutputDeserializer {
 pub struct DeleteObjectRequest {
     /// <p><p/></p>
     pub bucket: String,
-    /// <p>Indicates whether S3 Object Lock should bypass Governance-mode restrictions to process this operation.</p>
+    /// <p>Indicates whether Amazon S3 object lock should bypass governance-mode restrictions to process this operation.</p>
     pub bypass_governance_retention: Option<bool>,
     /// <p><p/></p>
     pub key: String,
@@ -3070,7 +3071,7 @@ impl DeleteObjectsOutputDeserializer {
 pub struct DeleteObjectsRequest {
     /// <p><p/></p>
     pub bucket: String,
-    /// <p>Specifies whether you want to delete this object even if it has a Governance-type Object Lock in place. You must have sufficient permissions to perform this operation.</p>
+    /// <p>Specifies whether you want to delete this object even if it has a Governance-type object lock in place. You must have sufficient permissions to perform this operation.</p>
     pub bypass_governance_retention: Option<bool>,
     /// <p><p/></p>
     pub delete: Delete,
@@ -3214,18 +3215,18 @@ impl DescriptionSerializer {
     }
 }
 
-/// <p>A container for information about the replication destination.</p>
+/// <p>Specifies information about where to publish analysis or configuration results for an Amazon S3 bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Destination {
-    /// <p>A container for information about access control for replicas. </p> <p>Use this element only in a cross-account scenario where source and destination bucket owners are not the same to change replica ownership to the AWS account that owns the destination bucket. If you don't add this element to the replication configuration, the replicas are owned by same AWS account that owns the source object. </p>
+    /// <p>Specify this only in a cross-account scenario (where source and destination bucket owners are not the same), and you want to change replica ownership to the AWS account that owns the destination bucket. If this is not specified in the replication configuration, the replicas are owned by same AWS account that owns the source object.</p>
     pub access_control_translation: Option<AccessControlTranslation>,
-    /// <p>The account ID of the destination bucket. Currently, Amazon S3 verifies this value only if Access Control Translation is enabled. </p> <p>In a cross-account scenario, if you change replica ownership to the AWS account that owns the destination bucket by adding the <code>AccessControlTranslation</code> element, this is the account ID of the owner of the destination bucket. </p>
+    /// <p>Destination bucket owner account ID. In a cross-account scenario, if you direct Amazon S3 to change replica ownership to the AWS account that owns the destination bucket by specifying the <code>AccessControlTranslation</code> property, this is the account ID of the destination bucket owner. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/crr-change-owner.html">Cross-Region Replication Additional Configuration: Change Replica Owner</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub account: Option<String>,
-    /// <p> The Amazon Resource Name (ARN) of the bucket where you want Amazon S3 to store replicas of the object identified by the rule. </p> <p> If there are multiple rules in your replication configuration, all rules must specify the same bucket as the destination. A replication configuration can replicate objects to only one destination bucket. </p>
+    /// <p> The Amazon Resource Name (ARN) of the bucket where you want Amazon S3 to store replicas of the object identified by the rule.</p> <p>A replication configuration can replicate objects to only one destination bucket. If there are multiple rules in your replication configuration, all rules must specify the same destination bucket.</p>
     pub bucket: String,
-    /// <p>A container that provides information about encryption. If <code>SourceSelectionCriteria</code> is specified, you must specify this element. </p>
+    /// <p>A container that provides information about encryption. If <code>SourceSelectionCriteria</code> is specified, you must specify this element.</p>
     pub encryption_configuration: Option<EncryptionConfiguration>,
-    /// <p> The class of storage used to store the object. By default Amazon S3 uses storage class of the source object when creating a replica. </p>
+    /// <p> The storage class to use when replicating objects, such as standard or reduced redundancy. By default, Amazon S3 uses the storage class of the source object to create the object replica. </p> <p>For valid values, see the <code>StorageClass</code> element of the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTreplication.html">PUT Bucket replication</a> action in the <i>Amazon Simple Storage Service API Reference</i>.</p>
     pub storage_class: Option<String>,
 }
 
@@ -3520,10 +3521,10 @@ impl EncryptionSerializer {
     }
 }
 
-/// <p>A container for information about the encryption-based configuration for replicas.</p>
+/// <p>Specifies encryption-related information for an Amazon S3 bucket that is a destination for replicated objects.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EncryptionConfiguration {
-    /// <p>The ID of the AWS KMS key for the AWS Region where the destination bucket resides. Amazon S3 uses this key to encrypt the replica object. </p>
+    /// <p>Specifies the AWS KMS Key ID (Key ARN or Alias ARN) for the destination bucket. Amazon S3 uses this key to encrypt replica objects.</p>
     pub replica_kms_key_id: Option<String>,
 }
 
@@ -4035,12 +4036,12 @@ impl FileHeaderInfoSerializer {
     }
 }
 
-/// <p>A container for a key value pair that defines the criteria for the filter rule.</p>
+/// <p>Specifies the Amazon S3 object key name to filter on and whether to filter on the suffix or prefix of the key name.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct FilterRule {
-    /// <p>The object key name prefix or suffix identifying one or more objects to which the filtering rule applies. The maximum prefix length is 1,024 characters. Overlapping prefixes and suffixes are not supported. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Event Notifications</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
+    /// <p>The object key name prefix or suffix identifying one or more objects to which the filtering rule applies. The maximum length is 1,024 characters. Overlapping prefixes and suffixes are not supported. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Event Notifications</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub name: Option<String>,
-    /// <p><p/></p>
+    /// <p>The value that the filter searches for in object key names.</p>
     pub value: Option<String>,
 }
 
@@ -4307,7 +4308,7 @@ impl GetBucketAnalyticsConfigurationOutputDeserializer {
 pub struct GetBucketAnalyticsConfigurationRequest {
     /// <p>The name of the bucket from which an analytics configuration is retrieved.</p>
     pub bucket: String,
-    /// <p>The identifier used to represent an analytics configuration.</p>
+    /// <p>The ID that identifies the analytics configuration.</p>
     pub id: String,
 }
 
@@ -4345,6 +4346,7 @@ pub struct GetBucketCorsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketEncryptionOutput {
+    /// <p><p/></p>
     pub server_side_encryption_configuration: Option<ServerSideEncryptionConfiguration>,
 }
 
@@ -4503,6 +4505,7 @@ pub struct GetBucketLocationRequest {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketLoggingOutput {
+    /// <p><p/></p>
     pub logging_enabled: Option<LoggingEnabled>,
 }
 
@@ -4611,6 +4614,7 @@ pub struct GetBucketPolicyStatusRequest {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketReplicationOutput {
+    /// <p><p/></p>
     pub replication_configuration: Option<ReplicationConfiguration>,
 }
 
@@ -4880,7 +4884,7 @@ pub struct GetObjectLegalHoldRequest {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetObjectLockConfigurationOutput {
-    /// <p>The specified bucket's Object Lock configuration.</p>
+    /// <p>The specified bucket's object lock configuration.</p>
     pub object_lock_configuration: Option<ObjectLockConfiguration>,
 }
 
@@ -4902,7 +4906,7 @@ impl GetObjectLockConfigurationOutputDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetObjectLockConfigurationRequest {
-    /// <p>The bucket whose Object Lock configuration you want to retrieve.</p>
+    /// <p>The bucket whose object lock configuration you want to retrieve.</p>
     pub bucket: String,
 }
 
@@ -4942,9 +4946,9 @@ pub struct GetObjectOutput {
     pub missing_meta: Option<i64>,
     /// <p>Indicates whether this object has an active legal hold. This field is only returned if you have permission to view an object's legal hold status.</p>
     pub object_lock_legal_hold_status: Option<String>,
-    /// <p>The Object Lock mode currently in place for this object.</p>
+    /// <p>The object lock mode currently in place for this object.</p>
     pub object_lock_mode: Option<String>,
-    /// <p>The date and time when this object's Object Lock will expire.</p>
+    /// <p>The date and time when this object's object lock will expire.</p>
     pub object_lock_retain_until_date: Option<String>,
     /// <p>The count of parts this object has.</p>
     pub parts_count: Option<i64>,
@@ -5393,9 +5397,9 @@ pub struct HeadObjectOutput {
     pub missing_meta: Option<i64>,
     /// <p>The Legal Hold status for the specified object.</p>
     pub object_lock_legal_hold_status: Option<String>,
-    /// <p>The Object Lock mode currently in place for this object.</p>
+    /// <p>The object lock mode currently in place for this object.</p>
     pub object_lock_mode: Option<String>,
-    /// <p>The date and time when this object's Object Lock will expire.</p>
+    /// <p>The date and time when this object's object lock expires.</p>
     pub object_lock_retain_until_date: Option<String>,
     /// <p>The count of parts this object has.</p>
     pub parts_count: Option<i64>,
@@ -5729,7 +5733,7 @@ impl InputSerializationSerializer {
     }
 }
 
-/// <p><p/></p>
+/// <p>Specifies the inventory configuration for an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETInventoryConfig.html">GET Bucket inventory</a> in the <i>Amazon Simple Storage Service API Reference</i>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct InventoryConfiguration {
     /// <p>Contains information about where to publish the inventory results.</p>
@@ -5738,9 +5742,9 @@ pub struct InventoryConfiguration {
     pub filter: Option<InventoryFilter>,
     /// <p>The ID used to identify the inventory configuration.</p>
     pub id: String,
-    /// <p>Specifies which object version(s) to included in the inventory results.</p>
+    /// <p>Object versions to include in the inventory list. If set to <code>All</code>, the list includes all the object versions, which adds the version-related fields <code>VersionId</code>, <code>IsLatest</code>, and <code>DeleteMarker</code> to the list. If set to <code>Current</code>, the list does not contain these version-related fields.</p>
     pub included_object_versions: String,
-    /// <p>Specifies whether the inventory is enabled or disabled.</p>
+    /// <p>Specifies whether the inventory is enabled or disabled. If set to <code>True</code>, an inventory list is generated. If set to <code>False</code>, no inventory list is generated.</p>
     pub is_enabled: bool,
     /// <p>Contains the optional fields that are included in the inventory results.</p>
     pub optional_fields: Option<Vec<String>>,
@@ -6644,11 +6648,12 @@ impl LambdaFunctionArnSerializer {
 /// <p>A container for specifying the configuration for AWS Lambda notifications.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LambdaFunctionConfiguration {
-    /// <p><p/></p>
+    /// <p>The Amazon S3 bucket event for which to invoke the AWS Lambda function. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Supported Event Types</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub events: Vec<String>,
+    /// <p><p/></p>
     pub filter: Option<NotificationConfigurationFilter>,
     pub id: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the Lambda cloud function that Amazon S3 can invoke when it detects events of the specified type.</p>
+    /// <p>The Amazon Resource Name (ARN) of the AWS Lambda function that Amazon S3 invokes when the specified event type occurs.</p>
     pub lambda_function_arn: String,
 }
 
@@ -6891,12 +6896,15 @@ impl LifecycleExpirationSerializer {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LifecycleRule {
+    /// <p><p/></p>
     pub abort_incomplete_multipart_upload: Option<AbortIncompleteMultipartUpload>,
     /// <p><p/></p>
     pub expiration: Option<LifecycleExpiration>,
+    /// <p><p/></p>
     pub filter: Option<LifecycleRuleFilter>,
     /// <p>Unique identifier for the rule. The value cannot be longer than 255 characters.</p>
     pub id: Option<String>,
+    /// <p><p/></p>
     pub noncurrent_version_expiration: Option<NoncurrentVersionExpiration>,
     /// <p><p/></p>
     pub noncurrent_version_transitions: Option<Vec<NoncurrentVersionTransition>>,
@@ -7093,6 +7101,7 @@ impl LifecycleRuleAndOperatorSerializer {
 /// <p>The Filter is used to identify objects that a Lifecycle Rule applies to. A Filter must have exactly one of Prefix, Tag, or And specified.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LifecycleRuleFilter {
+    /// <p><p/></p>
     pub and: Option<LifecycleRuleAndOperator>,
     /// <p>Prefix identifying one or more objects to which the rule applies.</p>
     pub prefix: Option<String>,
@@ -8015,14 +8024,14 @@ impl LocationPrefixSerializer {
     }
 }
 
-/// <p>Container for logging information. Presence of this element indicates that logging is enabled. Parameters TargetBucket and TargetPrefix are required in this case.</p>
+/// <p>Describes where logs are stored and the prefix that Amazon S3 assigns to all log object keys for a bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTlogging.html">PUT Bucket logging</a> in the <i>Amazon Simple Storage Service API Reference</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LoggingEnabled {
     /// <p>Specifies the bucket where you want Amazon S3 to store server access logs. You can have your logs delivered to any bucket that you own, including the same bucket that is being logged. You can also configure multiple buckets to deliver their logs to the same target bucket. In this case you should choose a different TargetPrefix for each source bucket so that the delivered log files can be distinguished by key.</p>
     pub target_bucket: String,
     /// <p><p/></p>
     pub target_grants: Option<Vec<TargetGrant>>,
-    /// <p>This element lets you specify a prefix for the keys that the log files will be stored under.</p>
+    /// <p>A prefix for all log object keys. If you store log files from multiple Amazon S3 buckets in a single bucket, you can use a prefix to distinguish which log files came from which bucket.</p>
     pub target_prefix: String,
 }
 
@@ -8429,7 +8438,7 @@ impl MetricsAndOperatorSerializer {
     }
 }
 
-/// <p><p/></p>
+/// <p>Specifies a metrics configuration for the CloudWatch request metrics (specified by the metrics configuration ID) from an Amazon S3 bucket. If you're updating an existing metrics configuration, note that this is a full replacement of the existing metrics configuration. If you don't include the elements you want to keep, they are erased. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTMetricConfiguration.html"> PUT Bucket metrics</a> in the <i>Amazon Simple Storage Service API Reference</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct MetricsConfiguration {
     /// <p>Specifies a metrics configuration filter. The metrics configuration will only include objects that meet the filter's criteria. A filter must be a prefix, a tag, or a conjunction (MetricsAndOperator).</p>
@@ -8847,10 +8856,10 @@ impl NoncurrentVersionExpirationSerializer {
     }
 }
 
-/// <p>Container for the transition rule that describes when noncurrent objects transition to the STANDARD_IA, ONEZONE_IA, INTELLIGENT_TIERING, GLACIER or DEEP_ARCHIVE storage class. If your bucket is versioning-enabled (or versioning is suspended), you can set this action to request that Amazon S3 transition noncurrent object versions to the STANDARD_IA, ONEZONE_IA, INTELLIGENT_TIERING, GLACIER or DEEP_ARCHIVE storage class at a specific period in the object's lifetime.</p>
+/// <p>Container for the transition rule that describes when noncurrent objects transition to the <code>STANDARD_IA</code>, <code>ONEZONE_IA</code>, <code>INTELLIGENT_TIERING</code>, <code>GLACIER</code>, or <code>DEEP_ARCHIVE</code> storage class. If your bucket is versioning-enabled (or versioning is suspended), you can set this action to request that Amazon S3 transition noncurrent object versions to the <code>STANDARD_IA</code>, <code>ONEZONE_IA</code>, <code>INTELLIGENT_TIERING</code>, <code>GLACIER</code>, or <code>DEEP_ARCHIVE</code> storage class at a specific period in the object's lifetime.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct NoncurrentVersionTransition {
-    /// <p>Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the Amazon Simple Storage Service Developer Guide.</p>
+    /// <p>Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub noncurrent_days: Option<i64>,
     /// <p>The class of storage used to store the object.</p>
     pub storage_class: Option<String>,
@@ -8969,11 +8978,11 @@ impl NoncurrentVersionTransitionListSerializer {
 /// <p>A container for specifying the notification configuration of the bucket. If this element is empty, notifications are turned off for the bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct NotificationConfiguration {
-    /// <p><p/></p>
+    /// <p>Describes the AWS Lambda functions to invoke and the events for which to invoke them.</p>
     pub lambda_function_configurations: Option<Vec<LambdaFunctionConfiguration>>,
-    /// <p><p/></p>
+    /// <p>The Amazon Simple Queue Service queues to publish messages to and the events for which to publish messages.</p>
     pub queue_configurations: Option<Vec<QueueConfiguration>>,
-    /// <p><p/></p>
+    /// <p>The topic to which notifications are sent and the events for which notifications are generated.</p>
     pub topic_configurations: Option<Vec<TopicConfiguration>>,
 }
 
@@ -9138,9 +9147,10 @@ impl NotificationConfigurationDeprecatedSerializer {
     }
 }
 
-/// <p>A container for object key name filtering rules. For information about key name filtering, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Event Notifications</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
+/// <p>Specifies object key name filtering rules. For information about key name filtering, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Event Notifications</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct NotificationConfigurationFilter {
+    /// <p><p/></p>
     pub key: Option<S3KeyFilter>,
 }
 
@@ -9408,12 +9418,12 @@ impl ObjectListDeserializer {
         Ok(obj)
     }
 }
-/// <p>The container element for Object Lock configuration parameters.</p>
+/// <p>The container element for object lock configuration parameters.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ObjectLockConfiguration {
-    /// <p>Indicates whether this bucket has an Object Lock configuration enabled.</p>
+    /// <p>Indicates whether this bucket has an object lock configuration enabled.</p>
     pub object_lock_enabled: Option<String>,
-    /// <p>The Object Lock rule in place for the specified object.</p>
+    /// <p>The object lock rule in place for the specified object.</p>
     pub rule: Option<ObjectLockRule>,
 }
 
@@ -9594,7 +9604,7 @@ impl ObjectLockLegalHoldStatusSerializer {
 pub struct ObjectLockRetention {
     /// <p>Indicates the Retention mode for the specified object.</p>
     pub mode: Option<String>,
-    /// <p>The date on which this Object Lock Retention will expire.</p>
+    /// <p>The date on which this object lock retention expires.</p>
     pub retain_until_date: Option<String>,
 }
 
@@ -9687,7 +9697,7 @@ impl ObjectLockRetentionModeSerializer {
     }
 }
 
-/// <p>The container element for an Object Lock rule.</p>
+/// <p>The container element for an object lock rule.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ObjectLockRule {
     /// <p>The default retention period that you want to apply to new objects placed in the specified bucket.</p>
@@ -10461,7 +10471,7 @@ impl ProtocolSerializer {
     }
 }
 
-/// <p><p/></p>
+/// <p>Specifies the Block Public Access configuration for an Amazon S3 bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PublicAccessBlockConfiguration {
     /// <p>Specifies whether Amazon S3 should block public access control lists (ACLs) for this bucket and objects in this bucket. Setting this element to <code>TRUE</code> causes the following behavior:</p> <ul> <li> <p>PUT Bucket acl and PUT Object acl calls fail if the specified ACL is public.</p> </li> <li> <p>PUT Object calls fail if the request includes a public ACL.</p> </li> </ul> <p>Enabling this setting doesn't affect existing policies or ACLs.</p>
@@ -10576,7 +10586,7 @@ pub struct PutBucketAccelerateConfigurationRequest {
 pub struct PutBucketAclRequest {
     /// <p>The canned ACL to apply to the bucket.</p>
     pub acl: Option<String>,
-    /// <p><p/></p>
+    /// <p>Contains the elements that set the ACL permissions for an object per grantee.</p>
     pub access_control_policy: Option<AccessControlPolicy>,
     /// <p><p/></p>
     pub bucket: String,
@@ -10600,7 +10610,7 @@ pub struct PutBucketAnalyticsConfigurationRequest {
     pub analytics_configuration: AnalyticsConfiguration,
     /// <p>The name of the bucket to which an analytics configuration is stored.</p>
     pub bucket: String,
-    /// <p>The identifier used to represent an analytics configuration.</p>
+    /// <p>The ID that identifies the analytics configuration.</p>
     pub id: String,
 }
 
@@ -10616,10 +10626,11 @@ pub struct PutBucketCorsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketEncryptionRequest {
-    /// <p>The name of the bucket for which the server-side encryption configuration is set.</p>
+    /// <p>Specifies default encryption for a bucket using server-side encryption with Amazon S3-managed keys (SSE-S3) or AWS KMS-managed keys (SSE-KMS). For information about the Amazon S3 default encryption feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html">Amazon S3 Default Bucket Encryption</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub bucket: String,
-    /// <p>The base64-encoded 128-bit MD5 digest of the server-side encryption configuration. This parameter is auto-populated when using the command from the CLI</p>
+    /// <p>The base64-encoded 128-bit MD5 digest of the server-side encryption configuration. This parameter is auto-populated when using the command from the CLI.</p>
     pub content_md5: Option<String>,
+    /// <p><p/></p>
     pub server_side_encryption_configuration: ServerSideEncryptionConfiguration,
 }
 
@@ -10675,6 +10686,7 @@ pub struct PutBucketMetricsConfigurationRequest {
 pub struct PutBucketNotificationConfigurationRequest {
     /// <p><p/></p>
     pub bucket: String,
+    /// <p><p/></p>
     pub notification_configuration: NotificationConfiguration,
 }
 
@@ -10704,10 +10716,11 @@ pub struct PutBucketPolicyRequest {
 pub struct PutBucketReplicationRequest {
     /// <p><p/></p>
     pub bucket: String,
-    /// <p><p/></p>
+    /// <p>The base64-encoded 128-bit MD5 digest of the data. You must use this header as a message integrity check to verify that the request body was not corrupted in transit.</p>
     pub content_md5: Option<String>,
-    pub replication_configuration: ReplicationConfiguration,
     /// <p><p/></p>
+    pub replication_configuration: ReplicationConfiguration,
+    /// <p>A token that allows Amazon S3 object lock to be enabled for an existing bucket.</p>
     pub token: Option<String>,
 }
 
@@ -10778,7 +10791,7 @@ impl PutObjectAclOutputDeserializer {
 pub struct PutObjectAclRequest {
     /// <p>The canned ACL to apply to the object.</p>
     pub acl: Option<String>,
-    /// <p><p/></p>
+    /// <p>Contains the elements that set the ACL permissions for an object per grantee.</p>
     pub access_control_policy: Option<AccessControlPolicy>,
     /// <p><p/></p>
     pub bucket: String,
@@ -10860,14 +10873,14 @@ impl PutObjectLockConfigurationOutputDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutObjectLockConfigurationRequest {
-    /// <p>The bucket whose Object Lock configuration you want to create or replace.</p>
+    /// <p>The bucket whose object lock configuration you want to create or replace.</p>
     pub bucket: String,
     /// <p>The MD5 hash for the request body.</p>
     pub content_md5: Option<String>,
-    /// <p>The Object Lock configuration that you want to apply to the specified bucket.</p>
+    /// <p>The object lock configuration that you want to apply to the specified bucket.</p>
     pub object_lock_configuration: Option<ObjectLockConfiguration>,
     pub request_payer: Option<String>,
-    /// <p>A token to allow Object Lock to be enabled for an existing bucket.</p>
+    /// <p>A token to allow Amazon S3 object lock to be enabled for an existing bucket.</p>
     pub token: Option<String>,
 }
 
@@ -10924,7 +10937,7 @@ pub struct PutObjectRequest {
     pub content_language: Option<String>,
     /// <p>Size of the body in bytes. This parameter is useful when the size of the body cannot be determined automatically.</p>
     pub content_length: Option<i64>,
-    /// <p>The base64-encoded 128-bit MD5 digest of the part data. This parameter is auto-populated when using the command from the CLI</p>
+    /// <p>The base64-encoded 128-bit MD5 digest of the part data. This parameter is auto-populated when using the command from the CLI. This parameted is required if object lock parameters are specified.</p>
     pub content_md5: Option<String>,
     /// <p>A standard MIME type describing the format of the object data.</p>
     pub content_type: Option<String>,
@@ -10944,9 +10957,9 @@ pub struct PutObjectRequest {
     pub metadata: Option<::std::collections::HashMap<String, String>>,
     /// <p>The Legal Hold status that you want to apply to the specified object.</p>
     pub object_lock_legal_hold_status: Option<String>,
-    /// <p>The Object Lock mode that you want to apply to this object.</p>
+    /// <p>The object lock mode that you want to apply to this object.</p>
     pub object_lock_mode: Option<String>,
-    /// <p>The date and time when you want this object's Object Lock to expire.</p>
+    /// <p>The date and time when you want this object's object lock to expire.</p>
     pub object_lock_retain_until_date: Option<String>,
     pub request_payer: Option<String>,
     /// <p>Specifies the algorithm to use to when encrypting the object (e.g., AES256).</p>
@@ -11083,14 +11096,15 @@ impl QueueArnSerializer {
     }
 }
 
-/// <p>A container for specifying the configuration for publication of messages to an Amazon Simple Queue Service (Amazon SQS) queue.when Amazon S3 detects specified events.</p>
+/// <p>Specifies the configuration for publishing messages to an Amazon Simple Queue Service (Amazon SQS) queue when Amazon S3 detects specified events.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct QueueConfiguration {
     /// <p><p/></p>
     pub events: Vec<String>,
+    /// <p><p/></p>
     pub filter: Option<NotificationConfigurationFilter>,
     pub id: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the Amazon SQS queue to which Amazon S3 will publish a message when it detects events of the specified type.</p>
+    /// <p>The Amazon Resource Name (ARN) of the Amazon SQS queue to which Amazon S3 publishes a message when it detects events of the specified type.</p>
     pub queue_arn: String,
 }
 
@@ -11408,18 +11422,18 @@ impl RecordsEventDeserializer {
         })
     }
 }
-/// <p><p/></p>
+/// <p>Specifies how requests are redirected. In the event of an error, you can specify a different error code to return.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Redirect {
     /// <p>The host name to use in the redirect request.</p>
     pub host_name: Option<String>,
     /// <p>The HTTP redirect code to use on the response. Not required if one of the siblings is present.</p>
     pub http_redirect_code: Option<String>,
-    /// <p>Protocol to use (http, https) when redirecting requests. The default is the protocol that is used in the original request.</p>
+    /// <p>Protocol to use when redirecting requests. The default is the protocol that is used in the original request.</p>
     pub protocol: Option<String>,
-    /// <p>The object key prefix to use in the redirect request. For example, to redirect requests for all pages with prefix docs/ (objects in the docs/ folder) to documents/, you can set a condition block with KeyPrefixEquals set to docs/ and in the Redirect set ReplaceKeyPrefixWith to /documents. Not required if one of the siblings is present. Can be present only if ReplaceKeyWith is not provided.</p>
+    /// <p>The object key prefix to use in the redirect request. For example, to redirect requests for all pages with prefix <code>docs/</code> (objects in the <code>docs/</code> folder) to <code>documents/</code>, you can set a condition block with <code>KeyPrefixEquals</code> set to <code>docs/</code> and in the Redirect set <code>ReplaceKeyPrefixWith</code> to <code>/documents</code>. Not required if one of the siblings is present. Can be present only if <code>ReplaceKeyWith</code> is not provided.</p>
     pub replace_key_prefix_with: Option<String>,
-    /// <p>The specific object key to use in the redirect request. For example, redirect request to error.html. Not required if one of the sibling is present. Can be present only if ReplaceKeyPrefixWith is not provided.</p>
+    /// <p>The specific object key to use in the redirect request. For example, redirect request to <code>error.html</code>. Not required if one of the siblings is present. Can be present only if <code>ReplaceKeyPrefixWith</code> is not provided.</p>
     pub replace_key_with: Option<String>,
 }
 
@@ -11520,12 +11534,12 @@ impl RedirectSerializer {
     }
 }
 
-/// <p><p/></p>
+/// <p>Specifies the redirect behavior of all requests to a website endpoint of an Amazon S3 bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct RedirectAllRequestsTo {
-    /// <p>Name of the host where requests will be redirected.</p>
+    /// <p>Name of the host where requests are redirected.</p>
     pub host_name: String,
-    /// <p>Protocol to use (http, https) when redirecting requests. The default is the protocol that is used in the original request.</p>
+    /// <p>Protocol to use when redirecting requests. The default is the protocol that is used in the original request.</p>
     pub protocol: Option<String>,
 }
 
@@ -11680,7 +11694,7 @@ impl ReplicaKmsKeyIDSerializer {
 /// <p>A container for replication rules. You can add up to 1,000 rules. The maximum size of a replication configuration is 2 MB.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplicationConfiguration {
-    /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that Amazon S3 can assume when replicating the objects.</p>
+    /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that Amazon S3 assumes when replicating objects. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/crr-how-setup.html">How to Set Up Cross-Region Replication</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub role: String,
     /// <p>A container for one or more replication rules. A replication configuration must have at least one rule and can contain a maximum of 1,000 rules. </p>
     pub rules: Vec<ReplicationRule>,
@@ -11736,20 +11750,22 @@ impl ReplicationConfigurationSerializer {
     }
 }
 
-/// <p>A container for information about a specific replication rule.</p>
+/// <p>Specifies which Amazon S3 objects to replicate and where to store the replicas.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplicationRule {
+    /// <p><p/></p>
     pub delete_marker_replication: Option<DeleteMarkerReplication>,
     /// <p>A container for information about the replication destination.</p>
     pub destination: Destination,
+    /// <p><p/></p>
     pub filter: Option<ReplicationRuleFilter>,
     /// <p>A unique identifier for the rule. The maximum value is 255 characters.</p>
     pub id: Option<String>,
     /// <p>The priority associated with the rule. If you specify multiple rules in a replication configuration, Amazon S3 prioritizes the rules to prevent conflicts when filtering. If two or more rules identify the same object based on a specified filter, the rule with higher priority takes precedence. For example:</p> <ul> <li> <p>Same object quality prefix based filter criteria If prefixes you specified in multiple rules overlap </p> </li> <li> <p>Same object qualify tag based filter criteria specified in multiple rules</p> </li> </ul> <p>For more information, see <a href=" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>.</p>
     pub priority: Option<i64>,
-    /// <p>A container that describes additional filters for identifying the source objects that you want to replicate. You can choose to enable or disable the replication of these objects. Currently, Amazon S3 supports only the filter that you can specify for objects created with server-side encryption using an AWS KMS-Managed Key (SSE-KMS). </p> <p> If you want Amazon S3 to replicate objects created with server-side encryption using AWS KMS-Managed Keys. </p>
+    /// <p>A container that describes additional filters for identifying the source objects that you want to replicate. You can choose to enable or disable the replication of these objects. Currently, Amazon S3 supports only the filter that you can specify for objects created with server-side encryption using an AWS KMS-Managed Key (SSE-KMS).</p>
     pub source_selection_criteria: Option<SourceSelectionCriteria>,
-    /// <p>If status isn't enabled, the rule is ignored.</p>
+    /// <p>Specifies whether the rule is enabled.</p>
     pub status: String,
 }
 
@@ -12276,6 +12292,7 @@ pub struct RestoreObjectRequest {
     /// <p><p/></p>
     pub key: String,
     pub request_payer: Option<String>,
+    /// <p><p/></p>
     pub restore_request: Option<RestoreRequest>,
     /// <p><p/></p>
     pub version_id: Option<String>,
@@ -12409,10 +12426,10 @@ impl RoleSerializer {
     }
 }
 
-/// <p><p/></p>
+/// <p>Specifies the redirect behavior and when a redirect is applied.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct RoutingRule {
-    /// <p>A container for describing a condition that must be met for the specified redirect to apply. For example, 1. If request is for pages in the /docs folder, redirect to the /documents folder. 2. If request results in HTTP error 4xx, redirect request to another host where you might process the error.</p>
+    /// <p>A container for describing a condition that must be met for the specified redirect to apply. For example, 1. If request is for pages in the <code>/docs</code> folder, redirect to the <code>/documents</code> folder. 2. If request results in HTTP error 4xx, redirect request to another host where you might process the error.</p>
     pub condition: Option<Condition>,
     /// <p>Container for redirect information. You can redirect requests to another host, to another page, or with another protocol. In the event of an error, you can specify a different error code to return.</p>
     pub redirect: Redirect,
@@ -12498,19 +12515,22 @@ impl RoutingRulesSerializer {
     }
 }
 
-/// <p><p/></p>
+/// <p>Specifies lifecycle rules for an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTlifecycle.html">PUT Bucket lifecycle</a> in the <i>Amazon Simple Storage Service API Reference</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Rule {
+    /// <p><p/></p>
     pub abort_incomplete_multipart_upload: Option<AbortIncompleteMultipartUpload>,
     /// <p><p/></p>
     pub expiration: Option<LifecycleExpiration>,
-    /// <p>Unique identifier for the rule. The value cannot be longer than 255 characters.</p>
+    /// <p>Unique identifier for the rule. The value can't be longer than 255 characters.</p>
     pub id: Option<String>,
+    /// <p><p/></p>
     pub noncurrent_version_expiration: Option<NoncurrentVersionExpiration>,
+    /// <p><p/></p>
     pub noncurrent_version_transition: Option<NoncurrentVersionTransition>,
-    /// <p>Prefix identifying one or more objects to which the rule applies.</p>
+    /// <p>Object key prefix that identifies one or more objects to which this rule applies.</p>
     pub prefix: String,
-    /// <p>If 'Enabled', the rule is currently being applied. If 'Disabled', the rule is not currently being applied.</p>
+    /// <p>If <code>Enabled</code>, the rule is currently being applied. If <code>Disabled</code>, the rule is not currently being applied.</p>
     pub status: String,
     /// <p><p/></p>
     pub transition: Option<Transition>,
@@ -12681,6 +12701,7 @@ impl RulesSerializer {
 /// <p>A container for object key name prefix and suffix filtering rules.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct S3KeyFilter {
+    /// <p><p/></p>
     pub filter_rules: Option<Vec<FilterRule>>,
 }
 
@@ -12733,6 +12754,7 @@ pub struct S3Location {
     pub bucket_name: String,
     /// <p>The canned ACL to apply to the restore results.</p>
     pub canned_acl: Option<String>,
+    /// <p><p/></p>
     pub encryption: Option<Encryption>,
     /// <p>The prefix that is prepended to the restore results for this request.</p>
     pub prefix: String,
@@ -13122,10 +13144,10 @@ impl ServerSideEncryptionSerializer {
     }
 }
 
-/// <p>Describes the default server-side encryption to apply to new objects in the bucket. If Put Object request does not specify any server-side encryption, this default encryption will be applied.</p>
+/// <p>Describes the default server-side encryption to apply to new objects in the bucket. If a PUT Object request doesn't specify any server-side encryption, this default encryption will be applied. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTencryption.html">PUT Bucket encryption</a> in the <i>Amazon Simple Storage Service API Reference</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ServerSideEncryptionByDefault {
-    /// <p>KMS master key ID to use for the default encryption. This parameter is allowed if SSEAlgorithm is aws:kms.</p>
+    /// <p>KMS master key ID to use for the default encryption. This parameter is allowed if and only if <code>SSEAlgorithm</code> is set to <code>aws:kms</code>.</p>
     pub kms_master_key_id: Option<String>,
     /// <p>Server-side encryption algorithm to use for the default encryption.</p>
     pub sse_algorithm: String,
@@ -13191,7 +13213,7 @@ impl ServerSideEncryptionByDefaultSerializer {
     }
 }
 
-/// <p>Container for server-side encryption configuration rules. Currently S3 supports one rule only.</p>
+/// <p>Specifies the default server-side-encryption configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ServerSideEncryptionConfiguration {
     /// <p>Container for information about a particular server-side encryption configuration rule.</p>
@@ -13241,10 +13263,10 @@ impl ServerSideEncryptionConfigurationSerializer {
     }
 }
 
-/// <p>Container for information about a particular server-side encryption configuration rule.</p>
+/// <p>Specifies the default server-side encryption configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ServerSideEncryptionRule {
-    /// <p>Describes the default server-side encryption to apply to new objects in the bucket. If Put Object request does not specify any server-side encryption, this default encryption will be applied.</p>
+    /// <p>Specifies the default server-side encryption to apply to new objects in the bucket. If a PUT Object request doesn't specify any server-side encryption, this default encryption will be applied.</p>
     pub apply_server_side_encryption_by_default: Option<ServerSideEncryptionByDefault>,
 }
 
@@ -13389,10 +13411,10 @@ impl SizeDeserializer {
         Ok(obj)
     }
 }
-/// <p>A container for filters that define which source objects should be replicated.</p>
+/// <p>A container that describes additional filters for identifying the source objects that you want to replicate. You can choose to enable or disable the replication of these objects. Currently, Amazon S3 supports only the filter that you can specify for objects created with server-side encryption using an AWS KMS-Managed Key (SSE-KMS).</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SourceSelectionCriteria {
-    /// <p> A container for filter information for the selection of S3 objects encrypted with AWS KMS. If you include <code>SourceSelectionCriteria</code> in the replication configuration, this element is required. </p>
+    /// <p> A container for filter information for the selection of Amazon S3 objects encrypted with AWS KMS. If you include <code>SourceSelectionCriteria</code> in the replication configuration, this element is required. </p>
     pub sse_kms_encrypted_objects: Option<SseKmsEncryptedObjects>,
 }
 
@@ -13449,7 +13471,7 @@ impl SourceSelectionCriteriaSerializer {
 /// <p>A container for filter information for the selection of S3 objects encrypted with AWS KMS.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SseKmsEncryptedObjects {
-    /// <p> If the status is not <code>Enabled</code>, replication for S3 objects encrypted with AWS KMS is disabled.</p>
+    /// <p>Specifies whether Amazon S3 replicates objects created with server-side encryption using an AWS KMS-managed key.</p>
     pub status: String,
 }
 
@@ -13657,10 +13679,10 @@ impl StorageClassSerializer {
     }
 }
 
-/// <p><p/></p>
+/// <p>Specifies data related to access patterns to be collected and made available to analyze the tradeoffs between different storage classes for an Amazon S3 bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct StorageClassAnalysis {
-    /// <p>A container used to describe how data related to the storage class analysis should be exported.</p>
+    /// <p>Specifies how data related to the storage class analysis for an Amazon S3 bucket should be exported.</p>
     pub data_export: Option<StorageClassAnalysisDataExport>,
 }
 
@@ -13711,7 +13733,7 @@ impl StorageClassAnalysisSerializer {
 pub struct StorageClassAnalysisDataExport {
     /// <p>The place to store the data for an analysis.</p>
     pub destination: AnalyticsExportDestination,
-    /// <p>The version of the output schema to use when exporting data. Must be V_1.</p>
+    /// <p>The version of the output schema to use when exporting data. Must be <code>V_1</code>.</p>
     pub output_schema_version: String,
 }
 
@@ -14204,14 +14226,15 @@ impl TopicArnSerializer {
     }
 }
 
-/// <p>A container for specifying the configuration for publication of messages to an Amazon Simple Notification Service (Amazon SNS) topic.when Amazon S3 detects specified events.</p>
+/// <p>A container for specifying the configuration for publication of messages to an Amazon Simple Notification Service (Amazon SNS) topic when Amazon S3 detects specified events.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TopicConfiguration {
-    /// <p><p/></p>
+    /// <p>The Amazon S3 bucket event about which to send notifications. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Supported Event Types</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub events: Vec<String>,
+    /// <p><p/></p>
     pub filter: Option<NotificationConfigurationFilter>,
     pub id: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which Amazon S3 will publish a message when it detects events of the specified type.</p>
+    /// <p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which Amazon S3 publishes a message when it detects events of the specified type.</p>
     pub topic_arn: String,
 }
 
@@ -14404,14 +14427,14 @@ impl TopicConfigurationListSerializer {
     }
 }
 
-/// <p><p/></p>
+/// <p>Specifies when an object transitions to a specified storage class.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Transition {
-    /// <p>Indicates at what date the object is to be moved or deleted. Should be in GMT ISO 8601 Format.</p>
+    /// <p>Indicates when objects are transitioned to the specified storage class. The date value must be in ISO 8601 format. The time is always midnight UTC.</p>
     pub date: Option<String>,
-    /// <p>Indicates the lifetime, in days, of the objects that are subject to the rule. The value must be a non-zero positive integer.</p>
+    /// <p>Indicates the number of days after creation when objects are transitioned to the specified storage class. The value must be a positive integer.</p>
     pub days: Option<i64>,
-    /// <p>The class of storage used to store the object.</p>
+    /// <p>The storage class to which you want the object to transition.</p>
     pub storage_class: Option<String>,
 }
 
@@ -14766,7 +14789,7 @@ pub struct UploadPartRequest {
     pub bucket: String,
     /// <p>Size of the body in bytes. This parameter is useful when the size of the body cannot be determined automatically.</p>
     pub content_length: Option<i64>,
-    /// <p>The base64-encoded 128-bit MD5 digest of the part data.</p>
+    /// <p>The base64-encoded 128-bit MD5 digest of the part data. This parameter is auto-populated when using the command from the CLI. This parameted is required if object lock parameters are specified.</p>
     pub content_md5: Option<String>,
     /// <p>Object key for which the multipart upload was initiated.</p>
     pub key: String,
@@ -14867,7 +14890,7 @@ impl VersionIdMarkerSerializer {
     }
 }
 
-/// <p><p/></p>
+/// <p>Describes the versioning state of an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTVersioningStatus.html">PUT Bucket versioning</a> in the <i>Amazon Simple Storage Service API Reference</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct VersioningConfiguration {
     /// <p>Specifies whether MFA delete is enabled in the bucket versioning configuration. This element is only returned if the bucket has been configured with MFA delete. If the bucket has never been so configured, this element is not returned.</p>
@@ -14908,16 +14931,16 @@ impl VersioningConfigurationSerializer {
     }
 }
 
-/// <p><p/></p>
+/// <p>Specifies website configuration parameters for an Amazon S3 bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct WebsiteConfiguration {
-    /// <p><p/></p>
+    /// <p>The name of the error document for the website.</p>
     pub error_document: Option<ErrorDocument>,
-    /// <p><p/></p>
+    /// <p>The name of the index document for the website.</p>
     pub index_document: Option<IndexDocument>,
-    /// <p><p/></p>
+    /// <p><p>The redirect behavior for every request to this bucket&#39;s website endpoint.</p> <important> <p>If you specify this property, you can&#39;t specify any other property.</p> </important></p>
     pub redirect_all_requests_to: Option<RedirectAllRequestsTo>,
-    /// <p><p/></p>
+    /// <p>Rules that define when a redirect is applied and the redirect behavior.</p>
     pub routing_rules: Option<Vec<RoutingRule>>,
 }
 
@@ -18348,7 +18371,7 @@ pub trait S3 {
     /// <p>Deletes the bucket. All objects (including all object versions and Delete Markers) in the bucket must be deleted before the bucket itself can be deleted.</p>
     fn delete_bucket(&self, input: DeleteBucketRequest) -> RusotoFuture<(), DeleteBucketError>;
 
-    /// <p>Deletes an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
+    /// <p>Deletes an analytics configuration for the bucket (specified by the analytics configuration ID).</p> <p>To use this operation, you must have permissions to perform the s3:PutAnalyticsConfiguration action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. </p>
     fn delete_bucket_analytics_configuration(
         &self,
         input: DeleteBucketAnalyticsConfigurationRequest,
@@ -18567,7 +18590,7 @@ pub trait S3 {
         input: GetObjectLegalHoldRequest,
     ) -> RusotoFuture<GetObjectLegalHoldOutput, GetObjectLegalHoldError>;
 
-    /// <p>Gets the Object Lock configuration for a bucket. The rule specified in the Object Lock configuration will be applied by default to every new object placed in the specified bucket.</p>
+    /// <p>Gets the object lock configuration for a bucket. The rule specified in the object lock configuration will be applied by default to every new object placed in the specified bucket.</p>
     fn get_object_lock_configuration(
         &self,
         input: GetObjectLockConfigurationRequest,
@@ -18720,13 +18743,13 @@ pub trait S3 {
         input: PutBucketNotificationConfigurationRequest,
     ) -> RusotoFuture<(), PutBucketNotificationConfigurationError>;
 
-    /// <p>Replaces a policy on a bucket. If the bucket already has a policy, the one in this request completely replaces it.</p>
+    /// <p>Applies an Amazon S3 bucket policy to an Amazon S3 bucket.</p>
     fn put_bucket_policy(
         &self,
         input: PutBucketPolicyRequest,
     ) -> RusotoFuture<(), PutBucketPolicyError>;
 
-    /// <p> Creates a replication configuration or replaces an existing one. For more information, see <a href=" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
+    /// <p> Creates a replication configuration or replaces an existing one. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
     fn put_bucket_replication(
         &self,
         input: PutBucketReplicationRequest,
@@ -18771,7 +18794,7 @@ pub trait S3 {
         input: PutObjectLegalHoldRequest,
     ) -> RusotoFuture<PutObjectLegalHoldOutput, PutObjectLegalHoldError>;
 
-    /// <p>Places an Object Lock configuration on the specified bucket. The rule specified in the Object Lock configuration will be applied by default to every new object placed in the specified bucket.</p>
+    /// <p>Places an object lock configuration on the specified bucket. The rule specified in the object lock configuration will be applied by default to every new object placed in the specified bucket.</p>
     fn put_object_lock_configuration(
         &self,
         input: PutObjectLockConfigurationRequest,
@@ -19575,7 +19598,7 @@ impl S3 for S3Client {
         })
     }
 
-    /// <p>Deletes an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
+    /// <p>Deletes an analytics configuration for the bucket (specified by the analytics configuration ID).</p> <p>To use this operation, you must have permissions to perform the s3:PutAnalyticsConfiguration action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. </p>
     #[allow(unused_variables, warnings)]
     fn delete_bucket_analytics_configuration(
         &self,
@@ -21336,7 +21359,7 @@ impl S3 for S3Client {
         })
     }
 
-    /// <p>Gets the Object Lock configuration for a bucket. The rule specified in the Object Lock configuration will be applied by default to every new object placed in the specified bucket.</p>
+    /// <p>Gets the object lock configuration for a bucket. The rule specified in the object lock configuration will be applied by default to every new object placed in the specified bucket.</p>
     #[allow(unused_variables, warnings)]
     fn get_object_lock_configuration(
         &self,
@@ -22804,7 +22827,7 @@ impl S3 for S3Client {
         })
     }
 
-    /// <p>Replaces a policy on a bucket. If the bucket already has a policy, the one in this request completely replaces it.</p>
+    /// <p>Applies an Amazon S3 bucket policy to an Amazon S3 bucket.</p>
     #[allow(unused_variables, warnings)]
     fn put_bucket_policy(
         &self,
@@ -22846,7 +22869,7 @@ impl S3 for S3Client {
         })
     }
 
-    /// <p> Creates a replication configuration or replaces an existing one. For more information, see <a href=" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
+    /// <p> Creates a replication configuration or replaces an existing one. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
     #[allow(unused_variables, warnings)]
     fn put_bucket_replication(
         &self,
@@ -23419,7 +23442,7 @@ impl S3 for S3Client {
         })
     }
 
-    /// <p>Places an Object Lock configuration on the specified bucket. The rule specified in the Object Lock configuration will be applied by default to every new object placed in the specified bucket.</p>
+    /// <p>Places an object lock configuration on the specified bucket. The rule specified in the object lock configuration will be applied by default to every new object placed in the specified bucket.</p>
     #[allow(unused_variables, warnings)]
     fn put_object_lock_configuration(
         &self,

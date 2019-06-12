@@ -27,7 +27,7 @@ use serde_json;
 /// <p>Defines an action to be initiated by a trigger.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Action {
-    /// <p>The job arguments used when this trigger fires. For this job run, they replace the default arguments set in the job definition itself.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
+    /// <p>The job arguments used when this trigger fires. For this job run, they replace the default arguments set in the job definition itself.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
@@ -39,11 +39,11 @@ pub struct Action {
     #[serde(rename = "NotificationProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_property: Option<NotificationProperty>,
-    /// <p>The name of the SecurityConfiguration structure to be used with this action.</p>
+    /// <p>The name of the <code>SecurityConfiguration</code> structure to be used with this action.</p>
     #[serde(rename = "SecurityConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_configuration: Option<String>,
-    /// <p>The JobRun timeout in minutes. This is the maximum time that a job run can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours). This overrides the timeout value set in the parent job.</p>
+    /// <p>The <code>JobRun</code> timeout in minutes. This is the maximum time that a job run can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours). This overrides the timeout value set in the parent job.</p>
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
@@ -216,7 +216,7 @@ pub struct BatchGetDevEndpointsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetJobsRequest {
-    /// <p>A list of job names, which may be the names returned from the <code>ListJobs</code> operation.</p>
+    /// <p>A list of job names, which might be the names returned from the <code>ListJobs</code> operation.</p>
     #[serde(rename = "JobNames")]
     pub job_names: Vec<String>,
 }
@@ -292,11 +292,11 @@ pub struct BatchStopJobRunError {
     #[serde(rename = "ErrorDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_detail: Option<ErrorDetail>,
-    /// <p>The name of the job definition used in the job run in question.</p>
+    /// <p>The name of the job definition that is used in the job run in question.</p>
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    /// <p>The JobRunId of the job run in question.</p>
+    /// <p>The <code>JobRunId</code> of the job run in question.</p>
     #[serde(rename = "JobRunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_run_id: Option<String>,
@@ -307,7 +307,7 @@ pub struct BatchStopJobRunRequest {
     /// <p>The name of the job definition for which to stop job runs.</p>
     #[serde(rename = "JobName")]
     pub job_name: String,
-    /// <p>A list of the JobRunIds that should be stopped for that job definition.</p>
+    /// <p>A list of the <code>JobRunIds</code> that should be stopped for that job definition.</p>
     #[serde(rename = "JobRunIds")]
     pub job_run_ids: Vec<String>,
 }
@@ -315,7 +315,7 @@ pub struct BatchStopJobRunRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct BatchStopJobRunResponse {
-    /// <p>A list of the errors that were encountered in tryng to stop JobRuns, including the JobRunId for which each error was encountered and details about the error.</p>
+    /// <p>A list of the errors that were encountered in trying to stop <code>JobRuns</code>, including the <code>JobRunId</code> for which each error was encountered and details about the error.</p>
     #[serde(rename = "Errors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub errors: Option<Vec<BatchStopJobRunError>>,
@@ -325,7 +325,7 @@ pub struct BatchStopJobRunResponse {
     pub successful_submissions: Option<Vec<BatchStopJobRunSuccessfulSubmission>>,
 }
 
-/// <p>Records a successful request to stop a specified JobRun.</p>
+/// <p>Records a successful request to stop a specified <code>JobRun</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct BatchStopJobRunSuccessfulSubmission {
@@ -333,7 +333,7 @@ pub struct BatchStopJobRunSuccessfulSubmission {
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    /// <p>The JobRunId of the job run that was stopped.</p>
+    /// <p>The <code>JobRunId</code> of the job run that was stopped.</p>
     #[serde(rename = "JobRunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_run_id: Option<String>,
@@ -481,7 +481,7 @@ pub struct Column {
 /// <p>Defines a condition under which a trigger fires.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Condition {
-    /// <p>The name of the Job to whose JobRuns this condition applies and on which this trigger waits.</p>
+    /// <p>The name of the job whose <code>JobRuns</code> this condition applies to, and on which this trigger waits.</p>
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
@@ -489,7 +489,7 @@ pub struct Condition {
     #[serde(rename = "LogicalOperator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logical_operator: Option<String>,
-    /// <p>The condition state. Currently, the values supported are SUCCEEDED, STOPPED, TIMEOUT and FAILED.</p>
+    /// <p>The condition state. Currently, the values supported are <code>SUCCEEDED</code>, <code>STOPPED</code>, <code>TIMEOUT</code>, and <code>FAILED</code>.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -995,14 +995,14 @@ pub struct CreateGrokClassifierRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateJobRequest {
-    /// <p>The JobCommand that executes this job.</p>
+    /// <p>The <code>JobCommand</code> that executes this job.</p>
     #[serde(rename = "Command")]
     pub command: JobCommand,
     /// <p>The connections used for this job.</p>
     #[serde(rename = "Connections")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connections: Option<ConnectionsList>,
-    /// <p>The default arguments for this job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
+    /// <p>The default arguments for this job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "DefaultArguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_arguments: Option<::std::collections::HashMap<String, String>>,
@@ -1010,7 +1010,7 @@ pub struct CreateJobRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>An ExecutionProperty specifying the maximum number of concurrent runs allowed for this job.</p>
+    /// <p>An <code>ExecutionProperty</code> specifying the maximum number of concurrent runs allowed for this job.</p>
     #[serde(rename = "ExecutionProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_property: Option<ExecutionProperty>,
@@ -1018,7 +1018,7 @@ pub struct CreateJobRequest {
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
-    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a python shell job, or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
+    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a Python shell job or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a Python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
     #[serde(rename = "MaxCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_capacity: Option<f64>,
@@ -1037,14 +1037,14 @@ pub struct CreateJobRequest {
     #[serde(rename = "NumberOfWorkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_workers: Option<i64>,
-    /// <p>The name or ARN of the IAM role associated with this job.</p>
+    /// <p>The name or Amazon Resource Name (ARN) of the IAM role associated with this job.</p>
     #[serde(rename = "Role")]
     pub role: String,
-    /// <p>The name of the SecurityConfiguration structure to be used with this job.</p>
+    /// <p>The name of the <code>SecurityConfiguration</code> structure to be used with this job.</p>
     #[serde(rename = "SecurityConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_configuration: Option<String>,
-    /// <p>The tags to use with this job. You may use tags to limit access to the job. For more information about tags in AWS Glue, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a> in the developer guide.</p>
+    /// <p>The tags to use with this job. You may use tags to limit access to the job. For more information about tags in AWS Glue, see <a href="https://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a> in the developer guide.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -1052,7 +1052,7 @@ pub struct CreateJobRequest {
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
-    /// <p><p>The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.</p> </li> </ul></p>
+    /// <p><p>The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker maps to 1 DPU (4 vCPU, 16 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of memory, 128 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.</p> </li> </ul></p>
     #[serde(rename = "WorkerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub worker_type: Option<String>,
@@ -1181,19 +1181,19 @@ pub struct CreateTriggerRequest {
     /// <p>The name of the trigger.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>A predicate to specify when the new trigger should fire.</p> <p>This field is required when the trigger type is CONDITIONAL.</p>
+    /// <p>A predicate to specify when the new trigger should fire.</p> <p>This field is required when the trigger type is <code>CONDITIONAL</code>.</p>
     #[serde(rename = "Predicate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predicate: Option<Predicate>,
-    /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p> <p>This field is required when the trigger type is SCHEDULED.</p>
+    /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="https://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p> <p>This field is required when the trigger type is SCHEDULED.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
-    /// <p>Set to true to start SCHEDULED and CONDITIONAL triggers when created. True not supported for ON_DEMAND triggers.</p>
+    /// <p>Set to <code>true</code> to start <code>SCHEDULED</code> and <code>CONDITIONAL</code> triggers when created. True is not supported for <code>ON_DEMAND</code> triggers.</p>
     #[serde(rename = "StartOnCreation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_on_creation: Option<bool>,
-    /// <p>The tags to use with this trigger. You may use tags to limit access to the trigger. For more information about tags in AWS Glue, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a> in the developer guide. </p>
+    /// <p>The tags to use with this trigger. You may use tags to limit access to the trigger. For more information about tags in AWS Glue, see <a href="https://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a> in the developer guide. </p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -2097,11 +2097,11 @@ pub struct GetJobRunsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetJobRunsResponse {
-    /// <p>A list of job-run metatdata objects.</p>
+    /// <p>A list of job-run metadata objects.</p>
     #[serde(rename = "JobRuns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_runs: Option<Vec<JobRun>>,
-    /// <p>A continuation token, if not all reequested job runs have been returned.</p>
+    /// <p>A continuation token, if not all requested job runs have been returned.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2447,7 +2447,7 @@ pub struct GetTablesResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetTagsRequest {
-    /// <p>The Amazon ARN of the resource for which to retrieve tags.</p>
+    /// <p>The Amazon Resource Name (ARN) of the resource for which to retrieve tags.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
 }
@@ -2479,7 +2479,7 @@ pub struct GetTriggerResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetTriggersRequest {
-    /// <p>The name of the job for which to retrieve triggers. The trigger that can start this job will be returned, and if there is no such trigger, all triggers will be returned.</p>
+    /// <p>The name of the job to retrieve triggers for. The trigger that can start this job is returned, and if there is no such trigger, all triggers are returned.</p>
     #[serde(rename = "DependentJobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dependent_job_name: Option<String>,
@@ -2628,7 +2628,7 @@ pub struct JdbcTarget {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Job {
-    /// <p>The JobCommand that executes this job.</p>
+    /// <p>The <code>JobCommand</code> that executes this job.</p>
     #[serde(rename = "Command")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub command: Option<JobCommand>,
@@ -2640,15 +2640,15 @@ pub struct Job {
     #[serde(rename = "CreatedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_on: Option<f64>,
-    /// <p>The default arguments for this job, specified as name-value pairs.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
+    /// <p>The default arguments for this job, specified as name-value pairs.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "DefaultArguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_arguments: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Description of the job being defined.</p>
+    /// <p>A description of the job.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>An ExecutionProperty specifying the maximum number of concurrent runs allowed for this job.</p>
+    /// <p>An <code>ExecutionProperty</code> specifying the maximum number of concurrent runs allowed for this job.</p>
     #[serde(rename = "ExecutionProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_property: Option<ExecutionProperty>,
@@ -2660,7 +2660,7 @@ pub struct Job {
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
-    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a python shell job, or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
+    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a Python shell job or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a Python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
     #[serde(rename = "MaxCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_capacity: Option<f64>,
@@ -2680,11 +2680,11 @@ pub struct Job {
     #[serde(rename = "NumberOfWorkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_workers: Option<i64>,
-    /// <p>The name or ARN of the IAM role associated with this job.</p>
+    /// <p>The name or Amazon Resource Name (ARN) of the IAM role associated with this job.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
-    /// <p>The name of the SecurityConfiguration structure to be used with this job.</p>
+    /// <p>The name of the <code>SecurityConfiguration</code> structure to be used with this job.</p>
     #[serde(rename = "SecurityConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_configuration: Option<String>,
@@ -2692,7 +2692,7 @@ pub struct Job {
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
-    /// <p><p>The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.</p> </li> </ul></p>
+    /// <p><p>The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker maps to 1 DPU (4 vCPU, 16 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of memory, 128 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.</p> </li> </ul></p>
     #[serde(rename = "WorkerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub worker_type: Option<String>,
@@ -2740,11 +2740,15 @@ pub struct JobBookmarksEncryption {
 /// <p>Specifies code executed when a job is run.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct JobCommand {
-    /// <p>The name of the job command: this must be <code>glueetl</code>, for an Apache Spark ETL job, or <code>pythonshell</code>, for a Python shell job.</p>
+    /// <p>The name of the job command. For an Apache Spark ETL job, this must be <code>glueetl</code>. For a Python shell job, it must be <code>pythonshell</code>.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Specifies the S3 path to a script that executes a job (required).</p>
+    /// <p>The Python version being used to execute a Python shell job. Allowed values are 2 or 3.</p>
+    #[serde(rename = "PythonVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub python_version: Option<String>,
+    /// <p>Specifies the Amazon Simple Storage Service (Amazon S3) path to a script that executes a job (required).</p>
     #[serde(rename = "ScriptLocation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub script_location: Option<String>,
@@ -2754,7 +2758,7 @@ pub struct JobCommand {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct JobRun {
-    /// <p>The job arguments associated with this run. For this job run, they replace the default arguments set in the job definition itself.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
+    /// <p>The job arguments associated with this run. For this job run, they replace the default arguments set in the job definition itself.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own job arguments, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
@@ -2762,7 +2766,7 @@ pub struct JobRun {
     #[serde(rename = "Attempt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attempt: Option<i64>,
-    /// <p>The date and time this job run completed.</p>
+    /// <p>The date and time that this job run completed.</p>
     #[serde(rename = "CompletedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completed_on: Option<f64>,
@@ -2786,15 +2790,15 @@ pub struct JobRun {
     #[serde(rename = "JobRunState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_run_state: Option<String>,
-    /// <p>The last time this job run was modified.</p>
+    /// <p>The last time that this job run was modified.</p>
     #[serde(rename = "LastModifiedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_on: Option<f64>,
-    /// <p>The name of the log group for secure logging, that can be server-side encrypted in CloudWatch using KMS. This name can be <code>/aws-glue/jobs/</code>, in which case the default encryption is <code>NONE</code>. If you add a role name and SecurityConfiguration name (in other words, <code>/aws-glue/jobs-yourRoleName-yourSecurityConfigurationName/</code>), then that security configuration will be used to encrypt the log group.</p>
+    /// <p>The name of the log group for secure logging that can be server-side encrypted in Amazon CloudWatch using AWS KMS. This name can be <code>/aws-glue/jobs/</code>, in which case the default encryption is <code>NONE</code>. If you add a role name and <code>SecurityConfiguration</code> name (in other words, <code>/aws-glue/jobs-yourRoleName-yourSecurityConfigurationName/</code>), then that security configuration is used to encrypt the log group.</p>
     #[serde(rename = "LogGroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_group_name: Option<String>,
-    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a python shell job, or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
+    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://docs.aws.amazon.com/https:/aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a Python shell job or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a Python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
     #[serde(rename = "MaxCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_capacity: Option<f64>,
@@ -2810,11 +2814,11 @@ pub struct JobRun {
     #[serde(rename = "PredecessorRuns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predecessor_runs: Option<Vec<Predecessor>>,
-    /// <p>The ID of the previous run of this job. For example, the JobRunId specified in the StartJobRun action.</p>
+    /// <p>The ID of the previous run of this job. For example, the <code>JobRunId</code> specified in the <code>StartJobRun</code> action.</p>
     #[serde(rename = "PreviousRunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub previous_run_id: Option<String>,
-    /// <p>The name of the SecurityConfiguration structure to be used with this job run.</p>
+    /// <p>The name of the <code>SecurityConfiguration</code> structure to be used with this job run.</p>
     #[serde(rename = "SecurityConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_configuration: Option<String>,
@@ -2822,7 +2826,7 @@ pub struct JobRun {
     #[serde(rename = "StartedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub started_on: Option<f64>,
-    /// <p>The JobRun timeout in minutes. This is the maximum time that a job run can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours). This overrides the timeout value set in the parent job.</p>
+    /// <p>The <code>JobRun</code> timeout in minutes. This is the maximum time that a job run can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours). This overrides the timeout value set in the parent job.</p>
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
@@ -2836,10 +2840,10 @@ pub struct JobRun {
     pub worker_type: Option<String>,
 }
 
-/// <p>Specifies information used to update an existing job definition. Note that the previous job definition will be completely overwritten by this information.</p>
+/// <p>Specifies information used to update an existing job definition. The previous job definition is completely overwritten by this information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct JobUpdate {
-    /// <p>The JobCommand that executes this job (required).</p>
+    /// <p>The <code>JobCommand</code> that executes this job (required).</p>
     #[serde(rename = "Command")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub command: Option<JobCommand>,
@@ -2847,7 +2851,7 @@ pub struct JobUpdate {
     #[serde(rename = "Connections")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connections: Option<ConnectionsList>,
-    /// <p>The default arguments for this job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
+    /// <p>The default arguments for this job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "DefaultArguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_arguments: Option<::std::collections::HashMap<String, String>>,
@@ -2855,7 +2859,7 @@ pub struct JobUpdate {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>An ExecutionProperty specifying the maximum number of concurrent runs allowed for this job.</p>
+    /// <p>An <code>ExecutionProperty</code> specifying the maximum number of concurrent runs allowed for this job.</p>
     #[serde(rename = "ExecutionProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_property: Option<ExecutionProperty>,
@@ -2863,7 +2867,7 @@ pub struct JobUpdate {
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
-    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a python shell job, or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
+    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a Python shell job or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a Python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
     #[serde(rename = "MaxCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_capacity: Option<f64>,
@@ -2871,7 +2875,7 @@ pub struct JobUpdate {
     #[serde(rename = "MaxRetries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_retries: Option<i64>,
-    /// <p>Specifies configuration properties of a job notification.</p>
+    /// <p>Specifies the configuration properties of a job notification.</p>
     #[serde(rename = "NotificationProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_property: Option<NotificationProperty>,
@@ -2879,11 +2883,11 @@ pub struct JobUpdate {
     #[serde(rename = "NumberOfWorkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_workers: Option<i64>,
-    /// <p>The name or ARN of the IAM role associated with this job (required).</p>
+    /// <p>The name or Amazon Resource Name (ARN) of the IAM role associated with this job (required).</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
-    /// <p>The name of the SecurityConfiguration structure to be used with this job.</p>
+    /// <p>The name of the <code>SecurityConfiguration</code> structure to be used with this job.</p>
     #[serde(rename = "SecurityConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_configuration: Option<String>,
@@ -2891,7 +2895,7 @@ pub struct JobUpdate {
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
-    /// <p><p>The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.</p> </li> </ul></p>
+    /// <p><p>The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker maps to 1 DPU (4 vCPU, 16 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of memory, 128 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.</p> </li> </ul></p>
     #[serde(rename = "WorkerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub worker_type: Option<String>,
@@ -2999,7 +3003,7 @@ pub struct ListDevEndpointsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListDevEndpointsResponse {
-    /// <p>The names of all DevEndpoints in the account, or the DevEndpoints with the specified tags.</p>
+    /// <p>The names of all the <code>DevEndpoint</code>s in the account, or the <code>DevEndpoint</code>s with the specified tags.</p>
     #[serde(rename = "DevEndpointNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dev_endpoint_names: Option<Vec<String>>,
@@ -3040,7 +3044,7 @@ pub struct ListJobsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTriggersRequest {
-    /// <p> The name of the job for which to retrieve triggers. The trigger that can start this job will be returned, and if there is no such trigger, all triggers will be returned.</p>
+    /// <p> The name of the job for which to retrieve triggers. The trigger that can start this job is returned. If there is no such trigger, all triggers are returned.</p>
     #[serde(rename = "DependentJobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dependent_job_name: Option<String>,
@@ -3260,7 +3264,7 @@ pub struct Predicate {
     #[serde(rename = "Conditions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub conditions: Option<Vec<Condition>>,
-    /// <p>Optional field if only one condition is listed. If multiple conditions are listed, then this field is required.</p>
+    /// <p>An optional field if only one condition is listed. If multiple conditions are listed, then this field is required.</p>
     #[serde(rename = "Logical")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logical: Option<String>,
@@ -3474,18 +3478,18 @@ pub struct StartCrawlerScheduleResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartJobRunRequest {
-    /// <p>The job arguments specifically for this run. For this job run, they replace the default arguments set in the job definition itself.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
+    /// <p>The job arguments specifically for this run. For this job run, they replace the default arguments set in the job definition itself.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
     /// <p>The name of the job definition to use.</p>
     #[serde(rename = "JobName")]
     pub job_name: String,
-    /// <p>The ID of a previous JobRun to retry.</p>
+    /// <p>The ID of a previous <code>JobRun</code> to retry.</p>
     #[serde(rename = "JobRunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_run_id: Option<String>,
-    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a python shell job, or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
+    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://docs.aws.amazon.com/https:/aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a Python shell job, or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a Python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
     #[serde(rename = "MaxCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_capacity: Option<f64>,
@@ -3497,11 +3501,11 @@ pub struct StartJobRunRequest {
     #[serde(rename = "NumberOfWorkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_workers: Option<i64>,
-    /// <p>The name of the SecurityConfiguration structure to be used with this job run.</p>
+    /// <p>The name of the <code>SecurityConfiguration</code> structure to be used with this job run.</p>
     #[serde(rename = "SecurityConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_configuration: Option<String>,
-    /// <p>The JobRun timeout in minutes. This is the maximum time that a job run can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours). This overrides the timeout value set in the parent job.</p>
+    /// <p>The <code>JobRun</code> timeout in minutes. This is the maximum time that a job run can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours). This overrides the timeout value set in the parent job.</p>
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
@@ -3796,7 +3800,7 @@ pub struct TableVersionError {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TagResourceRequest {
-    /// <p>The ARN of the AWS Glue resource to which to add the tags. For more information about AWS Glue resource ARNs, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-common.html#aws-glue-api-regex-aws-glue-arn-id">AWS Glue ARN string pattern</a>.</p>
+    /// <p>The ARN of the AWS Glue resource to which to add the tags. For more information about AWS Glue resource ARNs, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-common.html#aws-glue-api-regex-aws-glue-arn-id">AWS Glue ARN string pattern</a>.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
     /// <p>Tags to add to this resource.</p>
@@ -3824,7 +3828,7 @@ pub struct Trigger {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>Name of the trigger.</p>
+    /// <p>The name of the trigger.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -3832,7 +3836,7 @@ pub struct Trigger {
     #[serde(rename = "Predicate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predicate: Option<Predicate>,
-    /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
+    /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="https://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
@@ -3846,7 +3850,7 @@ pub struct Trigger {
     pub type_: Option<String>,
 }
 
-/// <p>A structure used to provide information used to update a trigger. This object will update the the previous trigger definition by overwriting it completely.</p>
+/// <p>A structure used to provide information used to update a trigger. This object updates the previous trigger definition by overwriting it completely.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TriggerUpdate {
     /// <p>The actions initiated by this trigger.</p>
@@ -3865,7 +3869,7 @@ pub struct TriggerUpdate {
     #[serde(rename = "Predicate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predicate: Option<Predicate>,
-    /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
+    /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="https://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
@@ -3873,7 +3877,7 @@ pub struct TriggerUpdate {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UntagResourceRequest {
-    /// <p>The ARN of the resource from which to remove the tags.</p>
+    /// <p>The Amazon Resource Name (ARN) of the resource from which to remove the tags.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
     /// <p>Tags to remove from this resource.</p>
@@ -4104,7 +4108,7 @@ pub struct UpdateGrokClassifierRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateJobRequest {
-    /// <p>Name of the job definition to update.</p>
+    /// <p>The name of the job definition to update.</p>
     #[serde(rename = "JobName")]
     pub job_name: String,
     /// <p>Specifies the values with which to update the job definition.</p>
@@ -10014,22 +10018,22 @@ pub trait Glue {
         input: ImportCatalogToGlueRequest,
     ) -> RusotoFuture<ImportCatalogToGlueResponse, ImportCatalogToGlueError>;
 
-    /// <p>Retrieves the names of all crawler resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
+    /// <p>Retrieves the names of all crawler resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.</p>
     fn list_crawlers(
         &self,
         input: ListCrawlersRequest,
     ) -> RusotoFuture<ListCrawlersResponse, ListCrawlersError>;
 
-    /// <p>Retrieves the names of all DevEndpoint resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
+    /// <p>Retrieves the names of all <code>DevEndpoint</code> resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.</p>
     fn list_dev_endpoints(
         &self,
         input: ListDevEndpointsRequest,
     ) -> RusotoFuture<ListDevEndpointsResponse, ListDevEndpointsError>;
 
-    /// <p>Retrieves the names of all job resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
+    /// <p>Retrieves the names of all job resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.</p>
     fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError>;
 
-    /// <p>Retrieves the names of all trigger resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
+    /// <p>Retrieves the names of all trigger resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.</p>
     fn list_triggers(
         &self,
         input: ListTriggersRequest,
@@ -10071,7 +10075,7 @@ pub trait Glue {
         input: StartJobRunRequest,
     ) -> RusotoFuture<StartJobRunResponse, StartJobRunError>;
 
-    /// <p>Starts an existing trigger. See <a href="http://docs.aws.amazon.com/glue/latest/dg/trigger-job.html">Triggering Jobs</a> for information about how different types of trigger are started.</p>
+    /// <p>Starts an existing trigger. See <a href="https://docs.aws.amazon.com/glue/latest/dg/trigger-job.html">Triggering Jobs</a> for information about how different types of trigger are started.</p>
     fn start_trigger(
         &self,
         input: StartTriggerRequest,
@@ -10095,7 +10099,7 @@ pub trait Glue {
         input: StopTriggerRequest,
     ) -> RusotoFuture<StopTriggerResponse, StopTriggerError>;
 
-    /// <p>Adds tags to a resource. A tag is a label you can assign to an AWS resource. In AWS Glue, you can tag only certain resources. For information about what resources you can tag, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a>.</p>
+    /// <p>Adds tags to a resource. A tag is a label you can assign to an AWS resource. In AWS Glue, you can tag only certain resources. For information about what resources you can tag, see <a href="https://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a>.</p>
     fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -12215,7 +12219,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Retrieves the names of all crawler resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
+    /// <p>Retrieves the names of all crawler resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.</p>
     fn list_crawlers(
         &self,
         input: ListCrawlersRequest,
@@ -12244,7 +12248,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Retrieves the names of all DevEndpoint resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
+    /// <p>Retrieves the names of all <code>DevEndpoint</code> resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.</p>
     fn list_dev_endpoints(
         &self,
         input: ListDevEndpointsRequest,
@@ -12273,7 +12277,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Retrieves the names of all job resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
+    /// <p>Retrieves the names of all job resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.</p>
     fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
@@ -12299,7 +12303,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Retrieves the names of all trigger resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
+    /// <p>Retrieves the names of all trigger resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.</p>
     fn list_triggers(
         &self,
         input: ListTriggersRequest,
@@ -12501,7 +12505,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Starts an existing trigger. See <a href="http://docs.aws.amazon.com/glue/latest/dg/trigger-job.html">Triggering Jobs</a> for information about how different types of trigger are started.</p>
+    /// <p>Starts an existing trigger. See <a href="https://docs.aws.amazon.com/glue/latest/dg/trigger-job.html">Triggering Jobs</a> for information about how different types of trigger are started.</p>
     fn start_trigger(
         &self,
         input: StartTriggerRequest,
@@ -12616,7 +12620,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Adds tags to a resource. A tag is a label you can assign to an AWS resource. In AWS Glue, you can tag only certain resources. For information about what resources you can tag, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a>.</p>
+    /// <p>Adds tags to a resource. A tag is a label you can assign to an AWS resource. In AWS Glue, you can tag only certain resources. For information about what resources you can tag, see <a href="https://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a>.</p>
     fn tag_resource(
         &self,
         input: TagResourceRequest,

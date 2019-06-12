@@ -121,6 +121,28 @@ impl AccountQuotaListDeserializer {
         })
     }
 }
+struct ActivityStreamModeDeserializer;
+impl ActivityStreamModeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct ActivityStreamStatusDeserializer;
+impl ActivityStreamStatusDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddRoleToDBClusterMessage {
     /// <p>The name of the DB cluster to associate the IAM role with.</p>
@@ -2600,6 +2622,14 @@ impl CreateOptionGroupResultDeserializer {
 /// <p>Contains the details of an Amazon Aurora DB cluster. </p> <p>This data type is used as a response element in the <code>DescribeDBClusters</code>, <code>StopDBCluster</code>, and <code>StartDBCluster</code> actions. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBCluster {
+    /// <p>The name of the Amazon Kinesis data stream used for the database activity stream.</p>
+    pub activity_stream_kinesis_stream_name: Option<String>,
+    /// <p>The AWS KMS key identifier used for encrypting messages in the database activity stream.</p>
+    pub activity_stream_kms_key_id: Option<String>,
+    /// <p>The mode of the database activity stream. Database events such as a change or access generate an activity stream event. The database session can handle these events either synchronously or asynchronously. </p>
+    pub activity_stream_mode: Option<String>,
+    /// <p>The status of the database activity stream.</p>
+    pub activity_stream_status: Option<String>,
     /// <p>For all database engines except Amazon Aurora, <code>AllocatedStorage</code> specifies the allocated storage size in gibibytes (GiB). For Aurora, <code>AllocatedStorage</code> always returns 1, because Aurora DB cluster storage size is not fixed, but instead automatically adjusts as needed.</p>
     pub allocated_storage: Option<i64>,
     /// <p>Provides a list of the AWS Identity and Access Management (IAM) roles that are associated with the DB cluster. IAM roles that are associated with a DB cluster grant permission for the DB cluster to access other AWS services on your behalf.</p>
@@ -2658,7 +2688,7 @@ pub struct DBCluster {
     pub engine_version: Option<String>,
     /// <p>Specifies the ID that Amazon Route 53 assigns when you create a hosted zone.</p>
     pub hosted_zone_id: Option<String>,
-    /// <p><note> <p>HTTP endpoint functionality is in beta for Aurora Serverless and is subject to change.</p> </note> <p>A value that indicates whether the HTTP endpoint for an Aurora Serverless DB cluster is enabled.</p> <p>When enabled, the HTTP endpoint provides a connectionless web service API for running SQL queries on the Aurora Serverless DB cluster. You can also query your database from inside the RDS console with the query editor.</p> <p>For more information about Aurora Serverless, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.html">Using Amazon Aurora Serverless</a> in the <i>Amazon Aurora User Guide</i>.</p></p>
+    /// <p>A value that indicates whether the HTTP endpoint for an Aurora Serverless DB cluster is enabled.</p> <p>When enabled, the HTTP endpoint provides a connectionless web service API for running SQL queries on the Aurora Serverless DB cluster. You can also query your database from inside the RDS console with the query editor.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/data-api.html">Using the Data API for Aurora Serverless</a> in the <i>Amazon Aurora User Guide</i>.</p>
     pub http_endpoint_enabled: Option<bool>,
     /// <p>A value that indicates whether the mapping of AWS Identity and Access Management (IAM) accounts to database accounts is enabled.</p>
     pub iam_database_authentication_enabled: Option<bool>,
@@ -2702,6 +2732,30 @@ impl DBClusterDeserializer {
     ) -> Result<DBCluster, XmlParseError> {
         deserialize_elements::<_, DBCluster, _>(tag_name, stack, |name, stack, obj| {
             match name {
+                "ActivityStreamKinesisStreamName" => {
+                    obj.activity_stream_kinesis_stream_name = Some(
+                        StringDeserializer::deserialize("ActivityStreamKinesisStreamName", stack)?,
+                    );
+                }
+                "ActivityStreamKmsKeyId" => {
+                    obj.activity_stream_kms_key_id = Some(StringDeserializer::deserialize(
+                        "ActivityStreamKmsKeyId",
+                        stack,
+                    )?);
+                }
+                "ActivityStreamMode" => {
+                    obj.activity_stream_mode = Some(ActivityStreamModeDeserializer::deserialize(
+                        "ActivityStreamMode",
+                        stack,
+                    )?);
+                }
+                "ActivityStreamStatus" => {
+                    obj.activity_stream_status =
+                        Some(ActivityStreamStatusDeserializer::deserialize(
+                            "ActivityStreamStatus",
+                            stack,
+                        )?);
+                }
                 "AllocatedStorage" => {
                     obj.allocated_storage = Some(IntegerOptionalDeserializer::deserialize(
                         "AllocatedStorage",
@@ -4003,6 +4057,8 @@ pub struct DBEngineVersion {
     pub engine_version: Option<String>,
     /// <p>The types of logs that the database engine has available for export to CloudWatch Logs.</p>
     pub exportable_log_types: Option<Vec<String>>,
+    /// <p>The status of the DB engine version, either <code>available</code> or <code>deprecated</code>.</p>
+    pub status: Option<String>,
     /// <p> A list of the character sets supported by this engine for the <code>CharacterSetName</code> parameter of the <code>CreateDBInstance</code> action. </p>
     pub supported_character_sets: Option<Vec<CharacterSet>>,
     /// <p>A list of the supported DB engine modes.</p>
@@ -4063,6 +4119,9 @@ impl DBEngineVersionDeserializer {
                     obj.exportable_log_types.get_or_insert(vec![]).extend(
                         LogTypeListDeserializer::deserialize("ExportableLogTypes", stack)?,
                     );
+                }
+                "Status" => {
+                    obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
                 }
                 "SupportedCharacterSets" => {
                     obj.supported_character_sets.get_or_insert(vec![]).extend(
@@ -6818,6 +6877,8 @@ pub struct DescribeDBEngineVersionsMessage {
     pub engine_version: Option<String>,
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
+    /// <p>A value that indicates whether to include engine versions that aren't available in the list. The default is to list only available engine versions.</p>
+    pub include_all: Option<bool>,
     /// <p>A value that indicates whether to list the supported character sets for each engine version.</p> <p>If this parameter is enabled and the requested engine supports the <code>CharacterSetName</code> parameter for <code>CreateDBInstance</code>, the response includes a list of supported character sets for each engine version. </p>
     pub list_supported_character_sets: Option<bool>,
     /// <p>A value that indicates whether to list the supported time zones for each engine version.</p> <p>If this parameter is enabled and the requested engine supports the <code>TimeZone</code> parameter for <code>CreateDBInstance</code>, the response includes a list of supported time zones for each engine version. </p>
@@ -6858,6 +6919,9 @@ impl DescribeDBEngineVersionsMessageSerializer {
                 &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
+        }
+        if let Some(ref field_value) = obj.include_all {
+            params.put(&format!("{}{}", prefix, "IncludeAll"), &field_value);
         }
         if let Some(ref field_value) = obj.list_supported_character_sets {
             params.put(
@@ -9596,7 +9660,7 @@ pub struct ModifyDBClusterMessage {
     pub db_cluster_parameter_group_name: Option<String>,
     /// <p>A value that indicates whether the DB cluster has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. </p>
     pub deletion_protection: Option<bool>,
-    /// <p><note> <p>HTTP endpoint functionality is in beta for Aurora Serverless and is subject to change.</p> </note> <p>A value that indicates whether to enable the HTTP endpoint for an Aurora Serverless DB cluster. By default, the HTTP endpoint is disabled.</p> <p>When enabled, the HTTP endpoint provides a connectionless web service API for running SQL queries on the Aurora Serverless DB cluster. You can also query your database from inside the RDS console with the query editor.</p> <p>For more information about Aurora Serverless, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.html">Using Amazon Aurora Serverless</a> in the <i>Amazon Aurora User Guide</i>.</p></p>
+    /// <p>A value that indicates whether to enable the HTTP endpoint for an Aurora Serverless DB cluster. By default, the HTTP endpoint is disabled.</p> <p>When enabled, the HTTP endpoint provides a connectionless web service API for running SQL queries on the Aurora Serverless DB cluster. You can also query your database from inside the RDS console with the query editor.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/data-api.html">Using the Data API for Aurora Serverless</a> in the <i>Amazon Aurora User Guide</i>.</p>
     pub enable_http_endpoint: Option<bool>,
     /// <p>A value that indicates whether to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts. By default, mapping is disabled.</p>
     pub enable_iam_database_authentication: Option<bool>,
@@ -14972,6 +15036,89 @@ impl SourceTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct StartActivityStreamRequest {
+    /// <p>Specifies whether or not the database activity stream is to start as soon as possible, regardless of the maintenance window for the database.</p>
+    pub apply_immediately: Option<bool>,
+    /// <p>The AWS KMS key identifier for encrypting messages in the database activity stream. The key identifier can be either a key ID, a key ARN, or a key alias.</p>
+    pub kms_key_id: String,
+    /// <p>Specifies the mode of the database activity stream. Database events such as a change or access generate an activity stream event. The database session can handle these events either synchronously or asynchronously. </p>
+    pub mode: String,
+    /// <p>The Amazon Resource Name (ARN) of the DB cluster, for example <code>arn:aws:rds:us-east-1:12345667890:cluster:das-cluster</code>.</p>
+    pub resource_arn: String,
+}
+
+/// Serialize `StartActivityStreamRequest` contents to a `SignedRequest`.
+struct StartActivityStreamRequestSerializer;
+impl StartActivityStreamRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &StartActivityStreamRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.apply_immediately {
+            params.put(&format!("{}{}", prefix, "ApplyImmediately"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "KmsKeyId"), &obj.kms_key_id);
+        params.put(&format!("{}{}", prefix, "Mode"), &obj.mode);
+        params.put(&format!("{}{}", prefix, "ResourceArn"), &obj.resource_arn);
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct StartActivityStreamResponse {
+    /// <p>Indicates whether or not the database activity stream will start as soon as possible, regardless of the maintenance window for the database.</p>
+    pub apply_immediately: Option<bool>,
+    /// <p>The name of the Amazon Kinesis data stream to be used for the database activity stream.</p>
+    pub kinesis_stream_name: Option<String>,
+    /// <p>The AWS KMS key identifier for encryption of messages in the database activity stream.</p>
+    pub kms_key_id: Option<String>,
+    /// <p>The mode of the database activity stream.</p>
+    pub mode: Option<String>,
+    /// <p>The status of the database activity stream.</p>
+    pub status: Option<String>,
+}
+
+struct StartActivityStreamResponseDeserializer;
+impl StartActivityStreamResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StartActivityStreamResponse, XmlParseError> {
+        deserialize_elements::<_, StartActivityStreamResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ApplyImmediately" => {
+                        obj.apply_immediately =
+                            Some(BooleanDeserializer::deserialize("ApplyImmediately", stack)?);
+                    }
+                    "KinesisStreamName" => {
+                        obj.kinesis_stream_name =
+                            Some(StringDeserializer::deserialize("KinesisStreamName", stack)?);
+                    }
+                    "KmsKeyId" => {
+                        obj.kms_key_id = Some(StringDeserializer::deserialize("KmsKeyId", stack)?);
+                    }
+                    "Mode" => {
+                        obj.mode =
+                            Some(ActivityStreamModeDeserializer::deserialize("Mode", stack)?);
+                    }
+                    "Status" => {
+                        obj.status = Some(ActivityStreamStatusDeserializer::deserialize(
+                            "Status", stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StartDBClusterMessage {
     /// <p>The DB cluster identifier of the Amazon Aurora DB cluster to be started. This parameter is stored as a lowercase string.</p>
     pub db_cluster_identifier: String,
@@ -15060,6 +15207,71 @@ impl StartDBInstanceResultDeserializer {
             }
             Ok(())
         })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct StopActivityStreamRequest {
+    /// <p>Specifies whether or not the database activity stream is to stop as soon as possible, regardless of the maintenance window for the database.</p>
+    pub apply_immediately: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) of the DB cluster for the database activity stream. For example, <code>arn:aws:rds:us-east-1:12345667890:cluster:das-cluster</code>. </p>
+    pub resource_arn: String,
+}
+
+/// Serialize `StopActivityStreamRequest` contents to a `SignedRequest`.
+struct StopActivityStreamRequestSerializer;
+impl StopActivityStreamRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &StopActivityStreamRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.apply_immediately {
+            params.put(&format!("{}{}", prefix, "ApplyImmediately"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "ResourceArn"), &obj.resource_arn);
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct StopActivityStreamResponse {
+    /// <p>The name of the Amazon Kinesis data stream used for the database activity stream.</p>
+    pub kinesis_stream_name: Option<String>,
+    /// <p>The AWS KMS key identifier used for encrypting messages in the database activity stream.</p>
+    pub kms_key_id: Option<String>,
+    /// <p>The status of the database activity stream.</p>
+    pub status: Option<String>,
+}
+
+struct StopActivityStreamResponseDeserializer;
+impl StopActivityStreamResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StopActivityStreamResponse, XmlParseError> {
+        deserialize_elements::<_, StopActivityStreamResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "KinesisStreamName" => {
+                        obj.kinesis_stream_name =
+                            Some(StringDeserializer::deserialize("KinesisStreamName", stack)?);
+                    }
+                    "KmsKeyId" => {
+                        obj.kms_key_id = Some(StringDeserializer::deserialize("KmsKeyId", stack)?);
+                    }
+                    "Status" => {
+                        obj.status = Some(ActivityStreamStatusDeserializer::deserialize(
+                            "Status", stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -23710,6 +23922,99 @@ impl Error for RevokeDBSecurityGroupIngressError {
         }
     }
 }
+/// Errors returned by StartActivityStream
+#[derive(Debug, PartialEq)]
+pub enum StartActivityStreamError {
+    /// <p> <i>DBClusterIdentifier</i> doesn't refer to an existing DB cluster. </p>
+    DBClusterNotFoundFault(String),
+    /// <p> <i>DBInstanceIdentifier</i> doesn't refer to an existing DB instance. </p>
+    DBInstanceNotFoundFault(String),
+    /// <p>The requested operation can't be performed while the cluster is in this state.</p>
+    InvalidDBClusterStateFault(String),
+    /// <p>The DB instance isn't in a valid state.</p>
+    InvalidDBInstanceStateFault(String),
+    /// <p>An error occurred accessing an AWS KMS key.</p>
+    KMSKeyNotAccessibleFault(String),
+    /// <p>The specified resource ID was not found.</p>
+    ResourceNotFoundFault(String),
+}
+
+impl StartActivityStreamError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartActivityStreamError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DBClusterNotFoundFault" => {
+                        return RusotoError::Service(
+                            StartActivityStreamError::DBClusterNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    "DBInstanceNotFound" => {
+                        return RusotoError::Service(
+                            StartActivityStreamError::DBInstanceNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    "InvalidDBClusterStateFault" => {
+                        return RusotoError::Service(
+                            StartActivityStreamError::InvalidDBClusterStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidDBInstanceState" => {
+                        return RusotoError::Service(
+                            StartActivityStreamError::InvalidDBInstanceStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "KMSKeyNotAccessibleFault" => {
+                        return RusotoError::Service(
+                            StartActivityStreamError::KMSKeyNotAccessibleFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ResourceNotFoundFault" => {
+                        return RusotoError::Service(
+                            StartActivityStreamError::ResourceNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for StartActivityStreamError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartActivityStreamError {
+    fn description(&self) -> &str {
+        match *self {
+            StartActivityStreamError::DBClusterNotFoundFault(ref cause) => cause,
+            StartActivityStreamError::DBInstanceNotFoundFault(ref cause) => cause,
+            StartActivityStreamError::InvalidDBClusterStateFault(ref cause) => cause,
+            StartActivityStreamError::InvalidDBInstanceStateFault(ref cause) => cause,
+            StartActivityStreamError::KMSKeyNotAccessibleFault(ref cause) => cause,
+            StartActivityStreamError::ResourceNotFoundFault(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by StartDBCluster
 #[derive(Debug, PartialEq)]
 pub enum StartDBClusterError {
@@ -23901,6 +24206,89 @@ impl Error for StartDBInstanceError {
             StartDBInstanceError::InvalidSubnet(ref cause) => cause,
             StartDBInstanceError::InvalidVPCNetworkStateFault(ref cause) => cause,
             StartDBInstanceError::KMSKeyNotAccessibleFault(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by StopActivityStream
+#[derive(Debug, PartialEq)]
+pub enum StopActivityStreamError {
+    /// <p> <i>DBClusterIdentifier</i> doesn't refer to an existing DB cluster. </p>
+    DBClusterNotFoundFault(String),
+    /// <p> <i>DBInstanceIdentifier</i> doesn't refer to an existing DB instance. </p>
+    DBInstanceNotFoundFault(String),
+    /// <p>The requested operation can't be performed while the cluster is in this state.</p>
+    InvalidDBClusterStateFault(String),
+    /// <p>The DB instance isn't in a valid state.</p>
+    InvalidDBInstanceStateFault(String),
+    /// <p>The specified resource ID was not found.</p>
+    ResourceNotFoundFault(String),
+}
+
+impl StopActivityStreamError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopActivityStreamError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DBClusterNotFoundFault" => {
+                        return RusotoError::Service(
+                            StopActivityStreamError::DBClusterNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    "DBInstanceNotFound" => {
+                        return RusotoError::Service(
+                            StopActivityStreamError::DBInstanceNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    "InvalidDBClusterStateFault" => {
+                        return RusotoError::Service(
+                            StopActivityStreamError::InvalidDBClusterStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidDBInstanceState" => {
+                        return RusotoError::Service(
+                            StopActivityStreamError::InvalidDBInstanceStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ResourceNotFoundFault" => {
+                        return RusotoError::Service(
+                            StopActivityStreamError::ResourceNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for StopActivityStreamError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StopActivityStreamError {
+    fn description(&self) -> &str {
+        match *self {
+            StopActivityStreamError::DBClusterNotFoundFault(ref cause) => cause,
+            StopActivityStreamError::DBInstanceNotFoundFault(ref cause) => cause,
+            StopActivityStreamError::InvalidDBClusterStateFault(ref cause) => cause,
+            StopActivityStreamError::InvalidDBInstanceStateFault(ref cause) => cause,
+            StopActivityStreamError::ResourceNotFoundFault(ref cause) => cause,
         }
     }
 }
@@ -24693,6 +25081,12 @@ pub trait Rds {
         input: RevokeDBSecurityGroupIngressMessage,
     ) -> RusotoFuture<RevokeDBSecurityGroupIngressResult, RevokeDBSecurityGroupIngressError>;
 
+    /// <p>Starts a database activity stream to monitor activity on the database. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/DBActivityStreams.html">Database Activity Streams</a> in the <i>Amazon Aurora User Guide</i>.</p>
+    fn start_activity_stream(
+        &self,
+        input: StartActivityStreamRequest,
+    ) -> RusotoFuture<StartActivityStreamResponse, StartActivityStreamError>;
+
     /// <p><p>Starts an Amazon Aurora DB cluster that was stopped using the AWS console, the stop-db-cluster AWS CLI command, or the StopDBCluster action.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-cluster-stop-start.html"> Stopping and Starting an Aurora Cluster</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn start_db_cluster(
         &self,
@@ -24704,6 +25098,12 @@ pub trait Rds {
         &self,
         input: StartDBInstanceMessage,
     ) -> RusotoFuture<StartDBInstanceResult, StartDBInstanceError>;
+
+    /// <p>Stops a database activity stream that was started using the AWS console, the <code>start-activity-stream</code> AWS CLI command, or the <code>StartActivityStream</code> action.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/DBActivityStreams.html">Database Activity Streams</a> in the <i>Amazon Aurora User Guide</i>.</p>
+    fn stop_activity_stream(
+        &self,
+        input: StopActivityStreamRequest,
+    ) -> RusotoFuture<StopActivityStreamResponse, StopActivityStreamError>;
 
     /// <p><p> Stops an Amazon Aurora DB cluster. When you stop a DB cluster, Aurora retains the DB cluster&#39;s metadata, including its endpoints and DB parameter groups. Aurora also retains the transaction logs so you can do a point-in-time restore if necessary. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-cluster-stop-start.html"> Stopping and Starting an Aurora Cluster</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn stop_db_cluster(
@@ -29694,6 +30094,56 @@ impl Rds for RdsClient {
         })
     }
 
+    /// <p>Starts a database activity stream to monitor activity on the database. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/DBActivityStreams.html">Database Activity Streams</a> in the <i>Amazon Aurora User Guide</i>.</p>
+    fn start_activity_stream(
+        &self,
+        input: StartActivityStreamRequest,
+    ) -> RusotoFuture<StartActivityStreamResponse, StartActivityStreamError> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "StartActivityStream");
+        params.put("Version", "2014-10-31");
+        StartActivityStreamRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(StartActivityStreamError::from_response(response))
+                    }),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = StartActivityStreamResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = StartActivityStreamResponseDeserializer::deserialize(
+                        "StartActivityStreamResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
     /// <p><p>Starts an Amazon Aurora DB cluster that was stopped using the AWS console, the stop-db-cluster AWS CLI command, or the StopDBCluster action.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-cluster-stop-start.html"> Stopping and Starting an Aurora Cluster</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     fn start_db_cluster(
         &self,
@@ -29785,6 +30235,57 @@ impl Rds for RdsClient {
                     start_element(&actual_tag_name, &mut stack)?;
                     result = StartDBInstanceResultDeserializer::deserialize(
                         "StartDBInstanceResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Stops a database activity stream that was started using the AWS console, the <code>start-activity-stream</code> AWS CLI command, or the <code>StartActivityStream</code> action.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/DBActivityStreams.html">Database Activity Streams</a> in the <i>Amazon Aurora User Guide</i>.</p>
+    fn stop_activity_stream(
+        &self,
+        input: StopActivityStreamRequest,
+    ) -> RusotoFuture<StopActivityStreamResponse, StopActivityStreamError> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "StopActivityStream");
+        params.put("Version", "2014-10-31");
+        StopActivityStreamRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StopActivityStreamError::from_response(response))),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = StopActivityStreamResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = StopActivityStreamResponseDeserializer::deserialize(
+                        "StopActivityStreamResult",
                         &mut stack,
                     )?;
                     skip_tree(&mut stack);
