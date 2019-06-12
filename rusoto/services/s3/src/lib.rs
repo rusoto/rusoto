@@ -20,6 +20,8 @@ extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate xml;
+#[cfg(nightly)]
+extern crate test;
 
 mod generated;
 mod custom;

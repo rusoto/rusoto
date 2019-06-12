@@ -163,3 +163,8 @@ exclude = [
     "service_crategen",
     "skeptical"
 ]
+
+[profile.bench]
+opt-level = 3
+debug = false
+debug-assertions = false
