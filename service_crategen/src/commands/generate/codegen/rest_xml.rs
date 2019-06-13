@@ -109,6 +109,12 @@ impl GenerateProtocol for RestXmlGenerator {
             }
         }
 
+        // S3 has special cases where the payload is not meant to be xml serialized and passed
+        // as a string literal (Policy as an example). Making an exception based on service and shape.
+        if service.service_type_name().eq("S3") && name.eq("Policy") {
+            return None;
+        }
+
         let ty = get_rust_type(service, name, shape, false, self.timestamp_type());
         Some(format!(
             "
@@ -175,7 +181,7 @@ fn generate_payload_serialization(service: &Service<'_>, operation: &Operation) 
 
     // the payload field determines which member of the input shape is sent as the request body (if any)
     if input_shape.payload.is_some() {
-        parts.push(generate_payload_member_serialization(input_shape));
+        parts.push(generate_payload_member_serialization(service,input_shape));
         parts.push(
             generate_service_specific_code(service, operation).unwrap_or_else(|| "".to_owned()),
         );
@@ -216,7 +222,7 @@ fn generate_service_specific_code(service: &Service<'_>, operation: &Operation) 
     }
 }
 
-fn generate_payload_member_serialization(shape: &Shape) -> String {
+fn generate_payload_member_serialization(service: &Service,shape: &Shape) -> String {
     let payload_field = shape.payload.as_ref().unwrap();
     let payload_member = shape.members.as_ref().unwrap().get(payload_field).unwrap();
 
@@ -228,6 +234,12 @@ fn generate_payload_member_serialization(shape: &Shape) -> String {
                  }}",
             payload_field.to_snake_case()
         )
+    }
+    // s3 is a special case where the policy member should not be xml serialized but rather passed
+    // as a string literal
+    else if service.service_type_name().eq("S3") && payload_field.eq("Policy") {
+        format!("request.set_payload(Some(input.{payload_field}.into_bytes()));",
+                payload_field = payload_field.to_snake_case())
     }
     // otherwise serialize the object to XML and use that as the payload
     else if shape.required(payload_field) {
