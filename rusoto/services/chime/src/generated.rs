@@ -1008,6 +1008,10 @@ pub struct PhoneNumber {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p>The phone number type.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
     /// <p>The updated phone number timestamp, in ISO 8601 format.</p>
     #[serde(rename = "UpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1264,6 +1268,10 @@ pub struct SearchAvailablePhoneNumbersRequest {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+    /// <p>The toll-free prefix that you use to filter results.</p>
+    #[serde(rename = "TollFreePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub toll_free_prefix: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -5962,7 +5970,7 @@ pub trait Chime {
         input: BatchUnsuspendUserRequest,
     ) -> RusotoFuture<BatchUnsuspendUserResponse, BatchUnsuspendUserError>;
 
-    /// <p>Updates phone number product types. Choose from Amazon Chime Business Calling and Amazon Chime Voice Connector product types.</p>
+    /// <p>Updates phone number product types. Choose from Amazon Chime Business Calling and Amazon Chime Voice Connector product types. For toll-free numbers, you can use only the Amazon Chime Voice Connector product type.</p>
     fn batch_update_phone_number(
         &self,
         input: BatchUpdatePhoneNumberRequest,
@@ -5986,7 +5994,7 @@ pub trait Chime {
         input: CreateBotRequest,
     ) -> RusotoFuture<CreateBotResponse, CreateBotError>;
 
-    /// <p>Creates an order for phone numbers to be provisioned. Choose from Amazon Chime Business Calling and Amazon Chime Voice Connector product types.</p>
+    /// <p>Creates an order for phone numbers to be provisioned. Choose from Amazon Chime Business Calling and Amazon Chime Voice Connector product types. For toll-free numbers, you can use only the Amazon Chime Voice Connector product type.</p>
     fn create_phone_number_order(
         &self,
         input: CreatePhoneNumberOrderRequest,
@@ -6255,7 +6263,7 @@ pub trait Chime {
         input: UpdateGlobalSettingsRequest,
     ) -> RusotoFuture<(), UpdateGlobalSettingsError>;
 
-    /// <p>Updates phone number details, such as product type, for the specified phone number ID.</p>
+    /// <p>Updates phone number details, such as product type, for the specified phone number ID. For toll-free numbers, you can use only the Amazon Chime Voice Connector product type.</p>
     fn update_phone_number(
         &self,
         input: UpdatePhoneNumberRequest,
@@ -6508,7 +6516,7 @@ impl Chime for ChimeClient {
         })
     }
 
-    /// <p>Updates phone number product types. Choose from Amazon Chime Business Calling and Amazon Chime Voice Connector product types.</p>
+    /// <p>Updates phone number product types. Choose from Amazon Chime Business Calling and Amazon Chime Voice Connector product types. For toll-free numbers, you can use only the Amazon Chime Voice Connector product type.</p>
     fn batch_update_phone_number(
         &self,
         input: BatchUpdatePhoneNumberRequest,
@@ -6642,7 +6650,7 @@ impl Chime for ChimeClient {
         })
     }
 
-    /// <p>Creates an order for phone numbers to be provisioned. Choose from Amazon Chime Business Calling and Amazon Chime Voice Connector product types.</p>
+    /// <p>Creates an order for phone numbers to be provisioned. Choose from Amazon Chime Business Calling and Amazon Chime Voice Connector product types. For toll-free numbers, you can use only the Amazon Chime Voice Connector product type.</p>
     fn create_phone_number_order(
         &self,
         input: CreatePhoneNumberOrderRequest,
@@ -8024,6 +8032,9 @@ impl Chime for ChimeClient {
         if let Some(ref x) = input.state {
             params.put("state", x);
         }
+        if let Some(ref x) = input.toll_free_prefix {
+            params.put("toll-free-prefix", x);
+        }
         params.put("type", "phone-numbers");
         request.set_params(params);
 
@@ -8175,7 +8186,7 @@ impl Chime for ChimeClient {
         })
     }
 
-    /// <p>Updates phone number details, such as product type, for the specified phone number ID.</p>
+    /// <p>Updates phone number details, such as product type, for the specified phone number ID. For toll-free numbers, you can use only the Amazon Chime Voice Connector product type.</p>
     fn update_phone_number(
         &self,
         input: UpdatePhoneNumberRequest,

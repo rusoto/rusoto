@@ -264,6 +264,41 @@ fn list_multipart_uploads_no_uploads() {
 }
 
 
+#[cfg(nightly)]
+#[bench]
+fn bench_parse_list_buckets_response(b: &mut Bencher) {
+    use test::Bencher;
+    let mock = MockRequestDispatcher::with_status(200)
+        .with_body(r#"
+        <?xml version="1.0" encoding="UTF-8"?>
+        <ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01">
+            <Owner>
+            <ID>bcaf1ffd86f461ca5fb16fd081034f</ID>
+            <DisplayName>webfile</DisplayName>
+            </Owner>
+            <Buckets>
+            <Bucket>
+                    <Name>quotes</Name>
+                    <CreationDate>2006-02-03T16:45:09.000Z</CreationDate>
+            </Bucket>
+            <Bucket>
+                    <Name>samples</Name>
+                    <CreationDate>2006-02-03T16:41:58.000Z</CreationDate>
+            </Bucket>
+            </Buckets>
+        </ListAllMyBucketsResult>
+        "#)
+        .with_request_checker(|request: &SignedRequest| {
+            assert_eq!(request.method, "GET");
+            assert_eq!(request.path, "/");
+            assert!(request.payload.is_none());
+        });
+
+    let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
+
+    b.iter(|| client.list_buckets().sync().unwrap());
+}
+
 #[test]
 // sample response from the S3 documentation
 // tests the model generation and deserialization end-to-end

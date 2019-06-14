@@ -336,9 +336,13 @@ pub struct CreateRepositoryInput {
     #[serde(rename = "repositoryDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_description: Option<String>,
-    /// <p><p>The name of the new repository to be created.</p> <note> <p>The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. For a full description of the limits on repository names, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">Limits</a> in the AWS CodeCommit User Guide. The suffix &quot;.git&quot; is prohibited.</p> </note></p>
+    /// <p><p>The name of the new repository to be created.</p> <note> <p>The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. For a full description of the limits on repository names, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">Limits</a> in the AWS CodeCommit User Guide. The suffix &quot;.git&quot; is prohibited.</p> </note></p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
+    /// <p>One or more tag key-value pairs to use when tagging this repository.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Represents the output of a create repository operation.</p>
@@ -1040,6 +1044,30 @@ pub struct ListRepositoriesOutput {
     pub repositories: Option<Vec<RepositoryNameIdPair>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsForResourceInput {
+    /// <p>An enumeration token that when provided in a request, returns the next batch of the results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the resource for which you want to get information about tags, if any.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTagsForResourceOutput {
+    /// <p>An enumeration token that allows the operation to batch the next results of the operation.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of tag key and value pairs associated with the specified resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>Returns information about the location of a change or comment in the comparison between two commits or a pull request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Location {
@@ -1687,6 +1715,16 @@ pub struct SymbolicLink {
     pub relative_path: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceInput {
+    /// <p>The Amazon Resource Name (ARN) of the resource to which you want to add or update tags.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+    /// <p>The key-value pair to use when tagging this repository.</p>
+    #[serde(rename = "tags")]
+    pub tags: ::std::collections::HashMap<String, String>,
+}
+
 /// <p>Returns information about a target for a pull request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct Target {
@@ -1725,6 +1763,16 @@ pub struct TestRepositoryTriggersOutput {
     #[serde(rename = "successfulExecutions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub successful_executions: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceInput {
+    /// <p>The Amazon Resource Name (ARN) of the resource to which you want to remove tags.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+    /// <p>The tag key for each tag that you want to remove from the resource.</p>
+    #[serde(rename = "tagKeys")]
+    pub tag_keys: Vec<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2575,12 +2623,20 @@ pub enum CreateRepositoryError {
     InvalidRepositoryDescription(String),
     /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
     InvalidRepositoryName(String),
+    /// <p>The specified tag is not valid. Key names cannot be prefixed with aws:.</p>
+    InvalidSystemTagUsage(String),
+    /// <p>The map of tags is not valid.</p>
+    InvalidTagsMap(String),
     /// <p>A repository resource limit was exceeded.</p>
     RepositoryLimitExceeded(String),
     /// <p>The specified repository name already exists.</p>
     RepositoryNameExists(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
+    /// <p>The tag policy is not valid.</p>
+    TagPolicy(String),
+    /// <p>The maximum number of tags for an AWS CodeCommit resource has been exceeded.</p>
+    TooManyTags(String),
 }
 
 impl CreateRepositoryError {
@@ -2622,6 +2678,14 @@ impl CreateRepositoryError {
                         err.msg,
                     ))
                 }
+                "InvalidSystemTagUsageException" => {
+                    return RusotoError::Service(CreateRepositoryError::InvalidSystemTagUsage(
+                        err.msg,
+                    ))
+                }
+                "InvalidTagsMapException" => {
+                    return RusotoError::Service(CreateRepositoryError::InvalidTagsMap(err.msg))
+                }
                 "RepositoryLimitExceededException" => {
                     return RusotoError::Service(CreateRepositoryError::RepositoryLimitExceeded(
                         err.msg,
@@ -2636,6 +2700,12 @@ impl CreateRepositoryError {
                     return RusotoError::Service(CreateRepositoryError::RepositoryNameRequired(
                         err.msg,
                     ))
+                }
+                "TagPolicyException" => {
+                    return RusotoError::Service(CreateRepositoryError::TagPolicy(err.msg))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreateRepositoryError::TooManyTags(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -2659,9 +2729,13 @@ impl Error for CreateRepositoryError {
             CreateRepositoryError::EncryptionKeyUnavailable(ref cause) => cause,
             CreateRepositoryError::InvalidRepositoryDescription(ref cause) => cause,
             CreateRepositoryError::InvalidRepositoryName(ref cause) => cause,
+            CreateRepositoryError::InvalidSystemTagUsage(ref cause) => cause,
+            CreateRepositoryError::InvalidTagsMap(ref cause) => cause,
             CreateRepositoryError::RepositoryLimitExceeded(ref cause) => cause,
             CreateRepositoryError::RepositoryNameExists(ref cause) => cause,
             CreateRepositoryError::RepositoryNameRequired(ref cause) => cause,
+            CreateRepositoryError::TagPolicy(ref cause) => cause,
+            CreateRepositoryError::TooManyTags(ref cause) => cause,
         }
     }
 }
@@ -3219,7 +3293,7 @@ pub enum GetBlobError {
     EncryptionKeyNotFound(String),
     /// <p>The encryption key is not available.</p>
     EncryptionKeyUnavailable(String),
-    /// <p>The specified file exceeds the file size limit for AWS CodeCommit. For more information about limits in AWS CodeCommit, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">AWS CodeCommit User Guide</a>.</p>
+    /// <p>The specified file exceeds the file size limit for AWS CodeCommit. For more information about limits in AWS CodeCommit, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">AWS CodeCommit User Guide</a>.</p>
     FileTooLarge(String),
     /// <p>The specified blob is not valid.</p>
     InvalidBlobId(String),
@@ -4002,7 +4076,7 @@ pub enum GetFileError {
     EncryptionKeyUnavailable(String),
     /// <p>The specified file does not exist. Verify that you have provided the correct name of the file, including its full path and extension.</p>
     FileDoesNotExist(String),
-    /// <p>The specified file exceeds the file size limit for AWS CodeCommit. For more information about limits in AWS CodeCommit, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">AWS CodeCommit User Guide</a>.</p>
+    /// <p>The specified file exceeds the file size limit for AWS CodeCommit. For more information about limits in AWS CodeCommit, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">AWS CodeCommit User Guide</a>.</p>
     FileTooLarge(String),
     /// <p>The specified commit is not valid.</p>
     InvalidCommit(String),
@@ -4879,6 +4953,65 @@ impl Error for ListRepositoriesError {
             ListRepositoriesError::InvalidContinuationToken(ref cause) => cause,
             ListRepositoriesError::InvalidOrder(ref cause) => cause,
             ListRepositoriesError::InvalidSortBy(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
+    InvalidRepositoryName(String),
+    /// <p>The value for the resource ARN is not valid. For more information about resources in AWS CodeCommit, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-iam-access-control-identity-based.html#arn-formats">CodeCommit Resources and Operations</a> in the AWS CodeCommit User Guide.</p>
+    InvalidResourceArn(String),
+    /// <p>The specified repository does not exist.</p>
+    RepositoryDoesNotExist(String),
+    /// <p>A valid Amazon Resource Name (ARN) for an AWS CodeCommit resource is required. For a list of valid resources in AWS CodeCommit, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-iam-access-control-identity-based.html#arn-formats">CodeCommit Resources and Operations</a> in the AWS CodeCommit User Guide.</p>
+    ResourceArnRequired(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidRepositoryNameException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InvalidRepositoryName(
+                        err.msg,
+                    ))
+                }
+                "InvalidResourceArnException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InvalidResourceArn(
+                        err.msg,
+                    ))
+                }
+                "RepositoryDoesNotExistException" => {
+                    return RusotoError::Service(ListTagsForResourceError::RepositoryDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "ResourceArnRequiredException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceArnRequired(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::InvalidRepositoryName(ref cause) => cause,
+            ListTagsForResourceError::InvalidResourceArn(ref cause) => cause,
+            ListTagsForResourceError::RepositoryDoesNotExist(ref cause) => cause,
+            ListTagsForResourceError::ResourceArnRequired(ref cause) => cause,
         }
     }
 }
@@ -6016,6 +6149,87 @@ impl Error for PutRepositoryTriggersError {
         }
     }
 }
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
+    InvalidRepositoryName(String),
+    /// <p>The value for the resource ARN is not valid. For more information about resources in AWS CodeCommit, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-iam-access-control-identity-based.html#arn-formats">CodeCommit Resources and Operations</a> in the AWS CodeCommit User Guide.</p>
+    InvalidResourceArn(String),
+    /// <p>The specified tag is not valid. Key names cannot be prefixed with aws:.</p>
+    InvalidSystemTagUsage(String),
+    /// <p>The map of tags is not valid.</p>
+    InvalidTagsMap(String),
+    /// <p>The specified repository does not exist.</p>
+    RepositoryDoesNotExist(String),
+    /// <p>A valid Amazon Resource Name (ARN) for an AWS CodeCommit resource is required. For a list of valid resources in AWS CodeCommit, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-iam-access-control-identity-based.html#arn-formats">CodeCommit Resources and Operations</a> in the AWS CodeCommit User Guide.</p>
+    ResourceArnRequired(String),
+    /// <p>The tag policy is not valid.</p>
+    TagPolicy(String),
+    /// <p>A map of tags is required.</p>
+    TagsMapRequired(String),
+    /// <p>The maximum number of tags for an AWS CodeCommit resource has been exceeded.</p>
+    TooManyTags(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidRepositoryNameException" => {
+                    return RusotoError::Service(TagResourceError::InvalidRepositoryName(err.msg))
+                }
+                "InvalidResourceArnException" => {
+                    return RusotoError::Service(TagResourceError::InvalidResourceArn(err.msg))
+                }
+                "InvalidSystemTagUsageException" => {
+                    return RusotoError::Service(TagResourceError::InvalidSystemTagUsage(err.msg))
+                }
+                "InvalidTagsMapException" => {
+                    return RusotoError::Service(TagResourceError::InvalidTagsMap(err.msg))
+                }
+                "RepositoryDoesNotExistException" => {
+                    return RusotoError::Service(TagResourceError::RepositoryDoesNotExist(err.msg))
+                }
+                "ResourceArnRequiredException" => {
+                    return RusotoError::Service(TagResourceError::ResourceArnRequired(err.msg))
+                }
+                "TagPolicyException" => {
+                    return RusotoError::Service(TagResourceError::TagPolicy(err.msg))
+                }
+                "TagsMapRequiredException" => {
+                    return RusotoError::Service(TagResourceError::TagsMapRequired(err.msg))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(TagResourceError::TooManyTags(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::InvalidRepositoryName(ref cause) => cause,
+            TagResourceError::InvalidResourceArn(ref cause) => cause,
+            TagResourceError::InvalidSystemTagUsage(ref cause) => cause,
+            TagResourceError::InvalidTagsMap(ref cause) => cause,
+            TagResourceError::RepositoryDoesNotExist(ref cause) => cause,
+            TagResourceError::ResourceArnRequired(ref cause) => cause,
+            TagResourceError::TagPolicy(ref cause) => cause,
+            TagResourceError::TagsMapRequired(ref cause) => cause,
+            TagResourceError::TooManyTags(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by TestRepositoryTriggers
 #[derive(Debug, PartialEq)]
 pub enum TestRepositoryTriggersError {
@@ -6218,6 +6432,89 @@ impl Error for TestRepositoryTriggersError {
             TestRepositoryTriggersError::RepositoryTriggerEventsListRequired(ref cause) => cause,
             TestRepositoryTriggersError::RepositoryTriggerNameRequired(ref cause) => cause,
             TestRepositoryTriggersError::RepositoryTriggersListRequired(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
+    InvalidRepositoryName(String),
+    /// <p>The value for the resource ARN is not valid. For more information about resources in AWS CodeCommit, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-iam-access-control-identity-based.html#arn-formats">CodeCommit Resources and Operations</a> in the AWS CodeCommit User Guide.</p>
+    InvalidResourceArn(String),
+    /// <p>The specified tag is not valid. Key names cannot be prefixed with aws:.</p>
+    InvalidSystemTagUsage(String),
+    /// <p>The list of tags is not valid.</p>
+    InvalidTagKeysList(String),
+    /// <p>The specified repository does not exist.</p>
+    RepositoryDoesNotExist(String),
+    /// <p>A valid Amazon Resource Name (ARN) for an AWS CodeCommit resource is required. For a list of valid resources in AWS CodeCommit, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-iam-access-control-identity-based.html#arn-formats">CodeCommit Resources and Operations</a> in the AWS CodeCommit User Guide.</p>
+    ResourceArnRequired(String),
+    /// <p>A list of tag keys is required. The list cannot be empty or null.</p>
+    TagKeysListRequired(String),
+    /// <p>The tag policy is not valid.</p>
+    TagPolicy(String),
+    /// <p>The maximum number of tags for an AWS CodeCommit resource has been exceeded.</p>
+    TooManyTags(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidRepositoryNameException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidRepositoryName(err.msg))
+                }
+                "InvalidResourceArnException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidResourceArn(err.msg))
+                }
+                "InvalidSystemTagUsageException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidSystemTagUsage(err.msg))
+                }
+                "InvalidTagKeysListException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidTagKeysList(err.msg))
+                }
+                "RepositoryDoesNotExistException" => {
+                    return RusotoError::Service(UntagResourceError::RepositoryDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "ResourceArnRequiredException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceArnRequired(err.msg))
+                }
+                "TagKeysListRequiredException" => {
+                    return RusotoError::Service(UntagResourceError::TagKeysListRequired(err.msg))
+                }
+                "TagPolicyException" => {
+                    return RusotoError::Service(UntagResourceError::TagPolicy(err.msg))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(UntagResourceError::TooManyTags(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::InvalidRepositoryName(ref cause) => cause,
+            UntagResourceError::InvalidResourceArn(ref cause) => cause,
+            UntagResourceError::InvalidSystemTagUsage(ref cause) => cause,
+            UntagResourceError::InvalidTagKeysList(ref cause) => cause,
+            UntagResourceError::RepositoryDoesNotExist(ref cause) => cause,
+            UntagResourceError::ResourceArnRequired(ref cause) => cause,
+            UntagResourceError::TagKeysListRequired(ref cause) => cause,
+            UntagResourceError::TagPolicy(ref cause) => cause,
+            UntagResourceError::TooManyTags(ref cause) => cause,
         }
     }
 }
@@ -6968,6 +7265,12 @@ pub trait CodeCommit {
         input: ListRepositoriesInput,
     ) -> RusotoFuture<ListRepositoriesOutput, ListRepositoriesError>;
 
+    /// <p>Gets information about AWS tags for a specified Amazon Resource Name (ARN) in AWS CodeCommit. For a list of valid resources in AWS CodeCommit, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-iam-access-control-identity-based.html#arn-formats">CodeCommit Resources and Operations</a> in the AWS CodeCommit User Guide.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceInput,
+    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError>;
+
     /// <p>Closes a pull request and attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the fast-forward merge option.</p>
     fn merge_pull_request_by_fast_forward(
         &self,
@@ -7001,11 +7304,17 @@ pub trait CodeCommit {
         input: PutRepositoryTriggersInput,
     ) -> RusotoFuture<PutRepositoryTriggersOutput, PutRepositoryTriggersError>;
 
+    /// <p>Adds or updates tags for a resource in AWS CodeCommit. For a list of valid resources in AWS CodeCommit, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-iam-access-control-identity-based.html#arn-formats">CodeCommit Resources and Operations</a> in the AWS CodeCommit User Guide.</p>
+    fn tag_resource(&self, input: TagResourceInput) -> RusotoFuture<(), TagResourceError>;
+
     /// <p>Tests the functionality of repository triggers by sending information to the trigger target. If real data is available in the repository, the test will send data from the last commit. If no data is available, sample data will be generated.</p>
     fn test_repository_triggers(
         &self,
         input: TestRepositoryTriggersInput,
     ) -> RusotoFuture<TestRepositoryTriggersOutput, TestRepositoryTriggersError>;
+
+    /// <p>Removes tags for a resource in AWS CodeCommit. For a list of valid resources in AWS CodeCommit, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-iam-access-control-identity-based.html#arn-formats">CodeCommit Resources and Operations</a> in the AWS CodeCommit User Guide.</p>
+    fn untag_resource(&self, input: UntagResourceInput) -> RusotoFuture<(), UntagResourceError>;
 
     /// <p>Replaces the contents of a comment.</p>
     fn update_comment(
@@ -7043,7 +7352,7 @@ pub trait CodeCommit {
         input: UpdateRepositoryDescriptionInput,
     ) -> RusotoFuture<(), UpdateRepositoryDescriptionError>;
 
-    /// <p>Renames a repository. The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. The suffix ".git" is prohibited. For a full description of the limits on repository names, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">Limits</a> in the AWS CodeCommit User Guide.</p>
+    /// <p>Renames a repository. The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. The suffix ".git" is prohibited. For a full description of the limits on repository names, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">Limits</a> in the AWS CodeCommit User Guide.</p>
     fn update_repository_name(
         &self,
         input: UpdateRepositoryNameInput,
@@ -7811,6 +8120,34 @@ impl CodeCommit for CodeCommitClient {
         })
     }
 
+    /// <p>Gets information about AWS tags for a specified Amazon Resource Name (ARN) in AWS CodeCommit. For a list of valid resources in AWS CodeCommit, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-iam-access-control-identity-based.html#arn-formats">CodeCommit Resources and Operations</a> in the AWS CodeCommit User Guide.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceInput,
+    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.ListTagsForResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTagsForResourceOutput, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Closes a pull request and attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the fast-forward merge option.</p>
     fn merge_pull_request_by_fast_forward(
         &self,
@@ -7980,6 +8317,29 @@ impl CodeCommit for CodeCommitClient {
         })
     }
 
+    /// <p>Adds or updates tags for a resource in AWS CodeCommit. For a list of valid resources in AWS CodeCommit, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-iam-access-control-identity-based.html#arn-formats">CodeCommit Resources and Operations</a> in the AWS CodeCommit User Guide.</p>
+    fn tag_resource(&self, input: TagResourceInput) -> RusotoFuture<(), TagResourceError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.TagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(future::ok(::std::mem::drop(response)))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Tests the functionality of repository triggers by sending information to the trigger target. If real data is available in the repository, the test will send data from the last commit. If no data is available, sample data will be generated.</p>
     fn test_repository_triggers(
         &self,
@@ -8003,6 +8363,29 @@ impl CodeCommit for CodeCommitClient {
                     response.buffer().from_err().and_then(|response| {
                         Err(TestRepositoryTriggersError::from_response(response))
                     }),
+                )
+            }
+        })
+    }
+
+    /// <p>Removes tags for a resource in AWS CodeCommit. For a list of valid resources in AWS CodeCommit, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-iam-access-control-identity-based.html#arn-formats">CodeCommit Resources and Operations</a> in the AWS CodeCommit User Guide.</p>
+    fn untag_resource(&self, input: UntagResourceInput) -> RusotoFuture<(), UntagResourceError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.UntagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(future::ok(::std::mem::drop(response)))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
                 )
             }
         })
@@ -8174,7 +8557,7 @@ impl CodeCommit for CodeCommitClient {
         })
     }
 
-    /// <p>Renames a repository. The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. The suffix ".git" is prohibited. For a full description of the limits on repository names, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">Limits</a> in the AWS CodeCommit User Guide.</p>
+    /// <p>Renames a repository. The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. The suffix ".git" is prohibited. For a full description of the limits on repository names, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">Limits</a> in the AWS CodeCommit User Guide.</p>
     fn update_repository_name(
         &self,
         input: UpdateRepositoryNameInput,

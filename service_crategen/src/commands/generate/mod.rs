@@ -90,7 +90,7 @@ pub fn generate_services(
         let service_dependencies = service.get_dependencies();
         let service_dev_dependencies = service.get_dev_dependencies();
 
-        let extern_crates = service_dependencies.iter().map(|(k, _)| {
+        let mut extern_crates = service_dependencies.iter().map(|(k, _)| {
             if k == "xml-rs" {
                 return "extern crate xml;".into();
             }
@@ -101,6 +101,10 @@ pub fn generate_services(
             }
             format!("extern crate {};", safe_name)
         }).collect::<Vec<String>>().join("\n");
+        // S3 needs the external test crate for benchmark tests
+        if service.full_name() == "Amazon Simple Storage Service" {
+            extern_crates.push_str("\n#[cfg(nightly)]\nextern crate test;");
+        }
 
         let mut cargo_manifest = BufWriter::new(
             OpenOptions::new()

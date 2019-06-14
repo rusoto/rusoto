@@ -119,6 +119,10 @@ pub struct Channel {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p>Where channel data is stored.</p>
+    #[serde(rename = "storage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage: Option<ChannelStorage>,
 }
 
 /// <p>The activity that determines the source of the messages to be processed.</p>
@@ -146,6 +150,33 @@ pub struct ChannelStatistics {
     pub size: Option<EstimatedResourceSize>,
 }
 
+/// <p>Where channel data is stored.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ChannelStorage {
+    /// <p>Use this to store channel data in an S3 bucket that you manage.</p>
+    #[serde(rename = "customerManagedS3")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub customer_managed_s3: Option<CustomerManagedChannelS3Storage>,
+    /// <p>Use this to store channel data in an S3 bucket managed by the AWS IoT Analytics service.</p>
+    #[serde(rename = "serviceManagedS3")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_managed_s3: Option<ServiceManagedChannelS3Storage>,
+}
+
+/// <p>Where channel data is stored.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ChannelStorageSummary {
+    /// <p>Used to store channel data in an S3 bucket that you manage.</p>
+    #[serde(rename = "customerManagedS3")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub customer_managed_s3: Option<CustomerManagedChannelS3StorageSummary>,
+    /// <p>Used to store channel data in an S3 bucket managed by the AWS IoT Analytics service.</p>
+    #[serde(rename = "serviceManagedS3")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_managed_s3: Option<ServiceManagedChannelS3StorageSummary>,
+}
+
 /// <p>A summary of information about a channel.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -154,6 +185,10 @@ pub struct ChannelSummary {
     #[serde(rename = "channelName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_name: Option<String>,
+    /// <p>Where channel data is stored.</p>
+    #[serde(rename = "channelStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_storage: Option<ChannelStorageSummary>,
     /// <p>When the channel was created.</p>
     #[serde(rename = "creationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -191,6 +226,10 @@ pub struct CreateChannelRequest {
     /// <p>The name of the channel.</p>
     #[serde(rename = "channelName")]
     pub channel_name: String,
+    /// <p>Where channel data is stored.</p>
+    #[serde(rename = "channelStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_storage: Option<ChannelStorage>,
     /// <p>How long, in days, message data is kept for the channel.</p>
     #[serde(rename = "retentionPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -286,6 +325,10 @@ pub struct CreateDatastoreRequest {
     /// <p>The name of the data store.</p>
     #[serde(rename = "datastoreName")]
     pub datastore_name: String,
+    /// <p>Where data store data is stored.</p>
+    #[serde(rename = "datastoreStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub datastore_storage: Option<DatastoreStorage>,
     /// <p>How long, in days, message data is kept for the data store.</p>
     #[serde(rename = "retentionPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -338,6 +381,72 @@ pub struct CreatePipelineResponse {
     #[serde(rename = "pipelineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_name: Option<String>,
+}
+
+/// <p>Use this to store channel data in an S3 bucket that you manage.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CustomerManagedChannelS3Storage {
+    /// <p>The name of the Amazon S3 bucket in which channel data is stored.</p>
+    #[serde(rename = "bucket")]
+    pub bucket: String,
+    /// <p>The prefix used to create the keys of the channel data objects. Each object in an Amazon S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key).</p>
+    #[serde(rename = "keyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_prefix: Option<String>,
+    /// <p>The ARN of the role which grants AWS IoT Analytics permission to interact with your Amazon S3 resources.</p>
+    #[serde(rename = "roleArn")]
+    pub role_arn: String,
+}
+
+/// <p>Used to store channel data in an S3 bucket that you manage.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CustomerManagedChannelS3StorageSummary {
+    /// <p>The name of the Amazon S3 bucket in which channel data is stored.</p>
+    #[serde(rename = "bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket: Option<String>,
+    /// <p>The prefix used to create the keys of the channel data objects. Each object in an Amazon S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key).</p>
+    #[serde(rename = "keyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_prefix: Option<String>,
+    /// <p>The ARN of the role which grants AWS IoT Analytics permission to interact with your Amazon S3 resources.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
+/// <p>Use this to store data store data in an S3 bucket that you manage.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CustomerManagedDatastoreS3Storage {
+    /// <p>The name of the Amazon S3 bucket in which data store data is stored.</p>
+    #[serde(rename = "bucket")]
+    pub bucket: String,
+    /// <p>The prefix used to create the keys of the data store data objects. Each object in an Amazon S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key).</p>
+    #[serde(rename = "keyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_prefix: Option<String>,
+    /// <p>The ARN of the role which grants AWS IoT Analytics permission to interact with your Amazon S3 resources.</p>
+    #[serde(rename = "roleArn")]
+    pub role_arn: String,
+}
+
+/// <p>Used to store data store data in an S3 bucket that you manage.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CustomerManagedDatastoreS3StorageSummary {
+    /// <p>The name of the Amazon S3 bucket in which data store data is stored.</p>
+    #[serde(rename = "bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket: Option<String>,
+    /// <p>The prefix used to create the keys of the data store data objects. Each object in an Amazon S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key).</p>
+    #[serde(rename = "keyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_prefix: Option<String>,
+    /// <p>The ARN of the role which grants AWS IoT Analytics permission to interact with your Amazon S3 resources.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
 }
 
 /// <p>Information about a data set.</p>
@@ -571,6 +680,10 @@ pub struct Datastore {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p>Where data store data is stored.</p>
+    #[serde(rename = "storage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage: Option<DatastoreStorage>,
 }
 
 /// <p>The 'datastore' activity that specifies where to store the processed data.</p>
@@ -594,6 +707,33 @@ pub struct DatastoreStatistics {
     pub size: Option<EstimatedResourceSize>,
 }
 
+/// <p>Where data store data is stored.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DatastoreStorage {
+    /// <p>Use this to store data store data in an S3 bucket that you manage.</p>
+    #[serde(rename = "customerManagedS3")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub customer_managed_s3: Option<CustomerManagedDatastoreS3Storage>,
+    /// <p>Use this to store data store data in an S3 bucket managed by the AWS IoT Analytics service.</p>
+    #[serde(rename = "serviceManagedS3")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_managed_s3: Option<ServiceManagedDatastoreS3Storage>,
+}
+
+/// <p>Where data store data is stored.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DatastoreStorageSummary {
+    /// <p>Used to store data store data in an S3 bucket that you manage.</p>
+    #[serde(rename = "customerManagedS3")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub customer_managed_s3: Option<CustomerManagedDatastoreS3StorageSummary>,
+    /// <p>Used to store data store data in an S3 bucket managed by the AWS IoT Analytics service.</p>
+    #[serde(rename = "serviceManagedS3")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_managed_s3: Option<ServiceManagedDatastoreS3StorageSummary>,
+}
+
 /// <p>A summary of information about a data store.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -606,6 +746,10 @@ pub struct DatastoreSummary {
     #[serde(rename = "datastoreName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub datastore_name: Option<String>,
+    /// <p>Where data store data is stored.</p>
+    #[serde(rename = "datastoreStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub datastore_storage: Option<DatastoreStorageSummary>,
     /// <p>The last time the data store was updated.</p>
     #[serde(rename = "lastUpdateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1383,6 +1527,24 @@ pub struct SelectAttributesActivity {
     pub next: Option<String>,
 }
 
+/// <p>Use this to store channel data in an S3 bucket managed by the AWS IoT Analytics service.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ServiceManagedChannelS3Storage {}
+
+/// <p>Used to store channel data in an S3 bucket managed by the AWS IoT Analytics service.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ServiceManagedChannelS3StorageSummary {}
+
+/// <p>Use this to store data store data in an S3 bucket managed by the AWS IoT Analytics service.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ServiceManagedDatastoreS3Storage {}
+
+/// <p>Used to store data store data in an S3 bucket managed by the AWS IoT Analytics service.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ServiceManagedDatastoreS3StorageSummary {}
+
 /// <p>The SQL query to modify the message.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SqlQueryDatasetAction {
@@ -1471,6 +1633,10 @@ pub struct UpdateChannelRequest {
     /// <p>The name of the channel to be updated.</p>
     #[serde(rename = "channelName")]
     pub channel_name: String,
+    /// <p>Where channel data is stored.</p>
+    #[serde(rename = "channelStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_storage: Option<ChannelStorage>,
     /// <p>How long, in days, message data is kept for the channel.</p>
     #[serde(rename = "retentionPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1508,6 +1674,10 @@ pub struct UpdateDatastoreRequest {
     /// <p>The name of the data store to be updated.</p>
     #[serde(rename = "datastoreName")]
     pub datastore_name: String,
+    /// <p>Where data store data is stored.</p>
+    #[serde(rename = "datastoreStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub datastore_storage: Option<DatastoreStorage>,
     /// <p>How long, in days, message data is kept for the data store.</p>
     #[serde(rename = "retentionPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]

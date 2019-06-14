@@ -50,3 +50,7 @@ check_service_defintions:
 .PHONY: time_credentials
 time_credentials:
 	(cd rusoto/credential && cargo clean --package rusoto_credential && touch src/lib.rs && time cargo +$$RUST_VERSION build)
+
+.PHONY: bench_s3
+bench_s3:
+	(cd rusoto/services/s3 && cargo +nightly bench)
