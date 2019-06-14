@@ -1,7 +1,10 @@
 # Rusoto changes
 
 ## [Unreleased]
+
 - Exclude `test_resources` in cargo manifest
+- (Breaking Change) Fix invalid signatures on presigned URLs by adding a new
+  `should_sha256_sign_payload` argument to `SignedRequest::generate_presigned_url`.
 
 ## [0.39.0] - 2019-05-19
 
