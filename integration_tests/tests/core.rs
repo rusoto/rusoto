@@ -1,3 +1,5 @@
+#![cfg(feature = "core")]
+
 extern crate futures;
 extern crate reqwest;
 extern crate rusoto_core;
