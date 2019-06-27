@@ -6,6 +6,7 @@
 //! If needed, the request will be re-issued to a temporary redirect endpoint.  This can happen with
 //! newly created S3 buckets not in us-standard/us-east-1.
 
+use std::borrow::Cow;
 use std::collections::btree_map::Entry;
 use std::collections::BTreeMap;
 use std::fmt;
@@ -26,6 +27,12 @@ use crate::credential::AwsCredentials;
 use crate::param::{Params, ServiceParams};
 use crate::region::Region;
 use crate::stream::ByteStream;
+
+/// Payload string to use for unsigned payload
+pub static UNSIGNED_PAYLOAD: &str = "UNSIGNED-PAYLOAD";
+/// Payload string to use for signed empty payload
+pub static EMPTY_SHA256_HASH: &str =
+    "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 
 /// Possible payloads included in a `SignedRequest`.
 pub enum SignedRequestPayload {
@@ -234,11 +241,15 @@ impl SignedRequest {
         self.params = params;
     }
 
-    /// http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html
+    /// Generate a Presigned URL for AWS
+    ///
+    /// See the [documentation](https://docs.aws.amazon.com/general/latest/gr/sigv4_signing.html)
+    /// for more information.
     pub fn generate_presigned_url(
         &mut self,
         creds: &AwsCredentials,
         expires_in: &Duration,
+        should_sha256_sign_payload: bool,
     ) -> String {
         debug!("Presigning request URL");
 
@@ -260,9 +271,9 @@ impl SignedRequest {
         self.remove_header("Content-Type");
 
         if let Some(ref token) = *creds.token() {
-            self.remove_header("x-amz-security-token");
+            self.remove_header("X-Amz-Security-Token");
             self.params
-                .put("x-amz-security-token", encode_uri_strict(token));
+                .put("X-Amz-Security-Token", encode_uri_strict(token));
         }
 
         self.remove_header("X-Amz-Algorithm");
@@ -299,6 +310,23 @@ impl SignedRequest {
         debug!("signed_headers: {:?}", signed_headers);
         debug!("canonical_query_string: {:?}", self.canonical_query_string);
 
+        let payload = if should_sha256_sign_payload {
+            match self.payload {
+                None => {
+                    Cow::Borrowed(EMPTY_SHA256_HASH)
+                }
+                Some(SignedRequestPayload::Buffer(ref payload)) => {
+                    let (digest, _len) = digest_payload(&payload);
+                    Cow::Owned(digest)
+                }
+                Some(SignedRequestPayload::Stream(ref _stream)) => {
+                    Cow::Borrowed(UNSIGNED_PAYLOAD)
+                }
+            }
+        } else {
+            Cow::Borrowed(UNSIGNED_PAYLOAD)
+        };
+
         let canonical_request = format!(
             "{}\n{}\n{}\n{}\n{}\n{}",
             &self.method,
@@ -306,7 +334,7 @@ impl SignedRequest {
             self.canonical_query_string,
             canonical_headers,
             &signed_headers,
-            "UNSIGNED-PAYLOAD"
+            payload
         );
 
         debug!("canonical_request: {:?}", canonical_request);
@@ -412,9 +440,9 @@ impl SignedRequest {
                     self.canonical_query_string,
                     canonical_headers,
                     signed_headers,
-                    &to_hexdigest("")
+                    EMPTY_SHA256_HASH
                 );
-                (Some(to_hexdigest("")), Some(0))
+                (Some(Cow::Borrowed(EMPTY_SHA256_HASH)), Some(0))
             }
             Some(SignedRequestPayload::Buffer(ref payload)) => {
                 let (digest, len) = digest_payload(&payload);
@@ -427,7 +455,7 @@ impl SignedRequest {
                     signed_headers,
                     &digest
                 );
-                (Some(digest), Some(len))
+                (Some(Cow::Owned(digest)), Some(len))
             }
             Some(SignedRequestPayload::Stream(ref stream)) => {
                 canonical_request = format!(
@@ -437,9 +465,9 @@ impl SignedRequest {
                     self.canonical_query_string,
                     canonical_headers,
                     signed_headers,
-                    "UNSIGNED-PAYLOAD"
+                    UNSIGNED_PAYLOAD
                 );
-                (Some("UNSIGNED-PAYLOAD".to_owned()), stream.size_hint())
+                (Some(Cow::Borrowed(UNSIGNED_PAYLOAD)), stream.size_hint())
             }
         };
 

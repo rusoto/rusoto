@@ -635,6 +635,7 @@ http = "0.1.17"
 
 [features]
 all = [
+		"core",
 		"acm",
 		"acm-pca",
 		"alexaforbusiness",
@@ -785,6 +786,7 @@ all = [
 		"apigatewayv2",
 		"ram"
 	]
+core = []
 acm = ["rusoto_acm"]
 acm-pca = ["rusoto_acm_pca"]
 alexaforbusiness = ["rusoto_alexaforbusiness"]
