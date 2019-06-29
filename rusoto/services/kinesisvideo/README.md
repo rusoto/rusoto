@@ -23,7 +23,7 @@ To use `rusoto_kinesisvideo` in your application, add it as a dependency in your
 
 ```toml
 [dependencies]
-rusoto_kinesisvideo = "0.39.0"
+rusoto_kinesisvideo = "0.40.0"
 ```
 
 ## Contributing

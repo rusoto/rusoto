@@ -23,7 +23,7 @@ To use `rusoto_lex_runtime` in your application, add it as a dependency in your 
 
 ```toml
 [dependencies]
-rusoto_lex_runtime = "0.39.0"
+rusoto_lex_runtime = "0.40.0"
 ```
 
 ## Contributing

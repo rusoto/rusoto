@@ -23,7 +23,7 @@ To use `rusoto_resource_groups` in your application, add it as a dependency in y
 
 ```toml
 [dependencies]
-rusoto_resource_groups = "0.39.0"
+rusoto_resource_groups = "0.40.0"
 ```
 
 ## Contributing

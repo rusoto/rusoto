@@ -23,7 +23,7 @@ To use `rusoto_sns` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_sns = "0.39.0"
+rusoto_sns = "0.40.0"
 ```
 
 ## Contributing

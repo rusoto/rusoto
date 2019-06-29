@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+(Please put changes here)
+
+## [0.40.0] - 2019-06-28
+
+- Only emit types used in service during crate generation
+- Updated CloudFront to use latest API version: `2018-11-05`
+- Only emit crate tests section when needed
+- Fix bug with CodePipeline response not containing required fields from AWS
+- Moved API documentation links to docs.rs
+- Decode IAM policy documents automatically
+- Removed `serde_json` crate from services where it was not required
 - Exclude `test_resources` in cargo manifest
 - upgrades botocore version to from `1.12.156` to `1.12.163`
 - (Breaking Change) Fix invalid signatures on presigned URLs by adding a new

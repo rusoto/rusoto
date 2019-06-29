@@ -23,7 +23,7 @@ To use `rusoto_guardduty` in your application, add it as a dependency in your `C
 
 ```toml
 [dependencies]
-rusoto_guardduty = "0.39.0"
+rusoto_guardduty = "0.40.0"
 ```
 
 ## Contributing
