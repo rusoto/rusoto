@@ -162,6 +162,9 @@ fn generate_default_headers(service: &Service<'_>) -> String {
                 }"
         .to_string();
     }
+    if service.full_name() == "Amazon WorkLink" {
+        return "request.set_content_type(\"application/json\".to_owned());".to_string()
+    }
     "request.set_content_type(\"application/x-amz-json-1.1\".to_owned());".to_string()
 }
 

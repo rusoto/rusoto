@@ -2992,7 +2992,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/associateDomain";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3027,7 +3027,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/associateWebsiteAuthorizationProvider";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3062,7 +3062,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/associateWebsiteCertificateAuthority";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3094,7 +3094,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/createFleet";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3126,7 +3126,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/deleteFleet";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3159,7 +3159,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/describeAuditStreamConfiguration";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3193,7 +3193,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/describeCompanyNetworkConfiguration";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3224,7 +3224,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/describeDevice";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3259,7 +3259,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/describeDevicePolicyConfiguration";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3290,7 +3290,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/describeDomain";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3322,7 +3322,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/describeFleetMetadata";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3356,7 +3356,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/describeIdentityProviderConfiguration";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3391,7 +3391,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/describeWebsiteCertificateAuthority";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3422,7 +3422,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/disassociateDomain";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3457,7 +3457,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/disassociateWebsiteAuthorizationProvider";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3490,7 +3490,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/disassociateWebsiteCertificateAuthority";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3522,7 +3522,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/listDevices";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3554,7 +3554,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/listDomains";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3586,7 +3586,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/listFleets";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3621,7 +3621,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/listWebsiteAuthorizationProviders";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3655,7 +3655,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/listWebsiteCertificateAuthorities";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3686,7 +3686,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/restoreDomainAccess";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3717,7 +3717,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/revokeDomainAccess";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3749,7 +3749,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/signOutUser";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3782,7 +3782,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/updateAuditStreamConfiguration";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3814,7 +3814,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/updateCompanyNetworkConfiguration";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3846,7 +3846,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/updateDevicePolicyConfiguration";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3877,7 +3877,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/updateDomainMetadata";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3908,7 +3908,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/UpdateFleetMetadata";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
@@ -3942,7 +3942,7 @@ impl Worklink for WorklinkClient {
         let request_uri = "/updateIdentityProviderConfiguration";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.set_content_type("application/json".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
