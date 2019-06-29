@@ -154,7 +154,7 @@ impl HttpResponse {
 }
 
 #[derive(Clone, Debug, PartialEq)]
-/// An error produced when invalid request types are sent.
+/// An error produced when sending the request, such as a timeout error.
 pub struct HttpDispatchError {
     message: String,
 }
