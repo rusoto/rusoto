@@ -23,7 +23,7 @@ To use `rusoto_sqs` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_sqs = "0.39.0"
+rusoto_sqs = "0.40.0"
 ```
 
 ## Contributing

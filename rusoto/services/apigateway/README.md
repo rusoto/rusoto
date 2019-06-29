@@ -23,7 +23,7 @@ To use `rusoto_apigateway` in your application, add it as a dependency in your `
 
 ```toml
 [dependencies]
-rusoto_apigateway = "0.39.0"
+rusoto_apigateway = "0.40.0"
 ```
 
 ## Contributing

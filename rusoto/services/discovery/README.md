@@ -23,7 +23,7 @@ To use `rusoto_discovery` in your application, add it as a dependency in your `C
 
 ```toml
 [dependencies]
-rusoto_discovery = "0.39.0"
+rusoto_discovery = "0.40.0"
 ```
 
 ## Contributing

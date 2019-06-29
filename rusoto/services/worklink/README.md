@@ -23,7 +23,7 @@ To use `rusoto_worklink` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_worklink = "0.39.0"
+rusoto_worklink = "0.40.0"
 ```
 
 ## Contributing

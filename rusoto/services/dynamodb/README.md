@@ -23,7 +23,7 @@ To use `rusoto_dynamodb` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_dynamodb = "0.39.0"
+rusoto_dynamodb = "0.40.0"
 ```
 
 ## Contributing
