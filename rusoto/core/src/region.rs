@@ -196,9 +196,10 @@ impl<'de> de::Visitor<'de> for RegionVisitor {
         let name: String = seq
             .next_element()?
             .ok_or_else(|| de::Error::custom("region is missing name"))?;
-        let endpoint: Option<String> = seq
-            .next_element()?
-            .ok_or_else(|| de::Error::custom("region is missing endpoint"))?;
+        let endpoint: Option<String> = match seq.next_element() {
+            Ok(o) => o,
+            Err(_) => None,
+        };
         match (name, endpoint) {
             (name, Some(endpoint)) => Ok(Region::Custom { name, endpoint }),
             (name, None) => name.parse().map_err(de::Error::custom),
@@ -361,15 +362,31 @@ mod tests {
             endpoint: "http://localhost:8000".to_owned(),
             name: "eu-east-1".to_owned(),
         };
-        assert_tokens(
-            &custom_region,
-            &[
-                Token::Tuple { len: 2 },
-                Token::String("eu-east-1"),
-                Token::Some,
-                Token::String("http://localhost:8000"),
-                Token::TupleEnd,
-            ],
-        );
+        let expected = "[\"eu-east-1\",\"http://localhost:8000\"]";
+        let region_deserialized = serde_json::to_string(&custom_region).unwrap();
+        assert_eq!(region_deserialized, expected);
+
+        let from_json = serde_json::de::from_str(&region_deserialized).unwrap();
+        assert_eq!(custom_region, from_json);
+    }
+
+    #[test]
+    fn region_serialize_deserialize_standard() {
+        let r = Region::UsWest2;
+        let region_deserialized = serde_json::to_string(&r).unwrap();
+        let expected = "[\"us-west-2\",null]";
+
+        assert_eq!(region_deserialized, expected);
+
+        let from_json = serde_json::de::from_str(&region_deserialized).unwrap();
+        assert_eq!(r, from_json);
+    }
+
+    #[test]
+    fn region_serialize_deserialize_standard_only_region_name() {
+        let r = Region::UsWest2;
+        let only_region_name = "[\"us-west-2\"]";
+        let from_json = serde_json::de::from_str(&only_region_name).unwrap();
+        assert_eq!(r, from_json);
     }
 }
