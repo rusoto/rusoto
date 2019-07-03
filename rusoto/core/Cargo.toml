@@ -64,7 +64,7 @@ serde_test = "1.0.1"
 
 [features]
 default = ["native-tls"]
-nightly-testing = ["clippy", "rusoto_credential/nightly-testing"]
+nightly-testing = ["rusoto_credential/nightly-testing"]
 native-tls = ["hyper-tls"]
 rustls = ["hyper-rustls"]
 unstable = []
