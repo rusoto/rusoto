@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["ServiceParams","Key:value pair for an service parameter."],["ToParam","Trait for implementing type to paramater conversion"]],"type":[["Params","Paramaters for HTTP Request stored as a `BTreeMap`"]]});

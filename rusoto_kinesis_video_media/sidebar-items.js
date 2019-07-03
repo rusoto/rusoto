@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["GetMediaError","Errors returned by GetMedia"]],"struct":[["GetMediaInput",""],["GetMediaOutput",""],["KinesisVideoMediaClient","A client for the Kinesis Video Media API."],["StartSelector",""]],"trait":[["KinesisVideoMedia","Trait representing the capabilities of the Kinesis Video Media API. Kinesis Video Media clients implement this trait."]]});

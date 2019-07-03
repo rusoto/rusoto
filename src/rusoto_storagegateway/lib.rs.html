@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `rusoto/services/storagegateway/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../rusoto_storagegateway/index.html'><img src='https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png' alt='logo' width='100'></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1"> 1</span>
+<span id="2"> 2</span>
+<span id="3"> 3</span>
+<span id="4"> 4</span>
+<span id="5"> 5</span>
+<span id="6"> 6</span>
+<span id="7"> 7</span>
+<span id="8"> 8</span>
+<span id="9"> 9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+</pre><div class="example-wrap"><pre class="rust ">
+
+<span class="comment">// =================================================================</span>
+<span class="comment">//</span>
+<span class="comment">//                           * WARNING *</span>
+<span class="comment">//</span>
+<span class="comment">//                    This file is generated!</span>
+<span class="comment">//</span>
+<span class="comment">//  Changes made to this file will be overwritten. If changes are</span>
+<span class="comment">//  required to the generated code, the service_crategen project</span>
+<span class="comment">//  must be updated to generate the changes.</span>
+<span class="comment">//</span>
+<span class="comment">// =================================================================</span>
+
+<span class="attribute">#![<span class="ident">doc</span>(<span class="ident">html_logo_url</span> <span class="op">=</span> <span class="string">&quot;https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png&quot;</span>)]</span>
+<span class="doccomment">//! &lt;p&gt;&lt;fullname&gt;AWS Storage Gateway Service&lt;/fullname&gt; &lt;p&gt;AWS Storage Gateway is the service that connects an on-premises software appliance with cloud-based storage to provide seamless and secure integration between an organization&amp;#39;s on-premises IT environment and the AWS storage infrastructure. The service enables you to securely upload data to the AWS cloud for cost effective backup and rapid disaster recovery.&lt;/p&gt; &lt;p&gt;Use the following links to get started using the &lt;i&gt;AWS Storage Gateway Service API Reference&lt;/i&gt;:&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; &lt;a href=&quot;https://docs.aws.amazon.com/storagegateway/latest/userguide/AWSStorageGatewayAPI.html#AWSStorageGatewayHTTPRequestsHeaders&quot;&gt;AWS Storage Gateway Required Request Headers&lt;/a&gt;: Describes the required headers that you must send with every POST request to AWS Storage Gateway.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;a href=&quot;https://docs.aws.amazon.com/storagegateway/latest/userguide/AWSStorageGatewayAPI.html#AWSStorageGatewaySigningRequests&quot;&gt;Signing Requests&lt;/a&gt;: AWS Storage Gateway requires that you authenticate every request you send; this topic describes how sign such a request.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;a href=&quot;https://docs.aws.amazon.com/storagegateway/latest/userguide/AWSStorageGatewayAPI.html#APIErrorResponses&quot;&gt;Error Responses&lt;/a&gt;: Provides reference information about AWS Storage Gateway errors.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;a href=&quot;https://docs.aws.amazon.com/storagegateway/latest/APIReference/API_Operations.html&quot;&gt;Operations in AWS Storage Gateway&lt;/a&gt;: Contains detailed descriptions of all AWS Storage Gateway operations, their request parameters, response elements, possible errors, and examples of requests and responses.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;a href=&quot;http://docs.aws.amazon.com/general/latest/gr/rande.html#sg_region&quot;&gt;AWS Storage Gateway Regions and Endpoints:&lt;/a&gt; Provides a list of each AWS region and endpoints available for use with AWS Storage Gateway. &lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;note&gt; &lt;p&gt;AWS Storage Gateway resource IDs are in uppercase. When you use these resource IDs with the Amazon EC2 API, EC2 expects resource IDs in lowercase. You must change your resource ID to lowercase to use it with the EC2 API. For example, in Storage Gateway the ID for a volume might be &lt;code&gt;vol-AA22BB012345DAF670&lt;/code&gt;. When you use this ID with the EC2 API, you must change it to &lt;code&gt;vol-aa22bb012345daf670&lt;/code&gt;. Otherwise, the EC2 API might not behave as expected.&lt;/p&gt; &lt;/note&gt; &lt;important&gt; &lt;p&gt;IDs for Storage Gateway volumes and Amazon EBS snapshots created from gateway volumes are changing to a longer format. Starting in December 2016, all new volumes and snapshots will be created with a 17-character string. Starting in April 2016, you will be able to use these longer IDs so you can test your systems with the new format. For more information, see &lt;a href=&quot;https://aws.amazon.com/ec2/faqs/#longer-ids&quot;&gt;Longer EC2 and EBS Resource IDs&lt;/a&gt;. &lt;/p&gt; &lt;p&gt; For example, a volume Amazon Resource Name (ARN) with the longer volume ID format looks like the following:&lt;/p&gt; &lt;p&gt; &lt;code&gt;arn:aws:storagegateway:us-west-2:111122223333:gateway/sgw-12A3456B/volume/vol-1122AABBCCDDEEFFG&lt;/code&gt;.&lt;/p&gt; &lt;p&gt;A snapshot ID with the longer ID format looks like the following: &lt;code&gt;snap-78e226633445566ee&lt;/code&gt;.&lt;/p&gt; &lt;p&gt;For more information, see &lt;a href=&quot;https://forums.aws.amazon.com/ann.jspa?annID=3557&quot;&gt;Announcement: Heads-up – Longer AWS Storage Gateway volume and snapshot IDs coming in 2016&lt;/a&gt;.&lt;/p&gt; &lt;/important&gt;&lt;/p&gt;</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! If you&#39;re using the service, you&#39;re probably looking for [StorageGatewayClient](struct.StorageGatewayClient.html) and [StorageGateway](trait.StorageGateway.html).</span>
+
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">bytes</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">futures</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">rusoto_core</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">serde</span>;
+<span class="attribute">#[<span class="ident">macro_use</span>]</span>
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">serde_derive</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">serde_json</span>;
+
+<span class="kw">mod</span> <span class="ident">generated</span>;
+<span class="kw">mod</span> <span class="ident">custom</span>;
+
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">generated</span>::<span class="kw-2">*</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">custom</span>::<span class="kw-2">*</span>;
+            
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "rusoto_storagegateway";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

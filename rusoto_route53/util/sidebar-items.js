@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["quote_txt_record","Route53 TXT entries require quotations around their values. Use this function to add quotes if needed. These examples show how this adds quotes if needed: `ignore let rr = vec![ ResourceRecord { value: quote_txt_record(\"foo\"), }, ResourceRecord { value: quote_txt_record(\"\\\"baz\\\"\"), }, ];`"]]});

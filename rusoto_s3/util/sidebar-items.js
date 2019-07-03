@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["encode_key","URL encodes an S3 object key. This is necessary for `copy_object` and `upload_part_copy`, which require the `copy_source` field to be URL encoded."]],"struct":[["PreSignedRequestOption",""]],"trait":[["PreSignedRequest",""]]});

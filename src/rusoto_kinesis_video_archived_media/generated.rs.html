@@ -1,0 +1,1107 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `rusoto/services/kinesis-video-archived-media/src/generated.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>generated.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../rusoto_kinesis_video_archived_media/index.html'><img src='https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png' alt='logo' width='100'></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<span id="2">  2</span>
+<span id="3">  3</span>
+<span id="4">  4</span>
+<span id="5">  5</span>
+<span id="6">  6</span>
+<span id="7">  7</span>
+<span id="8">  8</span>
+<span id="9">  9</span>
+<span id="10"> 10</span>
+<span id="11"> 11</span>
+<span id="12"> 12</span>
+<span id="13"> 13</span>
+<span id="14"> 14</span>
+<span id="15"> 15</span>
+<span id="16"> 16</span>
+<span id="17"> 17</span>
+<span id="18"> 18</span>
+<span id="19"> 19</span>
+<span id="20"> 20</span>
+<span id="21"> 21</span>
+<span id="22"> 22</span>
+<span id="23"> 23</span>
+<span id="24"> 24</span>
+<span id="25"> 25</span>
+<span id="26"> 26</span>
+<span id="27"> 27</span>
+<span id="28"> 28</span>
+<span id="29"> 29</span>
+<span id="30"> 30</span>
+<span id="31"> 31</span>
+<span id="32"> 32</span>
+<span id="33"> 33</span>
+<span id="34"> 34</span>
+<span id="35"> 35</span>
+<span id="36"> 36</span>
+<span id="37"> 37</span>
+<span id="38"> 38</span>
+<span id="39"> 39</span>
+<span id="40"> 40</span>
+<span id="41"> 41</span>
+<span id="42"> 42</span>
+<span id="43"> 43</span>
+<span id="44"> 44</span>
+<span id="45"> 45</span>
+<span id="46"> 46</span>
+<span id="47"> 47</span>
+<span id="48"> 48</span>
+<span id="49"> 49</span>
+<span id="50"> 50</span>
+<span id="51"> 51</span>
+<span id="52"> 52</span>
+<span id="53"> 53</span>
+<span id="54"> 54</span>
+<span id="55"> 55</span>
+<span id="56"> 56</span>
+<span id="57"> 57</span>
+<span id="58"> 58</span>
+<span id="59"> 59</span>
+<span id="60"> 60</span>
+<span id="61"> 61</span>
+<span id="62"> 62</span>
+<span id="63"> 63</span>
+<span id="64"> 64</span>
+<span id="65"> 65</span>
+<span id="66"> 66</span>
+<span id="67"> 67</span>
+<span id="68"> 68</span>
+<span id="69"> 69</span>
+<span id="70"> 70</span>
+<span id="71"> 71</span>
+<span id="72"> 72</span>
+<span id="73"> 73</span>
+<span id="74"> 74</span>
+<span id="75"> 75</span>
+<span id="76"> 76</span>
+<span id="77"> 77</span>
+<span id="78"> 78</span>
+<span id="79"> 79</span>
+<span id="80"> 80</span>
+<span id="81"> 81</span>
+<span id="82"> 82</span>
+<span id="83"> 83</span>
+<span id="84"> 84</span>
+<span id="85"> 85</span>
+<span id="86"> 86</span>
+<span id="87"> 87</span>
+<span id="88"> 88</span>
+<span id="89"> 89</span>
+<span id="90"> 90</span>
+<span id="91"> 91</span>
+<span id="92"> 92</span>
+<span id="93"> 93</span>
+<span id="94"> 94</span>
+<span id="95"> 95</span>
+<span id="96"> 96</span>
+<span id="97"> 97</span>
+<span id="98"> 98</span>
+<span id="99"> 99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+</pre><div class="example-wrap"><pre class="rust ">
+<span class="comment">// =================================================================</span>
+<span class="comment">//</span>
+<span class="comment">//                           * WARNING *</span>
+<span class="comment">//</span>
+<span class="comment">//                    This file is generated!</span>
+<span class="comment">//</span>
+<span class="comment">//  Changes made to this file will be overwritten. If changes are</span>
+<span class="comment">//  required to the generated code, the service_crategen project</span>
+<span class="comment">//  must be updated to generate the changes.</span>
+<span class="comment">//</span>
+<span class="comment">// =================================================================</span>
+
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
+
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">warnings</span>)]</span>
+<span class="kw">use</span> <span class="ident">futures</span>::<span class="ident">future</span>;
+<span class="kw">use</span> <span class="ident">futures</span>::<span class="ident">Future</span>;
+<span class="kw">use</span> <span class="ident">rusoto_core</span>::<span class="ident">credential</span>::<span class="ident">ProvideAwsCredentials</span>;
+<span class="kw">use</span> <span class="ident">rusoto_core</span>::<span class="ident">region</span>;
+<span class="kw">use</span> <span class="ident">rusoto_core</span>::<span class="ident">request</span>::{<span class="ident">BufferedHttpResponse</span>, <span class="ident">DispatchSignedRequest</span>};
+<span class="kw">use</span> <span class="ident">rusoto_core</span>::{<span class="ident">Client</span>, <span class="ident">RusotoError</span>, <span class="ident">RusotoFuture</span>};
+
+<span class="kw">use</span> <span class="ident">rusoto_core</span>::<span class="ident">proto</span>;
+<span class="kw">use</span> <span class="ident">rusoto_core</span>::<span class="ident">signature</span>::<span class="ident">SignedRequest</span>;
+<span class="kw">use</span> <span class="ident">serde_json</span>;
+<span class="doccomment">/// &lt;p&gt;Represents a segment of video or other time-delimited data.&lt;/p&gt;</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">test</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>))]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Fragment</span> {
+    <span class="doccomment">/// &lt;p&gt;The playback duration or other time value associated with the fragment.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;FragmentLengthInMilliseconds&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">fragment_length_in_milliseconds</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The index value of the fragment.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;FragmentNumber&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">fragment_number</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The total fragment size, including information about the fragment and contained media data.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;FragmentSizeInBytes&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">fragment_size_in_bytes</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The timestamp from the producer corresponding to the fragment.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;ProducerTimestamp&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">producer_timestamp</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The timestamp from the AWS server corresponding to the fragment.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;ServerTimestamp&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">server_timestamp</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span>,
+}
+
+<span class="doccomment">/// &lt;p&gt;Describes the timestamp range and timestamp origin of a range of fragments.&lt;/p&gt; &lt;p&gt;Only fragments with a start timestamp greater than or equal to the given start time and less than or equal to the end time are returned. For example, if a stream contains fragments with the following start timestamps: &lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;00:00:00&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;00:00:02&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;00:00:04&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;00:00:06&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;p&gt; A fragment selector range with a start time of 00:00:01 and end time of 00:00:04 would return the fragments with start times of 00:00:02 and 00:00:04. &lt;/p&gt;</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FragmentSelector</span> {
+    <span class="doccomment">/// &lt;p&gt;The origin of the timestamps to use (Server or Producer).&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;FragmentSelectorType&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">fragment_selector_type</span>: <span class="ident">String</span>,
+    <span class="doccomment">/// &lt;p&gt;The range of timestamps to return.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;TimestampRange&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">timestamp_range</span>: <span class="ident">TimestampRange</span>,
+}
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">GetHLSStreamingSessionURLInput</span> {
+    <span class="doccomment">/// &lt;p&gt;Specifies which format should be used for packaging the media. Specifying the &lt;code&gt;FRAGMENTED_MP4&lt;/code&gt; container format packages the media into MP4 fragments (fMP4 or CMAF). This is the recommended packaging because there is minimal packaging overhead. The other container format option is &lt;code&gt;MPEG_TS&lt;/code&gt;. HLS has supported MPEG TS chunks since it was released and is sometimes the only supported packaging on older HLS players. MPEG TS typically has a 5-25 percent packaging overhead. This means MPEG TS typically requires 5-25 percent more bandwidth and cost than fMP4.&lt;/p&gt; &lt;p&gt;The default is &lt;code&gt;FRAGMENTED_MP4&lt;/code&gt;.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;ContainerFormat&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">container_format</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;Specifies when flags marking discontinuities between fragments will be added to the media playlists. The default is &lt;code&gt;ALWAYS&lt;/code&gt; when &lt;a&gt;HLSFragmentSelector&lt;/a&gt; is &lt;code&gt;SERVER_TIMESTAMP&lt;/code&gt;, and &lt;code&gt;NEVER&lt;/code&gt; when it is &lt;code&gt;PRODUCER_TIMESTAMP&lt;/code&gt;.&lt;/p&gt; &lt;p&gt;Media players typically build a timeline of media content to play, based on the timestamps of each fragment. This means that if there is any overlap between fragments (as is typical if &lt;a&gt;HLSFragmentSelector&lt;/a&gt; is &lt;code&gt;SERVER_TIMESTAMP&lt;/code&gt;), the media player timeline has small gaps between fragments in some places, and overwrites frames in other places. When there are discontinuity flags between fragments, the media player is expected to reset the timeline, resulting in the fragment being played immediately after the previous fragment. We recommend that you always have discontinuity flags between fragments if the fragment timestamps are not accurate or if fragments might be missing. You should not place discontinuity flags between fragments for the player timeline to accurately map to the producer timestamps.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;DiscontinuityMode&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">discontinuity_mode</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;Specifies when the fragment start timestamps should be included in the HLS media playlist. Typically, media players report the playhead position as a time relative to the start of the first fragment in the playback session. However, when the start timestamps are included in the HLS media playlist, some media players might report the current playhead as an absolute time based on the fragment timestamps. This can be useful for creating a playback experience that shows viewers the wall-clock time of the media.&lt;/p&gt; &lt;p&gt;The default is &lt;code&gt;NEVER&lt;/code&gt;. When &lt;a&gt;HLSFragmentSelector&lt;/a&gt; is &lt;code&gt;SERVER_TIMESTAMP&lt;/code&gt;, the timestamps will be the server start timestamps. Similarly, when &lt;a&gt;HLSFragmentSelector&lt;/a&gt; is &lt;code&gt;PRODUCER_TIMESTAMP&lt;/code&gt;, the timestamps will be the producer start timestamps. &lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;DisplayFragmentTimestamp&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">display_fragment_timestamp</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The time in seconds until the requested session expires. This value can be between 300 (5 minutes) and 43200 (12 hours).&lt;/p&gt; &lt;p&gt;When a session expires, no new calls to &lt;code&gt;GetHLSMasterPlaylist&lt;/code&gt;, &lt;code&gt;GetHLSMediaPlaylist&lt;/code&gt;, &lt;code&gt;GetMP4InitFragment&lt;/code&gt;, or &lt;code&gt;GetMP4MediaFragment&lt;/code&gt; can be made for that session.&lt;/p&gt; &lt;p&gt;The default is 300 (5 minutes).&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;Expires&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">expires</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The time range of the requested fragment, and the source of the timestamps.&lt;/p&gt; &lt;p&gt;This parameter is required if &lt;code&gt;PlaybackMode&lt;/code&gt; is &lt;code&gt;ON_DEMAND&lt;/code&gt;. This parameter is optional if &lt;code&gt;PlaybackMode&lt;/code&gt; is &lt;code&gt;LIVE&lt;/code&gt;. If &lt;code&gt;PlaybackMode&lt;/code&gt; is &lt;code&gt;LIVE&lt;/code&gt;, the &lt;code&gt;FragmentSelectorType&lt;/code&gt; can be set, but the &lt;code&gt;TimestampRange&lt;/code&gt; should not be set. If &lt;code&gt;PlaybackMode&lt;/code&gt; is &lt;code&gt;ON_DEMAND&lt;/code&gt;, both &lt;code&gt;FragmentSelectorType&lt;/code&gt; and &lt;code&gt;TimestampRange&lt;/code&gt; must be set.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;HLSFragmentSelector&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">hls_fragment_selector</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HLSFragmentSelector</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The maximum number of fragments that are returned in the HLS media playlists.&lt;/p&gt; &lt;p&gt;When the &lt;code&gt;PlaybackMode&lt;/code&gt; is &lt;code&gt;LIVE&lt;/code&gt;, the most recent fragments are returned up to this value. When the &lt;code&gt;PlaybackMode&lt;/code&gt; is &lt;code&gt;ON_DEMAND&lt;/code&gt;, the oldest fragments are returned, up to this maximum number.&lt;/p&gt; &lt;p&gt;When there are a higher number of fragments available in a live HLS media playlist, video players often buffer content before starting playback. Increasing the buffer size increases the playback latency, but it decreases the likelihood that rebuffering will occur during playback. We recommend that a live HLS media playlist have a minimum of 3 fragments and a maximum of 10 fragments.&lt;/p&gt; &lt;p&gt;The default is 5 fragments if &lt;code&gt;PlaybackMode&lt;/code&gt; is &lt;code&gt;LIVE&lt;/code&gt;, and 1,000 if &lt;code&gt;PlaybackMode&lt;/code&gt; is &lt;code&gt;ON_DEMAND&lt;/code&gt;. &lt;/p&gt; &lt;p&gt;The maximum value of 1,000 fragments corresponds to more than 16 minutes of video on streams with 1-second fragments, and more than 2 1/2 hours of video on streams with 10-second fragments.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;MaxMediaPlaylistFragmentResults&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">max_media_playlist_fragment_results</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;Whether to retrieve live or archived, on-demand data.&lt;/p&gt; &lt;p&gt;Features of the two types of session include the following:&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; &lt;b&gt; &lt;code&gt;LIVE&lt;/code&gt; &lt;/b&gt;: For sessions of this type, the HLS media playlist is continually updated with the latest fragments as they become available. We recommend that the media player retrieve a new playlist on a one-second interval. When this type of session is played in a media player, the user interface typically displays a &quot;live&quot; notification, with no scrubber control for choosing the position in the playback window to display.&lt;/p&gt; &lt;note&gt; &lt;p&gt;In &lt;code&gt;LIVE&lt;/code&gt; mode, the newest available fragments are included in an HLS media playlist, even if there is a gap between fragments (that is, if a fragment is missing). A gap like this might cause a media player to halt or cause a jump in playback. In this mode, fragments are not added to the HLS media playlist if they are older than the newest fragment in the playlist. If the missing fragment becomes available after a subsequent fragment is added to the playlist, the older fragment is not added, and the gap is not filled.&lt;/p&gt; &lt;/note&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;b&gt; &lt;code&gt;ON_DEMAND&lt;/code&gt; &lt;/b&gt;: For sessions of this type, the HLS media playlist contains all the fragments for the session, up to the number that is specified in &lt;code&gt;MaxMediaPlaylistFragmentResults&lt;/code&gt;. The playlist must be retrieved only once for each session. When this type of session is played in a media player, the user interface typically displays a scrubber control for choosing the position in the playback window to display.&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;p&gt;In both playback modes, if &lt;code&gt;FragmentSelectorType&lt;/code&gt; is &lt;code&gt;PRODUCER_TIMESTAMP&lt;/code&gt;, and if there are multiple fragments with the same start timestamp, the fragment that has the larger fragment number (that is, the newer fragment) is included in the HLS media playlist. The other fragments are not included. Fragments that have different timestamps but have overlapping durations are still included in the HLS media playlist. This can lead to unexpected behavior in the media player.&lt;/p&gt; &lt;p&gt;The default is &lt;code&gt;LIVE&lt;/code&gt;.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;PlaybackMode&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">playback_mode</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The Amazon Resource Name (ARN) of the stream for which to retrieve the HLS master playlist URL.&lt;/p&gt; &lt;p&gt;You must specify either the &lt;code&gt;StreamName&lt;/code&gt; or the &lt;code&gt;StreamARN&lt;/code&gt;.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;StreamARN&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">stream_arn</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The name of the stream for which to retrieve the HLS master playlist URL.&lt;/p&gt; &lt;p&gt;You must specify either the &lt;code&gt;StreamName&lt;/code&gt; or the &lt;code&gt;StreamARN&lt;/code&gt;.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;StreamName&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">stream_name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+}
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">test</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>))]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">GetHLSStreamingSessionURLOutput</span> {
+    <span class="doccomment">/// &lt;p&gt;The URL (containing the session token) that a media player can use to retrieve the HLS master playlist.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;HLSStreamingSessionURL&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">hls_streaming_session_url</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+}
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">GetMediaForFragmentListInput</span> {
+    <span class="doccomment">/// &lt;p&gt;A list of the numbers of fragments for which to retrieve media. You retrieve these values with &lt;a&gt;ListFragments&lt;/a&gt;.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;Fragments&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">fragments</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The name of the stream from which to retrieve fragment media.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;StreamName&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">stream_name</span>: <span class="ident">String</span>,
+}
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">GetMediaForFragmentListOutput</span> {
+    <span class="doccomment">/// &lt;p&gt;The content type of the requested media.&lt;/p&gt;</span>
+    <span class="kw">pub</span> <span class="ident">content_type</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;&lt;p&gt;The payload that Kinesis Video Streams returns is a sequence of chunks from the specified stream. For information about the chunks, see &lt;a href=&quot;http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_dataplane_PutMedia.html&quot;&gt;PutMedia&lt;/a&gt;. The chunks that Kinesis Video Streams returns in the &lt;code&gt;GetMediaForFragmentList&lt;/code&gt; call also include the following additional Matroska (MKV) tags: &lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;AWS&lt;em&gt;KINESISVIDEO&lt;/em&gt;FRAGMENT&lt;em&gt;NUMBER - Fragment number returned in the chunk.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;AWS&lt;/em&gt;KINESISVIDEO&lt;em&gt;SERVER&lt;/em&gt;SIDE&lt;em&gt;TIMESTAMP - Server-side timestamp of the fragment.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;AWS&lt;/em&gt;KINESISVIDEO&lt;em&gt;PRODUCER&lt;/em&gt;SIDE&lt;em&gt;TIMESTAMP - Producer-side timestamp of the fragment.&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;p&gt;The following tags will be included if an exception occurs:&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;AWS&lt;/em&gt;KINESISVIDEO&lt;em&gt;FRAGMENT&lt;/em&gt;NUMBER - The number of the fragment that threw the exception&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;AWS&lt;em&gt;KINESISVIDEO&lt;/em&gt;EXCEPTION&lt;em&gt;ERROR&lt;/em&gt;CODE - The integer code of the exception&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;AWS&lt;em&gt;KINESISVIDEO&lt;/em&gt;EXCEPTION_MESSAGE - A text description of the exception&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt;&lt;/p&gt;</span>
+    <span class="kw">pub</span> <span class="ident">payload</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bytes</span>::<span class="ident">Bytes</span><span class="op">&gt;</span>,
+}
+
+<span class="doccomment">/// &lt;p&gt;Contains the range of timestamps for the requested media, and the source of the timestamps.&lt;/p&gt;</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">HLSFragmentSelector</span> {
+    <span class="doccomment">/// &lt;p&gt;The source of the timestamps for the requested media.&lt;/p&gt; &lt;p&gt;When &lt;code&gt;FragmentSelectorType&lt;/code&gt; is set to &lt;code&gt;PRODUCER_TIMESTAMP&lt;/code&gt; and &lt;a&gt;GetHLSStreamingSessionURLInput$PlaybackMode&lt;/a&gt; is &lt;code&gt;ON_DEMAND&lt;/code&gt;, the first fragment ingested with a producer timestamp within the specified &lt;a&gt;FragmentSelector$TimestampRange&lt;/a&gt; is included in the media playlist. In addition, the fragments with producer timestamps within the &lt;code&gt;TimestampRange&lt;/code&gt; ingested immediately following the first fragment (up to the &lt;a&gt;GetHLSStreamingSessionURLInput$MaxMediaPlaylistFragmentResults&lt;/a&gt; value) are included. &lt;/p&gt; &lt;p&gt;Fragments that have duplicate producer timestamps are deduplicated. This means that if producers are producing a stream of fragments with producer timestamps that are approximately equal to the true clock time, the HLS media playlists will contain all of the fragments within the requested timestamp range. If some fragments are ingested within the same time range and very different points in time, only the oldest ingested collection of fragments are returned.&lt;/p&gt; &lt;p&gt;When &lt;code&gt;FragmentSelectorType&lt;/code&gt; is set to &lt;code&gt;PRODUCER_TIMESTAMP&lt;/code&gt; and &lt;a&gt;GetHLSStreamingSessionURLInput$PlaybackMode&lt;/a&gt; is &lt;code&gt;LIVE&lt;/code&gt;, the producer timestamps are used in the MP4 fragments and for deduplication. But the most recently ingested fragments based on server timestamps are included in the HLS media playlist. This means that even if fragments ingested in the past have producer timestamps with values now, they are not included in the HLS media playlist.&lt;/p&gt; &lt;p&gt;The default is &lt;code&gt;SERVER_TIMESTAMP&lt;/code&gt;.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;FragmentSelectorType&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">fragment_selector_type</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The start and end of the timestamp range for the requested media.&lt;/p&gt; &lt;p&gt;This value should not be present if &lt;code&gt;PlaybackType&lt;/code&gt; is &lt;code&gt;LIVE&lt;/code&gt;.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;TimestampRange&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">timestamp_range</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HLSTimestampRange</span><span class="op">&gt;</span>,
+}
+
+<span class="doccomment">/// &lt;p&gt;&lt;p&gt;The start and end of the timestamp range for the requested media.&lt;/p&gt; &lt;p&gt;This value should not be present if &lt;code&gt;PlaybackType&lt;/code&gt; is &lt;code&gt;LIVE&lt;/code&gt;.&lt;/p&gt; &lt;note&gt; &lt;p&gt;The values in the &lt;code&gt;HLSTimestampRange&lt;/code&gt; are inclusive. Fragments that begin before the start time but continue past it, or fragments that begin before the end time but continue past it, are included in the session.&lt;/p&gt; &lt;/note&gt;&lt;/p&gt;</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">HLSTimestampRange</span> {
+    <span class="doccomment">/// &lt;p&gt;&lt;p&gt;The end of the timestamp range for the requested media. This value must be within 3 hours of the specified &lt;code&gt;StartTimestamp&lt;/code&gt;, and it must be later than the &lt;code&gt;StartTimestamp&lt;/code&gt; value.&lt;/p&gt; &lt;p&gt;If &lt;code&gt;FragmentSelectorType&lt;/code&gt; for the request is &lt;code&gt;SERVER_TIMESTAMP&lt;/code&gt;, this value must be in the past.&lt;/p&gt; &lt;p&gt;If the &lt;code&gt;HLSTimestampRange&lt;/code&gt; value is specified, the &lt;code&gt;EndTimestamp&lt;/code&gt; value is required.&lt;/p&gt; &lt;note&gt; &lt;p&gt;This value is inclusive. The &lt;code&gt;EndTimestamp&lt;/code&gt; is compared to the (starting) timestamp of the fragment. Fragments that start before the &lt;code&gt;EndTimestamp&lt;/code&gt; value and continue past it are included in the session.&lt;/p&gt; &lt;/note&gt;&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;EndTimestamp&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">end_timestamp</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;&lt;p&gt;The start of the timestamp range for the requested media.&lt;/p&gt; &lt;p&gt;If the &lt;code&gt;HLSTimestampRange&lt;/code&gt; value is specified, the &lt;code&gt;StartTimestamp&lt;/code&gt; value is required.&lt;/p&gt; &lt;note&gt; &lt;p&gt;This value is inclusive. Fragments that start before the &lt;code&gt;StartTimestamp&lt;/code&gt; and continue past it are included in the session. If &lt;code&gt;FragmentSelectorType&lt;/code&gt; is &lt;code&gt;SERVER_TIMESTAMP&lt;/code&gt;, the &lt;code&gt;StartTimestamp&lt;/code&gt; must be later than the stream head.&lt;/p&gt; &lt;/note&gt;&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;StartTimestamp&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">start_timestamp</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span>,
+}
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ListFragmentsInput</span> {
+    <span class="doccomment">/// &lt;p&gt;Describes the timestamp range and timestamp origin for the range of fragments to return.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;FragmentSelector&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">fragment_selector</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">FragmentSelector</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The total number of fragments to return. If the total number of fragments available is more than the value specified in &lt;code&gt;max-results&lt;/code&gt;, then a &lt;a&gt;ListFragmentsOutput$NextToken&lt;/a&gt; is provided in the output that you can use to resume pagination.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;MaxResults&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">max_results</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;A token to specify where to start paginating. This is the &lt;a&gt;ListFragmentsOutput$NextToken&lt;/a&gt; from a previously truncated response.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;NextToken&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">next_token</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The name of the stream from which to retrieve a fragment list.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;StreamName&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">stream_name</span>: <span class="ident">String</span>,
+}
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">test</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>))]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ListFragmentsOutput</span> {
+    <span class="doccomment">/// &lt;p&gt;A list of archived &lt;a&gt;Fragment&lt;/a&gt; objects from the stream that meet the selector criteria. Results are in no specific order, even across pages.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;Fragments&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">fragments</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Fragment</span><span class="op">&gt;&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;If the returned list is truncated, the operation returns this token to use to retrieve the next page of results. This value is &lt;code&gt;null&lt;/code&gt; when there are no more results to return.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;NextToken&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">next_token</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+}
+
+<span class="doccomment">/// &lt;p&gt;The range of timestamps for which to return fragments.&lt;/p&gt;</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TimestampRange</span> {
+    <span class="doccomment">/// &lt;p&gt;The ending timestamp in the range of timestamps for which to return fragments.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;EndTimestamp&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">end_timestamp</span>: <span class="ident">f64</span>,
+    <span class="doccomment">/// &lt;p&gt;The starting timestamp in the range of timestamps for which to return fragments.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;StartTimestamp&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">start_timestamp</span>: <span class="ident">f64</span>,
+}
+
+<span class="doccomment">/// Errors returned by GetHLSStreamingSessionURL</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">GetHLSStreamingSessionURLError</span> {
+    <span class="doccomment">/// &lt;p&gt;Kinesis Video Streams has throttled the request because you have exceeded the limit of allowed client calls. Try making the call later.&lt;/p&gt;</span>
+    <span class="ident">ClientLimitExceeded</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;A specified parameter exceeds its restrictions, is not supported, or can&#39;t be used.&lt;/p&gt;</span>
+    <span class="ident">InvalidArgument</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;The codec private data in at least one of the tracks of the video stream is not valid for this operation.&lt;/p&gt;</span>
+    <span class="ident">InvalidCodecPrivateData</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;No codec private data was found in at least one of tracks of the video stream.&lt;/p&gt;</span>
+    <span class="ident">MissingCodecPrivateData</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;A &lt;code&gt;PlaybackMode&lt;/code&gt; of &lt;code&gt;ON_DEMAND&lt;/code&gt; was requested for a stream that does not retain data (that is, has a &lt;code&gt;DataRetentionInHours&lt;/code&gt; of 0). &lt;/p&gt;</span>
+    <span class="ident">NoDataRetention</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;Status Code: 403, The caller is not authorized to perform an operation on the given stream, or the token has expired.&lt;/p&gt;</span>
+    <span class="ident">NotAuthorized</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt; &lt;code&gt;GetMedia&lt;/code&gt; throws this error when Kinesis Video Streams can&#39;t find the stream that you specified.&lt;/p&gt; &lt;p&gt; &lt;code&gt;GetHLSStreamingSessionURL&lt;/code&gt; throws this error if a session with a &lt;code&gt;PlaybackMode&lt;/code&gt; of &lt;code&gt;ON_DEMAND&lt;/code&gt; is requested for a stream that has no fragments within the requested time range, or if a session with a &lt;code&gt;PlaybackMode&lt;/code&gt; of &lt;code&gt;LIVE&lt;/code&gt; is requested for a stream that has no fragments within the last 30 seconds.&lt;/p&gt;</span>
+    <span class="ident">ResourceNotFound</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;The type of the media (for example, h.264 video or ACC audio) could not be determined from the codec IDs of the tracks in the first fragment for a playback session. The codec ID for track 1 should be &lt;code&gt;V_MPEG/ISO/AVC&lt;/code&gt; and, optionally, the codec ID for track 2 should be &lt;code&gt;A_AAC&lt;/code&gt;.&lt;/p&gt;</span>
+    <span class="ident">UnsupportedStreamMediaType</span>(<span class="ident">String</span>),
+}
+
+<span class="kw">impl</span> <span class="ident">GetHLSStreamingSessionURLError</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_response</span>(<span class="ident">res</span>: <span class="ident">BufferedHttpResponse</span>) <span class="op">-&gt;</span> <span class="ident">RusotoError</span><span class="op">&lt;</span><span class="ident">GetHLSStreamingSessionURLError</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">proto</span>::<span class="ident">json</span>::<span class="ident">Error</span>::<span class="ident">parse_rest</span>(<span class="kw-2">&amp;</span><span class="ident">res</span>) {
+            <span class="kw">match</span> <span class="ident">err</span>.<span class="ident">typ</span>.<span class="ident">as_str</span>() {
+                <span class="string">&quot;ClientLimitExceededException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(
+                        <span class="ident">GetHLSStreamingSessionURLError</span>::<span class="ident">ClientLimitExceeded</span>(<span class="ident">err</span>.<span class="ident">msg</span>),
+                    )
+                }
+                <span class="string">&quot;InvalidArgumentException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">GetHLSStreamingSessionURLError</span>::<span class="ident">InvalidArgument</span>(
+                        <span class="ident">err</span>.<span class="ident">msg</span>,
+                    ))
+                }
+                <span class="string">&quot;InvalidCodecPrivateDataException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(
+                        <span class="ident">GetHLSStreamingSessionURLError</span>::<span class="ident">InvalidCodecPrivateData</span>(<span class="ident">err</span>.<span class="ident">msg</span>),
+                    )
+                }
+                <span class="string">&quot;MissingCodecPrivateDataException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(
+                        <span class="ident">GetHLSStreamingSessionURLError</span>::<span class="ident">MissingCodecPrivateData</span>(<span class="ident">err</span>.<span class="ident">msg</span>),
+                    )
+                }
+                <span class="string">&quot;NoDataRetentionException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">GetHLSStreamingSessionURLError</span>::<span class="ident">NoDataRetention</span>(
+                        <span class="ident">err</span>.<span class="ident">msg</span>,
+                    ))
+                }
+                <span class="string">&quot;NotAuthorizedException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">GetHLSStreamingSessionURLError</span>::<span class="ident">NotAuthorized</span>(
+                        <span class="ident">err</span>.<span class="ident">msg</span>,
+                    ))
+                }
+                <span class="string">&quot;ResourceNotFoundException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">GetHLSStreamingSessionURLError</span>::<span class="ident">ResourceNotFound</span>(
+                        <span class="ident">err</span>.<span class="ident">msg</span>,
+                    ))
+                }
+                <span class="string">&quot;UnsupportedStreamMediaTypeException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(
+                        <span class="ident">GetHLSStreamingSessionURLError</span>::<span class="ident">UnsupportedStreamMediaType</span>(<span class="ident">err</span>.<span class="ident">msg</span>),
+                    )
+                }
+                <span class="string">&quot;ValidationException&quot;</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Validation</span>(<span class="ident">err</span>.<span class="ident">msg</span>),
+                <span class="kw">_</span> <span class="op">=&gt;</span> {}
+            }
+        }
+        <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Unknown</span>(<span class="ident">res</span>);
+    }
+}
+<span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">GetHLSStreamingSessionURLError</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+        <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="ident">description</span>())
+    }
+}
+<span class="kw">impl</span> <span class="ident">Error</span> <span class="kw">for</span> <span class="ident">GetHLSStreamingSessionURLError</span> {
+    <span class="kw">fn</span> <span class="ident">description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+        <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
+            <span class="ident">GetHLSStreamingSessionURLError</span>::<span class="ident">ClientLimitExceeded</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">GetHLSStreamingSessionURLError</span>::<span class="ident">InvalidArgument</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">GetHLSStreamingSessionURLError</span>::<span class="ident">InvalidCodecPrivateData</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">GetHLSStreamingSessionURLError</span>::<span class="ident">MissingCodecPrivateData</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">GetHLSStreamingSessionURLError</span>::<span class="ident">NoDataRetention</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">GetHLSStreamingSessionURLError</span>::<span class="ident">NotAuthorized</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">GetHLSStreamingSessionURLError</span>::<span class="ident">ResourceNotFound</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">GetHLSStreamingSessionURLError</span>::<span class="ident">UnsupportedStreamMediaType</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+        }
+    }
+}
+<span class="doccomment">/// Errors returned by GetMediaForFragmentList</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">GetMediaForFragmentListError</span> {
+    <span class="doccomment">/// &lt;p&gt;Kinesis Video Streams has throttled the request because you have exceeded the limit of allowed client calls. Try making the call later.&lt;/p&gt;</span>
+    <span class="ident">ClientLimitExceeded</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;A specified parameter exceeds its restrictions, is not supported, or can&#39;t be used.&lt;/p&gt;</span>
+    <span class="ident">InvalidArgument</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;Status Code: 403, The caller is not authorized to perform an operation on the given stream, or the token has expired.&lt;/p&gt;</span>
+    <span class="ident">NotAuthorized</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt; &lt;code&gt;GetMedia&lt;/code&gt; throws this error when Kinesis Video Streams can&#39;t find the stream that you specified.&lt;/p&gt; &lt;p&gt; &lt;code&gt;GetHLSStreamingSessionURL&lt;/code&gt; throws this error if a session with a &lt;code&gt;PlaybackMode&lt;/code&gt; of &lt;code&gt;ON_DEMAND&lt;/code&gt; is requested for a stream that has no fragments within the requested time range, or if a session with a &lt;code&gt;PlaybackMode&lt;/code&gt; of &lt;code&gt;LIVE&lt;/code&gt; is requested for a stream that has no fragments within the last 30 seconds.&lt;/p&gt;</span>
+    <span class="ident">ResourceNotFound</span>(<span class="ident">String</span>),
+}
+
+<span class="kw">impl</span> <span class="ident">GetMediaForFragmentListError</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_response</span>(<span class="ident">res</span>: <span class="ident">BufferedHttpResponse</span>) <span class="op">-&gt;</span> <span class="ident">RusotoError</span><span class="op">&lt;</span><span class="ident">GetMediaForFragmentListError</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">proto</span>::<span class="ident">json</span>::<span class="ident">Error</span>::<span class="ident">parse_rest</span>(<span class="kw-2">&amp;</span><span class="ident">res</span>) {
+            <span class="kw">match</span> <span class="ident">err</span>.<span class="ident">typ</span>.<span class="ident">as_str</span>() {
+                <span class="string">&quot;ClientLimitExceededException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">GetMediaForFragmentListError</span>::<span class="ident">ClientLimitExceeded</span>(
+                        <span class="ident">err</span>.<span class="ident">msg</span>,
+                    ))
+                }
+                <span class="string">&quot;InvalidArgumentException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">GetMediaForFragmentListError</span>::<span class="ident">InvalidArgument</span>(
+                        <span class="ident">err</span>.<span class="ident">msg</span>,
+                    ))
+                }
+                <span class="string">&quot;NotAuthorizedException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">GetMediaForFragmentListError</span>::<span class="ident">NotAuthorized</span>(
+                        <span class="ident">err</span>.<span class="ident">msg</span>,
+                    ))
+                }
+                <span class="string">&quot;ResourceNotFoundException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">GetMediaForFragmentListError</span>::<span class="ident">ResourceNotFound</span>(
+                        <span class="ident">err</span>.<span class="ident">msg</span>,
+                    ))
+                }
+                <span class="string">&quot;ValidationException&quot;</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Validation</span>(<span class="ident">err</span>.<span class="ident">msg</span>),
+                <span class="kw">_</span> <span class="op">=&gt;</span> {}
+            }
+        }
+        <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Unknown</span>(<span class="ident">res</span>);
+    }
+}
+<span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">GetMediaForFragmentListError</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+        <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="ident">description</span>())
+    }
+}
+<span class="kw">impl</span> <span class="ident">Error</span> <span class="kw">for</span> <span class="ident">GetMediaForFragmentListError</span> {
+    <span class="kw">fn</span> <span class="ident">description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+        <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
+            <span class="ident">GetMediaForFragmentListError</span>::<span class="ident">ClientLimitExceeded</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">GetMediaForFragmentListError</span>::<span class="ident">InvalidArgument</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">GetMediaForFragmentListError</span>::<span class="ident">NotAuthorized</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">GetMediaForFragmentListError</span>::<span class="ident">ResourceNotFound</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+        }
+    }
+}
+<span class="doccomment">/// Errors returned by ListFragments</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ListFragmentsError</span> {
+    <span class="doccomment">/// &lt;p&gt;Kinesis Video Streams has throttled the request because you have exceeded the limit of allowed client calls. Try making the call later.&lt;/p&gt;</span>
+    <span class="ident">ClientLimitExceeded</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;A specified parameter exceeds its restrictions, is not supported, or can&#39;t be used.&lt;/p&gt;</span>
+    <span class="ident">InvalidArgument</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;Status Code: 403, The caller is not authorized to perform an operation on the given stream, or the token has expired.&lt;/p&gt;</span>
+    <span class="ident">NotAuthorized</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt; &lt;code&gt;GetMedia&lt;/code&gt; throws this error when Kinesis Video Streams can&#39;t find the stream that you specified.&lt;/p&gt; &lt;p&gt; &lt;code&gt;GetHLSStreamingSessionURL&lt;/code&gt; throws this error if a session with a &lt;code&gt;PlaybackMode&lt;/code&gt; of &lt;code&gt;ON_DEMAND&lt;/code&gt; is requested for a stream that has no fragments within the requested time range, or if a session with a &lt;code&gt;PlaybackMode&lt;/code&gt; of &lt;code&gt;LIVE&lt;/code&gt; is requested for a stream that has no fragments within the last 30 seconds.&lt;/p&gt;</span>
+    <span class="ident">ResourceNotFound</span>(<span class="ident">String</span>),
+}
+
+<span class="kw">impl</span> <span class="ident">ListFragmentsError</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_response</span>(<span class="ident">res</span>: <span class="ident">BufferedHttpResponse</span>) <span class="op">-&gt;</span> <span class="ident">RusotoError</span><span class="op">&lt;</span><span class="ident">ListFragmentsError</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">proto</span>::<span class="ident">json</span>::<span class="ident">Error</span>::<span class="ident">parse_rest</span>(<span class="kw-2">&amp;</span><span class="ident">res</span>) {
+            <span class="kw">match</span> <span class="ident">err</span>.<span class="ident">typ</span>.<span class="ident">as_str</span>() {
+                <span class="string">&quot;ClientLimitExceededException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">ListFragmentsError</span>::<span class="ident">ClientLimitExceeded</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;InvalidArgumentException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">ListFragmentsError</span>::<span class="ident">InvalidArgument</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;NotAuthorizedException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">ListFragmentsError</span>::<span class="ident">NotAuthorized</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;ResourceNotFoundException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">ListFragmentsError</span>::<span class="ident">ResourceNotFound</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;ValidationException&quot;</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Validation</span>(<span class="ident">err</span>.<span class="ident">msg</span>),
+                <span class="kw">_</span> <span class="op">=&gt;</span> {}
+            }
+        }
+        <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Unknown</span>(<span class="ident">res</span>);
+    }
+}
+<span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">ListFragmentsError</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+        <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="ident">description</span>())
+    }
+}
+<span class="kw">impl</span> <span class="ident">Error</span> <span class="kw">for</span> <span class="ident">ListFragmentsError</span> {
+    <span class="kw">fn</span> <span class="ident">description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+        <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
+            <span class="ident">ListFragmentsError</span>::<span class="ident">ClientLimitExceeded</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">ListFragmentsError</span>::<span class="ident">InvalidArgument</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">ListFragmentsError</span>::<span class="ident">NotAuthorized</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">ListFragmentsError</span>::<span class="ident">ResourceNotFound</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+        }
+    }
+}
+<span class="doccomment">/// Trait representing the capabilities of the Kinesis Video Archived Media API. Kinesis Video Archived Media clients implement this trait.</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">KinesisVideoArchivedMedia</span> {
+    <span class="doccomment">/// &lt;p&gt;Retrieves an HTTP Live Streaming (HLS) URL for the stream. You can then open the URL in a browser or media player to view the stream contents.&lt;/p&gt; &lt;p&gt;You must specify either the &lt;code&gt;StreamName&lt;/code&gt; or the &lt;code&gt;StreamARN&lt;/code&gt;.&lt;/p&gt; &lt;p&gt;An Amazon Kinesis video stream has the following requirements for providing data through HLS:&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;The media must contain h.264 encoded video and, optionally, AAC encoded audio. Specifically, the codec id of track 1 should be &lt;code&gt;V_MPEG/ISO/AVC&lt;/code&gt;. Optionally, the codec id of track 2 should be &lt;code&gt;A_AAC&lt;/code&gt;.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;Data retention must be greater than 0.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;The video track of each fragment must contain codec private data in the Advanced Video Coding (AVC) for H.264 format (&lt;a href=&quot;https://www.iso.org/standard/55980.html&quot;&gt;MPEG-4 specification ISO/IEC 14496-15&lt;/a&gt;). For information about adapting stream data to a given format, see &lt;a href=&quot;http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/producer-reference-nal.html&quot;&gt;NAL Adaptation Flags&lt;/a&gt;.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;The audio track (if present) of each fragment must contain codec private data in the AAC format (&lt;a href=&quot;https://www.iso.org/standard/43345.html&quot;&gt;AAC specification ISO/IEC 13818-7&lt;/a&gt;).&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;p&gt;Kinesis Video Streams HLS sessions contain fragments in the fragmented MPEG-4 form (also called fMP4 or CMAF), rather than the MPEG-2 form (also called TS chunks, which the HLS specification also supports). For more information about HLS fragment types, see the &lt;a href=&quot;https://tools.ietf.org/html/draft-pantos-http-live-streaming-23&quot;&gt;HLS specification&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;The following procedure shows how to use HLS with Kinesis Video Streams:&lt;/p&gt; &lt;ol&gt; &lt;li&gt; &lt;p&gt;Get an endpoint using &lt;a href=&quot;http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_GetDataEndpoint.html&quot;&gt;GetDataEndpoint&lt;/a&gt;, specifying &lt;code&gt;GET_HLS_STREAMING_SESSION_URL&lt;/code&gt; for the &lt;code&gt;APIName&lt;/code&gt; parameter.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;Retrieve the HLS URL using &lt;code&gt;GetHLSStreamingSessionURL&lt;/code&gt;. Kinesis Video Streams creates an HLS streaming session to be used for accessing content in a stream using the HLS protocol. &lt;code&gt;GetHLSStreamingSessionURL&lt;/code&gt; returns an authenticated URL (that includes an encrypted session token) for the session&#39;s HLS &lt;i&gt;master playlist&lt;/i&gt; (the root resource needed for streaming with HLS).&lt;/p&gt; &lt;note&gt; &lt;p&gt;Don&#39;t share or store this token where an unauthorized entity could access it. The token provides access to the content of the stream. Safeguard the token with the same measures that you would use with your AWS credentials.&lt;/p&gt; &lt;/note&gt; &lt;p&gt;The media that is made available through the playlist consists only of the requested stream, time range, and format. No other media data (such as frames outside the requested window or alternate bitrates) is made available.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;Provide the URL (containing the encrypted session token) for the HLS master playlist to a media player that supports the HLS protocol. Kinesis Video Streams makes the HLS media playlist, initialization fragment, and media fragments available through the master playlist URL. The initialization fragment contains the codec private data for the stream, and other data needed to set up the video or audio decoder and renderer. The media fragments contain H.264-encoded video frames or AAC-encoded audio samples.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;The media player receives the authenticated URL and requests stream metadata and media data normally. When the media player requests data, it calls the following actions:&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; &lt;b&gt;GetHLSMasterPlaylist:&lt;/b&gt; Retrieves an HLS master playlist, which contains a URL for the &lt;code&gt;GetHLSMediaPlaylist&lt;/code&gt; action for each track, and additional metadata for the media player, including estimated bitrate and resolution.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;b&gt;GetHLSMediaPlaylist:&lt;/b&gt; Retrieves an HLS media playlist, which contains a URL to access the MP4 initialization fragment with the &lt;code&gt;GetMP4InitFragment&lt;/code&gt; action, and URLs to access the MP4 media fragments with the &lt;code&gt;GetMP4MediaFragment&lt;/code&gt; actions. The HLS media playlist also contains metadata about the stream that the player needs to play it, such as whether the &lt;code&gt;PlaybackMode&lt;/code&gt; is &lt;code&gt;LIVE&lt;/code&gt; or &lt;code&gt;ON_DEMAND&lt;/code&gt;. The HLS media playlist is typically static for sessions with a &lt;code&gt;PlaybackType&lt;/code&gt; of &lt;code&gt;ON_DEMAND&lt;/code&gt;. The HLS media playlist is continually updated with new fragments for sessions with a &lt;code&gt;PlaybackType&lt;/code&gt; of &lt;code&gt;LIVE&lt;/code&gt;. There is a distinct HLS media playlist for the video track and the audio track (if applicable) that contains MP4 media URLs for the specific track. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;b&gt;GetMP4InitFragment:&lt;/b&gt; Retrieves the MP4 initialization fragment. The media player typically loads the initialization fragment before loading any media fragments. This fragment contains the &quot;&lt;code&gt;fytp&lt;/code&gt;&quot; and &quot;&lt;code&gt;moov&lt;/code&gt;&quot; MP4 atoms, and the child atoms that are needed to initialize the media player decoder.&lt;/p&gt; &lt;p&gt;The initialization fragment does not correspond to a fragment in a Kinesis video stream. It contains only the codec private data for the stream and respective track, which the media player needs to decode the media frames.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;b&gt;GetMP4MediaFragment:&lt;/b&gt; Retrieves MP4 media fragments. These fragments contain the &quot;&lt;code&gt;moof&lt;/code&gt;&quot; and &quot;&lt;code&gt;mdat&lt;/code&gt;&quot; MP4 atoms and their child atoms, containing the encoded fragment&#39;s media frames and their timestamps. &lt;/p&gt; &lt;note&gt; &lt;p&gt;After the first media fragment is made available in a streaming session, any fragments that don&#39;t contain the same codec private data cause an error to be returned when those different media fragments are loaded. Therefore, the codec private data should not change between fragments in a session. This also means that the session fails if the fragments in a stream change from having only video to having both audio and video.&lt;/p&gt; &lt;/note&gt; &lt;p&gt;Data retrieved with this action is billable. See &lt;a href=&quot;https://aws.amazon.com/kinesis/video-streams/pricing/&quot;&gt;Pricing&lt;/a&gt; for details.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;b&gt;GetTSFragment:&lt;/b&gt; Retrieves MPEG TS fragments containing both initialization and media data for all tracks in the stream.&lt;/p&gt; &lt;note&gt; &lt;p&gt;If the &lt;code&gt;ContainerFormat&lt;/code&gt; is &lt;code&gt;MPEG_TS&lt;/code&gt;, this API is used instead of &lt;code&gt;GetMP4InitFragment&lt;/code&gt; and &lt;code&gt;GetMP4MediaFragment&lt;/code&gt; to retrieve stream media.&lt;/p&gt; &lt;/note&gt; &lt;p&gt;Data retrieved with this action is billable. For more information, see &lt;a href=&quot;https://aws.amazon.com/kinesis/video-streams/pricing/&quot;&gt;Kinesis Video Streams pricing&lt;/a&gt;.&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;/li&gt; &lt;/ol&gt; &lt;note&gt; &lt;p&gt;The following restrictions apply to HLS sessions:&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;A streaming session URL should not be shared between players. The service might throttle a session if multiple media players are sharing it. For connection limits, see &lt;a href=&quot;http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/limits.html&quot;&gt;Kinesis Video Streams Limits&lt;/a&gt;.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;A Kinesis video stream can have a maximum of five active HLS streaming sessions. If a new session is created when the maximum number of sessions is already active, the oldest (earliest created) session is closed. The number of active &lt;code&gt;GetMedia&lt;/code&gt; connections on a Kinesis video stream does not count against this limit, and the number of active HLS sessions does not count against the active &lt;code&gt;GetMedia&lt;/code&gt; connection limit.&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;/note&gt; &lt;p&gt;You can monitor the amount of data that the media player consumes by monitoring the &lt;code&gt;GetMP4MediaFragment.OutgoingBytes&lt;/code&gt; Amazon CloudWatch metric. For information about using CloudWatch to monitor Kinesis Video Streams, see &lt;a href=&quot;http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/monitoring.html&quot;&gt;Monitoring Kinesis Video Streams&lt;/a&gt;. For pricing information, see &lt;a href=&quot;https://aws.amazon.com/kinesis/video-streams/pricing/&quot;&gt;Amazon Kinesis Video Streams Pricing&lt;/a&gt; and &lt;a href=&quot;https://aws.amazon.com/pricing/&quot;&gt;AWS Pricing&lt;/a&gt;. Charges for both HLS sessions and outgoing AWS data apply.&lt;/p&gt; &lt;p&gt;For more information about HLS, see &lt;a href=&quot;https://developer.apple.com/streaming/&quot;&gt;HTTP Live Streaming&lt;/a&gt; on the &lt;a href=&quot;https://developer.apple.com&quot;&gt;Apple Developer site&lt;/a&gt;.&lt;/p&gt;</span>
+    <span class="kw">fn</span> <span class="ident">get_hls_streaming_session_url</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">input</span>: <span class="ident">GetHLSStreamingSessionURLInput</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">RusotoFuture</span><span class="op">&lt;</span><span class="ident">GetHLSStreamingSessionURLOutput</span>, <span class="ident">GetHLSStreamingSessionURLError</span><span class="op">&gt;</span>;
+
+    <span class="doccomment">/// &lt;p&gt;&lt;p&gt;Gets media for a list of fragments (specified by fragment number) from the archived data in an Amazon Kinesis video stream.&lt;/p&gt; &lt;note&gt; &lt;p&gt;You must first call the &lt;code&gt;GetDataEndpoint&lt;/code&gt; API to get an endpoint. Then send the &lt;code&gt;GetMediaForFragmentList&lt;/code&gt; requests to this endpoint using the &lt;a href=&quot;https://docs.aws.amazon.com/cli/latest/reference/&quot;&gt;--endpoint-url parameter&lt;/a&gt;. &lt;/p&gt; &lt;/note&gt; &lt;p&gt;The following limits apply when using the &lt;code&gt;GetMediaForFragmentList&lt;/code&gt; API:&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;A client can call &lt;code&gt;GetMediaForFragmentList&lt;/code&gt; up to five times per second per stream. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;Kinesis Video Streams sends media data at a rate of up to 25 megabytes per second (or 200 megabits per second) during a &lt;code&gt;GetMediaForFragmentList&lt;/code&gt; session. &lt;/p&gt; &lt;/li&gt; &lt;/ul&gt;&lt;/p&gt;</span>
+    <span class="kw">fn</span> <span class="ident">get_media_for_fragment_list</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">input</span>: <span class="ident">GetMediaForFragmentListInput</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">RusotoFuture</span><span class="op">&lt;</span><span class="ident">GetMediaForFragmentListOutput</span>, <span class="ident">GetMediaForFragmentListError</span><span class="op">&gt;</span>;
+
+    <span class="doccomment">/// &lt;p&gt;&lt;p&gt;Returns a list of &lt;a&gt;Fragment&lt;/a&gt; objects from the specified stream and timestamp range within the archived data.&lt;/p&gt; &lt;p&gt;Listing fragments is eventually consistent. This means that even if the producer receives an acknowledgment that a fragment is persisted, the result might not be returned immediately from a request to &lt;code&gt;ListFragments&lt;/code&gt;. However, results are typically available in less than one second.&lt;/p&gt; &lt;note&gt; &lt;p&gt;You must first call the &lt;code&gt;GetDataEndpoint&lt;/code&gt; API to get an endpoint. Then send the &lt;code&gt;ListFragments&lt;/code&gt; requests to this endpoint using the &lt;a href=&quot;https://docs.aws.amazon.com/cli/latest/reference/&quot;&gt;--endpoint-url parameter&lt;/a&gt;. &lt;/p&gt; &lt;/note&gt;&lt;/p&gt;</span>
+    <span class="kw">fn</span> <span class="ident">list_fragments</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">input</span>: <span class="ident">ListFragmentsInput</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">RusotoFuture</span><span class="op">&lt;</span><span class="ident">ListFragmentsOutput</span>, <span class="ident">ListFragmentsError</span><span class="op">&gt;</span>;
+}
+<span class="doccomment">/// A client for the Kinesis Video Archived Media API.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">KinesisVideoArchivedMediaClient</span> {
+    <span class="ident">client</span>: <span class="ident">Client</span>,
+    <span class="ident">region</span>: <span class="ident">region</span>::<span class="ident">Region</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">KinesisVideoArchivedMediaClient</span> {
+    <span class="doccomment">/// Creates a client backed by the default tokio event loop.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The client will use the default credentials provider and tls client.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">region</span>: <span class="ident">region</span>::<span class="ident">Region</span>) <span class="op">-&gt;</span> <span class="ident">KinesisVideoArchivedMediaClient</span> {
+        <span class="ident">KinesisVideoArchivedMediaClient</span> {
+            <span class="ident">client</span>: <span class="ident">Client</span>::<span class="ident">shared</span>(),
+            <span class="ident">region</span>,
+        }
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_with</span><span class="op">&lt;</span><span class="ident">P</span>, <span class="ident">D</span><span class="op">&gt;</span>(
+        <span class="ident">request_dispatcher</span>: <span class="ident">D</span>,
+        <span class="ident">credentials_provider</span>: <span class="ident">P</span>,
+        <span class="ident">region</span>: <span class="ident">region</span>::<span class="ident">Region</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">KinesisVideoArchivedMediaClient</span>
+    <span class="kw">where</span>
+        <span class="ident">P</span>: <span class="ident">ProvideAwsCredentials</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">P</span>::<span class="ident">Future</span>: <span class="ident">Send</span>,
+        <span class="ident">D</span>: <span class="ident">DispatchSignedRequest</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">D</span>::<span class="ident">Future</span>: <span class="ident">Send</span>,
+    {
+        <span class="ident">KinesisVideoArchivedMediaClient</span> {
+            <span class="ident">client</span>: <span class="ident">Client</span>::<span class="ident">new_with</span>(<span class="ident">credentials_provider</span>, <span class="ident">request_dispatcher</span>),
+            <span class="ident">region</span>,
+        }
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">KinesisVideoArchivedMedia</span> <span class="kw">for</span> <span class="ident">KinesisVideoArchivedMediaClient</span> {
+    <span class="doccomment">/// &lt;p&gt;Retrieves an HTTP Live Streaming (HLS) URL for the stream. You can then open the URL in a browser or media player to view the stream contents.&lt;/p&gt; &lt;p&gt;You must specify either the &lt;code&gt;StreamName&lt;/code&gt; or the &lt;code&gt;StreamARN&lt;/code&gt;.&lt;/p&gt; &lt;p&gt;An Amazon Kinesis video stream has the following requirements for providing data through HLS:&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;The media must contain h.264 encoded video and, optionally, AAC encoded audio. Specifically, the codec id of track 1 should be &lt;code&gt;V_MPEG/ISO/AVC&lt;/code&gt;. Optionally, the codec id of track 2 should be &lt;code&gt;A_AAC&lt;/code&gt;.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;Data retention must be greater than 0.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;The video track of each fragment must contain codec private data in the Advanced Video Coding (AVC) for H.264 format (&lt;a href=&quot;https://www.iso.org/standard/55980.html&quot;&gt;MPEG-4 specification ISO/IEC 14496-15&lt;/a&gt;). For information about adapting stream data to a given format, see &lt;a href=&quot;http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/producer-reference-nal.html&quot;&gt;NAL Adaptation Flags&lt;/a&gt;.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;The audio track (if present) of each fragment must contain codec private data in the AAC format (&lt;a href=&quot;https://www.iso.org/standard/43345.html&quot;&gt;AAC specification ISO/IEC 13818-7&lt;/a&gt;).&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;p&gt;Kinesis Video Streams HLS sessions contain fragments in the fragmented MPEG-4 form (also called fMP4 or CMAF), rather than the MPEG-2 form (also called TS chunks, which the HLS specification also supports). For more information about HLS fragment types, see the &lt;a href=&quot;https://tools.ietf.org/html/draft-pantos-http-live-streaming-23&quot;&gt;HLS specification&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;The following procedure shows how to use HLS with Kinesis Video Streams:&lt;/p&gt; &lt;ol&gt; &lt;li&gt; &lt;p&gt;Get an endpoint using &lt;a href=&quot;http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_GetDataEndpoint.html&quot;&gt;GetDataEndpoint&lt;/a&gt;, specifying &lt;code&gt;GET_HLS_STREAMING_SESSION_URL&lt;/code&gt; for the &lt;code&gt;APIName&lt;/code&gt; parameter.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;Retrieve the HLS URL using &lt;code&gt;GetHLSStreamingSessionURL&lt;/code&gt;. Kinesis Video Streams creates an HLS streaming session to be used for accessing content in a stream using the HLS protocol. &lt;code&gt;GetHLSStreamingSessionURL&lt;/code&gt; returns an authenticated URL (that includes an encrypted session token) for the session&#39;s HLS &lt;i&gt;master playlist&lt;/i&gt; (the root resource needed for streaming with HLS).&lt;/p&gt; &lt;note&gt; &lt;p&gt;Don&#39;t share or store this token where an unauthorized entity could access it. The token provides access to the content of the stream. Safeguard the token with the same measures that you would use with your AWS credentials.&lt;/p&gt; &lt;/note&gt; &lt;p&gt;The media that is made available through the playlist consists only of the requested stream, time range, and format. No other media data (such as frames outside the requested window or alternate bitrates) is made available.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;Provide the URL (containing the encrypted session token) for the HLS master playlist to a media player that supports the HLS protocol. Kinesis Video Streams makes the HLS media playlist, initialization fragment, and media fragments available through the master playlist URL. The initialization fragment contains the codec private data for the stream, and other data needed to set up the video or audio decoder and renderer. The media fragments contain H.264-encoded video frames or AAC-encoded audio samples.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;The media player receives the authenticated URL and requests stream metadata and media data normally. When the media player requests data, it calls the following actions:&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; &lt;b&gt;GetHLSMasterPlaylist:&lt;/b&gt; Retrieves an HLS master playlist, which contains a URL for the &lt;code&gt;GetHLSMediaPlaylist&lt;/code&gt; action for each track, and additional metadata for the media player, including estimated bitrate and resolution.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;b&gt;GetHLSMediaPlaylist:&lt;/b&gt; Retrieves an HLS media playlist, which contains a URL to access the MP4 initialization fragment with the &lt;code&gt;GetMP4InitFragment&lt;/code&gt; action, and URLs to access the MP4 media fragments with the &lt;code&gt;GetMP4MediaFragment&lt;/code&gt; actions. The HLS media playlist also contains metadata about the stream that the player needs to play it, such as whether the &lt;code&gt;PlaybackMode&lt;/code&gt; is &lt;code&gt;LIVE&lt;/code&gt; or &lt;code&gt;ON_DEMAND&lt;/code&gt;. The HLS media playlist is typically static for sessions with a &lt;code&gt;PlaybackType&lt;/code&gt; of &lt;code&gt;ON_DEMAND&lt;/code&gt;. The HLS media playlist is continually updated with new fragments for sessions with a &lt;code&gt;PlaybackType&lt;/code&gt; of &lt;code&gt;LIVE&lt;/code&gt;. There is a distinct HLS media playlist for the video track and the audio track (if applicable) that contains MP4 media URLs for the specific track. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;b&gt;GetMP4InitFragment:&lt;/b&gt; Retrieves the MP4 initialization fragment. The media player typically loads the initialization fragment before loading any media fragments. This fragment contains the &quot;&lt;code&gt;fytp&lt;/code&gt;&quot; and &quot;&lt;code&gt;moov&lt;/code&gt;&quot; MP4 atoms, and the child atoms that are needed to initialize the media player decoder.&lt;/p&gt; &lt;p&gt;The initialization fragment does not correspond to a fragment in a Kinesis video stream. It contains only the codec private data for the stream and respective track, which the media player needs to decode the media frames.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;b&gt;GetMP4MediaFragment:&lt;/b&gt; Retrieves MP4 media fragments. These fragments contain the &quot;&lt;code&gt;moof&lt;/code&gt;&quot; and &quot;&lt;code&gt;mdat&lt;/code&gt;&quot; MP4 atoms and their child atoms, containing the encoded fragment&#39;s media frames and their timestamps. &lt;/p&gt; &lt;note&gt; &lt;p&gt;After the first media fragment is made available in a streaming session, any fragments that don&#39;t contain the same codec private data cause an error to be returned when those different media fragments are loaded. Therefore, the codec private data should not change between fragments in a session. This also means that the session fails if the fragments in a stream change from having only video to having both audio and video.&lt;/p&gt; &lt;/note&gt; &lt;p&gt;Data retrieved with this action is billable. See &lt;a href=&quot;https://aws.amazon.com/kinesis/video-streams/pricing/&quot;&gt;Pricing&lt;/a&gt; for details.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;b&gt;GetTSFragment:&lt;/b&gt; Retrieves MPEG TS fragments containing both initialization and media data for all tracks in the stream.&lt;/p&gt; &lt;note&gt; &lt;p&gt;If the &lt;code&gt;ContainerFormat&lt;/code&gt; is &lt;code&gt;MPEG_TS&lt;/code&gt;, this API is used instead of &lt;code&gt;GetMP4InitFragment&lt;/code&gt; and &lt;code&gt;GetMP4MediaFragment&lt;/code&gt; to retrieve stream media.&lt;/p&gt; &lt;/note&gt; &lt;p&gt;Data retrieved with this action is billable. For more information, see &lt;a href=&quot;https://aws.amazon.com/kinesis/video-streams/pricing/&quot;&gt;Kinesis Video Streams pricing&lt;/a&gt;.&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;/li&gt; &lt;/ol&gt; &lt;note&gt; &lt;p&gt;The following restrictions apply to HLS sessions:&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;A streaming session URL should not be shared between players. The service might throttle a session if multiple media players are sharing it. For connection limits, see &lt;a href=&quot;http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/limits.html&quot;&gt;Kinesis Video Streams Limits&lt;/a&gt;.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;A Kinesis video stream can have a maximum of five active HLS streaming sessions. If a new session is created when the maximum number of sessions is already active, the oldest (earliest created) session is closed. The number of active &lt;code&gt;GetMedia&lt;/code&gt; connections on a Kinesis video stream does not count against this limit, and the number of active HLS sessions does not count against the active &lt;code&gt;GetMedia&lt;/code&gt; connection limit.&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;/note&gt; &lt;p&gt;You can monitor the amount of data that the media player consumes by monitoring the &lt;code&gt;GetMP4MediaFragment.OutgoingBytes&lt;/code&gt; Amazon CloudWatch metric. For information about using CloudWatch to monitor Kinesis Video Streams, see &lt;a href=&quot;http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/monitoring.html&quot;&gt;Monitoring Kinesis Video Streams&lt;/a&gt;. For pricing information, see &lt;a href=&quot;https://aws.amazon.com/kinesis/video-streams/pricing/&quot;&gt;Amazon Kinesis Video Streams Pricing&lt;/a&gt; and &lt;a href=&quot;https://aws.amazon.com/pricing/&quot;&gt;AWS Pricing&lt;/a&gt;. Charges for both HLS sessions and outgoing AWS data apply.&lt;/p&gt; &lt;p&gt;For more information about HLS, see &lt;a href=&quot;https://developer.apple.com/streaming/&quot;&gt;HTTP Live Streaming&lt;/a&gt; on the &lt;a href=&quot;https://developer.apple.com&quot;&gt;Apple Developer site&lt;/a&gt;.&lt;/p&gt;</span>
+    <span class="kw">fn</span> <span class="ident">get_hls_streaming_session_url</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">input</span>: <span class="ident">GetHLSStreamingSessionURLInput</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">RusotoFuture</span><span class="op">&lt;</span><span class="ident">GetHLSStreamingSessionURLOutput</span>, <span class="ident">GetHLSStreamingSessionURLError</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">request_uri</span> <span class="op">=</span> <span class="string">&quot;/getHLSStreamingSessionURL&quot;</span>;
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">SignedRequest</span>::<span class="ident">new</span>(<span class="string">&quot;POST&quot;</span>, <span class="string">&quot;kinesisvideo&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">region</span>, <span class="kw-2">&amp;</span><span class="ident">request_uri</span>);
+        <span class="ident">request</span>.<span class="ident">set_content_type</span>(<span class="string">&quot;application/x-amz-json-1.1&quot;</span>.<span class="ident">to_owned</span>());
+
+        <span class="kw">let</span> <span class="ident">encoded</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">serde_json</span>::<span class="ident">to_vec</span>(<span class="kw-2">&amp;</span><span class="ident">input</span>).<span class="ident">unwrap</span>());
+        <span class="ident">request</span>.<span class="ident">set_payload</span>(<span class="ident">encoded</span>);
+
+        <span class="self">self</span>.<span class="ident">client</span>.<span class="ident">sign_and_dispatch</span>(<span class="ident">request</span>, <span class="op">|</span><span class="ident">response</span><span class="op">|</span> {
+            <span class="kw">if</span> <span class="ident">response</span>.<span class="ident">status</span>.<span class="ident">is_success</span>() {
+                <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">response</span>.<span class="ident">buffer</span>().<span class="ident">from_err</span>().<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">response</span><span class="op">|</span> {
+                    <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">proto</span>::<span class="ident">json</span>::<span class="ident">ResponsePayload</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">response</span>)
+                        .<span class="ident">deserialize</span>::<span class="op">&lt;</span><span class="ident">GetHLSStreamingSessionURLOutput</span>, <span class="kw">_</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
+
+                    <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
+                }))
+            } <span class="kw">else</span> {
+                <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">response</span>.<span class="ident">buffer</span>().<span class="ident">from_err</span>().<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">response</span><span class="op">|</span> {
+                    <span class="prelude-val">Err</span>(<span class="ident">GetHLSStreamingSessionURLError</span>::<span class="ident">from_response</span>(<span class="ident">response</span>))
+                }))
+            }
+        })
+    }
+
+    <span class="doccomment">/// &lt;p&gt;&lt;p&gt;Gets media for a list of fragments (specified by fragment number) from the archived data in an Amazon Kinesis video stream.&lt;/p&gt; &lt;note&gt; &lt;p&gt;You must first call the &lt;code&gt;GetDataEndpoint&lt;/code&gt; API to get an endpoint. Then send the &lt;code&gt;GetMediaForFragmentList&lt;/code&gt; requests to this endpoint using the &lt;a href=&quot;https://docs.aws.amazon.com/cli/latest/reference/&quot;&gt;--endpoint-url parameter&lt;/a&gt;. &lt;/p&gt; &lt;/note&gt; &lt;p&gt;The following limits apply when using the &lt;code&gt;GetMediaForFragmentList&lt;/code&gt; API:&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;A client can call &lt;code&gt;GetMediaForFragmentList&lt;/code&gt; up to five times per second per stream. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;Kinesis Video Streams sends media data at a rate of up to 25 megabytes per second (or 200 megabits per second) during a &lt;code&gt;GetMediaForFragmentList&lt;/code&gt; session. &lt;/p&gt; &lt;/li&gt; &lt;/ul&gt;&lt;/p&gt;</span>
+    <span class="kw">fn</span> <span class="ident">get_media_for_fragment_list</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">input</span>: <span class="ident">GetMediaForFragmentListInput</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">RusotoFuture</span><span class="op">&lt;</span><span class="ident">GetMediaForFragmentListOutput</span>, <span class="ident">GetMediaForFragmentListError</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">request_uri</span> <span class="op">=</span> <span class="string">&quot;/getMediaForFragmentList&quot;</span>;
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">SignedRequest</span>::<span class="ident">new</span>(<span class="string">&quot;POST&quot;</span>, <span class="string">&quot;kinesisvideo&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">region</span>, <span class="kw-2">&amp;</span><span class="ident">request_uri</span>);
+        <span class="ident">request</span>.<span class="ident">set_content_type</span>(<span class="string">&quot;application/x-amz-json-1.1&quot;</span>.<span class="ident">to_owned</span>());
+
+        <span class="kw">let</span> <span class="ident">encoded</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">serde_json</span>::<span class="ident">to_vec</span>(<span class="kw-2">&amp;</span><span class="ident">input</span>).<span class="ident">unwrap</span>());
+        <span class="ident">request</span>.<span class="ident">set_payload</span>(<span class="ident">encoded</span>);
+
+        <span class="self">self</span>.<span class="ident">client</span>.<span class="ident">sign_and_dispatch</span>(<span class="ident">request</span>, <span class="op">|</span><span class="ident">response</span><span class="op">|</span> {
+            <span class="kw">if</span> <span class="ident">response</span>.<span class="ident">status</span>.<span class="ident">is_success</span>() {
+                <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">response</span>.<span class="ident">buffer</span>().<span class="ident">from_err</span>().<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">response</span><span class="op">|</span> {
+                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">GetMediaForFragmentListOutput</span>::<span class="ident">default</span>();
+                    <span class="ident">result</span>.<span class="ident">payload</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">response</span>.<span class="ident">body</span>);
+
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">content_type</span>) <span class="op">=</span> <span class="ident">response</span>.<span class="ident">headers</span>.<span class="ident">get</span>(<span class="string">&quot;Content-Type&quot;</span>) {
+                        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">content_type</span>.<span class="ident">to_owned</span>();
+                        <span class="ident">result</span>.<span class="ident">content_type</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">value</span>)
+                    };
+
+                    <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
+                }))
+            } <span class="kw">else</span> {
+                <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">response</span>.<span class="ident">buffer</span>().<span class="ident">from_err</span>().<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">response</span><span class="op">|</span> {
+                    <span class="prelude-val">Err</span>(<span class="ident">GetMediaForFragmentListError</span>::<span class="ident">from_response</span>(<span class="ident">response</span>))
+                }))
+            }
+        })
+    }
+
+    <span class="doccomment">/// &lt;p&gt;&lt;p&gt;Returns a list of &lt;a&gt;Fragment&lt;/a&gt; objects from the specified stream and timestamp range within the archived data.&lt;/p&gt; &lt;p&gt;Listing fragments is eventually consistent. This means that even if the producer receives an acknowledgment that a fragment is persisted, the result might not be returned immediately from a request to &lt;code&gt;ListFragments&lt;/code&gt;. However, results are typically available in less than one second.&lt;/p&gt; &lt;note&gt; &lt;p&gt;You must first call the &lt;code&gt;GetDataEndpoint&lt;/code&gt; API to get an endpoint. Then send the &lt;code&gt;ListFragments&lt;/code&gt; requests to this endpoint using the &lt;a href=&quot;https://docs.aws.amazon.com/cli/latest/reference/&quot;&gt;--endpoint-url parameter&lt;/a&gt;. &lt;/p&gt; &lt;/note&gt;&lt;/p&gt;</span>
+    <span class="kw">fn</span> <span class="ident">list_fragments</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">input</span>: <span class="ident">ListFragmentsInput</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">RusotoFuture</span><span class="op">&lt;</span><span class="ident">ListFragmentsOutput</span>, <span class="ident">ListFragmentsError</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">request_uri</span> <span class="op">=</span> <span class="string">&quot;/listFragments&quot;</span>;
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">SignedRequest</span>::<span class="ident">new</span>(<span class="string">&quot;POST&quot;</span>, <span class="string">&quot;kinesisvideo&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">region</span>, <span class="kw-2">&amp;</span><span class="ident">request_uri</span>);
+        <span class="ident">request</span>.<span class="ident">set_content_type</span>(<span class="string">&quot;application/x-amz-json-1.1&quot;</span>.<span class="ident">to_owned</span>());
+
+        <span class="kw">let</span> <span class="ident">encoded</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">serde_json</span>::<span class="ident">to_vec</span>(<span class="kw-2">&amp;</span><span class="ident">input</span>).<span class="ident">unwrap</span>());
+        <span class="ident">request</span>.<span class="ident">set_payload</span>(<span class="ident">encoded</span>);
+
+        <span class="self">self</span>.<span class="ident">client</span>.<span class="ident">sign_and_dispatch</span>(<span class="ident">request</span>, <span class="op">|</span><span class="ident">response</span><span class="op">|</span> {
+            <span class="kw">if</span> <span class="ident">response</span>.<span class="ident">status</span>.<span class="ident">is_success</span>() {
+                <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">response</span>.<span class="ident">buffer</span>().<span class="ident">from_err</span>().<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">response</span><span class="op">|</span> {
+                    <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">proto</span>::<span class="ident">json</span>::<span class="ident">ResponsePayload</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">response</span>)
+                        .<span class="ident">deserialize</span>::<span class="op">&lt;</span><span class="ident">ListFragmentsOutput</span>, <span class="kw">_</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
+
+                    <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
+                }))
+            } <span class="kw">else</span> {
+                <span class="ident">Box</span>::<span class="ident">new</span>(
+                    <span class="ident">response</span>
+                        .<span class="ident">buffer</span>()
+                        .<span class="ident">from_err</span>()
+                        .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">response</span><span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">ListFragmentsError</span>::<span class="ident">from_response</span>(<span class="ident">response</span>))),
+                )
+            }
+        })
+    }
+}
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "rusoto_kinesis_video_archived_media";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

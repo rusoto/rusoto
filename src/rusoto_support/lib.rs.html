@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `rusoto/services/support/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../rusoto_support/index.html'><img src='https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png' alt='logo' width='100'></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1"> 1</span>
+<span id="2"> 2</span>
+<span id="3"> 3</span>
+<span id="4"> 4</span>
+<span id="5"> 5</span>
+<span id="6"> 6</span>
+<span id="7"> 7</span>
+<span id="8"> 8</span>
+<span id="9"> 9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+</pre><div class="example-wrap"><pre class="rust ">
+
+<span class="comment">// =================================================================</span>
+<span class="comment">//</span>
+<span class="comment">//                           * WARNING *</span>
+<span class="comment">//</span>
+<span class="comment">//                    This file is generated!</span>
+<span class="comment">//</span>
+<span class="comment">//  Changes made to this file will be overwritten. If changes are</span>
+<span class="comment">//  required to the generated code, the service_crategen project</span>
+<span class="comment">//  must be updated to generate the changes.</span>
+<span class="comment">//</span>
+<span class="comment">// =================================================================</span>
+
+<span class="attribute">#![<span class="ident">doc</span>(<span class="ident">html_logo_url</span> <span class="op">=</span> <span class="string">&quot;https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png&quot;</span>)]</span>
+<span class="doccomment">//! &lt;p&gt;&lt;fullname&gt;AWS Support&lt;/fullname&gt; &lt;p&gt;The AWS Support API reference is intended for programmers who need detailed information about the AWS Support operations and data types. This service enables you to manage your AWS Support cases programmatically. It uses HTTP methods that return results in JSON format.&lt;/p&gt; &lt;p&gt;The AWS Support service also exposes a set of &lt;a href=&quot;http://aws.amazon.com/premiumsupport/trustedadvisor/&quot;&gt;Trusted Advisor&lt;/a&gt; features. You can retrieve a list of checks and their descriptions, get check results, specify checks to refresh, and get the refresh status of checks. &lt;/p&gt; &lt;p&gt;The following list describes the AWS Support case management operations:&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; &lt;b&gt;Service names, issue categories, and available severity levels. &lt;/b&gt;The &lt;a&gt;DescribeServices&lt;/a&gt; and &lt;a&gt;DescribeSeverityLevels&lt;/a&gt; operations return AWS service names, service codes, service categories, and problem severity levels. You use these values when you call the &lt;a&gt;CreateCase&lt;/a&gt; operation. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;b&gt;Case creation, case details, and case resolution.&lt;/b&gt; The &lt;a&gt;CreateCase&lt;/a&gt;, &lt;a&gt;DescribeCases&lt;/a&gt;, &lt;a&gt;DescribeAttachment&lt;/a&gt;, and &lt;a&gt;ResolveCase&lt;/a&gt; operations create AWS Support cases, retrieve information about cases, and resolve cases.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;b&gt;Case communication.&lt;/b&gt; The &lt;a&gt;DescribeCommunications&lt;/a&gt;, &lt;a&gt;AddCommunicationToCase&lt;/a&gt;, and &lt;a&gt;AddAttachmentsToSet&lt;/a&gt; operations retrieve and add communications and attachments to AWS Support cases. &lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;p&gt;The following list describes the operations available from the AWS Support service for Trusted Advisor:&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; &lt;a&gt;DescribeTrustedAdvisorChecks&lt;/a&gt; returns the list of checks that run against your AWS resources.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;Using the &lt;code&gt;checkId&lt;/code&gt; for a specific check returned by &lt;a&gt;DescribeTrustedAdvisorChecks&lt;/a&gt;, you can call &lt;a&gt;DescribeTrustedAdvisorCheckResult&lt;/a&gt; to obtain the results for the check you specified.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;a&gt;DescribeTrustedAdvisorCheckSummaries&lt;/a&gt; returns summarized results for one or more Trusted Advisor checks.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;a&gt;RefreshTrustedAdvisorCheck&lt;/a&gt; requests that Trusted Advisor rerun a specified check. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;a&gt;DescribeTrustedAdvisorCheckRefreshStatuses&lt;/a&gt; reports the refresh status of one or more checks. &lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;p&gt;For authentication of requests, AWS Support uses &lt;a href=&quot;http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html&quot;&gt;Signature Version 4 Signing Process&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;See &lt;a href=&quot;http://docs.aws.amazon.com/awssupport/latest/user/Welcome.html&quot;&gt;About the AWS Support API&lt;/a&gt; in the &lt;i&gt;AWS Support User Guide&lt;/i&gt; for information about how to use this service to create and manage your support cases, and how to call Trusted Advisor for results of checks on your resources. &lt;/p&gt;&lt;/p&gt;</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! If you&#39;re using the service, you&#39;re probably looking for [AWSSupportClient](struct.AWSSupportClient.html) and [AWSSupport](trait.AWSSupport.html).</span>
+
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">bytes</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">futures</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">rusoto_core</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">serde</span>;
+<span class="attribute">#[<span class="ident">macro_use</span>]</span>
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">serde_derive</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">serde_json</span>;
+
+<span class="kw">mod</span> <span class="ident">generated</span>;
+<span class="kw">mod</span> <span class="ident">custom</span>;
+
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">generated</span>::<span class="kw-2">*</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">custom</span>::<span class="kw-2">*</span>;
+            
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "rusoto_support";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

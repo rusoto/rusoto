@@ -1,0 +1,1107 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `rusoto/services/lex-runtime/src/generated.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>generated.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../rusoto_lex_runtime/index.html'><img src='https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png' alt='logo' width='100'></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<span id="2">  2</span>
+<span id="3">  3</span>
+<span id="4">  4</span>
+<span id="5">  5</span>
+<span id="6">  6</span>
+<span id="7">  7</span>
+<span id="8">  8</span>
+<span id="9">  9</span>
+<span id="10"> 10</span>
+<span id="11"> 11</span>
+<span id="12"> 12</span>
+<span id="13"> 13</span>
+<span id="14"> 14</span>
+<span id="15"> 15</span>
+<span id="16"> 16</span>
+<span id="17"> 17</span>
+<span id="18"> 18</span>
+<span id="19"> 19</span>
+<span id="20"> 20</span>
+<span id="21"> 21</span>
+<span id="22"> 22</span>
+<span id="23"> 23</span>
+<span id="24"> 24</span>
+<span id="25"> 25</span>
+<span id="26"> 26</span>
+<span id="27"> 27</span>
+<span id="28"> 28</span>
+<span id="29"> 29</span>
+<span id="30"> 30</span>
+<span id="31"> 31</span>
+<span id="32"> 32</span>
+<span id="33"> 33</span>
+<span id="34"> 34</span>
+<span id="35"> 35</span>
+<span id="36"> 36</span>
+<span id="37"> 37</span>
+<span id="38"> 38</span>
+<span id="39"> 39</span>
+<span id="40"> 40</span>
+<span id="41"> 41</span>
+<span id="42"> 42</span>
+<span id="43"> 43</span>
+<span id="44"> 44</span>
+<span id="45"> 45</span>
+<span id="46"> 46</span>
+<span id="47"> 47</span>
+<span id="48"> 48</span>
+<span id="49"> 49</span>
+<span id="50"> 50</span>
+<span id="51"> 51</span>
+<span id="52"> 52</span>
+<span id="53"> 53</span>
+<span id="54"> 54</span>
+<span id="55"> 55</span>
+<span id="56"> 56</span>
+<span id="57"> 57</span>
+<span id="58"> 58</span>
+<span id="59"> 59</span>
+<span id="60"> 60</span>
+<span id="61"> 61</span>
+<span id="62"> 62</span>
+<span id="63"> 63</span>
+<span id="64"> 64</span>
+<span id="65"> 65</span>
+<span id="66"> 66</span>
+<span id="67"> 67</span>
+<span id="68"> 68</span>
+<span id="69"> 69</span>
+<span id="70"> 70</span>
+<span id="71"> 71</span>
+<span id="72"> 72</span>
+<span id="73"> 73</span>
+<span id="74"> 74</span>
+<span id="75"> 75</span>
+<span id="76"> 76</span>
+<span id="77"> 77</span>
+<span id="78"> 78</span>
+<span id="79"> 79</span>
+<span id="80"> 80</span>
+<span id="81"> 81</span>
+<span id="82"> 82</span>
+<span id="83"> 83</span>
+<span id="84"> 84</span>
+<span id="85"> 85</span>
+<span id="86"> 86</span>
+<span id="87"> 87</span>
+<span id="88"> 88</span>
+<span id="89"> 89</span>
+<span id="90"> 90</span>
+<span id="91"> 91</span>
+<span id="92"> 92</span>
+<span id="93"> 93</span>
+<span id="94"> 94</span>
+<span id="95"> 95</span>
+<span id="96"> 96</span>
+<span id="97"> 97</span>
+<span id="98"> 98</span>
+<span id="99"> 99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+</pre><div class="example-wrap"><pre class="rust ">
+<span class="comment">// =================================================================</span>
+<span class="comment">//</span>
+<span class="comment">//                           * WARNING *</span>
+<span class="comment">//</span>
+<span class="comment">//                    This file is generated!</span>
+<span class="comment">//</span>
+<span class="comment">//  Changes made to this file will be overwritten. If changes are</span>
+<span class="comment">//  required to the generated code, the service_crategen project</span>
+<span class="comment">//  must be updated to generate the changes.</span>
+<span class="comment">//</span>
+<span class="comment">// =================================================================</span>
+
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
+
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">warnings</span>)]</span>
+<span class="kw">use</span> <span class="ident">futures</span>::<span class="ident">future</span>;
+<span class="kw">use</span> <span class="ident">futures</span>::<span class="ident">Future</span>;
+<span class="kw">use</span> <span class="ident">rusoto_core</span>::<span class="ident">credential</span>::<span class="ident">ProvideAwsCredentials</span>;
+<span class="kw">use</span> <span class="ident">rusoto_core</span>::<span class="ident">region</span>;
+<span class="kw">use</span> <span class="ident">rusoto_core</span>::<span class="ident">request</span>::{<span class="ident">BufferedHttpResponse</span>, <span class="ident">DispatchSignedRequest</span>};
+<span class="kw">use</span> <span class="ident">rusoto_core</span>::{<span class="ident">Client</span>, <span class="ident">RusotoError</span>, <span class="ident">RusotoFuture</span>};
+
+<span class="kw">use</span> <span class="ident">rusoto_core</span>::<span class="ident">proto</span>;
+<span class="kw">use</span> <span class="ident">rusoto_core</span>::<span class="ident">signature</span>::<span class="ident">SignedRequest</span>;
+<span class="kw">use</span> <span class="ident">serde_json</span>;
+<span class="doccomment">/// &lt;p&gt;Represents an option to be shown on the client platform (Facebook, Slack, etc.)&lt;/p&gt;</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">test</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>))]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Button</span> {
+    <span class="doccomment">/// &lt;p&gt;Text that is visible to the user on the button.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;text&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">text</span>: <span class="ident">String</span>,
+    <span class="doccomment">/// &lt;p&gt;The value sent to Amazon Lex when a user chooses the button. For example, consider button text &quot;NYC.&quot; When the user chooses the button, the value sent can be &quot;New York City.&quot;&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;value&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">value</span>: <span class="ident">String</span>,
+}
+
+<span class="doccomment">/// &lt;p&gt;Represents an option rendered to the user when a prompt is shown. It could be an image, a button, a link, or text. &lt;/p&gt;</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">test</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>))]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">GenericAttachment</span> {
+    <span class="doccomment">/// &lt;p&gt;The URL of an attachment to the response card.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;attachmentLinkUrl&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">attachment_link_url</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The list of options to show to the user.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;buttons&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">buttons</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Button</span><span class="op">&gt;&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The URL of an image that is displayed to the user.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;imageUrl&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">image_url</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The subtitle shown below the title.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;subTitle&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">sub_title</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The title of the option.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;title&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">title</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+}
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PostContentRequest</span> {
+    <span class="doccomment">/// &lt;p&gt;&lt;p&gt; You pass this value as the &lt;code&gt;Accept&lt;/code&gt; HTTP header. &lt;/p&gt; &lt;p&gt; The message Amazon Lex returns in the response can be either text or speech based on the &lt;code&gt;Accept&lt;/code&gt; HTTP header value in the request. &lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; If the value is &lt;code&gt;text/plain; charset=utf-8&lt;/code&gt;, Amazon Lex returns text in the response. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; If the value begins with &lt;code&gt;audio/&lt;/code&gt;, Amazon Lex returns speech in the response. Amazon Lex uses Amazon Polly to generate the speech (using the configuration you specified in the &lt;code&gt;Accept&lt;/code&gt; header). For example, if you specify &lt;code&gt;audio/mpeg&lt;/code&gt; as the value, Amazon Lex returns speech in the MPEG format.&lt;/p&gt; &lt;p&gt;The following are the accepted values:&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;audio/mpeg&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;audio/ogg&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;audio/pcm&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;text/plain; charset=utf-8&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;audio/* (defaults to mpeg)&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;/li&gt; &lt;/ul&gt;&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;accept&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">accept</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;Alias of the Amazon Lex bot.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;botAlias&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">bot_alias</span>: <span class="ident">String</span>,
+    <span class="doccomment">/// &lt;p&gt;Name of the Amazon Lex bot.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;botName&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">bot_name</span>: <span class="ident">String</span>,
+    <span class="doccomment">/// &lt;p&gt;&lt;p&gt; You pass this value as the &lt;code&gt;Content-Type&lt;/code&gt; HTTP header. &lt;/p&gt; &lt;p&gt; Indicates the audio format or text. The header value must start with one of the following prefixes: &lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;PCM format, audio data must be in little-endian byte order.&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;audio/l16; rate=16000; channels=1&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;audio/x-l16; sample-rate=16000; channel-count=1&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;audio/lpcm; sample-rate=8000; sample-size-bits=16; channel-count=1; is-big-endian=false &lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;Opus format&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;audio/x-cbr-opus-with-preamble; preamble-size=0; bit-rate=256000; frame-size-milliseconds=4&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;Text format&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;text/plain; charset=utf-8&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;/li&gt; &lt;/ul&gt;&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;contentType&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">content_type</span>: <span class="ident">String</span>,
+    <span class="doccomment">/// &lt;p&gt; User input in PCM or Opus audio format or text format as described in the &lt;code&gt;Content-Type&lt;/code&gt; HTTP header. &lt;/p&gt; &lt;p&gt;You can stream audio data to Amazon Lex or you can create a local buffer that captures all of the audio data before sending. In general, you get better performance if you stream audio data rather than buffering the data locally.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;inputStream&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(
+        <span class="ident">deserialize_with</span> <span class="op">=</span> <span class="string">&quot;::rusoto_core::serialization::SerdeBlob::deserialize_blob&quot;</span>,
+        <span class="ident">serialize_with</span> <span class="op">=</span> <span class="string">&quot;::rusoto_core::serialization::SerdeBlob::serialize_blob&quot;</span>,
+        <span class="ident">default</span>
+    )]</span>
+    <span class="kw">pub</span> <span class="ident">input_stream</span>: <span class="ident">bytes</span>::<span class="ident">Bytes</span>,
+    <span class="doccomment">/// &lt;p&gt;You pass this value as the &lt;code&gt;x-amz-lex-request-attributes&lt;/code&gt; HTTP header.&lt;/p&gt; &lt;p&gt;Request-specific information passed between Amazon Lex and a client application. The value must be a JSON serialized and base64 encoded map with string keys and values. The total size of the &lt;code&gt;requestAttributes&lt;/code&gt; and &lt;code&gt;sessionAttributes&lt;/code&gt; headers is limited to 12 KB.&lt;/p&gt; &lt;p&gt;The namespace &lt;code&gt;x-amz-lex:&lt;/code&gt; is reserved for special attributes. Don&#39;t create any request attributes with the prefix &lt;code&gt;x-amz-lex:&lt;/code&gt;.&lt;/p&gt; &lt;p&gt;For more information, see &lt;a href=&quot;http://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html#context-mgmt-request-attribs&quot;&gt;Setting Request Attributes&lt;/a&gt;.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;requestAttributes&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">request_attributes</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;You pass this value as the &lt;code&gt;x-amz-lex-session-attributes&lt;/code&gt; HTTP header.&lt;/p&gt; &lt;p&gt;Application-specific information passed between Amazon Lex and a client application. The value must be a JSON serialized and base64 encoded map with string keys and values. The total size of the &lt;code&gt;sessionAttributes&lt;/code&gt; and &lt;code&gt;requestAttributes&lt;/code&gt; headers is limited to 12 KB.&lt;/p&gt; &lt;p&gt;For more information, see &lt;a href=&quot;http://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html#context-mgmt-session-attribs&quot;&gt;Setting Session Attributes&lt;/a&gt;.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;sessionAttributes&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">session_attributes</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;&lt;p&gt;The ID of the client application user. Amazon Lex uses this to identify a user&amp;#39;s conversation with your bot. At runtime, each request must contain the &lt;code&gt;userID&lt;/code&gt; field.&lt;/p&gt; &lt;p&gt;To decide the user ID to use for your application, consider the following factors.&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;The &lt;code&gt;userID&lt;/code&gt; field must not contain any personally identifiable information of the user, for example, name, personal identification numbers, or other end user personal information.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;If you want a user to start a conversation on one device and continue on another device, use a user-specific identifier.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;If you want the same user to be able to have two independent conversations on two different devices, choose a device-specific identifier.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;A user can&amp;#39;t have two independent conversations with two different versions of the same bot. For example, a user can&amp;#39;t have a conversation with the PROD and BETA versions of the same bot. If you anticipate that a user will need to have conversation with two different versions, for example, while testing, include the bot alias in the user ID to separate the two conversations.&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt;&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;userId&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">user_id</span>: <span class="ident">String</span>,
+}
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PostContentResponse</span> {
+    <span class="doccomment">/// &lt;p&gt;The prompt (or statement) to convey to the user. This is based on the bot configuration and context. For example, if Amazon Lex did not understand the user intent, it sends the &lt;code&gt;clarificationPrompt&lt;/code&gt; configured for the bot. If the intent requires confirmation before taking the fulfillment action, it sends the &lt;code&gt;confirmationPrompt&lt;/code&gt;. Another example: Suppose that the Lambda function successfully fulfilled the intent, and sent a message to convey to the user. Then Amazon Lex sends that message in the response. &lt;/p&gt;</span>
+    <span class="kw">pub</span> <span class="ident">audio_stream</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bytes</span>::<span class="ident">Bytes</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;Content type as specified in the &lt;code&gt;Accept&lt;/code&gt; HTTP header in the request.&lt;/p&gt;</span>
+    <span class="kw">pub</span> <span class="ident">content_type</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;&lt;p&gt;Identifies the current state of the user interaction. Amazon Lex returns one of the following values as &lt;code&gt;dialogState&lt;/code&gt;. The client can optionally use this information to customize the user interface. &lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;ElicitIntent&lt;/code&gt; - Amazon Lex wants to elicit the user&amp;#39;s intent. Consider the following examples: &lt;/p&gt; &lt;p&gt; For example, a user might utter an intent (&amp;quot;I want to order a pizza&amp;quot;). If Amazon Lex cannot infer the user intent from this utterance, it will return this dialog state. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;ConfirmIntent&lt;/code&gt; - Amazon Lex is expecting a &amp;quot;yes&amp;quot; or &amp;quot;no&amp;quot; response. &lt;/p&gt; &lt;p&gt;For example, Amazon Lex wants user confirmation before fulfilling an intent. Instead of a simple &amp;quot;yes&amp;quot; or &amp;quot;no&amp;quot; response, a user might respond with additional information. For example, &amp;quot;yes, but make it a thick crust pizza&amp;quot; or &amp;quot;no, I want to order a drink.&amp;quot; Amazon Lex can process such additional information (in these examples, update the crust type slot or change the intent from OrderPizza to OrderDrink). &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;ElicitSlot&lt;/code&gt; - Amazon Lex is expecting the value of a slot for the current intent. &lt;/p&gt; &lt;p&gt; For example, suppose that in the response Amazon Lex sends this message: &amp;quot;What size pizza would you like?&amp;quot;. A user might reply with the slot value (e.g., &amp;quot;medium&amp;quot;). The user might also provide additional information in the response (e.g., &amp;quot;medium thick crust pizza&amp;quot;). Amazon Lex can process such additional information appropriately. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;Fulfilled&lt;/code&gt; - Conveys that the Lambda function has successfully fulfilled the intent. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;ReadyForFulfillment&lt;/code&gt; - Conveys that the client has to fulfill the request. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;Failed&lt;/code&gt; - Conveys that the conversation with the user failed. &lt;/p&gt; &lt;p&gt; This can happen for various reasons, including that the user does not provide an appropriate response to prompts from the service (you can configure how many times Amazon Lex can prompt a user for specific information), or if the Lambda function fails to fulfill the intent. &lt;/p&gt; &lt;/li&gt; &lt;/ul&gt;&lt;/p&gt;</span>
+    <span class="kw">pub</span> <span class="ident">dialog_state</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The text used to process the request.&lt;/p&gt; &lt;p&gt;If the input was an audio stream, the &lt;code&gt;inputTranscript&lt;/code&gt; field contains the text extracted from the audio stream. This is the text that is actually processed to recognize intents and slot values. You can use this information to determine if Amazon Lex is correctly processing the audio that you send.&lt;/p&gt;</span>
+    <span class="kw">pub</span> <span class="ident">input_transcript</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;Current user intent that Amazon Lex is aware of.&lt;/p&gt;</span>
+    <span class="kw">pub</span> <span class="ident">intent_name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The message to convey to the user. The message can come from the bot&#39;s configuration or from a Lambda function.&lt;/p&gt; &lt;p&gt;If the intent is not configured with a Lambda function, or if the Lambda function returned &lt;code&gt;Delegate&lt;/code&gt; as the &lt;code&gt;dialogAction.type&lt;/code&gt; its response, Amazon Lex decides on the next course of action and selects an appropriate message from the bot&#39;s configuration based on the current interaction context. For example, if Amazon Lex isn&#39;t able to understand user input, it uses a clarification prompt message.&lt;/p&gt; &lt;p&gt;When you create an intent you can assign messages to groups. When messages are assigned to groups Amazon Lex returns one message from each group in the response. The message field is an escaped JSON string containing the messages. For more information about the structure of the JSON string returned, see &lt;a&gt;msg-prompts-formats&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;If the Lambda function returns a message, Amazon Lex passes it to the client in its response.&lt;/p&gt;</span>
+    <span class="kw">pub</span> <span class="ident">message</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;&lt;p&gt;The format of the response message. One of the following values:&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;PlainText&lt;/code&gt; - The message contains plain UTF-8 text.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;CustomPayload&lt;/code&gt; - The message is a custom format for the client.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;SSML&lt;/code&gt; - The message contains text formatted for voice output.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;Composite&lt;/code&gt; - The message contains an escaped JSON object containing one or more messages from the groups that messages were assigned to when the intent was created.&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt;&lt;/p&gt;</span>
+    <span class="kw">pub</span> <span class="ident">message_format</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt; Map of key/value pairs representing the session-specific context information. &lt;/p&gt;</span>
+    <span class="kw">pub</span> <span class="ident">session_attributes</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt; If the &lt;code&gt;dialogState&lt;/code&gt; value is &lt;code&gt;ElicitSlot&lt;/code&gt;, returns the name of the slot for which Amazon Lex is eliciting a value. &lt;/p&gt;</span>
+    <span class="kw">pub</span> <span class="ident">slot_to_elicit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;Map of zero or more intent slots (name/value pairs) Amazon Lex detected from the user input during the conversation.&lt;/p&gt; &lt;p&gt;Amazon Lex creates a resolution list containing likely values for a slot. The value that it returns is determined by the &lt;code&gt;valueSelectionStrategy&lt;/code&gt; selected when the slot type was created or updated. If &lt;code&gt;valueSelectionStrategy&lt;/code&gt; is set to &lt;code&gt;ORIGINAL_VALUE&lt;/code&gt;, the value provided by the user is returned, if the user value is similar to the slot values. If &lt;code&gt;valueSelectionStrategy&lt;/code&gt; is set to &lt;code&gt;TOP_RESOLUTION&lt;/code&gt; Amazon Lex returns the first value in the resolution list or, if there is no resolution list, null. If you don&#39;t specify a &lt;code&gt;valueSelectionStrategy&lt;/code&gt;, the default is &lt;code&gt;ORIGINAL_VALUE&lt;/code&gt;.&lt;/p&gt;</span>
+    <span class="kw">pub</span> <span class="ident">slots</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+}
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PostTextRequest</span> {
+    <span class="doccomment">/// &lt;p&gt;The alias of the Amazon Lex bot.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;botAlias&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">bot_alias</span>: <span class="ident">String</span>,
+    <span class="doccomment">/// &lt;p&gt;The name of the Amazon Lex bot.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;botName&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">bot_name</span>: <span class="ident">String</span>,
+    <span class="doccomment">/// &lt;p&gt;The text that the user entered (Amazon Lex interprets this text).&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;inputText&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">input_text</span>: <span class="ident">String</span>,
+    <span class="doccomment">/// &lt;p&gt;Request-specific information passed between Amazon Lex and a client application.&lt;/p&gt; &lt;p&gt;The namespace &lt;code&gt;x-amz-lex:&lt;/code&gt; is reserved for special attributes. Don&#39;t create any request attributes with the prefix &lt;code&gt;x-amz-lex:&lt;/code&gt;.&lt;/p&gt; &lt;p&gt;For more information, see &lt;a href=&quot;http://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html#context-mgmt-request-attribs&quot;&gt;Setting Request Attributes&lt;/a&gt;.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;requestAttributes&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">request_attributes</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span>::<span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;Application-specific information passed between Amazon Lex and a client application.&lt;/p&gt; &lt;p&gt;For more information, see &lt;a href=&quot;http://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html#context-mgmt-session-attribs&quot;&gt;Setting Session Attributes&lt;/a&gt;.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;sessionAttributes&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">session_attributes</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span>::<span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;&lt;p&gt;The ID of the client application user. Amazon Lex uses this to identify a user&amp;#39;s conversation with your bot. At runtime, each request must contain the &lt;code&gt;userID&lt;/code&gt; field.&lt;/p&gt; &lt;p&gt;To decide the user ID to use for your application, consider the following factors.&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;The &lt;code&gt;userID&lt;/code&gt; field must not contain any personally identifiable information of the user, for example, name, personal identification numbers, or other end user personal information.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;If you want a user to start a conversation on one device and continue on another device, use a user-specific identifier.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;If you want the same user to be able to have two independent conversations on two different devices, choose a device-specific identifier.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;A user can&amp;#39;t have two independent conversations with two different versions of the same bot. For example, a user can&amp;#39;t have a conversation with the PROD and BETA versions of the same bot. If you anticipate that a user will need to have conversation with two different versions, for example, while testing, include the bot alias in the user ID to separate the two conversations.&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt;&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;userId&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">user_id</span>: <span class="ident">String</span>,
+}
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">test</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>))]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PostTextResponse</span> {
+    <span class="doccomment">/// &lt;p&gt;&lt;p&gt; Identifies the current state of the user interaction. Amazon Lex returns one of the following values as &lt;code&gt;dialogState&lt;/code&gt;. The client can optionally use this information to customize the user interface. &lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;ElicitIntent&lt;/code&gt; - Amazon Lex wants to elicit user intent. &lt;/p&gt; &lt;p&gt;For example, a user might utter an intent (&amp;quot;I want to order a pizza&amp;quot;). If Amazon Lex cannot infer the user intent from this utterance, it will return this dialogState.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;ConfirmIntent&lt;/code&gt; - Amazon Lex is expecting a &amp;quot;yes&amp;quot; or &amp;quot;no&amp;quot; response. &lt;/p&gt; &lt;p&gt; For example, Amazon Lex wants user confirmation before fulfilling an intent. &lt;/p&gt; &lt;p&gt;Instead of a simple &amp;quot;yes&amp;quot; or &amp;quot;no,&amp;quot; a user might respond with additional information. For example, &amp;quot;yes, but make it thick crust pizza&amp;quot; or &amp;quot;no, I want to order a drink&amp;quot;. Amazon Lex can process such additional information (in these examples, update the crust type slot value, or change intent from OrderPizza to OrderDrink).&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;ElicitSlot&lt;/code&gt; - Amazon Lex is expecting a slot value for the current intent. &lt;/p&gt; &lt;p&gt;For example, suppose that in the response Amazon Lex sends this message: &amp;quot;What size pizza would you like?&amp;quot;. A user might reply with the slot value (e.g., &amp;quot;medium&amp;quot;). The user might also provide additional information in the response (e.g., &amp;quot;medium thick crust pizza&amp;quot;). Amazon Lex can process such additional information appropriately. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;Fulfilled&lt;/code&gt; - Conveys that the Lambda function configured for the intent has successfully fulfilled the intent. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;ReadyForFulfillment&lt;/code&gt; - Conveys that the client has to fulfill the intent. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;Failed&lt;/code&gt; - Conveys that the conversation with the user failed. &lt;/p&gt; &lt;p&gt; This can happen for various reasons including that the user did not provide an appropriate response to prompts from the service (you can configure how many times Amazon Lex can prompt a user for specific information), or the Lambda function failed to fulfill the intent. &lt;/p&gt; &lt;/li&gt; &lt;/ul&gt;&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;dialogState&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">dialog_state</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The current user intent that Amazon Lex is aware of.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;intentName&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">intent_name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The message to convey to the user. The message can come from the bot&#39;s configuration or from a Lambda function.&lt;/p&gt; &lt;p&gt;If the intent is not configured with a Lambda function, or if the Lambda function returned &lt;code&gt;Delegate&lt;/code&gt; as the &lt;code&gt;dialogAction.type&lt;/code&gt; its response, Amazon Lex decides on the next course of action and selects an appropriate message from the bot&#39;s configuration based on the current interaction context. For example, if Amazon Lex isn&#39;t able to understand user input, it uses a clarification prompt message.&lt;/p&gt; &lt;p&gt;When you create an intent you can assign messages to groups. When messages are assigned to groups Amazon Lex returns one message from each group in the response. The message field is an escaped JSON string containing the messages. For more information about the structure of the JSON string returned, see &lt;a&gt;msg-prompts-formats&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;If the Lambda function returns a message, Amazon Lex passes it to the client in its response.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;message&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">message</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;&lt;p&gt;The format of the response message. One of the following values:&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;PlainText&lt;/code&gt; - The message contains plain UTF-8 text.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;CustomPayload&lt;/code&gt; - The message is a custom format defined by the Lambda function.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;SSML&lt;/code&gt; - The message contains text formatted for voice output.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;Composite&lt;/code&gt; - The message contains an escaped JSON object containing one or more messages from the groups that messages were assigned to when the intent was created.&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt;&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;messageFormat&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">message_format</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;Represents the options that the user has to respond to the current prompt. Response Card can come from the bot configuration (in the Amazon Lex console, choose the settings button next to a slot) or from a code hook (Lambda function). &lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;responseCard&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">response_card</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ResponseCard</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;A map of key-value pairs representing the session-specific context information.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;sessionAttributes&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">session_attributes</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span>::<span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;If the &lt;code&gt;dialogState&lt;/code&gt; value is &lt;code&gt;ElicitSlot&lt;/code&gt;, returns the name of the slot for which Amazon Lex is eliciting a value. &lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;slotToElicit&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">slot_to_elicit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt; The intent slots that Amazon Lex detected from the user input in the conversation. &lt;/p&gt; &lt;p&gt;Amazon Lex creates a resolution list containing likely values for a slot. The value that it returns is determined by the &lt;code&gt;valueSelectionStrategy&lt;/code&gt; selected when the slot type was created or updated. If &lt;code&gt;valueSelectionStrategy&lt;/code&gt; is set to &lt;code&gt;ORIGINAL_VALUE&lt;/code&gt;, the value provided by the user is returned, if the user value is similar to the slot values. If &lt;code&gt;valueSelectionStrategy&lt;/code&gt; is set to &lt;code&gt;TOP_RESOLUTION&lt;/code&gt; Amazon Lex returns the first value in the resolution list or, if there is no resolution list, null. If you don&#39;t specify a &lt;code&gt;valueSelectionStrategy&lt;/code&gt;, the default is &lt;code&gt;ORIGINAL_VALUE&lt;/code&gt;.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;slots&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">slots</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span>::<span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;&gt;</span>,
+}
+
+<span class="doccomment">/// &lt;p&gt;If you configure a response card when creating your bots, Amazon Lex substitutes the session attributes and slot values that are available, and then returns it. The response card can also come from a Lambda function ( &lt;code&gt;dialogCodeHook&lt;/code&gt; and &lt;code&gt;fulfillmentActivity&lt;/code&gt; on an intent).&lt;/p&gt;</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">test</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>))]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ResponseCard</span> {
+    <span class="doccomment">/// &lt;p&gt;The content type of the response.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;contentType&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">content_type</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;An array of attachment objects representing options.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;genericAttachments&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">generic_attachments</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">GenericAttachment</span><span class="op">&gt;&gt;</span>,
+    <span class="doccomment">/// &lt;p&gt;The version of the response card format.&lt;/p&gt;</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;version&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">version</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+}
+
+<span class="doccomment">/// Errors returned by PostContent</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PostContentError</span> {
+    <span class="doccomment">/// &lt;p&gt;Either the Amazon Lex bot is still building, or one of the dependent services (Amazon Polly, AWS Lambda) failed with an internal service error.&lt;/p&gt;</span>
+    <span class="ident">BadGateway</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt; Request validation failed, there is no usable message in the context, or the bot build failed, is still in progress, or contains unbuilt changes. &lt;/p&gt;</span>
+    <span class="ident">BadRequest</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt; Two clients are using the same AWS account, Amazon Lex bot, and user ID. &lt;/p&gt;</span>
+    <span class="ident">Conflict</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;&lt;p&gt; One of the dependencies, such as AWS Lambda or Amazon Polly, threw an exception. For example, &lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;If Amazon Lex does not have sufficient permissions to call a Lambda function.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;If a Lambda function takes longer than 30 seconds to execute.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;If a fulfillment Lambda function returns a &lt;code&gt;Delegate&lt;/code&gt; dialog action without removing any slot values.&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt;&lt;/p&gt;</span>
+    <span class="ident">DependencyFailed</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;Internal service error. Retry the call.&lt;/p&gt;</span>
+    <span class="ident">InternalFailure</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;Exceeded a limit.&lt;/p&gt;</span>
+    <span class="ident">LimitExceeded</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;This exception is not used.&lt;/p&gt;</span>
+    <span class="ident">LoopDetected</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;The accept header in the request does not have a valid value.&lt;/p&gt;</span>
+    <span class="ident">NotAcceptable</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;The resource (such as the Amazon Lex bot or an alias) that is referred to is not found.&lt;/p&gt;</span>
+    <span class="ident">NotFound</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;The input speech is too long.&lt;/p&gt;</span>
+    <span class="ident">RequestTimeout</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;The Content-Type header (&lt;code&gt;PostContent&lt;/code&gt; API) has an invalid value. &lt;/p&gt;</span>
+    <span class="ident">UnsupportedMediaType</span>(<span class="ident">String</span>),
+}
+
+<span class="kw">impl</span> <span class="ident">PostContentError</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_response</span>(<span class="ident">res</span>: <span class="ident">BufferedHttpResponse</span>) <span class="op">-&gt;</span> <span class="ident">RusotoError</span><span class="op">&lt;</span><span class="ident">PostContentError</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">proto</span>::<span class="ident">json</span>::<span class="ident">Error</span>::<span class="ident">parse_rest</span>(<span class="kw-2">&amp;</span><span class="ident">res</span>) {
+            <span class="kw">match</span> <span class="ident">err</span>.<span class="ident">typ</span>.<span class="ident">as_str</span>() {
+                <span class="string">&quot;BadGatewayException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">PostContentError</span>::<span class="ident">BadGateway</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;BadRequestException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">PostContentError</span>::<span class="ident">BadRequest</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;ConflictException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">PostContentError</span>::<span class="ident">Conflict</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;DependencyFailedException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">PostContentError</span>::<span class="ident">DependencyFailed</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;InternalFailureException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">PostContentError</span>::<span class="ident">InternalFailure</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;LimitExceededException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">PostContentError</span>::<span class="ident">LimitExceeded</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;LoopDetectedException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">PostContentError</span>::<span class="ident">LoopDetected</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;NotAcceptableException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">PostContentError</span>::<span class="ident">NotAcceptable</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;NotFoundException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">PostContentError</span>::<span class="ident">NotFound</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;RequestTimeoutException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">PostContentError</span>::<span class="ident">RequestTimeout</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;UnsupportedMediaTypeException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">PostContentError</span>::<span class="ident">UnsupportedMediaType</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;ValidationException&quot;</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Validation</span>(<span class="ident">err</span>.<span class="ident">msg</span>),
+                <span class="kw">_</span> <span class="op">=&gt;</span> {}
+            }
+        }
+        <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Unknown</span>(<span class="ident">res</span>);
+    }
+}
+<span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">PostContentError</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+        <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="ident">description</span>())
+    }
+}
+<span class="kw">impl</span> <span class="ident">Error</span> <span class="kw">for</span> <span class="ident">PostContentError</span> {
+    <span class="kw">fn</span> <span class="ident">description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+        <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
+            <span class="ident">PostContentError</span>::<span class="ident">BadGateway</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">PostContentError</span>::<span class="ident">BadRequest</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">PostContentError</span>::<span class="ident">Conflict</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">PostContentError</span>::<span class="ident">DependencyFailed</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">PostContentError</span>::<span class="ident">InternalFailure</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">PostContentError</span>::<span class="ident">LimitExceeded</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">PostContentError</span>::<span class="ident">LoopDetected</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">PostContentError</span>::<span class="ident">NotAcceptable</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">PostContentError</span>::<span class="ident">NotFound</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">PostContentError</span>::<span class="ident">RequestTimeout</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">PostContentError</span>::<span class="ident">UnsupportedMediaType</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+        }
+    }
+}
+<span class="doccomment">/// Errors returned by PostText</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PostTextError</span> {
+    <span class="doccomment">/// &lt;p&gt;Either the Amazon Lex bot is still building, or one of the dependent services (Amazon Polly, AWS Lambda) failed with an internal service error.&lt;/p&gt;</span>
+    <span class="ident">BadGateway</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt; Request validation failed, there is no usable message in the context, or the bot build failed, is still in progress, or contains unbuilt changes. &lt;/p&gt;</span>
+    <span class="ident">BadRequest</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt; Two clients are using the same AWS account, Amazon Lex bot, and user ID. &lt;/p&gt;</span>
+    <span class="ident">Conflict</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;&lt;p&gt; One of the dependencies, such as AWS Lambda or Amazon Polly, threw an exception. For example, &lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;If Amazon Lex does not have sufficient permissions to call a Lambda function.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;If a Lambda function takes longer than 30 seconds to execute.&lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;If a fulfillment Lambda function returns a &lt;code&gt;Delegate&lt;/code&gt; dialog action without removing any slot values.&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt;&lt;/p&gt;</span>
+    <span class="ident">DependencyFailed</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;Internal service error. Retry the call.&lt;/p&gt;</span>
+    <span class="ident">InternalFailure</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;Exceeded a limit.&lt;/p&gt;</span>
+    <span class="ident">LimitExceeded</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;This exception is not used.&lt;/p&gt;</span>
+    <span class="ident">LoopDetected</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// &lt;p&gt;The resource (such as the Amazon Lex bot or an alias) that is referred to is not found.&lt;/p&gt;</span>
+    <span class="ident">NotFound</span>(<span class="ident">String</span>),
+}
+
+<span class="kw">impl</span> <span class="ident">PostTextError</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_response</span>(<span class="ident">res</span>: <span class="ident">BufferedHttpResponse</span>) <span class="op">-&gt;</span> <span class="ident">RusotoError</span><span class="op">&lt;</span><span class="ident">PostTextError</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">proto</span>::<span class="ident">json</span>::<span class="ident">Error</span>::<span class="ident">parse_rest</span>(<span class="kw-2">&amp;</span><span class="ident">res</span>) {
+            <span class="kw">match</span> <span class="ident">err</span>.<span class="ident">typ</span>.<span class="ident">as_str</span>() {
+                <span class="string">&quot;BadGatewayException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">PostTextError</span>::<span class="ident">BadGateway</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;BadRequestException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">PostTextError</span>::<span class="ident">BadRequest</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;ConflictException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">PostTextError</span>::<span class="ident">Conflict</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;DependencyFailedException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">PostTextError</span>::<span class="ident">DependencyFailed</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;InternalFailureException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">PostTextError</span>::<span class="ident">InternalFailure</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;LimitExceededException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">PostTextError</span>::<span class="ident">LimitExceeded</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;LoopDetectedException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">PostTextError</span>::<span class="ident">LoopDetected</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;NotFoundException&quot;</span> <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Service</span>(<span class="ident">PostTextError</span>::<span class="ident">NotFound</span>(<span class="ident">err</span>.<span class="ident">msg</span>))
+                }
+                <span class="string">&quot;ValidationException&quot;</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Validation</span>(<span class="ident">err</span>.<span class="ident">msg</span>),
+                <span class="kw">_</span> <span class="op">=&gt;</span> {}
+            }
+        }
+        <span class="kw">return</span> <span class="ident">RusotoError</span>::<span class="ident">Unknown</span>(<span class="ident">res</span>);
+    }
+}
+<span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">PostTextError</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+        <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="ident">description</span>())
+    }
+}
+<span class="kw">impl</span> <span class="ident">Error</span> <span class="kw">for</span> <span class="ident">PostTextError</span> {
+    <span class="kw">fn</span> <span class="ident">description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+        <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
+            <span class="ident">PostTextError</span>::<span class="ident">BadGateway</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">PostTextError</span>::<span class="ident">BadRequest</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">PostTextError</span>::<span class="ident">Conflict</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">PostTextError</span>::<span class="ident">DependencyFailed</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">PostTextError</span>::<span class="ident">InternalFailure</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">PostTextError</span>::<span class="ident">LimitExceeded</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">PostTextError</span>::<span class="ident">LoopDetected</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+            <span class="ident">PostTextError</span>::<span class="ident">NotFound</span>(<span class="kw-2">ref</span> <span class="ident">cause</span>) <span class="op">=&gt;</span> <span class="ident">cause</span>,
+        }
+    }
+}
+<span class="doccomment">/// Trait representing the capabilities of the Amazon Lex Runtime Service API. Amazon Lex Runtime Service clients implement this trait.</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">LexRuntime</span> {
+    <span class="doccomment">/// &lt;p&gt; Sends user input (text or speech) to Amazon Lex. Clients use this API to send text and audio requests to Amazon Lex at runtime. Amazon Lex interprets the user input using the machine learning model that it built for the bot. &lt;/p&gt; &lt;p&gt;The &lt;code&gt;PostContent&lt;/code&gt; operation supports audio input at 8kHz and 16kHz. You can use 8kHz audio to achieve higher speech recognition accuracy in telephone audio applications. &lt;/p&gt; &lt;p&gt; In response, Amazon Lex returns the next message to convey to the user. Consider the following example messages: &lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; For a user input &quot;I would like a pizza,&quot; Amazon Lex might return a response with a message eliciting slot data (for example, &lt;code&gt;PizzaSize&lt;/code&gt;): &quot;What size pizza would you like?&quot;. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; After the user provides all of the pizza order information, Amazon Lex might return a response with a message to get user confirmation: &quot;Order the pizza?&quot;. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; After the user replies &quot;Yes&quot; to the confirmation prompt, Amazon Lex might return a conclusion statement: &quot;Thank you, your cheese pizza has been ordered.&quot;. &lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;p&gt; Not all Amazon Lex messages require a response from the user. For example, conclusion statements do not require a response. Some messages require only a yes or no response. In addition to the &lt;code&gt;message&lt;/code&gt;, Amazon Lex provides additional context about the message in the response that you can use to enhance client behavior, such as displaying the appropriate client user interface. Consider the following examples: &lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; If the message is to elicit slot data, Amazon Lex returns the following context information: &lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;x-amz-lex-dialog-state&lt;/code&gt; header set to &lt;code&gt;ElicitSlot&lt;/code&gt; &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;x-amz-lex-intent-name&lt;/code&gt; header set to the intent name in the current context &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;x-amz-lex-slot-to-elicit&lt;/code&gt; header set to the slot name for which the &lt;code&gt;message&lt;/code&gt; is eliciting information &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;x-amz-lex-slots&lt;/code&gt; header set to a map of slots configured for the intent with their current values &lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; If the message is a confirmation prompt, the &lt;code&gt;x-amz-lex-dialog-state&lt;/code&gt; header is set to &lt;code&gt;Confirmation&lt;/code&gt; and the &lt;code&gt;x-amz-lex-slot-to-elicit&lt;/code&gt; header is omitted. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; If the message is a clarification prompt configured for the intent, indicating that the user intent is not understood, the &lt;code&gt;x-amz-dialog-state&lt;/code&gt; header is set to &lt;code&gt;ElicitIntent&lt;/code&gt; and the &lt;code&gt;x-amz-slot-to-elicit&lt;/code&gt; header is omitted. &lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;p&gt; In addition, Amazon Lex also returns your application-specific &lt;code&gt;sessionAttributes&lt;/code&gt;. For more information, see &lt;a href=&quot;http://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html&quot;&gt;Managing Conversation Context&lt;/a&gt;. &lt;/p&gt;</span>
+    <span class="kw">fn</span> <span class="ident">post_content</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">input</span>: <span class="ident">PostContentRequest</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">RusotoFuture</span><span class="op">&lt;</span><span class="ident">PostContentResponse</span>, <span class="ident">PostContentError</span><span class="op">&gt;</span>;
+
+    <span class="doccomment">/// &lt;p&gt;Sends user input (text-only) to Amazon Lex. Client applications can use this API to send requests to Amazon Lex at runtime. Amazon Lex then interprets the user input using the machine learning model it built for the bot. &lt;/p&gt; &lt;p&gt; In response, Amazon Lex returns the next &lt;code&gt;message&lt;/code&gt; to convey to the user an optional &lt;code&gt;responseCard&lt;/code&gt; to display. Consider the following example messages: &lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; For a user input &quot;I would like a pizza&quot;, Amazon Lex might return a response with a message eliciting slot data (for example, PizzaSize): &quot;What size pizza would you like?&quot; &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; After the user provides all of the pizza order information, Amazon Lex might return a response with a message to obtain user confirmation &quot;Proceed with the pizza order?&quot;. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; After the user replies to a confirmation prompt with a &quot;yes&quot;, Amazon Lex might return a conclusion statement: &quot;Thank you, your cheese pizza has been ordered.&quot;. &lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;p&gt; Not all Amazon Lex messages require a user response. For example, a conclusion statement does not require a response. Some messages require only a &quot;yes&quot; or &quot;no&quot; user response. In addition to the &lt;code&gt;message&lt;/code&gt;, Amazon Lex provides additional context about the message in the response that you might use to enhance client behavior, for example, to display the appropriate client user interface. These are the &lt;code&gt;slotToElicit&lt;/code&gt;, &lt;code&gt;dialogState&lt;/code&gt;, &lt;code&gt;intentName&lt;/code&gt;, and &lt;code&gt;slots&lt;/code&gt; fields in the response. Consider the following examples: &lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;If the message is to elicit slot data, Amazon Lex returns the following context information:&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;dialogState&lt;/code&gt; set to ElicitSlot &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;intentName&lt;/code&gt; set to the intent name in the current context &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;slotToElicit&lt;/code&gt; set to the slot name for which the &lt;code&gt;message&lt;/code&gt; is eliciting information &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;slots&lt;/code&gt; set to a map of slots, configured for the intent, with currently known values &lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; If the message is a confirmation prompt, the &lt;code&gt;dialogState&lt;/code&gt; is set to ConfirmIntent and &lt;code&gt;SlotToElicit&lt;/code&gt; is set to null. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;If the message is a clarification prompt (configured for the intent) that indicates that user intent is not understood, the &lt;code&gt;dialogState&lt;/code&gt; is set to ElicitIntent and &lt;code&gt;slotToElicit&lt;/code&gt; is set to null. &lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;p&gt; In addition, Amazon Lex also returns your application-specific &lt;code&gt;sessionAttributes&lt;/code&gt;. For more information, see &lt;a href=&quot;http://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html&quot;&gt;Managing Conversation Context&lt;/a&gt;. &lt;/p&gt;</span>
+    <span class="kw">fn</span> <span class="ident">post_text</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">input</span>: <span class="ident">PostTextRequest</span>) <span class="op">-&gt;</span> <span class="ident">RusotoFuture</span><span class="op">&lt;</span><span class="ident">PostTextResponse</span>, <span class="ident">PostTextError</span><span class="op">&gt;</span>;
+}
+<span class="doccomment">/// A client for the Amazon Lex Runtime Service API.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LexRuntimeClient</span> {
+    <span class="ident">client</span>: <span class="ident">Client</span>,
+    <span class="ident">region</span>: <span class="ident">region</span>::<span class="ident">Region</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">LexRuntimeClient</span> {
+    <span class="doccomment">/// Creates a client backed by the default tokio event loop.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The client will use the default credentials provider and tls client.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">region</span>: <span class="ident">region</span>::<span class="ident">Region</span>) <span class="op">-&gt;</span> <span class="ident">LexRuntimeClient</span> {
+        <span class="ident">LexRuntimeClient</span> {
+            <span class="ident">client</span>: <span class="ident">Client</span>::<span class="ident">shared</span>(),
+            <span class="ident">region</span>,
+        }
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_with</span><span class="op">&lt;</span><span class="ident">P</span>, <span class="ident">D</span><span class="op">&gt;</span>(
+        <span class="ident">request_dispatcher</span>: <span class="ident">D</span>,
+        <span class="ident">credentials_provider</span>: <span class="ident">P</span>,
+        <span class="ident">region</span>: <span class="ident">region</span>::<span class="ident">Region</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">LexRuntimeClient</span>
+    <span class="kw">where</span>
+        <span class="ident">P</span>: <span class="ident">ProvideAwsCredentials</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">P</span>::<span class="ident">Future</span>: <span class="ident">Send</span>,
+        <span class="ident">D</span>: <span class="ident">DispatchSignedRequest</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">D</span>::<span class="ident">Future</span>: <span class="ident">Send</span>,
+    {
+        <span class="ident">LexRuntimeClient</span> {
+            <span class="ident">client</span>: <span class="ident">Client</span>::<span class="ident">new_with</span>(<span class="ident">credentials_provider</span>, <span class="ident">request_dispatcher</span>),
+            <span class="ident">region</span>,
+        }
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">LexRuntime</span> <span class="kw">for</span> <span class="ident">LexRuntimeClient</span> {
+    <span class="doccomment">/// &lt;p&gt; Sends user input (text or speech) to Amazon Lex. Clients use this API to send text and audio requests to Amazon Lex at runtime. Amazon Lex interprets the user input using the machine learning model that it built for the bot. &lt;/p&gt; &lt;p&gt;The &lt;code&gt;PostContent&lt;/code&gt; operation supports audio input at 8kHz and 16kHz. You can use 8kHz audio to achieve higher speech recognition accuracy in telephone audio applications. &lt;/p&gt; &lt;p&gt; In response, Amazon Lex returns the next message to convey to the user. Consider the following example messages: &lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; For a user input &quot;I would like a pizza,&quot; Amazon Lex might return a response with a message eliciting slot data (for example, &lt;code&gt;PizzaSize&lt;/code&gt;): &quot;What size pizza would you like?&quot;. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; After the user provides all of the pizza order information, Amazon Lex might return a response with a message to get user confirmation: &quot;Order the pizza?&quot;. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; After the user replies &quot;Yes&quot; to the confirmation prompt, Amazon Lex might return a conclusion statement: &quot;Thank you, your cheese pizza has been ordered.&quot;. &lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;p&gt; Not all Amazon Lex messages require a response from the user. For example, conclusion statements do not require a response. Some messages require only a yes or no response. In addition to the &lt;code&gt;message&lt;/code&gt;, Amazon Lex provides additional context about the message in the response that you can use to enhance client behavior, such as displaying the appropriate client user interface. Consider the following examples: &lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; If the message is to elicit slot data, Amazon Lex returns the following context information: &lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;x-amz-lex-dialog-state&lt;/code&gt; header set to &lt;code&gt;ElicitSlot&lt;/code&gt; &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;x-amz-lex-intent-name&lt;/code&gt; header set to the intent name in the current context &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;x-amz-lex-slot-to-elicit&lt;/code&gt; header set to the slot name for which the &lt;code&gt;message&lt;/code&gt; is eliciting information &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;x-amz-lex-slots&lt;/code&gt; header set to a map of slots configured for the intent with their current values &lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; If the message is a confirmation prompt, the &lt;code&gt;x-amz-lex-dialog-state&lt;/code&gt; header is set to &lt;code&gt;Confirmation&lt;/code&gt; and the &lt;code&gt;x-amz-lex-slot-to-elicit&lt;/code&gt; header is omitted. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; If the message is a clarification prompt configured for the intent, indicating that the user intent is not understood, the &lt;code&gt;x-amz-dialog-state&lt;/code&gt; header is set to &lt;code&gt;ElicitIntent&lt;/code&gt; and the &lt;code&gt;x-amz-slot-to-elicit&lt;/code&gt; header is omitted. &lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;p&gt; In addition, Amazon Lex also returns your application-specific &lt;code&gt;sessionAttributes&lt;/code&gt;. For more information, see &lt;a href=&quot;http://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html&quot;&gt;Managing Conversation Context&lt;/a&gt;. &lt;/p&gt;</span>
+    <span class="kw">fn</span> <span class="ident">post_content</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">input</span>: <span class="ident">PostContentRequest</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">RusotoFuture</span><span class="op">&lt;</span><span class="ident">PostContentResponse</span>, <span class="ident">PostContentError</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">request_uri</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(
+            <span class="string">&quot;/bot/{bot_name}/alias/{bot_alias}/user/{user_id}/content&quot;</span>,
+            <span class="ident">bot_alias</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">bot_alias</span>,
+            <span class="ident">bot_name</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">bot_name</span>,
+            <span class="ident">user_id</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">user_id</span>
+        );
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">SignedRequest</span>::<span class="ident">new</span>(<span class="string">&quot;POST&quot;</span>, <span class="string">&quot;lex&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">region</span>, <span class="kw-2">&amp;</span><span class="ident">request_uri</span>);
+        <span class="ident">request</span>.<span class="ident">set_content_type</span>(<span class="string">&quot;application/x-amz-json-1.1&quot;</span>.<span class="ident">to_owned</span>());
+
+        <span class="ident">request</span>.<span class="ident">set_endpoint_prefix</span>(<span class="string">&quot;runtime.lex&quot;</span>.<span class="ident">to_string</span>());
+        <span class="kw">let</span> <span class="ident">encoded</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">input</span>.<span class="ident">input_stream</span>.<span class="ident">to_owned</span>());
+        <span class="ident">request</span>.<span class="ident">set_payload</span>(<span class="ident">encoded</span>);
+
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">accept</span>) <span class="op">=</span> <span class="ident">input</span>.<span class="ident">accept</span> {
+            <span class="ident">request</span>.<span class="ident">add_header</span>(<span class="string">&quot;Accept&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">accept</span>.<span class="ident">to_string</span>());
+        }
+        <span class="ident">request</span>.<span class="ident">add_header</span>(<span class="string">&quot;Content-Type&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">input</span>.<span class="ident">content_type</span>);
+
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">request_attributes</span>) <span class="op">=</span> <span class="ident">input</span>.<span class="ident">request_attributes</span> {
+            <span class="ident">request</span>.<span class="ident">add_header</span>(
+                <span class="string">&quot;x-amz-lex-request-attributes&quot;</span>,
+                <span class="kw-2">&amp;</span><span class="ident">request_attributes</span>.<span class="ident">to_string</span>(),
+            );
+        }
+
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">session_attributes</span>) <span class="op">=</span> <span class="ident">input</span>.<span class="ident">session_attributes</span> {
+            <span class="ident">request</span>.<span class="ident">add_header</span>(
+                <span class="string">&quot;x-amz-lex-session-attributes&quot;</span>,
+                <span class="kw-2">&amp;</span><span class="ident">session_attributes</span>.<span class="ident">to_string</span>(),
+            );
+        }
+
+        <span class="self">self</span>.<span class="ident">client</span>.<span class="ident">sign_and_dispatch</span>(<span class="ident">request</span>, <span class="op">|</span><span class="ident">response</span><span class="op">|</span> {
+            <span class="kw">if</span> <span class="ident">response</span>.<span class="ident">status</span>.<span class="ident">is_success</span>() {
+                <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">response</span>.<span class="ident">buffer</span>().<span class="ident">from_err</span>().<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">response</span><span class="op">|</span> {
+                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">PostContentResponse</span>::<span class="ident">default</span>();
+                    <span class="ident">result</span>.<span class="ident">audio_stream</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">response</span>.<span class="ident">body</span>);
+
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">content_type</span>) <span class="op">=</span> <span class="ident">response</span>.<span class="ident">headers</span>.<span class="ident">get</span>(<span class="string">&quot;Content-Type&quot;</span>) {
+                        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">content_type</span>.<span class="ident">to_owned</span>();
+                        <span class="ident">result</span>.<span class="ident">content_type</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">value</span>)
+                    };
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">dialog_state</span>) <span class="op">=</span> <span class="ident">response</span>.<span class="ident">headers</span>.<span class="ident">get</span>(<span class="string">&quot;x-amz-lex-dialog-state&quot;</span>) {
+                        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">dialog_state</span>.<span class="ident">to_owned</span>();
+                        <span class="ident">result</span>.<span class="ident">dialog_state</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">value</span>)
+                    };
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">input_transcript</span>) <span class="op">=</span>
+                        <span class="ident">response</span>.<span class="ident">headers</span>.<span class="ident">get</span>(<span class="string">&quot;x-amz-lex-input-transcript&quot;</span>)
+                    {
+                        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">input_transcript</span>.<span class="ident">to_owned</span>();
+                        <span class="ident">result</span>.<span class="ident">input_transcript</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">value</span>)
+                    };
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">intent_name</span>) <span class="op">=</span> <span class="ident">response</span>.<span class="ident">headers</span>.<span class="ident">get</span>(<span class="string">&quot;x-amz-lex-intent-name&quot;</span>) {
+                        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">intent_name</span>.<span class="ident">to_owned</span>();
+                        <span class="ident">result</span>.<span class="ident">intent_name</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">value</span>)
+                    };
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">message</span>) <span class="op">=</span> <span class="ident">response</span>.<span class="ident">headers</span>.<span class="ident">get</span>(<span class="string">&quot;x-amz-lex-message&quot;</span>) {
+                        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">message</span>.<span class="ident">to_owned</span>();
+                        <span class="ident">result</span>.<span class="ident">message</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">value</span>)
+                    };
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">message_format</span>) <span class="op">=</span> <span class="ident">response</span>.<span class="ident">headers</span>.<span class="ident">get</span>(<span class="string">&quot;x-amz-lex-message-format&quot;</span>) {
+                        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">message_format</span>.<span class="ident">to_owned</span>();
+                        <span class="ident">result</span>.<span class="ident">message_format</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">value</span>)
+                    };
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">session_attributes</span>) <span class="op">=</span>
+                        <span class="ident">response</span>.<span class="ident">headers</span>.<span class="ident">get</span>(<span class="string">&quot;x-amz-lex-session-attributes&quot;</span>)
+                    {
+                        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">session_attributes</span>.<span class="ident">to_owned</span>();
+                        <span class="ident">result</span>.<span class="ident">session_attributes</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">value</span>)
+                    };
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">slot_to_elicit</span>) <span class="op">=</span> <span class="ident">response</span>.<span class="ident">headers</span>.<span class="ident">get</span>(<span class="string">&quot;x-amz-lex-slot-to-elicit&quot;</span>) {
+                        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">slot_to_elicit</span>.<span class="ident">to_owned</span>();
+                        <span class="ident">result</span>.<span class="ident">slot_to_elicit</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">value</span>)
+                    };
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">slots</span>) <span class="op">=</span> <span class="ident">response</span>.<span class="ident">headers</span>.<span class="ident">get</span>(<span class="string">&quot;x-amz-lex-slots&quot;</span>) {
+                        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">slots</span>.<span class="ident">to_owned</span>();
+                        <span class="ident">result</span>.<span class="ident">slots</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">value</span>)
+                    };
+
+                    <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
+                }))
+            } <span class="kw">else</span> {
+                <span class="ident">Box</span>::<span class="ident">new</span>(
+                    <span class="ident">response</span>
+                        .<span class="ident">buffer</span>()
+                        .<span class="ident">from_err</span>()
+                        .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">response</span><span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">PostContentError</span>::<span class="ident">from_response</span>(<span class="ident">response</span>))),
+                )
+            }
+        })
+    }
+
+    <span class="doccomment">/// &lt;p&gt;Sends user input (text-only) to Amazon Lex. Client applications can use this API to send requests to Amazon Lex at runtime. Amazon Lex then interprets the user input using the machine learning model it built for the bot. &lt;/p&gt; &lt;p&gt; In response, Amazon Lex returns the next &lt;code&gt;message&lt;/code&gt; to convey to the user an optional &lt;code&gt;responseCard&lt;/code&gt; to display. Consider the following example messages: &lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; For a user input &quot;I would like a pizza&quot;, Amazon Lex might return a response with a message eliciting slot data (for example, PizzaSize): &quot;What size pizza would you like?&quot; &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; After the user provides all of the pizza order information, Amazon Lex might return a response with a message to obtain user confirmation &quot;Proceed with the pizza order?&quot;. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; After the user replies to a confirmation prompt with a &quot;yes&quot;, Amazon Lex might return a conclusion statement: &quot;Thank you, your cheese pizza has been ordered.&quot;. &lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;p&gt; Not all Amazon Lex messages require a user response. For example, a conclusion statement does not require a response. Some messages require only a &quot;yes&quot; or &quot;no&quot; user response. In addition to the &lt;code&gt;message&lt;/code&gt;, Amazon Lex provides additional context about the message in the response that you might use to enhance client behavior, for example, to display the appropriate client user interface. These are the &lt;code&gt;slotToElicit&lt;/code&gt;, &lt;code&gt;dialogState&lt;/code&gt;, &lt;code&gt;intentName&lt;/code&gt;, and &lt;code&gt;slots&lt;/code&gt; fields in the response. Consider the following examples: &lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;If the message is to elicit slot data, Amazon Lex returns the following context information:&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;dialogState&lt;/code&gt; set to ElicitSlot &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;intentName&lt;/code&gt; set to the intent name in the current context &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;slotToElicit&lt;/code&gt; set to the slot name for which the &lt;code&gt;message&lt;/code&gt; is eliciting information &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; &lt;code&gt;slots&lt;/code&gt; set to a map of slots, configured for the intent, with currently known values &lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt; If the message is a confirmation prompt, the &lt;code&gt;dialogState&lt;/code&gt; is set to ConfirmIntent and &lt;code&gt;SlotToElicit&lt;/code&gt; is set to null. &lt;/p&gt; &lt;/li&gt; &lt;li&gt; &lt;p&gt;If the message is a clarification prompt (configured for the intent) that indicates that user intent is not understood, the &lt;code&gt;dialogState&lt;/code&gt; is set to ElicitIntent and &lt;code&gt;slotToElicit&lt;/code&gt; is set to null. &lt;/p&gt; &lt;/li&gt; &lt;/ul&gt; &lt;p&gt; In addition, Amazon Lex also returns your application-specific &lt;code&gt;sessionAttributes&lt;/code&gt;. For more information, see &lt;a href=&quot;http://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html&quot;&gt;Managing Conversation Context&lt;/a&gt;. &lt;/p&gt;</span>
+    <span class="kw">fn</span> <span class="ident">post_text</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">input</span>: <span class="ident">PostTextRequest</span>) <span class="op">-&gt;</span> <span class="ident">RusotoFuture</span><span class="op">&lt;</span><span class="ident">PostTextResponse</span>, <span class="ident">PostTextError</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">request_uri</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(
+            <span class="string">&quot;/bot/{bot_name}/alias/{bot_alias}/user/{user_id}/text&quot;</span>,
+            <span class="ident">bot_alias</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">bot_alias</span>,
+            <span class="ident">bot_name</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">bot_name</span>,
+            <span class="ident">user_id</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">user_id</span>
+        );
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">SignedRequest</span>::<span class="ident">new</span>(<span class="string">&quot;POST&quot;</span>, <span class="string">&quot;lex&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">region</span>, <span class="kw-2">&amp;</span><span class="ident">request_uri</span>);
+        <span class="ident">request</span>.<span class="ident">set_content_type</span>(<span class="string">&quot;application/x-amz-json-1.1&quot;</span>.<span class="ident">to_owned</span>());
+
+        <span class="ident">request</span>.<span class="ident">set_endpoint_prefix</span>(<span class="string">&quot;runtime.lex&quot;</span>.<span class="ident">to_string</span>());
+        <span class="kw">let</span> <span class="ident">encoded</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">serde_json</span>::<span class="ident">to_vec</span>(<span class="kw-2">&amp;</span><span class="ident">input</span>).<span class="ident">unwrap</span>());
+        <span class="ident">request</span>.<span class="ident">set_payload</span>(<span class="ident">encoded</span>);
+
+        <span class="self">self</span>.<span class="ident">client</span>.<span class="ident">sign_and_dispatch</span>(<span class="ident">request</span>, <span class="op">|</span><span class="ident">response</span><span class="op">|</span> {
+            <span class="kw">if</span> <span class="ident">response</span>.<span class="ident">status</span>.<span class="ident">is_success</span>() {
+                <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">response</span>.<span class="ident">buffer</span>().<span class="ident">from_err</span>().<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">response</span><span class="op">|</span> {
+                    <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">proto</span>::<span class="ident">json</span>::<span class="ident">ResponsePayload</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">response</span>)
+                        .<span class="ident">deserialize</span>::<span class="op">&lt;</span><span class="ident">PostTextResponse</span>, <span class="kw">_</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
+
+                    <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
+                }))
+            } <span class="kw">else</span> {
+                <span class="ident">Box</span>::<span class="ident">new</span>(
+                    <span class="ident">response</span>
+                        .<span class="ident">buffer</span>()
+                        .<span class="ident">from_err</span>()
+                        .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">response</span><span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">PostTextError</span>::<span class="ident">from_response</span>(<span class="ident">response</span>))),
+                )
+            }
+        })
+    }
+}
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "rusoto_lex_runtime";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
