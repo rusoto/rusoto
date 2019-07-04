@@ -46,6 +46,9 @@ pub enum Region {
 
     /// Region that covers the North-Eastern part of Asia Pacific
     ApNortheast2,
+    
+    /// Region that covers the North-Eastern part of Asia Pacific
+    ApNortheast3,
 
     /// Region that covers the Southern part of Asia Pacific
     ApSouth1,
@@ -128,6 +131,7 @@ impl Region {
             Region::ApEast1 => "ap-east-1",
             Region::ApNortheast1 => "ap-northeast-1",
             Region::ApNortheast2 => "ap-northeast-2",
+            Region::ApNortheast3 => "ap-northeast-3",
             Region::ApSouth1 => "ap-south-1",
             Region::ApSoutheast1 => "ap-southeast-1",
             Region::ApSoutheast2 => "ap-southeast-2",
@@ -227,6 +231,7 @@ impl FromStr for Region {
             "ap-east-1" | "apeast1" => Ok(Region::ApEast1),
             "ap-northeast-1" | "apnortheast1" => Ok(Region::ApNortheast1),
             "ap-northeast-2" | "apnortheast2" => Ok(Region::ApNortheast2),
+            "ap-northeast-3" | "apnortheast3" => Ok(Region::ApNortheast3),
             "ap-south-1" | "apsouth1" => Ok(Region::ApSouth1),
             "ap-southeast-1" | "apsoutheast1" => Ok(Region::ApSoutheast1),
             "ap-southeast-2" | "apsoutheast2" => Ok(Region::ApSoutheast2),
@@ -302,6 +307,7 @@ mod tests {
         assert_eq!("ap-east-1".parse(), Ok(Region::ApEast1));
         assert_eq!("ap-northeast-1".parse(), Ok(Region::ApNortheast1));
         assert_eq!("ap-northeast-2".parse(), Ok(Region::ApNortheast2));
+        assert_eq!("ap-northeast-3".parse(), Ok(Region::ApNortheast3));
         assert_eq!("ap-south-1".parse(), Ok(Region::ApSouth1));
         assert_eq!("ap-southeast-1".parse(), Ok(Region::ApSoutheast1));
         assert_eq!("ap-southeast-2".parse(), Ok(Region::ApSoutheast2));
@@ -327,6 +333,7 @@ mod tests {
         assert_tokens(&Region::ApEast1, &tokens_for_region("ap-east-1"));
         assert_tokens(&Region::ApNortheast1, &tokens_for_region("ap-northeast-1"));
         assert_tokens(&Region::ApNortheast2, &tokens_for_region("ap-northeast-2"));
+        assert_tokens(&Region::ApNortheast3, &tokens_for_region("ap-northeast-3"));
         assert_tokens(&Region::ApSouth1, &tokens_for_region("ap-south-1"));
         assert_tokens(&Region::ApSoutheast1, &tokens_for_region("ap-southeast-1"));
         assert_tokens(&Region::ApSoutheast2, &tokens_for_region("ap-southeast-2"));
