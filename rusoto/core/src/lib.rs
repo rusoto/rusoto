@@ -3,7 +3,6 @@
 )]
 #![cfg_attr(feature = "unstable", feature(proc_macro))]
 #![cfg_attr(feature = "nightly-testing", feature(plugin))]
-#![cfg_attr(feature = "nightly-testing", plugin(clippy))]
 #![cfg_attr(
     feature = "nightly-testing",
     allow(

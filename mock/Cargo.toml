@@ -39,5 +39,5 @@ default_features = false
 features = ["native-tls"]
 
 [features]
-nightly-testing = ["clippy", "rusoto_core/nightly-testing"]
+nightly-testing = ["rusoto_core/nightly-testing"]
 unstable = []
