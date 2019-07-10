@@ -62,6 +62,8 @@ pub use crate::client::Client;
 pub mod proto;
 #[doc(hidden)]
 pub mod serialization;
+#[doc(hidden)]
+pub mod compression;
 
 pub use crate::credential::{CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials};
 pub use crate::error::{RusotoError, RusotoResult};

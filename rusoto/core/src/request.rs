@@ -8,7 +8,7 @@ use std::env;
 use std::error::Error;
 use std::fmt;
 use std::io;
-use std::io::Error as IoError;
+use std::io::{Error as IoError, Write};
 use std::mem;
 use std::rc::Rc;
 use std::sync::Arc;
@@ -31,6 +31,7 @@ use log::Level::Debug;
 
 use crate::signature::{SignedRequest, SignedRequestPayload};
 use crate::stream::ByteStream;
+use crate::compression::{CompressRequestPayload, CompressionOptions};
 
 // Pulls in the statically generated rustc version.
 include!(concat!(env!("OUT_DIR"), "/user_agent_vars.rs"));
@@ -308,6 +309,7 @@ impl Payload for HttpClientPayload {
 /// Http client for use with AWS services.
 pub struct HttpClient<C = HttpsConnector<HttpConnector>> {
     inner: HyperClient<C, HttpClientPayload>,
+    compression_options: Option<CompressionOptions>,
 }
 
 impl HttpClient {
@@ -356,7 +358,7 @@ where
     /// Allows for a custom connector to be used with the HttpClient
     pub fn from_connector(connector: C) -> Self {
         let inner = HyperClient::builder().build(connector);
-        HttpClient { inner }
+        HttpClient { inner, compression_options: None }
     }
 
     /// Allows for a custom connector to be used with the HttpClient
@@ -368,13 +370,15 @@ where
             .map(|sz| builder.http1_read_buf_exact_size(sz));
         let inner = builder.build(connector);
 
-        HttpClient { inner }
+        HttpClient { inner, compression_options: config.compression_optionss }
     }
 }
 
 /// Configuration options for the HTTP Client
 pub struct HttpConfig {
     read_buf_size: Option<usize>,
+    // Optional compression options, would not compress request payload if it's None
+    compression_optionss: Option<CompressionOptions>,
 }
 
 impl HttpConfig {
@@ -382,6 +386,7 @@ impl HttpConfig {
     pub fn new() -> HttpConfig {
         HttpConfig {
             read_buf_size: None,
+            compression_optionss: None,
         }
     }
     /// Sets the size of the read buffer for inbound data
@@ -389,6 +394,13 @@ impl HttpConfig {
     /// by requiring fewer copies out of the socket buffer.
     pub fn read_buf_size(&mut self, sz: usize) {
         self.read_buf_size = Some(sz);
+    }
+
+    /// Enables compression of request payload with given options.
+    /// Note that not all of the services support sending payload with compression.
+    /// On default compression is disabled.
+    pub fn enable_compression(&mut self, compression_options: CompressionOptions) {
+        self.compression_optionss = Some(compression_options);
     }
 }
 
@@ -511,6 +523,40 @@ where
         };
 
         HttpClientFuture(inner)
+    }
+}
+
+impl CompressRequestPayload for HttpClient {
+    fn compress(&self, request: &mut SignedRequest, compression_options: &CompressionOptions) {
+        match request.payload {
+            None => return,
+            Some(SignedRequestPayload::Buffer(ref payload)) => {
+                // Don't compress if request payload length size is lesser than min size
+                if let Some(sz) = compression_options.min_payload_size_for_compression{
+                    if payload.len() < sz{
+                        return;
+                    }
+                }
+                let mut encoder = libflate::gzip::Encoder::new(Vec::<u8>::new()).unwrap();
+                encoder.write_all(payload).unwrap();
+                let payload_compressed = encoder.finish().into_result().unwrap();
+                // Don't compress if compressed size is greater than payload size
+                if payload.len() <= payload_compressed.len() {
+                    return;
+                }
+                let payload_compressed = Bytes::from(payload_compressed);
+                request.payload = Some(SignedRequestPayload::Buffer(payload_compressed));
+                request.add_header("Content-Encoding", "gzip");
+            }
+            Some(SignedRequestPayload::Stream(ref _stream)) => {
+                // TODO what to do for streams?
+                return;
+            }
+        };
+    }
+
+    fn compression_options(&self) -> &Option<CompressionOptions> {
+        &self.compression_options
     }
 }
 

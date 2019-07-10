@@ -7,7 +7,9 @@ use crate::credential::{CredentialsError, DefaultCredentialsProvider, ProvideAws
 use crate::error::RusotoError;
 use crate::future::{self, RusotoFuture};
 use crate::request::{DispatchSignedRequest, HttpClient, HttpDispatchError, HttpResponse};
-use crate::signature::SignedRequest;
+use crate::signature::{SignedRequest};
+use crate::compression::CompressRequestPayload;
+use core::borrow::BorrowMut;
 
 lazy_static! {
     static ref SHARED_CLIENT: Mutex<Weak<ClientInner<DefaultCredentialsProvider, HttpClient>>> =
@@ -40,11 +42,11 @@ impl Client {
 
     /// Create a client from a credentials provider and request dispatcher.
     pub fn new_with<P, D>(credentials_provider: P, dispatcher: D) -> Self
-    where
-        P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
-        D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
+        where
+            P: ProvideAwsCredentials + Send + Sync + 'static,
+            P::Future: Send,
+            D: DispatchSignedRequest + CompressRequestPayload + Send + Sync + 'static,
+            D::Future: Send,
     {
         let inner = ClientInner {
             credentials_provider: Arc::new(credentials_provider),
@@ -59,7 +61,7 @@ impl Client {
     pub fn sign_and_dispatch<T, E>(
         &self,
         request: SignedRequest,
-        response_handler: fn(HttpResponse) -> Box<dyn Future<Item = T, Error = RusotoError<E>> + Send>,
+        response_handler: fn(HttpResponse) -> Box<dyn Future<Item=T, Error=RusotoError<E>> + Send>,
     ) -> RusotoFuture<T, E> {
         future::new(self.inner.sign_and_dispatch(request), response_handler)
     }
@@ -74,7 +76,7 @@ trait SignAndDispatch {
     fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-    ) -> Box<dyn TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>;
+    ) -> Box<dyn TimeoutFuture<Item=HttpResponse, Error=SignAndDispatchError> + Send>;
 }
 
 pub trait TimeoutFuture: Future {
@@ -97,16 +99,16 @@ impl<P, D> Clone for ClientInner<P, D> {
 }
 
 impl<P, D> SignAndDispatch for ClientInner<P, D>
-where
-    P: ProvideAwsCredentials + Send + Sync + 'static,
-    P::Future: Send,
-    D: DispatchSignedRequest + Send + Sync + 'static,
-    D::Future: Send,
+    where
+        P: ProvideAwsCredentials + Send + Sync + 'static,
+        P::Future: Send,
+        D: DispatchSignedRequest + CompressRequestPayload + Send + Sync + 'static,
+        D::Future: Send,
 {
     fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-    ) -> Box<dyn TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send> {
+    ) -> Box<dyn TimeoutFuture<Item=HttpResponse, Error=SignAndDispatchError> + Send> {
         Box::new(SignAndDispatchFuture {
             inner: self.clone(),
             state: Some(SignAndDispatchState::Lazy { request }),
@@ -115,16 +117,16 @@ where
     }
 }
 
-pub struct SignAndDispatchFuture<P: ProvideAwsCredentials, D: DispatchSignedRequest> {
+pub struct SignAndDispatchFuture<P: ProvideAwsCredentials, D: DispatchSignedRequest + CompressRequestPayload> {
     inner: ClientInner<P, D>,
     state: Option<SignAndDispatchState<P, D>>,
     timeout: Option<Duration>,
 }
 
 impl<P, D> TimeoutFuture for SignAndDispatchFuture<P, D>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
+    where
+        P: ProvideAwsCredentials,
+        D: DispatchSignedRequest + CompressRequestPayload,
 {
     fn set_timeout(&mut self, timeout: Duration) {
         self.timeout = Some(timeout);
@@ -136,7 +138,7 @@ where
 }
 
 #[allow(clippy::large_enum_variant)]
-enum SignAndDispatchState<P: ProvideAwsCredentials, D: DispatchSignedRequest> {
+enum SignAndDispatchState<P: ProvideAwsCredentials, D: DispatchSignedRequest + CompressRequestPayload> {
     Lazy {
         request: SignedRequest,
     },
@@ -150,9 +152,9 @@ enum SignAndDispatchState<P: ProvideAwsCredentials, D: DispatchSignedRequest> {
 }
 
 impl<P, D> Future for SignAndDispatchFuture<P, D>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
+    where
+        P: ProvideAwsCredentials,
+        D: DispatchSignedRequest + CompressRequestPayload,
 {
     type Item = HttpResponse;
     type Error = SignAndDispatchError;
@@ -175,6 +177,9 @@ where
                     Ok(Async::NotReady)
                 }
                 Ok(Async::Ready(credentials)) => {
+                    if let Some(compression_options) = self.inner.dispatcher.compression_options(){
+                        self.inner.dispatcher.compress(request.borrow_mut(), &compression_options);
+                    }
                     request.sign_with_plus(&credentials, true);
                     let future = self.inner.dispatcher.dispatch(request, self.timeout);
                     self.state = Some(SignAndDispatchState::Dispatching { future });
