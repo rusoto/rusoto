@@ -138,6 +138,7 @@ where
         use rusoto_core::region;
         use rusoto_core::credential::ProvideAwsCredentials;
         use rusoto_core::{{Client, RusotoFuture, RusotoError}};
+        use rusoto_core::compression::CompressRequestPayload;
     "
     )?;
 
@@ -193,7 +194,7 @@ where
             pub fn new_with<P, D>(request_dispatcher: D, credentials_provider: P, region: region::Region) -> {type_name}
                 where P: ProvideAwsCredentials + Send + Sync + 'static,
                       P::Future: Send,
-                      D: DispatchSignedRequest + Send + Sync + 'static,
+                      D: DispatchSignedRequest + CompressRequestPayload + Send + Sync + 'static,
                       D::Future: Send
             {{
                 {type_name} {{
