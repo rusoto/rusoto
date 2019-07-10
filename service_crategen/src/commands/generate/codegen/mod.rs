@@ -135,6 +135,7 @@ where
         use futures::future;
         use futures::Future;
         use rusoto_core::request::{{BufferedHttpResponse, DispatchSignedRequest}};
+        use rusoto_core::compression::CompressRequestPayload;
         use rusoto_core::region;
         use rusoto_core::credential::ProvideAwsCredentials;
         use rusoto_core::{{Client, RusotoFuture, RusotoError}};
@@ -190,14 +191,15 @@ where
                 }}
             }}
 
-            pub fn new_with<P, D>(request_dispatcher: D, credentials_provider: P, region: region::Region) -> {type_name}
+            pub fn new_with<P, D, C>(request_dispatcher: D, credentials_provider: P, payload_compressor: Option<C>, region: region::Region) -> {type_name}
                 where P: ProvideAwsCredentials + Send + Sync + 'static,
                       P::Future: Send,
                       D: DispatchSignedRequest + Send + Sync + 'static,
-                      D::Future: Send
+                      D::Future: Send,
+                      C: CompressRequestPayload + Send + Sync + 'static
             {{
                 {type_name} {{
-                    client: Client::new_with(credentials_provider, request_dispatcher),
+                    client: Client::new_with(credentials_provider, request_dispatcher, payload_compressor),
                     region
                 }}
             }}
@@ -335,7 +337,7 @@ fn find_shapes_to_generate(service: &Service<'_>) -> BTreeSet<String> {
         }
     }
     return shapes_to_generate;
-} 
+}
 
 fn generate_types<P>(writer: &mut FileWriter, service: &Service<'_>, protocol_generator: &P) -> IoResult
 where

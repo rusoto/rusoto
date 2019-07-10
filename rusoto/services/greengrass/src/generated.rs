@@ -16,6 +16,7 @@ use std::fmt;
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::compression::CompressRequestPayload;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
@@ -7072,9 +7073,10 @@ impl GreenGrassClient {
         }
     }
 
-    pub fn new_with<P, D>(
+    pub fn new_with<P, D, C>(
         request_dispatcher: D,
         credentials_provider: P,
+        payload_compressor: Option<C>,
         region: region::Region,
     ) -> GreenGrassClient
     where
@@ -7082,9 +7084,10 @@ impl GreenGrassClient {
         P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
+        C: CompressRequestPayload + Send + Sync + 'static,
     {
         GreenGrassClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+            client: Client::new_with(credentials_provider, request_dispatcher, payload_compressor),
             region,
         }
     }
