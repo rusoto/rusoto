@@ -47,6 +47,8 @@ url = "1.6.0"
 tokio = "0.1.7"
 tokio-timer = "0.2.6"
 xml-rs = "0.7"
+# TODO find a way to include if only needed
+libflate = "0.1"
 
 [dependencies.rusoto_credential]
 path = "../credential"
