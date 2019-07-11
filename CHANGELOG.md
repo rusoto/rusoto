@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Add `HttpClient::from_builder`
+
 (Please put changes here)
 
 ## [0.40.0] - 2019-06-28
