@@ -731,6 +731,8 @@ pub struct Cluster {
     pub automated_snapshot_retention_period: Option<i64>,
     /// <p>The name of the Availability Zone in which the cluster is located.</p>
     pub availability_zone: Option<String>,
+    /// <p><p>The availability status of the cluster for queries. Possible values are the following:</p> <ul> <li> <p>Available - The cluster is available for queries. </p> </li> <li> <p>Unavailable - The cluster is not available for queries.</p> </li> <li> <p>Maintenance - The cluster is intermittently available for queries due to maintenance activities.</p> </li> <li> <p>Modifying - The cluster is intermittently available for queries due to changes that modify the cluster.</p> </li> <li> <p>Failed - The cluster failed and is not available for queries.</p> </li> </ul></p>
+    pub cluster_availability_status: Option<String>,
     /// <p>The date and time that the cluster was created.</p>
     pub cluster_create_time: Option<String>,
     /// <p>The unique identifier of the cluster.</p>
@@ -836,6 +838,12 @@ impl ClusterDeserializer {
                 "AvailabilityZone" => {
                     obj.availability_zone =
                         Some(StringDeserializer::deserialize("AvailabilityZone", stack)?);
+                }
+                "ClusterAvailabilityStatus" => {
+                    obj.cluster_availability_status = Some(StringDeserializer::deserialize(
+                        "ClusterAvailabilityStatus",
+                        stack,
+                    )?);
                 }
                 "ClusterCreateTime" => {
                     obj.cluster_create_time =
@@ -15747,6 +15755,8 @@ pub enum RestoreFromClusterSnapshotError {
     InvalidRestoreFault(String),
     /// <p>The requested subnet is not valid, or not all of the subnets are in the same VPC.</p>
     InvalidSubnet(String),
+    /// <p>The tag is invalid.</p>
+    InvalidTagFault(String),
     /// <p>The cluster subnet group does not cover all Availability Zones.</p>
     InvalidVPCNetworkStateFault(String),
     /// <p>The encryption key has exceeded its grant limit in AWS KMS.</p>
@@ -15757,6 +15767,8 @@ pub enum RestoreFromClusterSnapshotError {
     NumberOfNodesQuotaExceededFault(String),
     /// <p>We could not find the specified snapshot schedule. </p>
     SnapshotScheduleNotFoundFault(String),
+    /// <p>You have exceeded the number of tags allowed.</p>
+    TagLimitExceededFault(String),
     /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
 }
@@ -15888,6 +15900,11 @@ impl RestoreFromClusterSnapshotError {
                             RestoreFromClusterSnapshotError::InvalidSubnet(parsed_error.message),
                         )
                     }
+                    "InvalidTagFault" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::InvalidTagFault(parsed_error.message),
+                        )
+                    }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::InvalidVPCNetworkStateFault(
@@ -15917,6 +15934,13 @@ impl RestoreFromClusterSnapshotError {
                     "SnapshotScheduleNotFound" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::SnapshotScheduleNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "TagLimitExceededFault" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::TagLimitExceededFault(
                                 parsed_error.message,
                             ),
                         )
@@ -15972,6 +15996,7 @@ impl Error for RestoreFromClusterSnapshotError {
             RestoreFromClusterSnapshotError::InvalidElasticIpFault(ref cause) => cause,
             RestoreFromClusterSnapshotError::InvalidRestoreFault(ref cause) => cause,
             RestoreFromClusterSnapshotError::InvalidSubnet(ref cause) => cause,
+            RestoreFromClusterSnapshotError::InvalidTagFault(ref cause) => cause,
             RestoreFromClusterSnapshotError::InvalidVPCNetworkStateFault(ref cause) => cause,
             RestoreFromClusterSnapshotError::LimitExceededFault(ref cause) => cause,
             RestoreFromClusterSnapshotError::NumberOfNodesPerClusterLimitExceededFault(
@@ -15979,6 +16004,7 @@ impl Error for RestoreFromClusterSnapshotError {
             ) => cause,
             RestoreFromClusterSnapshotError::NumberOfNodesQuotaExceededFault(ref cause) => cause,
             RestoreFromClusterSnapshotError::SnapshotScheduleNotFoundFault(ref cause) => cause,
+            RestoreFromClusterSnapshotError::TagLimitExceededFault(ref cause) => cause,
             RestoreFromClusterSnapshotError::UnauthorizedOperation(ref cause) => cause,
         }
     }

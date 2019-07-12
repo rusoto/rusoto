@@ -1373,7 +1373,7 @@ pub struct CreateOpsItemRequest {
     #[serde(rename = "Notifications")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notifications: Option<Vec<OpsItemNotification>>,
-    /// <p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <p>This custom data is searchable, but with restrictions. For the <code>Searchable operational data</code> feature, all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. For the <code>Private operational data</code> feature, the data is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p>
+    /// <p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <important> <p>Operational data keys <i>can't</i> begin with the following: amazon, aws, amzn, ssm, /amazon, /aws, /amzn, /ssm.</p> </important> <p>You can choose to make the data searchable by other users in the account or you can restrict search access. Searchable data means that all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. Operational data that is not searchable is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p> <p>Use the <code>/aws/resources</code> key in OperationalData to specify a related resource in the request. Use the <code>/aws/automations</code> key in OperationalData to associate an Automation runbook with the OpsItem. To view AWS CLI example commands that use these keys, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-creating-OpsItems.html#OpsCenter-manually-create-OpsItems">Creating OpsItems Manually</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "OperationalData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operational_data: Option<::std::collections::HashMap<String, OpsItemDataValue>>,
@@ -1388,7 +1388,7 @@ pub struct CreateOpsItemRequest {
     /// <p>The origin of the OpsItem, such as Amazon EC2 or AWS Systems Manager.</p>
     #[serde(rename = "Source")]
     pub source: String,
-    /// <p><p>Optional metadata that you assign to a resource. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment. For example, you might want to tag an OpsItem to identify the AWS resource or the type of issue. In this case, you could specify the following key name/value pairs:</p> <ul> <li> <p> <code>Key=source,Value=EC2-instance</code> </p> </li> <li> <p> <code>Key=status,Value=stopped</code> </p> </li> </ul> <note> <p>To add tags to an existing OpsItem, use the <a>AddTagsToResource</a> action.</p> </note></p>
+    /// <p><p>Optional metadata that you assign to a resource. You can restrict access to OpsItems by using an inline IAM policy that specifies tags. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html#OpsCenter-getting-started-user-permissions">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Tags use a key-value pair. For example:</p> <p> <code>Key=Department,Value=Finance</code> </p> <note> <p>To add tags to an existing OpsItem, use the <a>AddTagsToResource</a> action.</p> </note></p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1517,9 +1517,17 @@ pub struct DeleteAssociationResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDocumentRequest {
+    /// <p>(Optional) The version of the document that you want to delete. If not provided, all versions of the document are deleted.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_version: Option<String>,
     /// <p>The name of the document.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>(Optional) The version name of the document that you want to delete. If not provided, all versions of the document are deleted.</p>
+    #[serde(rename = "VersionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2508,7 +2516,7 @@ pub struct DescribeOpsItemsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p><p>One or more filters to limit the reponse.</p> <ul> <li> <p>Key: CreatedTime</p> <p>Operations: GreaterThan, LessThan</p> </li> <li> <p>Key: LastModifiedBy</p> <p>Operations: Contains, Equals</p> </li> <li> <p>Key: LastModifiedTime</p> <p>Operations: GreaterThan, LessThan</p> </li> <li> <p>Key: Priority</p> <p>Operations: Equals</p> </li> <li> <p>Key: Source</p> <p>Operations: Contains, Equals</p> </li> <li> <p>Key: Status</p> <p>Operations: Equals</p> </li> <li> <p>Key: Title</p> <p>Operations: Contains</p> </li> <li> <p>Key: OperationalData</p> <p>Operations: Equals</p> </li> <li> <p>Key: OperationalDataKey</p> <p>Operations: Equals</p> </li> <li> <p>Key: OperationalDataValue</p> <p>Operations: Equals, Contains</p> </li> <li> <p>Key: OpsItemId</p> <p>Operations: Equals</p> </li> <li> <p>Key: ResourceId</p> <p>Operations: Contains</p> </li> <li> <p>Key: AutomationId</p> <p>Operations: Equals</p> </li> </ul></p>
+    /// <p>One or more filters to limit the reponse.</p> <ul> <li> <p>Key: CreatedTime</p> <p>Operations: GreaterThan, LessThan</p> </li> <li> <p>Key: LastModifiedBy</p> <p>Operations: Contains, Equals</p> </li> <li> <p>Key: LastModifiedTime</p> <p>Operations: GreaterThan, LessThan</p> </li> <li> <p>Key: Priority</p> <p>Operations: Equals</p> </li> <li> <p>Key: Source</p> <p>Operations: Contains, Equals</p> </li> <li> <p>Key: Status</p> <p>Operations: Equals</p> </li> <li> <p>Key: Title</p> <p>Operations: Contains</p> </li> <li> <p>Key: OperationalData*</p> <p>Operations: Equals</p> </li> <li> <p>Key: OperationalDataKey</p> <p>Operations: Equals</p> </li> <li> <p>Key: OperationalDataValue</p> <p>Operations: Equals, Contains</p> </li> <li> <p>Key: OpsItemId</p> <p>Operations: Equals</p> </li> <li> <p>Key: ResourceId</p> <p>Operations: Contains</p> </li> <li> <p>Key: AutomationId</p> <p>Operations: Equals</p> </li> </ul> <p>*If you filter the response by using the OperationalData operator, specify a key-value pair by using the following JSON format: {"key":"key_name","value":"a_value"}</p>
     #[serde(rename = "OpsItemFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ops_item_filters: Option<Vec<OpsItemFilter>>,
@@ -5375,7 +5383,7 @@ pub struct OpsFilter {
     pub values: Vec<String>,
 }
 
-/// <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+/// <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct OpsItem {
@@ -5403,7 +5411,7 @@ pub struct OpsItem {
     #[serde(rename = "Notifications")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notifications: Option<Vec<OpsItemNotification>>,
-    /// <p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <p>This custom data is searchable, but with restrictions. For the <code>Searchable operational data</code> feature, all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. For the <code>Private operational data</code> feature, the data is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p>
+    /// <p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <important> <p>Operational data keys <i>can't</i> begin with the following: amazon, aws, amzn, ssm, /amazon, /aws, /amzn, /ssm.</p> </important> <p>You can choose to make the data searchable by other users in the account or you can restrict search access. Searchable data means that all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. Operational data that is not searchable is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p> <p>Use the <code>/aws/resources</code> key in OperationalData to specify a related resource in the request. Use the <code>/aws/automations</code> key in OperationalData to associate an Automation runbook with the OpsItem. To view AWS CLI example commands that use these keys, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-creating-OpsItems.html#OpsCenter-manually-create-OpsItems">Creating OpsItems Manually</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "OperationalData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operational_data: Option<::std::collections::HashMap<String, OpsItemDataValue>>,
@@ -5415,7 +5423,7 @@ pub struct OpsItem {
     #[serde(rename = "Priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
-    /// <p>One or more OpsItems that share something in common with the current OpsItems. For example, related OpsItems can include OpsItems with similar error messages, impacted resources, or statuses for the impacted resource.</p>
+    /// <p>One or more OpsItems that share something in common with the current OpsItem. For example, related OpsItems can include OpsItems with similar error messages, impacted resources, or statuses for the impacted resource.</p>
     #[serde(rename = "RelatedOpsItems")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub related_ops_items: Option<Vec<RelatedOpsItem>>,
@@ -5423,7 +5431,7 @@ pub struct OpsItem {
     #[serde(rename = "Source")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<String>,
-    /// <p>The OpsItem status. Status can be <code>Open</code>, <code>In Progress</code>, or <code>Resolved</code>. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-working-with-OpsItems-editing-details.html">Editing OpsItem Details</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>The OpsItem status. Status can be <code>Open</code>, <code>In Progress</code>, or <code>Resolved</code>. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-working-with-OpsItems-editing-details.html">Editing OpsItem Details</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -5450,7 +5458,7 @@ pub struct OpsItemDataValue {
     pub value: Option<String>,
 }
 
-/// <p>Describes an OpsCenter filter.</p>
+/// <p>Describes an OpsItem filter.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct OpsItemFilter {
     /// <p>The name of the filter.</p>
@@ -5493,7 +5501,7 @@ pub struct OpsItemSummary {
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_time: Option<f64>,
-    /// <p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <p>This custom data is searchable, but with restrictions. For the <code>Searchable operational data</code> feature, all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. For the <code>Private operational data</code> feature, the data is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p>
+    /// <p>Operational data is custom data that provides useful reference details about the OpsItem. </p>
     #[serde(rename = "OperationalData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operational_data: Option<::std::collections::HashMap<String, OpsItemDataValue>>,
@@ -6192,7 +6200,7 @@ pub struct RegisterTaskWithMaintenanceWindowResult {
     pub window_task_id: Option<String>,
 }
 
-/// <p>An OpsItems that shares something in common with the current OpsItems. For example, related OpsItems can include OpsItems with similar error messages, impacted resources, or statuses for the impacted resource.</p>
+/// <p>An OpsItems that shares something in common with the current OpsItem. For example, related OpsItems can include OpsItems with similar error messages, impacted resources, or statuses for the impacted resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RelatedOpsItem {
     /// <p>The ID of an OpsItem related to the current OpsItem.</p>
@@ -7373,7 +7381,7 @@ pub struct UpdateOpsItemRequest {
     #[serde(rename = "Notifications")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notifications: Option<Vec<OpsItemNotification>>,
-    /// <p>Add new keys or edit existing key-value pairs of the OperationalData map in the OpsItem object.</p> <p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <p>This custom data is searchable, but with restrictions. For the <code>Searchable operational data</code> feature, all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. For the <code>Private operational data</code> feature, the data is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p>
+    /// <p>Add new keys or edit existing key-value pairs of the OperationalData map in the OpsItem object.</p> <p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <important> <p>Operational data keys <i>can't</i> begin with the following: amazon, aws, amzn, ssm, /amazon, /aws, /amzn, /ssm.</p> </important> <p>You can choose to make the data searchable by other users in the account or you can restrict search access. Searchable data means that all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. Operational data that is not searchable is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p> <p>Use the <code>/aws/resources</code> key in OperationalData to specify a related resource in the request. Use the <code>/aws/automations</code> key in OperationalData to associate an Automation runbook with the OpsItem. To view AWS CLI example commands that use these keys, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-creating-OpsItems.html#OpsCenter-manually-create-OpsItems">Creating OpsItems Manually</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "OperationalData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operational_data: Option<::std::collections::HashMap<String, OpsItemDataValue>>,
@@ -7392,7 +7400,7 @@ pub struct UpdateOpsItemRequest {
     #[serde(rename = "RelatedOpsItems")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub related_ops_items: Option<Vec<RelatedOpsItem>>,
-    /// <p>The OpsItem status. Status can be <code>Open</code>, <code>In Progress</code>, or <code>Resolved</code>. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-working-with-OpsItems-editing-details.html">Editing OpsItem Details</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>The OpsItem status. Status can be <code>Open</code>, <code>In Progress</code>, or <code>Resolved</code>. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-working-with-OpsItems-editing-details.html">Editing OpsItem Details</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -8079,7 +8087,7 @@ pub enum CreateOpsItemError {
     OpsItemAlreadyExists(String),
     /// <p>A specified parameter argument isn't valid. Verify the available arguments and try again.</p>
     OpsItemInvalidParameter(String),
-    /// <p>The request caused OpsItems to exceed one or more limits. For information about OpsItem limits, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-learn-more.html#OpsItems-learn-more-limits">What are the resource limits for OpsItems?</a>.</p>
+    /// <p>The request caused OpsItems to exceed one or more limits. For information about OpsItem limits, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-learn-more.html#OpsCenter-learn-more-limits">What are the resource limits for OpsCenter?</a>.</p>
     OpsItemLimitExceeded(String),
 }
 
@@ -13952,7 +13960,7 @@ pub enum UpdateOpsItemError {
     OpsItemAlreadyExists(String),
     /// <p>A specified parameter argument isn't valid. Verify the available arguments and try again.</p>
     OpsItemInvalidParameter(String),
-    /// <p>The request caused OpsItems to exceed one or more limits. For information about OpsItem limits, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-learn-more.html#OpsItems-learn-more-limits">What are the resource limits for OpsItems?</a>.</p>
+    /// <p>The request caused OpsItems to exceed one or more limits. For information about OpsItem limits, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-learn-more.html#OpsCenter-learn-more-limits">What are the resource limits for OpsCenter?</a>.</p>
     OpsItemLimitExceeded(String),
     /// <p>The specified OpsItem ID doesn't exist. Verify the ID and try again.</p>
     OpsItemNotFound(String),
@@ -14142,7 +14150,7 @@ pub trait Ssm {
         input: CreateMaintenanceWindowRequest,
     ) -> RusotoFuture<CreateMaintenanceWindowResult, CreateMaintenanceWindowError>;
 
-    /// <p>Creates a new OpsItem. You must have permission in AWS Identity and Access Management (IAM) to create a new OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    /// <p>Creates a new OpsItem. You must have permission in AWS Identity and Access Management (IAM) to create a new OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     fn create_ops_item(
         &self,
         input: CreateOpsItemRequest,
@@ -14424,7 +14432,7 @@ pub trait Ssm {
         DescribeMaintenanceWindowsForTargetError,
     >;
 
-    /// <p>Query a set of OpsItems. You must have permission in AWS Identity and Access Management (IAM) to query a list of OpsItems. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    /// <p>Query a set of OpsItems. You must have permission in AWS Identity and Access Management (IAM) to query a list of OpsItems. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     fn describe_ops_items(
         &self,
         input: DescribeOpsItemsRequest,
@@ -14550,7 +14558,7 @@ pub trait Ssm {
         input: GetMaintenanceWindowTaskRequest,
     ) -> RusotoFuture<GetMaintenanceWindowTaskResult, GetMaintenanceWindowTaskError>;
 
-    /// <p>Get information about an OpsItem by using the ID. You must have permission in AWS Identity and Access Management (IAM) to view information about an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    /// <p>Get information about an OpsItem by using the ID. You must have permission in AWS Identity and Access Management (IAM) to view information about an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     fn get_ops_item(
         &self,
         input: GetOpsItemRequest,
@@ -14844,7 +14852,7 @@ pub trait Ssm {
         input: UpdateManagedInstanceRoleRequest,
     ) -> RusotoFuture<UpdateManagedInstanceRoleResult, UpdateManagedInstanceRoleError>;
 
-    /// <p>Edit or change an OpsItem. You must have permission in AWS Identity and Access Management (IAM) to update an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    /// <p>Edit or change an OpsItem. You must have permission in AWS Identity and Access Management (IAM) to update an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     fn update_ops_item(
         &self,
         input: UpdateOpsItemRequest,
@@ -15127,7 +15135,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Creates a new OpsItem. You must have permission in AWS Identity and Access Management (IAM) to create a new OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    /// <p>Creates a new OpsItem. You must have permission in AWS Identity and Access Management (IAM) to create a new OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     fn create_ops_item(
         &self,
         input: CreateOpsItemRequest,
@@ -16331,7 +16339,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Query a set of OpsItems. You must have permission in AWS Identity and Access Management (IAM) to query a list of OpsItems. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    /// <p>Query a set of OpsItems. You must have permission in AWS Identity and Access Management (IAM) to query a list of OpsItems. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     fn describe_ops_items(
         &self,
         input: DescribeOpsItemsRequest,
@@ -16901,7 +16909,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Get information about an OpsItem by using the ID. You must have permission in AWS Identity and Access Management (IAM) to view information about an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    /// <p>Get information about an OpsItem by using the ID. You must have permission in AWS Identity and Access Management (IAM) to view information about an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     fn get_ops_item(
         &self,
         input: GetOpsItemRequest,
@@ -18254,7 +18262,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Edit or change an OpsItem. You must have permission in AWS Identity and Access Management (IAM) to update an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    /// <p>Edit or change an OpsItem. You must have permission in AWS Identity and Access Management (IAM) to update an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     fn update_ops_item(
         &self,
         input: UpdateOpsItemRequest,

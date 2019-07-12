@@ -355,7 +355,7 @@ pub struct GetCostForecastRequest {
     /// <p>How granular you want the forecast to be. You can get 3 months of <code>DAILY</code> forecasts or 12 months of <code>MONTHLY</code> forecasts.</p> <p>The <code>GetCostForecast</code> operation supports only <code>DAILY</code> and <code>MONTHLY</code> granularities.</p>
     #[serde(rename = "Granularity")]
     pub granularity: String,
-    /// <p><p>Which metric Cost Explorer uses to create your forecast. For more information about blended and unblended rates, see <a href="https://aws.amazon.com/premiumsupport/knowledge-center/blended-rates-intro/">Why does the &quot;blended&quot; annotation appear on some line items in my bill?</a>. </p> <p>Valid values for a <code>GetCostForecast</code> call are the following:</p> <ul> <li> <p>AmortizedCost</p> </li> <li> <p>BlendedCost</p> </li> <li> <p>NetAmortizedCost</p> </li> <li> <p>NetUnblendedCost</p> </li> <li> <p>UnblendedCost</p> </li> </ul></p>
+    /// <p><p>Which metric Cost Explorer uses to create your forecast. For more information about blended and unblended rates, see <a href="https://aws.amazon.com/premiumsupport/knowledge-center/blended-rates-intro/">Why does the &quot;blended&quot; annotation appear on some line items in my bill?</a>. </p> <p>Valid values for a <code>GetCostForecast</code> call are the following:</p> <ul> <li> <p>AMORTIZED<em>COST</p> </li> <li> <p>BLENDED</em>COST</p> </li> <li> <p>NET<em>AMORTIZED</em>COST</p> </li> <li> <p>NET<em>UNBLENDED</em>COST</p> </li> <li> <p>UNBLENDED_COST</p> </li> </ul></p>
     #[serde(rename = "Metric")]
     pub metric: String,
     /// <p>Cost Explorer always returns the mean forecast as a single point. You can request a prediction interval around the mean by specifying a confidence level. The higher the confidence level, the more confident Cost Explorer is about the actual value falling in the prediction interval. Higher confidence levels result in wider prediction intervals.</p>
@@ -594,6 +594,40 @@ pub struct GetTagsResponse {
     /// <p>The total number of query results.</p>
     #[serde(rename = "TotalSize")]
     pub total_size: i64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetUsageForecastRequest {
+    /// <p>The filters that you want to use to filter your forecast. Cost Explorer API supports all of the Cost Explorer filters.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<Expression>,
+    /// <p>How granular you want the forecast to be. You can get 3 months of <code>DAILY</code> forecasts or 12 months of <code>MONTHLY</code> forecasts.</p> <p>The <code>GetUsageForecast</code> operation supports only <code>DAILY</code> and <code>MONTHLY</code> granularities.</p>
+    #[serde(rename = "Granularity")]
+    pub granularity: String,
+    /// <p><p>Which metric Cost Explorer uses to create your forecast.</p> <p>Valid values for a <code>GetUsageForecast</code> call are the following:</p> <ul> <li> <p>USAGE<em>QUANTITY</p> </li> <li> <p>NORMALIZED</em>USAGE_AMOUNT</p> </li> </ul></p>
+    #[serde(rename = "Metric")]
+    pub metric: String,
+    /// <p>Cost Explorer always returns the mean forecast as a single point. You can request a prediction interval around the mean by specifying a confidence level. The higher the confidence level, the more confident Cost Explorer is about the actual value falling in the prediction interval. Higher confidence levels result in wider prediction intervals.</p>
+    #[serde(rename = "PredictionIntervalLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prediction_interval_level: Option<i64>,
+    /// <p>The start and end dates of the period that you want to retrieve usage forecast for. The start date is inclusive, but the end date is exclusive. For example, if <code>start</code> is <code>2017-01-01</code> and <code>end</code> is <code>2017-05-01</code>, then the cost and usage data is retrieved from <code>2017-01-01</code> up to and including <code>2017-04-30</code> but not including <code>2017-05-01</code>.</p>
+    #[serde(rename = "TimePeriod")]
+    pub time_period: DateInterval,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetUsageForecastResponse {
+    /// <p>The forecasts for your query, in order. For <code>DAILY</code> forecasts, this is a list of days. For <code>MONTHLY</code> forecasts, this is a list of months.</p>
+    #[serde(rename = "ForecastResultsByTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub forecast_results_by_time: Option<Vec<ForecastResult>>,
+    /// <p>How much you're forecasted to use over the forecast period.</p>
+    #[serde(rename = "Total")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total: Option<MetricValue>,
 }
 
 /// <p>One level of grouped data in the results.</p>
@@ -1404,6 +1438,53 @@ impl Error for GetTagsError {
         }
     }
 }
+/// Errors returned by GetUsageForecast
+#[derive(Debug, PartialEq)]
+pub enum GetUsageForecastError {
+    /// <p>The requested data is unavailable.</p>
+    DataUnavailable(String),
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+    /// <p>Cost Explorer was unable to identify the usage unit. Provide <code>UsageType/UsageTypeGroup</code> filter selections that contain matching units, for example: <code>hours</code>.(</p>
+    UnresolvableUsageUnit(String),
+}
+
+impl GetUsageForecastError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUsageForecastError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "DataUnavailableException" => {
+                    return RusotoError::Service(GetUsageForecastError::DataUnavailable(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(GetUsageForecastError::LimitExceeded(err.msg))
+                }
+                "UnresolvableUsageUnitException" => {
+                    return RusotoError::Service(GetUsageForecastError::UnresolvableUsageUnit(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetUsageForecastError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetUsageForecastError {
+    fn description(&self) -> &str {
+        match *self {
+            GetUsageForecastError::DataUnavailable(ref cause) => cause,
+            GetUsageForecastError::LimitExceeded(ref cause) => cause,
+            GetUsageForecastError::UnresolvableUsageUnit(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the AWS Cost Explorer API. AWS Cost Explorer clients implement this trait.
 pub trait CostExplorer {
     /// <p>Retrieves cost and usage metrics for your account. You can specify which cost and usage-related metric, such as <code>BlendedCosts</code> or <code>UsageQuantity</code>, that you want the request to return. You can also filter and group your data by various dimensions, such as <code>SERVICE</code> or <code>AZ</code>, in a specific time range. For a complete list of valid dimensions, see the <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_GetDimensionValues.html">GetDimensionValues</a> operation. Master accounts in an organization in AWS Organizations have access to all member accounts.</p>
@@ -1447,6 +1528,12 @@ pub trait CostExplorer {
 
     /// <p>Queries for available tag keys and tag values for a specified period. You can search the tag values for an arbitrary string. </p>
     fn get_tags(&self, input: GetTagsRequest) -> RusotoFuture<GetTagsResponse, GetTagsError>;
+
+    /// <p>Retrieves a forecast for how much Amazon Web Services predicts that you will use over the forecast time period that you select, based on your past usage. </p>
+    fn get_usage_forecast(
+        &self,
+        input: GetUsageForecastRequest,
+    ) -> RusotoFuture<GetUsageForecastResponse, GetUsageForecastError>;
 }
 /// A client for the AWS Cost Explorer API.
 #[derive(Clone)]
@@ -1686,6 +1773,35 @@ impl CostExplorer for CostExplorerClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(GetTagsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves a forecast for how much Amazon Web Services predicts that you will use over the forecast time period that you select, based on your past usage. </p>
+    fn get_usage_forecast(
+        &self,
+        input: GetUsageForecastRequest,
+    ) -> RusotoFuture<GetUsageForecastResponse, GetUsageForecastError> {
+        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSInsightsIndexService.GetUsageForecast");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetUsageForecastResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetUsageForecastError::from_response(response))),
                 )
             }
         })

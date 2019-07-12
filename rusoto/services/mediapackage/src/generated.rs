@@ -270,6 +270,12 @@ pub struct DashEncryption {
 /// <p>A Dynamic Adaptive Streaming over HTTP (DASH) packaging configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DashPackage {
+    #[serde(rename = "AdTriggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ad_triggers: Option<Vec<String>>,
+    #[serde(rename = "AdsOnDeliveryRestrictions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ads_on_delivery_restrictions: Option<String>,
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption: Option<DashEncryption>,
@@ -533,6 +539,12 @@ pub struct HlsManifestCreateOrUpdateParameters {
     #[serde(rename = "AdMarkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ad_markers: Option<String>,
+    #[serde(rename = "AdTriggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ad_triggers: Option<Vec<String>>,
+    #[serde(rename = "AdsOnDeliveryRestrictions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ads_on_delivery_restrictions: Option<String>,
     /// <p>The ID of the manifest. The ID must be unique within the OriginEndpoint and it cannot be changed after it is created.</p>
     #[serde(rename = "Id")]
     pub id: String,
@@ -580,6 +592,12 @@ pub struct HlsPackage {
     #[serde(rename = "AdMarkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ad_markers: Option<String>,
+    #[serde(rename = "AdTriggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ad_triggers: Option<Vec<String>>,
+    #[serde(rename = "AdsOnDeliveryRestrictions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ads_on_delivery_restrictions: Option<String>,
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption: Option<HlsEncryption>,

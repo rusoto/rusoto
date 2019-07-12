@@ -791,6 +791,12 @@ pub struct DeleteEvaluationResultsRequest {
 pub struct DeleteEvaluationResultsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteOrganizationConfigRuleRequest {
+    #[serde(rename = "OrganizationConfigRuleName")]
+    pub organization_config_rule_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeletePendingAggregationRequestRequest {
     /// <p>The 12-digit account ID of the account requesting to aggregate data.</p>
     #[serde(rename = "RequesterAccountId")]
@@ -1207,6 +1213,54 @@ pub struct DescribeDeliveryChannelsResponse {
     #[serde(rename = "DeliveryChannels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delivery_channels: Option<Vec<DeliveryChannel>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeOrganizationConfigRuleStatusesRequest {
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    #[serde(rename = "OrganizationConfigRuleNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_config_rule_names: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeOrganizationConfigRuleStatusesResponse {
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    #[serde(rename = "OrganizationConfigRuleStatuses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_config_rule_statuses: Option<Vec<OrganizationConfigRuleStatus>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeOrganizationConfigRulesRequest {
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    #[serde(rename = "OrganizationConfigRuleNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_config_rule_names: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeOrganizationConfigRulesResponse {
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    #[serde(rename = "OrganizationConfigRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_config_rules: Option<Vec<OrganizationConfigRule>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1686,6 +1740,32 @@ pub struct GetDiscoveredResourceCountsResponse {
     pub total_discovered_resources: Option<i64>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetOrganizationConfigRuleDetailedStatusRequest {
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<StatusDetailFilters>,
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    #[serde(rename = "OrganizationConfigRuleName")]
+    pub organization_config_rule_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetOrganizationConfigRuleDetailedStatusResponse {
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    #[serde(rename = "OrganizationConfigRuleDetailedStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_config_rule_detailed_status: Option<Vec<MemberAccountStatus>>,
+}
+
 /// <p>The input for the <a>GetResourceConfigHistory</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetResourceConfigHistoryRequest {
@@ -1848,6 +1928,26 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct MemberAccountStatus {
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "ConfigRuleName")]
+    pub config_rule_name: String,
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    #[serde(rename = "LastUpdateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_time: Option<f64>,
+    #[serde(rename = "MemberAccountRuleStatus")]
+    pub member_account_rule_status: String,
+}
+
 /// <p>This object contains regions to set up the aggregator and an IAM role to retrieve organization details.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct OrganizationAggregationSource {
@@ -1862,6 +1962,101 @@ pub struct OrganizationAggregationSource {
     /// <p>ARN of the IAM role used to retrieve AWS Organization details associated with the aggregator account.</p>
     #[serde(rename = "RoleArn")]
     pub role_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct OrganizationConfigRule {
+    #[serde(rename = "ExcludedAccounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub excluded_accounts: Option<Vec<String>>,
+    #[serde(rename = "LastUpdateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_time: Option<f64>,
+    #[serde(rename = "OrganizationConfigRuleArn")]
+    pub organization_config_rule_arn: String,
+    #[serde(rename = "OrganizationConfigRuleName")]
+    pub organization_config_rule_name: String,
+    #[serde(rename = "OrganizationCustomRuleMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_custom_rule_metadata: Option<OrganizationCustomRuleMetadata>,
+    #[serde(rename = "OrganizationManagedRuleMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_managed_rule_metadata: Option<OrganizationManagedRuleMetadata>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct OrganizationConfigRuleStatus {
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    #[serde(rename = "LastUpdateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_time: Option<f64>,
+    #[serde(rename = "OrganizationConfigRuleName")]
+    pub organization_config_rule_name: String,
+    #[serde(rename = "OrganizationRuleStatus")]
+    pub organization_rule_status: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrganizationCustomRuleMetadata {
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "InputParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_parameters: Option<String>,
+    #[serde(rename = "LambdaFunctionArn")]
+    pub lambda_function_arn: String,
+    #[serde(rename = "MaximumExecutionFrequency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_execution_frequency: Option<String>,
+    #[serde(rename = "OrganizationConfigRuleTriggerTypes")]
+    pub organization_config_rule_trigger_types: Vec<String>,
+    #[serde(rename = "ResourceIdScope")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id_scope: Option<String>,
+    #[serde(rename = "ResourceTypesScope")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_types_scope: Option<Vec<String>>,
+    #[serde(rename = "TagKeyScope")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_key_scope: Option<String>,
+    #[serde(rename = "TagValueScope")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_value_scope: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrganizationManagedRuleMetadata {
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "InputParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_parameters: Option<String>,
+    #[serde(rename = "MaximumExecutionFrequency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_execution_frequency: Option<String>,
+    #[serde(rename = "ResourceIdScope")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id_scope: Option<String>,
+    #[serde(rename = "ResourceTypesScope")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_types_scope: Option<Vec<String>>,
+    #[serde(rename = "RuleIdentifier")]
+    pub rule_identifier: String,
+    #[serde(rename = "TagKeyScope")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_key_scope: Option<String>,
+    #[serde(rename = "TagValueScope")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_value_scope: Option<String>,
 }
 
 /// <p>An object that represents the account ID and region of an aggregator account that is requesting authorization but is not yet authorized.</p>
@@ -1977,6 +2172,29 @@ pub struct PutEvaluationsResponse {
     #[serde(rename = "FailedEvaluations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_evaluations: Option<Vec<Evaluation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct PutOrganizationConfigRuleRequest {
+    #[serde(rename = "ExcludedAccounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub excluded_accounts: Option<Vec<String>>,
+    #[serde(rename = "OrganizationConfigRuleName")]
+    pub organization_config_rule_name: String,
+    #[serde(rename = "OrganizationCustomRuleMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_custom_rule_metadata: Option<OrganizationCustomRuleMetadata>,
+    #[serde(rename = "OrganizationManagedRuleMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_managed_rule_metadata: Option<OrganizationManagedRuleMetadata>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutOrganizationConfigRuleResponse {
+    #[serde(rename = "OrganizationConfigRuleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_config_rule_arn: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2395,6 +2613,16 @@ pub struct StaticValue {
     pub values: Option<Vec<String>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StatusDetailFilters {
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    #[serde(rename = "MemberAccountRuleStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member_account_rule_status: Option<String>,
+}
+
 /// <p>The input for the <a>StopConfigurationRecorder</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopConfigurationRecorderRequest {
@@ -2746,6 +2974,50 @@ impl Error for DeleteEvaluationResultsError {
         }
     }
 }
+/// Errors returned by DeleteOrganizationConfigRule
+#[derive(Debug, PartialEq)]
+pub enum DeleteOrganizationConfigRuleError {
+    NoSuchOrganizationConfigRule(String),
+    /// <p>The rule is currently being deleted or the rule is deleting your evaluation results. Try your request again later.</p>
+    ResourceInUse(String),
+}
+
+impl DeleteOrganizationConfigRuleError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteOrganizationConfigRuleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "NoSuchOrganizationConfigRuleException" => {
+                    return RusotoError::Service(
+                        DeleteOrganizationConfigRuleError::NoSuchOrganizationConfigRule(err.msg),
+                    )
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(DeleteOrganizationConfigRuleError::ResourceInUse(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteOrganizationConfigRuleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteOrganizationConfigRuleError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteOrganizationConfigRuleError::NoSuchOrganizationConfigRule(ref cause) => cause,
+            DeleteOrganizationConfigRuleError::ResourceInUse(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeletePendingAggregationRequest
 #[derive(Debug, PartialEq)]
 pub enum DeletePendingAggregationRequestError {
@@ -2788,6 +3060,8 @@ impl Error for DeletePendingAggregationRequestError {
 pub enum DeleteRemediationConfigurationError {
     /// <p>You specified an AWS Config rule without a remediation configuration.</p>
     NoSuchRemediationConfiguration(String),
+
+    RemediationInProgress(String),
 }
 
 impl DeleteRemediationConfigurationError {
@@ -2801,6 +3075,11 @@ impl DeleteRemediationConfigurationError {
                         DeleteRemediationConfigurationError::NoSuchRemediationConfiguration(
                             err.msg,
                         ),
+                    )
+                }
+                "RemediationInProgressException" => {
+                    return RusotoError::Service(
+                        DeleteRemediationConfigurationError::RemediationInProgress(err.msg),
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
@@ -2819,6 +3098,7 @@ impl Error for DeleteRemediationConfigurationError {
     fn description(&self) -> &str {
         match *self {
             DeleteRemediationConfigurationError::NoSuchRemediationConfiguration(ref cause) => cause,
+            DeleteRemediationConfigurationError::RemediationInProgress(ref cause) => cause,
         }
     }
 }
@@ -3484,6 +3764,116 @@ impl Error for DescribeDeliveryChannelsError {
         }
     }
 }
+/// Errors returned by DescribeOrganizationConfigRuleStatuses
+#[derive(Debug, PartialEq)]
+pub enum DescribeOrganizationConfigRuleStatusesError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+
+    NoSuchOrganizationConfigRule(String),
+}
+
+impl DescribeOrganizationConfigRuleStatusesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeOrganizationConfigRuleStatusesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidLimitException" => {
+                    return RusotoError::Service(
+                        DescribeOrganizationConfigRuleStatusesError::InvalidLimit(err.msg),
+                    )
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        DescribeOrganizationConfigRuleStatusesError::InvalidNextToken(err.msg),
+                    )
+                }
+                "NoSuchOrganizationConfigRuleException" => {
+                    return RusotoError::Service(
+                        DescribeOrganizationConfigRuleStatusesError::NoSuchOrganizationConfigRule(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeOrganizationConfigRuleStatusesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeOrganizationConfigRuleStatusesError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeOrganizationConfigRuleStatusesError::InvalidLimit(ref cause) => cause,
+            DescribeOrganizationConfigRuleStatusesError::InvalidNextToken(ref cause) => cause,
+            DescribeOrganizationConfigRuleStatusesError::NoSuchOrganizationConfigRule(
+                ref cause,
+            ) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeOrganizationConfigRules
+#[derive(Debug, PartialEq)]
+pub enum DescribeOrganizationConfigRulesError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+
+    NoSuchOrganizationConfigRule(String),
+}
+
+impl DescribeOrganizationConfigRulesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeOrganizationConfigRulesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidLimitException" => {
+                    return RusotoError::Service(
+                        DescribeOrganizationConfigRulesError::InvalidLimit(err.msg),
+                    )
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        DescribeOrganizationConfigRulesError::InvalidNextToken(err.msg),
+                    )
+                }
+                "NoSuchOrganizationConfigRuleException" => {
+                    return RusotoError::Service(
+                        DescribeOrganizationConfigRulesError::NoSuchOrganizationConfigRule(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeOrganizationConfigRulesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeOrganizationConfigRulesError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeOrganizationConfigRulesError::InvalidLimit(ref cause) => cause,
+            DescribeOrganizationConfigRulesError::InvalidNextToken(ref cause) => cause,
+            DescribeOrganizationConfigRulesError::NoSuchOrganizationConfigRule(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribePendingAggregationRequests
 #[derive(Debug, PartialEq)]
 pub enum DescribePendingAggregationRequestsError {
@@ -4079,6 +4469,63 @@ impl Error for GetDiscoveredResourceCountsError {
         }
     }
 }
+/// Errors returned by GetOrganizationConfigRuleDetailedStatus
+#[derive(Debug, PartialEq)]
+pub enum GetOrganizationConfigRuleDetailedStatusError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+
+    NoSuchOrganizationConfigRule(String),
+}
+
+impl GetOrganizationConfigRuleDetailedStatusError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetOrganizationConfigRuleDetailedStatusError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidLimitException" => {
+                    return RusotoError::Service(
+                        GetOrganizationConfigRuleDetailedStatusError::InvalidLimit(err.msg),
+                    )
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        GetOrganizationConfigRuleDetailedStatusError::InvalidNextToken(err.msg),
+                    )
+                }
+                "NoSuchOrganizationConfigRuleException" => {
+                    return RusotoError::Service(
+                        GetOrganizationConfigRuleDetailedStatusError::NoSuchOrganizationConfigRule(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetOrganizationConfigRuleDetailedStatusError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetOrganizationConfigRuleDetailedStatusError {
+    fn description(&self) -> &str {
+        match *self {
+            GetOrganizationConfigRuleDetailedStatusError::InvalidLimit(ref cause) => cause,
+            GetOrganizationConfigRuleDetailedStatusError::InvalidNextToken(ref cause) => cause,
+            GetOrganizationConfigRuleDetailedStatusError::NoSuchOrganizationConfigRule(
+                ref cause,
+            ) => cause,
+        }
+    }
+}
 /// Errors returned by GetResourceConfigHistory
 #[derive(Debug, PartialEq)]
 pub enum GetResourceConfigHistoryError {
@@ -4671,6 +5118,93 @@ impl Error for PutEvaluationsError {
         }
     }
 }
+/// Errors returned by PutOrganizationConfigRule
+#[derive(Debug, PartialEq)]
+pub enum PutOrganizationConfigRuleError {
+    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>The rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>The AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> </ul></p>
+    InsufficientPermissions(String),
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
+
+    MaxNumberOfOrganizationConfigRulesExceeded(String),
+    /// <p>Organization does is no longer available.</p>
+    NoAvailableOrganization(String),
+    /// <p>No permission to call the EnableAWSServiceAccess API.</p>
+    OrganizationAccessDenied(String),
+    /// <p>The configuration aggregator cannot be created because organization does not have all features enabled.</p>
+    OrganizationAllFeaturesNotEnabled(String),
+    /// <p>The rule is currently being deleted or the rule is deleting your evaluation results. Try your request again later.</p>
+    ResourceInUse(String),
+}
+
+impl PutOrganizationConfigRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutOrganizationConfigRuleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InsufficientPermissionsException" => {
+                    return RusotoError::Service(
+                        PutOrganizationConfigRuleError::InsufficientPermissions(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        PutOrganizationConfigRuleError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "MaxNumberOfOrganizationConfigRulesExceededException" => {
+                    return RusotoError::Service(
+                        PutOrganizationConfigRuleError::MaxNumberOfOrganizationConfigRulesExceeded(
+                            err.msg,
+                        ),
+                    )
+                }
+                "NoAvailableOrganizationException" => {
+                    return RusotoError::Service(
+                        PutOrganizationConfigRuleError::NoAvailableOrganization(err.msg),
+                    )
+                }
+                "OrganizationAccessDeniedException" => {
+                    return RusotoError::Service(
+                        PutOrganizationConfigRuleError::OrganizationAccessDenied(err.msg),
+                    )
+                }
+                "OrganizationAllFeaturesNotEnabledException" => {
+                    return RusotoError::Service(
+                        PutOrganizationConfigRuleError::OrganizationAllFeaturesNotEnabled(err.msg),
+                    )
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(PutOrganizationConfigRuleError::ResourceInUse(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for PutOrganizationConfigRuleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutOrganizationConfigRuleError {
+    fn description(&self) -> &str {
+        match *self {
+            PutOrganizationConfigRuleError::InsufficientPermissions(ref cause) => cause,
+            PutOrganizationConfigRuleError::InvalidParameterValue(ref cause) => cause,
+            PutOrganizationConfigRuleError::MaxNumberOfOrganizationConfigRulesExceeded(
+                ref cause,
+            ) => cause,
+            PutOrganizationConfigRuleError::NoAvailableOrganization(ref cause) => cause,
+            PutOrganizationConfigRuleError::OrganizationAccessDenied(ref cause) => cause,
+            PutOrganizationConfigRuleError::OrganizationAllFeaturesNotEnabled(ref cause) => cause,
+            PutOrganizationConfigRuleError::ResourceInUse(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by PutRemediationConfigurations
 #[derive(Debug, PartialEq)]
 pub enum PutRemediationConfigurationsError {
@@ -5118,6 +5652,11 @@ pub trait ConfigService {
         input: DeleteEvaluationResultsRequest,
     ) -> RusotoFuture<DeleteEvaluationResultsResponse, DeleteEvaluationResultsError>;
 
+    fn delete_organization_config_rule(
+        &self,
+        input: DeleteOrganizationConfigRuleRequest,
+    ) -> RusotoFuture<(), DeleteOrganizationConfigRuleError>;
+
     /// <p>Deletes pending authorization requests for a specified aggregator account in a specified region.</p>
     fn delete_pending_aggregation_request(
         &self,
@@ -5229,6 +5768,19 @@ pub trait ConfigService {
         input: DescribeDeliveryChannelsRequest,
     ) -> RusotoFuture<DescribeDeliveryChannelsResponse, DescribeDeliveryChannelsError>;
 
+    fn describe_organization_config_rule_statuses(
+        &self,
+        input: DescribeOrganizationConfigRuleStatusesRequest,
+    ) -> RusotoFuture<
+        DescribeOrganizationConfigRuleStatusesResponse,
+        DescribeOrganizationConfigRuleStatusesError,
+    >;
+
+    fn describe_organization_config_rules(
+        &self,
+        input: DescribeOrganizationConfigRulesRequest,
+    ) -> RusotoFuture<DescribeOrganizationConfigRulesResponse, DescribeOrganizationConfigRulesError>;
+
     /// <p>Returns a list of all pending aggregation requests.</p>
     fn describe_pending_aggregation_requests(
         &self,
@@ -5327,6 +5879,14 @@ pub trait ConfigService {
         input: GetDiscoveredResourceCountsRequest,
     ) -> RusotoFuture<GetDiscoveredResourceCountsResponse, GetDiscoveredResourceCountsError>;
 
+    fn get_organization_config_rule_detailed_status(
+        &self,
+        input: GetOrganizationConfigRuleDetailedStatusRequest,
+    ) -> RusotoFuture<
+        GetOrganizationConfigRuleDetailedStatusResponse,
+        GetOrganizationConfigRuleDetailedStatusError,
+    >;
+
     /// <p><p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval. If you specified a retention period to retain your <code>ConfigurationItems</code> between a minimum of 30 days and a maximum of 7 years (2557 days), AWS Config returns the <code>ConfigurationItems</code> for the specified retention period. </p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note></p>
     fn get_resource_config_history(
         &self,
@@ -5383,6 +5943,11 @@ pub trait ConfigService {
         &self,
         input: PutEvaluationsRequest,
     ) -> RusotoFuture<PutEvaluationsResponse, PutEvaluationsError>;
+
+    fn put_organization_config_rule(
+        &self,
+        input: PutOrganizationConfigRuleRequest,
+    ) -> RusotoFuture<PutOrganizationConfigRuleResponse, PutOrganizationConfigRuleError>;
 
     /// <p>Adds or updates the remediation configuration with a specific AWS Config rule with the selected target or action. The API creates the <code>RemediationConfiguration</code> object for the AWS Config rule. The AWS Config rule must already exist for you to add a remediation configuration. The target (SSM document) must exist and have permissions to use the target. </p>
     fn put_remediation_configurations(
@@ -5682,6 +6247,31 @@ impl ConfigService for ConfigServiceClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteEvaluationResultsError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    fn delete_organization_config_rule(
+        &self,
+        input: DeleteOrganizationConfigRuleRequest,
+    ) -> RusotoFuture<(), DeleteOrganizationConfigRuleError> {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DeleteOrganizationConfigRule",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(future::ok(::std::mem::drop(response)))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteOrganizationConfigRuleError::from_response(response))
                 }))
             }
         })
@@ -6172,6 +6762,70 @@ impl ConfigService for ConfigServiceClient {
         })
     }
 
+    fn describe_organization_config_rule_statuses(
+        &self,
+        input: DescribeOrganizationConfigRuleStatusesRequest,
+    ) -> RusotoFuture<
+        DescribeOrganizationConfigRuleStatusesResponse,
+        DescribeOrganizationConfigRuleStatusesError,
+    > {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeOrganizationConfigRuleStatuses",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeOrganizationConfigRuleStatusesResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeOrganizationConfigRuleStatusesError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    fn describe_organization_config_rules(
+        &self,
+        input: DescribeOrganizationConfigRulesRequest,
+    ) -> RusotoFuture<DescribeOrganizationConfigRulesResponse, DescribeOrganizationConfigRulesError>
+    {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeOrganizationConfigRules",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeOrganizationConfigRulesResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeOrganizationConfigRulesError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Returns a list of all pending aggregation requests.</p>
     fn describe_pending_aggregation_requests(
         &self,
@@ -6590,6 +7244,39 @@ impl ConfigService for ConfigServiceClient {
         })
     }
 
+    fn get_organization_config_rule_detailed_status(
+        &self,
+        input: GetOrganizationConfigRuleDetailedStatusRequest,
+    ) -> RusotoFuture<
+        GetOrganizationConfigRuleDetailedStatusResponse,
+        GetOrganizationConfigRuleDetailedStatusError,
+    > {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.GetOrganizationConfigRuleDetailedStatus",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetOrganizationConfigRuleDetailedStatusResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetOrganizationConfigRuleDetailedStatusError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p><p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval. If you specified a retention period to retain your <code>ConfigurationItems</code> between a minimum of 30 days and a maximum of 7 years (2557 days), AWS Config returns the <code>ConfigurationItems</code> for the specified retention period. </p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note></p>
     fn get_resource_config_history(
         &self,
@@ -6866,6 +7553,34 @@ impl ConfigService for ConfigServiceClient {
                         .from_err()
                         .and_then(|response| Err(PutEvaluationsError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    fn put_organization_config_rule(
+        &self,
+        input: PutOrganizationConfigRuleRequest,
+    ) -> RusotoFuture<PutOrganizationConfigRuleResponse, PutOrganizationConfigRuleError> {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.PutOrganizationConfigRule",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutOrganizationConfigRuleResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(PutOrganizationConfigRuleError::from_response(response))
+                }))
             }
         })
     }

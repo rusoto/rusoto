@@ -337,10 +337,18 @@ pub struct Contact {
     #[serde(rename = "LastName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_name: Option<String>,
-    /// <p>The phone number of the contact.</p>
+    /// <p>The phone number of the contact. The phone number type defaults to WORK. You can either specify PhoneNumber or PhoneNumbers. We recommend that you use PhoneNumbers, which lets you specify the phone number type and multiple numbers.</p>
     #[serde(rename = "PhoneNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phone_number: Option<String>,
+    /// <p>The list of phone numbers for the contact.</p>
+    #[serde(rename = "PhoneNumbers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phone_numbers: Option<Vec<PhoneNumber>>,
+    /// <p>The list of SIP addresses for the contact.</p>
+    #[serde(rename = "SipAddresses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_addresses: Option<Vec<SipAddress>>,
 }
 
 /// <p>Information related to a contact.</p>
@@ -363,10 +371,18 @@ pub struct ContactData {
     #[serde(rename = "LastName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_name: Option<String>,
-    /// <p>The phone number of the contact.</p>
+    /// <p>The phone number of the contact. The phone number type defaults to WORK. You can specify PhoneNumber or PhoneNumbers. We recommend that you use PhoneNumbers, which lets you specify the phone number type and multiple numbers.</p>
     #[serde(rename = "PhoneNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phone_number: Option<String>,
+    /// <p>The list of phone numbers for the contact.</p>
+    #[serde(rename = "PhoneNumbers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phone_numbers: Option<Vec<PhoneNumber>>,
+    /// <p>The list of SIP addresses for the contact.</p>
+    #[serde(rename = "SipAddresses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_addresses: Option<Vec<SipAddress>>,
 }
 
 /// <p>The content definition. This can contain only one text, SSML, or audio list object.</p>
@@ -500,10 +516,18 @@ pub struct CreateContactRequest {
     #[serde(rename = "LastName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_name: Option<String>,
-    /// <p>The phone number of the contact in E.164 format.</p>
+    /// <p>The phone number of the contact in E.164 format. The phone number type defaults to WORK. You can specify PhoneNumber or PhoneNumbers. We recommend that you use PhoneNumbers, which lets you specify the phone number type and multiple numbers.</p>
     #[serde(rename = "PhoneNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phone_number: Option<String>,
+    /// <p>The list of phone numbers for the contact.</p>
+    #[serde(rename = "PhoneNumbers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phone_numbers: Option<Vec<PhoneNumber>>,
+    /// <p>The list of SIP addresses for the contact.</p>
+    #[serde(rename = "SipAddresses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_addresses: Option<Vec<SipAddress>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1884,6 +1908,17 @@ pub struct PSTNDialIn {
     pub phone_number: String,
 }
 
+/// <p>The phone number for the contact containing the raw number and phone number type.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PhoneNumber {
+    /// <p>The raw value of the phone number.</p>
+    #[serde(rename = "Number")]
+    pub number: String,
+    /// <p>The type of the phone number.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+}
+
 /// <p>A room profile with attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -2525,6 +2560,17 @@ pub struct SendInvitationRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct SendInvitationResponse {}
 
+/// <p>The SIP address for the contact containing the URI and SIP address type.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SipAddress {
+    /// <p>The type of the SIP address.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+    /// <p>The URI for the SIP address.</p>
+    #[serde(rename = "Uri")]
+    pub uri: String,
+}
+
 /// <p>Granular information about the skill.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -2879,10 +2925,18 @@ pub struct UpdateContactRequest {
     #[serde(rename = "LastName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_name: Option<String>,
-    /// <p>The updated phone number of the contact.</p>
+    /// <p>The updated phone number of the contact. The phone number type defaults to WORK. You can either specify PhoneNumber or PhoneNumbers. We recommend that you use PhoneNumbers, which lets you specify the phone number type and multiple numbers.</p>
     #[serde(rename = "PhoneNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phone_number: Option<String>,
+    /// <p>The list of phone numbers for the contact.</p>
+    #[serde(rename = "PhoneNumbers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phone_numbers: Option<Vec<PhoneNumber>>,
+    /// <p>The list of SIP addresses for the contact.</p>
+    #[serde(rename = "SipAddresses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_addresses: Option<Vec<SipAddress>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -6734,7 +6788,7 @@ pub trait AlexaForBusiness {
         input: DeleteDeviceRequest,
     ) -> RusotoFuture<DeleteDeviceResponse, DeleteDeviceError>;
 
-    /// <p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data. This action can be called once every 24 hours for a specific shared device. </p>
+    /// <p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data and associated response data. This action can be called once every 24 hours for a specific shared device.</p> <p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data. This action can be called once every 24 hours for a specific shared device. </p>
     fn delete_device_usage_data(
         &self,
         input: DeleteDeviceUsageDataRequest,
@@ -7059,7 +7113,7 @@ pub trait AlexaForBusiness {
         input: SendAnnouncementRequest,
     ) -> RusotoFuture<SendAnnouncementResponse, SendAnnouncementError>;
 
-    /// <p>Sends an enrollment invitation email with a URL to a user. The URL is valid for 72 hours or until you call this operation again, whichever comes first. </p>
+    /// <p>Sends an enrollment invitation email with a URL to a user. The URL is valid for 30 days or until you call this operation again, whichever comes first. </p>
     fn send_invitation(
         &self,
         input: SendInvitationRequest,
@@ -7825,7 +7879,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
-    /// <p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data. This action can be called once every 24 hours for a specific shared device. </p>
+    /// <p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data and associated response data. This action can be called once every 24 hours for a specific shared device.</p> <p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data. This action can be called once every 24 hours for a specific shared device. </p>
     fn delete_device_usage_data(
         &self,
         input: DeleteDeviceUsageDataRequest,
@@ -9390,7 +9444,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
-    /// <p>Sends an enrollment invitation email with a URL to a user. The URL is valid for 72 hours or until you call this operation again, whichever comes first. </p>
+    /// <p>Sends an enrollment invitation email with a URL to a user. The URL is valid for 30 days or until you call this operation again, whichever comes first. </p>
     fn send_invitation(
         &self,
         input: SendInvitationRequest,

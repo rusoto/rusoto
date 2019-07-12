@@ -31,6 +31,10 @@ pub struct Action {
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The name of the crawler to be used with this action.</p>
+    #[serde(rename = "CrawlerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub crawler_name: Option<String>,
     /// <p>The name of a job to be executed.</p>
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -284,6 +288,30 @@ pub struct BatchGetTriggersResponse {
     pub triggers_not_found: Option<Vec<String>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct BatchGetWorkflowsRequest {
+    /// <p>Specifies whether to include a graph when returning the workflow resource metadata.</p>
+    #[serde(rename = "IncludeGraph")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_graph: Option<bool>,
+    /// <p>A list of workflow names, which may be the names returned from the <code>ListWorkflows</code> operation.</p>
+    #[serde(rename = "Names")]
+    pub names: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BatchGetWorkflowsResponse {
+    /// <p>A list of names of workflows not found.</p>
+    #[serde(rename = "MissingWorkflows")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub missing_workflows: Option<Vec<String>>,
+    /// <p>A list of workflow resource metadata.</p>
+    #[serde(rename = "Workflows")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub workflows: Option<Vec<Workflow>>,
+}
+
 /// <p>Records an error that occurred when attempting to stop a specified job run.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -481,6 +509,14 @@ pub struct Column {
 /// <p>Defines a condition under which a trigger fires.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Condition {
+    /// <p>The state of the crawler to which this condition applies.</p>
+    #[serde(rename = "CrawlState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub crawl_state: Option<String>,
+    /// <p>The name of the crawler to which this condition applies.</p>
+    #[serde(rename = "CrawlerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub crawler_name: Option<String>,
     /// <p>The name of the job whose <code>JobRuns</code> this condition applies to, and on which this trigger waits.</p>
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -582,6 +618,36 @@ pub struct ConnectionsList {
     #[serde(rename = "Connections")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connections: Option<Vec<String>>,
+}
+
+/// <p>The details of a crawl in the workflow.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Crawl {
+    /// <p>The date and time on which the crawl completed.</p>
+    #[serde(rename = "CompletedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub completed_on: Option<f64>,
+    /// <p>The error message associated with the crawl.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// <p>The log group associated with the crawl.</p>
+    #[serde(rename = "LogGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_group: Option<String>,
+    /// <p>The log stream associated with the crawl.</p>
+    #[serde(rename = "LogStream")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_stream: Option<String>,
+    /// <p>The date and time on which the crawl started.</p>
+    #[serde(rename = "StartedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub started_on: Option<f64>,
+    /// <p>The state of the crawler.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
 }
 
 /// <p>Specifies a crawler program that examines a data source and uses classifiers to try to determine its schema. If successful, the crawler records metadata concerning the data source in the AWS Glue Data Catalog.</p>
@@ -694,6 +760,16 @@ pub struct CrawlerMetrics {
     #[serde(rename = "TimeLeftSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub time_left_seconds: Option<f64>,
+}
+
+/// <p>The details of a Crawler node present in the workflow.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CrawlerNodeDetails {
+    /// <p>A list of crawls represented by the crawl node.</p>
+    #[serde(rename = "Crawls")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub crawls: Option<Vec<Crawl>>,
 }
 
 /// <p>Specifies data stores to crawl.</p>
@@ -1200,6 +1276,10 @@ pub struct CreateTriggerRequest {
     /// <p>The type of the new trigger.</p>
     #[serde(rename = "Type")]
     pub type_: String,
+    /// <p>The name of the workflow associated with the trigger.</p>
+    #[serde(rename = "WorkflowName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub workflow_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1228,6 +1308,34 @@ pub struct CreateUserDefinedFunctionRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateUserDefinedFunctionResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateWorkflowRequest {
+    /// <p>A collection of properties to be used as part of each execution of the workflow.</p>
+    #[serde(rename = "DefaultRunProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_run_properties: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A description of the workflow.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name to be assigned to the workflow. It should be unique within your account.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The tags to be used with this workflow.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateWorkflowResponse {
+    /// <p>The name of the workflow which was provided as part of the request.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
 
 /// <p>Specifies an XML classifier for <code>CreateClassifier</code> to create.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1543,6 +1651,22 @@ pub struct DeleteUserDefinedFunctionRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteUserDefinedFunctionResponse {}
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteWorkflowRequest {
+    /// <p>Name of the workflow to be deleted.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteWorkflowResponse {
+    /// <p>Name of the workflow specified in input.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
 /// <p>A development endpoint where a developer can remotely debug ETL scripts.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1657,6 +1781,20 @@ pub struct DynamoDBTarget {
     #[serde(rename = "Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
+}
+
+/// <p>An edge represents a directed connection between two AWS Glue components which are part of the workflow the edge belongs to.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Edge {
+    /// <p>The unique of the node within the workflow where the edge ends.</p>
+    #[serde(rename = "DestinationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_id: Option<String>,
+    /// <p>The unique of the node within the workflow where the edge starts.</p>
+    #[serde(rename = "SourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_id: Option<String>,
 }
 
 /// <p>Specifies the encryption-at-rest configuration for the Data Catalog.</p>
@@ -2564,6 +2702,100 @@ pub struct GetUserDefinedFunctionsResponse {
     pub user_defined_functions: Option<Vec<UserDefinedFunction>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetWorkflowRequest {
+    /// <p>Specifies whether to include a graph when returning the workflow resource metadata.</p>
+    #[serde(rename = "IncludeGraph")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_graph: Option<bool>,
+    /// <p>The name of the workflow to retrieve.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetWorkflowResponse {
+    /// <p>The resource metadata for the workflow.</p>
+    #[serde(rename = "Workflow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub workflow: Option<Workflow>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetWorkflowRunPropertiesRequest {
+    /// <p>Name of the workflow which was run.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The ID of the workflow run whose run properties should be returned.</p>
+    #[serde(rename = "RunId")]
+    pub run_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetWorkflowRunPropertiesResponse {
+    /// <p>The workflow run properties which were set during the specified run.</p>
+    #[serde(rename = "RunProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub run_properties: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetWorkflowRunRequest {
+    /// <p>Specifies whether to include the workflow graph in response or not.</p>
+    #[serde(rename = "IncludeGraph")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_graph: Option<bool>,
+    /// <p>Name of the workflow being run.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The ID of the workflow run.</p>
+    #[serde(rename = "RunId")]
+    pub run_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetWorkflowRunResponse {
+    /// <p>The requested workflow run metadata.</p>
+    #[serde(rename = "Run")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub run: Option<WorkflowRun>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetWorkflowRunsRequest {
+    /// <p>Specifies whether to include the workflow graph in response or not.</p>
+    #[serde(rename = "IncludeGraph")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_graph: Option<bool>,
+    /// <p>The maximum number of workflow runs to be included in the response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Name of the workflow whose metadata of runs should be returned.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The maximum size of the response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetWorkflowRunsResponse {
+    /// <p>A continuation token, if not all requested workflow runs have been returned.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of workflow run metadata objects.</p>
+    #[serde(rename = "Runs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub runs: Option<Vec<WorkflowRun>>,
+}
+
 /// <p>A classifier that uses <code>grok</code> patterns.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -2748,10 +2980,20 @@ pub struct JobCommand {
     #[serde(rename = "PythonVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub python_version: Option<String>,
-    /// <p>Specifies the Amazon Simple Storage Service (Amazon S3) path to a script that executes a job (required).</p>
+    /// <p>Specifies the Amazon Simple Storage Service (Amazon S3) path to a script that executes a job.</p>
     #[serde(rename = "ScriptLocation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub script_location: Option<String>,
+}
+
+/// <p>The details of a Job node present in the workflow.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct JobNodeDetails {
+    /// <p>The information for the job runs represented by the job node.</p>
+    #[serde(rename = "JobRuns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_runs: Option<Vec<JobRun>>,
 }
 
 /// <p>Contains information about a job run.</p>
@@ -3075,6 +3317,31 @@ pub struct ListTriggersResponse {
     pub trigger_names: Option<Vec<String>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListWorkflowsRequest {
+    /// <p>The maximum size of a list to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A continuation token, if this is a continuation request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListWorkflowsResponse {
+    /// <p>A continuation token, if not all workflow names have been returned.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>List of names of workflows in the account.</p>
+    #[serde(rename = "Workflows")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub workflows: Option<Vec<String>>,
+}
+
 /// <p>The location of resources.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct Location {
@@ -3119,6 +3386,36 @@ pub struct MappingEntry {
     #[serde(rename = "TargetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_type: Option<String>,
+}
+
+/// <p>A node represents an AWS Glue component like Trigger, Job etc. which is part of a workflow.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Node {
+    /// <p>Details of the crawler when the node represents a crawler.</p>
+    #[serde(rename = "CrawlerDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub crawler_details: Option<CrawlerNodeDetails>,
+    /// <p>Details of the Job when the node represents a Job.</p>
+    #[serde(rename = "JobDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_details: Option<JobNodeDetails>,
+    /// <p>The name of the AWS Glue component represented by the node.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>Details of the Trigger when the node represents a Trigger.</p>
+    #[serde(rename = "TriggerDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trigger_details: Option<TriggerNodeDetails>,
+    /// <p>The type of AWS Glue component represented by the node.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p>The unique Id assigned to the node within the workflow.</p>
+    #[serde(rename = "UniqueId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unique_id: Option<String>,
 }
 
 /// <p>Specifies configuration properties of a notification.</p>
@@ -3308,6 +3605,23 @@ pub struct PutResourcePolicyResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_hash: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct PutWorkflowRunPropertiesRequest {
+    /// <p>Name of the workflow which was run.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The ID of the workflow run for which the run properties should be updated.</p>
+    #[serde(rename = "RunId")]
+    pub run_id: String,
+    /// <p>The properties to put for the specified run.</p>
+    #[serde(rename = "RunProperties")]
+    pub run_properties: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutWorkflowRunPropertiesResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ResetJobBookmarkRequest {
@@ -3538,6 +3852,22 @@ pub struct StartTriggerResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartWorkflowRunRequest {
+    /// <p>The name of the workflow to start.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StartWorkflowRunResponse {
+    /// <p>An Id for the new run.</p>
+    #[serde(rename = "RunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub run_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3848,6 +4178,20 @@ pub struct Trigger {
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+    /// <p>The name of the workflow associated with the trigger.</p>
+    #[serde(rename = "WorkflowName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub workflow_name: Option<String>,
+}
+
+/// <p>The details of a Trigger node present in the workflow.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TriggerNodeDetails {
+    /// <p>The information of the trigger represented by the trigger node.</p>
+    #[serde(rename = "Trigger")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trigger: Option<Trigger>,
 }
 
 /// <p>A structure used to provide information used to update a trigger. This object updates the previous trigger definition by overwriting it completely.</p>
@@ -4223,6 +4567,30 @@ pub struct UpdateUserDefinedFunctionRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateUserDefinedFunctionResponse {}
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateWorkflowRequest {
+    /// <p>A collection of properties to be used as part of each execution of the workflow.</p>
+    #[serde(rename = "DefaultRunProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_run_properties: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The description of the workflow.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Name of the workflow to be updated.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateWorkflowResponse {
+    /// <p>The name of the workflow which was specified in input.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
 /// <p>Specifies an XML classifier to be updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateXMLClassifierRequest {
@@ -4292,6 +4660,122 @@ pub struct UserDefinedFunctionInput {
     #[serde(rename = "ResourceUris")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_uris: Option<Vec<ResourceUri>>,
+}
+
+/// <p>A workflow represents a flow in which AWS Glue components should be executed to complete a logical task.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Workflow {
+    /// <p>The date and time when the workflow was created.</p>
+    #[serde(rename = "CreatedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_on: Option<f64>,
+    /// <p>A collection of properties to be used as part of each execution of the workflow.</p>
+    #[serde(rename = "DefaultRunProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_run_properties: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A description of the workflow.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The graph representing all the AWS Glue components that belong to the workflow as nodes and directed connections between them as edges.</p>
+    #[serde(rename = "Graph")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub graph: Option<WorkflowGraph>,
+    /// <p>The date and time when the workflow was last modified.</p>
+    #[serde(rename = "LastModifiedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_on: Option<f64>,
+    /// <p>The information about the last execution of the workflow.</p>
+    #[serde(rename = "LastRun")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_run: Option<WorkflowRun>,
+    /// <p>The name of the workflow representing the flow.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>A workflow graph represents the complete workflow containing all the AWS Glue components present in the workflow and all the directed connections between them.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct WorkflowGraph {
+    /// <p>A list of all the directed connections between the nodes belonging to the workflow.</p>
+    #[serde(rename = "Edges")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub edges: Option<Vec<Edge>>,
+    /// <p>A list of the the AWS Glue components belong to the workflow represented as nodes.</p>
+    #[serde(rename = "Nodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub nodes: Option<Vec<Node>>,
+}
+
+/// <p>A workflow run is an execution of a workflow providing all the runtime information.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct WorkflowRun {
+    /// <p>The date and time when the workflow run completed.</p>
+    #[serde(rename = "CompletedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub completed_on: Option<f64>,
+    /// <p>The graph representing all the AWS Glue components that belong to the workflow as nodes and directed connections between them as edges.</p>
+    #[serde(rename = "Graph")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub graph: Option<WorkflowGraph>,
+    /// <p>Name of the workflow which was executed.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The date and time when the workflow run was started.</p>
+    #[serde(rename = "StartedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub started_on: Option<f64>,
+    /// <p>The statistics of the run.</p>
+    #[serde(rename = "Statistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub statistics: Option<WorkflowRunStatistics>,
+    /// <p>The status of the workflow run.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The ID of this workflow run.</p>
+    #[serde(rename = "WorkflowRunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub workflow_run_id: Option<String>,
+    /// <p>The workflow run properties which were set during the run.</p>
+    #[serde(rename = "WorkflowRunProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub workflow_run_properties: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Workflow run statistics provides statistics about the workflow run.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct WorkflowRunStatistics {
+    /// <p>Total number of Actions which have failed.</p>
+    #[serde(rename = "FailedActions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_actions: Option<i64>,
+    /// <p>Total number Actions in running state.</p>
+    #[serde(rename = "RunningActions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub running_actions: Option<i64>,
+    /// <p>Total number of Actions which have stopped.</p>
+    #[serde(rename = "StoppedActions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stopped_actions: Option<i64>,
+    /// <p>Total number of Actions which have succeeded.</p>
+    #[serde(rename = "SucceededActions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub succeeded_actions: Option<i64>,
+    /// <p>Total number of Actions which timed out.</p>
+    #[serde(rename = "TimeoutActions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout_actions: Option<i64>,
+    /// <p>Total number of Actions in the workflow run.</p>
+    #[serde(rename = "TotalActions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_actions: Option<i64>,
 }
 
 /// <p>A classifier for <code>XML</code> content.</p>
@@ -4843,6 +5327,51 @@ impl Error for BatchGetTriggersError {
             BatchGetTriggersError::InternalService(ref cause) => cause,
             BatchGetTriggersError::InvalidInput(ref cause) => cause,
             BatchGetTriggersError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by BatchGetWorkflows
+#[derive(Debug, PartialEq)]
+pub enum BatchGetWorkflowsError {
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl BatchGetWorkflowsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetWorkflowsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(BatchGetWorkflowsError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(BatchGetWorkflowsError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(BatchGetWorkflowsError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for BatchGetWorkflowsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for BatchGetWorkflowsError {
+    fn description(&self) -> &str {
+        match *self {
+            BatchGetWorkflowsError::InternalService(ref cause) => cause,
+            BatchGetWorkflowsError::InvalidInput(ref cause) => cause,
+            BatchGetWorkflowsError::OperationTimeout(ref cause) => cause,
         }
     }
 }
@@ -5524,6 +6053,8 @@ pub enum CreateTriggerError {
     AlreadyExists(String),
     /// <p>Two processes are trying to modify a resource simultaneously.</p>
     ConcurrentModification(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
     /// <p>The same unique identifier was associated with two different records.</p>
     IdempotentParameterMismatch(String),
     /// <p>An internal service error occurred.</p>
@@ -5547,6 +6078,9 @@ impl CreateTriggerError {
                     return RusotoError::Service(CreateTriggerError::ConcurrentModification(
                         err.msg,
                     ))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(CreateTriggerError::EntityNotFound(err.msg))
                 }
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(CreateTriggerError::IdempotentParameterMismatch(
@@ -5584,6 +6118,7 @@ impl Error for CreateTriggerError {
         match *self {
             CreateTriggerError::AlreadyExists(ref cause) => cause,
             CreateTriggerError::ConcurrentModification(ref cause) => cause,
+            CreateTriggerError::EntityNotFound(ref cause) => cause,
             CreateTriggerError::IdempotentParameterMismatch(ref cause) => cause,
             CreateTriggerError::InternalService(ref cause) => cause,
             CreateTriggerError::InvalidInput(ref cause) => cause,
@@ -5672,6 +6207,73 @@ impl Error for CreateUserDefinedFunctionError {
             CreateUserDefinedFunctionError::InvalidInput(ref cause) => cause,
             CreateUserDefinedFunctionError::OperationTimeout(ref cause) => cause,
             CreateUserDefinedFunctionError::ResourceNumberLimitExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateWorkflow
+#[derive(Debug, PartialEq)]
+pub enum CreateWorkflowError {
+    /// <p>A resource to be created or added already exists.</p>
+    AlreadyExists(String),
+    /// <p>Two processes are trying to modify a resource simultaneously.</p>
+    ConcurrentModification(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+    /// <p>A resource numerical limit was exceeded.</p>
+    ResourceNumberLimitExceeded(String),
+}
+
+impl CreateWorkflowError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWorkflowError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AlreadyExistsException" => {
+                    return RusotoError::Service(CreateWorkflowError::AlreadyExists(err.msg))
+                }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(CreateWorkflowError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(CreateWorkflowError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(CreateWorkflowError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(CreateWorkflowError::OperationTimeout(err.msg))
+                }
+                "ResourceNumberLimitExceededException" => {
+                    return RusotoError::Service(CreateWorkflowError::ResourceNumberLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateWorkflowError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateWorkflowError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateWorkflowError::AlreadyExists(ref cause) => cause,
+            CreateWorkflowError::ConcurrentModification(ref cause) => cause,
+            CreateWorkflowError::InternalService(ref cause) => cause,
+            CreateWorkflowError::InvalidInput(ref cause) => cause,
+            CreateWorkflowError::OperationTimeout(ref cause) => cause,
+            CreateWorkflowError::ResourceNumberLimitExceeded(ref cause) => cause,
         }
     }
 }
@@ -6339,6 +6941,59 @@ impl Error for DeleteUserDefinedFunctionError {
             DeleteUserDefinedFunctionError::InternalService(ref cause) => cause,
             DeleteUserDefinedFunctionError::InvalidInput(ref cause) => cause,
             DeleteUserDefinedFunctionError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteWorkflow
+#[derive(Debug, PartialEq)]
+pub enum DeleteWorkflowError {
+    /// <p>Two processes are trying to modify a resource simultaneously.</p>
+    ConcurrentModification(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl DeleteWorkflowError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWorkflowError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(DeleteWorkflowError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(DeleteWorkflowError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(DeleteWorkflowError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(DeleteWorkflowError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteWorkflowError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteWorkflowError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteWorkflowError::ConcurrentModification(ref cause) => cause,
+            DeleteWorkflowError::InternalService(ref cause) => cause,
+            DeleteWorkflowError::InvalidInput(ref cause) => cause,
+            DeleteWorkflowError::OperationTimeout(ref cause) => cause,
         }
     }
 }
@@ -8068,6 +8723,218 @@ impl Error for GetUserDefinedFunctionsError {
         }
     }
 }
+/// Errors returned by GetWorkflow
+#[derive(Debug, PartialEq)]
+pub enum GetWorkflowError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl GetWorkflowError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetWorkflowError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetWorkflowError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(GetWorkflowError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetWorkflowError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(GetWorkflowError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetWorkflowError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetWorkflowError {
+    fn description(&self) -> &str {
+        match *self {
+            GetWorkflowError::EntityNotFound(ref cause) => cause,
+            GetWorkflowError::InternalService(ref cause) => cause,
+            GetWorkflowError::InvalidInput(ref cause) => cause,
+            GetWorkflowError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetWorkflowRun
+#[derive(Debug, PartialEq)]
+pub enum GetWorkflowRunError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl GetWorkflowRunError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetWorkflowRunError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetWorkflowRunError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(GetWorkflowRunError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetWorkflowRunError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(GetWorkflowRunError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetWorkflowRunError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetWorkflowRunError {
+    fn description(&self) -> &str {
+        match *self {
+            GetWorkflowRunError::EntityNotFound(ref cause) => cause,
+            GetWorkflowRunError::InternalService(ref cause) => cause,
+            GetWorkflowRunError::InvalidInput(ref cause) => cause,
+            GetWorkflowRunError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetWorkflowRunProperties
+#[derive(Debug, PartialEq)]
+pub enum GetWorkflowRunPropertiesError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl GetWorkflowRunPropertiesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetWorkflowRunPropertiesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetWorkflowRunPropertiesError::EntityNotFound(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(GetWorkflowRunPropertiesError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetWorkflowRunPropertiesError::InvalidInput(
+                        err.msg,
+                    ))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(GetWorkflowRunPropertiesError::OperationTimeout(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetWorkflowRunPropertiesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetWorkflowRunPropertiesError {
+    fn description(&self) -> &str {
+        match *self {
+            GetWorkflowRunPropertiesError::EntityNotFound(ref cause) => cause,
+            GetWorkflowRunPropertiesError::InternalService(ref cause) => cause,
+            GetWorkflowRunPropertiesError::InvalidInput(ref cause) => cause,
+            GetWorkflowRunPropertiesError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetWorkflowRuns
+#[derive(Debug, PartialEq)]
+pub enum GetWorkflowRunsError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl GetWorkflowRunsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetWorkflowRunsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetWorkflowRunsError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(GetWorkflowRunsError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetWorkflowRunsError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(GetWorkflowRunsError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetWorkflowRunsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetWorkflowRunsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetWorkflowRunsError::EntityNotFound(ref cause) => cause,
+            GetWorkflowRunsError::InternalService(ref cause) => cause,
+            GetWorkflowRunsError::InvalidInput(ref cause) => cause,
+            GetWorkflowRunsError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ImportCatalogToGlue
 #[derive(Debug, PartialEq)]
 pub enum ImportCatalogToGlueError {
@@ -8295,6 +9162,51 @@ impl Error for ListTriggersError {
         }
     }
 }
+/// Errors returned by ListWorkflows
+#[derive(Debug, PartialEq)]
+pub enum ListWorkflowsError {
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl ListWorkflowsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWorkflowsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(ListWorkflowsError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(ListWorkflowsError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(ListWorkflowsError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListWorkflowsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListWorkflowsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListWorkflowsError::InternalService(ref cause) => cause,
+            ListWorkflowsError::InvalidInput(ref cause) => cause,
+            ListWorkflowsError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by PutDataCatalogEncryptionSettings
 #[derive(Debug, PartialEq)]
 pub enum PutDataCatalogEncryptionSettingsError {
@@ -8404,6 +9316,89 @@ impl Error for PutResourcePolicyError {
             PutResourcePolicyError::InternalService(ref cause) => cause,
             PutResourcePolicyError::InvalidInput(ref cause) => cause,
             PutResourcePolicyError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by PutWorkflowRunProperties
+#[derive(Debug, PartialEq)]
+pub enum PutWorkflowRunPropertiesError {
+    /// <p>A resource to be created or added already exists.</p>
+    AlreadyExists(String),
+    /// <p>Two processes are trying to modify a resource simultaneously.</p>
+    ConcurrentModification(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+    /// <p>A resource numerical limit was exceeded.</p>
+    ResourceNumberLimitExceeded(String),
+}
+
+impl PutWorkflowRunPropertiesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutWorkflowRunPropertiesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AlreadyExistsException" => {
+                    return RusotoError::Service(PutWorkflowRunPropertiesError::AlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(
+                        PutWorkflowRunPropertiesError::ConcurrentModification(err.msg),
+                    )
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(PutWorkflowRunPropertiesError::EntityNotFound(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(PutWorkflowRunPropertiesError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(PutWorkflowRunPropertiesError::InvalidInput(
+                        err.msg,
+                    ))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(PutWorkflowRunPropertiesError::OperationTimeout(
+                        err.msg,
+                    ))
+                }
+                "ResourceNumberLimitExceededException" => {
+                    return RusotoError::Service(
+                        PutWorkflowRunPropertiesError::ResourceNumberLimitExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for PutWorkflowRunPropertiesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutWorkflowRunPropertiesError {
+    fn description(&self) -> &str {
+        match *self {
+            PutWorkflowRunPropertiesError::AlreadyExists(ref cause) => cause,
+            PutWorkflowRunPropertiesError::ConcurrentModification(ref cause) => cause,
+            PutWorkflowRunPropertiesError::EntityNotFound(ref cause) => cause,
+            PutWorkflowRunPropertiesError::InternalService(ref cause) => cause,
+            PutWorkflowRunPropertiesError::InvalidInput(ref cause) => cause,
+            PutWorkflowRunPropertiesError::OperationTimeout(ref cause) => cause,
+            PutWorkflowRunPropertiesError::ResourceNumberLimitExceeded(ref cause) => cause,
         }
     }
 }
@@ -8693,6 +9688,73 @@ impl Error for StartTriggerError {
             StartTriggerError::InvalidInput(ref cause) => cause,
             StartTriggerError::OperationTimeout(ref cause) => cause,
             StartTriggerError::ResourceNumberLimitExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by StartWorkflowRun
+#[derive(Debug, PartialEq)]
+pub enum StartWorkflowRunError {
+    /// <p>Too many jobs are being run concurrently.</p>
+    ConcurrentRunsExceeded(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+    /// <p>A resource numerical limit was exceeded.</p>
+    ResourceNumberLimitExceeded(String),
+}
+
+impl StartWorkflowRunError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartWorkflowRunError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentRunsExceededException" => {
+                    return RusotoError::Service(StartWorkflowRunError::ConcurrentRunsExceeded(
+                        err.msg,
+                    ))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(StartWorkflowRunError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(StartWorkflowRunError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(StartWorkflowRunError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(StartWorkflowRunError::OperationTimeout(err.msg))
+                }
+                "ResourceNumberLimitExceededException" => {
+                    return RusotoError::Service(
+                        StartWorkflowRunError::ResourceNumberLimitExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StartWorkflowRunError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartWorkflowRunError {
+    fn description(&self) -> &str {
+        match *self {
+            StartWorkflowRunError::ConcurrentRunsExceeded(ref cause) => cause,
+            StartWorkflowRunError::EntityNotFound(ref cause) => cause,
+            StartWorkflowRunError::InternalService(ref cause) => cause,
+            StartWorkflowRunError::InvalidInput(ref cause) => cause,
+            StartWorkflowRunError::OperationTimeout(ref cause) => cause,
+            StartWorkflowRunError::ResourceNumberLimitExceeded(ref cause) => cause,
         }
     }
 }
@@ -9606,6 +10668,65 @@ impl Error for UpdateUserDefinedFunctionError {
         }
     }
 }
+/// Errors returned by UpdateWorkflow
+#[derive(Debug, PartialEq)]
+pub enum UpdateWorkflowError {
+    /// <p>Two processes are trying to modify a resource simultaneously.</p>
+    ConcurrentModification(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl UpdateWorkflowError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateWorkflowError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(UpdateWorkflowError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(UpdateWorkflowError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(UpdateWorkflowError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(UpdateWorkflowError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(UpdateWorkflowError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateWorkflowError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateWorkflowError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateWorkflowError::ConcurrentModification(ref cause) => cause,
+            UpdateWorkflowError::EntityNotFound(ref cause) => cause,
+            UpdateWorkflowError::InternalService(ref cause) => cause,
+            UpdateWorkflowError::InvalidInput(ref cause) => cause,
+            UpdateWorkflowError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the AWS Glue API. AWS Glue clients implement this trait.
 pub trait Glue {
     /// <p>Creates one or more partitions in a batch operation.</p>
@@ -9667,6 +10788,12 @@ pub trait Glue {
         &self,
         input: BatchGetTriggersRequest,
     ) -> RusotoFuture<BatchGetTriggersResponse, BatchGetTriggersError>;
+
+    /// <p>Returns a list of resource metadata for a given list of workflow names. After calling the <code>ListWorkflows</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
+    fn batch_get_workflows(
+        &self,
+        input: BatchGetWorkflowsRequest,
+    ) -> RusotoFuture<BatchGetWorkflowsResponse, BatchGetWorkflowsError>;
 
     /// <p>Stops one or more job runs for a specified job definition.</p>
     fn batch_stop_job_run(
@@ -9746,6 +10873,12 @@ pub trait Glue {
         input: CreateUserDefinedFunctionRequest,
     ) -> RusotoFuture<CreateUserDefinedFunctionResponse, CreateUserDefinedFunctionError>;
 
+    /// <p>Creates a new workflow.</p>
+    fn create_workflow(
+        &self,
+        input: CreateWorkflowRequest,
+    ) -> RusotoFuture<CreateWorkflowResponse, CreateWorkflowError>;
+
     /// <p>Removes a classifier from the Data Catalog.</p>
     fn delete_classifier(
         &self,
@@ -9823,6 +10956,12 @@ pub trait Glue {
         &self,
         input: DeleteUserDefinedFunctionRequest,
     ) -> RusotoFuture<DeleteUserDefinedFunctionResponse, DeleteUserDefinedFunctionError>;
+
+    /// <p>Deletes a workflow.</p>
+    fn delete_workflow(
+        &self,
+        input: DeleteWorkflowRequest,
+    ) -> RusotoFuture<DeleteWorkflowResponse, DeleteWorkflowError>;
 
     /// <p>Retrieves the status of a migration operation.</p>
     fn get_catalog_import_status(
@@ -10012,6 +11151,30 @@ pub trait Glue {
         input: GetUserDefinedFunctionsRequest,
     ) -> RusotoFuture<GetUserDefinedFunctionsResponse, GetUserDefinedFunctionsError>;
 
+    /// <p>Retrieves resource metadata for a workflow.</p>
+    fn get_workflow(
+        &self,
+        input: GetWorkflowRequest,
+    ) -> RusotoFuture<GetWorkflowResponse, GetWorkflowError>;
+
+    /// <p>Retrieves the metadata for a given workflow run. </p>
+    fn get_workflow_run(
+        &self,
+        input: GetWorkflowRunRequest,
+    ) -> RusotoFuture<GetWorkflowRunResponse, GetWorkflowRunError>;
+
+    /// <p>Retrieves the workflow run properties which were set during the run.</p>
+    fn get_workflow_run_properties(
+        &self,
+        input: GetWorkflowRunPropertiesRequest,
+    ) -> RusotoFuture<GetWorkflowRunPropertiesResponse, GetWorkflowRunPropertiesError>;
+
+    /// <p>Retrieves metadata for all runs of a given workflow.</p>
+    fn get_workflow_runs(
+        &self,
+        input: GetWorkflowRunsRequest,
+    ) -> RusotoFuture<GetWorkflowRunsResponse, GetWorkflowRunsError>;
+
     /// <p>Imports an existing Athena Data Catalog to AWS Glue</p>
     fn import_catalog_to_glue(
         &self,
@@ -10039,6 +11202,12 @@ pub trait Glue {
         input: ListTriggersRequest,
     ) -> RusotoFuture<ListTriggersResponse, ListTriggersError>;
 
+    /// <p>Lists names of workflows created in the account.</p>
+    fn list_workflows(
+        &self,
+        input: ListWorkflowsRequest,
+    ) -> RusotoFuture<ListWorkflowsResponse, ListWorkflowsError>;
+
     /// <p>Sets the security configuration for a specified catalog. After the configuration has been set, the specified encryption is applied to every catalog write thereafter.</p>
     fn put_data_catalog_encryption_settings(
         &self,
@@ -10050,6 +11219,12 @@ pub trait Glue {
         &self,
         input: PutResourcePolicyRequest,
     ) -> RusotoFuture<PutResourcePolicyResponse, PutResourcePolicyError>;
+
+    /// <p>Puts the specified workflow run properties for the given workflow run. If a property already exists for the specified run, then it overrides the value otherwise adds the property to existing properties.</p>
+    fn put_workflow_run_properties(
+        &self,
+        input: PutWorkflowRunPropertiesRequest,
+    ) -> RusotoFuture<PutWorkflowRunPropertiesResponse, PutWorkflowRunPropertiesError>;
 
     /// <p>Resets a bookmark entry.</p>
     fn reset_job_bookmark(
@@ -10080,6 +11255,12 @@ pub trait Glue {
         &self,
         input: StartTriggerRequest,
     ) -> RusotoFuture<StartTriggerResponse, StartTriggerError>;
+
+    /// <p>Starts a new run of the specified workflow.</p>
+    fn start_workflow_run(
+        &self,
+        input: StartWorkflowRunRequest,
+    ) -> RusotoFuture<StartWorkflowRunResponse, StartWorkflowRunError>;
 
     /// <p>If the specified crawler is running, stops the crawl.</p>
     fn stop_crawler(
@@ -10176,6 +11357,12 @@ pub trait Glue {
         &self,
         input: UpdateUserDefinedFunctionRequest,
     ) -> RusotoFuture<UpdateUserDefinedFunctionResponse, UpdateUserDefinedFunctionError>;
+
+    /// <p>Updates an existing workflow.</p>
+    fn update_workflow(
+        &self,
+        input: UpdateWorkflowRequest,
+    ) -> RusotoFuture<UpdateWorkflowResponse, UpdateWorkflowError>;
 }
 /// A client for the AWS Glue API.
 #[derive(Clone)]
@@ -10492,6 +11679,35 @@ impl Glue for GlueClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(BatchGetTriggersError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Returns a list of resource metadata for a given list of workflow names. After calling the <code>ListWorkflows</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
+    fn batch_get_workflows(
+        &self,
+        input: BatchGetWorkflowsRequest,
+    ) -> RusotoFuture<BatchGetWorkflowsResponse, BatchGetWorkflowsError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.BatchGetWorkflows");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<BatchGetWorkflowsResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(BatchGetWorkflowsError::from_response(response))),
                 )
             }
         })
@@ -10867,6 +12083,35 @@ impl Glue for GlueClient {
         })
     }
 
+    /// <p>Creates a new workflow.</p>
+    fn create_workflow(
+        &self,
+        input: CreateWorkflowRequest,
+    ) -> RusotoFuture<CreateWorkflowResponse, CreateWorkflowError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.CreateWorkflow");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateWorkflowResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateWorkflowError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Removes a classifier from the Data Catalog.</p>
     fn delete_classifier(
         &self,
@@ -11233,6 +12478,35 @@ impl Glue for GlueClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteUserDefinedFunctionError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Deletes a workflow.</p>
+    fn delete_workflow(
+        &self,
+        input: DeleteWorkflowRequest,
+    ) -> RusotoFuture<DeleteWorkflowResponse, DeleteWorkflowError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.DeleteWorkflow");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteWorkflowResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteWorkflowError::from_response(response))),
+                )
             }
         })
     }
@@ -12191,6 +13465,119 @@ impl Glue for GlueClient {
         })
     }
 
+    /// <p>Retrieves resource metadata for a workflow.</p>
+    fn get_workflow(
+        &self,
+        input: GetWorkflowRequest,
+    ) -> RusotoFuture<GetWorkflowResponse, GetWorkflowError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.GetWorkflow");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetWorkflowResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetWorkflowError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves the metadata for a given workflow run. </p>
+    fn get_workflow_run(
+        &self,
+        input: GetWorkflowRunRequest,
+    ) -> RusotoFuture<GetWorkflowRunResponse, GetWorkflowRunError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.GetWorkflowRun");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetWorkflowRunResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetWorkflowRunError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves the workflow run properties which were set during the run.</p>
+    fn get_workflow_run_properties(
+        &self,
+        input: GetWorkflowRunPropertiesRequest,
+    ) -> RusotoFuture<GetWorkflowRunPropertiesResponse, GetWorkflowRunPropertiesError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.GetWorkflowRunProperties");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetWorkflowRunPropertiesResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetWorkflowRunPropertiesError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Retrieves metadata for all runs of a given workflow.</p>
+    fn get_workflow_runs(
+        &self,
+        input: GetWorkflowRunsRequest,
+    ) -> RusotoFuture<GetWorkflowRunsResponse, GetWorkflowRunsError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.GetWorkflowRuns");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetWorkflowRunsResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetWorkflowRunsError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Imports an existing Athena Data Catalog to AWS Glue</p>
     fn import_catalog_to_glue(
         &self,
@@ -12332,6 +13719,35 @@ impl Glue for GlueClient {
         })
     }
 
+    /// <p>Lists names of workflows created in the account.</p>
+    fn list_workflows(
+        &self,
+        input: ListWorkflowsRequest,
+    ) -> RusotoFuture<ListWorkflowsResponse, ListWorkflowsError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.ListWorkflows");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListWorkflowsResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListWorkflowsError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Sets the security configuration for a specified catalog. After the configuration has been set, the specified encryption is applied to every catalog write thereafter.</p>
     fn put_data_catalog_encryption_settings(
         &self,
@@ -12386,6 +13802,32 @@ impl Glue for GlueClient {
                         .from_err()
                         .and_then(|response| Err(PutResourcePolicyError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Puts the specified workflow run properties for the given workflow run. If a property already exists for the specified run, then it overrides the value otherwise adds the property to existing properties.</p>
+    fn put_workflow_run_properties(
+        &self,
+        input: PutWorkflowRunPropertiesRequest,
+    ) -> RusotoFuture<PutWorkflowRunPropertiesResponse, PutWorkflowRunPropertiesError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.PutWorkflowRunProperties");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutWorkflowRunPropertiesResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(PutWorkflowRunPropertiesError::from_response(response))
+                }))
             }
         })
     }
@@ -12529,6 +13971,35 @@ impl Glue for GlueClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(StartTriggerError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Starts a new run of the specified workflow.</p>
+    fn start_workflow_run(
+        &self,
+        input: StartWorkflowRunRequest,
+    ) -> RusotoFuture<StartWorkflowRunResponse, StartWorkflowRunError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.StartWorkflowRun");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartWorkflowRunResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StartWorkflowRunError::from_response(response))),
                 )
             }
         })
@@ -12989,6 +14460,35 @@ impl Glue for GlueClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateUserDefinedFunctionError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Updates an existing workflow.</p>
+    fn update_workflow(
+        &self,
+        input: UpdateWorkflowRequest,
+    ) -> RusotoFuture<UpdateWorkflowResponse, UpdateWorkflowError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.UpdateWorkflow");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateWorkflowResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateWorkflowError::from_response(response))),
+                )
             }
         })
     }

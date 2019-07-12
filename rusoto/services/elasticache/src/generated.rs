@@ -4237,6 +4237,8 @@ pub struct NodeGroup {
     pub node_group_members: Option<Vec<NodeGroupMember>>,
     /// <p>The endpoint of the primary node in this node group (shard).</p>
     pub primary_endpoint: Option<Endpoint>,
+    /// <p>The endpoint of the replica nodes in this node group (shard).</p>
+    pub reader_endpoint: Option<Endpoint>,
     /// <p>The keyspace for this node group (shard).</p>
     pub slots: Option<String>,
     /// <p>The current state of this replication group - <code>creating</code>, <code>available</code>, etc.</p>
@@ -4264,6 +4266,10 @@ impl NodeGroupDeserializer {
                 "PrimaryEndpoint" => {
                     obj.primary_endpoint =
                         Some(EndpointDeserializer::deserialize("PrimaryEndpoint", stack)?);
+                }
+                "ReaderEndpoint" => {
+                    obj.reader_endpoint =
+                        Some(EndpointDeserializer::deserialize("ReaderEndpoint", stack)?);
                 }
                 "Slots" => {
                     obj.slots = Some(StringDeserializer::deserialize("Slots", stack)?);
@@ -10985,7 +10991,7 @@ pub trait ElastiCache {
         AuthorizeCacheSecurityGroupIngressError,
     >;
 
-    /// <p>Apply the service update. For more information on service updates and applying them, see <a href="https://docs.aws.amazon.com/http:/docs.aws.amazon.com/Amazon/red-ug/applying-updates.html">Applying Service Updates</a>.</p>
+    /// <p>Apply the service update. For more information on service updates and applying them, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/applying-updates.html">Applying Service Updates</a>.</p>
     fn batch_apply_update_action(
         &self,
         input: BatchApplyUpdateActionMessage,
@@ -11396,7 +11402,7 @@ impl ElastiCache for ElastiCacheClient {
         })
     }
 
-    /// <p>Apply the service update. For more information on service updates and applying them, see <a href="https://docs.aws.amazon.com/http:/docs.aws.amazon.com/Amazon/red-ug/applying-updates.html">Applying Service Updates</a>.</p>
+    /// <p>Apply the service update. For more information on service updates and applying them, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/applying-updates.html">Applying Service Updates</a>.</p>
     fn batch_apply_update_action(
         &self,
         input: BatchApplyUpdateActionMessage,

@@ -240,7 +240,7 @@ pub struct CreateFleetRequest {
     #[serde(rename = "FleetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_type: Option<String>,
-    /// <p><p>The amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the <code>DisconnectTimeoutInSeconds</code> time interval begins. Users are notified before they are disconnected due to inactivity. If they try to reconnect to the streaming session before the time interval specified in <code>DisconnectTimeoutInSeconds</code> elapses, they are connected to their previous session. Users are considered idle when they stop providing keyboard or mouse input during their streaming session. File uploads and downloads, audio in, audio out, and pixels changing do not qualify as user activity. If users continue to be idle after the time interval in <code>IdleDisconnectTimeoutInSeconds</code> elapses, they are disconnected.</p> <p>To prevent users from being disconnected due to inactivity, specify a value of 0. Otherwise, specify a value between 60 and 3600. The default value is 900.</p> <note> <p>If you enable this feature, we recommend that you specify a value that corresponds exactly to a whole number of minutes (for example, 60, 120, and 180). If you don&#39;t do this, the value is rounded to the nearest minute. For example, if you specify a value of 70, users are disconnected after 1 minute of inactivity. If you specify a value that is at the midpoint between two different minutes, the value is rounded up. For example, if you specify a value of 90, users are disconnected after 2 minutes of inactivity. </p> </note></p>
+    /// <p><p>The amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the <code>DisconnectTimeoutInSeconds</code> time interval begins. Users are notified before they are disconnected due to inactivity. If they try to reconnect to the streaming session before the time interval specified in <code>DisconnectTimeoutInSeconds</code> elapses, they are connected to their previous session. Users are considered idle when they stop providing keyboard or mouse input during their streaming session. File uploads and downloads, audio in, audio out, and pixels changing do not qualify as user activity. If users continue to be idle after the time interval in <code>IdleDisconnectTimeoutInSeconds</code> elapses, they are disconnected.</p> <p>To prevent users from being disconnected due to inactivity, specify a value of 0. Otherwise, specify a value between 60 and 3600. The default value is 0.</p> <note> <p>If you enable this feature, we recommend that you specify a value that corresponds exactly to a whole number of minutes (for example, 60, 120, and 180). If you don&#39;t do this, the value is rounded to the nearest minute. For example, if you specify a value of 70, users are disconnected after 1 minute of inactivity. If you specify a value that is at the midpoint between two different minutes, the value is rounded up. For example, if you specify a value of 90, users are disconnected after 2 minutes of inactivity. </p> </note></p>
     #[serde(rename = "IdleDisconnectTimeoutInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub idle_disconnect_timeout_in_seconds: Option<i64>,
@@ -452,7 +452,7 @@ pub struct CreateUsageReportSubscriptionRequest {}
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateUsageReportSubscriptionResult {
-    /// <p>The Amazon S3 bucket where generated reports are stored. When a usage report subscription is enabled for the first time for an account in an AWS Region, an S3 bucket is created. The bucket is unique to the AWS account and the Region. </p>
+    /// <p>The Amazon S3 bucket where generated reports are stored.</p> <p>If you enabled on-instance session scripts and Amazon S3 logging for your session script configuration, AppStream 2.0 created an S3 bucket to store the script output. The bucket is unique to your account and Region. When you enable usage reporting in this case, AppStream 2.0 uses the same bucket to store your usage reports. If you haven't already enabled on-instance session scripts, when you enable usage reports, AppStream 2.0 creates a new S3 bucket.</p>
     #[serde(rename = "S3BucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_bucket_name: Option<String>,
@@ -985,7 +985,7 @@ pub struct ExpireSessionRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct ExpireSessionResult {}
 
-/// <p>Describes the parameters for a fleet.</p>
+/// <p>Describes a fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Fleet {
@@ -1027,7 +1027,7 @@ pub struct Fleet {
     #[serde(rename = "FleetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_type: Option<String>,
-    /// <p><p>The amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the <code>DisconnectTimeoutInSeconds</code> time interval begins. Users are notified before they are disconnected due to inactivity. If users try to reconnect to the streaming session before the time interval specified in <code>DisconnectTimeoutInSeconds</code> elapses, they are connected to their previous session. Users are considered idle when they stop providing keyboard or mouse input during their streaming session. File uploads and downloads, audio in, audio out, and pixels changing do not qualify as user activity. If users continue to be idle after the time interval in <code>IdleDisconnectTimeoutInSeconds</code> elapses, they are disconnected.</p> <p>To prevent users from being disconnected due to inactivity, specify a value of 0. Otherwise, specify a value between 60 and 3600. The default value is 900.</p> <note> <p>If you enable this feature, we recommend that you specify a value that corresponds exactly to a whole number of minutes (for example, 60, 120, and 180). If you don&#39;t do this, the value is rounded to the nearest minute. For example, if you specify a value of 70, users are disconnected after 1 minute of inactivity. If you specify a value that is at the midpoint between two different minutes, the value is rounded up. For example, if you specify a value of 90, users are disconnected after 2 minutes of inactivity. </p> </note></p>
+    /// <p><p>The amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the <code>DisconnectTimeoutInSeconds</code> time interval begins. Users are notified before they are disconnected due to inactivity. If users try to reconnect to the streaming session before the time interval specified in <code>DisconnectTimeoutInSeconds</code> elapses, they are connected to their previous session. Users are considered idle when they stop providing keyboard or mouse input during their streaming session. File uploads and downloads, audio in, audio out, and pixels changing do not qualify as user activity. If users continue to be idle after the time interval in <code>IdleDisconnectTimeoutInSeconds</code> elapses, they are disconnected.</p> <p>To prevent users from being disconnected due to inactivity, specify a value of 0. Otherwise, specify a value between 60 and 3600. The default value is 0.</p> <note> <p>If you enable this feature, we recommend that you specify a value that corresponds exactly to a whole number of minutes (for example, 60, 120, and 180). If you don&#39;t do this, the value is rounded to the nearest minute. For example, if you specify a value of 70, users are disconnected after 1 minute of inactivity. If you specify a value that is at the midpoint between two different minutes, the value is rounded up. For example, if you specify a value of 90, users are disconnected after 2 minutes of inactivity. </p> </note></p>
     #[serde(rename = "IdleDisconnectTimeoutInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub idle_disconnect_timeout_in_seconds: Option<i64>,
@@ -1104,6 +1104,10 @@ pub struct Image {
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
+    /// <p>The name of the image builder that was used to create the private image. If the image is shared, this value is null.</p>
+    #[serde(rename = "ImageBuilderName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_builder_name: Option<String>,
     /// <p>Indicates whether an image builder can be launched from this image.</p>
     #[serde(rename = "ImageBuilderSupported")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1184,6 +1188,9 @@ pub struct ImageBuilder {
     /// <p>The name of the image builder.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    #[serde(rename = "NetworkAccessConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_access_configuration: Option<NetworkAccessConfiguration>,
     /// <p>The operating system platform of the image builder.</p>
     #[serde(rename = "Platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1321,7 +1328,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>Describes the network details of the fleet instance for the streaming session.</p>
+/// <p>Describes the network details of the fleet or image builder instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct NetworkAccessConfiguration {
@@ -1636,7 +1643,7 @@ pub struct UpdateFleetRequest {
     #[serde(rename = "EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
-    /// <p><p>The amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the <code>DisconnectTimeoutInSeconds</code> time interval begins. Users are notified before they are disconnected due to inactivity. If users try to reconnect to the streaming session before the time interval specified in <code>DisconnectTimeoutInSeconds</code> elapses, they are connected to their previous session. Users are considered idle when they stop providing keyboard or mouse input during their streaming session. File uploads and downloads, audio in, audio out, and pixels changing do not qualify as user activity. If users continue to be idle after the time interval in <code>IdleDisconnectTimeoutInSeconds</code> elapses, they are disconnected. </p> <p>To prevent users from being disconnected due to inactivity, specify a value of 0. Otherwise, specify a value between 60 and 3600. The default value is 900.</p> <note> <p>If you enable this feature, we recommend that you specify a value that corresponds exactly to a whole number of minutes (for example, 60, 120, and 180). If you don&#39;t do this, the value is rounded to the nearest minute. For example, if you specify a value of 70, users are disconnected after 1 minute of inactivity. If you specify a value that is at the midpoint between two different minutes, the value is rounded up. For example, if you specify a value of 90, users are disconnected after 2 minutes of inactivity. </p> </note></p>
+    /// <p><p>The amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the <code>DisconnectTimeoutInSeconds</code> time interval begins. Users are notified before they are disconnected due to inactivity. If users try to reconnect to the streaming session before the time interval specified in <code>DisconnectTimeoutInSeconds</code> elapses, they are connected to their previous session. Users are considered idle when they stop providing keyboard or mouse input during their streaming session. File uploads and downloads, audio in, audio out, and pixels changing do not qualify as user activity. If users continue to be idle after the time interval in <code>IdleDisconnectTimeoutInSeconds</code> elapses, they are disconnected. </p> <p>To prevent users from being disconnected due to inactivity, specify a value of 0. Otherwise, specify a value between 60 and 3600. The default value is 0.</p> <note> <p>If you enable this feature, we recommend that you specify a value that corresponds exactly to a whole number of minutes (for example, 60, 120, and 180). If you don&#39;t do this, the value is rounded to the nearest minute. For example, if you specify a value of 70, users are disconnected after 1 minute of inactivity. If you specify a value that is at the midpoint between two different minutes, the value is rounded up. For example, if you specify a value of 90, users are disconnected after 2 minutes of inactivity. </p> </note></p>
     #[serde(rename = "IdleDisconnectTimeoutInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub idle_disconnect_timeout_in_seconds: Option<i64>,
@@ -1748,7 +1755,7 @@ pub struct UsageReportSubscription {
     #[serde(rename = "LastGeneratedReportDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_generated_report_date: Option<f64>,
-    /// <p>The Amazon S3 bucket where generated reports are stored. When a usage report subscription is enabled for the first time for an account in an AWS Region, an S3 bucket is created. The bucket is unique to the AWS account and the Region.</p>
+    /// <p>The Amazon S3 bucket where generated reports are stored.</p> <p>If you enabled on-instance session scripts and Amazon S3 logging for your session script configuration, AppStream 2.0 created an S3 bucket to store the script output. The bucket is unique to your account and Region. When you enable usage reporting in this case, AppStream 2.0 uses the same bucket to store your usage reports. If you haven't already enabled on-instance session scripts, when you enable usage reports, AppStream 2.0 creates a new S3 bucket.</p>
     #[serde(rename = "S3BucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_bucket_name: Option<String>,
@@ -1756,7 +1763,7 @@ pub struct UsageReportSubscription {
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
-    /// <p>The errors that are returned when usage reports can't be generated.</p>
+    /// <p>The errors that were returned if usage reports couldn't be generated.</p>
     #[serde(rename = "SubscriptionErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription_errors: Option<Vec<LastReportGenerationExecutionError>>,
@@ -1853,7 +1860,7 @@ pub struct VpcConfig {
     #[serde(rename = "SecurityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
-    /// <p>The identifiers of the subnets to which a network interface is attached from the fleet instance or image builder instance. Fleet instances use one or two subnets. Image builder instances use one subnet.</p>
+    /// <p>The identifiers of the subnets to which a network interface is attached from the fleet instance or image builder instance. Fleet instances use one or more subnets. Image builder instances use one subnet.</p>
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
@@ -2468,6 +2475,8 @@ impl Error for CreateStreamingURLError {
 pub enum CreateUsageReportSubscriptionError {
     /// <p>The resource cannot be created because your AWS account is suspended. For assistance, contact AWS Support. </p>
     InvalidAccountStatus(String),
+    /// <p>The specified role is invalid.</p>
+    InvalidRole(String),
 }
 
 impl CreateUsageReportSubscriptionError {
@@ -2480,6 +2489,11 @@ impl CreateUsageReportSubscriptionError {
                     return RusotoError::Service(
                         CreateUsageReportSubscriptionError::InvalidAccountStatus(err.msg),
                     )
+                }
+                "InvalidRoleException" => {
+                    return RusotoError::Service(CreateUsageReportSubscriptionError::InvalidRole(
+                        err.msg,
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -2497,6 +2511,7 @@ impl Error for CreateUsageReportSubscriptionError {
     fn description(&self) -> &str {
         match *self {
             CreateUsageReportSubscriptionError::InvalidAccountStatus(ref cause) => cause,
+            CreateUsageReportSubscriptionError::InvalidRole(ref cause) => cause,
         }
     }
 }

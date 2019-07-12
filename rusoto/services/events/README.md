@@ -1,6 +1,6 @@
 
 # Rusoto CloudWatchEvents
-Rust SDK for Amazon CloudWatch Events
+Rust SDK for Amazon EventBridge
 
 You may be looking for:
 
