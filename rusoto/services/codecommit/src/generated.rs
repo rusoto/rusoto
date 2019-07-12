@@ -27,7 +27,7 @@ use serde_json;
 /// <p>Information about errors in a BatchDescribeMergeConflicts operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct BatchDescribeMergeConflictsError {
+pub struct CodeCommitBatchDescribeMergeConflictsError {
     /// <p>The name of the exception.</p>
     #[serde(rename = "exceptionName")]
     pub exception_name: String,
@@ -95,7 +95,7 @@ pub struct BatchDescribeMergeConflictsOutput {
     /// <p>A list of any errors returned while describing the merge conflicts for each file.</p>
     #[serde(rename = "errors")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub errors: Option<Vec<BatchDescribeMergeConflictsError>>,
+    pub errors: Option<Vec<CodeCommitBatchDescribeMergeConflictsError>>,
     /// <p>An enumeration token that can be used in a request to return the next batch of the results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
