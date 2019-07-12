@@ -280,7 +280,7 @@ fn is_streaming_shape(service: &Service<'_>, name: &str) -> bool {
         .any(|(_, shape)| streaming_members(shape).any(|member| member.shape == name))
 }
 
-// do any type name mutation needed to avoid collisions with Rust types
+// do any type name mutation for shapes needed to avoid collisions with Rust types and Error enum types
 fn mutate_type_name(service: &Service<'_>, type_name: &str) -> String {
     let capitalized = util::capitalize_first(type_name.to_owned());
 
@@ -305,6 +305,9 @@ fn mutate_type_name(service: &Service<'_>, type_name: &str) -> String {
 
         // EC2 has an CreateFleetError struct, avoid collision with our error enum
         "CreateFleetError" => "EC2CreateFleetError".to_owned(),
+
+        // codecommit has a BatchDescribeMergeConflictsError, avoid colliision with our error enum
+        "BatchDescribeMergeConflictsError" => "CodeCommitBatchDescribeMergeConflictsError".to_owned(),
 
         // otherwise make sure it's rust-idiomatic and capitalized
         _ => without_underscores,
