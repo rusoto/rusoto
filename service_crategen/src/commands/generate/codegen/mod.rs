@@ -306,7 +306,7 @@ fn mutate_type_name(service: &Service<'_>, type_name: &str) -> String {
         // EC2 has an CreateFleetError struct, avoid collision with our error enum
         "CreateFleetError" => "EC2CreateFleetError".to_owned(),
 
-        // codecommit has a BatchDescribeMergeConflictsError, avoid colliision with our error enum
+        // codecommit has a BatchDescribeMergeConflictsError, avoid collision with our error enum
         "BatchDescribeMergeConflictsError" => "CodeCommitBatchDescribeMergeConflictsError".to_owned(),
 
         // otherwise make sure it's rust-idiomatic and capitalized
