@@ -4,6 +4,8 @@
 
 (Please put changes here)
 
+- Upgrade to botocore from ``1.12.163` to `1.12.187`
+
 ## [0.40.0] - 2019-06-28
 
 - Only emit types used in service during crate generation
