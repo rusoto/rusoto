@@ -565,7 +565,7 @@ fn generate_struct_fields<P: GenerateProtocol>(
                 lines.push(format!("pub {}: Option<{}>,", name, rs_type))
             // In pratice, Lex can return null values for slots that are not filled. The documentation
             // does not mention that the slot values themselves can be null.
-            } if service.name() == "Amazon Lex Runtime Service"  && shape_name == "PostTextResponse" && name == "slots"{
+            } else if service.name() == "Amazon Lex Runtime Service"  && shape_name == "PostTextResponse" && name == "slots"{
                 lines.push(format!("pub {}: Option<::std::collections::HashMap<String, Option<String>>>,", name))
             } else if shape.required(member_name) {
                 lines.push(format!("pub {}: {},", name, rs_type))
