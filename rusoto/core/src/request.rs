@@ -25,6 +25,7 @@ use hyper::client::HttpConnector;
 use hyper::client::ResponseFuture as HyperResponseFuture;
 use hyper::Error as HyperError;
 use hyper::{Body, Client as HyperClient, Request as HyperRequest, Response as HyperResponse};
+use hyper::client::Builder as HyperBuilder;
 use tokio_timer::Timeout;
 
 use log::Level::Debug;
@@ -368,6 +369,12 @@ where
             .map(|sz| builder.http1_read_buf_exact_size(sz));
         let inner = builder.build(connector);
 
+        HttpClient { inner }
+    }
+
+    /// Alows for a custom builder and connector to be used with the HttpClient
+    pub fn from_builder(builder: HyperBuilder, connector: C) -> Self {
+        let inner = builder.build(connector);
         HttpClient { inner }
     }
 }
