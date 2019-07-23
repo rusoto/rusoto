@@ -8,11 +8,11 @@ use super::{FileWriter, IoResult};
 use crate::util;
 use crate::Service;
 
-const BOTOCORE_ERROR_RESPONSE_TESTS_DIR: &'static str = concat!(
+const BOTOCORE_ERROR_RESPONSE_TESTS_DIR: &str = concat!(
     env!("CARGO_MANIFEST_DIR"),
     "/botocore/tests/unit/response_parsing/xml/errors/"
 );
-const BOTOCORE_VALID_RESPONSE_TESTS_DIR: &'static str = concat!(
+const BOTOCORE_VALID_RESPONSE_TESTS_DIR: &str = concat!(
     env!("CARGO_MANIFEST_DIR"),
     "/botocore/tests/unit/response_parsing/xml/responses/"
 );
