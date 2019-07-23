@@ -99,9 +99,7 @@ fn generate_response_parse_test(
 ) -> Option<String> {
     let maybe_operation = case_insensitive_btreemap_get(service.operations(), &response.action);
 
-    if maybe_operation.is_none() {
-        return None;
-    }
+    maybe_operation?;
 
     let operation = maybe_operation.unwrap();
     let request_params;
