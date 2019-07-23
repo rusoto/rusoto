@@ -7,9 +7,7 @@ use lazy_static::lazy_static;
 
 // Add request headers for any shape members marked as headers
 pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<String> {
-    if operation.input.is_none() {
-        return None;
-    }
+    operation.input.as_ref()?;
 
     let shape = service
         .get_shape(&operation.input.as_ref().unwrap().shape)
@@ -20,9 +18,7 @@ pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<
         .unwrap()
         .iter()
         .filter_map(|(member_name, member)| {
-            if member.location.is_none() {
-                return None;
-            }
+            member.location.as_ref()?;
             match &member.location.as_ref().unwrap()[..] {
                 "header" => {
                     if shape.required(member_name) {
@@ -74,9 +70,7 @@ pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<
 }
 
 pub fn generate_params_loading_string(service: &Service<'_>, operation: &Operation) -> Option<String> {
-    if operation.input.is_none() {
-        return None;
-    }
+    operation.input.as_ref()?;
 
     let input_type = operation.input_shape();
     let input_shape = service.get_shape(input_type).unwrap();
