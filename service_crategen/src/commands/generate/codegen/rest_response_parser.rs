@@ -12,9 +12,7 @@ pub fn generate_response_headers_parser(
     operation: &Operation,
 ) -> Option<String> {
     // nothing to do if there's no output type
-    if operation.output.is_none() {
-        return None;
-    }
+    operation.output.as_ref()?;
 
     let shape = service
         .get_shape(&operation.output.as_ref().unwrap().shape)

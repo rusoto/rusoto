@@ -213,8 +213,8 @@ fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service<'_>) 
                 .as_ref()
                 .unwrap()
                 .iter()
-                .filter_map(|(member_name, member)| {
-                    Some(format!(
+                .map(|(member_name, member)| {
+                    format!(
                         "obj.{field_name} = {parse_expression};",
                         field_name = generate_field_name(member_name),
                         parse_expression = generate_struct_field_parse_expression(
@@ -225,7 +225,7 @@ fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service<'_>) 
                             &member_name.to_string(),
                             false
                         )
-                    ))
+                    )
                 })
                 .collect::<Vec<String>>()
                 .join("\n");
