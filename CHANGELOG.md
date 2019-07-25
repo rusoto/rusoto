@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Add `HttpClient::from_builder`
+
 (Please put changes here)
 
 - Deserialize PostTextResponse correctly by allowing null values in the slots field

@@ -1,5 +1,4 @@
 #![cfg_attr(feature = "nightly-testing", feature(plugin))]
-#![cfg_attr(feature = "nightly-testing", plugin(clippy))]
 
 mod botocore;
 mod cargo;

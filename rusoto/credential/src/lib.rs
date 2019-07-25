@@ -2,7 +2,6 @@
     html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
 )]
 #![cfg_attr(feature = "nightly-testing", feature(plugin))]
-#![cfg_attr(feature = "nightly-testing", plugin(clippy))]
 #![cfg_attr(not(feature = "unstable"), deny(warnings))]
 #![deny(missing_docs)]
 

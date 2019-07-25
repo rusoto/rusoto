@@ -8,11 +8,11 @@ use super::{FileWriter, IoResult};
 use crate::util;
 use crate::Service;
 
-const BOTOCORE_ERROR_RESPONSE_TESTS_DIR: &'static str = concat!(
+const BOTOCORE_ERROR_RESPONSE_TESTS_DIR: &str = concat!(
     env!("CARGO_MANIFEST_DIR"),
     "/botocore/tests/unit/response_parsing/xml/errors/"
 );
-const BOTOCORE_VALID_RESPONSE_TESTS_DIR: &'static str = concat!(
+const BOTOCORE_VALID_RESPONSE_TESTS_DIR: &str = concat!(
     env!("CARGO_MANIFEST_DIR"),
     "/botocore/tests/unit/response_parsing/xml/responses/"
 );
@@ -99,9 +99,7 @@ fn generate_response_parse_test(
 ) -> Option<String> {
     let maybe_operation = case_insensitive_btreemap_get(service.operations(), &response.action);
 
-    if maybe_operation.is_none() {
-        return None;
-    }
+    maybe_operation?;
 
     let operation = maybe_operation.unwrap();
     let request_params;
