@@ -327,7 +327,7 @@ fn find_shapes_to_generate(service: &Service<'_>) -> BTreeSet<String> {
         shapes_to_generate.insert(shape_name.to_owned())
     };
 
-    for (_, operation) in service.operations() {
+    for operation in service.operations().values() {
         if let Some(ref input) = operation.input {
             service.visit_shapes(&input.shape, &mut visitor);
         }
