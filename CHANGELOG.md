@@ -6,6 +6,8 @@
 
 (Please put changes here)
 
+- Deserialize PostTextResponse correctly by allowing null values in the slots field
+
 ## [0.40.0] - 2019-06-28
 
 - Only emit types used in service during crate generation
