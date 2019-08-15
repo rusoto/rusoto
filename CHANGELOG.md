@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Add `HttpClient::from_builder`
+- Upgrade hyper-rustls library
 
 (Please put changes here)
 
