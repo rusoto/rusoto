@@ -418,7 +418,6 @@ impl SignedRequest {
         }
 
         // build the canonical request
-        let signed_headers = signed_headers(&self.headers);
         self.canonical_uri = canonical_uri(&self.path, &self.region);
         // Normalize URI paths according to RFC 3986. Remove redundant and relative path components. Each path segment must be URI-encoded twice (except for Amazon S3 which only gets URI-encoded once).
         // see https://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html
@@ -427,54 +426,36 @@ impl SignedRequest {
         } else {
             self.canonical_uri.clone()
         };
-        let canonical_headers = canonical_headers(&self.headers);
-
-        let canonical_request: String;
 
         let (digest, len) = match self.payload {
             None => {
-                canonical_request = format!(
-                    "{}\n{}\n{}\n{}\n{}\n{}",
-                    &self.method,
-                    canonical_uri,
-                    self.canonical_query_string,
-                    canonical_headers,
-                    signed_headers,
-                    EMPTY_SHA256_HASH
-                );
-                (Some(Cow::Borrowed(EMPTY_SHA256_HASH)), Some(0))
+                (Cow::Borrowed(EMPTY_SHA256_HASH), Some(0))
             }
             Some(SignedRequestPayload::Buffer(ref payload)) => {
                 let (digest, len) = digest_payload(&payload);
-                canonical_request = format!(
-                    "{}\n{}\n{}\n{}\n{}\n{}",
-                    &self.method,
-                    canonical_uri,
-                    self.canonical_query_string,
-                    canonical_headers,
-                    signed_headers,
-                    &digest
-                );
-                (Some(Cow::Owned(digest)), Some(len))
+                (Cow::Owned(digest), Some(len))
             }
             Some(SignedRequestPayload::Stream(ref stream)) => {
-                canonical_request = format!(
-                    "{}\n{}\n{}\n{}\n{}\n{}",
-                    &self.method,
-                    canonical_uri,
-                    self.canonical_query_string,
-                    canonical_headers,
-                    signed_headers,
-                    UNSIGNED_PAYLOAD
-                );
-                (Some(Cow::Borrowed(UNSIGNED_PAYLOAD)), stream.size_hint())
+                (Cow::Borrowed(UNSIGNED_PAYLOAD), stream.size_hint())
             }
         };
 
-        if let Some(digest) = digest {
-            self.remove_header("x-amz-content-sha256");
-            self.add_header("x-amz-content-sha256", &digest);
-        }
+        self.remove_header("x-amz-content-sha256");
+        self.add_header("x-amz-content-sha256", &digest);
+
+        let signed_headers = signed_headers(&self.headers);
+
+        let canonical_headers = canonical_headers(&self.headers);
+
+        let canonical_request = format!(
+            "{}\n{}\n{}\n{}\n{}\n{}",
+            &self.method,
+            canonical_uri,
+            self.canonical_query_string,
+            canonical_headers,
+            signed_headers,
+            digest
+        );
 
         if let Some(len) = len {
             self.remove_header("content-length");
