@@ -466,6 +466,7 @@ mod tests {
             .expect("No bar profile in multiple_profile_credentials");
         assert_eq!(bar_profile.get(REGION), Some(&"us-east-4".to_string()));
         assert_eq!(bar_profile.get("output"), Some(&"json".to_string()));
+        assert_eq!(bar_profile.get("#"), None);
     }
 
     #[test]

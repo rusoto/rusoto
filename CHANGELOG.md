@@ -7,6 +7,7 @@
 (Please put changes here)
 
 - Deserialize PostTextResponse correctly by allowing null values in the slots field
+- Fix Profile Config Loading with comments
 
 ## [0.40.0] - 2019-06-28
 
