@@ -279,7 +279,7 @@ fn parse_config_file(file_path: &Path) -> Option<HashMap<String, HashMap<String,
             line.ok()
                 .map(|l| l.trim_matches(' ').to_owned())
                 .into_iter()
-                .find(|l| !l.starts_with('#') || !l.is_empty())
+                .find(|l| !l.starts_with('#') && !l.is_empty())
         })
         .fold(Default::default(), |(mut result, profile), line| {
             if profile_regex.is_match(&line) {
@@ -466,6 +466,7 @@ mod tests {
             .expect("No bar profile in multiple_profile_credentials");
         assert_eq!(bar_profile.get(REGION), Some(&"us-east-4".to_string()));
         assert_eq!(bar_profile.get("output"), Some(&"json".to_string()));
+        assert_eq!(bar_profile.get("# comments"), None);
     }
 
     #[test]
