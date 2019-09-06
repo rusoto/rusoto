@@ -2,16 +2,19 @@ use std::error::Error;
 use std::fmt;
 use std::io;
 
-use crate::credential::CredentialsError;
+use crate::CredentialsError;
 
 use super::proto::xml::util::XmlParseError;
 use super::request::{BufferedHttpResponse, HttpDispatchError};
+use crate::client::SignAndDispatchError;
 
 /// Generic error type returned by all rusoto requests.
 #[derive(Debug, PartialEq)]
 pub enum RusotoError<E> {
     /// A service-specific error occurred.
     Service(E),
+    /// An error occurred during a signed disptach
+    SignAndDispatch(SignAndDispatchError),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -22,6 +25,8 @@ pub enum RusotoError<E> {
     ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(BufferedHttpResponse),
+    /// An error occurred when attempting to run a future as blocking
+    Blocking,
 }
 
 /// Result carrying a generic `RusotoError`.

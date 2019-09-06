@@ -2,35 +2,34 @@
 //!
 //! Wraps the `hyper` library to send PUT, POST, DELETE and GET requests.
 
-//extern crate lazy_static;
-
 use std::env;
 use std::error::Error;
 use std::fmt;
+use std::future::Future;
 use std::io;
 use std::io::Error as IoError;
-use std::mem;
+use std::pin::Pin;
 use std::rc::Rc;
 use std::sync::Arc;
 use std::time::Duration;
 
 use crate::tls::HttpsConnector;
-use bytes::Bytes;
-use futures::{Async, Future, Poll, Stream};
+use bytes::{Bytes, BytesMut};
+use futures::{FutureExt, StreamExt};
 use http::header::{HeaderName, HeaderValue};
 use http::{HeaderMap, Method, StatusCode};
-use hyper::body::Payload;
 use hyper::client::connect::Connect;
 use hyper::client::HttpConnector;
-use hyper::client::ResponseFuture as HyperResponseFuture;
 use hyper::Error as HyperError;
 use hyper::{Body, Client as HyperClient, Request as HyperRequest, Response as HyperResponse};
 use hyper::client::Builder as HyperBuilder;
-use tokio_timer::Timeout;
+use lazy_static::lazy_static;
+use tokio::future::FutureExt as _;
 
+use log::*;
 use log::Level::Debug;
 
-use crate::signature::{SignedRequest, SignedRequestPayload};
+use crate::signature::SignedRequest;
 use crate::stream::ByteStream;
 
 // Pulls in the statically generated rustc version.
@@ -96,42 +95,25 @@ impl fmt::Debug for BufferedHttpResponse {
     }
 }
 
-/// Future returned from `HttpResponse::buffer`.
-pub struct BufferedHttpResponseFuture {
-    status: StatusCode,
-    headers: HeaderMap<String>,
-    future: ::futures::stream::Concat2<ByteStream>,
-}
-
-impl Future for BufferedHttpResponseFuture {
-    type Item = BufferedHttpResponse;
-    type Error = HttpDispatchError;
-
-    fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
-        self.future
-            .poll()
-            .map_err(std::convert::Into::into)
-            .map(|r#async| {
-                r#async.map(|body| BufferedHttpResponse {
-                    status: self.status,
-                    headers: mem::replace(&mut self.headers, Default::default()),
-                    body,
-                })
-            })
-    }
-}
-
 impl HttpResponse {
     /// Buffer the full response body in memory, resulting in a `BufferedHttpResponse`.
-    pub fn buffer(self) -> BufferedHttpResponseFuture {
-        BufferedHttpResponseFuture {
-            status: self.status,
-            headers: self.headers,
-            future: self.body.concat2(),
+    pub async fn buffer(self) -> Result<BufferedHttpResponse, HttpDispatchError> {
+        let mut this = self;
+        let mut bytes = BytesMut::new();
+        for try_chunk in this.body.next().await {
+            let chunk = try_chunk.map_err(|e| {
+                HttpDispatchError { message: format!("Error obtaining body: {}", e) }
+            })?;
+            bytes.extend(chunk);
         }
+        Ok(BufferedHttpResponse {
+            status: this.status,
+            headers: this.headers,
+            body: bytes.freeze(),
+        })
     }
 
-    fn from_hyper(hyper_response: HyperResponse<Body>) -> HttpResponse {
+    async fn from_hyper(hyper_response: HyperResponse<Body>) -> HttpResponse {
         let status = hyper_response.status();
         let headers = hyper_response
             .headers()
@@ -141,10 +123,14 @@ impl HttpResponse {
                 (h.clone(), value_string)
             })
             .collect();
-        let body = hyper_response
-            .into_body()
-            .map(hyper::Chunk::into_bytes)
-            .map_err(|err| io::Error::new(io::ErrorKind::Other, err));
+        let body = hyper_response.into_body()
+            .map(|try_chunk| {
+                try_chunk
+                    .map(|c| c.into_bytes())
+                    .map_err(|e| {
+                    IoError::new(io::ErrorKind::Other, format!("Error obtaining chunk: {}", e))
+                })
+            });
 
         HttpResponse {
             status,
@@ -195,127 +181,36 @@ impl From<IoError> for HttpDispatchError {
     }
 }
 
+pub(crate) type DispatchSignedRequestFuture = Pin<Box<dyn Future<Output=Result<HttpResponse, HttpDispatchError>> + Send>>;
+
 /// Trait for implementing HTTP Request/Response
 pub trait DispatchSignedRequest {
-    /// The future response value.
-    type Future: Future<Item = HttpResponse, Error = HttpDispatchError> + 'static;
     /// Dispatch Request, and then return a Response
-    fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> Self::Future;
+    fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> DispatchSignedRequestFuture;
 }
 
 impl<D: DispatchSignedRequest> DispatchSignedRequest for Rc<D> {
-    type Future = D::Future;
-    fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> Self::Future {
+    fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> DispatchSignedRequestFuture {
         D::dispatch(&*self, request, timeout)
     }
 }
 
 impl<D: DispatchSignedRequest> DispatchSignedRequest for Arc<D> {
-    type Future = D::Future;
-    fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> Self::Future {
+    fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> DispatchSignedRequestFuture {
         D::dispatch(&*self, request, timeout)
-    }
-}
-
-/// A future that will resolve to an `HttpResponse`.
-pub struct HttpClientFuture(ClientFutureInner);
-
-enum ClientFutureInner {
-    Hyper(HyperResponseFuture),
-    HyperWithTimeout(Timeout<HyperResponseFuture>),
-    Error(String),
-}
-
-impl Future for HttpClientFuture {
-    type Item = HttpResponse;
-    type Error = HttpDispatchError;
-
-    fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
-        match self.0 {
-            ClientFutureInner::Error(ref message) => Err(HttpDispatchError {
-                message: message.clone(),
-            }),
-            ClientFutureInner::Hyper(ref mut hyper_future) => {
-                Ok(hyper_future.poll()?.map(HttpResponse::from_hyper))
-            }
-            ClientFutureInner::HyperWithTimeout(ref mut deadline_future) => {
-                match deadline_future.poll() {
-                    Err(deadline_err) => {
-                        if deadline_err.is_elapsed() {
-                            Err(HttpDispatchError {
-                                message: "Request timed out".into(),
-                            })
-                        } else if deadline_err.is_inner() {
-                            Err(deadline_err.into_inner().unwrap().into())
-                        } else {
-                            Err(HttpDispatchError {
-                                message: format!("deadline error: {}", deadline_err),
-                            })
-                        }
-                    }
-                    Ok(Async::NotReady) => Ok(Async::NotReady),
-                    Ok(Async::Ready(hyper_res)) => {
-                        Ok(Async::Ready(HttpResponse::from_hyper(hyper_res)))
-                    }
-                }
-            }
-        }
-    }
-}
-
-struct HttpClientPayload {
-    inner: Option<SignedRequestPayload>,
-}
-
-impl Payload for HttpClientPayload {
-    type Data = io::Cursor<Bytes>;
-    type Error = io::Error;
-
-    fn poll_data(&mut self) -> Poll<Option<Self::Data>, Self::Error> {
-        match self.inner {
-            None => Ok(Async::Ready(None)),
-            Some(SignedRequestPayload::Buffer(ref mut buffer)) => {
-                if buffer.is_empty() {
-                    Ok(Async::Ready(None))
-                } else {
-                    Ok(Async::Ready(Some(io::Cursor::new(buffer.split_off(0)))))
-                }
-            }
-            Some(SignedRequestPayload::Stream(ref mut stream)) => match stream.poll()? {
-                Async::NotReady => Ok(Async::NotReady),
-                Async::Ready(None) => Ok(Async::Ready(None)),
-                Async::Ready(Some(buffer)) => Ok(Async::Ready(Some(io::Cursor::new(buffer)))),
-            },
-        }
-    }
-
-    fn is_end_stream(&self) -> bool {
-        match self.inner {
-            None => true,
-            Some(SignedRequestPayload::Buffer(ref buffer)) => buffer.is_empty(),
-            Some(SignedRequestPayload::Stream(_)) => false,
-        }
-    }
-
-    fn content_length(&self) -> Option<u64> {
-        match self.inner {
-            None => Some(0),
-            Some(SignedRequestPayload::Buffer(ref buffer)) => Some(buffer.len() as u64),
-            Some(SignedRequestPayload::Stream(ref stream)) => stream.size_hint().map(|s| s as u64),
-        }
     }
 }
 
 /// Http client for use with AWS services.
 pub struct HttpClient<C = HttpsConnector<HttpConnector>> {
-    inner: HyperClient<C, HttpClientPayload>,
+    inner: HyperClient<C, Body>,
 }
 
 impl HttpClient {
     /// Create a tls-enabled http client.
     pub fn new() -> Result<Self, TlsError> {
         #[cfg(feature = "native-tls")]
-        let connector = match HttpsConnector::new(4) {
+        let connector = match HttpsConnector::new() {
             Ok(connector) => connector,
             Err(tls_error) => {
                 return Err(TlsError {
@@ -325,7 +220,7 @@ impl HttpClient {
         };
 
         #[cfg(feature = "rustls")]
-        let connector = HttpsConnector::new(4);
+        let connector = HttpsConnector::new();
 
         Ok(Self::from_connector(connector))
     }
@@ -333,7 +228,7 @@ impl HttpClient {
     /// Create a tls-enabled http client.
     pub fn new_with_config(config: HttpConfig) -> Result<Self, TlsError> {
         #[cfg(feature = "native-tls")]
-        let connector = match HttpsConnector::new(4) {
+        let connector = match HttpsConnector::new() {
             Ok(connector) => connector,
             Err(tls_error) => {
                 return Err(TlsError {
@@ -343,7 +238,7 @@ impl HttpClient {
         };
 
         #[cfg(feature = "rustls")]
-        let connector = HttpsConnector::new(4);
+        let connector = HttpsConnector::new();
 
         Ok(Self::from_connector_with_config(connector, config))
     }
@@ -352,7 +247,7 @@ impl HttpClient {
 impl<C> HttpClient<C>
 where
     C: Connect,
-    C::Future: 'static,
+    C::Future: 'static
 {
     /// Allows for a custom connector to be used with the HttpClient
     pub fn from_connector(connector: C) -> Self {
@@ -406,118 +301,131 @@ impl Default for HttpConfig {
     }
 }
 
+async fn http_client_dispatch<C>(
+    client: HyperClient<C, Body>,
+    request: SignedRequest,
+    timeout: Option<Duration>
+) -> Result<HttpResponse, HttpDispatchError>
+    where
+        C: Connect + 'static
+{
+    let hyper_method = match request.method().as_ref() {
+        "POST" => Method::POST,
+        "PUT" => Method::PUT,
+        "DELETE" => Method::DELETE,
+        "GET" => Method::GET,
+        "HEAD" => Method::HEAD,
+        v => {
+            return Err(HttpDispatchError {
+                message: format!(
+                    "Unsupported HTTP verb {}",
+                    v
+                )
+            });
+        }
+    };
+
+    // translate the headers map to a format Hyper likes
+    let mut hyper_headers = HeaderMap::new();
+    for h in request.headers().iter() {
+        let header_name = match h.0.parse::<HeaderName>() {
+            Ok(name) => name,
+            Err(err) => {
+                return Err(HttpDispatchError {
+                    message: format!(
+                        "error parsing header name: {}",
+                        err
+                    )
+                });
+            }
+        };
+        for v in h.1.iter() {
+            let header_value = match HeaderValue::from_bytes(v) {
+                Ok(value) => value,
+                Err(err) => {
+                    return Err(HttpDispatchError {
+                        message: format!(
+                            "error parsing header value: {}",
+                            err
+                        )
+                    });
+                }
+            };
+            hyper_headers.append(&header_name, header_value);
+        }
+    }
+
+    // Add a default user-agent header if one is not already present.
+    if !hyper_headers.contains_key("user-agent") {
+        hyper_headers.insert("user-agent", DEFAULT_USER_AGENT.parse().unwrap());
+    }
+
+    let mut final_uri = format!(
+        "{}://{}{}",
+        request.scheme(),
+        request.hostname(),
+        request.canonical_path()
+    );
+    if !request.canonical_query_string().is_empty() {
+        final_uri = final_uri + &format!("?{}", request.canonical_query_string());
+    }
+
+    if log_enabled!(Debug) {
+        debug!(
+            "Full request: \n method: {}\n final_uri: {}\nHeaders:\n",
+            hyper_method, final_uri
+        );
+        for (h, v) in hyper_headers.iter() {
+            debug!("{}:{:?}", h.as_str(), v);
+        }
+    }
+
+    let mut http_request_builder = HyperRequest::builder();
+    http_request_builder.method(hyper_method);
+    http_request_builder.uri(final_uri);
+
+    let try_http_request = if let Some(p) = request.payload {
+        http_request_builder.body(p.into_inner())
+    } else {
+        http_request_builder.body(Body::empty())
+    };
+
+    let mut http_request = try_http_request.map_err(|err| {
+        HttpDispatchError {
+            message: format!(
+                "error building request: {}",
+                err
+            )
+        }
+    })?;
+
+    *http_request.headers_mut() = hyper_headers;
+
+    let f = client.request(http_request);
+
+    let try_resp = match timeout {
+        None => f.await,
+        Some(duration) => {
+            match f.timeout(duration).await {
+                Err(_e) => return Err(HttpDispatchError { message: "Timeout while dispatching request".to_owned() }),
+                Ok(try_req) => try_req,
+            }
+        }
+    };
+    let resp = try_resp.map_err(|e| {
+        HttpDispatchError {
+            message: format!("Error during dispatch: {}", e),
+        }
+    })?;
+    Ok(HttpResponse::from_hyper(resp).await)
+}
+
 impl<C> DispatchSignedRequest for HttpClient<C>
 where
     C: Connect + 'static,
-    C::Future: 'static,
 {
-    type Future = HttpClientFuture;
-
-    fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> Self::Future {
-        let hyper_method = match request.method().as_ref() {
-            "POST" => Method::POST,
-            "PUT" => Method::PUT,
-            "DELETE" => Method::DELETE,
-            "GET" => Method::GET,
-            "HEAD" => Method::HEAD,
-            v => {
-                return HttpClientFuture(ClientFutureInner::Error(format!(
-                    "Unsupported HTTP verb {}",
-                    v
-                )))
-            }
-        };
-
-        // translate the headers map to a format Hyper likes
-        let mut hyper_headers = HeaderMap::new();
-        for h in request.headers().iter() {
-            let header_name = match h.0.parse::<HeaderName>() {
-                Ok(name) => name,
-                Err(err) => {
-                    return HttpClientFuture(ClientFutureInner::Error(format!(
-                        "error parsing header name: {}",
-                        err
-                    )));
-                }
-            };
-            for v in h.1.iter() {
-                let header_value = match HeaderValue::from_bytes(v) {
-                    Ok(value) => value,
-                    Err(err) => {
-                        return HttpClientFuture(ClientFutureInner::Error(format!(
-                            "error parsing header value: {}",
-                            err
-                        )));
-                    }
-                };
-                hyper_headers.append(&header_name, header_value);
-            }
-        }
-
-        // Add a default user-agent header if one is not already present.
-        if !hyper_headers.contains_key("user-agent") {
-            hyper_headers.insert("user-agent", DEFAULT_USER_AGENT.parse().unwrap());
-        }
-
-        let mut final_uri = format!(
-            "{}://{}{}",
-            request.scheme(),
-            request.hostname(),
-            request.canonical_path()
-        );
-        if !request.canonical_query_string().is_empty() {
-            final_uri = final_uri + &format!("?{}", request.canonical_query_string());
-        }
-
-        if log_enabled!(Debug) {
-            let payload = match request.payload {
-                Some(SignedRequestPayload::Buffer(ref payload_bytes)) => {
-                    String::from_utf8(payload_bytes.as_ref().to_owned())
-                        .unwrap_or_else(|_| String::from("<non-UTF-8 data>"))
-                }
-                Some(SignedRequestPayload::Stream(ref stream)) => {
-                    format!("<stream size_hint={:?}>", stream.size_hint())
-                }
-                None => "".to_owned(),
-            };
-
-            debug!(
-                "Full request: \n method: {}\n final_uri: {}\n payload: {}\nHeaders:\n",
-                hyper_method, final_uri, payload
-            );
-            for (h, v) in hyper_headers.iter() {
-                debug!("{}:{:?}", h.as_str(), v);
-            }
-        }
-
-        let mut http_request_builder = HyperRequest::builder();
-        http_request_builder.method(hyper_method);
-        http_request_builder.uri(final_uri);
-
-        let body = HttpClientPayload {
-            inner: request.payload,
-        };
-        let mut http_request = match http_request_builder.body(body) {
-            Ok(request) => request,
-            Err(err) => {
-                return HttpClientFuture(ClientFutureInner::Error(format!(
-                    "error building request: {}",
-                    err
-                )));
-            }
-        };
-
-        *http_request.headers_mut() = hyper_headers;
-
-        let inner = match timeout {
-            None => ClientFutureInner::Hyper(self.inner.request(http_request)),
-            Some(duration) => {
-                let future = Timeout::new(self.inner.request(http_request), duration);
-                ClientFutureInner::HyperWithTimeout(future)
-            }
-        };
-
-        HttpClientFuture(inner)
+    fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> DispatchSignedRequestFuture {
+        http_client_dispatch::<C>(self.inner.clone(), request, timeout).boxed()
     }
 }
 
@@ -550,13 +458,6 @@ mod tests {
         fn is_send_and_sync<T: Send + Sync>() {}
 
         is_send_and_sync::<HttpClient>();
-    }
-
-    #[test]
-    fn http_client_future_is_send() {
-        fn is_send<T: Send>() {}
-
-        is_send::<HttpClientFuture>();
     }
 
     #[test]

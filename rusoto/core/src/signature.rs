@@ -9,7 +9,6 @@
 use std::borrow::Cow;
 use std::collections::btree_map::Entry;
 use std::collections::BTreeMap;
-use std::fmt;
 use std::str;
 use std::time::Duration;
 
@@ -17,16 +16,18 @@ use base64;
 use bytes::Bytes;
 use hex;
 use hmac::{Hmac, Mac};
-use md5;
+use log::*;
+//use md5;
 use sha2::{Digest, Sha256};
 use time::now_utc;
 use time::Tm;
 use url::percent_encoding::{percent_decode, utf8_percent_encode, EncodeSet};
 
-use crate::credential::AwsCredentials;
+use crate::AwsCredentials;
 use crate::param::{Params, ServiceParams};
 use crate::region::Region;
 use crate::stream::ByteStream;
+use hyper::Body;
 
 /// Payload string to use for unsigned payload
 pub static UNSIGNED_PAYLOAD: &str = "UNSIGNED-PAYLOAD";
@@ -34,27 +35,15 @@ pub static UNSIGNED_PAYLOAD: &str = "UNSIGNED-PAYLOAD";
 pub static EMPTY_SHA256_HASH: &str =
     "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 
-/// Possible payloads included in a `SignedRequest`.
-pub enum SignedRequestPayload {
-    /// Transfer payload in a single chunk
-    Buffer(Bytes),
-    /// Transfer payload in multiple chunks
-    Stream(ByteStream),
+/// A data structure indicating our payload is a signed request
+#[derive(Debug)]
+pub struct SignedRequestPayload {
+    inner: Body,
 }
 
-impl fmt::Debug for SignedRequestPayload {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            SignedRequestPayload::Buffer(ref buf) => {
-                write!(f, "SignedRequestPayload::Buffer(len = {})", buf.len())
-            }
-            SignedRequestPayload::Stream(ref stream) => write!(
-                f,
-                "SignedRequestPayload::Stream(size_hint = {:?})",
-                stream.size_hint()
-            ),
-        }
-    }
+impl SignedRequestPayload {
+    /// Convert into inner body
+    pub fn into_inner(self) -> Body { self.inner }
 }
 
 /// A data structure for all the elements of an HTTP request that are involved in
@@ -127,19 +116,19 @@ impl SignedRequest {
 
     /// Sets the new body (payload) as a stream
     pub fn set_payload_stream(&mut self, stream: ByteStream) {
-        self.payload = Some(SignedRequestPayload::Stream(stream));
+        self.payload = Some(SignedRequestPayload { inner: stream });
     }
 
     /// Computes and sets the Content-MD5 header based on the current payload.
     ///
     /// Has no effect if the payload is not set, or is not a buffer.
     pub fn set_content_md5_header(&mut self) {
-        let digest;
-        if let Some(SignedRequestPayload::Buffer(ref payload)) = self.payload {
-            digest = Some(md5::compute(payload));
-        } else {
-            digest = None;
-        }
+        let digest: Option<Vec<u8>> = None;
+//        if let Some(SignedRequestPayload::Buffer(ref payload)) = self.payload {
+//            digest = Some(md5::compute(payload));
+//        } else {
+//            digest = None;
+//        }
         if let Some(digest) = digest {
             // need to deref digest and then pass that reference:
             self.add_header("Content-MD5", &base64::encode(&(*digest)));
@@ -315,11 +304,8 @@ impl SignedRequest {
                 None => {
                     Cow::Borrowed(EMPTY_SHA256_HASH)
                 }
-                Some(SignedRequestPayload::Buffer(ref payload)) => {
-                    let (digest, _len) = digest_payload(&payload);
-                    Cow::Owned(digest)
-                }
-                Some(SignedRequestPayload::Stream(ref _stream)) => {
+                Some(_payload) => {
+                    //let (digest, _len) = digest_payload(&payload);
                     Cow::Borrowed(UNSIGNED_PAYLOAD)
                 }
             }
@@ -431,12 +417,9 @@ impl SignedRequest {
             None => {
                 (Cow::Borrowed(EMPTY_SHA256_HASH), Some(0))
             }
-            Some(SignedRequestPayload::Buffer(ref payload)) => {
-                let (digest, len) = digest_payload(&payload);
-                (Cow::Owned(digest), Some(len))
-            }
-            Some(SignedRequestPayload::Stream(ref stream)) => {
-                (Cow::Borrowed(UNSIGNED_PAYLOAD), stream.size_hint())
+            Some(payload) => {
+                //let (digest, len) = digest_payload(&payload);
+                (Cow::Borrowed(UNSIGNED_PAYLOAD), None)
             }
         };
 
@@ -454,7 +437,7 @@ impl SignedRequest {
             self.canonical_query_string,
             canonical_headers,
             signed_headers,
-            digest
+            digest.to_string()
         );
 
         if let Some(len) = len {
@@ -789,11 +772,10 @@ fn build_hostname(service: &str, region: &Region) -> String {
 
 #[cfg(test)]
 mod tests {
-    use futures::Future;
     use std::collections::BTreeMap;
     use time::empty_tm;
 
-    use crate::credential::{ProfileProvider, ProvideAwsCredentials};
+    use crate::{ProfileProvider, ProvideAwsCredentials};
     use crate::param::Params;
     use crate::Region;
 
@@ -805,8 +787,8 @@ mod tests {
         assert_eq!("sqs.us-east-1.amazonaws.com", request.hostname());
     }
 
-    #[test]
-    fn path_percent_encoded() {
+    #[tokio::test]
+    async fn path_percent_encoded() {
         let provider = ProfileProvider::with_configuration(
             "test_resources/multiple_profile_credentials",
             "foo",
@@ -817,7 +799,7 @@ mod tests {
             &Region::UsEast1,
             "/path with spaces: the sequel",
         );
-        request.sign(provider.credentials().wait().as_ref().unwrap());
+        request.sign(provider.credentials().await.as_ref().unwrap());
         assert_eq!(
             "/path%20with%20spaces%3A%20the%20sequel",
             request.canonical_uri()

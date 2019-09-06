@@ -1,3 +1,4 @@
+use serde::Deserialize;
 use serde_json::{from_slice, Value};
 
 use super::super::super::request::BufferedHttpResponse;

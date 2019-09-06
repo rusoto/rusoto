@@ -2,10 +2,8 @@
 
 use chrono::{DateTime, FixedOffset, Utc};
 
-use futures::future::{result, FutureResult};
-use futures::{Future, Poll};
-
 use crate::{non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCredentials};
+use futures::FutureExt;
 
 /// Provides AWS credentials from environment variables.
 ///
@@ -132,27 +130,9 @@ impl EnvironmentVariableProvider for EnvironmentProvider {
     }
 }
 
-/// Provides AWS credentials from environment variables as a Future.
-pub struct EnvironmentProviderFuture {
-    inner: FutureResult<AwsCredentials, CredentialsError>,
-}
-
-impl Future for EnvironmentProviderFuture {
-    type Item = AwsCredentials;
-    type Error = CredentialsError;
-
-    fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
-        self.inner.poll()
-    }
-}
-
 impl ProvideAwsCredentials for EnvironmentProvider {
-    type Future = EnvironmentProviderFuture;
-
-    fn credentials(&self) -> Self::Future {
-        EnvironmentProviderFuture {
-            inner: result(credentials_from_environment(self)),
-        }
+    fn credentials(&self) -> crate::CredentialsFuture {
+        futures::future::ready(credentials_from_environment(self)).boxed()
     }
 }
 
@@ -204,13 +184,13 @@ mod tests {
     static E_NO_SECRET_ACCESS_KEY: &str = "No (or empty) AWS_SECRET_ACCESS_KEY in environment";
     static E_INVALID_EXPIRATION: &str = "Invalid AWS_CREDENTIAL_EXPIRATION in environment";
 
-    #[test]
-    fn get_temporary_credentials_from_env() {
+    #[tokio::test]
+    async fn get_temporary_credentials_from_env() {
         let _guard = lock(&ENV_MUTEX);
         env::set_var(AWS_ACCESS_KEY_ID, "id");
         env::set_var(AWS_SECRET_ACCESS_KEY, "secret");
         env::set_var(AWS_SESSION_TOKEN, "token");
-        let result = EnvironmentProvider::default().credentials().wait();
+        let result = EnvironmentProvider::default().credentials().await;
         env::remove_var(AWS_ACCESS_KEY_ID);
         env::remove_var(AWS_SECRET_ACCESS_KEY);
         env::remove_var(AWS_SESSION_TOKEN);
@@ -221,13 +201,13 @@ mod tests {
         assert_eq!(creds.token(), &Some("token".to_string()));
     }
 
-    #[test]
-    fn get_non_temporary_credentials_from_env() {
+    #[tokio::test]
+    async fn get_non_temporary_credentials_from_env() {
         let _guard = lock(&ENV_MUTEX);
         env::set_var(AWS_ACCESS_KEY_ID, "id");
         env::set_var(AWS_SECRET_ACCESS_KEY, "secret");
         env::remove_var(AWS_SESSION_TOKEN);
-        let result = EnvironmentProvider::default().credentials().wait();
+        let result = EnvironmentProvider::default().credentials().await;
         env::remove_var(AWS_ACCESS_KEY_ID);
         env::remove_var(AWS_SECRET_ACCESS_KEY);
         assert!(result.is_ok());
@@ -237,13 +217,13 @@ mod tests {
         assert_eq!(creds.token(), &None);
     }
 
-    #[test]
-    fn environment_provider_missing_key_id() {
+    #[tokio::test]
+    async fn environment_provider_missing_key_id() {
         let _guard = lock(&ENV_MUTEX);
         env::remove_var(AWS_ACCESS_KEY_ID);
         env::set_var(AWS_SECRET_ACCESS_KEY, "secret");
         env::remove_var(AWS_SESSION_TOKEN);
-        let result = EnvironmentProvider::default().credentials().wait();
+        let result = EnvironmentProvider::default().credentials().await;
         env::remove_var(AWS_SECRET_ACCESS_KEY);
         assert!(result.is_err());
         assert_eq!(
@@ -252,13 +232,13 @@ mod tests {
         );
     }
 
-    #[test]
-    fn environment_provider_missing_secret() {
+    #[tokio::test]
+    async fn environment_provider_missing_secret() {
         let _guard = lock(&ENV_MUTEX);
         env::remove_var(AWS_SECRET_ACCESS_KEY);
         env::set_var(AWS_ACCESS_KEY_ID, "id");
         env::remove_var(AWS_SESSION_TOKEN);
-        let result = EnvironmentProvider::default().credentials().wait();
+        let result = EnvironmentProvider::default().credentials().await;
         env::remove_var(AWS_ACCESS_KEY_ID);
         assert!(result.is_err());
         assert_eq!(
@@ -267,13 +247,13 @@ mod tests {
         );
     }
 
-    #[test]
-    fn environment_provider_missing_credentials() {
+    #[tokio::test]
+    async fn environment_provider_missing_credentials() {
         let _guard = lock(&ENV_MUTEX);
         env::remove_var(AWS_SECRET_ACCESS_KEY);
         env::remove_var(AWS_ACCESS_KEY_ID);
         env::remove_var(AWS_SESSION_TOKEN);
-        let result = EnvironmentProvider::default().credentials().wait();
+        let result = EnvironmentProvider::default().credentials().await;
         assert!(result.is_err());
         assert_eq!(
             result.err(),
@@ -281,14 +261,14 @@ mod tests {
         );
     }
 
-    #[test]
-    fn environment_provider_bad_expiration() {
+    #[tokio::test]
+    async fn environment_provider_bad_expiration() {
         let _guard = lock(&ENV_MUTEX);
         env::set_var(AWS_ACCESS_KEY_ID, "id");
         env::set_var(AWS_SECRET_ACCESS_KEY, "secret");
         env::set_var(AWS_SESSION_TOKEN, "token");
         env::set_var(AWS_CREDENTIAL_EXPIRATION, "lore ipsum");
-        let result = EnvironmentProvider::default().credentials().wait();
+        let result = EnvironmentProvider::default().credentials().await;
         env::remove_var(AWS_ACCESS_KEY_ID);
         env::remove_var(AWS_SECRET_ACCESS_KEY);
         env::remove_var(AWS_SESSION_TOKEN);
@@ -300,8 +280,8 @@ mod tests {
         });
     }
 
-    #[test]
-    fn get_temporary_credentials_with_expiration_from_env() {
+    #[tokio::test]
+    async fn get_temporary_credentials_with_expiration_from_env() {
         let _guard = lock(&ENV_MUTEX);
         let now = Utc::now();
         let now_str = now.to_rfc3339();
@@ -309,7 +289,7 @@ mod tests {
         env::set_var(AWS_SECRET_ACCESS_KEY, "secret");
         env::set_var(AWS_SESSION_TOKEN, "token");
         env::set_var(AWS_CREDENTIAL_EXPIRATION, now_str);
-        let result = EnvironmentProvider::default().credentials().wait();
+        let result = EnvironmentProvider::default().credentials().await;
         env::remove_var(AWS_ACCESS_KEY_ID);
         env::remove_var(AWS_SECRET_ACCESS_KEY);
         env::remove_var(AWS_SESSION_TOKEN);
@@ -322,15 +302,15 @@ mod tests {
         assert_eq!(creds.expires_at(), &Some(now));
     }
 
-    #[test]
-    fn regression_test_rfc_3339_compat() {
+    #[tokio::test]
+    async fn regression_test_rfc_3339_compat() {
         let _guard = lock(&ENV_MUTEX);
         // RFC 3339 expiration times with lower case 't' could not be parsed by earlier
         // implementations.
         env::set_var(AWS_CREDENTIAL_EXPIRATION, "1996-12-19t16:39:57-08:00");
         env::set_var(AWS_ACCESS_KEY_ID, "id");
         env::set_var(AWS_SECRET_ACCESS_KEY, "secret");
-        let result = EnvironmentProvider::default().credentials().wait();
+        let result = EnvironmentProvider::default().credentials().await;
         env::remove_var(AWS_CREDENTIAL_EXPIRATION);
         env::remove_var(AWS_ACCESS_KEY_ID);
         env::remove_var(AWS_SECRET_ACCESS_KEY);
@@ -341,8 +321,8 @@ mod tests {
         );
     }
 
-    #[test]
-    fn alternative_prefix() {
+    #[tokio::test]
+    async fn alternative_prefix() {
         // NOTE: not strictly neccessary here, since we are using a non-standard
         // prefix, so we shouldn't collide with the other env interactions in
         // the other tests.
@@ -356,7 +336,7 @@ mod tests {
         env::set_var("MYAPP_CREDENTIAL_EXPIRATION", now_str);
         let result = EnvironmentProvider::with_prefix("MYAPP")
             .credentials()
-            .wait();
+            .await;
         env::remove_var("MYAPP_ACCESS_KEY_ID");
         env::remove_var("MYAPP_SECRET_ACCESS_KEY");
         env::remove_var("MYAPP_SESSION_TOKEN");

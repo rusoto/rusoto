@@ -2,9 +2,9 @@
 //! For those who can't get them from an environment, or a file.
 
 use chrono::{Duration, Utc};
-use futures::future::{ok, FutureResult};
 
-use crate::{AwsCredentials, CredentialsError, ProvideAwsCredentials};
+use crate::{AwsCredentials, ProvideAwsCredentials};
+use futures::FutureExt;
 
 /// Provides AWS credentials from statically/programmatically provided strings.
 #[derive(Clone, Debug)]
@@ -68,27 +68,25 @@ impl StaticProvider {
 }
 
 impl ProvideAwsCredentials for StaticProvider {
-    type Future = FutureResult<AwsCredentials, CredentialsError>;
-
-    fn credentials(&self) -> Self::Future {
+    fn credentials(&self) -> crate::CredentialsFuture {
         let mut creds = self.credentials.clone();
         creds.expires_at = self.valid_for.map(|v| Utc::now() + Duration::seconds(v));
-        ok(creds)
+        futures::future::ready(Ok(creds)).boxed()
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use futures::Future;
     use std::thread;
     use std::time;
 
     use super::*;
     use crate::test_utils::{is_secret_hidden_behind_asterisks, SECRET};
     use crate::ProvideAwsCredentials;
+    use quickcheck::quickcheck;
 
-    #[test]
-    fn test_static_provider_creation() {
+    #[tokio::test]
+    async fn test_static_provider_creation() {
         let result = StaticProvider::new(
             "fake-key".to_owned(),
             "fake-secret".to_owned(),
@@ -96,21 +94,21 @@ mod tests {
             Some(300),
         )
         .credentials()
-        .wait();
+        .await;
         assert!(result.is_ok());
     }
 
-    #[test]
-    fn test_static_provider_minimal_creation() {
+    #[tokio::test]
+    async fn test_static_provider_minimal_creation() {
         let result =
             StaticProvider::new_minimal("fake-key-2".to_owned(), "fake-secret-2".to_owned())
                 .credentials()
-                .wait();
+                .await;
         assert!(result.is_ok());
     }
 
-    #[test]
-    fn test_static_provider_custom_time_expiration() {
+    #[tokio::test]
+    async fn test_static_provider_custom_time_expiration() {
         let start_time = Utc::now();
         let result = StaticProvider::new(
             "fake-key".to_owned(),
@@ -119,7 +117,7 @@ mod tests {
             Some(10000),
         )
         .credentials()
-        .wait();
+        .await;
         assert!(result.is_ok());
         let finalized = result.unwrap();
         let expires_at = finalized.expires_at().unwrap().clone();
@@ -129,17 +127,17 @@ mod tests {
         assert!(expires_at < start_time + Duration::minutes(200));
     }
 
-    #[test]
-    fn test_static_provider_expiration_time_is_recalculated() {
+    #[tokio::test]
+    async fn test_static_provider_expiration_time_is_recalculated() {
         let provider = StaticProvider::new(
             "fake-key".to_owned(),
             "fake-secret".to_owned(),
             None,
             Some(10000),
         );
-        let creds1 = provider.credentials().wait().unwrap();
+        let creds1 = provider.credentials().await.unwrap();
         thread::sleep(time::Duration::from_secs(1));
-        let creds2 = provider.credentials().wait().unwrap();
+        let creds2 = provider.credentials().await.unwrap();
         assert!(creds1.expires_at() < creds2.expires_at());
     }
 

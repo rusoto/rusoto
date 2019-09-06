@@ -1,13 +1,18 @@
+use std::future::Future;
+use std::pin::Pin;
 use std::sync::{Arc, Mutex, Weak};
 use std::time::Duration;
 
-use futures::{Async, Future, Poll};
-
-use crate::credential::{CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials};
-use crate::error::RusotoError;
+use crate::{CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials};
 use crate::future::{self, RusotoFuture};
 use crate::request::{DispatchSignedRequest, HttpClient, HttpDispatchError, HttpResponse};
 use crate::signature::SignedRequest;
+
+use futures::FutureExt;
+use lazy_static::lazy_static;
+use tokio::future::FutureExt as _;
+
+pub(crate) type SignAndDispatchFuture = Pin<Box<dyn Future<Output = Result<HttpResponse, SignAndDispatchError>> + Send>>;
 
 lazy_static! {
     static ref SHARED_CLIENT: Mutex<Weak<ClientInner<DefaultCredentialsProvider, HttpClient>>> =
@@ -42,9 +47,7 @@ impl Client {
     pub fn new_with<P, D>(credentials_provider: P, dispatcher: D) -> Self
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         let inner = ClientInner {
             credentials_provider: Arc::new(credentials_provider),
@@ -59,12 +62,17 @@ impl Client {
     pub fn sign_and_dispatch<T, E>(
         &self,
         request: SignedRequest,
-        response_handler: fn(HttpResponse) -> Box<dyn Future<Item = T, Error = RusotoError<E>> + Send>,
-    ) -> RusotoFuture<T, E> {
-        future::new(self.inner.sign_and_dispatch(request), response_handler)
+        response_handler: fn(HttpResponse) -> future::RusotoHandlerFuture<T, E>,
+    ) -> RusotoFuture<T, E>
+        where
+            T: 'static,
+            E: 'static
+    {
+        future::new(self.inner.sign_and_dispatch(request, None), response_handler)
     }
 }
 
+#[derive(Debug, PartialEq)]
 pub enum SignAndDispatchError {
     Credentials(CredentialsError),
     Dispatch(HttpDispatchError),
@@ -74,12 +82,8 @@ trait SignAndDispatch {
     fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-    ) -> Box<dyn TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>;
-}
-
-pub trait TimeoutFuture: Future {
-    fn set_timeout(&mut self, timeout: Duration);
-    fn clear_timeout(&mut self);
+        timeout: Option<Duration>,
+    ) -> SignAndDispatchFuture;
 }
 
 struct ClientInner<P, D> {
@@ -96,100 +100,50 @@ impl<P, D> Clone for ClientInner<P, D> {
     }
 }
 
+async fn sign_and_dispatch<P, D>(
+    client: ClientInner<P, D>,
+    request: SignedRequest,
+    timeout: Option<Duration>
+) -> Result<HttpResponse, SignAndDispatchError>
+    where
+        P: ProvideAwsCredentials + Send + Sync + 'static,
+        D: DispatchSignedRequest + Send + Sync + 'static,
+{
+    let f = client.credentials_provider.credentials();
+    let credentials = if let Some(to) = timeout {
+        match f.timeout(to).await {
+            Err(e) => {
+                let err = CredentialsError {
+                    message: "Timeout getting credentials".to_owned(),
+                };
+                return Err(SignAndDispatchError::Credentials(err));
+            },
+            Ok(try_creds) => try_creds,
+        }
+    } else {
+        f.await
+    };
+    let credentials = credentials.map_err(SignAndDispatchError::Credentials)?;
+    let mut request = request;
+    request.sign_with_plus(&credentials, true);
+    client.dispatcher.dispatch(request, timeout).await.map_err(SignAndDispatchError::Dispatch)
+}
+
 impl<P, D> SignAndDispatch for ClientInner<P, D>
 where
     P: ProvideAwsCredentials + Send + Sync + 'static,
-    P::Future: Send,
     D: DispatchSignedRequest + Send + Sync + 'static,
-    D::Future: Send,
 {
     fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-    ) -> Box<dyn TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send> {
-        Box::new(SignAndDispatchFuture {
-            inner: self.clone(),
-            state: Some(SignAndDispatchState::Lazy { request }),
-            timeout: None,
-        })
-    }
-}
-
-pub struct SignAndDispatchFuture<P: ProvideAwsCredentials, D: DispatchSignedRequest> {
-    inner: ClientInner<P, D>,
-    state: Option<SignAndDispatchState<P, D>>,
-    timeout: Option<Duration>,
-}
-
-impl<P, D> TimeoutFuture for SignAndDispatchFuture<P, D>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    fn set_timeout(&mut self, timeout: Duration) {
-        self.timeout = Some(timeout);
-    }
-
-    fn clear_timeout(&mut self) {
-        self.timeout = None;
-    }
-}
-
-#[allow(clippy::large_enum_variant)]
-enum SignAndDispatchState<P: ProvideAwsCredentials, D: DispatchSignedRequest> {
-    Lazy {
-        request: SignedRequest,
-    },
-    FetchingCredentials {
-        future: P::Future,
-        request: SignedRequest,
-    },
-    Dispatching {
-        future: D::Future,
-    },
-}
-
-impl<P, D> Future for SignAndDispatchFuture<P, D>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    type Item = HttpResponse;
-    type Error = SignAndDispatchError;
-
-    fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
-        match self.state.take().unwrap() {
-            SignAndDispatchState::Lazy { request } => {
-                let future = self.inner.credentials_provider.credentials();
-                self.state = Some(SignAndDispatchState::FetchingCredentials { future, request });
-                self.poll()
-            }
-            SignAndDispatchState::FetchingCredentials {
-                mut future,
-                mut request,
-            } => match future.poll() {
-                Err(err) => Err(SignAndDispatchError::Credentials(err)),
-                Ok(Async::NotReady) => {
-                    self.state =
-                        Some(SignAndDispatchState::FetchingCredentials { future, request });
-                    Ok(Async::NotReady)
-                }
-                Ok(Async::Ready(credentials)) => {
-                    request.sign_with_plus(&credentials, true);
-                    let future = self.inner.dispatcher.dispatch(request, self.timeout);
-                    self.state = Some(SignAndDispatchState::Dispatching { future });
-                    self.poll()
-                }
-            },
-            SignAndDispatchState::Dispatching { mut future } => match future.poll() {
-                Err(err) => Err(SignAndDispatchError::Dispatch(err)),
-                Ok(Async::NotReady) => {
-                    self.state = Some(SignAndDispatchState::Dispatching { future });
-                    Ok(Async::NotReady)
-                }
-                Ok(Async::Ready(response)) => Ok(Async::Ready(response)),
-            },
-        }
+        timeout: Option<Duration>,
+    ) -> SignAndDispatchFuture {
+        sign_and_dispatch(
+            self.clone(),
+            request,
+            timeout,
+        ).boxed()
     }
 }
 
