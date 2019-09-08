@@ -98,7 +98,7 @@ pub fn generate_source(service: &Service<'_>, writer: &mut FileWriter) -> IoResu
 /// escape reserved words with an underscore
 pub fn generate_field_name(member_name: &str) -> String {
     let name = member_name.to_snake_case();
-    if name == "return" || name == "type" {
+    if name == "return" || name == "type" || name == "match" {
         name + "_"
     } else {
         name
