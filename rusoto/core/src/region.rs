@@ -76,7 +76,7 @@ pub enum Region {
 
     /// Region that covers Northern Europe
     EuNorth1,
-    
+
     /// Bahrain, Middle East South
     MeSouth1,
 
