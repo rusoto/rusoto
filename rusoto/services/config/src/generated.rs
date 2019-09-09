@@ -13,16 +13,16 @@
 use std::error::Error;
 use std::fmt;
 
-#[allow(warnings)]
-use futures::future;
-use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
+#[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use futures::FutureExt;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>A collection of accounts and regions.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -5457,9 +5457,7 @@ impl ConfigServiceClient {
     ) -> ConfigServiceClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         ConfigServiceClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
@@ -5487,16 +5485,31 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchGetAggregateResourceConfigResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<BatchGetAggregateResourceConfigResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchGetAggregateResourceConfigError::from_response(
-                        response,
-                    ))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(BatchGetAggregateResourceConfigError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -5515,16 +5528,29 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchGetResourceConfigResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<BatchGetResourceConfigResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(BatchGetResourceConfigError::from_response(response))
-                    }),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(BatchGetResourceConfigError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -5546,11 +5572,23 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteAggregationAuthorizationError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DeleteAggregationAuthorizationError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -5569,14 +5607,19 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteConfigRuleError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(DeleteConfigRuleError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -5598,11 +5641,21 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteConfigurationAggregatorError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DeleteConfigurationAggregatorError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -5624,11 +5677,21 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteConfigurationRecorderError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DeleteConfigurationRecorderError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -5647,13 +5710,19 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteDeliveryChannelError::from_response(response))
-                    }),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(DeleteDeliveryChannelError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -5675,14 +5744,29 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteEvaluationResultsResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DeleteEvaluationResultsResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteEvaluationResultsError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DeleteEvaluationResultsError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -5704,13 +5788,23 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeletePendingAggregationRequestError::from_response(
-                        response,
-                    ))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DeletePendingAggregationRequestError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -5733,14 +5827,31 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteRemediationConfigurationResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DeleteRemediationConfigurationResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteRemediationConfigurationError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DeleteRemediationConfigurationError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -5762,11 +5873,21 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteRetentionConfigurationError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DeleteRetentionConfigurationError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -5785,16 +5906,27 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeliverConfigSnapshotResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DeliverConfigSnapshotResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeliverConfigSnapshotError::from_response(response))
-                    }),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(DeliverConfigSnapshotError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -5818,17 +5950,20 @@ impl ConfigService for ConfigServiceClient {
         request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAggregateComplianceByConfigRulesResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAggregateComplianceByConfigRulesError::from_response(response))
-                }))
-            }
-        })
+                        if response.status.is_success() {
+                            response.buffer().map(|try_response| {
+                try_response.and_then(|response| {
+                    proto::json::ResponsePayload::new(&response).deserialize::<DescribeAggregateComplianceByConfigRulesResponse, _>()
+                })
+            }).boxed()
+                        } else {
+                            response.buffer().map(|try_response| {
+                                try_response.map_or_else(|e| e, |response| {
+                                    Err(DescribeAggregateComplianceByConfigRulesError::from_response(response))
+                                }).boxed()
+                            }).boxed()
+                        }
+                    })
     }
 
     /// <p>Returns a list of authorizations granted to various aggregator accounts and regions.</p>
@@ -5851,16 +5986,31 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAggregationAuthorizationsResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribeAggregationAuthorizationsResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAggregationAuthorizationsError::from_response(
-                        response,
-                    ))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DescribeAggregationAuthorizationsError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -5883,14 +6033,31 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeComplianceByConfigRuleResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribeComplianceByConfigRuleResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeComplianceByConfigRuleError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DescribeComplianceByConfigRuleError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -5912,14 +6079,29 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeComplianceByResourceResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribeComplianceByResourceResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeComplianceByResourceError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DescribeComplianceByResourceError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -5944,16 +6126,31 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeConfigRuleEvaluationStatusResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribeConfigRuleEvaluationStatusResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConfigRuleEvaluationStatusError::from_response(
-                        response,
-                    ))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DescribeConfigRuleEvaluationStatusError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -5972,16 +6169,27 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeConfigRulesResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribeConfigRulesResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeConfigRulesError::from_response(response))
-                    }),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(DescribeConfigRulesError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6006,13 +6214,17 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            Box::new(response.buffer().from_err().and_then(|response| {
+                            response.buffer().map(|try_response| {
+                try_response.and_then(|response| {
                     proto::json::ResponsePayload::new(&response).deserialize::<DescribeConfigurationAggregatorSourcesStatusResponse, _>()
-                }))
+                })
+            }).boxed()
                         } else {
-                            Box::new(response.buffer().from_err().and_then(|response| {
-                                Err(DescribeConfigurationAggregatorSourcesStatusError::from_response(response))
-                            }))
+                            response.buffer().map(|try_response| {
+                                try_response.map_or_else(|e| e, |response| {
+                                    Err(DescribeConfigurationAggregatorSourcesStatusError::from_response(response))
+                                }).boxed()
+                            }).boxed()
                         }
                     })
     }
@@ -6035,16 +6247,31 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeConfigurationAggregatorsResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribeConfigurationAggregatorsResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConfigurationAggregatorsError::from_response(
-                        response,
-                    ))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DescribeConfigurationAggregatorsError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6069,16 +6296,31 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeConfigurationRecorderStatusResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribeConfigurationRecorderStatusResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConfigurationRecorderStatusError::from_response(
-                        response,
-                    ))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DescribeConfigurationRecorderStatusError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6101,14 +6343,31 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeConfigurationRecordersResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribeConfigurationRecordersResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConfigurationRecordersError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DescribeConfigurationRecordersError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6131,14 +6390,29 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeDeliveryChannelStatusResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribeDeliveryChannelStatusResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDeliveryChannelStatusError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DescribeDeliveryChannelStatusError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6160,14 +6434,29 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeDeliveryChannelsResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribeDeliveryChannelsResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDeliveryChannelsError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DescribeDeliveryChannelsError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6192,16 +6481,31 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribePendingAggregationRequestsResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribePendingAggregationRequestsResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribePendingAggregationRequestsError::from_response(
-                        response,
-                    ))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DescribePendingAggregationRequestsError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6226,16 +6530,31 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeRemediationConfigurationsResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribeRemediationConfigurationsResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeRemediationConfigurationsError::from_response(
-                        response,
-                    ))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DescribeRemediationConfigurationsError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6260,16 +6579,31 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeRemediationExecutionStatusResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribeRemediationExecutionStatusResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeRemediationExecutionStatusError::from_response(
-                        response,
-                    ))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DescribeRemediationExecutionStatusError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6292,16 +6626,31 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeRetentionConfigurationsResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribeRetentionConfigurationsResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeRetentionConfigurationsError::from_response(
-                        response,
-                    ))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DescribeRetentionConfigurationsError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6325,17 +6674,20 @@ impl ConfigService for ConfigServiceClient {
         request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetAggregateComplianceDetailsByConfigRuleResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetAggregateComplianceDetailsByConfigRuleError::from_response(response))
-                }))
-            }
-        })
+                        if response.status.is_success() {
+                            response.buffer().map(|try_response| {
+                try_response.and_then(|response| {
+                    proto::json::ResponsePayload::new(&response).deserialize::<GetAggregateComplianceDetailsByConfigRuleResponse, _>()
+                })
+            }).boxed()
+                        } else {
+                            response.buffer().map(|try_response| {
+                                try_response.map_or_else(|e| e, |response| {
+                                    Err(GetAggregateComplianceDetailsByConfigRuleError::from_response(response))
+                                }).boxed()
+                            }).boxed()
+                        }
+                    })
     }
 
     /// <p><p>Returns the number of compliant and noncompliant rules for one or more accounts and regions in an aggregator.</p> <note> <p>The results can return an empty result page, but if you have a nextToken, the results are displayed on the next page.</p> </note></p>
@@ -6357,19 +6709,20 @@ impl ConfigService for ConfigServiceClient {
         request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetAggregateConfigRuleComplianceSummaryResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetAggregateConfigRuleComplianceSummaryError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+                        if response.status.is_success() {
+                            response.buffer().map(|try_response| {
+                try_response.and_then(|response| {
+                    proto::json::ResponsePayload::new(&response).deserialize::<GetAggregateConfigRuleComplianceSummaryResponse, _>()
+                })
+            }).boxed()
+                        } else {
+                            response.buffer().map(|try_response| {
+                                try_response.map_or_else(|e| e, |response| {
+                                    Err(GetAggregateConfigRuleComplianceSummaryError::from_response(response))
+                                }).boxed()
+                            }).boxed()
+                        }
+                    })
     }
 
     /// <p>Returns the resource counts across accounts and regions that are present in your AWS Config aggregator. You can request the resource counts by providing filters and GroupByKey.</p> <p>For example, if the input contains accountID 12345678910 and region us-east-1 in filters, the API returns the count of resources in account ID 12345678910 and region us-east-1. If the input contains ACCOUNT_ID as a GroupByKey, the API returns resource counts for all source accounts that are present in your aggregator.</p>
@@ -6391,19 +6744,20 @@ impl ConfigService for ConfigServiceClient {
         request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetAggregateDiscoveredResourceCountsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetAggregateDiscoveredResourceCountsError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+                        if response.status.is_success() {
+                            response.buffer().map(|try_response| {
+                try_response.and_then(|response| {
+                    proto::json::ResponsePayload::new(&response).deserialize::<GetAggregateDiscoveredResourceCountsResponse, _>()
+                })
+            }).boxed()
+                        } else {
+                            response.buffer().map(|try_response| {
+                                try_response.map_or_else(|e| e, |response| {
+                                    Err(GetAggregateDiscoveredResourceCountsError::from_response(response))
+                                }).boxed()
+                            }).boxed()
+                        }
+                    })
     }
 
     /// <p>Returns configuration item that is aggregated for your specific resource in a specific source account and region.</p>
@@ -6423,14 +6777,29 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetAggregateResourceConfigResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<GetAggregateResourceConfigResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetAggregateResourceConfigError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(GetAggregateResourceConfigError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6453,16 +6822,31 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetComplianceDetailsByConfigRuleResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<GetComplianceDetailsByConfigRuleResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetComplianceDetailsByConfigRuleError::from_response(
-                        response,
-                    ))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(GetComplianceDetailsByConfigRuleError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6485,14 +6869,31 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetComplianceDetailsByResourceResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<GetComplianceDetailsByResourceResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetComplianceDetailsByResourceError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(GetComplianceDetailsByResourceError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6513,16 +6914,31 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetComplianceSummaryByConfigRuleResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<GetComplianceSummaryByConfigRuleResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetComplianceSummaryByConfigRuleError::from_response(
-                        response,
-                    ))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(GetComplianceSummaryByConfigRuleError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6547,16 +6963,31 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetComplianceSummaryByResourceTypeResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<GetComplianceSummaryByResourceTypeResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetComplianceSummaryByResourceTypeError::from_response(
-                        response,
-                    ))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(GetComplianceSummaryByResourceTypeError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6578,14 +7009,29 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetDiscoveredResourceCountsResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<GetDiscoveredResourceCountsResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetDiscoveredResourceCountsError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(GetDiscoveredResourceCountsError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6607,14 +7053,29 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetResourceConfigHistoryResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<GetResourceConfigHistoryResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetResourceConfigHistoryError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(GetResourceConfigHistoryError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6637,16 +7098,31 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAggregateDiscoveredResourcesResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListAggregateDiscoveredResourcesResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAggregateDiscoveredResourcesError::from_response(
-                        response,
-                    ))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(ListAggregateDiscoveredResourcesError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6668,14 +7144,29 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListDiscoveredResourcesResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListDiscoveredResourcesResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDiscoveredResourcesError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(ListDiscoveredResourcesError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6694,16 +7185,27 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsForResourceResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListTagsForResourceResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(ListTagsForResourceError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6725,14 +7227,29 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutAggregationAuthorizationResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<PutAggregationAuthorizationResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutAggregationAuthorizationError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(PutAggregationAuthorizationError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6748,14 +7265,19 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutConfigRuleError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(PutConfigRuleError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6777,14 +7299,29 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutConfigurationAggregatorResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<PutConfigurationAggregatorResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutConfigurationAggregatorError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(PutConfigurationAggregatorError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6806,11 +7343,21 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutConfigurationRecorderError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(PutConfigurationRecorderError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6829,14 +7376,19 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutDeliveryChannelError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(PutDeliveryChannelError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6855,17 +7407,27 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutEvaluationsResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<PutEvaluationsResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutEvaluationsError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(PutEvaluationsError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6887,14 +7449,29 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutRemediationConfigurationsResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<PutRemediationConfigurationsResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutRemediationConfigurationsError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(PutRemediationConfigurationsError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6916,14 +7493,29 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutRetentionConfigurationResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<PutRetentionConfigurationResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutRetentionConfigurationError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(PutRetentionConfigurationError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6942,16 +7534,27 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SelectResourceConfigResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<SelectResourceConfigResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(SelectResourceConfigError::from_response(response))
-                    }),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(SelectResourceConfigError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -6973,14 +7576,29 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartConfigRulesEvaluationResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<StartConfigRulesEvaluationResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartConfigRulesEvaluationError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(StartConfigRulesEvaluationError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -7002,11 +7620,21 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartConfigurationRecorderError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(StartConfigurationRecorderError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -7028,14 +7656,29 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartRemediationExecutionResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<StartRemediationExecutionResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartRemediationExecutionError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(StartRemediationExecutionError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -7057,11 +7700,21 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopConfigurationRecorderError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(StopConfigurationRecorderError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -7077,14 +7730,19 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TagResourceError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(TagResourceError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -7100,14 +7758,19 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UntagResourceError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(UntagResourceError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }

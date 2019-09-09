@@ -13,16 +13,16 @@
 use std::error::Error;
 use std::fmt;
 
-#[allow(warnings)]
-use futures::future;
-use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
+#[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use futures::FutureExt;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Details about license consumption.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1825,9 +1825,7 @@ impl LicenseManagerClient {
     ) -> LicenseManagerClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         LicenseManagerClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
@@ -1854,14 +1852,29 @@ impl LicenseManager for LicenseManagerClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateLicenseConfigurationResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<CreateLicenseConfigurationResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateLicenseConfigurationError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(CreateLicenseConfigurationError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -1883,14 +1896,29 @@ impl LicenseManager for LicenseManagerClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteLicenseConfigurationResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DeleteLicenseConfigurationResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteLicenseConfigurationError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DeleteLicenseConfigurationError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -1909,14 +1937,29 @@ impl LicenseManager for LicenseManagerClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetLicenseConfigurationResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<GetLicenseConfigurationResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetLicenseConfigurationError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(GetLicenseConfigurationError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -1933,17 +1976,27 @@ impl LicenseManager for LicenseManagerClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetServiceSettingsResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<GetServiceSettingsResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetServiceSettingsError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(GetServiceSettingsError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -1967,19 +2020,20 @@ impl LicenseManager for LicenseManagerClient {
         request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAssociationsForLicenseConfigurationResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAssociationsForLicenseConfigurationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+                        if response.status.is_success() {
+                            response.buffer().map(|try_response| {
+                try_response.and_then(|response| {
+                    proto::json::ResponsePayload::new(&response).deserialize::<ListAssociationsForLicenseConfigurationResponse, _>()
+                })
+            }).boxed()
+                        } else {
+                            response.buffer().map(|try_response| {
+                                try_response.map_or_else(|e| e, |response| {
+                                    Err(ListAssociationsForLicenseConfigurationError::from_response(response))
+                                }).boxed()
+                            }).boxed()
+                        }
+                    })
     }
 
     /// <p>Lists license configuration objects for an account, each containing the name, description, license type, and other license terms modeled from a license agreement.</p>
@@ -1999,14 +2053,29 @@ impl LicenseManager for LicenseManagerClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListLicenseConfigurationsResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListLicenseConfigurationsResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListLicenseConfigurationsError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(ListLicenseConfigurationsError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2030,19 +2099,20 @@ impl LicenseManager for LicenseManagerClient {
         request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListLicenseSpecificationsForResourceResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListLicenseSpecificationsForResourceError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+                        if response.status.is_success() {
+                            response.buffer().map(|try_response| {
+                try_response.and_then(|response| {
+                    proto::json::ResponsePayload::new(&response).deserialize::<ListLicenseSpecificationsForResourceResponse, _>()
+                })
+            }).boxed()
+                        } else {
+                            response.buffer().map(|try_response| {
+                                try_response.map_or_else(|e| e, |response| {
+                                    Err(ListLicenseSpecificationsForResourceError::from_response(response))
+                                }).boxed()
+                            }).boxed()
+                        }
+                    })
     }
 
     /// <p>Returns a detailed list of resources.</p>
@@ -2059,16 +2129,27 @@ impl LicenseManager for LicenseManagerClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListResourceInventoryResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListResourceInventoryResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListResourceInventoryError::from_response(response))
-                    }),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(ListResourceInventoryError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2087,16 +2168,27 @@ impl LicenseManager for LicenseManagerClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsForResourceResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListTagsForResourceResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(ListTagsForResourceError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2119,16 +2211,31 @@ impl LicenseManager for LicenseManagerClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListUsageForLicenseConfigurationResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListUsageForLicenseConfigurationResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListUsageForLicenseConfigurationError::from_response(
-                        response,
-                    ))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(ListUsageForLicenseConfigurationError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2147,17 +2254,27 @@ impl LicenseManager for LicenseManagerClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TagResourceResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<TagResourceResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TagResourceError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(TagResourceError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2176,17 +2293,27 @@ impl LicenseManager for LicenseManagerClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UntagResourceResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<UntagResourceResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UntagResourceError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(UntagResourceError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2208,14 +2335,29 @@ impl LicenseManager for LicenseManagerClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateLicenseConfigurationResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<UpdateLicenseConfigurationResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateLicenseConfigurationError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(UpdateLicenseConfigurationError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2239,19 +2381,20 @@ impl LicenseManager for LicenseManagerClient {
         request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateLicenseSpecificationsForResourceResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateLicenseSpecificationsForResourceError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+                        if response.status.is_success() {
+                            response.buffer().map(|try_response| {
+                try_response.and_then(|response| {
+                    proto::json::ResponsePayload::new(&response).deserialize::<UpdateLicenseSpecificationsForResourceResponse, _>()
+                })
+            }).boxed()
+                        } else {
+                            response.buffer().map(|try_response| {
+                                try_response.map_or_else(|e| e, |response| {
+                                    Err(UpdateLicenseSpecificationsForResourceError::from_response(response))
+                                }).boxed()
+                            }).boxed()
+                        }
+                    })
     }
 
     /// <p>Updates License Manager service settings.</p>
@@ -2268,16 +2411,27 @@ impl LicenseManager for LicenseManagerClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateServiceSettingsResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<UpdateServiceSettingsResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateServiceSettingsError::from_response(response))
-                    }),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(UpdateServiceSettingsError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }

@@ -13,17 +13,17 @@
 use std::error::Error;
 use std::fmt;
 
-#[allow(warnings)]
-use futures::future;
-use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
+#[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use futures::FutureExt;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>A nested application summary.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1894,9 +1894,7 @@ impl ServerlessRepoClient {
     ) -> ServerlessRepoClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         ServerlessRepoClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
@@ -1921,19 +1919,29 @@ impl ServerlessRepo for ServerlessRepoClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateApplicationResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<CreateApplicationResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateApplicationError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(CreateApplicationError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -1957,16 +1965,31 @@ impl ServerlessRepo for ServerlessRepoClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateApplicationVersionResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<CreateApplicationVersionResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateApplicationVersionError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| {
+                                    Err(CreateApplicationVersionError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -1990,16 +2013,32 @@ impl ServerlessRepo for ServerlessRepoClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateCloudFormationChangeSetResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<CreateCloudFormationChangeSetResponse, _>(
+                            )?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCloudFormationChangeSetError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| {
+                                    Err(CreateCloudFormationChangeSetError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2022,16 +2061,32 @@ impl ServerlessRepo for ServerlessRepoClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 201 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateCloudFormationTemplateResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<CreateCloudFormationTemplateResponse, _>(
+                            )?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCloudFormationTemplateError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| {
+                                    Err(CreateCloudFormationTemplateError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2052,18 +2107,28 @@ impl ServerlessRepo for ServerlessRepoClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 204 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteApplicationError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(DeleteApplicationError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2089,19 +2154,29 @@ impl ServerlessRepo for ServerlessRepoClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetApplicationResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<GetApplicationResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetApplicationError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(GetApplicationError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2121,18 +2196,29 @@ impl ServerlessRepo for ServerlessRepoClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetApplicationPolicyResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<GetApplicationPolicyResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetApplicationPolicyError::from_response(response))
-                    }),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(GetApplicationPolicyError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2153,16 +2239,31 @@ impl ServerlessRepo for ServerlessRepoClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetCloudFormationTemplateResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<GetCloudFormationTemplateResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCloudFormationTemplateError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| {
+                                    Err(GetCloudFormationTemplateError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2194,16 +2295,31 @@ impl ServerlessRepo for ServerlessRepoClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListApplicationDependenciesResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListApplicationDependenciesResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListApplicationDependenciesError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| {
+                                    Err(ListApplicationDependenciesError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2232,16 +2348,31 @@ impl ServerlessRepo for ServerlessRepoClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListApplicationVersionsResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListApplicationVersionsResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListApplicationVersionsError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| {
+                                    Err(ListApplicationVersionsError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2267,19 +2398,29 @@ impl ServerlessRepo for ServerlessRepoClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListApplicationsResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListApplicationsResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListApplicationsError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(ListApplicationsError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2305,18 +2446,29 @@ impl ServerlessRepo for ServerlessRepoClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutApplicationPolicyResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<PutApplicationPolicyResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(PutApplicationPolicyError::from_response(response))
-                    }),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(PutApplicationPolicyError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2339,19 +2491,29 @@ impl ServerlessRepo for ServerlessRepoClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateApplicationResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<UpdateApplicationResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateApplicationError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(UpdateApplicationError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }

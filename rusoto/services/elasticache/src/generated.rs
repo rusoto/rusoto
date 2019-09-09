@@ -13,14 +13,13 @@
 use std::error::Error;
 use std::fmt;
 
-#[allow(warnings)]
-use futures::future;
-use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
+#[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use futures::FutureExt;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
@@ -11280,9 +11279,7 @@ impl ElastiCacheClient {
     ) -> ElastiCacheClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         ElastiCacheClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
@@ -11308,12 +11305,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AddTagsToResourceError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(AddTagsToResourceError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11362,11 +11362,19 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AuthorizeCacheSecurityGroupIngressError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(AuthorizeCacheSecurityGroupIngressError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11412,9 +11420,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchApplyUpdateActionError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(BatchApplyUpdateActionError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11460,9 +11474,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchStopUpdateActionError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(BatchStopUpdateActionError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11508,12 +11528,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CopySnapshotError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CopySnapshotError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11559,12 +11582,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateCacheClusterError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateCacheClusterError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11610,9 +11636,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCacheParameterGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateCacheParameterGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11658,9 +11690,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCacheSecurityGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateCacheSecurityGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11706,9 +11744,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCacheSubnetGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateCacheSubnetGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11754,9 +11798,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateReplicationGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateReplicationGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11802,12 +11852,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateSnapshotError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateSnapshotError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11853,11 +11906,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DecreaseReplicaCountError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DecreaseReplicaCountError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11903,12 +11960,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteCacheClusterError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteCacheClusterError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11954,12 +12014,18 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCacheParameterGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteCacheParameterGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -11979,12 +12045,18 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCacheSecurityGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteCacheSecurityGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -12004,12 +12076,18 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCacheSubnetGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteCacheSubnetGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -12029,9 +12107,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteReplicationGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteReplicationGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12077,12 +12161,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteSnapshotError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteSnapshotError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12128,9 +12215,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCacheClustersError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeCacheClustersError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12176,9 +12269,17 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCacheEngineVersionsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeCacheEngineVersionsError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12224,9 +12325,17 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCacheParameterGroupsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeCacheParameterGroupsError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12272,9 +12381,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCacheParametersError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeCacheParametersError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12320,9 +12435,17 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCacheSecurityGroupsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeCacheSecurityGroupsError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12368,9 +12491,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCacheSubnetGroupsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeCacheSubnetGroupsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12417,11 +12546,19 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEngineDefaultParametersError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeEngineDefaultParametersError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12467,12 +12604,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeEventsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeEventsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12516,9 +12656,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReplicationGroupsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeReplicationGroupsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12564,9 +12710,17 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReservedCacheNodesError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeReservedCacheNodesError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12613,11 +12767,19 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReservedCacheNodesOfferingsError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeReservedCacheNodesOfferingsError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12663,9 +12825,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeServiceUpdatesError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeServiceUpdatesError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12711,12 +12879,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeSnapshotsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeSnapshotsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12762,9 +12933,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeUpdateActionsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeUpdateActionsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12810,11 +12987,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(IncreaseReplicaCountError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(IncreaseReplicaCountError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12861,11 +13042,19 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAllowedNodeTypeModificationsError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(ListAllowedNodeTypeModificationsError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12911,11 +13100,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ListTagsForResourceError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12961,12 +13154,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ModifyCacheClusterError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ModifyCacheClusterError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13012,9 +13208,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyCacheParameterGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ModifyCacheParameterGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13060,9 +13262,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyCacheSubnetGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ModifyCacheSubnetGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13108,9 +13316,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyReplicationGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ModifyReplicationGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13163,9 +13377,21 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyReplicationGroupShardConfigurationError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(
+                                    ModifyReplicationGroupShardConfigurationError::from_response(
+                                        response,
+                                    ),
+                                )
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13215,11 +13441,19 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PurchaseReservedCacheNodesOfferingError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(PurchaseReservedCacheNodesOfferingError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13265,12 +13499,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RebootCacheClusterError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(RebootCacheClusterError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13316,9 +13553,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemoveTagsFromResourceError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(RemoveTagsFromResourceError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13364,9 +13607,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ResetCacheParameterGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ResetCacheParameterGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13413,11 +13662,19 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RevokeCacheSecurityGroupIngressError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(RevokeCacheSecurityGroupIngressError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13463,12 +13720,15 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TestFailoverError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(TestFailoverError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

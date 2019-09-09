@@ -13,16 +13,16 @@
 use std::error::Error;
 use std::fmt;
 
-#[allow(warnings)]
-use futures::future;
-use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
+#[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use futures::FutureExt;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Contains information about the certificate subject. The certificate can be one issued by your private certificate authority (CA) or it can be your private CA certificate. The <b>Subject</b> field in the certificate identifies the entity that owns or controls the public key in the certificate. The entity can be a user, computer, device, or service. The <b>Subject</b> must contain an X.500 distinguished name (DN). A DN is a sequence of relative distinguished names (RDNs). The RDNs are separated by commas in the certificate. The DN must be unique for each entity, but your private CA can issue more than one certificate with the same DN to the same entity. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1996,9 +1996,7 @@ impl AcmPcaClient {
     ) -> AcmPcaClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         AcmPcaClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
@@ -2022,14 +2020,29 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateCertificateAuthorityResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<CreateCertificateAuthorityResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCertificateAuthorityError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(CreateCertificateAuthorityError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2053,19 +2066,20 @@ impl AcmPca for AcmPcaClient {
         request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateCertificateAuthorityAuditReportResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCertificateAuthorityAuditReportError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+                        if response.status.is_success() {
+                            response.buffer().map(|try_response| {
+                try_response.and_then(|response| {
+                    proto::json::ResponsePayload::new(&response).deserialize::<CreateCertificateAuthorityAuditReportResponse, _>()
+                })
+            }).boxed()
+                        } else {
+                            response.buffer().map(|try_response| {
+                                try_response.map_or_else(|e| e, |response| {
+                                    Err(CreateCertificateAuthorityAuditReportError::from_response(response))
+                                }).boxed()
+                            }).boxed()
+                        }
+                    })
     }
 
     /// <p>Assigns permissions from a private CA to a designated AWS service. Services are specified by their service principals and can be given permission to create and retrieve certificates on a private CA. Services can also be given permission to list the active permissions that the private CA has granted. For ACM to automatically renew your private CA's certificates, you must assign all possible permissions from the CA to the ACM service principal.</p> <p>At this time, you can only assign permissions to ACM (<code>acm.amazonaws.com</code>). Permissions can be revoked with the <a>DeletePermission</a> operation and listed with the <a>ListPermissions</a> operation.</p>
@@ -2082,14 +2096,19 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreatePermissionError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(CreatePermissionError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2108,11 +2127,21 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCertificateAuthorityError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DeleteCertificateAuthorityError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2131,14 +2160,19 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeletePermissionError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(DeletePermissionError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2157,14 +2191,29 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeCertificateAuthorityResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribeCertificateAuthorityResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCertificateAuthorityError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(DescribeCertificateAuthorityError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2188,19 +2237,20 @@ impl AcmPca for AcmPcaClient {
         request.set_payload(Some(encoded));
 
         self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeCertificateAuthorityAuditReportResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCertificateAuthorityAuditReportError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+                        if response.status.is_success() {
+                            response.buffer().map(|try_response| {
+                try_response.and_then(|response| {
+                    proto::json::ResponsePayload::new(&response).deserialize::<DescribeCertificateAuthorityAuditReportResponse, _>()
+                })
+            }).boxed()
+                        } else {
+                            response.buffer().map(|try_response| {
+                                try_response.map_or_else(|e| e, |response| {
+                                    Err(DescribeCertificateAuthorityAuditReportError::from_response(response))
+                                }).boxed()
+                            }).boxed()
+                        }
+                    })
     }
 
     /// <p>Retrieves a certificate from your private CA. The ARN of the certificate is returned when you call the <a>IssueCertificate</a> operation. You must specify both the ARN of your private CA and the ARN of the issued certificate when calling the <b>GetCertificate</b> operation. You can retrieve the certificate if it is in the <b>ISSUED</b> state. You can call the <a>CreateCertificateAuthorityAuditReport</a> operation to create a report that contains information about all of the certificates issued and revoked by your private CA. </p>
@@ -2217,17 +2267,27 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetCertificateResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<GetCertificateResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetCertificateError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(GetCertificateError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2252,16 +2312,31 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetCertificateAuthorityCertificateResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<GetCertificateAuthorityCertificateResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCertificateAuthorityCertificateError::from_response(
-                        response,
-                    ))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(GetCertificateAuthorityCertificateError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2280,14 +2355,29 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetCertificateAuthorityCsrResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<GetCertificateAuthorityCsrResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCertificateAuthorityCsrError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(GetCertificateAuthorityCsrError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2309,13 +2399,23 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ImportCertificateAuthorityCertificateError::from_response(
-                        response,
-                    ))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(ImportCertificateAuthorityCertificateError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2334,17 +2434,27 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<IssueCertificateResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<IssueCertificateResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(IssueCertificateError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(IssueCertificateError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2363,14 +2473,29 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListCertificateAuthoritiesResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListCertificateAuthoritiesResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListCertificateAuthoritiesError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(ListCertificateAuthoritiesError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2389,17 +2514,27 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPermissionsResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListPermissionsResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListPermissionsError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(ListPermissionsError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2415,17 +2550,27 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListTagsResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListTagsError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(ListTagsError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2444,11 +2589,21 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RestoreCertificateAuthorityError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(RestoreCertificateAuthorityError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2467,14 +2622,19 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RevokeCertificateError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(RevokeCertificateError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2493,11 +2653,21 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TagCertificateAuthorityError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(TagCertificateAuthorityError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2516,11 +2686,21 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UntagCertificateAuthorityError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(UntagCertificateAuthorityError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2539,11 +2719,21 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                futures::future::ready(::std::mem::drop(response)).boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateCertificateAuthorityError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(UpdateCertificateAuthorityError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }

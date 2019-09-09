@@ -13,17 +13,17 @@
 use std::error::Error;
 use std::fmt;
 
-#[allow(warnings)]
-use futures::future;
-use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
+#[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use futures::FutureExt;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateUserRequest {
@@ -2393,9 +2393,7 @@ impl ConnectClient {
     ) -> ConnectClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         ConnectClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
@@ -2420,19 +2418,29 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateUserResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<CreateUserResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateUserError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(CreateUserError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2450,18 +2458,28 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteUserError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(DeleteUserError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2482,19 +2500,29 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeUserResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribeUserResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeUserError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(DescribeUserError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2515,16 +2543,31 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeUserHierarchyGroupResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribeUserHierarchyGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeUserHierarchyGroupError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| {
+                                    Err(DescribeUserHierarchyGroupError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2545,16 +2588,34 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeUserHierarchyStructureResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribeUserHierarchyStructureResponse, _>(
+                            )?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeUserHierarchyStructureError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| {
+                                    Err(DescribeUserHierarchyStructureError::from_response(
+                                        response,
+                                    ))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2575,18 +2636,29 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetContactAttributesResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<GetContactAttributesResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetContactAttributesError::from_response(response))
-                    }),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(GetContactAttributesError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2609,18 +2681,29 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetCurrentMetricDataResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<GetCurrentMetricDataResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetCurrentMetricDataError::from_response(response))
-                    }),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(GetCurrentMetricDataError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2640,19 +2723,29 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetFederationTokenResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<GetFederationTokenResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetFederationTokenError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(GetFederationTokenError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2675,19 +2768,29 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetMetricDataResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<GetMetricDataResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetMetricDataError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(GetMetricDataError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2716,18 +2819,29 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListRoutingProfilesResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListRoutingProfilesResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListRoutingProfilesError::from_response(response))
-                    }),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(ListRoutingProfilesError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2756,18 +2870,29 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListSecurityProfilesResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListSecurityProfilesResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListSecurityProfilesError::from_response(response))
-                    }),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(ListSecurityProfilesError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2796,16 +2921,31 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListUserHierarchyGroupsResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListUserHierarchyGroupsResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListUserHierarchyGroupsError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| {
+                                    Err(ListUserHierarchyGroupsError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2834,19 +2974,29 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListUsersResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListUsersResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListUsersError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(ListUsersError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2866,16 +3016,31 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartOutboundVoiceContactResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<StartOutboundVoiceContactResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartOutboundVoiceContactError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| {
+                                    Err(StartOutboundVoiceContactError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2895,19 +3060,29 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StopContactResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<StopContactResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(StopContactError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(StopContactError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2927,16 +3102,31 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateContactAttributesResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<UpdateContactAttributesResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateContactAttributesError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| {
+                                    Err(UpdateContactAttributesError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2960,17 +3150,28 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateUserHierarchyError::from_response(response))
-                    }),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(UpdateUserHierarchyError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2994,17 +3195,30 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateUserIdentityInfoError::from_response(response))
-                    }),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| {
+                                    Err(UpdateUserIdentityInfoError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -3028,17 +3242,28 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateUserPhoneConfigError::from_response(response))
-                    }),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(UpdateUserPhoneConfigError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -3062,15 +3287,30 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateUserRoutingProfileError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| {
+                                    Err(UpdateUserRoutingProfileError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -3094,15 +3334,30 @@ impl Connect for ConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateUserSecurityProfilesError::from_response(response))
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| {
+                                    Err(UpdateUserSecurityProfilesError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }

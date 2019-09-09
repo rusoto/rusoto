@@ -13,16 +13,16 @@
 use std::error::Error;
 use std::fmt;
 
-#[allow(warnings)]
-use futures::future;
-use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
+#[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use futures::FutureExt;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddTagsToResourceRequest {
@@ -1631,9 +1631,7 @@ impl CloudHsmClient {
     ) -> CloudHsmClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         CloudHsmClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
@@ -1657,17 +1655,27 @@ impl CloudHsm for CloudHsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AddTagsToResourceResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<AddTagsToResourceResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AddTagsToResourceError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(AddTagsToResourceError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -1686,17 +1694,27 @@ impl CloudHsm for CloudHsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateHapgResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<CreateHapgResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateHapgError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(CreateHapgError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -1715,17 +1733,27 @@ impl CloudHsm for CloudHsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateHsmResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<CreateHsmResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateHsmError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(CreateHsmError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -1744,17 +1772,27 @@ impl CloudHsm for CloudHsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateLunaClientResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<CreateLunaClientResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateLunaClientError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(CreateLunaClientError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -1773,17 +1811,27 @@ impl CloudHsm for CloudHsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteHapgResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DeleteHapgResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteHapgError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(DeleteHapgError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -1802,17 +1850,27 @@ impl CloudHsm for CloudHsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteHsmResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DeleteHsmResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteHsmError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(DeleteHsmError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -1831,17 +1889,27 @@ impl CloudHsm for CloudHsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteLunaClientResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DeleteLunaClientResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteLunaClientError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(DeleteLunaClientError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -1860,17 +1928,27 @@ impl CloudHsm for CloudHsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeHapgResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribeHapgResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeHapgError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(DescribeHapgError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -1889,17 +1967,27 @@ impl CloudHsm for CloudHsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeHsmResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribeHsmResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeHsmError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(DescribeHsmError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -1918,17 +2006,27 @@ impl CloudHsm for CloudHsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeLunaClientResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DescribeLunaClientResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeLunaClientError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(DescribeLunaClientError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -1947,17 +2045,27 @@ impl CloudHsm for CloudHsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetConfigResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<GetConfigResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetConfigError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(GetConfigError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -1974,17 +2082,27 @@ impl CloudHsm for CloudHsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAvailableZonesResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListAvailableZonesResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListAvailableZonesError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(ListAvailableZonesError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2003,17 +2121,27 @@ impl CloudHsm for CloudHsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListHapgsResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListHapgsResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListHapgsError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(ListHapgsError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2029,17 +2157,27 @@ impl CloudHsm for CloudHsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListHsmsResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListHsmsResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListHsmsError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(ListHsmsError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2058,17 +2196,27 @@ impl CloudHsm for CloudHsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListLunaClientsResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListLunaClientsResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListLunaClientsError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(ListLunaClientsError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2090,16 +2238,27 @@ impl CloudHsm for CloudHsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsForResourceResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListTagsForResourceResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(ListTagsForResourceError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2118,17 +2277,27 @@ impl CloudHsm for CloudHsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ModifyHapgResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ModifyHapgResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ModifyHapgError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(ModifyHapgError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2147,17 +2316,27 @@ impl CloudHsm for CloudHsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ModifyHsmResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ModifyHsmResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ModifyHsmError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(ModifyHsmError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2176,17 +2355,27 @@ impl CloudHsm for CloudHsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ModifyLunaClientResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ModifyLunaClientResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ModifyLunaClientError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| Err(ModifyLunaClientError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -2208,16 +2397,29 @@ impl CloudHsm for CloudHsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RemoveTagsFromResourceResponse, _>()
-                }))
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.and_then(|response| {
+                            proto::json::ResponsePayload::new(&response)
+                                .deserialize::<RemoveTagsFromResourceResponse, _>()
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(RemoveTagsFromResourceError::from_response(response))
-                    }),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| e,
+                                |response| {
+                                    Err(RemoveTagsFromResourceError::from_response(response))
+                                },
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }

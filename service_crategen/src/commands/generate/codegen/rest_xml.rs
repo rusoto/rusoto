@@ -49,9 +49,9 @@ impl GenerateProtocol for RestXmlGenerator {
 
                         self.client.sign_and_dispatch(request, |response| {{
                             if !response.status.is_success() {{
-                                return Box::new(response.buffer().from_err().and_then(|response| {{
+                                return response.buffer().from_err().and_then(|response| {{
                                     Err({error_type}::from_response(response))
-                                }}));
+                                }}).boxed();
                             }}
 
                             {parse_response_body}
@@ -83,6 +83,7 @@ impl GenerateProtocol for RestXmlGenerator {
 
     fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service<'_>) -> IoResult {
         let imports = "
+            use futures::FutureExt;
             use std::str::{FromStr};
             use std::io::Write;
             use xml::reader::ParserConfig;

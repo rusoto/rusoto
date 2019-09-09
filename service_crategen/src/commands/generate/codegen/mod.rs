@@ -136,8 +136,6 @@ where
         use std::fmt;
 
         #[allow(warnings)]
-        use futures::future;
-        use futures::Future;
         use rusoto_core::request::{{BufferedHttpResponse, DispatchSignedRequest}};
         use rusoto_core::region;
         use rusoto_core::credential::ProvideAwsCredentials;
@@ -196,9 +194,7 @@ where
 
             pub fn new_with<P, D>(request_dispatcher: D, credentials_provider: P, region: region::Region) -> {type_name}
                 where P: ProvideAwsCredentials + Send + Sync + 'static,
-                      P::Future: Send,
                       D: DispatchSignedRequest + Send + Sync + 'static,
-                      D::Future: Send
             {{
                 {type_name} {{
                     client: Client::new_with(credentials_provider, request_dispatcher),

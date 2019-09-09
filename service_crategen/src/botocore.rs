@@ -8,7 +8,6 @@ use std::path::Path;
 
 use serde::de::{Error as SerdeError, MapAccess, Visitor};
 use serde::{Deserialize, Deserializer};
-use serde_derive::Deserialize;
 use serde_json;
 
 use crate::util;

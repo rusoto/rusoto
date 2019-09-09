@@ -13,14 +13,13 @@
 use std::error::Error;
 use std::fmt;
 
-#[allow(warnings)]
-use futures::future;
-use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
+#[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use futures::FutureExt;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
@@ -6166,9 +6165,7 @@ impl ElbClient {
     ) -> ElbClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         ElbClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
@@ -6191,12 +6188,15 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AddTagsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(AddTagsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -6240,11 +6240,19 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ApplySecurityGroupsToLoadBalancerError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(ApplySecurityGroupsToLoadBalancerError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -6290,9 +6298,17 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AttachLoadBalancerToSubnetsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(AttachLoadBalancerToSubnetsError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -6338,11 +6354,15 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ConfigureHealthCheckError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ConfigureHealthCheckError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -6389,11 +6409,19 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateAppCookieStickinessPolicyError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(CreateAppCookieStickinessPolicyError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -6440,9 +6468,17 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateLBCookieStickinessPolicyError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(CreateLBCookieStickinessPolicyError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -6488,12 +6524,15 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateLoadBalancerError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateLoadBalancerError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -6539,9 +6578,17 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateLoadBalancerListenersError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(CreateLoadBalancerListenersError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -6587,9 +6634,15 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateLoadBalancerPolicyError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateLoadBalancerPolicyError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -6635,12 +6688,15 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteLoadBalancerError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteLoadBalancerError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -6686,9 +6742,17 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteLoadBalancerListenersError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DeleteLoadBalancerListenersError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -6734,9 +6798,15 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteLoadBalancerPolicyError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteLoadBalancerPolicyError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -6782,11 +6852,19 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeregisterInstancesFromLoadBalancerError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DeregisterInstancesFromLoadBalancerError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -6832,9 +6910,15 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAccountLimitsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeAccountLimitsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -6880,9 +6964,15 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeInstanceHealthError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeInstanceHealthError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -6929,9 +7019,17 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLoadBalancerAttributesError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeLoadBalancerAttributesError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -6977,9 +7075,17 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLoadBalancerPoliciesError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeLoadBalancerPoliciesError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -7026,11 +7132,19 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLoadBalancerPolicyTypesError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeLoadBalancerPolicyTypesError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -7076,9 +7190,15 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLoadBalancersError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeLoadBalancersError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -7124,12 +7244,15 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeTagsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeTagsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -7175,9 +7298,17 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetachLoadBalancerFromSubnetsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DetachLoadBalancerFromSubnetsError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -7224,11 +7355,19 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisableAvailabilityZonesForLoadBalancerError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DisableAvailabilityZonesForLoadBalancerError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -7274,11 +7413,19 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(EnableAvailabilityZonesForLoadBalancerError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(EnableAvailabilityZonesForLoadBalancerError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -7324,9 +7471,17 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyLoadBalancerAttributesError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(ModifyLoadBalancerAttributesError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -7372,11 +7527,19 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RegisterInstancesWithLoadBalancerError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(RegisterInstancesWithLoadBalancerError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -7422,12 +7585,15 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RemoveTagsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(RemoveTagsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -7474,11 +7640,19 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetLoadBalancerListenerSSLCertificateError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(SetLoadBalancerListenerSSLCertificateError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -7527,11 +7701,19 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetLoadBalancerPoliciesForBackendServerError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(SetLoadBalancerPoliciesForBackendServerError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -7579,11 +7761,19 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetLoadBalancerPoliciesOfListenerError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(SetLoadBalancerPoliciesOfListenerError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

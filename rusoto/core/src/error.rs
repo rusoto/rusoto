@@ -2,7 +2,7 @@ use std::error::Error;
 use std::fmt;
 use std::io;
 
-use crate::CredentialsError;
+use crate::credential::CredentialsError;
 
 use super::proto::xml::util::XmlParseError;
 use super::request::{BufferedHttpResponse, HttpDispatchError};
@@ -13,8 +13,6 @@ use crate::client::SignAndDispatchError;
 pub enum RusotoError<E> {
     /// A service-specific error occurred.
     Service(E),
-    /// An error occurred during a signed disptach
-    SignAndDispatch(SignAndDispatchError),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -57,6 +55,15 @@ impl<E> From<HttpDispatchError> for RusotoError<E> {
     }
 }
 
+impl<E> From<SignAndDispatchError> for RusotoError<E> {
+    fn from(err: SignAndDispatchError) -> Self {
+        match err {
+            SignAndDispatchError::Credentials(e) => Self::from(e),
+            SignAndDispatchError::Dispatch(e) => Self::from(e),
+        }
+    }
+}
+
 impl<E> From<io::Error> for RusotoError<E> {
     fn from(err: io::Error) -> Self {
         RusotoError::HttpDispatch(HttpDispatchError::from(err))
@@ -78,6 +85,7 @@ impl<E: Error + 'static> Error for RusotoError<E> {
             RusotoError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             RusotoError::ParseError(ref cause) => cause,
             RusotoError::Unknown(ref cause) => cause.body_as_str(),
+            RusotoError::Blocking => "Failed to run blocking future",
         }
     }
 

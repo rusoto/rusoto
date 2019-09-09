@@ -16,9 +16,12 @@ exclude = ["test_resources/*"]
 
 [dependencies]
 bytes = "0.4.12"
-futures = "0.1.16"
 serde = "1.0.2"
 serde_derive = "1.0.2"
+
+[dependencies.futures-preview]
+version = "0.3.0-alpha.18"
+features = ["async-await", "nightly"]
 
 [dependencies.rusoto_core]
 version = "0.40.0"

@@ -13,14 +13,13 @@
 use std::error::Error;
 use std::fmt;
 
-#[allow(warnings)]
-use futures::future;
-use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
+#[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use futures::FutureExt;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
@@ -9816,9 +9815,7 @@ impl CloudFormationClient {
     ) -> CloudFormationClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         CloudFormationClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
@@ -9844,15 +9841,18 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CancelUpdateStackError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CancelUpdateStackError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -9872,9 +9872,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ContinueUpdateRollbackError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ContinueUpdateRollbackError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -9920,12 +9926,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateChangeSetError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateChangeSetError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -9971,12 +9980,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateStackError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateStackError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10022,11 +10034,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateStackInstancesError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateStackInstancesError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10072,12 +10088,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateStackSetError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateStackSetError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10123,12 +10142,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteChangeSetError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteChangeSetError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10171,15 +10193,18 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteStackError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteStackError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -10199,11 +10224,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteStackInstancesError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteStackInstancesError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10249,12 +10278,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteStackSetError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteStackSetError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10300,9 +10332,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAccountLimitsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeAccountLimitsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10348,12 +10386,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeChangeSetError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeChangeSetError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10400,11 +10441,19 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeStackDriftDetectionStatusError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeStackDriftDetectionStatusError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10450,11 +10499,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeStackEventsError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeStackEventsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10500,9 +10553,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeStackInstanceError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeStackInstanceError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10548,9 +10607,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeStackResourceError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeStackResourceError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10596,9 +10661,17 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeStackResourceDriftsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeStackResourceDriftsError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10644,9 +10717,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeStackResourcesError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeStackResourcesError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10692,12 +10771,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeStackSetError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeStackSetError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10743,9 +10825,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeStackSetOperationError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeStackSetOperationError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10791,12 +10879,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeStacksError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeStacksError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10842,12 +10933,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DetectStackDriftError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DetectStackDriftError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10893,9 +10987,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetectStackResourceDriftError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DetectStackResourceDriftError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10941,11 +11041,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(EstimateTemplateCostError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(EstimateTemplateCostError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10991,12 +11095,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ExecuteChangeSetError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ExecuteChangeSetError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11042,12 +11149,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetStackPolicyError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(GetStackPolicyError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11093,12 +11203,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetTemplateError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(GetTemplateError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11144,12 +11257,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetTemplateSummaryError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(GetTemplateSummaryError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11195,12 +11311,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListChangeSetsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ListChangeSetsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11246,12 +11365,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListExportsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ListExportsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11297,12 +11419,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListImportsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ListImportsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11348,12 +11473,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListStackInstancesError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ListStackInstancesError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11399,12 +11527,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListStackResourcesError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ListStackResourcesError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11450,9 +11581,17 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListStackSetOperationResultsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(ListStackSetOperationResultsError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11498,9 +11637,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListStackSetOperationsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ListStackSetOperationsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11546,12 +11691,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListStackSetsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ListStackSetsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11597,12 +11745,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListStacksError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ListStacksError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11646,15 +11797,18 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SetStackPolicyError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(SetStackPolicyError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -11671,15 +11825,18 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SignalResourceError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(SignalResourceError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -11699,9 +11856,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopStackSetOperationError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(StopStackSetOperationError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11747,12 +11910,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateStackError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(UpdateStackError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11798,11 +11964,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateStackInstancesError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(UpdateStackInstancesError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11848,12 +12018,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateStackSetError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(UpdateStackSetError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11899,9 +12072,17 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateTerminationProtectionError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(UpdateTerminationProtectionError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11947,12 +12128,15 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ValidateTemplateError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ValidateTemplateError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

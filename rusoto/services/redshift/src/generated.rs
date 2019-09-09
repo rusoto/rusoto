@@ -13,14 +13,13 @@
 use std::error::Error;
 use std::fmt;
 
-#[allow(warnings)]
-use futures::future;
-use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
+#[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use futures::FutureExt;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
@@ -16751,9 +16750,7 @@ impl RedshiftClient {
     ) -> RedshiftClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         RedshiftClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
@@ -16780,9 +16777,17 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AcceptReservedNodeExchangeError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(AcceptReservedNodeExchangeError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16831,11 +16836,19 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AuthorizeClusterSecurityGroupIngressError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(AuthorizeClusterSecurityGroupIngressError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16881,9 +16894,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AuthorizeSnapshotAccessError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(AuthorizeSnapshotAccessError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16929,9 +16948,17 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchDeleteClusterSnapshotsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(BatchDeleteClusterSnapshotsError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16978,9 +17005,17 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchModifyClusterSnapshotsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(BatchModifyClusterSnapshotsError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17026,12 +17061,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CancelResizeError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CancelResizeError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17077,11 +17115,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CopyClusterSnapshotError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CopyClusterSnapshotError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17127,12 +17169,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateClusterError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateClusterError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17178,9 +17223,17 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateClusterParameterGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(CreateClusterParameterGroupError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17226,9 +17279,17 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateClusterSecurityGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(CreateClusterSecurityGroupError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17274,9 +17335,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateClusterSnapshotError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateClusterSnapshotError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17322,9 +17389,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateClusterSubnetGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateClusterSubnetGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17370,9 +17443,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateEventSubscriptionError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateEventSubscriptionError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17418,9 +17497,17 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateHsmClientCertificateError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(CreateHsmClientCertificateError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17466,9 +17553,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateHsmConfigurationError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateHsmConfigurationError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17514,9 +17607,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateSnapshotCopyGrantError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateSnapshotCopyGrantError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17562,9 +17661,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateSnapshotScheduleError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateSnapshotScheduleError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17607,15 +17712,18 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateTagsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateTagsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -17635,12 +17743,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteClusterError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteClusterError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17686,12 +17797,20 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteClusterParameterGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DeleteClusterParameterGroupError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -17711,12 +17830,20 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteClusterSecurityGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DeleteClusterSecurityGroupError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -17736,9 +17863,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteClusterSnapshotError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteClusterSnapshotError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17784,12 +17917,18 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteClusterSubnetGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteClusterSubnetGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -17809,12 +17948,18 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteEventSubscriptionError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteEventSubscriptionError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -17834,12 +17979,20 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteHsmClientCertificateError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DeleteHsmClientCertificateError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -17859,12 +18012,18 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteHsmConfigurationError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteHsmConfigurationError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -17884,12 +18043,18 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteSnapshotCopyGrantError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteSnapshotCopyGrantError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -17909,12 +18074,18 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteSnapshotScheduleError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteSnapshotScheduleError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -17931,15 +18102,18 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteTagsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteTagsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -17959,9 +18133,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAccountAttributesError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeAccountAttributesError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18007,9 +18187,17 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClusterDbRevisionsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeClusterDbRevisionsError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18055,9 +18243,17 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClusterParameterGroupsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeClusterParameterGroupsError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18103,9 +18299,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClusterParametersError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeClusterParametersError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18151,9 +18353,17 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClusterSecurityGroupsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeClusterSecurityGroupsError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18199,9 +18409,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClusterSnapshotsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeClusterSnapshotsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18247,9 +18463,17 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClusterSubnetGroupsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeClusterSubnetGroupsError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18295,9 +18519,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClusterTracksError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeClusterTracksError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18343,9 +18573,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClusterVersionsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeClusterVersionsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18391,12 +18627,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeClustersError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeClustersError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18443,11 +18682,19 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDefaultClusterParametersError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeDefaultClusterParametersError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18493,9 +18740,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEventCategoriesError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeEventCategoriesError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18541,9 +18794,17 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEventSubscriptionsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeEventSubscriptionsError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18589,12 +18850,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeEventsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeEventsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18638,9 +18902,17 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeHsmClientCertificatesError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeHsmClientCertificatesError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18686,9 +18958,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeHsmConfigurationsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeHsmConfigurationsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18734,9 +19012,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLoggingStatusError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeLoggingStatusError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18782,11 +19066,19 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeOrderableClusterOptionsError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeOrderableClusterOptionsError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18832,9 +19124,17 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReservedNodeOfferingsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeReservedNodeOfferingsError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18880,9 +19180,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReservedNodesError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeReservedNodesError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18928,12 +19234,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeResizeError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeResizeError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18979,9 +19288,17 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeSnapshotCopyGrantsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeSnapshotCopyGrantsError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19027,9 +19344,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeSnapshotSchedulesError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeSnapshotSchedulesError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19072,12 +19395,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeStorageError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeStorageError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19123,9 +19449,17 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTableRestoreStatusError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeTableRestoreStatusError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19171,12 +19505,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeTagsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeTagsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19222,12 +19559,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DisableLoggingError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DisableLoggingError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19271,11 +19611,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DisableSnapshotCopyError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DisableSnapshotCopyError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19321,12 +19665,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(EnableLoggingError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(EnableLoggingError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19370,12 +19717,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(EnableSnapshotCopyError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(EnableSnapshotCopyError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19421,9 +19771,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetClusterCredentialsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(GetClusterCredentialsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19472,11 +19828,19 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetReservedNodeExchangeOfferingsError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(GetReservedNodeExchangeOfferingsError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19523,12 +19887,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ModifyClusterError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ModifyClusterError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19574,9 +19941,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyClusterDbRevisionError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ModifyClusterDbRevisionError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19622,9 +19995,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyClusterIamRolesError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ModifyClusterIamRolesError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19670,9 +20049,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyClusterMaintenanceError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ModifyClusterMaintenanceError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19718,9 +20103,17 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyClusterParameterGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(ModifyClusterParameterGroupError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19766,9 +20159,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyClusterSnapshotError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ModifyClusterSnapshotError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19814,12 +20213,20 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyClusterSnapshotScheduleError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(ModifyClusterSnapshotScheduleError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -19839,9 +20246,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyClusterSubnetGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ModifyClusterSubnetGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19887,9 +20300,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyEventSubscriptionError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ModifyEventSubscriptionError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19936,11 +20355,19 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifySnapshotCopyRetentionPeriodError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(ModifySnapshotCopyRetentionPeriodError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19986,9 +20413,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifySnapshotScheduleError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ModifySnapshotScheduleError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20034,9 +20467,17 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PurchaseReservedNodeOfferingError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(PurchaseReservedNodeOfferingError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20082,12 +20523,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RebootClusterError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(RebootClusterError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20133,9 +20577,17 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ResetClusterParameterGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(ResetClusterParameterGroupError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20181,12 +20633,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ResizeClusterError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ResizeClusterError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20232,9 +20687,17 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RestoreFromClusterSnapshotError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(RestoreFromClusterSnapshotError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20281,11 +20744,19 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RestoreTableFromClusterSnapshotError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(RestoreTableFromClusterSnapshotError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20332,11 +20803,19 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RevokeClusterSecurityGroupIngressError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(RevokeClusterSecurityGroupIngressError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20382,11 +20861,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(RevokeSnapshotAccessError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(RevokeSnapshotAccessError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20432,11 +20915,15 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(RotateEncryptionKeyError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(RotateEncryptionKeyError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

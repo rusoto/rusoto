@@ -13,14 +13,13 @@
 use std::error::Error;
 use std::fmt;
 
-#[allow(warnings)]
-use futures::future;
-use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
+#[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use futures::FutureExt;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
@@ -12730,9 +12729,7 @@ impl NeptuneClient {
     ) -> NeptuneClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         NeptuneClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
@@ -12758,15 +12755,18 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AddRoleToDBClusterError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(AddRoleToDBClusterError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -12787,11 +12787,19 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AddSourceIdentifierToSubscriptionError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(AddSourceIdentifierToSubscriptionError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12837,15 +12845,18 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AddTagsToResourceError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(AddTagsToResourceError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -12865,9 +12876,17 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ApplyPendingMaintenanceActionError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(ApplyPendingMaintenanceActionError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12913,9 +12932,17 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CopyDBClusterParameterGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(CopyDBClusterParameterGroupError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12961,9 +12988,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CopyDBClusterSnapshotError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CopyDBClusterSnapshotError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13009,11 +13042,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CopyDBParameterGroupError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CopyDBParameterGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13059,12 +13096,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateDBClusterError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateDBClusterError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13110,9 +13150,17 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDBClusterParameterGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(CreateDBClusterParameterGroupError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13158,9 +13206,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDBClusterSnapshotError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateDBClusterSnapshotError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13206,12 +13260,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateDBInstanceError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateDBInstanceError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13257,9 +13314,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDBParameterGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateDBParameterGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13305,11 +13368,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateDBSubnetGroupError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateDBSubnetGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13355,9 +13422,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateEventSubscriptionError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateEventSubscriptionError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13403,12 +13476,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteDBClusterError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteDBClusterError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13454,12 +13530,20 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteDBClusterParameterGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DeleteDBClusterParameterGroupError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -13479,9 +13563,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteDBClusterSnapshotError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteDBClusterSnapshotError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13527,12 +13617,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteDBInstanceError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteDBInstanceError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13578,12 +13671,18 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteDBParameterGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteDBParameterGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -13603,14 +13702,18 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteDBSubnetGroupError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteDBSubnetGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -13630,9 +13733,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteEventSubscriptionError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteEventSubscriptionError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13678,11 +13787,19 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDBClusterParameterGroupsError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeDBClusterParameterGroupsError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13728,9 +13845,17 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDBClusterParametersError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeDBClusterParametersError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13779,11 +13904,19 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDBClusterSnapshotAttributesError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeDBClusterSnapshotAttributesError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13829,9 +13962,17 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDBClusterSnapshotsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeDBClusterSnapshotsError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13877,12 +14018,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeDBClustersError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeDBClustersError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13928,9 +14072,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDBEngineVersionsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeDBEngineVersionsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13976,11 +14126,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeDBInstancesError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeDBInstancesError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14026,9 +14180,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDBParameterGroupsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeDBParameterGroupsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14074,11 +14234,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeDBParametersError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeDBParametersError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14124,9 +14288,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDBSubnetGroupsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeDBSubnetGroupsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14175,11 +14345,19 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEngineDefaultClusterParametersError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeEngineDefaultClusterParametersError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14226,11 +14404,19 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEngineDefaultParametersError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeEngineDefaultParametersError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14276,9 +14462,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEventCategoriesError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeEventCategoriesError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14324,9 +14516,17 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEventSubscriptionsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeEventSubscriptionsError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14372,12 +14572,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeEventsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DescribeEventsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14422,11 +14625,19 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeOrderableDBInstanceOptionsError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeOrderableDBInstanceOptionsError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14473,11 +14684,19 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribePendingMaintenanceActionsError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribePendingMaintenanceActionsError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14526,11 +14745,19 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeValidDBInstanceModificationsError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(DescribeValidDBInstanceModificationsError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14576,12 +14803,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(FailoverDBClusterError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(FailoverDBClusterError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14627,11 +14857,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ListTagsForResourceError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14677,12 +14911,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ModifyDBClusterError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ModifyDBClusterError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14728,9 +14965,17 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyDBClusterParameterGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(ModifyDBClusterParameterGroupError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14777,11 +15022,19 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyDBClusterSnapshotAttributeError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(ModifyDBClusterSnapshotAttributeError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14827,12 +15080,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ModifyDBInstanceError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ModifyDBInstanceError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14878,9 +15134,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyDBParameterGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ModifyDBParameterGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14926,11 +15188,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ModifyDBSubnetGroupError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ModifyDBSubnetGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14976,9 +15242,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyEventSubscriptionError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ModifyEventSubscriptionError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15024,9 +15296,17 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PromoteReadReplicaDBClusterError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(PromoteReadReplicaDBClusterError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15072,12 +15352,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RebootDBInstanceError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(RebootDBInstanceError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15123,12 +15406,18 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemoveRoleFromDBClusterError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(RemoveRoleFromDBClusterError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -15151,11 +15440,19 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemoveSourceIdentifierFromSubscriptionError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(RemoveSourceIdentifierFromSubscriptionError::from_response(
+                                    response,
+                                ))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15201,12 +15498,18 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemoveTagsFromResourceError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(RemoveTagsFromResourceError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -15226,9 +15529,17 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ResetDBClusterParameterGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(ResetDBClusterParameterGroupError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15274,9 +15585,15 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ResetDBParameterGroupError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ResetDBParameterGroupError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15322,9 +15639,17 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RestoreDBClusterFromSnapshotError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(RestoreDBClusterFromSnapshotError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15370,9 +15695,17 @@ impl Neptune for NeptuneClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RestoreDBClusterToPointInTimeError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| {
+                                Err(RestoreDBClusterToPointInTimeError::from_response(response))
+                            },
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

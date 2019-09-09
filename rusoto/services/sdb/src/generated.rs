@@ -13,14 +13,13 @@
 use std::error::Error;
 use std::fmt;
 
-#[allow(warnings)]
-use futures::future;
-use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
+#[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use futures::FutureExt;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
@@ -1657,9 +1656,7 @@ impl SimpleDbClient {
     ) -> SimpleDbClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         SimpleDbClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
@@ -1685,12 +1682,18 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchDeleteAttributesError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(BatchDeleteAttributesError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -1710,15 +1713,18 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(BatchPutAttributesError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(BatchPutAttributesError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -1735,15 +1741,18 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateDomainError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(CreateDomainError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -1763,15 +1772,18 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteAttributesError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteAttributesError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -1788,15 +1800,18 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteDomainError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DeleteDomainError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -1816,12 +1831,15 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DomainMetadataError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(DomainMetadataError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -1867,12 +1885,15 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetAttributesError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(GetAttributesError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -1918,12 +1939,15 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListDomainsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(ListDomainsError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -1966,15 +1990,18 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutAttributesError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(PutAttributesError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -1991,12 +2018,15 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SelectError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map_or_else(
+                            |e| e,
+                            |response| Err(SelectError::from_response(response)),
+                        )
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

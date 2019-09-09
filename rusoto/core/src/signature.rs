@@ -9,6 +9,7 @@
 use std::borrow::Cow;
 use std::collections::btree_map::Entry;
 use std::collections::BTreeMap;
+use std::fmt;
 use std::str;
 use std::time::Duration;
 
@@ -17,13 +18,13 @@ use bytes::Bytes;
 use hex;
 use hmac::{Hmac, Mac};
 use log::*;
-//use md5;
+use md5;
 use sha2::{Digest, Sha256};
 use time::now_utc;
 use time::Tm;
 use url::percent_encoding::{percent_decode, utf8_percent_encode, EncodeSet};
 
-use crate::AwsCredentials;
+use crate::credential::AwsCredentials;
 use crate::param::{Params, ServiceParams};
 use crate::region::Region;
 use crate::stream::ByteStream;
@@ -35,15 +36,41 @@ pub static UNSIGNED_PAYLOAD: &str = "UNSIGNED-PAYLOAD";
 pub static EMPTY_SHA256_HASH: &str =
     "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 
-/// A data structure indicating our payload is a signed request
-#[derive(Debug)]
-pub struct SignedRequestPayload {
-    inner: Body,
+/// Possible payloads included in a `SignedRequest`.
+pub enum SignedRequestPayload {
+    /// Transfer payload in a single chunk
+    Buffer(Bytes),
+    /// Transfer payload in multiple chunks
+    Stream(ByteStream),
 }
 
 impl SignedRequestPayload {
-    /// Convert into inner body
-    pub fn into_inner(self) -> Body { self.inner }
+    /// Convert `SignedRequestPayload` into a hyper `Body`
+    pub fn into_body(self) -> Body {
+        match self {
+            SignedRequestPayload::Buffer(bytes) => {
+                Body::from(bytes)
+            }
+            SignedRequestPayload::Stream(stream) => {
+                Body::wrap_stream(stream)
+            }
+        }
+    }
+}
+
+impl fmt::Debug for SignedRequestPayload {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            SignedRequestPayload::Buffer(ref buf) => {
+                write!(f, "SignedRequestPayload::Buffer(len = {})", buf.len())
+            }
+            SignedRequestPayload::Stream(ref stream) => write!(
+                f,
+                "SignedRequestPayload::Stream(size_hint = {:?})",
+                stream.size_hint()
+            ),
+        }
+    }
 }
 
 /// A data structure for all the elements of an HTTP request that are involved in
@@ -116,19 +143,19 @@ impl SignedRequest {
 
     /// Sets the new body (payload) as a stream
     pub fn set_payload_stream(&mut self, stream: ByteStream) {
-        self.payload = Some(SignedRequestPayload { inner: stream });
+        self.payload = Some(SignedRequestPayload::Stream(stream));
     }
 
     /// Computes and sets the Content-MD5 header based on the current payload.
     ///
     /// Has no effect if the payload is not set, or is not a buffer.
     pub fn set_content_md5_header(&mut self) {
-        let digest: Option<Vec<u8>> = None;
-//        if let Some(SignedRequestPayload::Buffer(ref payload)) = self.payload {
-//            digest = Some(md5::compute(payload));
-//        } else {
-//            digest = None;
-//        }
+        let digest;
+        if let Some(SignedRequestPayload::Buffer(ref payload)) = self.payload {
+            digest = Some(md5::compute(payload));
+        } else {
+            digest = None;
+        }
         if let Some(digest) = digest {
             // need to deref digest and then pass that reference:
             self.add_header("Content-MD5", &base64::encode(&(*digest)));
@@ -219,8 +246,8 @@ impl SignedRequest {
 
     /// Adds parameter to the HTTP Request
     pub fn add_param<S>(&mut self, key: S, value: S)
-    where
-        S: Into<String>,
+        where
+            S: Into<String>,
     {
         self.params.insert(key.into(), Some(value.into()));
     }
@@ -304,8 +331,11 @@ impl SignedRequest {
                 None => {
                     Cow::Borrowed(EMPTY_SHA256_HASH)
                 }
-                Some(_payload) => {
-                    //let (digest, _len) = digest_payload(&payload);
+                Some(SignedRequestPayload::Buffer(ref payload)) => {
+                    let (digest, _len) = digest_payload(&payload);
+                    Cow::Owned(digest)
+                }
+                Some(SignedRequestPayload::Stream(ref _stream)) => {
                     Cow::Borrowed(UNSIGNED_PAYLOAD)
                 }
             }
@@ -417,9 +447,12 @@ impl SignedRequest {
             None => {
                 (Cow::Borrowed(EMPTY_SHA256_HASH), Some(0))
             }
-            Some(payload) => {
-                //let (digest, len) = digest_payload(&payload);
-                (Cow::Borrowed(UNSIGNED_PAYLOAD), None)
+            Some(SignedRequestPayload::Buffer(ref payload)) => {
+                let (digest, len) = digest_payload(&payload);
+                (Cow::Owned(digest), Some(len))
+            }
+            Some(SignedRequestPayload::Stream(ref stream)) => {
+                (Cow::Borrowed(UNSIGNED_PAYLOAD), stream.size_hint())
             }
         };
 
@@ -437,7 +470,7 @@ impl SignedRequest {
             self.canonical_query_string,
             canonical_headers,
             signed_headers,
-            digest.to_string()
+            digest
         );
 
         if let Some(len) = len {
@@ -775,7 +808,7 @@ mod tests {
     use std::collections::BTreeMap;
     use time::empty_tm;
 
-    use crate::{ProfileProvider, ProvideAwsCredentials};
+    use crate::credential::{ProfileProvider, ProvideAwsCredentials};
     use crate::param::Params;
     use crate::Region;
 

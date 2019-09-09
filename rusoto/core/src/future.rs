@@ -142,19 +142,19 @@ use pin_project::pin_project;
 /// #   fn upload_part_copy(&self, _: UploadPartCopyRequest) -> RusotoFuture<UploadPartCopyOutput, UploadPartCopyError> { unimplemented!() }
 /// }
 /// ```
-pub(crate) type RusotoHandlerFuture<T, E> = Pin<Box<dyn Future<Output = Result<T, RusotoError<E>>> + Send>>;
-
 #[pin_project]
 pub struct RusotoFuture<T, E> {
     #[pin]
     inner: RusotoHandlerFuture<T, E>,
 }
 
+pub(crate) type RusotoHandlerFuture<T, E> = Pin<Box<dyn Future<Output = Result<T, RusotoError<E>>> + Send>>;
+
 async fn dispatch_rusoto_future<T, E>(
     future: SignAndDispatchFuture,
     handler: fn(HttpResponse) -> RusotoHandlerFuture<T, E>
 ) -> Result<T, RusotoError<E>> {
-    let resp = future.await.map_err(RusotoError::SignAndDispatch)?;
+    let resp = future.await.map_err(|e| RusotoError::from(e))?;
     handler(resp).await
 }
 

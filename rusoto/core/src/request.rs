@@ -181,7 +181,8 @@ impl From<IoError> for HttpDispatchError {
     }
 }
 
-pub(crate) type DispatchSignedRequestFuture = Pin<Box<dyn Future<Output=Result<HttpResponse, HttpDispatchError>> + Send>>;
+/// Type returned from `dispatch` for a `DispatchSignedRequest` implementor
+pub type DispatchSignedRequestFuture = Pin<Box<dyn Future<Output=Result<HttpResponse, HttpDispatchError>> + Send>>;
 
 /// Trait for implementing HTTP Request/Response
 pub trait DispatchSignedRequest {
@@ -385,7 +386,7 @@ async fn http_client_dispatch<C>(
     http_request_builder.uri(final_uri);
 
     let try_http_request = if let Some(p) = request.payload {
-        http_request_builder.body(p.into_inner())
+        http_request_builder.body(p.into_body())
     } else {
         http_request_builder.body(Body::empty())
     };

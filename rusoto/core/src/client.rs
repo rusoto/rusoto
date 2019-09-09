@@ -3,7 +3,7 @@ use std::pin::Pin;
 use std::sync::{Arc, Mutex, Weak};
 use std::time::Duration;
 
-use crate::{CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials};
+use crate::credential::{CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials};
 use crate::future::{self, RusotoFuture};
 use crate::request::{DispatchSignedRequest, HttpClient, HttpDispatchError, HttpResponse};
 use crate::signature::SignedRequest;
@@ -112,7 +112,7 @@ async fn sign_and_dispatch<P, D>(
     let f = client.credentials_provider.credentials();
     let credentials = if let Some(to) = timeout {
         match f.timeout(to).await {
-            Err(e) => {
+            Err(_e) => {
                 let err = CredentialsError {
                     message: "Timeout getting credentials".to_owned(),
                 };

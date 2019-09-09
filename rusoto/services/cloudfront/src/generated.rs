@@ -13,14 +13,13 @@
 use std::error::Error;
 use std::fmt;
 
-#[allow(warnings)]
-use futures::future;
-use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
+#[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use futures::FutureExt;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
@@ -12106,9 +12105,7 @@ impl CloudFrontClient {
     ) -> CloudFrontClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         CloudFrontClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
@@ -12141,11 +12138,15 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCloudFrontOriginAccessIdentityError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(CreateCloudFrontOriginAccessIdentityError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12199,12 +12200,11 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateDistributionError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(CreateDistributionError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12261,9 +12261,13 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDistributionWithTagsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(CreateDistributionWithTagsError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12318,11 +12322,15 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateFieldLevelEncryptionConfigError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(CreateFieldLevelEncryptionConfigError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12377,11 +12385,15 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateFieldLevelEncryptionProfileError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(CreateFieldLevelEncryptionProfileError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12438,12 +12450,11 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateInvalidationError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(CreateInvalidationError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12493,12 +12504,11 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreatePublicKeyError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(CreatePublicKeyError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12552,9 +12562,13 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateStreamingDistributionError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(CreateStreamingDistributionError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12614,11 +12628,15 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateStreamingDistributionWithTagsError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(CreateStreamingDistributionWithTagsError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12671,14 +12689,18 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCloudFrontOriginAccessIdentityError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(DeleteCloudFrontOriginAccessIdentityError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -12698,15 +12720,14 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteDistributionError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(DeleteDistributionError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -12726,14 +12747,18 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteFieldLevelEncryptionConfigError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(DeleteFieldLevelEncryptionConfigError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -12756,14 +12781,18 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteFieldLevelEncryptionProfileError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(DeleteFieldLevelEncryptionProfileError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -12783,15 +12812,14 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeletePublicKeyError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(DeletePublicKeyError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -12811,12 +12839,16 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteStreamingDistributionError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(DeleteStreamingDistributionError::from_response(response))
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -12836,11 +12868,15 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCloudFrontOriginAccessIdentityError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(GetCloudFrontOriginAccessIdentityError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12888,11 +12924,15 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCloudFrontOriginAccessIdentityConfigError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(GetCloudFrontOriginAccessIdentityConfigError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12935,12 +12975,11 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetDistributionError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetDistributionError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12982,9 +13021,11 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetDistributionConfigError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetDistributionConfigError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13026,9 +13067,11 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetFieldLevelEncryptionError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetFieldLevelEncryptionError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13073,9 +13116,13 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetFieldLevelEncryptionConfigError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(GetFieldLevelEncryptionConfigError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13121,9 +13168,13 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetFieldLevelEncryptionProfileError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(GetFieldLevelEncryptionProfileError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13171,11 +13222,15 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetFieldLevelEncryptionProfileConfigError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(GetFieldLevelEncryptionProfileConfigError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13221,12 +13276,11 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetInvalidationError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetInvalidationError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13265,12 +13319,11 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetPublicKeyError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetPublicKeyError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13310,12 +13363,11 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetPublicKeyConfigError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetPublicKeyConfigError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13357,9 +13409,13 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetStreamingDistributionError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(GetStreamingDistributionError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13405,9 +13461,13 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetStreamingDistributionConfigError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(GetStreamingDistributionConfigError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13461,11 +13521,15 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListCloudFrontOriginAccessIdentitiesError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(ListCloudFrontOriginAccessIdentitiesError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13513,12 +13577,11 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListDistributionsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(ListDistributionsError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13569,9 +13632,13 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDistributionsByWebACLIdError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(ListDistributionsByWebACLIdError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13620,11 +13687,15 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListFieldLevelEncryptionConfigsError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(ListFieldLevelEncryptionConfigsError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13673,11 +13744,15 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListFieldLevelEncryptionProfilesError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(ListFieldLevelEncryptionProfilesError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13728,12 +13803,11 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListInvalidationsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(ListInvalidationsError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13781,12 +13855,11 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListPublicKeysError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(ListPublicKeysError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13834,9 +13907,13 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListStreamingDistributionsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(ListStreamingDistributionsError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13879,11 +13956,11 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(ListTagsForResourceError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13927,15 +14004,14 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TagResourceError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(TagResourceError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -13956,15 +14032,14 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UntagResourceError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(UntagResourceError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -13998,11 +14073,15 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateCloudFrontOriginAccessIdentityError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(UpdateCloudFrontOriginAccessIdentityError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14056,12 +14135,11 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateDistributionError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(UpdateDistributionError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14119,11 +14197,15 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateFieldLevelEncryptionConfigError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(UpdateFieldLevelEncryptionConfigError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14181,11 +14263,15 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateFieldLevelEncryptionProfileError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(UpdateFieldLevelEncryptionProfileError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14239,12 +14325,11 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdatePublicKeyError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(UpdatePublicKeyError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14301,9 +14386,13 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateStreamingDistributionError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(UpdateStreamingDistributionError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

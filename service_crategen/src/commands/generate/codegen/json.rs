@@ -45,9 +45,11 @@ impl GenerateProtocol for JsonGenerator {
                         if response.status.is_success() {{
                             {ok_response}
                         }} else {{
-                            Box::new(response.buffer().from_err().and_then(|response| {{
-                                Err({error_type}::from_response(response))
-                            }}))
+                            response.buffer().map(|try_response| {{
+                                try_response.map_or_else(|e| e, |response| {{
+                                    Err({error_type}::from_response(response))
+                                }}).boxed()
+                            }}).boxed()
                         }}
                     }})
                 }}
@@ -73,9 +75,10 @@ impl GenerateProtocol for JsonGenerator {
     fn generate_prelude(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         let res = writeln!(
             writer,
-            "
+            "use futures::FutureExt;
         use rusoto_core::proto;
-        use rusoto_core::signature::SignedRequest;"
+        use rusoto_core::signature::SignedRequest;
+        use serde::{{Deserialize, Serialize}};"
         );
         if service.needs_serde_json_crate() {
             return writeln!(writer, "use serde_json;");
@@ -159,12 +162,14 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
 fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
     if operation.output.is_some() {
         format!(
-            "Box::new(response.buffer().from_err().and_then(|response| {{
+            "response.buffer().map(|try_response| {{
+                try_response.and_then(|response| {{
                     proto::json::ResponsePayload::new(&response).deserialize::<{}, _>()
-                }}))",
+                }})
+            }}).boxed()",
             output_type
         )
     } else {
-        "Box::new(future::ok(::std::mem::drop(response)))".to_owned()
+        "futures::future::ready(::std::mem::drop(response)).boxed()".to_owned()
     }
 }

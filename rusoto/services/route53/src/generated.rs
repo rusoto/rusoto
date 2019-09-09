@@ -13,14 +13,13 @@
 use std::error::Error;
 use std::fmt;
 
-#[allow(warnings)]
-use futures::future;
-use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
+#[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use futures::FutureExt;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
@@ -11869,9 +11868,7 @@ impl Route53Client {
     ) -> Route53Client
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         Route53Client {
             client: Client::new_with(credentials_provider, request_dispatcher),
@@ -11907,9 +11904,13 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateVPCWithHostedZoneError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(AssociateVPCWithHostedZoneError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11963,9 +11964,13 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ChangeResourceRecordSetsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(ChangeResourceRecordSetsError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12019,9 +12024,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ChangeTagsForResourceError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(ChangeTagsForResourceError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12069,12 +12076,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateHealthCheckError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(CreateHealthCheckError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12123,12 +12129,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateHostedZoneError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(CreateHostedZoneError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12177,9 +12182,13 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateQueryLoggingConfigError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(CreateQueryLoggingConfigError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12228,9 +12237,13 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateReusableDelegationSetError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(CreateReusableDelegationSetError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12279,11 +12292,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateTrafficPolicyError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(CreateTrafficPolicyError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12332,9 +12345,13 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateTrafficPolicyInstanceError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(CreateTrafficPolicyInstanceError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12385,9 +12402,13 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateTrafficPolicyVersionError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(CreateTrafficPolicyVersionError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12444,11 +12465,15 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateVPCAssociationAuthorizationError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(CreateVPCAssociationAuthorizationError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12492,12 +12517,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteHealthCheckError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(DeleteHealthCheckError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12538,12 +12562,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteHostedZoneError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(DeleteHostedZoneError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12584,9 +12607,13 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteQueryLoggingConfigError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(DeleteQueryLoggingConfigError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12627,9 +12654,13 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteReusableDelegationSetError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(DeleteReusableDelegationSetError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12674,11 +12705,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteTrafficPolicyError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(DeleteTrafficPolicyError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12719,9 +12750,13 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteTrafficPolicyInstanceError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(DeleteTrafficPolicyInstanceError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12777,11 +12812,15 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteVPCAssociationAuthorizationError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(DeleteVPCAssociationAuthorizationError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12835,9 +12874,13 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateVPCFromHostedZoneError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(DisassociateVPCFromHostedZoneError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12878,12 +12921,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetAccountLimitError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetAccountLimitError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12924,12 +12966,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetChangeError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetChangeError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12966,12 +13007,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetCheckerIpRangesError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetCheckerIpRangesError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13022,12 +13062,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetGeoLocationError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetGeoLocationError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13071,12 +13110,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetHealthCheckError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetHealthCheckError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13115,11 +13153,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetHealthCheckCountError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetHealthCheckCountError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13164,11 +13202,15 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetHealthCheckLastFailureReasonError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(GetHealthCheckLastFailureReasonError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13212,11 +13254,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetHealthCheckStatusError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetHealthCheckStatusError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13257,12 +13299,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetHostedZoneError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetHostedZoneError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13301,12 +13342,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetHostedZoneCountError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetHostedZoneCountError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13345,12 +13385,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetHostedZoneLimitError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetHostedZoneLimitError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13391,9 +13430,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetQueryLoggingConfigError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetQueryLoggingConfigError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13434,9 +13475,13 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetReusableDelegationSetError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(GetReusableDelegationSetError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13476,9 +13521,13 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetReusableDelegationSetLimitError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(GetReusableDelegationSetLimitError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13523,12 +13572,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetTrafficPolicyError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetTrafficPolicyError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13569,9 +13617,13 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetTrafficPolicyInstanceError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(GetTrafficPolicyInstanceError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13611,9 +13663,13 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetTrafficPolicyInstanceCountError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(GetTrafficPolicyInstanceCountError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13667,12 +13723,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListGeoLocationsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(ListGeoLocationsError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13720,12 +13775,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListHealthChecksError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(ListHealthChecksError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13776,12 +13830,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListHostedZonesError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(ListHostedZonesError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13832,9 +13885,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListHostedZonesByNameError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(ListHostedZonesByNameError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13885,9 +13940,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListQueryLoggingConfigsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(ListQueryLoggingConfigsError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13946,9 +14003,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListResourceRecordSetsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(ListResourceRecordSetsError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13996,9 +14055,13 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListReusableDelegationSetsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(ListReusableDelegationSetsError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14043,11 +14106,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(ListTagsForResourceError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14100,11 +14163,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourcesError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(ListTagsForResourcesError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14152,11 +14215,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTrafficPoliciesError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(ListTrafficPoliciesError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14210,9 +14273,13 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTrafficPolicyInstancesError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(ListTrafficPolicyInstancesError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14267,11 +14334,15 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTrafficPolicyInstancesByHostedZoneError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(ListTrafficPolicyInstancesByHostedZoneError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14331,11 +14402,15 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTrafficPolicyInstancesByPolicyError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(ListTrafficPolicyInstancesByPolicyError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14385,9 +14460,13 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTrafficPolicyVersionsError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(ListTrafficPolicyVersionsError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14441,11 +14520,15 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListVPCAssociationAuthorizationsError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(ListVPCAssociationAuthorizationsError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14499,12 +14582,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TestDNSAnswerError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(TestDNSAnswerError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14557,12 +14639,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateHealthCheckError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(UpdateHealthCheckError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14612,9 +14693,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateHostedZoneCommentError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(UpdateHostedZoneCommentError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14668,9 +14751,13 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateTrafficPolicyCommentError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(UpdateTrafficPolicyCommentError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14720,9 +14807,13 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateTrafficPolicyInstanceError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(UpdateTrafficPolicyInstanceError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

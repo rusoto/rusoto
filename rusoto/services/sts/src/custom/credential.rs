@@ -4,8 +4,7 @@ use futures::{Async, Future, Poll};
 
 use rusoto_core;
 
-use rusoto_core::credential::AwsCredentials;
-use rusoto_core::{CredentialsError, ProvideAwsCredentials, RusotoFuture};
+use rusoto_core::credential::{AwsCredentials, CredentialsError, ProvideAwsCredentials, RusotoFuture};
 use crate::{
     AssumeRoleError, AssumeRoleRequest, AssumeRoleResponse, AssumeRoleWithSAMLError,
     AssumeRoleWithSAMLRequest, AssumeRoleWithSAMLResponse, AssumeRoleWithWebIdentityError,
@@ -226,8 +225,6 @@ impl Future for StsSessionCredentialsProviderFuture {
 }
 
 impl ProvideAwsCredentials for StsSessionCredentialsProvider {
-    type Future = StsSessionCredentialsProviderFuture;
-
     fn credentials(&self) -> Self::Future {
         self.get_session_token()
     }
@@ -343,8 +340,6 @@ impl Future for StsAssumeRoleSessionCredentialsProviderFuture {
 }
 
 impl ProvideAwsCredentials for StsAssumeRoleSessionCredentialsProvider {
-    type Future = StsAssumeRoleSessionCredentialsProviderFuture;
-
     fn credentials(&self) -> Self::Future {
         self.assume_role()
     }
@@ -432,7 +427,7 @@ impl Future for StsWebIdentityFederationSessionCredentialsProviderFuture {
 
                 if let Some(subject_from_wif) = resp.subject_from_web_identity_token {
                     aws_creds.claims_mut().insert(
-                        rusoto_core::credential::claims::SUBJECT.to_owned(),
+                        rusoto_core::claims::SUBJECT.to_owned(),
                         subject_from_wif,
                     );
                 }

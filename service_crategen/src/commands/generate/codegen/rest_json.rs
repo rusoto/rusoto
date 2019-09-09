@@ -65,16 +65,20 @@ impl GenerateProtocol for RestJsonGenerator {
 
                     self.client.sign_and_dispatch(request, |response| {{
                         if {status_check} {{
-                            Box::new(response.buffer().from_err().and_then(|response| {{
-                                {parse_body}
-                                {parse_headers}
-                                {parse_status_code}
-                                Ok(result)
-                            }}))
+                            response.buffer().map(|try_response| {{
+                                try_response.map(|response| {{
+                                    {parse_body}
+                                    {parse_headers}
+                                    {parse_status_code}
+                                    result
+                                }})
+                            }}).boxed()
                         }} else {{
-                            Box::new(response.buffer().from_err().and_then(|response| {{
-                                Err({error_type}::from_response(response))
-                            }}))
+                            response.buffer().map(|try_response| {{
+                                try_response.map_or_else(|e| Err(e), |response| {{
+                                    Err({error_type}::from_response(response))
+                                }}).boxed()
+                            }}).boxed()
                         }}
                     }})
                 }}
@@ -114,8 +118,10 @@ impl GenerateProtocol for RestJsonGenerator {
 
         let res = writeln!(
             writer,
-            "use rusoto_core::signature::SignedRequest;
-                  use rusoto_core::proto;"
+            "use futures::FutureExt;
+                  use rusoto_core::signature::SignedRequest;
+                  use rusoto_core::proto;
+                  use serde::{{Deserialize, Serialize}};"
         );
         if service.needs_serde_json_crate() {
             return writeln!(writer, "use serde_json;");

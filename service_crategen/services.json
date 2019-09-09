@@ -744,7 +744,10 @@
     "version": "0.40.0",
     "coreVersion": "0.40.0",
     "protocolVersion": "2006-03-01",
-    "baseTypeName": "S3"
+    "baseTypeName": "S3",
+    "customDevDependencies": {
+      "criterion": "0.3"
+    }
   },
   "sagemaker": {
     "version": "0.40.0",

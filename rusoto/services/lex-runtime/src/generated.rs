@@ -13,16 +13,16 @@
 use std::error::Error;
 use std::fmt;
 
-#[allow(warnings)]
-use futures::future;
-use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
+#[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use futures::FutureExt;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Represents an option to be shown on the client platform (Facebook, Slack, etc.)</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -405,9 +405,7 @@ impl LexRuntimeClient {
     ) -> LexRuntimeClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         LexRuntimeClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
@@ -457,60 +455,77 @@ impl LexRuntime for LexRuntimeClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let mut result = PostContentResponse::default();
-                    result.audio_stream = Some(response.body);
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let mut result = PostContentResponse::default();
+                            result.audio_stream = Some(response.body);
 
-                    if let Some(content_type) = response.headers.get("Content-Type") {
-                        let value = content_type.to_owned();
-                        result.content_type = Some(value)
-                    };
-                    if let Some(dialog_state) = response.headers.get("x-amz-lex-dialog-state") {
-                        let value = dialog_state.to_owned();
-                        result.dialog_state = Some(value)
-                    };
-                    if let Some(input_transcript) =
-                        response.headers.get("x-amz-lex-input-transcript")
-                    {
-                        let value = input_transcript.to_owned();
-                        result.input_transcript = Some(value)
-                    };
-                    if let Some(intent_name) = response.headers.get("x-amz-lex-intent-name") {
-                        let value = intent_name.to_owned();
-                        result.intent_name = Some(value)
-                    };
-                    if let Some(message) = response.headers.get("x-amz-lex-message") {
-                        let value = message.to_owned();
-                        result.message = Some(value)
-                    };
-                    if let Some(message_format) = response.headers.get("x-amz-lex-message-format") {
-                        let value = message_format.to_owned();
-                        result.message_format = Some(value)
-                    };
-                    if let Some(session_attributes) =
-                        response.headers.get("x-amz-lex-session-attributes")
-                    {
-                        let value = session_attributes.to_owned();
-                        result.session_attributes = Some(value)
-                    };
-                    if let Some(slot_to_elicit) = response.headers.get("x-amz-lex-slot-to-elicit") {
-                        let value = slot_to_elicit.to_owned();
-                        result.slot_to_elicit = Some(value)
-                    };
-                    if let Some(slots) = response.headers.get("x-amz-lex-slots") {
-                        let value = slots.to_owned();
-                        result.slots = Some(value)
-                    };
+                            if let Some(content_type) = response.headers.get("Content-Type") {
+                                let value = content_type.to_owned();
+                                result.content_type = Some(value)
+                            };
+                            if let Some(dialog_state) =
+                                response.headers.get("x-amz-lex-dialog-state")
+                            {
+                                let value = dialog_state.to_owned();
+                                result.dialog_state = Some(value)
+                            };
+                            if let Some(input_transcript) =
+                                response.headers.get("x-amz-lex-input-transcript")
+                            {
+                                let value = input_transcript.to_owned();
+                                result.input_transcript = Some(value)
+                            };
+                            if let Some(intent_name) = response.headers.get("x-amz-lex-intent-name")
+                            {
+                                let value = intent_name.to_owned();
+                                result.intent_name = Some(value)
+                            };
+                            if let Some(message) = response.headers.get("x-amz-lex-message") {
+                                let value = message.to_owned();
+                                result.message = Some(value)
+                            };
+                            if let Some(message_format) =
+                                response.headers.get("x-amz-lex-message-format")
+                            {
+                                let value = message_format.to_owned();
+                                result.message_format = Some(value)
+                            };
+                            if let Some(session_attributes) =
+                                response.headers.get("x-amz-lex-session-attributes")
+                            {
+                                let value = session_attributes.to_owned();
+                                result.session_attributes = Some(value)
+                            };
+                            if let Some(slot_to_elicit) =
+                                response.headers.get("x-amz-lex-slot-to-elicit")
+                            {
+                                let value = slot_to_elicit.to_owned();
+                                result.slot_to_elicit = Some(value)
+                            };
+                            if let Some(slots) = response.headers.get("x-amz-lex-slots") {
+                                let value = slots.to_owned();
+                                result.slots = Some(value)
+                            };
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PostContentError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(PostContentError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }
@@ -533,19 +548,29 @@ impl LexRuntime for LexRuntimeClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PostTextResponse, _>()?;
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response.map(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<PostTextResponse, _>()?;
 
-                    Ok(result)
-                }))
+                            result
+                        })
+                    })
+                    .boxed()
             } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PostTextError::from_response(response))),
-                )
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_or_else(
+                                |e| Err(e),
+                                |response| Err(PostTextError::from_response(response)),
+                            )
+                            .boxed()
+                    })
+                    .boxed()
             }
         })
     }

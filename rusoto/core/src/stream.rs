@@ -3,7 +3,7 @@ use std::io;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
-use bytes::Bytes;
+use bytes::{BufMut, Bytes, BytesMut};
 use futures::{Stream, StreamExt};
 use pin_project::pin_project;
 use tokio::io::AsyncRead;
@@ -13,18 +13,18 @@ use tokio::io::AsyncRead;
 pub struct ByteStream {
     size_hint: Option<usize>,
     #[pin]
-    inner: Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send>>,
+    inner: Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send + Sync>>,
 }
 
 impl ByteStream {
     /// Create a new `ByteStream` by wrapping a `futures` stream.
     pub fn new<S>(stream: S) -> ByteStream
     where
-        S: Stream<Item = Result<Bytes, io::Error>> + Send + 'static,
+        S: Stream<Item = Result<Bytes, io::Error>> + Send + Sync + 'static,
     {
         ByteStream {
             size_hint: None,
-            inner: stream.boxed(),
+            inner: Box::pin(stream),
         }
     }
 
@@ -42,7 +42,9 @@ impl From<Vec<u8>> for ByteStream {
     fn from(buf: Vec<u8>) -> ByteStream {
         ByteStream {
             size_hint: Some(buf.len()),
-            inner: futures::stream::once(futures::future::ready(Ok(Bytes::from(buf)))).boxed(),
+            inner: Box::pin(futures::stream::once(futures::future::ready(
+                Ok(Bytes::from(buf)) as Result<Bytes, std::io::Error>
+            ))),
         }
     }
 }
@@ -57,7 +59,7 @@ impl Stream for ByteStream {
     type Item = Result<Bytes, io::Error>;
 
     fn poll_next(
-        self: Pin<&mut Self>,
+        mut self: Pin<&mut Self>,
         cx: &mut Context<'_>,
     ) -> Poll<Option<Self::Item>> {
         let this = self.project();
@@ -67,7 +69,7 @@ impl Stream for ByteStream {
 
 #[pin_project]
 struct ImplAsyncRead {
-    buffer: io::Cursor<Bytes>,
+    buffer: BytesMut,
     #[pin]
     stream: futures::stream::Fuse<Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send>>>,
 }
@@ -75,7 +77,7 @@ struct ImplAsyncRead {
 impl ImplAsyncRead {
     fn new(stream: Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send>>) -> Self {
         ImplAsyncRead {
-            buffer: io::Cursor::new(Bytes::new()),
+            buffer: BytesMut::new(),
             stream: stream.fuse(),
         }
     }
@@ -88,15 +90,19 @@ impl AsyncRead for ImplAsyncRead {
         buf: &mut [u8],
     ) -> Poll<io::Result<usize>> {
         let this = self.project();
-        match futures::ready!(this.stream.poll_next(cx)) {
-            None => Poll::Ready(Ok(0)),
-            Some(Err(e)) => Poll::Ready(Err(e)),
-            Some(Ok(bytes)) => {
-                let n = bytes.len();
-                this.buffer.extend(bytes);
-                Poll::Ready(Ok(n))
+        if this.buffer.is_empty() {
+            match futures::ready!(this.stream.poll_next(cx)) {
+                None => return Poll::Ready(Ok(0)),
+                Some(Err(e)) => return Poll::Ready(Err(e)),
+                Some(Ok(bytes)) => {
+                    this.buffer.put(bytes);
+                }
             }
         }
+        let available = std::cmp::min(buf.len(), this.buffer.len());
+        let mut bytes = this.buffer.split_to(available);
+        buf.copy_from_slice(bytes.as_mut());
+        Poll::Ready(Ok(available))
     }
 }
 

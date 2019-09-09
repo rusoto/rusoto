@@ -16,13 +16,20 @@ exclude = ["test_resources/*"]
 
 [dependencies]
 bytes = "0.4.12"
-futures = "0.1.16"
 xml-rs = "0.7"
+
+[dependencies.futures-preview]
+version = "0.3.0-alpha.18"
+features = ["async-await", "nightly"]
 
 [dependencies.rusoto_core]
 version = "0.40.0"
 path = "../../core"
 default-features = false
+
+[dev-dependencies]
+criterion = "0.3"
+
 [dev-dependencies.rusoto_mock]
 version = "0.40.0"
 path = "../../../mock"

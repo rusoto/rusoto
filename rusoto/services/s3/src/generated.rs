@@ -13,14 +13,13 @@
 use std::error::Error;
 use std::fmt;
 
-#[allow(warnings)]
-use futures::future;
-use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
+#[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
+use futures::FutureExt;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
@@ -18847,9 +18846,7 @@ impl S3Client {
     ) -> S3Client
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         S3Client {
             client: Client::new_with(credentials_provider, request_dispatcher),
@@ -18878,11 +18875,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(AbortMultipartUploadError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(AbortMultipartUploadError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18942,9 +18939,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CompleteMultipartUploadError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(CompleteMultipartUploadError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19190,12 +19189,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CopyObjectError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(CopyObjectError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19319,12 +19317,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateBucketError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(CreateBucketError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19490,9 +19487,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateMultipartUploadError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(CreateMultipartUploadError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19566,15 +19565,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteBucketError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(DeleteBucketError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -19595,14 +19593,18 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBucketAnalyticsConfigurationError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(DeleteBucketAnalyticsConfigurationError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -19622,15 +19624,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteBucketCorsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(DeleteBucketCorsError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -19650,12 +19651,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBucketEncryptionError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(DeleteBucketEncryptionError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -19676,14 +19679,18 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBucketInventoryConfigurationError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(DeleteBucketInventoryConfigurationError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -19703,12 +19710,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBucketLifecycleError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(DeleteBucketLifecycleError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -19729,14 +19738,18 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBucketMetricsConfigurationError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(DeleteBucketMetricsConfigurationError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -19756,15 +19769,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteBucketPolicyError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(DeleteBucketPolicyError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -19784,12 +19796,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBucketReplicationError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(DeleteBucketReplicationError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -19809,14 +19823,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteBucketTaggingError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(DeleteBucketTaggingError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -19836,14 +19850,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteBucketWebsiteError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(DeleteBucketWebsiteError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -19879,12 +19893,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteObjectError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(DeleteObjectError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19939,11 +19952,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteObjectTaggingError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(DeleteObjectTaggingError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20007,12 +20020,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteObjectsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(DeleteObjectsError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20056,12 +20068,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeletePublicAccessBlockError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(DeletePublicAccessBlockError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -20082,11 +20096,15 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketAccelerateConfigurationError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(GetBucketAccelerateConfigurationError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20129,12 +20147,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetBucketAclError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetBucketAclError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20177,11 +20194,15 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketAnalyticsConfigurationError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(GetBucketAnalyticsConfigurationError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20224,12 +20245,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetBucketCorsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetBucketCorsError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20270,11 +20290,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetBucketEncryptionError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetBucketEncryptionError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20319,11 +20339,15 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketInventoryConfigurationError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(GetBucketInventoryConfigurationError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20366,12 +20390,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetBucketLifecycleError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetBucketLifecycleError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20415,11 +20438,15 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketLifecycleConfigurationError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(GetBucketLifecycleConfigurationError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20462,12 +20489,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetBucketLocationError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetBucketLocationError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20510,12 +20536,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetBucketLoggingError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetBucketLoggingError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20559,9 +20584,13 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketMetricsConfigurationError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(GetBucketMetricsConfigurationError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20604,9 +20633,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketNotificationError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetBucketNotificationError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20649,11 +20680,15 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketNotificationConfigurationError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(GetBucketNotificationConfigurationError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20696,20 +20731,25 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetBucketPolicyError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetBucketPolicyError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(response.buffer().from_err().map(move |response| {
-                let mut result = GetBucketPolicyOutput::default();
-                result.policy = Some(String::from_utf8_lossy(response.body.as_ref()).into());
+            response
+                .buffer()
+                .map(move |try_response| {
+                    try_response.map(move |response| {
+                        let mut result = GetBucketPolicyOutput::default();
+                        result.policy =
+                            Some(String::from_utf8_lossy(response.body.as_ref()).into());
 
-                result
-            }))
+                        result
+                    })
+                })
+                .boxed()
         })
     }
 
@@ -20729,9 +20769,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketPolicyStatusError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetBucketPolicyStatusError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20774,11 +20816,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetBucketReplicationError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetBucketReplicationError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20821,9 +20863,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketRequestPaymentError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetBucketRequestPaymentError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20866,12 +20910,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetBucketTaggingError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetBucketTaggingError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20914,11 +20957,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetBucketVersioningError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetBucketVersioningError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20961,12 +21004,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetBucketWebsiteError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetBucketWebsiteError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21073,12 +21115,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetObjectError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetObjectError::from_response(response)))
+                    .boxed();
             }
 
             let mut result = GetObjectOutput::default();
@@ -21226,7 +21267,7 @@ impl S3 for S3Client {
                 let value = website_redirect_location.to_owned();
                 result.website_redirect_location = Some(value)
             };
-            Box::new(future::ok(result))
+            futures::future::ready(result).boxed()
         })
     }
 
@@ -21252,12 +21293,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetObjectAclError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetObjectAclError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21307,12 +21347,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetObjectLegalHoldError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetObjectLegalHoldError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21355,9 +21394,13 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetObjectLockConfigurationError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(GetObjectLockConfigurationError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21406,12 +21449,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetObjectRetentionError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetObjectRetentionError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21457,12 +21499,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetObjectTaggingError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetObjectTaggingError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21511,12 +21552,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetObjectTorrentError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetObjectTorrentError::from_response(response)))
+                    .boxed();
             }
 
             let mut result = GetObjectTorrentOutput::default();
@@ -21525,7 +21565,7 @@ impl S3 for S3Client {
                 let value = request_charged.to_owned();
                 result.request_charged = Some(value)
             };
-            Box::new(future::ok(result))
+            futures::future::ready(result).boxed()
         })
     }
 
@@ -21545,11 +21585,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetPublicAccessBlockError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(GetPublicAccessBlockError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21585,15 +21625,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(HeadBucketError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(HeadBucketError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -21662,12 +21701,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(HeadObjectError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(HeadObjectError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21846,11 +21884,15 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListBucketAnalyticsConfigurationsError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(ListBucketAnalyticsConfigurationsError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21897,11 +21939,15 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListBucketInventoryConfigurationsError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(ListBucketInventoryConfigurationsError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21948,11 +21994,15 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListBucketMetricsConfigurationsError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(ListBucketMetricsConfigurationsError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21988,12 +22038,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListBucketsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(ListBucketsError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -22052,11 +22101,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListMultipartUploadsError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(ListMultipartUploadsError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -22117,12 +22166,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListObjectVersionsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(ListObjectVersionsError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -22182,12 +22230,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListObjectsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(ListObjectsError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -22252,12 +22299,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListObjectsV2Error::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(ListObjectsV2Error::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -22304,12 +22350,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListPartsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(ListPartsError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -22368,14 +22413,18 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketAccelerateConfigurationError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(PutBucketAccelerateConfigurationError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -22430,15 +22479,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutBucketAclError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(PutBucketAclError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -22466,14 +22514,18 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketAnalyticsConfigurationError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(PutBucketAnalyticsConfigurationError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -22501,15 +22553,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutBucketCorsError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(PutBucketCorsError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -22539,14 +22590,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(PutBucketEncryptionError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(PutBucketEncryptionError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -22574,14 +22625,18 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketInventoryConfigurationError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(PutBucketInventoryConfigurationError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -22616,15 +22671,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutBucketLifecycleError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(PutBucketLifecycleError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -22656,14 +22710,18 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketLifecycleConfigurationError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(PutBucketLifecycleConfigurationError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -22693,15 +22751,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutBucketLoggingError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(PutBucketLoggingError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -22729,12 +22786,16 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketMetricsConfigurationError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(PutBucketMetricsConfigurationError::from_response(response))
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -22764,12 +22825,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketNotificationError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(PutBucketNotificationError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -22796,14 +22859,18 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketNotificationConfigurationError::from_response(
-                        response,
-                    ))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(PutBucketNotificationConfigurationError::from_response(
+                            response,
+                        ))
+                    })
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -22835,15 +22902,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutBucketPolicyError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(PutBucketPolicyError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -22878,14 +22944,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(PutBucketReplicationError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(PutBucketReplicationError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -22915,12 +22981,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketRequestPaymentError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(PutBucketRequestPaymentError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -22947,15 +23015,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutBucketTaggingError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(PutBucketTaggingError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -22989,14 +23056,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(PutBucketVersioningError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(PutBucketVersioningError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -23026,15 +23093,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutBucketWebsiteError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(PutBucketWebsiteError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -23182,12 +23248,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutObjectError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(PutObjectError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -23315,12 +23380,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutObjectAclError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(PutObjectAclError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -23385,12 +23449,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutObjectLegalHoldError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(PutObjectLegalHoldError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -23458,9 +23521,13 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutObjectLockConfigurationError::from_response(response))
-                }));
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| {
+                        Err(PutObjectLockConfigurationError::from_response(response))
+                    })
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -23534,12 +23601,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutObjectRetentionError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(PutObjectRetentionError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -23594,12 +23660,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutObjectTaggingError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(PutObjectTaggingError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -23655,14 +23720,14 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(PutPublicAccessBlockError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(PutPublicAccessBlockError::from_response(response)))
+                    .boxed();
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            futures::future::ready(::std::mem::drop(response)).boxed()
         })
     }
 
@@ -23699,12 +23764,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RestoreObjectError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(RestoreObjectError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -23781,11 +23845,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(SelectObjectContentError::from_response(response))
-                    }),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(SelectObjectContentError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -23864,12 +23928,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UploadPartError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(UploadPartError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -24026,12 +24089,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UploadPartCopyError::from_response(response))),
-                );
+                return response
+                    .buffer()
+                    .from_err()
+                    .and_then(|response| Err(UploadPartCopyError::from_response(response)))
+                    .boxed();
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

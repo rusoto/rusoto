@@ -43,7 +43,8 @@ use hyper::Error as HyperError;
 use pin_project::pin_project;
 use serde::Deserialize;
 
-pub(crate) type CredentialsFuture = Pin<Box<dyn Future<Output = Result<AwsCredentials, CredentialsError>> + Send>>;
+/// Type returned from a call to `credentials` on a `ProvideCredentials` implementor
+pub type CredentialsFuture = Pin<Box<dyn Future<Output = Result<AwsCredentials, CredentialsError>> + Send>>;
 
 /// AWS API access credentials, including access key, secret key, token (for IAM profiles),
 /// expiration timestamp, and claims from federated login.
