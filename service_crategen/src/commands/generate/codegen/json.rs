@@ -8,7 +8,11 @@ use crate::Service;
 pub struct JsonGenerator;
 
 impl GenerateProtocol for JsonGenerator {
-    fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
+    fn generate_method_signatures(
+        &self,
+        writer: &mut FileWriter,
+        service: &Service<'_>,
+    ) -> IoResult {
         for (operation_name, operation) in service.operations().iter() {
             let output_type = operation.output_shape_or("()");
 

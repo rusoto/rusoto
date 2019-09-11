@@ -323,9 +323,8 @@ pub fn mutate_type_name_for_streaming(type_name: &str) -> String {
 fn find_shapes_to_generate(service: &Service<'_>) -> BTreeSet<String> {
     let mut shapes_to_generate = BTreeSet::<String>::new();
 
-    let mut visitor = |shape_name: &str, _shape: &Shape| {
-        shapes_to_generate.insert(shape_name.to_owned())
-    };
+    let mut visitor =
+        |shape_name: &str, _shape: &Shape| shapes_to_generate.insert(shape_name.to_owned());
 
     for operation in service.operations().values() {
         if let Some(ref input) = operation.input {

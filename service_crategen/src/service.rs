@@ -208,7 +208,7 @@ impl<'b> Service<'b> {
 
     pub fn visit_shapes<F>(&self, shape_name: &str, visitor: &mut F)
     where
-        F: FnMut(&str, &Shape) -> bool
+        F: FnMut(&str, &Shape) -> bool,
     {
         let shape = self
             .get_shape(shape_name)

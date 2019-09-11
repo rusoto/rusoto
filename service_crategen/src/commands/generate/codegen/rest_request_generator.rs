@@ -1,9 +1,9 @@
 use super::generate_field_name;
 use crate::botocore::{Member, Operation, Shape, ShapeType};
-use inflector::Inflector;
-use regex::Regex;
 use crate::Service;
+use inflector::Inflector;
 use lazy_static::lazy_static;
+use regex::Regex;
 
 // Add request headers for any shape members marked as headers
 pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<String> {
@@ -69,7 +69,10 @@ pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<
         .join("\n"))
 }
 
-pub fn generate_params_loading_string(service: &Service<'_>, operation: &Operation) -> Option<String> {
+pub fn generate_params_loading_string(
+    service: &Service<'_>,
+    operation: &Operation,
+) -> Option<String> {
     operation.input.as_ref()?;
 
     let input_type = operation.input_shape();

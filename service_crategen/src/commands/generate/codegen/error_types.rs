@@ -279,7 +279,8 @@ impl JsonErrorTypes {
                 }
             }
         }
-        type_matchers.push("\"ValidationException\" => return RusotoError::Validation(err.msg)".to_string());
+        type_matchers
+            .push("\"ValidationException\" => return RusotoError::Validation(err.msg)".to_string());
         type_matchers.push("_ => {{}}".to_string());
         type_matchers.join(",\n")
     }
