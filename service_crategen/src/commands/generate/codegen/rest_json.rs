@@ -6,6 +6,7 @@ use super::{
     error_type_name, generate_field_name, rest_request_generator, rest_response_parser, FileWriter,
     GenerateProtocol, IoResult,
 };
+use crate::botocore;
 use crate::botocore::{Operation, Shape, ShapeType};
 use crate::Service;
 
@@ -274,7 +275,7 @@ fn service_has_query_parameters(service: &Service<'_>) -> bool {
         .filter(|operation| operation.1.input.is_some())
         .map(|(_, operation)| operation.input_shape())
         .map(|input_type| service.get_shape(input_type).unwrap())
-        .any(|input_shape| input_shape.has_query_parameters())
+        .any(botocore::Shape::has_query_parameters)
 }
 
 fn generate_documentation(operation: &Operation) -> Option<String> {
@@ -357,7 +358,7 @@ fn generate_body_parser(operation: &Operation, service: &Service<'_>) -> String 
                 Some(ref s) => {
                     // if there's any required shape present the body payload parser will handle it
                     // This can't be converted to `s.is_empty()`. TODO: find out why.
-                    s.len() > 0
+                    !s.is_empty()
                 }
                 None => false,
             };
@@ -388,17 +389,17 @@ fn payload_body_parser(
     mutable_result: bool,
     payload_required: bool,
 ) -> String {
-    let response_body = match payload_required {
-        true => match payload_type {
+    let response_body =  if payload_required {
+         match payload_type {
             ShapeType::Blob => "response.body",
             _ => "String::from_utf8_lossy(response.body.as_ref())",
-        },
-        false => match payload_type {
+         }
+        } else {
+            match payload_type {
             ShapeType::Blob => "Some(response.body)",
             _ => "Some(String::from_utf8_lossy(response.body.as_ref()).into_owned())",
-        },
+            }
     };
-
     format!(
         "
         let {mutable} result = {output_shape}::default();

@@ -340,7 +340,7 @@ fn find_shapes_to_generate(service: &Service<'_>) -> BTreeSet<String> {
             }
         }
     }
-    return shapes_to_generate;
+    shapes_to_generate
 }
 
 fn generate_types<P>(

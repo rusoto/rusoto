@@ -227,7 +227,7 @@ impl XmlErrorTypes {
             }
         }
 
-        type_matchers.push(format!("_ => {{}}"));
+        type_matchers.push("_ => {{}}".to_string());
         type_matchers.join(",")
     }
 }
@@ -279,10 +279,8 @@ impl JsonErrorTypes {
                 }
             }
         }
-        type_matchers.push(format!(
-            "\"ValidationException\" => return RusotoError::Validation(err.msg)",
-        ));
-        type_matchers.push(format!("_ => {{}}"));
+        type_matchers.push("\"ValidationException\" => return RusotoError::Validation(err.msg)".to_string());
+        type_matchers.push("_ => {{}}".to_string());
         type_matchers.join(",\n")
     }
 }
