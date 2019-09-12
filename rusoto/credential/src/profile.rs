@@ -353,9 +353,9 @@ fn parse_credentials_file(
 
         // handle the opening of named profile blocks
         if profile_regex.is_match(&unwrapped_line) {
-            if let (Some(profile), Some(key), Some(secret)) = (profile_name, access_key, secret_key) {
-                let creds =
-                    AwsCredentials::new(key, secret, token, None);
+            if let (Some(profile), Some(key), Some(secret)) = (profile_name, access_key, secret_key)
+            {
+                let creds = AwsCredentials::new(key, secret, token, None);
                 profiles.insert(profile, creds);
             }
 

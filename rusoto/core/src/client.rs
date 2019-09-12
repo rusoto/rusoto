@@ -3,7 +3,9 @@ use std::time::Duration;
 
 use futures::{Async, Future, Poll};
 
-use crate::credential::{CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials};
+use crate::credential::{
+    CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials, StaticProvider,
+};
 use crate::error::RusotoError;
 use crate::future::{self, RusotoFuture};
 use crate::request::{DispatchSignedRequest, HttpClient, HttpDispatchError, HttpResponse};
@@ -60,14 +62,12 @@ impl Client {
     /// useful for calling APIs like `Sts::assume_role_with_web_identity` and
     /// `Sts::assume_role_with_saml` which do not require any request signing or when calling
     /// AWS compatible third party API endpoints which employ different authentication mechanisms.
-    pub fn new_not_signing<P, D>(dispatcher: D) -> Self
+    pub fn new_not_signing<D>(dispatcher: D) -> Self
     where
-        P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        let inner = ClientInner::<P, D> {
+        let inner = ClientInner::<StaticProvider, D> {
             credentials_provider: None,
             dispatcher: Arc::new(dispatcher),
         };
