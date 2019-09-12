@@ -17,8 +17,8 @@ use crate::{
     GetSessionTokenResponse, Sts, StsClient,
 };
 
-pub const DEFAULT_DURATION_SECONDS: i32 = 3600;
-pub const DEFAULT_ROLE_DURATION_SECONDS: i32 = 900;
+pub const DEFAULT_DURATION_SECONDS: i64 = 3600;
+pub const DEFAULT_ROLE_DURATION_SECONDS: i64 = 900;
 
 /// Trait for conversions from STS Credentials to AWS Credentials.
 pub trait NewAwsCredsForStsCreds {
@@ -163,8 +163,8 @@ impl StsSessionCredentialsProvider {
         StsSessionCredentialsProvider {
             sts_client: Box::new(sts_client),
             session_duration: duration
-                .unwrap_or(Duration::seconds(DEFAULT_DURATION_SECONDS as i64)),
-            mfa_serial: mfa_serial,
+                .unwrap_or_else(||Duration::seconds(DEFAULT_DURATION_SECONDS)),
+            mfa_serial,
             mfa_code: None,
         }
     }
@@ -189,7 +189,6 @@ impl StsSessionCredentialsProvider {
             serial_number: self.mfa_serial.clone(),
             token_code: self.mfa_code.clone(),
             duration_seconds: Some(self.session_duration.num_seconds() as i64),
-            ..Default::default()
         };
         StsSessionCredentialsProviderFuture {
             inner: self.sts_client.get_session_token(request),
@@ -210,7 +209,7 @@ impl Future for StsSessionCredentialsProviderFuture {
             Ok(Async::Ready(resp)) => {
                 let creds = resp
                     .credentials
-                    .ok_or(CredentialsError::new("no credentials in response"))?;
+                    .ok_or_else(|| CredentialsError::new("no credentials in response"))?;
 
                 Ok(Async::Ready(AwsCredentials::new_for_credentials(
                     creds
@@ -271,13 +270,13 @@ impl StsAssumeRoleSessionCredentialsProvider {
     ) -> StsAssumeRoleSessionCredentialsProvider {
         StsAssumeRoleSessionCredentialsProvider {
             sts_client: Box::new(sts_client),
-            role_arn: role_arn,
-            session_name: session_name,
-            external_id: external_id,
+            role_arn,
+            session_name,
+            external_id,
             session_duration: session_duration
-                .unwrap_or(Duration::seconds(DEFAULT_ROLE_DURATION_SECONDS as i64)),
-            scope_down_policy: scope_down_policy,
-            mfa_serial: mfa_serial,
+                .unwrap_or_else(||Duration::seconds(DEFAULT_ROLE_DURATION_SECONDS)),
+            scope_down_policy,
+            mfa_serial,
             mfa_code: None,
         }
     }
@@ -327,7 +326,7 @@ impl Future for StsAssumeRoleSessionCredentialsProviderFuture {
             Ok(Async::Ready(resp)) => {
                 let creds = resp
                     .credentials
-                    .ok_or(CredentialsError::new("no credentials in response"))?;
+                    .ok_or_else(|| CredentialsError::new("no credentials in response"))?;
 
                 Ok(Async::Ready(AwsCredentials::new_for_credentials(
                     creds
@@ -384,13 +383,13 @@ impl StsWebIdentityFederationSessionCredentialsProvider {
     ) -> StsWebIdentityFederationSessionCredentialsProvider {
         StsWebIdentityFederationSessionCredentialsProvider {
             sts_client: Box::new(sts_client),
-            wif_token: wif_token,
-            wif_provider: wif_provider,
-            role_arn: role_arn,
-            session_name: session_name,
+            wif_token,
+            wif_provider,
+            role_arn,
+            session_name,
             session_duration: session_duration
-                .unwrap_or(Duration::seconds(DEFAULT_DURATION_SECONDS as i64)),
-            scope_down_policy: scope_down_policy,
+                .unwrap_or_else(||Duration::seconds(DEFAULT_DURATION_SECONDS)),
+            scope_down_policy,
         }
     }
 
@@ -426,7 +425,7 @@ impl Future for StsWebIdentityFederationSessionCredentialsProviderFuture {
             Ok(Async::Ready(resp)) => {
                 let creds = resp
                     .credentials
-                    .ok_or(CredentialsError::new("no credentials in response"))?;
+                    .ok_or_else(|| CredentialsError::new("no credentials in response"))?;
 
                 let mut aws_creds = AwsCredentials::new_for_credentials(creds)?;
 

@@ -131,11 +131,10 @@ where
         //  must be updated to generate the changes.
         //
         // =================================================================
+        #![allow(warnings)]
 
         use std::error::Error;
         use std::fmt;
-
-        #[allow(warnings)]
         use futures::future;
         use futures::Future;
         use rusoto_core::request::{{BufferedHttpResponse, DispatchSignedRequest}};

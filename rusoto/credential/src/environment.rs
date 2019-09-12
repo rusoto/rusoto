@@ -42,6 +42,7 @@ use crate::{non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCrede
 /// env::set_var("AWS_ACCESS_KEY_ID", "ANTN35UAENTS5UIAEATD");
 /// env::set_var("AWS_SECRET_ACCESS_KEY", "TtnuieannGt2rGuie2t8Tt7urarg5nauedRndrur");
 /// env::set_var("AWS_SESSION_TOKEN", "DfnGs8Td4rT8r4srxAg6Td4rT8r4srxAg6GtkTir");
+/// env::remove_var("AWS_CREDENTIAL_EXPIRATION");
 ///
 /// let creds = EnvironmentProvider::default().credentials().wait().unwrap();
 ///
