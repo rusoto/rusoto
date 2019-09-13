@@ -9,6 +9,7 @@
 - Deserialize PostTextResponse correctly by allowing null values in the slots field
 - Fix Profile Config Loading should ignore comments with '=' chars
 - Add App Mesh service
+- Refactor S3 integration tests - about a `#[test]` per behavior
 
 ## [0.40.0] - 2019-06-28
 
