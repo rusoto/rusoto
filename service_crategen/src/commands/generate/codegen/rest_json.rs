@@ -231,10 +231,9 @@ fn generate_payload(service: &Service<'_>, input_shape: Option<&Shape>) -> Optio
         }
     };
 
-    if declare_payload.is_some() {
-        Some(declare_payload.unwrap() + "request.set_payload(encoded);")
-    } else {
-        None
+    match declare_payload {
+        Some(value) => Some(value + "request.set_payload(encoded);"),
+        _ => None 
     }
 }
 

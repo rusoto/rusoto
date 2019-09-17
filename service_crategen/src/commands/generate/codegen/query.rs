@@ -251,7 +251,7 @@ fn generate_map_serializer(service: &Service<'_>, shape: &Shape) -> String {
     let primitive_value = value_shape.is_primitive();
 
     if primitive_value {
-        parts.push("params.put(&format!(\"{{}}.{{}}\", prefix, \"Value\"), &value);".to_string());
+        parts.push(format!("params.put(&format!(\"{{}}.{{}}\", prefix, \"Value\"), &value);"));
     } else {
         parts.push(format!(
             "{value_type}Serializer::serialize(
