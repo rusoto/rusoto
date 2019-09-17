@@ -35,11 +35,13 @@ struct TestS3Client {
     region: Region,
     s3: S3Client,
     bucket_name: String,
+    // This flag signifies whether this bucket was already deleted as part of a test
+    bucket_deleted: bool,
 }
 
 impl TestS3Client {
     // construct S3 testing client
-    fn new() -> TestS3Client {
+    fn new(bucket_name: String) -> TestS3Client {
         let region = if let Ok(endpoint) = env::var("S3_ENDPOINT") {
             let region = Region::Custom {
                 name: "us-east-1".to_owned(),
@@ -57,22 +59,20 @@ impl TestS3Client {
         TestS3Client {
             region: region.to_owned(),
             s3: S3Client::new(region),
-            bucket_name: "".to_owned(),
+            bucket_name: bucket_name.to_owned(),
+            bucket_deleted: false,
         }
     }
 
-    fn create_test_bucket(&self, extra_meta: String) -> String {
-        let bucket_name = format!("test-bucket-{}-{}", extra_meta.clone(), get_time().sec);
+    fn create_test_bucket(&self, name: String) {
         let create_bucket_req = CreateBucketRequest {
-            bucket: bucket_name.clone(),
+            bucket: name.clone(),
             ..Default::default()
         };
         self.s3
             .create_bucket(create_bucket_req)
             .sync()
             .expect("Failed to create test bucket");
-
-        bucket_name.clone()
     }
 
     fn delete_object(&self, key: String) {
@@ -106,18 +106,17 @@ impl TestS3Client {
 
 impl Drop for TestS3Client {
     fn drop(&mut self) {
-        // NOTE: assumes we set the bucket attr after creation, bad assumption?
-        if self.bucket_name == "" {
+        if self.bucket_deleted {
             return;
         }
         let delete_bucket_req = DeleteBucketRequest {
-            bucket: self.bucket_name.to_owned(),
+            bucket: self.bucket_name.clone(),
             ..Default::default()
         };
 
         match self.s3.delete_bucket(delete_bucket_req).sync() {
-            Ok(_) => info!("Deleted S3 bucket: {}", self.bucket_name),
-            Err(e) => error!("Failed to delete S3 bucket: {}", e),
+            Ok(_) => println!("Deleted S3 bucket: {}", self.bucket_name),
+            Err(e) => println!("Failed to delete S3 bucket: {}", e),
         }
     }
 }
@@ -134,17 +133,17 @@ fn test_bucket_creation_deletion() {
     init_logging();
 
     let bucket_name = format!("s3-test-bucket-{}", get_time().sec);
-    let test_client = TestS3Client::new();
+    let mut test_client = TestS3Client::new(bucket_name.clone());
 
     let create_bucket_req = CreateBucketRequest {
-        bucket: bucket_name.to_owned(),
+        bucket: bucket_name.clone(),
         ..Default::default()
     };
 
     // first create a bucket
     let create_bucket_resp = test_client.s3.create_bucket(create_bucket_req).sync();
     assert!(create_bucket_resp.is_ok());
-    info!(
+    println!(
         "Bucket {} created, resp: {:#?}",
         bucket_name.clone(),
         create_bucket_resp.unwrap()
@@ -173,13 +172,17 @@ fn test_bucket_creation_deletion() {
     assert!(result.is_ok());
 
     test_delete_bucket(&test_client.s3, &bucket_name);
+    test_client.bucket_deleted = true;
 }
 
 #[test]
 // test against normal files
 fn test_puts_gets_deletes() {
-    let mut test_client = TestS3Client::new();
-    test_client.bucket_name = test_client.create_test_bucket("default".to_owned());
+    init_logging();
+
+    let bucket_name = format!("test-bucket-{}-{}", "default".to_owned(), get_time().sec);
+    let mut test_client = TestS3Client::new(bucket_name.clone());
+    test_client.create_test_bucket(bucket_name.clone());
 
     // modify the bucket's CORS properties
     if cfg!(not(feature = "disable_minio_unsupported")) {
@@ -237,8 +240,11 @@ fn test_puts_gets_deletes() {
 #[test]
 // test against utf8 files
 fn test_puts_gets_deletes_utf8() {
-    let mut test_client = TestS3Client::new();
-    test_client.bucket_name = test_client.create_test_bucket("utf8".to_owned());
+    init_logging();
+
+    let bucket_name = format!("test-bucket-{}-{}", "utf-8".to_owned(), get_time().sec);
+    let mut test_client = TestS3Client::new(bucket_name.clone());
+    test_client.create_test_bucket(bucket_name.clone());
 
     let utf8_filename = format!("test[über]file@{}", get_time().sec);
     // UTF8 filenames
@@ -256,8 +262,11 @@ fn test_puts_gets_deletes_utf8() {
 #[test]
 // test against binary files
 fn test_puts_gets_deletes_binary() {
-    let mut test_client = TestS3Client::new();
-    test_client.bucket_name = test_client.create_test_bucket("binary".to_owned());
+    init_logging();
+
+    let bucket_name = format!("test-bucket-{}-{}", "binary".to_owned(), get_time().sec);
+    let mut test_client = TestS3Client::new(bucket_name.clone());
+    test_client.create_test_bucket(bucket_name.clone());
 
     let binary_filename = format!("test_file_b{}", get_time().sec);
 
@@ -276,8 +285,11 @@ fn test_puts_gets_deletes_binary() {
 #[test]
 // test metadata ops
 fn test_puts_gets_deletes_metadata() {
-    let mut test_client = TestS3Client::new();
-    test_client.bucket_name = test_client.create_test_bucket("metadata".to_owned());
+    init_logging();
+
+    let bucket_name = format!("test-bucket-{}-{}", "metadata".to_owned(), get_time().sec);
+    let mut test_client = TestS3Client::new(bucket_name.clone());
+    test_client.create_test_bucket(bucket_name.clone());
 
     let metadata_filename = format!("test_metadata_file_{}", get_time().sec);
     let mut metadata = HashMap::<String, String>::new();
@@ -317,8 +329,11 @@ fn test_puts_gets_deletes_metadata() {
 #[test]
 // test object ops using presigned urls
 fn test_puts_gets_deletes_presigned_url() {
-    let mut test_client = TestS3Client::new();
-    test_client.bucket_name = test_client.create_test_bucket("presigned".to_owned());
+    init_logging();
+
+    let bucket_name = format!("test-bucket-{}-{}", "presigned".to_owned(), get_time().sec);
+    let mut test_client = TestS3Client::new(bucket_name.clone());
+    test_client.create_test_bucket(bucket_name.clone());
 
     let filename = format!("test_file_{}_for_presigned", get_time().sec);
     // PUT an object for presigned url
@@ -394,15 +409,15 @@ fn test_puts_gets_deletes_presigned_url() {
         &test_client.bucket_name,
         &utf8_filename,
     );
-
-    // delete the test bucket
-    //test_delete_bucket(&client, &test_bucket);
 }
 
 #[test]
 fn test_multipart_stream_uploads() {
-    let mut test_client = TestS3Client::new();
-    test_client.bucket_name = test_client.create_test_bucket("multipart".to_owned());
+    init_logging();
+
+    let bucket_name = format!("test-bucket-{}-{}", "multipart".to_owned(), get_time().sec);
+    let mut test_client = TestS3Client::new(bucket_name.clone());
+    test_client.create_test_bucket(bucket_name.clone());
 
     let multipart_filename = format!("test_multipart_file_{}", get_time().sec);
     let credentials = DefaultCredentialsProvider::new()
@@ -645,7 +660,7 @@ fn test_put_object_with_filename(
                 ..Default::default()
             };
             let result = client.put_object(req).sync().expect("Couldn't PUT object");
-            info!("{:#?}", result);
+            println!("{:#?}", result);
         }
     }
 }
@@ -681,7 +696,7 @@ fn test_head_object(client: &S3Client, bucket: &str, filename: &str) {
         .head_object(head_req)
         .sync()
         .expect("Couldn't HEAD object");
-    info!("{:#?}", result);
+    println!("{:#?}", result);
 }
 
 fn test_get_object(client: &S3Client, bucket: &str, filename: &str) {
@@ -695,7 +710,7 @@ fn test_get_object(client: &S3Client, bucket: &str, filename: &str) {
         .get_object(get_req)
         .sync()
         .expect("Couldn't GET object");
-    info!("get object result: {:#?}", result);
+    println!("get object result: {:#?}", result);
 
     let stream = result.body.unwrap();
     let body = stream.concat2().wait().unwrap();
