@@ -2562,7 +2562,7 @@ impl Error for UntagResourceError {
     }
 }
 /// Trait representing the capabilities of the Amazon EventBridge API. Amazon EventBridge clients implement this trait.
-pub trait CloudWatchEvents {
+pub trait EventBridge {
     /// <p><p>Activates a partner event source that has been deactivated. Once activated, your matching event bus will start receiving events from the event source.</p> <note> <p>This operation is performed by AWS customers, not by SaaS partners.</p> </note></p>
     fn activate_event_source(
         &self,
@@ -2736,17 +2736,17 @@ pub trait CloudWatchEvents {
 }
 /// A client for the Amazon EventBridge API.
 #[derive(Clone)]
-pub struct CloudWatchEventsClient {
+pub struct EventBridgeClient {
     client: Client,
     region: region::Region,
 }
 
-impl CloudWatchEventsClient {
+impl EventBridgeClient {
     /// Creates a client backed by the default tokio event loop.
     ///
     /// The client will use the default credentials provider and tls client.
-    pub fn new(region: region::Region) -> CloudWatchEventsClient {
-        CloudWatchEventsClient {
+    pub fn new(region: region::Region) -> EventBridgeClient {
+        EventBridgeClient {
             client: Client::shared(),
             region,
         }
@@ -2756,21 +2756,21 @@ impl CloudWatchEventsClient {
         request_dispatcher: D,
         credentials_provider: P,
         region: region::Region,
-    ) -> CloudWatchEventsClient
+    ) -> EventBridgeClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
         P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        CloudWatchEventsClient {
+        EventBridgeClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
             region,
         }
     }
 }
 
-impl CloudWatchEvents for CloudWatchEventsClient {
+impl EventBridge for EventBridgeClient {
     /// <p><p>Activates a partner event source that has been deactivated. Once activated, your matching event bus will start receiving events from the event source.</p> <note> <p>This operation is performed by AWS customers, not by SaaS partners.</p> </note></p>
     fn activate_event_source(
         &self,

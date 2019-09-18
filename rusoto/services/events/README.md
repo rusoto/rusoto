@@ -1,5 +1,5 @@
 
-# Rusoto CloudWatchEvents
+# Rusoto EventBridge
 Rust SDK for Amazon EventBridge
 
 You may be looking for:
