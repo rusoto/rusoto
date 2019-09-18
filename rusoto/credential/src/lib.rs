@@ -58,7 +58,7 @@ pub struct AwsCredentials {
     key: String,
     #[serde(rename = "SecretAccessKey")]
     secret: String,
-    #[serde(rename = "Token")]
+    #[serde(rename = "SessionToken")]
     token: Option<String>,
     #[serde(rename = "Expiration")]
     expires_at: Option<DateTime<Utc>>,
