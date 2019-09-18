@@ -207,7 +207,7 @@ impl ProvideAwsCredentials for ProfileProvider {
         let inner = match ProfileProvider::default_config_location().map(|location| {
             parse_config_file(&location).and_then(|config| {
                 config
-                    .get(&ProfileProvider::default_profile_name())
+                    .get(&self.profile)
                     .and_then(|props| props.get("credential_process"))
                     .map(std::borrow::ToOwned::to_owned)
             })
@@ -475,7 +475,7 @@ mod tests {
             super::parse_config_file(Path::new("tests/sample-data/credential_process_config"));
         assert!(result.is_some());
         let profiles = result.unwrap();
-        assert_eq!(profiles.len(), 1);
+        assert_eq!(profiles.len(), 2);
         let default_profile = profiles
             .get(DEFAULT)
             .expect("No Default profile in default_profile_credentials");
@@ -622,6 +622,32 @@ mod tests {
             "baz_session_token"
         );
         assert!(creds.expires_at().is_some());
+
+        env::remove_var(AWS_CONFIG_FILE);
+    }
+
+    #[test]
+    fn profile_provider_credential_process_foo() {
+        let _guard = lock_env();
+        env::set_var(
+            AWS_CONFIG_FILE,
+            "tests/sample-data/credential_process_config",
+        );
+        let mut provider = ProfileProvider::new().unwrap();
+        provider.set_profile("foo");
+        let result = provider.credentials().wait();
+
+        assert!(result.is_ok());
+
+        let creds = result.ok().unwrap();
+        assert_eq!(creds.aws_access_key_id(), "foo_access_key");
+        assert_eq!(creds.aws_secret_access_key(), "foo_secret_key");
+        assert_eq!(
+            creds.token().as_ref().expect("session token not parsed"),
+            "foo_session_token"
+        );
+        assert!(creds.expires_at().is_some());
+
         env::remove_var(AWS_CONFIG_FILE);
     }
 
