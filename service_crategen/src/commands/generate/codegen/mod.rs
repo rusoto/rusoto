@@ -313,6 +313,9 @@ fn mutate_type_name(service: &Service<'_>, type_name: &str) -> String {
         // codecommit has a BatchDescribeMergeConflictsError, avoid collision with our error enum
         "BatchDescribeMergeConflictsError" => "CodeCommitBatchDescribeMergeConflictsError".to_owned(),
 
+        // codecommit has a BatchGetCommitsError, avoid collision with our error enum
+        "BatchGetCommitsError" => "CodeCommitBatchGetCommitsError".to_owned(),
+
         // otherwise make sure it's rust-idiomatic and capitalized
         _ => without_underscores,
     }
