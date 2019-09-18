@@ -7,9 +7,7 @@ use lazy_static::lazy_static;
 
 // Add request headers for any shape members marked as headers
 pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<String> {
-    if operation.input.is_none() {
-        return None;
-    }
+    operation.input.as_ref()?;
 
     let shape = service
         .get_shape(&operation.input.as_ref().unwrap().shape)
@@ -20,9 +18,7 @@ pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<
         .unwrap()
         .iter()
         .filter_map(|(member_name, member)| {
-            if member.location.is_none() {
-                return None;
-            }
+            member.location.as_ref()?;
             match &member.location.as_ref().unwrap()[..] {
                 "header" => {
                     if shape.required(member_name) {
@@ -74,9 +70,7 @@ pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<
 }
 
 pub fn generate_params_loading_string(service: &Service<'_>, operation: &Operation) -> Option<String> {
-    if operation.input.is_none() {
-        return None;
-    }
+    operation.input.as_ref()?;
 
     let input_type = operation.input_shape();
     let input_shape = service.get_shape(input_type).unwrap();
@@ -172,16 +166,18 @@ fn generate_static_param_strings(operation: &Operation) -> Vec<String> {
     // Sometimes the key has the query param already set, like "list-type=2"
     // These need to get parsed out of the URI and added to the params map
     // with the other "queryparam" members
-    if let Some(ref key) = maybe_params {
-        match key.find('=') {
-            Some(_) => {
-                let key_val_vec: Vec<&str> = key.split('=').collect();
-                static_params.push(format!(
-                    "params.put(\"{}\", \"{}\");",
-                    key_val_vec[0], key_val_vec[1]
-                ))
+    if let Some(ref params) = maybe_params {
+        for param in params.split('&') {
+            match param.find('=') {
+                Some(_) => {
+                    let key_val_vec: Vec<&str> = param.split('=').collect();
+                    static_params.push(format!(
+                        "params.put(\"{}\", \"{}\");",
+                        key_val_vec[0], key_val_vec[1]
+                    ))
+                }
+                None => static_params.push(format!("params.put_key(\"{}\");", param)),
             }
-            None => static_params.push(format!("params.put_key(\"{}\");", key)),
         }
     };
 
@@ -346,4 +342,21 @@ mod tests {
         );
     }
 
+    #[test]
+    fn generate_static_param_strings_parses_mixed_params() {
+        let service_json = "{\
+            \"name\": \"Search\",
+            \"http\":{
+                \"method\":\"GET\",
+                \"requestUri\":\"/2013-01-01/suggest?format=sdk&pretty\"
+            }\
+        }";
+        let operation = serde_json::from_str(service_json).expect("failed to parse operation json");
+
+        let static_params = generate_static_param_strings(&operation);
+
+        assert_eq!(static_params.len(), 2);
+        assert_eq!(static_params.get(0), Some(&"params.put(\"format\", \"sdk\");".to_owned()));
+        assert_eq!(static_params.get(1), Some(&"params.put_key(\"pretty\");".to_owned()));
+    }
 }

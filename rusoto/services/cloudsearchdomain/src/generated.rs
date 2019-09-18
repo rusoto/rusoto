@@ -549,7 +549,8 @@ impl CloudSearchDomain for CloudSearchDomainClient {
         if let Some(ref x) = input.stats {
             params.put("stats", x);
         }
-        params.put("format", "sdk&pretty");
+        params.put("format", "sdk");
+        params.put("pretty", "true");
         request.set_params(params);
 
         self.client.sign_and_dispatch(request, |response| {
@@ -586,7 +587,8 @@ impl CloudSearchDomain for CloudSearchDomainClient {
             params.put("size", x);
         }
         params.put("suggester", &input.suggester);
-        params.put("format", "sdk&pretty");
+        params.put("format", "sdk");
+        params.put("pretty", "true");
         request.set_params(params);
 
         self.client.sign_and_dispatch(request, |response| {

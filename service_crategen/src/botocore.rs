@@ -13,7 +13,7 @@ use serde_json;
 
 use crate::util;
 
-const BOTOCORE_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/botocore/botocore/data/");
+const BOTOCORE_DIR: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/botocore/botocore/data/");
 
 #[derive(Debug, Deserialize)]
 pub struct ServiceDefinition {

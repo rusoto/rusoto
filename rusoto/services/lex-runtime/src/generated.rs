@@ -309,7 +309,7 @@ pub struct PostTextResponse {
     /// <p> The intent slots that Amazon Lex detected from the user input in the conversation. </p> <p>Amazon Lex creates a resolution list containing likely values for a slot. The value that it returns is determined by the <code>valueSelectionStrategy</code> selected when the slot type was created or updated. If <code>valueSelectionStrategy</code> is set to <code>ORIGINAL_VALUE</code>, the value provided by the user is returned, if the user value is similar to the slot values. If <code>valueSelectionStrategy</code> is set to <code>TOP_RESOLUTION</code> Amazon Lex returns the first value in the resolution list or, if there is no resolution list, null. If you don't specify a <code>valueSelectionStrategy</code>, the default is <code>ORIGINAL_VALUE</code>.</p>
     #[serde(rename = "slots")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub slots: Option<::std::collections::HashMap<String, String>>,
+    pub slots: Option<::std::collections::HashMap<String, Option<String>>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]

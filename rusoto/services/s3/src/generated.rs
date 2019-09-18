@@ -23819,7 +23819,8 @@ impl S3 for S3Client {
             );
         }
         let mut params = Params::new();
-        params.put("select&select-type", "2");
+        params.put_key("select");
+        params.put("select-type", "2");
         request.set_params(params);
         let mut writer = EventWriter::new(Vec::new());
         SelectObjectContentRequestSerializer::serialize(

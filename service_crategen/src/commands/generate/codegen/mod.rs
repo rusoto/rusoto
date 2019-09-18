@@ -34,7 +34,11 @@ pub trait GenerateProtocol {
     /// Generate the various `use` statements required by the module generatedfor this service
     fn generate_prelude(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult;
 
-    fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult;
+    fn generate_method_signatures(
+        &self,
+        writer: &mut FileWriter,
+        service: &Service<'_>,
+    ) -> IoResult;
 
     /// Generate a method for each `Operation` in the `Service` to execute that method remotely
     ///
@@ -94,7 +98,7 @@ pub fn generate_source(service: &Service<'_>, writer: &mut FileWriter) -> IoResu
 /// escape reserved words with an underscore
 pub fn generate_field_name(member_name: &str) -> String {
     let name = member_name.to_snake_case();
-    if name == "return" || name == "type" {
+    if name == "return" || name == "type" || name == "match" {
         name + "_"
     } else {
         name
@@ -321,10 +325,12 @@ pub fn mutate_type_name_for_streaming(type_name: &str) -> String {
 
 fn find_shapes_to_generate(service: &Service<'_>) -> BTreeSet<String> {
     let mut shapes_to_generate = BTreeSet::<String>::new();
+
     let mut visitor = |shape_name: &str, _shape: &Shape| {
         shapes_to_generate.insert(shape_name.to_owned())
     };
-    for (_, operation) in service.operations() {
+
+    for operation in service.operations().values() {
         if let Some(ref input) = operation.input {
             service.visit_shapes(&input.shape, &mut visitor);
         }
@@ -338,9 +344,13 @@ fn find_shapes_to_generate(service: &Service<'_>) -> BTreeSet<String> {
         }
     }
     return shapes_to_generate;
-} 
+}
 
-fn generate_types<P>(writer: &mut FileWriter, service: &Service<'_>, protocol_generator: &P) -> IoResult
+fn generate_types<P>(
+    writer: &mut FileWriter,
+    service: &Service<'_>,
+    protocol_generator: &P,
+) -> IoResult
 where
     P: GenerateProtocol,
 {
@@ -559,6 +569,10 @@ fn generate_struct_fields<P: GenerateProtocol>(
             // See https://github.com/rusoto/rusoto/issues/1419 for more information
             if service.name() == "CodePipeline" && shape_name == "ActionRevision" && name == "revision_change_id" || name == "created" {
                 lines.push(format!("pub {}: Option<{}>,", name, rs_type))
+            // In pratice, Lex can return null values for slots that are not filled. The documentation
+            // does not mention that the slot values themselves can be null.
+            } else if service.name() == "Amazon Lex Runtime Service"  && shape_name == "PostTextResponse" && name == "slots"{
+                lines.push(format!("pub {}: Option<::std::collections::HashMap<String, Option<String>>>,", name))
             } else if shape.required(member_name) {
                 lines.push(format!("pub {}: {},", name, rs_type))
             } else if name == "type" {

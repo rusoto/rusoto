@@ -11,7 +11,10 @@ use std::str;
 #[test]
 fn should_list_policies() {
     let client = FmsClient::new(Region::UsEast1);
-    let request = ListPoliciesRequest::default();
+    let request = ListPoliciesRequest {
+        max_results: Some(1),
+        ..Default::default()
+    };
 
     // If our account doesn't have access, assume everything is fine:
     match client.list_policies(request).sync() {
@@ -22,7 +25,7 @@ fn should_list_policies() {
                     .contains("is not currently delegated by AWS FM"),
                 "Missing error message"
             ),
-            _ => panic!("Should have a typed error from FMS"),
+            _ => panic!("Should have a typed error from FMS, got {:?}", e),
         },
         Ok(res) => println!("Got these policies: {:?}", res),
     }

@@ -20,7 +20,7 @@ edition = "2018"
 
 [badges]
 appveyor = { repository = "rusoto/rusoto", branch = "master" }
-azure-devops = { project = "Rusoto", pipeline = "rusoto.rusoto", build="1" }
+azure-devops = { project = "matthewkmayer/Rusoto", pipeline = "rusoto.rusoto", build="1" }
 
 [build-dependencies]
 rustc_version = "0.2.1"
@@ -32,7 +32,7 @@ hmac = "0.5.0"
 http = "0.1.17"
 hyper = "0.12"
 hyper-tls = { version = "0.3.0", optional = true }
-hyper-rustls = { version = "0.16.0", optional = true }
+hyper-rustls = { version = "0.17.1", optional = true }
 lazy_static = "1.0"
 log = "0.4.1"
 md5 = "0.3.6"
