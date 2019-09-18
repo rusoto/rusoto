@@ -108,7 +108,7 @@ pub struct BatchDescribeMergeConflictsOutput {
 /// <p>Returns information about errors in a BatchGetCommits operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct BatchGetCommitsError {
+pub struct CodeCommitBatchGetCommitsError {
     /// <p>A commit ID that either could not be found or was not in a valid format.</p>
     #[serde(rename = "commitId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -143,7 +143,7 @@ pub struct BatchGetCommitsOutput {
     /// <p>Returns any commit IDs for which information could not be found. For example, if one of the commit IDs was a shortened SHA or that commit was not found in the specified repository, the ID will return an error object with additional information.</p>
     #[serde(rename = "errors")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub errors: Option<Vec<BatchGetCommitsError>>,
+    pub errors: Option<Vec<CodeCommitBatchGetCommitsError>>,
 }
 
 /// <p>Represents the input of a batch get repositories operation.</p>

@@ -34,6 +34,37 @@ pub struct AccessLog {
     pub file: Option<FileAccessLog>,
 }
 
+/// <p>An object representing the AWS Cloud Map attribute information for your virtual node.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsCloudMapInstanceAttribute {
+    /// <p>The name of an AWS Cloud Map service instance attribute key. Any AWS Cloud Map service instance
+    /// that contains the specified key and value is returned.</p>
+    #[serde(rename = "key")]
+    pub key: String,
+    /// <p>The value of an AWS Cloud Map service instance attribute key. Any AWS Cloud Map service
+    /// instance that contains the specified key and value is returned.</p>
+    #[serde(rename = "value")]
+    pub value: String,
+}
+
+/// <p>An object representing the AWS Cloud Map service discovery information for your virtual
+/// node.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsCloudMapServiceDiscovery {
+    /// <p>A string map that contains attributes with values that you can use to filter instances
+    /// by any custom attribute that you specified when you registered the instance. Only instances
+    /// that match all of the specified key/value pairs will be returned.</p>
+    #[serde(rename = "attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<Vec<AwsCloudMapInstanceAttribute>>,
+    /// <p>The name of the AWS Cloud Map namespace to use.</p>
+    #[serde(rename = "namespaceName")]
+    pub namespace_name: String,
+    /// <p>The name of the AWS Cloud Map service to use.</p>
+    #[serde(rename = "serviceName")]
+    pub service_name: String,
+}
+
 /// <p>An object representing the backends that a virtual node is expected to send outbound
 /// traffic to. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -58,9 +89,9 @@ pub struct CreateMeshInput {
     #[serde(rename = "spec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spec: Option<MeshSpec>,
-    /// <p>Optional metadata that you can apply to the service mesh to assist with categorization and organization.
-    /// Each tag consists of a key and an optional value, both of which you define.
-    /// Tag keys can have a maximum character length of 128 characters, and tag values can have
+    /// <p>Optional metadata that you can apply to the service mesh to assist with categorization
+    /// and organization. Each tag consists of a key and an optional value, both of which you
+    /// define. Tag keys can have a maximum character length of 128 characters, and tag values can have
     /// a maximum length of 256 characters.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -91,8 +122,8 @@ pub struct CreateRouteInput {
     /// <p>The route specification to apply.</p>
     #[serde(rename = "spec")]
     pub spec: RouteSpec,
-    /// <p>Optional metadata that you can apply to the route to assist with categorization and organization.
-    /// Each tag consists of a key and an optional value, both of which you define.
+    /// <p>Optional metadata that you can apply to the route to assist with categorization and
+    /// organization. Each tag consists of a key and an optional value, both of which you define.
     /// Tag keys can have a maximum character length of 128 characters, and tag values can have
     /// a maximum length of 256 characters.</p>
     #[serde(rename = "tags")]
@@ -124,9 +155,9 @@ pub struct CreateVirtualNodeInput {
     /// <p>The virtual node specification to apply.</p>
     #[serde(rename = "spec")]
     pub spec: VirtualNodeSpec,
-    /// <p>Optional metadata that you can apply to the virtual node to assist with categorization and organization.
-    /// Each tag consists of a key and an optional value, both of which you define.
-    /// Tag keys can have a maximum character length of 128 characters, and tag values can have
+    /// <p>Optional metadata that you can apply to the virtual node to assist with categorization
+    /// and organization. Each tag consists of a key and an optional value, both of which you
+    /// define. Tag keys can have a maximum character length of 128 characters, and tag values can have
     /// a maximum length of 256 characters.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -157,9 +188,9 @@ pub struct CreateVirtualRouterInput {
     /// <p>The virtual router specification to apply.</p>
     #[serde(rename = "spec")]
     pub spec: VirtualRouterSpec,
-    /// <p>Optional metadata that you can apply to the virtual router to assist with categorization and organization.
-    /// Each tag consists of a key and an optional value, both of which you define.
-    /// Tag keys can have a maximum character length of 128 characters, and tag values can have
+    /// <p>Optional metadata that you can apply to the virtual router to assist with categorization
+    /// and organization. Each tag consists of a key and an optional value, both of which you
+    /// define. Tag keys can have a maximum character length of 128 characters, and tag values can have
     /// a maximum length of 256 characters.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -190,9 +221,9 @@ pub struct CreateVirtualServiceInput {
     /// <p>The virtual service specification to apply.</p>
     #[serde(rename = "spec")]
     pub spec: VirtualServiceSpec,
-    /// <p>Optional metadata that you can apply to the virtual service to assist with categorization and organization.
-    /// Each tag consists of a key and an optional value, both of which you define.
-    /// Tag keys can have a maximum character length of 128 characters, and tag values can have
+    /// <p>Optional metadata that you can apply to the virtual service to assist with
+    /// categorization and organization. Each tag consists of a key and an optional value, both of
+    /// which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have
     /// a maximum length of 256 characters.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -399,14 +430,27 @@ pub struct DnsServiceDiscovery {
     pub hostname: String,
 }
 
+/// <p>An object representing the duration between retry attempts.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Duration {
+    /// <p>The unit of time between retry attempts.</p>
+    #[serde(rename = "unit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unit: Option<String>,
+    /// <p>The duration of time between retry attempts.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<i64>,
+}
+
 /// <p>An object representing the egress filter rules for a service mesh.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EgressFilter {
     /// <p>The egress filter type. By default, the type is <code>DROP_ALL</code>, which allows
-    /// egress only from virtual nodes to other defined resources in the service mesh (and any traffic
-    /// to <code>*.amazonaws.com</code> for AWS API calls). You can set the egress filter type to
-    /// <code>ALLOW_ALL</code> to allow egress to any endpoint inside or outside of the service
-    /// mesh.</p>
+    /// egress only from virtual nodes to other defined resources in the service mesh (and any
+    /// traffic to <code>*.amazonaws.com</code> for AWS API calls). You can set the egress filter
+    /// type to <code>ALLOW_ALL</code> to allow egress to any endpoint inside or outside of the
+    /// service mesh.</p>
     #[serde(rename = "type")]
     pub type_: String,
 }
@@ -416,9 +460,9 @@ pub struct EgressFilter {
 pub struct FileAccessLog {
     /// <p>The file path to write access logs to. You can use <code>/dev/stdout</code> to send
     /// access logs to standard out and configure your Envoy container to use a log driver, such as
-    /// <code>awslogs</code>, to export the access logs to a log storage service such as Amazon CloudWatch
-    /// Logs. You can also specify a path in the Envoy container's file system to write the files
-    /// to disk.</p>
+    /// <code>awslogs</code>, to export the access logs to a log storage service such as Amazon
+    /// CloudWatch Logs. You can also specify a path in the Envoy container's file system to write
+    /// the files to disk.</p>
     ///
     /// <pre><code>     &lt;note&gt;
     /// &lt;p&gt;The Envoy process must have write permissions to the path that you specify here.
@@ -427,6 +471,31 @@ pub struct FileAccessLog {
     /// </code></pre>
     #[serde(rename = "path")]
     pub path: String,
+}
+
+/// <p>An object representing the method and value to match the header value sent with a request. Specify one match method.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HeaderMatchMethod {
+    /// <p>The header value sent by the client must match the specified value exactly.</p>
+    #[serde(rename = "exact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exact: Option<String>,
+    /// <p>The header value sent by the client must begin with the specified characters.</p>
+    #[serde(rename = "prefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prefix: Option<String>,
+    /// <p>The object that specifies the range of numbers that the header value sent by the client must be included in.</p>
+    #[serde(rename = "range")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub range: Option<MatchRange>,
+    /// <p>The header value sent by the client must include the specified characters.</p>
+    #[serde(rename = "regex")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regex: Option<String>,
+    /// <p>The header value sent by the client must end with the specified characters.</p>
+    #[serde(rename = "suffix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suffix: Option<String>,
 }
 
 /// <p>An object representing the health check policy for a virtual node's listener.</p>
@@ -462,6 +531,48 @@ pub struct HealthCheckPolicy {
     pub unhealthy_threshold: i64,
 }
 
+/// <p>An object that represents a retry policy.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HttpRetryPolicy {
+    /// <p>Specify at least one of the following values.</p>
+    ///
+    /// <pre><code>     &lt;ul&gt;
+    /// &lt;li&gt;
+    /// &lt;p&gt;
+    /// &lt;b&gt;server-error&lt;/b&gt; – HTTP status codes 500, 501,
+    /// 502, 503, 504, 505, 506, 507, 508, 510, and 511&lt;/p&gt;
+    /// &lt;/li&gt;
+    /// &lt;li&gt;
+    /// &lt;p&gt;
+    /// &lt;b&gt;gateway-error&lt;/b&gt; – HTTP status codes 502,
+    /// 503, and 504&lt;/p&gt;
+    /// &lt;/li&gt;
+    /// &lt;li&gt;
+    /// &lt;p&gt;
+    /// &lt;b&gt;client-error&lt;/b&gt; – HTTP status code 409&lt;/p&gt;
+    /// &lt;/li&gt;
+    /// &lt;li&gt;
+    /// &lt;p&gt;
+    /// &lt;b&gt;stream-error&lt;/b&gt; – Retry on refused
+    /// stream&lt;/p&gt;
+    /// &lt;/li&gt;
+    /// &lt;/ul&gt;
+    /// </code></pre>
+    #[serde(rename = "httpRetryEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_retry_events: Option<Vec<String>>,
+    /// <p>The maximum number of retry attempts. If no value is specified, the default is 1.</p>
+    #[serde(rename = "maxRetries")]
+    pub max_retries: i64,
+    /// <p>An object that represents the retry duration.</p>
+    #[serde(rename = "perRetryTimeout")]
+    pub per_retry_timeout: Duration,
+    /// <p>Specify a valid value.</p>
+    #[serde(rename = "tcpRetryEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tcp_retry_events: Option<Vec<String>>,
+}
+
 /// <p>An object representing the HTTP routing specification for a route.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HttpRoute {
@@ -471,6 +582,10 @@ pub struct HttpRoute {
     /// <p>The criteria for determining an HTTP request match.</p>
     #[serde(rename = "match")]
     pub match_: HttpRouteMatch,
+    /// <p>An object that represents a retry policy.</p>
+    #[serde(rename = "retryPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retry_policy: Option<HttpRetryPolicy>,
 }
 
 /// <p>An object representing the traffic distribution requirements for matched HTTP
@@ -483,10 +598,34 @@ pub struct HttpRouteAction {
     pub weighted_targets: Vec<WeightedTarget>,
 }
 
+/// <p>An object representing the HTTP header in the request.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HttpRouteHeader {
+    /// <p>Specify <code>True</code> to match the opposite of the <code>HeaderMatchMethod</code> method and value. The default value is <code>False</code>.</p>
+    #[serde(rename = "invert")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invert: Option<bool>,
+    /// <p>The <code>HeaderMatchMethod</code> object.</p>
+    #[serde(rename = "match")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub match_: Option<HeaderMatchMethod>,
+    /// <p>A name for the HTTP header in the client request that will be matched on.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+}
+
 /// <p>An object representing the requirements for a route to match HTTP requests for a virtual
 /// router.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HttpRouteMatch {
+    /// <p>The client request headers to match on.</p>
+    #[serde(rename = "headers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub headers: Option<Vec<HttpRouteHeader>>,
+    /// <p>The client request header method to match on.</p>
+    #[serde(rename = "method")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub method: Option<String>,
     /// <p>Specifies the path to match requests with. This parameter must always start with
     /// <code>/</code>, which by itself matches all requests to the virtual service name. You
     /// can also match for path-based routing of requests. For example, if your virtual service
@@ -495,25 +634,29 @@ pub struct HttpRouteMatch {
     /// <code>/metrics</code>.</p>
     #[serde(rename = "prefix")]
     pub prefix: String,
+    /// <p>The client request header scheme to match on.</p>
+    #[serde(rename = "scheme")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheme: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListMeshesInput {
     /// <p>The maximum number of results returned by <code>ListMeshes</code> in paginated output.
     /// When you use this parameter, <code>ListMeshes</code> returns only <code>limit</code>
-    /// results in a single page along with a <code>nextToken</code> response element. You can see the
-    /// remaining results of the initial request by sending another
-    /// <code>ListMeshes</code> request with the returned <code>nextToken</code> value. This
-    /// value can be between 1 and 100. If you don't use this parameter,
+    /// results in a single page along with a <code>nextToken</code> response element. You can see
+    /// the remaining results of the initial request by sending another <code>ListMeshes</code>
+    /// request with the returned <code>nextToken</code> value. This value can be between
+    /// 1 and 100. If you don't use this parameter,
     /// <code>ListMeshes</code> returns up to 100 results and a
     /// <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
     /// <p>The <code>nextToken</code> value returned from a previous paginated
-    /// <code>ListMeshes</code> request where <code>limit</code> was used and the
-    /// results exceeded the value of that parameter. Pagination continues from the end of the
-    /// previous results that returned the <code>nextToken</code> value.</p>
+    /// <code>ListMeshes</code> request where <code>limit</code> was used and the results
+    /// exceeded the value of that parameter. Pagination continues from the end of the previous
+    /// results that returned the <code>nextToken</code> value.</p>
     ///
     /// <pre><code>     &lt;note&gt;
     /// &lt;p&gt;This token should be treated as an opaque identifier that is used only to
@@ -531,11 +674,10 @@ pub struct ListMeshesOutput {
     /// <p>The list of existing service meshes.</p>
     #[serde(rename = "meshes")]
     pub meshes: Vec<MeshRef>,
-    /// <p>The <code>nextToken</code> value to include in a future <code>ListMeshes</code>
-    /// request. When the results of a <code>ListMeshes</code> request exceed
-    /// <code>limit</code>, you can use this value to retrieve the next page of
-    /// results. This value is <code>null</code> when there are no more results to
-    /// return.</p>
+    /// <p>The <code>nextToken</code> value to include in a future <code>ListMeshes</code> request.
+    /// When the results of a <code>ListMeshes</code> request exceed <code>limit</code>, you can
+    /// use this value to retrieve the next page of results. This value is <code>null</code> when
+    /// there are no more results to return.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -545,10 +687,10 @@ pub struct ListMeshesOutput {
 pub struct ListRoutesInput {
     /// <p>The maximum number of results returned by <code>ListRoutes</code> in paginated output.
     /// When you use this parameter, <code>ListRoutes</code> returns only <code>limit</code>
-    /// results in a single page along with a <code>nextToken</code> response element. You can see the
-    /// remaining results of the initial request by sending another
-    /// <code>ListRoutes</code> request with the returned <code>nextToken</code> value. This
-    /// value can be between 1 and 100. If you don't use this parameter,
+    /// results in a single page along with a <code>nextToken</code> response element. You can see
+    /// the remaining results of the initial request by sending another <code>ListRoutes</code>
+    /// request with the returned <code>nextToken</code> value. This value can be between
+    /// 1 and 100. If you don't use this parameter,
     /// <code>ListRoutes</code> returns up to 100 results and a
     /// <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "limit")]
@@ -558,9 +700,9 @@ pub struct ListRoutesInput {
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The <code>nextToken</code> value returned from a previous paginated
-    /// <code>ListRoutes</code> request where <code>limit</code> was used and the
-    /// results exceeded the value of that parameter. Pagination continues from the end of the
-    /// previous results that returned the <code>nextToken</code> value.</p>
+    /// <code>ListRoutes</code> request where <code>limit</code> was used and the results
+    /// exceeded the value of that parameter. Pagination continues from the end of the previous
+    /// results that returned the <code>nextToken</code> value.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -572,11 +714,10 @@ pub struct ListRoutesInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListRoutesOutput {
-    /// <p>The <code>nextToken</code> value to include in a future <code>ListRoutes</code>
-    /// request. When the results of a <code>ListRoutes</code> request exceed
-    /// <code>limit</code>, you can use this value to retrieve the next page of
-    /// results. This value is <code>null</code> when there are no more results to
-    /// return.</p>
+    /// <p>The <code>nextToken</code> value to include in a future <code>ListRoutes</code> request.
+    /// When the results of a <code>ListRoutes</code> request exceed <code>limit</code>, you can
+    /// use this value to retrieve the next page of results. This value is <code>null</code> when
+    /// there are no more results to return.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -588,13 +729,13 @@ pub struct ListRoutesOutput {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTagsForResourceInput {
     /// <p>The maximum number of tag results returned by <code>ListTagsForResource</code> in
-    /// paginated output. When this parameter is used, <code>ListTagsForResource</code> returns only
-    /// <code>limit</code> results in a single page along with a <code>nextToken</code>
+    /// paginated output. When this parameter is used, <code>ListTagsForResource</code> returns
+    /// only <code>limit</code> results in a single page along with a <code>nextToken</code>
     /// response element. You can see the remaining results of the initial request by sending
     /// another <code>ListTagsForResource</code> request with the returned <code>nextToken</code>
-    /// value. This value can be between 1 and 100. If you don't use this
-    /// parameter, <code>ListTagsForResource</code> returns up to
-    /// 100 results and a <code>nextToken</code> value if applicable.</p>
+    /// value. This value can be between 1 and 100. If you don't use
+    /// this parameter, <code>ListTagsForResource</code> returns up to 100
+    /// results and a <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -615,9 +756,8 @@ pub struct ListTagsForResourceInput {
 pub struct ListTagsForResourceOutput {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListTagsForResource</code>
     /// request. When the results of a <code>ListTagsForResource</code> request exceed
-    /// <code>limit</code>, you can use this value to retrieve the next page of
-    /// results. This value is <code>null</code> when there are no more results to
-    /// return.</p>
+    /// <code>limit</code>, you can use this value to retrieve the next page of results. This
+    /// value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -633,8 +773,8 @@ pub struct ListVirtualNodesInput {
     /// <code>limit</code> results in a single page along with a <code>nextToken</code> response
     /// element. You can see the remaining results of the initial request by sending another
     /// <code>ListVirtualNodes</code> request with the returned <code>nextToken</code> value.
-    /// This value can be between 1 and 100. If you don't use this parameter,
-    /// <code>ListVirtualNodes</code> returns up to 100 results and a
+    /// This value can be between 1 and 100. If you don't use this
+    /// parameter, <code>ListVirtualNodes</code> returns up to 100 results and a
     /// <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -643,9 +783,9 @@ pub struct ListVirtualNodesInput {
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The <code>nextToken</code> value returned from a previous paginated
-    /// <code>ListVirtualNodes</code> request where <code>limit</code> was used and the
-    /// results exceeded the value of that parameter. Pagination continues from the end of the
-    /// previous results that returned the <code>nextToken</code> value.</p>
+    /// <code>ListVirtualNodes</code> request where <code>limit</code> was used and the results
+    /// exceeded the value of that parameter. Pagination continues from the end of the previous
+    /// results that returned the <code>nextToken</code> value.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -656,9 +796,8 @@ pub struct ListVirtualNodesInput {
 pub struct ListVirtualNodesOutput {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListVirtualNodes</code>
     /// request. When the results of a <code>ListVirtualNodes</code> request exceed
-    /// <code>limit</code>, you can use this value to retrieve the next page of
-    /// results. This value is <code>null</code> when there are no more results to
-    /// return.</p>
+    /// <code>limit</code>, you can use this value to retrieve the next page of results. This
+    /// value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -674,8 +813,8 @@ pub struct ListVirtualRoutersInput {
     /// <code>limit</code> results in a single page along with a <code>nextToken</code> response
     /// element. You can see the remaining results of the initial request by sending another
     /// <code>ListVirtualRouters</code> request with the returned <code>nextToken</code> value.
-    /// This value can be between 1 and 100. If you don't use this parameter,
-    /// <code>ListVirtualRouters</code> returns up to 100 results and
+    /// This value can be between 1 and 100. If you don't use this
+    /// parameter, <code>ListVirtualRouters</code> returns up to 100 results and
     /// a <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -697,9 +836,8 @@ pub struct ListVirtualRoutersInput {
 pub struct ListVirtualRoutersOutput {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListVirtualRouters</code>
     /// request. When the results of a <code>ListVirtualRouters</code> request exceed
-    /// <code>limit</code>, you can use this value to retrieve the next page of
-    /// results. This value is <code>null</code> when there are no more results to
-    /// return.</p>
+    /// <code>limit</code>, you can use this value to retrieve the next page of results. This
+    /// value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -715,8 +853,8 @@ pub struct ListVirtualServicesInput {
     /// <code>limit</code> results in a single page along with a <code>nextToken</code> response
     /// element. You can see the remaining results of the initial request by sending another
     /// <code>ListVirtualServices</code> request with the returned <code>nextToken</code> value.
-    /// This value can be between 1 and 100. If you don't use this parameter,
-    /// <code>ListVirtualServices</code> returns up to 100 results and
+    /// This value can be between 1 and 100. If you don't use this
+    /// parameter, <code>ListVirtualServices</code> returns up to 100 results and
     /// a <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -767,6 +905,17 @@ pub struct Logging {
     #[serde(rename = "accessLog")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_log: Option<AccessLog>,
+}
+
+/// <p>The range of values to match on. The first character of the range is included in the range, though the last character is not. For example, if the range specified were 1-100, only values 1-99 would be matched.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MatchRange {
+    /// <p>The end of the range.</p>
+    #[serde(rename = "end")]
+    pub end: i64,
+    /// <p>The start of the range.</p>
+    #[serde(rename = "start")]
+    pub start: i64,
 }
 
 /// <p>An object representing a service mesh returned by a describe operation.</p>
@@ -900,6 +1049,10 @@ pub struct RouteSpec {
     #[serde(rename = "httpRoute")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub http_route: Option<HttpRoute>,
+    /// <p>The priority for the route. Routes are matched based on the specified value, where 0 is the highest priority.</p>
+    #[serde(rename = "priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
     /// <p>The TCP routing information for the route.</p>
     #[serde(rename = "tcpRoute")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -918,14 +1071,18 @@ pub struct RouteStatus {
 /// <p>An object representing the service discovery information for a virtual node.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ServiceDiscovery {
+    /// <p>Specifies any AWS Cloud Map information for the virtual node.</p>
+    #[serde(rename = "awsCloudMap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_cloud_map: Option<AwsCloudMapServiceDiscovery>,
     /// <p>Specifies the DNS information for the virtual node.</p>
     #[serde(rename = "dns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dns: Option<DnsServiceDiscovery>,
 }
 
-/// <p>Optional metadata that you apply to a resource to assist with categorization and organization.
-/// Each tag consists of a key and an optional value, both of which you define.
+/// <p>Optional metadata that you apply to a resource to assist with categorization and
+/// organization. Each tag consists of a key and an optional value, both of which you define.
 /// Tag keys can have a maximum character length of 128 characters, and tag values can have
 /// a maximum length of 256 characters.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -934,8 +1091,8 @@ pub struct TagRef {
     /// that acts like a category for more specific tag values.</p>
     #[serde(rename = "key")]
     pub key: String,
-    /// <p>The optional part of a key-value pair that make up a tag. A <code>value</code> acts as
-    /// a descriptor within a tag category (key).</p>
+    /// <p>The optional part of a key-value pair that make up a tag. A <code>value</code> acts as a
+    /// descriptor within a tag category (key).</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
@@ -1171,7 +1328,8 @@ pub struct VirtualNodeSpec {
     #[serde(rename = "backends")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backends: Option<Vec<Backend>>,
-    /// <p>The listeners that the virtual node is expected to receive inbound traffic from. Currently only one listener is supported per virtual node.</p>
+    /// <p>The listeners that the virtual node is expected to receive inbound traffic from.
+    /// Currently only one listener is supported per virtual node.</p>
     #[serde(rename = "listeners")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub listeners: Option<Vec<Listener>>,
@@ -1249,9 +1407,11 @@ pub struct VirtualRouterServiceProvider {
 /// <p>An object representing the specification of a virtual router.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VirtualRouterSpec {
-    /// <p>The listeners that the virtual router is expected to receive inbound traffic from. Currently only one listener is supported per virtual router.</p>
+    /// <p>The listeners that the virtual router is expected to receive inbound traffic from.
+    /// Currently only one listener is supported per virtual router.</p>
     #[serde(rename = "listeners")]
-    pub listeners: Vec<VirtualRouterListener>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub listeners: Option<Vec<VirtualRouterListener>>,
 }
 
 /// <p>An object representing the status of a virtual router. </p>
@@ -1362,16 +1522,19 @@ pub enum CreateMeshError {
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service
+    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -1439,16 +1602,19 @@ pub enum CreateRouteError {
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service
+    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -1516,16 +1682,19 @@ pub enum CreateVirtualNodeError {
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service
+    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -1597,16 +1766,19 @@ pub enum CreateVirtualRouterError {
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service
+    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -1678,16 +1850,19 @@ pub enum CreateVirtualServiceError {
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service
+    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -1758,16 +1933,19 @@ pub enum DeleteMeshError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
-    /// <p>You can't delete the specified resource because it's in use or required by another resource.</p>
+    /// <p>You can't delete the specified resource because it's in use or required by another
+    /// resource.</p>
     ResourceInUse(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -1828,16 +2006,19 @@ pub enum DeleteRouteError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
-    /// <p>You can't delete the specified resource because it's in use or required by another resource.</p>
+    /// <p>You can't delete the specified resource because it's in use or required by another
+    /// resource.</p>
     ResourceInUse(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -1898,16 +2079,19 @@ pub enum DeleteVirtualNodeError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
-    /// <p>You can't delete the specified resource because it's in use or required by another resource.</p>
+    /// <p>You can't delete the specified resource because it's in use or required by another
+    /// resource.</p>
     ResourceInUse(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -1972,16 +2156,19 @@ pub enum DeleteVirtualRouterError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
-    /// <p>You can't delete the specified resource because it's in use or required by another resource.</p>
+    /// <p>You can't delete the specified resource because it's in use or required by another
+    /// resource.</p>
     ResourceInUse(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -2046,14 +2233,16 @@ pub enum DeleteVirtualServiceError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -2116,14 +2305,16 @@ pub enum DescribeMeshError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -2180,14 +2371,16 @@ pub enum DescribeRouteError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -2244,14 +2437,16 @@ pub enum DescribeVirtualNodeError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -2312,14 +2507,16 @@ pub enum DescribeVirtualRouterError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -2382,14 +2579,16 @@ pub enum DescribeVirtualServiceError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -2452,14 +2651,16 @@ pub enum ListMeshesError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -2516,14 +2717,16 @@ pub enum ListRoutesError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -2578,12 +2781,19 @@ impl Error for ListRoutesError {
 pub enum ListTagsForResourceError {
     /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
     BadRequest(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>You don't have permissions to perform this action.</p>
+    Forbidden(String),
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
+    TooManyRequests(String),
 }
 
 impl ListTagsForResourceError {
@@ -2592,6 +2802,9 @@ impl ListTagsForResourceError {
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListTagsForResourceError::Forbidden(err.msg))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalServerError(
@@ -2605,6 +2818,9 @@ impl ListTagsForResourceError {
                     return RusotoError::Service(ListTagsForResourceError::ServiceUnavailable(
                         err.msg,
                     ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListTagsForResourceError::TooManyRequests(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -2622,9 +2838,11 @@ impl Error for ListTagsForResourceError {
     fn description(&self) -> &str {
         match *self {
             ListTagsForResourceError::BadRequest(ref cause) => cause,
+            ListTagsForResourceError::Forbidden(ref cause) => cause,
             ListTagsForResourceError::InternalServerError(ref cause) => cause,
             ListTagsForResourceError::NotFound(ref cause) => cause,
             ListTagsForResourceError::ServiceUnavailable(ref cause) => cause,
+            ListTagsForResourceError::TooManyRequests(ref cause) => cause,
         }
     }
 }
@@ -2635,14 +2853,16 @@ pub enum ListVirtualNodesError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -2701,14 +2921,16 @@ pub enum ListVirtualRoutersError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -2769,14 +2991,16 @@ pub enum ListVirtualServicesError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -2835,12 +3059,19 @@ impl Error for ListVirtualServicesError {
 pub enum TagResourceError {
     /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
     BadRequest(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>You don't have permissions to perform this action.</p>
+    Forbidden(String),
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
+    TooManyRequests(String),
     /// <p>The request exceeds the maximum allowed number of tags allowed per resource. The current
     /// limit is 50 user tags per resource. You must reduce the number of tags in the request. None
     /// of the tags in this request were applied.</p>
@@ -2854,6 +3085,9 @@ impl TagResourceError {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(err.msg))
                 }
+                "ForbiddenException" => {
+                    return RusotoError::Service(TagResourceError::Forbidden(err.msg))
+                }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(TagResourceError::InternalServerError(err.msg))
                 }
@@ -2862,6 +3096,9 @@ impl TagResourceError {
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(TagResourceError::ServiceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(TagResourceError::TooManyRequests(err.msg))
                 }
                 "TooManyTagsException" => {
                     return RusotoError::Service(TagResourceError::TooManyTags(err.msg))
@@ -2882,9 +3119,11 @@ impl Error for TagResourceError {
     fn description(&self) -> &str {
         match *self {
             TagResourceError::BadRequest(ref cause) => cause,
+            TagResourceError::Forbidden(ref cause) => cause,
             TagResourceError::InternalServerError(ref cause) => cause,
             TagResourceError::NotFound(ref cause) => cause,
             TagResourceError::ServiceUnavailable(ref cause) => cause,
+            TagResourceError::TooManyRequests(ref cause) => cause,
             TagResourceError::TooManyTags(ref cause) => cause,
         }
     }
@@ -2894,12 +3133,19 @@ impl Error for TagResourceError {
 pub enum UntagResourceError {
     /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
     BadRequest(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>You don't have permissions to perform this action.</p>
+    Forbidden(String),
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
+    TooManyRequests(String),
 }
 
 impl UntagResourceError {
@@ -2909,6 +3155,9 @@ impl UntagResourceError {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
                 }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UntagResourceError::Forbidden(err.msg))
+                }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(UntagResourceError::InternalServerError(err.msg))
                 }
@@ -2917,6 +3166,9 @@ impl UntagResourceError {
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UntagResourceError::ServiceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UntagResourceError::TooManyRequests(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -2934,9 +3186,11 @@ impl Error for UntagResourceError {
     fn description(&self) -> &str {
         match *self {
             UntagResourceError::BadRequest(ref cause) => cause,
+            UntagResourceError::Forbidden(ref cause) => cause,
             UntagResourceError::InternalServerError(ref cause) => cause,
             UntagResourceError::NotFound(ref cause) => cause,
             UntagResourceError::ServiceUnavailable(ref cause) => cause,
+            UntagResourceError::TooManyRequests(ref cause) => cause,
         }
     }
 }
@@ -2950,14 +3204,16 @@ pub enum UpdateMeshError {
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -3021,16 +3277,19 @@ pub enum UpdateRouteError {
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service
+    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -3098,16 +3357,19 @@ pub enum UpdateVirtualNodeError {
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service
+    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -3179,16 +3441,19 @@ pub enum UpdateVirtualRouterError {
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service
+    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -3260,16 +3525,19 @@ pub enum UpdateVirtualServiceError {
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service
+    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between requests.</p>
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
     TooManyRequests(String),
 }
 
@@ -3335,8 +3603,8 @@ impl Error for UpdateVirtualServiceError {
 }
 /// Trait representing the capabilities of the AWS App Mesh API. AWS App Mesh clients implement this trait.
 pub trait AppMesh {
-    /// <p>Creates a service mesh. A service mesh is a logical boundary for network traffic
-    /// between the services that reside within it.</p>
+    /// <p>Creates a service mesh. A service mesh is a logical boundary for network traffic between
+    /// the services that reside within it.</p>
     ///
     /// <pre><code>     &lt;p&gt;After you create your service mesh, you can create virtual services, virtual nodes,
     /// virtual routers, and routes to distribute traffic between the applications in your
@@ -3365,8 +3633,8 @@ pub trait AppMesh {
     /// <p>Creates a virtual node within a service mesh.</p>
     ///
     /// <pre><code>     &lt;p&gt;A virtual node acts as a logical pointer to a particular task group, such as an Amazon ECS
-    /// service or a Kubernetes deployment. When you create a virtual node, you must specify the
-    /// DNS service discovery hostname for your task group.&lt;/p&gt;
+    /// service or a Kubernetes deployment. When you create a virtual node, you can specify the
+    /// service discovery information for your task group.&lt;/p&gt;
     /// &lt;p&gt;Any inbound traffic that your virtual node expects should be specified as a
     /// &lt;code&gt;listener&lt;/code&gt;. Any outbound traffic that your virtual node expects to reach
     /// should be specified as a &lt;code&gt;backend&lt;/code&gt;.&lt;/p&gt;
@@ -3403,10 +3671,10 @@ pub trait AppMesh {
 
     /// <p>Creates a virtual service within a service mesh.</p>
     ///
-    /// <pre><code>     &lt;p&gt;A virtual service is an abstraction of a real service that is provided by a
-    /// virtual node directly or indirectly by means of a virtual router. Dependent services call
-    /// your virtual service by its &lt;code&gt;virtualServiceName&lt;/code&gt;, and those requests are routed
-    /// to the virtual node or virtual router that is specified as the provider for the virtual
+    /// <pre><code>     &lt;p&gt;A virtual service is an abstraction of a real service that is provided by a virtual node
+    /// directly or indirectly by means of a virtual router. Dependent services call your virtual
+    /// service by its &lt;code&gt;virtualServiceName&lt;/code&gt;, and those requests are routed to the
+    /// virtual node or virtual router that is specified as the provider for the virtual
     /// service.&lt;/p&gt;
     /// </code></pre>
     fn create_virtual_service(
@@ -3416,8 +3684,8 @@ pub trait AppMesh {
 
     /// <p>Deletes an existing service mesh.</p>
     ///
-    /// <pre><code>     &lt;p&gt;You must delete all resources (virtual services, routes, virtual routers, and virtual nodes)
-    /// in the service mesh before you can delete the mesh itself.&lt;/p&gt;
+    /// <pre><code>     &lt;p&gt;You must delete all resources (virtual services, routes, virtual routers, and virtual
+    /// nodes) in the service mesh before you can delete the mesh itself.&lt;/p&gt;
     /// </code></pre>
     fn delete_mesh(
         &self,
@@ -3522,10 +3790,10 @@ pub trait AppMesh {
         input: ListVirtualServicesInput,
     ) -> RusotoFuture<ListVirtualServicesOutput, ListVirtualServicesError>;
 
-    /// <p>Associates the specified tags to a resource with the specified
-    /// <code>resourceArn</code>. If existing tags on a resource aren't specified in the
-    /// request parameters, they aren't changed. When a resource is deleted, the tags
-    /// associated with that resource are also deleted.</p>
+    /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>.
+    /// If existing tags on a resource aren't specified in the request parameters, they aren't
+    /// changed. When a resource is deleted, the tags associated with that resource are also
+    /// deleted.</p>
     fn tag_resource(
         &self,
         input: TagResourceInput,
@@ -3604,8 +3872,8 @@ impl AppMeshClient {
 }
 
 impl AppMesh for AppMeshClient {
-    /// <p>Creates a service mesh. A service mesh is a logical boundary for network traffic
-    /// between the services that reside within it.</p>
+    /// <p>Creates a service mesh. A service mesh is a logical boundary for network traffic between
+    /// the services that reside within it.</p>
     ///
     /// <pre><code>     &lt;p&gt;After you create your service mesh, you can create virtual services, virtual nodes,
     /// virtual routers, and routes to distribute traffic between the applications in your
@@ -3690,8 +3958,8 @@ impl AppMesh for AppMeshClient {
     /// <p>Creates a virtual node within a service mesh.</p>
     ///
     /// <pre><code>     &lt;p&gt;A virtual node acts as a logical pointer to a particular task group, such as an Amazon ECS
-    /// service or a Kubernetes deployment. When you create a virtual node, you must specify the
-    /// DNS service discovery hostname for your task group.&lt;/p&gt;
+    /// service or a Kubernetes deployment. When you create a virtual node, you can specify the
+    /// service discovery information for your task group.&lt;/p&gt;
     /// &lt;p&gt;Any inbound traffic that your virtual node expects should be specified as a
     /// &lt;code&gt;listener&lt;/code&gt;. Any outbound traffic that your virtual node expects to reach
     /// should be specified as a &lt;code&gt;backend&lt;/code&gt;.&lt;/p&gt;
@@ -3785,10 +4053,10 @@ impl AppMesh for AppMeshClient {
 
     /// <p>Creates a virtual service within a service mesh.</p>
     ///
-    /// <pre><code>     &lt;p&gt;A virtual service is an abstraction of a real service that is provided by a
-    /// virtual node directly or indirectly by means of a virtual router. Dependent services call
-    /// your virtual service by its &lt;code&gt;virtualServiceName&lt;/code&gt;, and those requests are routed
-    /// to the virtual node or virtual router that is specified as the provider for the virtual
+    /// <pre><code>     &lt;p&gt;A virtual service is an abstraction of a real service that is provided by a virtual node
+    /// directly or indirectly by means of a virtual router. Dependent services call your virtual
+    /// service by its &lt;code&gt;virtualServiceName&lt;/code&gt;, and those requests are routed to the
+    /// virtual node or virtual router that is specified as the provider for the virtual
     /// service.&lt;/p&gt;
     /// </code></pre>
     fn create_virtual_service(
@@ -3826,8 +4094,8 @@ impl AppMesh for AppMeshClient {
 
     /// <p>Deletes an existing service mesh.</p>
     ///
-    /// <pre><code>     &lt;p&gt;You must delete all resources (virtual services, routes, virtual routers, and virtual nodes)
-    /// in the service mesh before you can delete the mesh itself.&lt;/p&gt;
+    /// <pre><code>     &lt;p&gt;You must delete all resources (virtual services, routes, virtual routers, and virtual
+    /// nodes) in the service mesh before you can delete the mesh itself.&lt;/p&gt;
     /// </code></pre>
     fn delete_mesh(
         &self,
@@ -4395,10 +4663,10 @@ impl AppMesh for AppMeshClient {
         })
     }
 
-    /// <p>Associates the specified tags to a resource with the specified
-    /// <code>resourceArn</code>. If existing tags on a resource aren't specified in the
-    /// request parameters, they aren't changed. When a resource is deleted, the tags
-    /// associated with that resource are also deleted.</p>
+    /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>.
+    /// If existing tags on a resource aren't specified in the request parameters, they aren't
+    /// changed. When a resource is deleted, the tags associated with that resource are also
+    /// deleted.</p>
     fn tag_resource(
         &self,
         input: TagResourceInput,
