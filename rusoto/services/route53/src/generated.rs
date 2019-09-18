@@ -8593,7 +8593,7 @@ impl CreateTrafficPolicyVersionError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConcurrentModification" => return RusotoError::Service(CreateTrafficPolicyVersionError::ConcurrentModification(parsed_error.message)),"InvalidInput" => return RusotoError::Service(CreateTrafficPolicyVersionError::InvalidInput(parsed_error.message)),"InvalidTrafficPolicyDocument" => return RusotoError::Service(CreateTrafficPolicyVersionError::InvalidTrafficPolicyDocument(parsed_error.message)),"NoSuchTrafficPolicy" => return RusotoError::Service(CreateTrafficPolicyVersionError::NoSuchTrafficPolicy(parsed_error.message)),"TooManyTrafficPolicyVersionsForCurrentPolicy" => return RusotoError::Service(CreateTrafficPolicyVersionError::TooManyTrafficPolicyVersionsForCurrentPolicy(parsed_error.message)),_ => {}
+                                    "ConcurrentModification" => return RusotoError::Service(CreateTrafficPolicyVersionError::ConcurrentModification(parsed_error.message)),"InvalidInput" => return RusotoError::Service(CreateTrafficPolicyVersionError::InvalidInput(parsed_error.message)),"InvalidTrafficPolicyDocument" => return RusotoError::Service(CreateTrafficPolicyVersionError::InvalidTrafficPolicyDocument(parsed_error.message)),"NoSuchTrafficPolicy" => return RusotoError::Service(CreateTrafficPolicyVersionError::NoSuchTrafficPolicy(parsed_error.message)),"TooManyTrafficPolicyVersionsForCurrentPolicy" => return RusotoError::Service(CreateTrafficPolicyVersionError::TooManyTrafficPolicyVersionsForCurrentPolicy(parsed_error.message)),_ => {{}}
                                 }
             }
         }

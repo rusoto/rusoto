@@ -3822,7 +3822,7 @@ impl DescribeConfigurationAggregatorSourcesStatusError {
 "InvalidParameterValueException" => return RusotoError::Service(DescribeConfigurationAggregatorSourcesStatusError::InvalidParameterValue(err.msg)),
 "NoSuchConfigurationAggregatorException" => return RusotoError::Service(DescribeConfigurationAggregatorSourcesStatusError::NoSuchConfigurationAggregator(err.msg)),
 "ValidationException" => return RusotoError::Validation(err.msg),
-_ => {}
+_ => {{}}
                             }
         }
         return RusotoError::Unknown(res);
