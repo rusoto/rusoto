@@ -622,6 +622,10 @@ pub struct CreateProfileRequest {
     /// <p>The distance unit to be used by devices in the profile.</p>
     #[serde(rename = "DistanceUnit")]
     pub distance_unit: String,
+    /// <p>The locale of the room profile.</p>
+    #[serde(rename = "Locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub locale: Option<String>,
     /// <p>The maximum volume limit for a room profile.</p>
     #[serde(rename = "MaxVolumeLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1939,6 +1943,10 @@ pub struct Profile {
     #[serde(rename = "IsDefault")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_default: Option<bool>,
+    /// <p>The locale of a room profile.</p>
+    #[serde(rename = "Locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub locale: Option<String>,
     /// <p>The max volume limit of a room profile.</p>
     #[serde(rename = "MaxVolumeLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1989,6 +1997,10 @@ pub struct ProfileData {
     #[serde(rename = "IsDefault")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_default: Option<bool>,
+    /// <p>The locale of a room profile.</p>
+    #[serde(rename = "Locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub locale: Option<String>,
     /// <p>The ARN of a room profile.</p>
     #[serde(rename = "ProfileArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3050,6 +3062,10 @@ pub struct UpdateProfileRequest {
     #[serde(rename = "IsDefault")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_default: Option<bool>,
+    /// <p>The updated locale for the room profile.</p>
+    #[serde(rename = "Locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub locale: Option<String>,
     /// <p>The updated maximum volume limit for the room profile.</p>
     #[serde(rename = "MaxVolumeLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6788,7 +6804,7 @@ pub trait AlexaForBusiness {
         input: DeleteDeviceRequest,
     ) -> RusotoFuture<DeleteDeviceResponse, DeleteDeviceError>;
 
-    /// <p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data and associated response data. This action can be called once every 24 hours for a specific shared device.</p> <p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data. This action can be called once every 24 hours for a specific shared device. </p>
+    /// <p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data and associated response data. This action can be called once every 24 hours for a specific shared device.</p>
     fn delete_device_usage_data(
         &self,
         input: DeleteDeviceUsageDataRequest,
@@ -7879,7 +7895,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
-    /// <p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data and associated response data. This action can be called once every 24 hours for a specific shared device.</p> <p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data. This action can be called once every 24 hours for a specific shared device. </p>
+    /// <p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data and associated response data. This action can be called once every 24 hours for a specific shared device.</p>
     fn delete_device_usage_data(
         &self,
         input: DeleteDeviceUsageDataRequest,

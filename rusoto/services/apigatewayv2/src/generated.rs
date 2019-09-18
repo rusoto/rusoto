@@ -2912,6 +2912,10 @@ pub struct UpdateApiResponse {
     #[serde(rename = "RouteSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_selection_expression: Option<String>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>A version identifier for the API.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3137,6 +3141,10 @@ pub struct UpdateDomainNameResponse {
     #[serde(rename = "DomainNameConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name_configurations: Option<Vec<DomainNameConfiguration>>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3804,6 +3812,10 @@ pub struct UpdateStageResponse {
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// Errors returned by CreateApi

@@ -1227,7 +1227,7 @@ pub struct CreateAssociationRequest {
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    /// <p>The instance ID.</p>
+    /// <p><p>The instance ID.</p> <note> <p> <code>InstanceId</code> has been deprecated. To specify an instance ID for an association, use the <code>Targets</code> parameter. If you use the parameter <code>InstanceId</code>, you cannot use the parameters <code>AssociationName</code>, <code>DocumentVersion</code>, <code>MaxErrors</code>, <code>MaxConcurrency</code>, <code>OutputLocation</code>, or <code>ScheduleExpression</code>. To use these parameters, you must use the <code>Targets</code> parameter.</p> </note></p>
     #[serde(rename = "InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
@@ -1254,7 +1254,7 @@ pub struct CreateAssociationRequest {
     #[serde(rename = "ScheduleExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_expression: Option<String>,
-    /// <p>The targets (either instances or tags) for the association.</p>
+    /// <p>The targets (either instances or tags) for the association. You must specify a value for <code>Targets</code> if you don't specify a value for <code>InstanceId</code>.</p>
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
@@ -1517,14 +1517,14 @@ pub struct DeleteAssociationResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDocumentRequest {
-    /// <p>(Optional) The version of the document that you want to delete. If not provided, all versions of the document are deleted.</p>
+    /// <p>The version of the document that you want to delete. If not provided, all versions of the document are deleted.</p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
     /// <p>The name of the document.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>(Optional) The version name of the document that you want to delete. If not provided, all versions of the document are deleted.</p>
+    /// <p>The version name of the document that you want to delete. If not provided, all versions of the document are deleted.</p>
     #[serde(rename = "VersionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version_name: Option<String>,
@@ -2182,7 +2182,7 @@ pub struct DescribeInstancePatchStatesResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeInstancePatchesRequest {
-    /// <p>Each entry in the array is a structure containing:</p> <p>Key (string, between 1 and 128 characters)</p> <p>Values (array of strings, each string between 1 and 256 characters)</p>
+    /// <p>An array of structures. Each entry in the array is a structure containing a Key, Value combination. Valid values for Key are <code>Classification</code> | <code>KBId</code> | <code>Severity</code> | <code>State</code>.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<PatchOrchestratorFilter>>,
@@ -3422,7 +3422,7 @@ pub struct GetMaintenanceWindowExecutionTaskInvocationResult {
     #[serde(rename = "TaskExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_execution_id: Option<String>,
-    /// <p>Retrieves the task type for a maintenance window. Task types include the following: LAMBDA, STEP_FUNCTION, AUTOMATION, RUN_COMMAND.</p>
+    /// <p>Retrieves the task type for a maintenance window. Task types include the following: LAMBDA, STEP_FUNCTIONS, AUTOMATION, RUN_COMMAND.</p>
     #[serde(rename = "TaskType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_type: Option<String>,
@@ -3618,7 +3618,7 @@ pub struct GetMaintenanceWindowTaskResult {
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
-    /// <p>The resource that the task used during execution. For RUN_COMMAND and AUTOMATION task types, the TaskArn is the Systems Manager Document name/ARN. For LAMBDA tasks, the value is the function name/ARN. For STEP_FUNCTION tasks, the value is the state machine ARN.</p>
+    /// <p>The resource that the task used during execution. For RUN_COMMAND and AUTOMATION task types, the TaskArn is the Systems Manager Document name/ARN. For LAMBDA tasks, the value is the function name/ARN. For STEP_FUNCTIONS tasks, the value is the state machine ARN.</p>
     #[serde(rename = "TaskArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_arn: Option<String>,
@@ -5126,14 +5126,14 @@ pub struct MaintenanceWindowRunCommandParameters {
     pub timeout_seconds: Option<i64>,
 }
 
-/// <p><p>The parameters for a STEP_FUNCTION task.</p> <p>For information about specifying and updating task parameters, see <a>RegisterTaskWithMaintenanceWindow</a> and <a>UpdateMaintenanceWindowTask</a>.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p>For Step Functions tasks, Systems Manager ignores any values specified for <code>TaskParameters</code> and <code>LoggingInfo</code>.</p> </note></p>
+/// <p><p>The parameters for a STEP_FUNCTIONS task.</p> <p>For information about specifying and updating task parameters, see <a>RegisterTaskWithMaintenanceWindow</a> and <a>UpdateMaintenanceWindowTask</a>.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p>For Step Functions tasks, Systems Manager ignores any values specified for <code>TaskParameters</code> and <code>LoggingInfo</code>.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MaintenanceWindowStepFunctionsParameters {
-    /// <p>The inputs for the STEP_FUNCTION task.</p>
+    /// <p>The inputs for the STEP_FUNCTIONS task.</p>
     #[serde(rename = "Input")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input: Option<String>,
-    /// <p>The name of the STEP_FUNCTION task.</p>
+    /// <p>The name of the STEP_FUNCTIONS task.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -5209,7 +5209,7 @@ pub struct MaintenanceWindowTask {
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
-    /// <p>The resource that the task uses during execution. For RUN_COMMAND and AUTOMATION task types, <code>TaskArn</code> is the Systems Manager document name or ARN. For LAMBDA tasks, it's the function name or ARN. For STEP_FUNCTION tasks, it's the state machine ARN.</p>
+    /// <p>The resource that the task uses during execution. For RUN_COMMAND and AUTOMATION task types, <code>TaskArn</code> is the Systems Manager document name or ARN. For LAMBDA tasks, it's the function name or ARN. For STEP_FUNCTIONS tasks, it's the state machine ARN.</p>
     #[serde(rename = "TaskArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_arn: Option<String>,
@@ -5218,7 +5218,7 @@ pub struct MaintenanceWindowTask {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_parameters:
         Option<::std::collections::HashMap<String, MaintenanceWindowTaskParameterValueExpression>>,
-    /// <p>The type of task. The type can be one of the following: RUN_COMMAND, AUTOMATION, LAMBDA, or STEP_FUNCTION.</p>
+    /// <p>The type of task. The type can be one of the following: RUN_COMMAND, AUTOMATION, LAMBDA, or STEP_FUNCTIONS.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -5247,7 +5247,7 @@ pub struct MaintenanceWindowTaskInvocationParameters {
     #[serde(rename = "RunCommand")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub run_command: Option<MaintenanceWindowRunCommandParameters>,
-    /// <p>The parameters for a STEP_FUNCTION task type.</p>
+    /// <p>The parameters for a STEP_FUNCTIONS task type.</p>
     #[serde(rename = "StepFunctions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub step_functions: Option<MaintenanceWindowStepFunctionsParameters>,
@@ -6038,7 +6038,7 @@ pub struct PutParameterRequest {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>Parameter Store offers a standard tier and an advanced tier for parameters. Standard parameters have a value limit of 4 KB and can't be configured to use parameter policies. You can create a maximum of 10,000 standard parameters per account and per Region. Standard parameters are offered at no additional cost.</p> <p>Advanced parameters have a value limit of 8 KB and can be configured to use parameter policies. You can create a maximum of 100,000 advanced parameters per account and per Region. Advanced parameters incur a charge.</p> <p>If you don't specify a parameter tier when you create a new parameter, the parameter defaults to using the standard tier. You can change a standard parameter to an advanced parameter at any time. But you can't revert an advanced parameter to a standard parameter. Reverting an advanced parameter to a standard parameter would result in data loss because the system would truncate the size of the parameter from 8 KB to 4 KB. Reverting would also remove any policies attached to the parameter. Lastly, advanced parameters use a different form of encryption than standard parameters.</p> <p>If you no longer need an advanced parameter, or if you no longer want to incur charges for an advanced parameter, you must delete it and recreate it as a new standard parameter. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-advanced-parameters.html">About Advanced Parameters</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>The parameter tier to assign to a parameter.</p> <p>Parameter Store offers a standard tier and an advanced tier for parameters. Standard parameters have a content size limit of 4 KB and can't be configured to use parameter policies. You can create a maximum of 10,000 standard parameters for each Region in an AWS account. Standard parameters are offered at no additional cost. </p> <p>Advanced parameters have a content size limit of 8 KB and can be configured to use parameter policies. You can create a maximum of 100,000 advanced parameters for each Region in an AWS account. Advanced parameters incur a charge. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-advanced-parameters.html">About Advanced Parameters</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>You can change a standard parameter to an advanced parameter any time. But you can't revert an advanced parameter to a standard parameter. Reverting an advanced parameter to a standard parameter would result in data loss because the system would truncate the size of the parameter from 8 KB to 4 KB. Reverting would also remove any policies attached to the parameter. Lastly, advanced parameters use a different form of encryption than standard parameters. </p> <p>If you no longer need an advanced parameter, or if you no longer want to incur charges for an advanced parameter, you must delete it and recreate it as a new standard parameter. </p> <p> <b>Using the Default Tier Configuration</b> </p> <p>In <code>PutParameter</code> requests, you can specify the tier to create the parameter in. Whenever you specify a tier in the request, Parameter Store creates or updates the parameter according to that request. However, if you do not specify a tier in a request, Parameter Store assigns the tier based on the current Parameter Store default tier configuration.</p> <p>The default tier when you begin using Parameter Store is the standard-parameter tier. If you use the advanced-parameter tier, you can specify one of the following as the default:</p> <ul> <li> <p> <b>Advanced</b>: With this option, Parameter Store evaluates all requests as advanced parameters. </p> </li> <li> <p> <b>Intelligent-Tiering</b>: With this option, Parameter Store evaluates each request to determine if the parameter is standard or advanced. </p> <p>If the request doesn't include any options that require an advanced parameter, the parameter is created in the standard-parameter tier. If one or more options requiring an advanced parameter are included in the request, Parameter Store create a parameter in the advanced-parameter tier.</p> <p>This approach helps control your parameter-related costs by always creating standard parameters unless an advanced parameter is necessary. </p> </li> </ul> <p>Options that require an advanced parameter include the following:</p> <ul> <li> <p>The content size of the parameter is more than 4 KB.</p> </li> <li> <p>The parameter uses a parameter policy.</p> </li> <li> <p>More than 10,000 parameters already exist in your AWS account in the current Region.</p> </li> </ul> <p>For more information about configuring the default tier option, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/ps-default-tier.html">Specifying a Default Parameter Tier</a> in the AWS Systems Manager User Guide.</p>
     #[serde(rename = "Tier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tier: Option<String>,
@@ -6119,7 +6119,7 @@ pub struct RegisterTargetWithMaintenanceWindowRequest {
     /// <p>The type of target being registered with the maintenance window.</p>
     #[serde(rename = "ResourceType")]
     pub resource_type: String,
-    /// <p>The targets to register with the maintenance window. In other words, the instances to run commands on when the maintenance window runs.</p> <p>You can specify targets using either instance IDs or tags that have been applied to instances.</p> <p> <b>Example 1</b>: Specify instance IDs</p> <p> <code>Key=InstanceIds,Values=<i>instance-id-1</i>,<i>instance-id-2</i>,<i>instance-id-3</i> </code> </p> <p> <b>Example 2</b>: Use tag key-pairs applied to instances</p> <p> <code>Key=tag:<i>my-tag-key</i>,Values=<i>my-tag-value-1</i>,<i>my-tag-value-2</i> </code> </p> <p> <b>Example 3</b>: Use tag-keys applied to instances</p> <p> <code>Key=tag-key,Values=<i>my-tag-key-1</i>,<i>my-tag-key-2</i> </code> </p> <p>For more information about these examples formats, including the best use case for each one, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/mw-cli-tutorial-targets-examples.html">Examples: Register Targets with a Maintenance Window</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>The targets to register with the maintenance window. In other words, the instances to run commands on when the maintenance window runs.</p> <p>You can specify targets using instance IDs, resource group names, or tags that have been applied to instances.</p> <p> <b>Example 1</b>: Specify instance IDs</p> <p> <code>Key=InstanceIds,Values=<i>instance-id-1</i>,<i>instance-id-2</i>,<i>instance-id-3</i> </code> </p> <p> <b>Example 2</b>: Use tag key-pairs applied to instances</p> <p> <code>Key=tag:<i>my-tag-key</i>,Values=<i>my-tag-value-1</i>,<i>my-tag-value-2</i> </code> </p> <p> <b>Example 3</b>: Use tag-keys applied to instances</p> <p> <code>Key=tag-key,Values=<i>my-tag-key-1</i>,<i>my-tag-key-2</i> </code> </p> <p> <b>Example 4</b>: Use resource group names</p> <p> <code>Key=resource-groups:Name,Values=<i>resource-group-name</i> </code> </p> <p> <b>Example 5</b>: Use filters for resource group types</p> <p> <code>Key=resource-groups:ResourceTypeFilters,Values=<i>resource-type-1</i>,<i>resource-type-2</i> </code> </p> <note> <p>For <code>Key=resource-groups:ResourceTypeFilters</code>, specify resource types in the following format</p> <p> <code>Key=resource-groups:ResourceTypeFilters,Values=<i>AWS::EC2::INSTANCE</i>,<i>AWS::EC2::VPC</i> </code> </p> </note> <p>For more information about these examples formats, including the best use case for each one, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/mw-cli-tutorial-targets-examples.html">Examples: Register Targets with a Maintenance Window</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Targets")]
     pub targets: Vec<Target>,
     /// <p>The ID of the maintenance window the target should be registered with.</p>
@@ -6168,7 +6168,7 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     #[serde(rename = "ServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    /// <p>The targets (either instances or maintenance window targets).</p> <p>Specify instances using the following format: </p> <p> <code>Key=InstanceIds,Values=&lt;instance-id-1&gt;,&lt;instance-id-2&gt;</code> </p> <p>Specify maintenance window targets using the following format:</p> <p> <code>Key=&lt;WindowTargetIds&gt;,Values=&lt;window-target-id-1&gt;,&lt;window-target-id-2&gt;</code> </p>
+    /// <p>The targets (either instances or maintenance window targets).</p> <p>Specify instances using the following format: </p> <p> <code>Key=InstanceIds,Values=&lt;instance-id-1&gt;,&lt;instance-id-2&gt;</code> </p> <p>Specify maintenance window targets using the following format:</p> <p> <code>Key=WindowTargetIds;,Values=&lt;window-target-id-1&gt;,&lt;window-target-id-2&gt;</code> </p>
     #[serde(rename = "Targets")]
     pub targets: Vec<Target>,
     /// <p>The ARN of the task to run.</p>
@@ -6210,10 +6210,10 @@ pub struct RelatedOpsItem {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemoveTagsFromResourceRequest {
-    /// <p><p>The resource ID for which you want to remove tags. Use the ID of the resource. Here are some examples:</p> <p>ManagedInstance: mi-012345abcde</p> <p>MaintenanceWindow: mw-012345abcde</p> <p>PatchBaseline: pb-012345abcde</p> <p>For the Document and Parameter values, use the name of the resource.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
+    /// <p><p>The ID of the resource from which you want to remove tags. For example:</p> <p>ManagedInstance: mi-012345abcde</p> <p>MaintenanceWindow: mw-012345abcde</p> <p>PatchBaseline: pb-012345abcde</p> <p>For the Document and Parameter values, use the name of the resource.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. Specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    /// <p><p>The type of resource of which you want to remove a tag.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
+    /// <p><p>The type of resource from which you want to remove a tag.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. Specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceType")]
     pub resource_type: String,
     /// <p>Tag keys that you want to remove from the specified resource.</p>
@@ -6373,7 +6373,7 @@ pub struct ResumeSessionResponse {
     #[serde(rename = "SessionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub session_id: Option<String>,
-    /// <p>A URL back to SSM Agent on the instance that the Session Manager client uses to send commands and receive output from the instance. Format: <code>wss://ssm-messages.<b>region</b>.amazonaws.com/v1/data-channel/<b>session-id</b>?stream=(input|output)</code>.</p> <p> <b>region</b> represents the Region identifier for an AWS Region supported by AWS Systems Manager, such as <code>us-east-2</code> for the US East (Ohio) Region. For a list of supported <b>region</b> values, see the <b>Region</b> column in the <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#ssm_region">AWS Systems Manager table of regions and endpoints</a> in the <i>AWS General Reference</i>.</p> <p> <b>session-id</b> represents the ID of a Session Manager session, such as <code>1a2b3c4dEXAMPLE</code>.</p>
+    /// <p>A URL back to SSM Agent on the instance that the Session Manager client uses to send commands and receive output from the instance. Format: <code>wss://ssmmessages.<b>region</b>.amazonaws.com/v1/data-channel/<b>session-id</b>?stream=(input|output)</code>.</p> <p> <b>region</b> represents the Region identifier for an AWS Region supported by AWS Systems Manager, such as <code>us-east-2</code> for the US East (Ohio) Region. For a list of supported <b>region</b> values, see the <b>Region</b> column in the <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#ssm_region">AWS Systems Manager table of regions and endpoints</a> in the <i>AWS General Reference</i>.</p> <p> <b>session-id</b> represents the ID of a Session Manager session, such as <code>1a2b3c4dEXAMPLE</code>.</p>
     #[serde(rename = "StreamUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_url: Option<String>,
@@ -6742,7 +6742,7 @@ pub struct StartSessionResponse {
     #[serde(rename = "SessionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub session_id: Option<String>,
-    /// <p>A URL back to SSM Agent on the instance that the Session Manager client uses to send commands and receive output from the instance. Format: <code>wss://ssm-messages.<b>region</b>.amazonaws.com/v1/data-channel/<b>session-id</b>?stream=(input|output)</code> </p> <p> <b>region</b> represents the Region identifier for an AWS Region supported by AWS Systems Manager, such as <code>us-east-2</code> for the US East (Ohio) Region. For a list of supported <b>region</b> values, see the <b>Region</b> column in the <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#ssm_region">AWS Systems Manager table of regions and endpoints</a> in the <i>AWS General Reference</i>.</p> <p> <b>session-id</b> represents the ID of a Session Manager session, such as <code>1a2b3c4dEXAMPLE</code>.</p>
+    /// <p>A URL back to SSM Agent on the instance that the Session Manager client uses to send commands and receive output from the instance. Format: <code>wss://ssmmessages.<b>region</b>.amazonaws.com/v1/data-channel/<b>session-id</b>?stream=(input|output)</code> </p> <p> <b>region</b> represents the Region identifier for an AWS Region supported by AWS Systems Manager, such as <code>us-east-2</code> for the US East (Ohio) Region. For a list of supported <b>region</b> values, see the <b>Region</b> column in the <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#ssm_region">AWS Systems Manager table of regions and endpoints</a> in the <i>AWS General Reference</i>.</p> <p> <b>session-id</b> represents the ID of a Session Manager session, such as <code>1a2b3c4dEXAMPLE</code>.</p>
     #[serde(rename = "StreamUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_url: Option<String>,
@@ -6883,14 +6883,14 @@ pub struct Tag {
     pub value: String,
 }
 
-/// <p><p>An array of search criteria that targets instances using a Key,Value combination that you specify. <code>Targets</code> is required if you don&#39;t provide one or more instance IDs in the call.</p> <p/></p>
+/// <p>An array of search criteria that targets instances using a Key,Value combination that you specify. </p> <p>Supported formats include the following.</p> <ul> <li> <p> <code>Key=InstanceIds,Values=<i>instance-id-1</i>,<i>instance-id-2</i>,<i>instance-id-3</i> </code> </p> </li> <li> <p> <code>Key=tag:<i>my-tag-key</i>,Values=<i>my-tag-value-1</i>,<i>my-tag-value-2</i> </code> </p> </li> <li> <p> <code>Key=tag-key,Values=<i>my-tag-key-1</i>,<i>my-tag-key-2</i> </code> </p> </li> <li> <p>(Maintenance window targets only) <code>Key=resource-groups:Name,Values=<i>resource-group-name</i> </code> </p> </li> <li> <p>(Maintenance window targets only) <code>Key=resource-groups:ResourceTypeFilters,Values=<i>resource-type-1</i>,<i>resource-type-2</i> </code> </p> </li> </ul> <p>For example:</p> <ul> <li> <p> <code>Key=InstanceIds,Values=i-02573cafcfEXAMPLE,i-0471e04240EXAMPLE,i-07782c72faEXAMPLE</code> </p> </li> <li> <p> <code>Key=tag:CostCenter,Values=CostCenter1,CostCenter2,CostCenter3</code> </p> </li> <li> <p> <code>Key=tag-key,Values=Name,Instance-Type,CostCenter</code> </p> </li> <li> <p>(Maintenance window targets only) <code>Key=resource-groups:Name,Values=ProductionResourceGroup</code> </p> </li> <li> <p>(Maintenance window targets only) <code>Key=resource-groups:ResourceTypeFilters,Values=<i>AWS::EC2::INSTANCE</i>,<i>AWS::EC2::VPC</i> </code> </p> </li> </ul> <p>For information about how to send commands that target instances using <code>Key,Value</code> parameters, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html#send-commands-targeting">Using Targets and Rate Controls to Send Commands to a Fleet</a> in the <i>AWS Systems Manager User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Target {
-    /// <p>User-defined criteria for sending commands that target instances that meet the criteria. <code>Key</code> can be <code>tag:&lt;Amazon EC2 tag&gt;</code> or <code>InstanceIds</code>. For more information about how to send commands that target instances using <code>Key,Value</code> parameters, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html#send-commands-targeting">Using Targets and Rate Controls to Send Commands to a Fleet</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>User-defined criteria for sending commands that target instances that meet the criteria.</p>
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>User-defined criteria that maps to <code>Key</code>. For example, if you specified <code>tag:ServerRole</code>, you could specify <code>value:WebServer</code> to run a command on instances that include Amazon EC2 tags of <code>ServerRole,WebServer</code>. For more information about how to send commands that target instances using <code>Key,Value</code> parameters, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Using Targets and Rate Controls to Send Commands to a Fleet</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>User-defined criteria that maps to <code>Key</code>. For example, if you specified <code>tag:ServerRole</code>, you could specify <code>value:WebServer</code> to run a command on instances that include Amazon EC2 tags of <code>ServerRole,WebServer</code>. </p>
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
@@ -7055,7 +7055,7 @@ pub struct UpdateDocumentRequest {
     #[serde(rename = "DocumentFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_format: Option<String>,
-    /// <p>The version of the document that you want to update.</p>
+    /// <p>(Required) The version of the document that you want to update. </p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
@@ -7551,7 +7551,7 @@ pub enum AddTagsToResourceError {
     InvalidResourceId(String),
     /// <p>The resource type is not valid. For example, if you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
     InvalidResourceType(String),
-    /// <p>The Targets parameter includes too many tags. Remove one or more tags and try the command again.</p>
+    /// <p>The <code>Targets</code> parameter includes too many tags. Remove one or more tags and try the command again.</p>
     TooManyTagsError(String),
     /// <p>There are concurrent updates for a resource that supports one update at a time.</p>
     TooManyUpdates(String),
@@ -7612,7 +7612,7 @@ pub enum CancelCommandError {
     InternalServerError(String),
 
     InvalidCommandId(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
 }
 
@@ -7747,7 +7747,7 @@ pub enum CreateAssociationError {
     InvalidDocument(String),
     /// <p>The document version is not valid or does not exist.</p>
     InvalidDocumentVersion(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The output location is not valid or does not exist.</p>
     InvalidOutputLocation(String),
@@ -7852,7 +7852,7 @@ pub enum CreateAssociationBatchError {
     InvalidDocument(String),
     /// <p>The document version is not valid or does not exist.</p>
     InvalidDocumentVersion(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The output location is not valid or does not exist.</p>
     InvalidOutputLocation(String),
@@ -7959,7 +7959,7 @@ impl Error for CreateAssociationBatchError {
 pub enum CreateDocumentError {
     /// <p>The specified document already exists.</p>
     DocumentAlreadyExists(String),
-    /// <p>You can have at most 200 active Systems Manager documents.</p>
+    /// <p>You can have at most 500 active Systems Manager documents.</p>
     DocumentLimitExceeded(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -8305,7 +8305,7 @@ pub enum DeleteAssociationError {
     InternalServerError(String),
     /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>There are concurrent updates for a resource that supports one update at a time.</p>
     TooManyUpdates(String),
@@ -8669,7 +8669,7 @@ impl Error for DeleteResourceDataSyncError {
 pub enum DeregisterManagedInstanceError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
 }
 
@@ -8910,7 +8910,7 @@ pub enum DescribeAssociationError {
     InvalidAssociationVersion(String),
     /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
 }
 
@@ -9354,7 +9354,7 @@ impl Error for DescribeDocumentPermissionError {
 pub enum DescribeEffectiveInstanceAssociationsError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -9472,7 +9472,7 @@ impl Error for DescribeEffectivePatchesForPatchBaselineError {
 pub enum DescribeInstanceAssociationsStatusError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -9527,7 +9527,7 @@ pub enum DescribeInstanceInformationError {
     InternalServerError(String),
     /// <p>The specified key is not valid.</p>
     InvalidFilterKey(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified filter value is not valid.</p>
     InvalidInstanceInformationFilterValue(String),
@@ -9698,7 +9698,7 @@ pub enum DescribeInstancePatchesError {
     InternalServerError(String),
     /// <p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
     InvalidFilter(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -10490,7 +10490,7 @@ pub enum GetCommandInvocationError {
     InternalServerError(String),
 
     InvalidCommandId(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The plugin name is not valid.</p>
     InvalidPluginName(String),
@@ -11678,7 +11678,7 @@ pub enum ListCommandInvocationsError {
     InvalidCommandId(String),
     /// <p>The specified key is not valid.</p>
     InvalidFilterKey(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -11745,7 +11745,7 @@ pub enum ListCommandsError {
     InvalidCommandId(String),
     /// <p>The specified key is not valid.</p>
     InvalidFilterKey(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -12012,7 +12012,7 @@ pub enum ListInventoryEntriesError {
     InternalServerError(String),
     /// <p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
     InvalidFilter(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -12220,7 +12220,7 @@ impl Error for ListTagsForResourceError {
 /// Errors returned by ModifyDocumentPermission
 #[derive(Debug, PartialEq)]
 pub enum ModifyDocumentPermissionError {
-    /// <p>You can have at most 200 active Systems Manager documents.</p>
+    /// <p>You can have at most 500 active Systems Manager documents.</p>
     DocumentLimitExceeded(String),
     /// <p>The document cannot be shared with more AWS user accounts. You can share a document with a maximum of 20 accounts. You can publicly share up to five documents. If you need to increase this limit, contact AWS Support.</p>
     DocumentPermissionLimit(String),
@@ -12374,7 +12374,7 @@ pub enum PutInventoryError {
     CustomSchemaCountLimitExceeded(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>You specified invalid keys or values in the <code>Context</code> attribute for <code>InventoryItem</code>. Verify the keys and values, and try again.</p>
     InvalidInventoryItemContext(String),
@@ -12793,7 +12793,7 @@ impl Error for RegisterTargetWithMaintenanceWindowError {
 pub enum RegisterTaskWithMaintenanceWindowError {
     /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
-    /// <p>You attempted to register a LAMBDA or STEP_FUNCTION task in a region where the corresponding service is not available. </p>
+    /// <p>You attempted to register a LAMBDA or STEP_FUNCTIONS task in a region where the corresponding service is not available. </p>
     FeatureNotAvailable(String),
     /// <p>Error returned when an idempotent operation is retried and the parameters don't match the original call to the API with the same idempotency token. </p>
     IdempotentParameterMismatch(String),
@@ -13076,7 +13076,7 @@ pub enum SendCommandError {
     InvalidDocument(String),
     /// <p>The document version is not valid or does not exist.</p>
     InvalidDocumentVersion(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>One or more configuration items is not valid. Verify that a valid Amazon Resource Name (ARN) was provided for an Amazon SNS topic.</p>
     InvalidNotificationConfig(String),
@@ -13545,7 +13545,7 @@ pub enum UpdateAssociationStatusError {
     InternalServerError(String),
     /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The updated status is the same as the current status.</p>
     StatusUnchanged(String),
@@ -13913,7 +13913,7 @@ impl Error for UpdateMaintenanceWindowTaskError {
 pub enum UpdateManagedInstanceRoleError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
 }
 
@@ -14204,7 +14204,7 @@ pub trait Ssm {
         input: DeleteParameterRequest,
     ) -> RusotoFuture<DeleteParameterResult, DeleteParameterError>;
 
-    /// <p>Delete a list of parameters. This API is used to delete parameters by using the Amazon EC2 console.</p>
+    /// <p>Delete a list of parameters.</p>
     fn delete_parameters(
         &self,
         input: DeleteParametersRequest,
@@ -14255,7 +14255,7 @@ pub trait Ssm {
         DeregisterTaskFromMaintenanceWindowError,
     >;
 
-    /// <p>Details about the activation, including: the date and time the activation was created, the expiration date, the IAM role assigned to the instances in the activation, and the number of instances activated by this registration.</p>
+    /// <p>Describes details about the activation, such as the date and time the activation was created, its expiration date, the IAM role assigned to the instances in the activation, and the number of instances registered by using this activation.</p>
     fn describe_activations(
         &self,
         input: DescribeActivationsRequest,
@@ -14294,7 +14294,7 @@ pub trait Ssm {
         input: DescribeAutomationStepExecutionsRequest,
     ) -> RusotoFuture<DescribeAutomationStepExecutionsResult, DescribeAutomationStepExecutionsError>;
 
-    /// <p>Lists all patches that could possibly be included in a patch baseline.</p>
+    /// <p>Lists all patches eligible to be included in a patch baseline.</p>
     fn describe_available_patches(
         &self,
         input: DescribeAvailablePatchesRequest,
@@ -14531,7 +14531,7 @@ pub trait Ssm {
         input: GetMaintenanceWindowRequest,
     ) -> RusotoFuture<GetMaintenanceWindowResult, GetMaintenanceWindowError>;
 
-    /// <p>Retrieves details about a specific task run as part of a maintenance window execution.</p>
+    /// <p>Retrieves details about a specific a maintenance window execution.</p>
     fn get_maintenance_window_execution(
         &self,
         input: GetMaintenanceWindowExecutionRequest,
@@ -14543,7 +14543,7 @@ pub trait Ssm {
         input: GetMaintenanceWindowExecutionTaskRequest,
     ) -> RusotoFuture<GetMaintenanceWindowExecutionTaskResult, GetMaintenanceWindowExecutionTaskError>;
 
-    /// <p>Retrieves a task invocation. A task invocation is a specific task running on a specific target. maintenance windows report status for all invocations. </p>
+    /// <p>Retrieves information about a specific task running on a specific target.</p>
     fn get_maintenance_window_execution_task_invocation(
         &self,
         input: GetMaintenanceWindowExecutionTaskInvocationRequest,
@@ -14714,7 +14714,7 @@ pub trait Ssm {
         input: PutParameterRequest,
     ) -> RusotoFuture<PutParameterResult, PutParameterError>;
 
-    /// <p>Defines the default patch baseline.</p>
+    /// <p>Defines the default patch baseline for the relevant operating system.</p> <p>To reset the AWS predefined patch baseline as the default, specify the full patch baseline ARN as the baseline ID value. For example, for CentOS, specify <code>arn:aws:ssm:us-east-2:733109147000:patchbaseline/pb-0574b43a65ea646ed</code> instead of <code>pb-0574b43a65ea646ed</code>.</p>
     fn register_default_patch_baseline(
         &self,
         input: RegisterDefaultPatchBaselineRequest,
@@ -14744,7 +14744,7 @@ pub trait Ssm {
         input: RegisterTaskWithMaintenanceWindowRequest,
     ) -> RusotoFuture<RegisterTaskWithMaintenanceWindowResult, RegisterTaskWithMaintenanceWindowError>;
 
-    /// <p>Removes all tags from the specified resource.</p>
+    /// <p>Removes tag keys from the specified resource.</p>
     fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceRequest,
@@ -14816,7 +14816,7 @@ pub trait Ssm {
         input: UpdateAssociationStatusRequest,
     ) -> RusotoFuture<UpdateAssociationStatusResult, UpdateAssociationStatusError>;
 
-    /// <p>The document you want to update.</p>
+    /// <p>Updates one or more values for an SSM document.</p>
     fn update_document(
         &self,
         input: UpdateDocumentRequest,
@@ -14834,7 +14834,7 @@ pub trait Ssm {
         input: UpdateMaintenanceWindowRequest,
     ) -> RusotoFuture<UpdateMaintenanceWindowResult, UpdateMaintenanceWindowError>;
 
-    /// <p>Modifies the target of an existing maintenance window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>
+    /// <p><p>Modifies the target of an existing maintenance window. You can change the following:</p> <ul> <li> <p>Name</p> </li> <li> <p>Description</p> </li> <li> <p>Owner</p> </li> <li> <p>IDs for an ID target</p> </li> <li> <p>Tags for a Tag target</p> </li> <li> <p>From any supported tag type to another. The three supported tag types are ID target, Tag target, and resource group. For more information, see <a>Target</a>.</p> </li> </ul> <note> <p>If a parameter is null, then the corresponding field is not modified.</p> </note></p>
     fn update_maintenance_window_target(
         &self,
         input: UpdateMaintenanceWindowTargetRequest,
@@ -14846,7 +14846,7 @@ pub trait Ssm {
         input: UpdateMaintenanceWindowTaskRequest,
     ) -> RusotoFuture<UpdateMaintenanceWindowTaskResult, UpdateMaintenanceWindowTaskError>;
 
-    /// <p>Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.</p>
+    /// <p>Assigns or changes an Amazon Identity and Access Management (IAM) role for the managed instance.</p>
     fn update_managed_instance_role(
         &self,
         input: UpdateManagedInstanceRoleRequest,
@@ -15391,7 +15391,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Delete a list of parameters. This API is used to delete parameters by using the Amazon EC2 console.</p>
+    /// <p>Delete a list of parameters.</p>
     fn delete_parameters(
         &self,
         input: DeleteParametersRequest,
@@ -15604,7 +15604,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Details about the activation, including: the date and time the activation was created, the expiration date, the IAM role assigned to the instances in the activation, and the number of instances activated by this registration.</p>
+    /// <p>Describes details about the activation, such as the date and time the activation was created, its expiration date, the IAM role assigned to the instances in the activation, and the number of instances registered by using this activation.</p>
     fn describe_activations(
         &self,
         input: DescribeActivationsRequest,
@@ -15775,7 +15775,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Lists all patches that could possibly be included in a patch baseline.</p>
+    /// <p>Lists all patches eligible to be included in a patch baseline.</p>
     fn describe_available_patches(
         &self,
         input: DescribeAvailablePatchesRequest,
@@ -16793,7 +16793,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Retrieves details about a specific task run as part of a maintenance window execution.</p>
+    /// <p>Retrieves details about a specific a maintenance window execution.</p>
     fn get_maintenance_window_execution(
         &self,
         input: GetMaintenanceWindowExecutionRequest,
@@ -16851,7 +16851,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Retrieves a task invocation. A task invocation is a specific task running on a specific target. maintenance windows report status for all invocations. </p>
+    /// <p>Retrieves information about a specific task running on a specific target.</p>
     fn get_maintenance_window_execution_task_invocation(
         &self,
         input: GetMaintenanceWindowExecutionTaskInvocationRequest,
@@ -17642,7 +17642,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Defines the default patch baseline.</p>
+    /// <p>Defines the default patch baseline for the relevant operating system.</p> <p>To reset the AWS predefined patch baseline as the default, specify the full patch baseline ARN as the baseline ID value. For example, for CentOS, specify <code>arn:aws:ssm:us-east-2:733109147000:patchbaseline/pb-0574b43a65ea646ed</code> instead of <code>pb-0574b43a65ea646ed</code>.</p>
     fn register_default_patch_baseline(
         &self,
         input: RegisterDefaultPatchBaselineRequest,
@@ -17768,7 +17768,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Removes all tags from the specified resource.</p>
+    /// <p>Removes tag keys from the specified resource.</p>
     fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceRequest,
@@ -18103,7 +18103,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>The document you want to update.</p>
+    /// <p>Updates one or more values for an SSM document.</p>
     fn update_document(
         &self,
         input: UpdateDocumentRequest,
@@ -18184,7 +18184,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Modifies the target of an existing maintenance window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>
+    /// <p><p>Modifies the target of an existing maintenance window. You can change the following:</p> <ul> <li> <p>Name</p> </li> <li> <p>Description</p> </li> <li> <p>Owner</p> </li> <li> <p>IDs for an ID target</p> </li> <li> <p>Tags for a Tag target</p> </li> <li> <p>From any supported tag type to another. The three supported tag types are ID target, Tag target, and resource group. For more information, see <a>Target</a>.</p> </li> </ul> <note> <p>If a parameter is null, then the corresponding field is not modified.</p> </note></p>
     fn update_maintenance_window_target(
         &self,
         input: UpdateMaintenanceWindowTargetRequest,
@@ -18236,7 +18236,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.</p>
+    /// <p>Assigns or changes an Amazon Identity and Access Management (IAM) role for the managed instance.</p>
     fn update_managed_instance_role(
         &self,
         input: UpdateManagedInstanceRoleRequest,

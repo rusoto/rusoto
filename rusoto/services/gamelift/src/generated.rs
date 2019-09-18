@@ -149,6 +149,12 @@ pub struct Build {
     pub version: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CertificateConfiguration {
+    #[serde(rename = "CertificateType")]
+    pub certificate_type: String,
+}
+
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateAliasInput {
@@ -220,6 +226,9 @@ pub struct CreateFleetInput {
     #[serde(rename = "BuildId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub build_id: Option<String>,
+    #[serde(rename = "CertificateConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_configuration: Option<CertificateConfiguration>,
     /// <p>Human-readable description of a fleet.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1389,6 +1398,9 @@ pub struct FleetAttributes {
     #[serde(rename = "BuildId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub build_id: Option<String>,
+    #[serde(rename = "CertificateConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_configuration: Option<CertificateConfiguration>,
     /// <p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1538,6 +1550,9 @@ pub struct GameSession {
     #[serde(rename = "CurrentPlayerSessionCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub current_player_session_count: Option<i64>,
+    #[serde(rename = "DnsName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dns_name: Option<String>,
     /// <p>Unique identifier for a fleet that the game session is running on.</p>
     #[serde(rename = "FleetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1596,6 +1611,9 @@ pub struct GameSession {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GameSessionConnectionInfo {
+    #[serde(rename = "DnsName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dns_name: Option<String>,
     /// <p>Amazon Resource Name (<a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html">ARN</a>) that is assigned to a game session and uniquely identifies it.</p>
     #[serde(rename = "GameSessionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1632,6 +1650,9 @@ pub struct GameSessionDetail {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GameSessionPlacement {
+    #[serde(rename = "DnsName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dns_name: Option<String>,
     /// <p>Time stamp indicating when this request was completed, canceled, or timed out.</p>
     #[serde(rename = "EndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1784,6 +1805,9 @@ pub struct Instance {
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
+    #[serde(rename = "DnsName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dns_name: Option<String>,
     /// <p>Unique identifier for a fleet that the instance is in.</p>
     #[serde(rename = "FleetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2205,6 +2229,9 @@ pub struct PlayerSession {
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
+    #[serde(rename = "DnsName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dns_name: Option<String>,
     /// <p>Unique identifier for a fleet that the player's game session is running on.</p>
     #[serde(rename = "FleetId")]
     #[serde(skip_serializing_if = "Option::is_none")]

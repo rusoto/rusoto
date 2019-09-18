@@ -55,7 +55,7 @@ pub struct Action {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchCreatePartitionRequest {
-    /// <p>The ID of the catalog in which the partion is to be created. Currently, this should be the AWS account ID.</p>
+    /// <p>The ID of the catalog in which the partition is to be created. Currently, this should be the AWS account ID.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -73,7 +73,7 @@ pub struct BatchCreatePartitionRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct BatchCreatePartitionResponse {
-    /// <p>Errors encountered when trying to create the requested partitions.</p>
+    /// <p>The errors encountered when trying to create the requested partitions.</p>
     #[serde(rename = "Errors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub errors: Option<Vec<PartitionError>>,
@@ -105,7 +105,7 @@ pub struct BatchDeleteConnectionResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDeletePartitionRequest {
-    /// <p>The ID of the Data Catalog where the partition to be deleted resides. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog where the partition to be deleted resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -115,7 +115,7 @@ pub struct BatchDeletePartitionRequest {
     /// <p>A list of <code>PartitionInput</code> structures that define the partitions to be deleted.</p>
     #[serde(rename = "PartitionsToDelete")]
     pub partitions_to_delete: Vec<PartitionValueList>,
-    /// <p>The name of the table where the partitions to be deleted is located.</p>
+    /// <p>The name of the table that contains the partitions to be deleted.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
 }
@@ -123,7 +123,7 @@ pub struct BatchDeletePartitionRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct BatchDeletePartitionResponse {
-    /// <p>Errors encountered when trying to delete the requested partitions.</p>
+    /// <p>The errors encountered when trying to delete the requested partitions.</p>
     #[serde(rename = "Errors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub errors: Option<Vec<PartitionError>>,
@@ -131,11 +131,11 @@ pub struct BatchDeletePartitionResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDeleteTableRequest {
-    /// <p>The ID of the Data Catalog where the table resides. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog where the table resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>The name of the catalog database where the tables to delete reside. For Hive compatibility, this name is entirely lowercase.</p>
+    /// <p>The name of the catalog database in which the tables to delete reside. For Hive compatibility, this name is entirely lowercase.</p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
     /// <p>A list of the table to delete.</p>
@@ -154,7 +154,7 @@ pub struct BatchDeleteTableResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDeleteTableVersionRequest {
-    /// <p>The ID of the Data Catalog where the tables reside. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog where the tables reside. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -200,7 +200,7 @@ pub struct BatchGetCrawlersResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetDevEndpointsRequest {
-    /// <p>The list of DevEndpoint names, which may be the names returned from the <code>ListDevEndpoint</code> operation.</p>
+    /// <p>The list of <code>DevEndpoint</code> names, which might be the names returned from the <code>ListDevEndpoint</code> operation.</p>
     #[serde(rename = "DevEndpointNames")]
     pub dev_endpoint_names: Vec<String>,
 }
@@ -208,11 +208,11 @@ pub struct BatchGetDevEndpointsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct BatchGetDevEndpointsResponse {
-    /// <p>A list of DevEndpoint definitions.</p>
+    /// <p>A list of <code>DevEndpoint</code> definitions.</p>
     #[serde(rename = "DevEndpoints")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dev_endpoints: Option<Vec<DevEndpoint>>,
-    /// <p>A list of DevEndpoints not found.</p>
+    /// <p>A list of <code>DevEndpoints</code> not found.</p>
     #[serde(rename = "DevEndpointsNotFound")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dev_endpoints_not_found: Option<Vec<String>>,
@@ -262,7 +262,7 @@ pub struct BatchGetPartitionResponse {
     #[serde(rename = "Partitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub partitions: Option<Vec<Partition>>,
-    /// <p>A list of the partition values in the request for which partions were not returned.</p>
+    /// <p>A list of the partition values in the request for which partitions were not returned.</p>
     #[serde(rename = "UnprocessedKeys")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unprocessed_keys: Option<Vec<PartitionValueList>>,
@@ -367,6 +367,33 @@ pub struct BatchStopJobRunSuccessfulSubmission {
     pub job_run_id: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CancelMLTaskRunRequest {
+    /// <p>A unique identifier for the task run.</p>
+    #[serde(rename = "TaskRunId")]
+    pub task_run_id: String,
+    /// <p>The unique identifier of the machine learning transform.</p>
+    #[serde(rename = "TransformId")]
+    pub transform_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CancelMLTaskRunResponse {
+    /// <p>The status for this run.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The unique identifier for the task run.</p>
+    #[serde(rename = "TaskRunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_run_id: Option<String>,
+    /// <p>The unique identifier of the machine learning transform.</p>
+    #[serde(rename = "TransformId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_id: Option<String>,
+}
+
 /// <p>Specifies a table definition in the AWS Glue Data Catalog.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CatalogEntry {
@@ -382,7 +409,7 @@ pub struct CatalogEntry {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CatalogImportStatus {
-    /// <p>True if the migration has completed, or False otherwise.</p>
+    /// <p> <code>True</code> if the migration has completed, or <code>False</code> otherwise.</p>
     #[serde(rename = "ImportCompleted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub import_completed: Option<bool>,
@@ -429,14 +456,14 @@ pub struct Classifier {
     pub xml_classifier: Option<XMLClassifier>,
 }
 
-/// <p>Specifies how CloudWatch data should be encrypted.</p>
+/// <p>Specifies how Amazon CloudWatch data should be encrypted.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CloudWatchEncryption {
     /// <p>The encryption mode to use for CloudWatch data.</p>
     #[serde(rename = "CloudWatchEncryptionMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_watch_encryption_mode: Option<String>,
-    /// <p>The AWS ARN of the KMS key to be used to encrypt the data.</p>
+    /// <p>The Amazon Resource Name (ARN) of the KMS key to be used to encrypt the data.</p>
     #[serde(rename = "KmsKeyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_arn: Option<String>,
@@ -493,14 +520,18 @@ pub struct CodeGenNodeArg {
 /// <p>A column in a <code>Table</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Column {
-    /// <p>Free-form text comment.</p>
+    /// <p>A free-form text comment.</p>
     #[serde(rename = "Comment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
     /// <p>The name of the <code>Column</code>.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The datatype of data in the <code>Column</code>.</p>
+    /// <p>These key-value pairs define properties associated with the column.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The data type of the <code>Column</code>.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -531,11 +562,33 @@ pub struct Condition {
     pub state: Option<String>,
 }
 
+/// <p>The confusion matrix shows you what your transform is predicting accurately and what types of errors it is making.</p> <p>For more information, see <a href="https://en.wikipedia.org/wiki/Confusion_matrix">Confusion matrix</a> in Wikipedia.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ConfusionMatrix {
+    /// <p>The number of matches in the data that the transform didn't find, in the confusion matrix for your transform.</p>
+    #[serde(rename = "NumFalseNegatives")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub num_false_negatives: Option<i64>,
+    /// <p>The number of nonmatches in the data that the transform incorrectly classified as a match, in the confusion matrix for your transform.</p>
+    #[serde(rename = "NumFalsePositives")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub num_false_positives: Option<i64>,
+    /// <p>The number of nonmatches in the data that the transform correctly rejected, in the confusion matrix for your transform.</p>
+    #[serde(rename = "NumTrueNegatives")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub num_true_negatives: Option<i64>,
+    /// <p>The number of matches in the data that the transform correctly found, in the confusion matrix for your transform.</p>
+    #[serde(rename = "NumTruePositives")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub num_true_positives: Option<i64>,
+}
+
 /// <p>Defines a connection to a data source.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Connection {
-    /// <p><p>These key-value pairs define parameters for the connection:</p> <ul> <li> <p> <code>HOST</code> - The host URI: either the fully qualified domain name (FQDN) or the IPv4 address of the database host.</p> </li> <li> <p> <code>PORT</code> - The port number, between 1024 and 65535, of the port on which the database host is listening for database connections.</p> </li> <li> <p> <code>USER<em>NAME</code> - The name under which to log in to the database. The value string for <code>USER</em>NAME</code> is &quot;<code>USERNAME</code>&quot;.</p> </li> <li> <p> <code>PASSWORD</code> - A password, if one is used, for the user name.</p> </li> <li> <p> <code>ENCRYPTED<em>PASSWORD</code> - When you enable connection password protection by setting <code>ConnectionPasswordEncryption</code> in the Data Catalog encryption settings, this field stores the encrypted password.</p> </li> <li> <p> <code>JDBC</em>DRIVER<em>JAR</em>URI</code> - The Amazon S3 path of the JAR file that contains the JDBC driver to use.</p> </li> <li> <p> <code>JDBC<em>DRIVER</em>CLASS<em>NAME</code> - The class name of the JDBC driver to use.</p> </li> <li> <p> <code>JDBC</em>ENGINE</code> - The name of the JDBC engine to use.</p> </li> <li> <p> <code>JDBC<em>ENGINE</em>VERSION</code> - The version of the JDBC engine to use.</p> </li> <li> <p> <code>CONFIG<em>FILES</code> - (Reserved for future use).</p> </li> <li> <p> <code>INSTANCE</em>ID</code> - The instance ID to use.</p> </li> <li> <p> <code>JDBC<em>CONNECTION</em>URL</code> - The URL for the JDBC connection.</p> </li> <li> <p> <code>JDBC<em>ENFORCE</em>SSL</code> - A Boolean string (true, false) specifying whether Secure Sockets Layer (SSL) with hostname matching will be enforced for the JDBC connection on the client. The default is false.</p> </li> </ul></p>
+    /// <p><p>These key-value pairs define parameters for the connection:</p> <ul> <li> <p> <code>HOST</code> - The host URI: either the fully qualified domain name (FQDN) or the IPv4 address of the database host.</p> </li> <li> <p> <code>PORT</code> - The port number, between 1024 and 65535, of the port on which the database host is listening for database connections.</p> </li> <li> <p> <code>USER<em>NAME</code> - The name under which to log in to the database. The value string for <code>USER</em>NAME</code> is &quot;<code>USERNAME</code>&quot;.</p> </li> <li> <p> <code>PASSWORD</code> - A password, if one is used, for the user name.</p> </li> <li> <p> <code>ENCRYPTED<em>PASSWORD</code> - When you enable connection password protection by setting <code>ConnectionPasswordEncryption</code> in the Data Catalog encryption settings, this field stores the encrypted password.</p> </li> <li> <p> <code>JDBC</em>DRIVER<em>JAR</em>URI</code> - The Amazon Simple Storage Service (Amazon S3) path of the JAR file that contains the JDBC driver to use.</p> </li> <li> <p> <code>JDBC<em>DRIVER</em>CLASS<em>NAME</code> - The class name of the JDBC driver to use.</p> </li> <li> <p> <code>JDBC</em>ENGINE</code> - The name of the JDBC engine to use.</p> </li> <li> <p> <code>JDBC<em>ENGINE</em>VERSION</code> - The version of the JDBC engine to use.</p> </li> <li> <p> <code>CONFIG<em>FILES</code> - (Reserved for future use.)</p> </li> <li> <p> <code>INSTANCE</em>ID</code> - The instance ID to use.</p> </li> <li> <p> <code>JDBC<em>CONNECTION</em>URL</code> - The URL for the JDBC connection.</p> </li> <li> <p> <code>JDBC<em>ENFORCE</em>SSL</code> - A Boolean string (true, false) specifying whether Secure Sockets Layer (SSL) with hostname matching is enforced for the JDBC connection on the client. The default is false.</p> </li> </ul></p>
     #[serde(rename = "ConnectionProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_properties: Option<::std::collections::HashMap<String, String>>,
@@ -599,7 +652,7 @@ pub struct ConnectionInput {
     pub physical_connection_requirements: Option<PhysicalConnectionRequirements>,
 }
 
-/// <p>The data structure used by the Data Catalog to encrypt the password as part of <code>CreateConnection</code> or <code>UpdateConnection</code> and store it in the <code>ENCRYPTED_PASSWORD</code> field in the connection properties. You can enable catalog encryption or only password encryption.</p> <p>When a <code>CreationConnection</code> request arrives containing a password, the Data Catalog first encrypts the password using your AWS KMS key. It then encrypts the whole connection object again if catalog encryption is also enabled.</p> <p>This encryption requires that you set AWS KMS key permissions to enable or restrict access on the password key according to your security requirements. For example, you might want only admin users to have decrypt permission on the password key.</p>
+/// <p>The data structure used by the Data Catalog to encrypt the password as part of <code>CreateConnection</code> or <code>UpdateConnection</code> and store it in the <code>ENCRYPTED_PASSWORD</code> field in the connection properties. You can enable catalog encryption or only password encryption.</p> <p>When a <code>CreationConnection</code> request arrives containing a password, the Data Catalog first encrypts the password using your AWS KMS key. It then encrypts the whole connection object again if catalog encryption is also enabled.</p> <p>This encryption requires that you set AWS KMS key permissions to enable or restrict access on the password key according to your security requirements. For example, you might want only administrators to have decrypt permission on the password key.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ConnectionPasswordEncryption {
     /// <p>An AWS KMS key that is used to encrypt the connection password. </p> <p>If connection password protection is enabled, the caller of <code>CreateConnection</code> and <code>UpdateConnection</code> needs at least <code>kms:Encrypt</code> permission on the specified AWS KMS key, to encrypt passwords before storing them in the Data Catalog. </p> <p>You can set the decrypt permission to enable or restrict access on the password key according to your security requirements.</p>
@@ -919,11 +972,11 @@ pub struct CreateCsvClassifierRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDatabaseRequest {
-    /// <p>The ID of the Data Catalog in which to create the database. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog in which to create the database. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>A <code>DatabaseInput</code> object defining the metadata database to create in the catalog.</p>
+    /// <p>The metadata for the database.</p>
     #[serde(rename = "DatabaseInput")]
     pub database_input: DatabaseInput,
 }
@@ -934,82 +987,90 @@ pub struct CreateDatabaseResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDevEndpointRequest {
-    /// <p>A map of arguments used to configure the DevEndpoint.</p>
+    /// <p>A map of arguments used to configure the <code>DevEndpoint</code>.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The name to be assigned to the new DevEndpoint.</p>
+    /// <p>The name to be assigned to the new <code>DevEndpoint</code>.</p>
     #[serde(rename = "EndpointName")]
     pub endpoint_name: String,
-    /// <p>Path to one or more Java Jars in an S3 bucket that should be loaded in your DevEndpoint.</p>
+    /// <p>The path to one or more Java <code>.jar</code> files in an S3 bucket that should be loaded in your <code>DevEndpoint</code>.</p>
     #[serde(rename = "ExtraJarsS3Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_jars_s3_path: Option<String>,
-    /// <p>Path(s) to one or more Python libraries in an S3 bucket that should be loaded in your DevEndpoint. Multiple values must be complete paths separated by a comma.</p> <p>Please note that only pure Python libraries can currently be used on a DevEndpoint. Libraries that rely on C extensions, such as the <a href="http://pandas.pydata.org/">pandas</a> Python data analysis library, are not yet supported.</p>
+    /// <p><p>The paths to one or more Python libraries in an Amazon S3 bucket that should be loaded in your <code>DevEndpoint</code>. Multiple values must be complete paths separated by a comma.</p> <note> <p>You can only use pure Python libraries with a <code>DevEndpoint</code>. Libraries that rely on C extensions, such as the <a href="http://pandas.pydata.org/">pandas</a> Python data analysis library, are not yet supported.</p> </note></p>
     #[serde(rename = "ExtraPythonLibsS3Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_python_libs_s3_path: Option<String>,
-    /// <p>The number of AWS Glue Data Processing Units (DPUs) to allocate to this DevEndpoint.</p>
+    /// <p>The number of AWS Glue Data Processing Units (DPUs) to allocate to this <code>DevEndpoint</code>.</p>
     #[serde(rename = "NumberOfNodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_nodes: Option<i64>,
-    /// <p>The public key to be used by this DevEndpoint for authentication. This attribute is provided for backward compatibility, as the recommended attribute to use is public keys.</p>
+    /// <p>The number of workers of a defined <code>workerType</code> that are allocated to the development endpoint.</p> <p>The maximum number of workers you can define are 299 for <code>G.1X</code>, and 149 for <code>G.2X</code>. </p>
+    #[serde(rename = "NumberOfWorkers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_workers: Option<i64>,
+    /// <p>The public key to be used by this <code>DevEndpoint</code> for authentication. This attribute is provided for backward compatibility because the recommended attribute to use is public keys.</p>
     #[serde(rename = "PublicKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_key: Option<String>,
-    /// <p><p>A list of public keys to be used by the DevEndpoints for authentication. The use of this attribute is preferred over a single public key because the public keys allow you to have a different private key per client.</p> <note> <p>If you previously created an endpoint with a public key, you must remove that key to be able to set a list of public keys: call the <code>UpdateDevEndpoint</code> API with the public key content in the <code>deletePublicKeys</code> attribute, and the list of new keys in the <code>addPublicKeys</code> attribute.</p> </note></p>
+    /// <p><p>A list of public keys to be used by the development endpoints for authentication. The use of this attribute is preferred over a single public key because the public keys allow you to have a different private key per client.</p> <note> <p>If you previously created an endpoint with a public key, you must remove that key to be able to set a list of public keys. Call the <code>UpdateDevEndpoint</code> API with the public key content in the <code>deletePublicKeys</code> attribute, and the list of new keys in the <code>addPublicKeys</code> attribute.</p> </note></p>
     #[serde(rename = "PublicKeys")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_keys: Option<Vec<String>>,
-    /// <p>The IAM role for the DevEndpoint.</p>
+    /// <p>The IAM role for the <code>DevEndpoint</code>.</p>
     #[serde(rename = "RoleArn")]
     pub role_arn: String,
-    /// <p>The name of the SecurityConfiguration structure to be used with this DevEndpoint.</p>
+    /// <p>The name of the <code>SecurityConfiguration</code> structure to be used with this <code>DevEndpoint</code>.</p>
     #[serde(rename = "SecurityConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_configuration: Option<String>,
-    /// <p>Security group IDs for the security groups to be used by the new DevEndpoint.</p>
+    /// <p>Security group IDs for the security groups to be used by the new <code>DevEndpoint</code>.</p>
     #[serde(rename = "SecurityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
-    /// <p>The subnet ID for the new DevEndpoint to use.</p>
+    /// <p>The subnet ID for the new <code>DevEndpoint</code> to use.</p>
     #[serde(rename = "SubnetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_id: Option<String>,
-    /// <p>The tags to use with this DevEndpoint. You may use tags to limit access to the DevEndpoint. For more information about tags in AWS Glue, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a> in the developer guide.</p>
+    /// <p>The tags to use with this DevEndpoint. You may use tags to limit access to the DevEndpoint. For more information about tags in AWS Glue, see <a href="https://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a> in the developer guide.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The type of predefined worker that is allocated to the development endpoint. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker maps to 1 DPU (4 vCPU, 16 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of memory, 128 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.</p> </li> </ul> <p>Known issue: when a development endpoint is created with the <code>G.2X</code> <code>WorkerType</code> configuration, the Spark drivers for the development endpoint will run on 4 vCPU, 16 GB of memory, and a 64 GB disk. </p>
+    #[serde(rename = "WorkerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub worker_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateDevEndpointResponse {
-    /// <p>The map of arguments used to configure this DevEndpoint.</p>
+    /// <p>The map of arguments used to configure this <code>DevEndpoint</code>.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The AWS availability zone where this DevEndpoint is located.</p>
+    /// <p>The AWS Availability Zone where this <code>DevEndpoint</code> is located.</p>
     #[serde(rename = "AvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
-    /// <p>The point in time at which this DevEndpoint was created.</p>
+    /// <p>The point in time at which this <code>DevEndpoint</code> was created.</p>
     #[serde(rename = "CreatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
-    /// <p>The name assigned to the new DevEndpoint.</p>
+    /// <p>The name assigned to the new <code>DevEndpoint</code>.</p>
     #[serde(rename = "EndpointName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_name: Option<String>,
-    /// <p>Path to one or more Java Jars in an S3 bucket that will be loaded in your DevEndpoint.</p>
+    /// <p>Path to one or more Java <code>.jar</code> files in an S3 bucket that will be loaded in your <code>DevEndpoint</code>.</p>
     #[serde(rename = "ExtraJarsS3Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_jars_s3_path: Option<String>,
-    /// <p>Path(s) to one or more Python libraries in an S3 bucket that will be loaded in your DevEndpoint.</p>
+    /// <p>The paths to one or more Python libraries in an S3 bucket that will be loaded in your <code>DevEndpoint</code>.</p>
     #[serde(rename = "ExtraPythonLibsS3Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_python_libs_s3_path: Option<String>,
-    /// <p>The reason for a current failure in this DevEndpoint.</p>
+    /// <p>The reason for a current failure in this <code>DevEndpoint</code>.</p>
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
@@ -1017,31 +1078,39 @@ pub struct CreateDevEndpointResponse {
     #[serde(rename = "NumberOfNodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_nodes: Option<i64>,
-    /// <p>The AWS ARN of the role assigned to the new DevEndpoint.</p>
+    /// <p>The number of workers of a defined <code>workerType</code> that are allocated to the development endpoint.</p>
+    #[serde(rename = "NumberOfWorkers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_workers: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) of the role assigned to the new <code>DevEndpoint</code>.</p>
     #[serde(rename = "RoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    /// <p>The name of the SecurityConfiguration structure being used with this DevEndpoint.</p>
+    /// <p>The name of the <code>SecurityConfiguration</code> structure being used with this <code>DevEndpoint</code>.</p>
     #[serde(rename = "SecurityConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_configuration: Option<String>,
-    /// <p>The security groups assigned to the new DevEndpoint.</p>
+    /// <p>The security groups assigned to the new <code>DevEndpoint</code>.</p>
     #[serde(rename = "SecurityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
-    /// <p>The current status of the new DevEndpoint.</p>
+    /// <p>The current status of the new <code>DevEndpoint</code>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>The subnet ID assigned to the new DevEndpoint.</p>
+    /// <p>The subnet ID assigned to the new <code>DevEndpoint</code>.</p>
     #[serde(rename = "SubnetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_id: Option<String>,
-    /// <p>The ID of the VPC used by this DevEndpoint.</p>
+    /// <p>The ID of the virtual private cloud (VPC) used by this <code>DevEndpoint</code>.</p>
     #[serde(rename = "VpcId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_id: Option<String>,
-    /// <p>The address of the YARN endpoint used by this DevEndpoint.</p>
+    /// <p>The type of predefined worker that is allocated to the development endpoint. May be a value of Standard, G.1X, or G.2X.</p>
+    #[serde(rename = "WorkerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub worker_type: Option<String>,
+    /// <p>The address of the YARN endpoint used by this <code>DevEndpoint</code>.</p>
     #[serde(rename = "YarnEndpointAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub yarn_endpoint_address: Option<String>,
@@ -1090,6 +1159,10 @@ pub struct CreateJobRequest {
     #[serde(rename = "ExecutionProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_property: Option<ExecutionProperty>,
+    /// <p>Glue version determines the versions of Apache Spark and Python that AWS Glue supports. The Python version indicates the version supported for jobs of type Spark. </p> <p>For more information about the available AWS Glue versions and corresponding Spark and Python versions, see <a href="https://docs.aws.amazon.com/glue/latest/dg/add-job.html">Glue version</a> in the developer guide.</p> <p>Jobs that are created without specifying a Glue version default to Glue 0.9.</p>
+    #[serde(rename = "GlueVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub glue_version: Option<String>,
     /// <p>This field is reserved for future use.</p>
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1155,8 +1228,57 @@ pub struct CreateJsonClassifierRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateMLTransformRequest {
+    /// <p>A description of the machine learning transform that is being defined. The default is an empty string.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>A list of AWS Glue table definitions used by the transform.</p>
+    #[serde(rename = "InputRecordTables")]
+    pub input_record_tables: Vec<GlueTable>,
+    /// <p>The number of AWS Glue data processing units (DPUs) that are allocated to task runs for this transform. You can allocate from 2 to 100 DPUs; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>. </p> <p>When the <code>WorkerType</code> field is set to a value other than <code>Standard</code>, the <code>MaxCapacity</code> field is set automatically and becomes read-only.</p>
+    #[serde(rename = "MaxCapacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_capacity: Option<f64>,
+    /// <p>The maximum number of times to retry a task for this transform after a task run fails.</p>
+    #[serde(rename = "MaxRetries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_retries: Option<i64>,
+    /// <p>The unique name that you give the transform when you create it.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The number of workers of a defined <code>workerType</code> that are allocated when this task runs.</p>
+    #[serde(rename = "NumberOfWorkers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_workers: Option<i64>,
+    /// <p>The algorithmic parameters that are specific to the transform type used. Conditionally dependent on the transform type.</p>
+    #[serde(rename = "Parameters")]
+    pub parameters: TransformParameters,
+    /// <p>The name or Amazon Resource Name (ARN) of the IAM role with the required permissions. Ensure that this role has permission to your Amazon Simple Storage Service (Amazon S3) sources, targets, temporary directory, scripts, and any libraries that are used by the task run for this transform.</p>
+    #[serde(rename = "Role")]
+    pub role: String,
+    /// <p>The timeout of the task run for this transform in minutes. This is the maximum time that a task run for this transform can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours).</p>
+    #[serde(rename = "Timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<i64>,
+    /// <p><p>The type of predefined worker that is allocated when this task runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.</p> </li> </ul></p>
+    #[serde(rename = "WorkerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub worker_type: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateMLTransformResponse {
+    /// <p>A unique identifier that is generated for the transform.</p>
+    #[serde(rename = "TransformId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreatePartitionRequest {
-    /// <p>The ID of the catalog in which the partion is to be created. Currently, this should be the AWS account ID.</p>
+    /// <p>The AWS account ID of the catalog in which the partition is to be created.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -1293,7 +1415,7 @@ pub struct CreateTriggerResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateUserDefinedFunctionRequest {
-    /// <p>The ID of the Data Catalog in which to create the function. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog in which to create the function. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -1410,15 +1532,28 @@ pub struct DataCatalogEncryptionSettings {
     pub encryption_at_rest: Option<EncryptionAtRest>,
 }
 
-/// <p>The <code>Database</code> object represents a logical grouping of tables that may reside in a Hive metastore or an RDBMS.</p>
+/// <p>The AWS Lake Formation principal.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DataLakePrincipal {
+    /// <p>An identifier for the AWS Lake Formation principal.</p>
+    #[serde(rename = "DataLakePrincipalIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_lake_principal_identifier: Option<String>,
+}
+
+/// <p>The <code>Database</code> object represents a logical grouping of tables that might reside in a Hive metastore or an RDBMS.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Database {
+    /// <p>Creates a set of default permissions on the table for principals. </p>
+    #[serde(rename = "CreateTableDefaultPermissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_table_default_permissions: Option<Vec<PrincipalPermissions>>,
     /// <p>The time at which the metadata database was created in the catalog.</p>
     #[serde(rename = "CreateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<f64>,
-    /// <p>Description of the database.</p>
+    /// <p>A description of the database.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -1426,7 +1561,7 @@ pub struct Database {
     #[serde(rename = "LocationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location_uri: Option<String>,
-    /// <p>Name of the database. For Hive compatibility, this is folded to lowercase when it is stored.</p>
+    /// <p>The name of the database. For Hive compatibility, this is folded to lowercase when it is stored.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>These key-value pairs define parameters and properties of the database.</p>
@@ -1438,18 +1573,22 @@ pub struct Database {
 /// <p>The structure used to create or update a database.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DatabaseInput {
-    /// <p>Description of the database</p>
+    /// <p>Creates a set of default permissions on the table for principals. </p>
+    #[serde(rename = "CreateTableDefaultPermissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_table_default_permissions: Option<Vec<PrincipalPermissions>>,
+    /// <p>A description of the database.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The location of the database (for example, an HDFS path).</p>
+    /// <p>The location of the database (for example, an HDFS path). </p>
     #[serde(rename = "LocationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location_uri: Option<String>,
-    /// <p>Name of the database. For Hive compatibility, this is folded to lowercase when it is stored.</p>
+    /// <p>The name of the database. For Hive compatibility, this is folded to lowercase when it is stored.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>Thes key-value pairs define parameters and properties of the database.</p>
+    /// <p>These key-value pairs define parameters and properties of the database.</p> <p>These key-value pairs define parameters and properties of the database.</p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
@@ -1494,11 +1633,11 @@ pub struct DeleteCrawlerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDatabaseRequest {
-    /// <p>The ID of the Data Catalog in which the database resides. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog in which the database resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>The name of the Database to delete. For Hive compatibility, this must be all lowercase.</p>
+    /// <p>The name of the database to delete. For Hive compatibility, this must be all lowercase.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -1509,7 +1648,7 @@ pub struct DeleteDatabaseResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDevEndpointRequest {
-    /// <p>The name of the DevEndpoint.</p>
+    /// <p>The name of the <code>DevEndpoint</code>.</p>
     #[serde(rename = "EndpointName")]
     pub endpoint_name: String,
 }
@@ -1535,8 +1674,24 @@ pub struct DeleteJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteMLTransformRequest {
+    /// <p>The unique identifier of the transform to delete.</p>
+    #[serde(rename = "TransformId")]
+    pub transform_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteMLTransformResponse {
+    /// <p>The unique identifier of the transform that was deleted.</p>
+    #[serde(rename = "TransformId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeletePartitionRequest {
-    /// <p>The ID of the Data Catalog where the partition to be deleted resides. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog where the partition to be deleted resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -1546,7 +1701,7 @@ pub struct DeletePartitionRequest {
     /// <p>The values that define the partition.</p>
     #[serde(rename = "PartitionValues")]
     pub partition_values: Vec<String>,
-    /// <p>The name of the table where the partition to be deleted is located.</p>
+    /// <p>The name of the table that contains the partition to be deleted.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
 }
@@ -1580,7 +1735,7 @@ pub struct DeleteSecurityConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteTableRequest {
-    /// <p>The ID of the Data Catalog where the table resides. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog where the table resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -1598,7 +1753,7 @@ pub struct DeleteTableResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteTableVersionRequest {
-    /// <p>The ID of the Data Catalog where the tables reside. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog where the tables reside. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -1667,15 +1822,15 @@ pub struct DeleteWorkflowResponse {
     pub name: Option<String>,
 }
 
-/// <p>A development endpoint where a developer can remotely debug ETL scripts.</p>
+/// <p>A development endpoint where a developer can remotely debug extract, transform, and load (ETL) scripts.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DevEndpoint {
-    /// <p>A map of arguments used to configure the DevEndpoint.</p> <p>Note that currently, we only support "--enable-glue-datacatalog": "" as a valid argument.</p>
+    /// <p>A map of arguments used to configure the <code>DevEndpoint</code>.</p> <p>Currently, only <code>"--enable-glue-datacatalog": ""</code> is supported as a valid argument.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The AWS availability zone where this DevEndpoint is located.</p>
+    /// <p>The AWS Availability Zone where this <code>DevEndpoint</code> is located.</p>
     #[serde(rename = "AvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
@@ -1683,23 +1838,23 @@ pub struct DevEndpoint {
     #[serde(rename = "CreatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
-    /// <p>The name of the DevEndpoint.</p>
+    /// <p>The name of the <code>DevEndpoint</code>.</p>
     #[serde(rename = "EndpointName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_name: Option<String>,
-    /// <p>Path to one or more Java Jars in an S3 bucket that should be loaded in your DevEndpoint.</p> <p>Please note that only pure Java/Scala libraries can currently be used on a DevEndpoint.</p>
+    /// <p><p>The path to one or more Java <code>.jar</code> files in an S3 bucket that should be loaded in your <code>DevEndpoint</code>.</p> <note> <p>You can only use pure Java/Scala libraries with a <code>DevEndpoint</code>.</p> </note></p>
     #[serde(rename = "ExtraJarsS3Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_jars_s3_path: Option<String>,
-    /// <p>Path(s) to one or more Python libraries in an S3 bucket that should be loaded in your DevEndpoint. Multiple values must be complete paths separated by a comma.</p> <p>Please note that only pure Python libraries can currently be used on a DevEndpoint. Libraries that rely on C extensions, such as the <a href="http://pandas.pydata.org/">pandas</a> Python data analysis library, are not yet supported.</p>
+    /// <p><p>The paths to one or more Python libraries in an Amazon S3 bucket that should be loaded in your <code>DevEndpoint</code>. Multiple values must be complete paths separated by a comma.</p> <note> <p>You can only use pure Python libraries with a <code>DevEndpoint</code>. Libraries that rely on C extensions, such as the <a href="http://pandas.pydata.org/">pandas</a> Python data analysis library, are not currently supported.</p> </note></p>
     #[serde(rename = "ExtraPythonLibsS3Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_python_libs_s3_path: Option<String>,
-    /// <p>The reason for a current failure in this DevEndpoint.</p>
+    /// <p>The reason for a current failure in this <code>DevEndpoint</code>.</p>
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
-    /// <p>The point in time at which this DevEndpoint was last modified.</p>
+    /// <p>The point in time at which this <code>DevEndpoint</code> was last modified.</p>
     #[serde(rename = "LastModifiedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_timestamp: Option<f64>,
@@ -1707,51 +1862,59 @@ pub struct DevEndpoint {
     #[serde(rename = "LastUpdateStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_update_status: Option<String>,
-    /// <p>The number of AWS Glue Data Processing Units (DPUs) allocated to this DevEndpoint.</p>
+    /// <p>The number of AWS Glue Data Processing Units (DPUs) allocated to this <code>DevEndpoint</code>.</p>
     #[serde(rename = "NumberOfNodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_nodes: Option<i64>,
-    /// <p>A private IP address to access the DevEndpoint within a VPC, if the DevEndpoint is created within one. The PrivateAddress field is present only when you create the DevEndpoint within your virtual private cloud (VPC).</p>
+    /// <p>The number of workers of a defined <code>workerType</code> that are allocated to the development endpoint.</p> <p>The maximum number of workers you can define are 299 for <code>G.1X</code>, and 149 for <code>G.2X</code>. </p>
+    #[serde(rename = "NumberOfWorkers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_workers: Option<i64>,
+    /// <p>A private IP address to access the <code>DevEndpoint</code> within a VPC if the <code>DevEndpoint</code> is created within one. The <code>PrivateAddress</code> field is present only when you create the <code>DevEndpoint</code> within your VPC.</p>
     #[serde(rename = "PrivateAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub private_address: Option<String>,
-    /// <p>The public IP address used by this DevEndpoint. The PublicAddress field is present only when you create a non-VPC (virtual private cloud) DevEndpoint.</p>
+    /// <p>The public IP address used by this <code>DevEndpoint</code>. The <code>PublicAddress</code> field is present only when you create a non-virtual private cloud (VPC) <code>DevEndpoint</code>.</p>
     #[serde(rename = "PublicAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_address: Option<String>,
-    /// <p>The public key to be used by this DevEndpoint for authentication. This attribute is provided for backward compatibility, as the recommended attribute to use is public keys.</p>
+    /// <p>The public key to be used by this <code>DevEndpoint</code> for authentication. This attribute is provided for backward compatibility because the recommended attribute to use is public keys.</p>
     #[serde(rename = "PublicKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_key: Option<String>,
-    /// <p><p>A list of public keys to be used by the DevEndpoints for authentication. The use of this attribute is preferred over a single public key because the public keys allow you to have a different private key per client.</p> <note> <p>If you previously created an endpoint with a public key, you must remove that key to be able to set a list of public keys: call the <code>UpdateDevEndpoint</code> API with the public key content in the <code>deletePublicKeys</code> attribute, and the list of new keys in the <code>addPublicKeys</code> attribute.</p> </note></p>
+    /// <p><p>A list of public keys to be used by the <code>DevEndpoints</code> for authentication. Using this attribute is preferred over a single public key because the public keys allow you to have a different private key per client.</p> <note> <p>If you previously created an endpoint with a public key, you must remove that key to be able to set a list of public keys. Call the <code>UpdateDevEndpoint</code> API operation with the public key content in the <code>deletePublicKeys</code> attribute, and the list of new keys in the <code>addPublicKeys</code> attribute.</p> </note></p>
     #[serde(rename = "PublicKeys")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_keys: Option<Vec<String>>,
-    /// <p>The AWS ARN of the IAM role used in this DevEndpoint.</p>
+    /// <p>The Amazon Resource Name (ARN) of the IAM role used in this <code>DevEndpoint</code>.</p>
     #[serde(rename = "RoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    /// <p>The name of the SecurityConfiguration structure to be used with this DevEndpoint.</p>
+    /// <p>The name of the <code>SecurityConfiguration</code> structure to be used with this <code>DevEndpoint</code>.</p>
     #[serde(rename = "SecurityConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_configuration: Option<String>,
-    /// <p>A list of security group identifiers used in this DevEndpoint.</p>
+    /// <p>A list of security group identifiers used in this <code>DevEndpoint</code>.</p>
     #[serde(rename = "SecurityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
-    /// <p>The current status of this DevEndpoint.</p>
+    /// <p>The current status of this <code>DevEndpoint</code>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>The subnet ID for this DevEndpoint.</p>
+    /// <p>The subnet ID for this <code>DevEndpoint</code>.</p>
     #[serde(rename = "SubnetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_id: Option<String>,
-    /// <p>The ID of the virtual private cloud (VPC) used by this DevEndpoint.</p>
+    /// <p>The ID of the virtual private cloud (VPC) used by this <code>DevEndpoint</code>.</p>
     #[serde(rename = "VpcId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_id: Option<String>,
-    /// <p>The YARN endpoint address used by this DevEndpoint.</p>
+    /// <p>The type of predefined worker that is allocated to the development endpoint. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker maps to 1 DPU (4 vCPU, 16 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of memory, 128 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.</p> </li> </ul> <p>Known issue: when a development endpoint is created with the <code>G.2X</code> <code>WorkerType</code> configuration, the Spark drivers for the development endpoint will run on 4 vCPU, 16 GB of memory, and a 64 GB disk. </p>
+    #[serde(rename = "WorkerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub worker_type: Option<String>,
+    /// <p>The YARN endpoint address used by this <code>DevEndpoint</code>.</p>
     #[serde(rename = "YarnEndpointAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub yarn_endpoint_address: Option<String>,
@@ -1761,14 +1924,14 @@ pub struct DevEndpoint {
     pub zeppelin_remote_spark_interpreter_port: Option<i64>,
 }
 
-/// <p>Custom libraries to be loaded into a DevEndpoint.</p>
+/// <p>Custom libraries to be loaded into a development endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DevEndpointCustomLibraries {
-    /// <p>Path to one or more Java Jars in an S3 bucket that should be loaded in your DevEndpoint.</p> <p>Please note that only pure Java/Scala libraries can currently be used on a DevEndpoint.</p>
+    /// <p><p>The path to one or more Java <code>.jar</code> files in an S3 bucket that should be loaded in your <code>DevEndpoint</code>.</p> <note> <p>You can only use pure Java/Scala libraries with a <code>DevEndpoint</code>.</p> </note></p>
     #[serde(rename = "ExtraJarsS3Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_jars_s3_path: Option<String>,
-    /// <p>Path(s) to one or more Python libraries in an S3 bucket that should be loaded in your DevEndpoint. Multiple values must be complete paths separated by a comma.</p> <p>Please note that only pure Python libraries can currently be used on a DevEndpoint. Libraries that rely on C extensions, such as the <a href="http://pandas.pydata.org/">pandas</a> Python data analysis library, are not yet supported.</p>
+    /// <p><p>The paths to one or more Python libraries in an Amazon Simple Storage Service (Amazon S3) bucket that should be loaded in your <code>DevEndpoint</code>. Multiple values must be complete paths separated by a comma.</p> <note> <p>You can only use pure Python libraries with a <code>DevEndpoint</code>. Libraries that rely on C extensions, such as the <a href="http://pandas.pydata.org/">pandas</a> Python data analysis library, are not currently supported.</p> </note></p>
     #[serde(rename = "ExtraPythonLibsS3Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_python_libs_s3_path: Option<String>,
@@ -1812,15 +1975,15 @@ pub struct EncryptionAtRest {
 /// <p>Specifies an encryption configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EncryptionConfiguration {
-    /// <p>The encryption configuration for CloudWatch.</p>
+    /// <p>The encryption configuration for Amazon CloudWatch.</p>
     #[serde(rename = "CloudWatchEncryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_watch_encryption: Option<CloudWatchEncryption>,
-    /// <p>The encryption configuration for Job Bookmarks.</p>
+    /// <p>The encryption configuration for job bookmarks.</p>
     #[serde(rename = "JobBookmarksEncryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_bookmarks_encryption: Option<JobBookmarksEncryption>,
-    /// <p>The encryption configuration for S3 data.</p>
+    /// <p>The encryption configuration for Amazon Simple Storage Service (Amazon S3) data.</p>
     #[serde(rename = "S3Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_encryption: Option<Vec<S3Encryption>>,
@@ -1840,6 +2003,19 @@ pub struct ErrorDetail {
     pub error_message: Option<String>,
 }
 
+/// <p>Evaluation metrics provide an estimate of the quality of your machine learning transform.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct EvaluationMetrics {
+    /// <p>The evaluation metrics for the find matches algorithm.</p>
+    #[serde(rename = "FindMatchesMetrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub find_matches_metrics: Option<FindMatchesMetrics>,
+    /// <p>The type of machine learning transform.</p>
+    #[serde(rename = "TransformType")]
+    pub transform_type: String,
+}
+
 /// <p>An execution property of a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ExecutionProperty {
@@ -1847,6 +2023,81 @@ pub struct ExecutionProperty {
     #[serde(rename = "MaxConcurrentRuns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrent_runs: Option<i64>,
+}
+
+/// <p>Specifies configuration properties for an exporting labels task run.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ExportLabelsTaskRunProperties {
+    /// <p>The Amazon Simple Storage Service (Amazon S3) path where you will export the labels.</p>
+    #[serde(rename = "OutputS3Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_s3_path: Option<String>,
+}
+
+/// <p>The evaluation metrics for the find matches algorithm. The quality of your machine learning transform is measured by getting your transform to predict some matches and comparing the results to known matches from the same dataset. The quality metrics are based on a subset of your data, so they are not precise.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct FindMatchesMetrics {
+    /// <p>The area under the precision/recall curve (AUPRC) is a single number measuring the overall quality of the transform, that is independent of the choice made for precision vs. recall. Higher values indicate that you have a more attractive precision vs. recall tradeoff.</p> <p>For more information, see <a href="https://en.wikipedia.org/wiki/Precision_and_recall">Precision and recall</a> in Wikipedia.</p>
+    #[serde(rename = "AreaUnderPRCurve")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub area_under_pr_curve: Option<f64>,
+    /// <p>The confusion matrix shows you what your transform is predicting accurately and what types of errors it is making.</p> <p>For more information, see <a href="https://en.wikipedia.org/wiki/Confusion_matrix">Confusion matrix</a> in Wikipedia.</p>
+    #[serde(rename = "ConfusionMatrix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub confusion_matrix: Option<ConfusionMatrix>,
+    /// <p>The maximum F1 metric indicates the transform's accuracy between 0 and 1, where 1 is the best accuracy.</p> <p>For more information, see <a href="https://en.wikipedia.org/wiki/F1_score">F1 score</a> in Wikipedia.</p>
+    #[serde(rename = "F1")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub f1: Option<f64>,
+    /// <p>The precision metric indicates when often your transform is correct when it predicts a match. Specifically, it measures how well the transform finds true positives from the total true positives possible.</p> <p>For more information, see <a href="https://en.wikipedia.org/wiki/Precision_and_recall">Precision and recall</a> in Wikipedia.</p>
+    #[serde(rename = "Precision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub precision: Option<f64>,
+    /// <p>The recall metric indicates that for an actual match, how often your transform predicts the match. Specifically, it measures how well the transform finds true positives from the total records in the source data.</p> <p>For more information, see <a href="https://en.wikipedia.org/wiki/Precision_and_recall">Precision and recall</a> in Wikipedia.</p>
+    #[serde(rename = "Recall")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recall: Option<f64>,
+}
+
+/// <p>The parameters to configure the find matches transform.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct FindMatchesParameters {
+    /// <p>The value that is selected when tuning your transform for a balance between accuracy and cost. A value of 0.5 means that the system balances accuracy and cost concerns. A value of 1.0 means a bias purely for accuracy, which typically results in a higher cost, sometimes substantially higher. A value of 0.0 means a bias purely for cost, which results in a less accurate <code>FindMatches</code> transform, sometimes with unacceptable accuracy.</p> <p>Accuracy measures how well the transform finds true positives and true negatives. Increasing accuracy requires more machine resources and cost. But it also results in increased recall. </p> <p>Cost measures how many compute resources, and thus money, are consumed to run the transform.</p>
+    #[serde(rename = "AccuracyCostTradeoff")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accuracy_cost_tradeoff: Option<f64>,
+    /// <p>The value to switch on or off to force the output to match the provided labels from users. If the value is <code>True</code>, the <code>find matches</code> transform forces the output to match the provided labels. The results override the normal conflation results. If the value is <code>False</code>, the <code>find matches</code> transform does not ensure all the labels provided are respected, and the results rely on the trained model.</p> <p>Note that setting this value to true may increase the conflation execution time.</p>
+    #[serde(rename = "EnforceProvidedLabels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enforce_provided_labels: Option<bool>,
+    /// <p>The value selected when tuning your transform for a balance between precision and recall. A value of 0.5 means no preference; a value of 1.0 means a bias purely for precision, and a value of 0.0 means a bias for recall. Because this is a tradeoff, choosing values close to 1.0 means very low recall, and choosing values close to 0.0 results in very low precision.</p> <p>The precision metric indicates how often your model is correct when it predicts a match. </p> <p>The recall metric indicates that for an actual match, how often your model predicts the match.</p>
+    #[serde(rename = "PrecisionRecallTradeoff")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub precision_recall_tradeoff: Option<f64>,
+    /// <p>The name of a column that uniquely identifies rows in the source table. Used to help identify matching records.</p>
+    #[serde(rename = "PrimaryKeyColumnName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub primary_key_column_name: Option<String>,
+}
+
+/// <p>Specifies configuration properties for a Find Matches task run.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct FindMatchesTaskRunProperties {
+    /// <p>The job ID for the Find Matches task run.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p>The name assigned to the job for the Find Matches task run.</p>
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_name: Option<String>,
+    /// <p>The job run ID for the Find Matches task run.</p>
+    #[serde(rename = "JobRunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_run_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1913,7 +2164,7 @@ pub struct GetConnectionRequest {
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>Allows you to retrieve the connection metadata without returning the password. For instance, the AWS Glue console uses this flag to retrieve the connection, and does not display the password. Set this parameter when the caller might not have permission to use the AWS KMS key to decrypt the password, but does have permission to access the rest of the connection properties.</p>
+    /// <p>Allows you to retrieve the connection metadata without returning the password. For instance, the AWS Glue console uses this flag to retrieve the connection, and does not display the password. Set this parameter when the caller might not have permission to use the AWS KMS key to decrypt the password, but it does have permission to access the rest of the connection properties.</p>
     #[serde(rename = "HidePassword")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hide_password: Option<bool>,
@@ -1950,11 +2201,11 @@ pub struct GetConnectionsRequest {
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>A filter that controls which connections will be returned.</p>
+    /// <p>A filter that controls which connections are returned.</p>
     #[serde(rename = "Filter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<GetConnectionsFilter>,
-    /// <p>Allows you to retrieve the connection metadata without returning the password. For instance, the AWS Glue console uses this flag to retrieve the connection, and does not display the password. Set this parameter when the caller might not have permission to use the AWS KMS key to decrypt the password, but does have permission to access the rest of the connection properties.</p>
+    /// <p>Allows you to retrieve the connection metadata without returning the password. For instance, the AWS Glue console uses this flag to retrieve the connection, and does not display the password. Set this parameter when the caller might not have permission to use the AWS KMS key to decrypt the password, but it does have permission to access the rest of the connection properties.</p>
     #[serde(rename = "HidePassword")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hide_password: Option<bool>,
@@ -2053,7 +2304,7 @@ pub struct GetCrawlersResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDataCatalogEncryptionSettingsRequest {
-    /// <p>The ID of the Data Catalog for which to retrieve the security configuration. If none is provided, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog to retrieve the security configuration for. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -2070,7 +2321,7 @@ pub struct GetDataCatalogEncryptionSettingsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDatabaseRequest {
-    /// <p>The ID of the Data Catalog in which the database resides. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog in which the database resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -2082,7 +2333,7 @@ pub struct GetDatabaseRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetDatabaseResponse {
-    /// <p>The definition of the specified database in the catalog.</p>
+    /// <p>The definition of the specified database in the Data Catalog.</p>
     #[serde(rename = "Database")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database: Option<Database>,
@@ -2090,7 +2341,7 @@ pub struct GetDatabaseResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDatabasesRequest {
-    /// <p>The ID of the Data Catalog from which to retrieve <code>Databases</code>. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog from which to retrieve <code>Databases</code>. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -2139,7 +2390,7 @@ pub struct GetDataflowGraphResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDevEndpointRequest {
-    /// <p>Name of the DevEndpoint for which to retrieve information.</p>
+    /// <p>Name of the <code>DevEndpoint</code> to retrieve information for.</p>
     #[serde(rename = "EndpointName")]
     pub endpoint_name: String,
 }
@@ -2147,7 +2398,7 @@ pub struct GetDevEndpointRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetDevEndpointResponse {
-    /// <p>A DevEndpoint definition.</p>
+    /// <p>A <code>DevEndpoint</code> definition.</p>
     #[serde(rename = "DevEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dev_endpoint: Option<DevEndpoint>,
@@ -2168,14 +2419,34 @@ pub struct GetDevEndpointsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetDevEndpointsResponse {
-    /// <p>A list of DevEndpoint definitions.</p>
+    /// <p>A list of <code>DevEndpoint</code> definitions.</p>
     #[serde(rename = "DevEndpoints")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dev_endpoints: Option<Vec<DevEndpoint>>,
-    /// <p>A continuation token, if not all DevEndpoint definitions have yet been returned.</p>
+    /// <p>A continuation token, if not all <code>DevEndpoint</code> definitions have yet been returned.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetJobBookmarkRequest {
+    /// <p>The name of the job in question.</p>
+    #[serde(rename = "JobName")]
+    pub job_name: String,
+    /// <p>The unique run identifier associated with this job run.</p>
+    #[serde(rename = "RunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub run_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetJobBookmarkResponse {
+    /// <p>A structure that defines a point that a job can resume processing.</p>
+    #[serde(rename = "JobBookmarkEntry")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_bookmark_entry: Option<JobBookmarkEntry>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2271,6 +2542,209 @@ pub struct GetJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetMLTaskRunRequest {
+    /// <p>The unique identifier of the task run.</p>
+    #[serde(rename = "TaskRunId")]
+    pub task_run_id: String,
+    /// <p>The unique identifier of the machine learning transform.</p>
+    #[serde(rename = "TransformId")]
+    pub transform_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetMLTaskRunResponse {
+    /// <p>The date and time when this task run was completed.</p>
+    #[serde(rename = "CompletedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub completed_on: Option<f64>,
+    /// <p>The error strings that are associated with the task run.</p>
+    #[serde(rename = "ErrorString")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_string: Option<String>,
+    /// <p>The amount of time (in seconds) that the task run consumed resources.</p>
+    #[serde(rename = "ExecutionTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_time: Option<i64>,
+    /// <p>The date and time when this task run was last modified.</p>
+    #[serde(rename = "LastModifiedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_on: Option<f64>,
+    /// <p>The names of the log groups that are associated with the task run.</p>
+    #[serde(rename = "LogGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_group_name: Option<String>,
+    /// <p>The list of properties that are associated with the task run.</p>
+    #[serde(rename = "Properties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub properties: Option<TaskRunProperties>,
+    /// <p>The date and time when this task run started.</p>
+    #[serde(rename = "StartedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub started_on: Option<f64>,
+    /// <p>The status for this task run.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The unique run identifier associated with this run.</p>
+    #[serde(rename = "TaskRunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_run_id: Option<String>,
+    /// <p>The unique identifier of the task run.</p>
+    #[serde(rename = "TransformId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetMLTaskRunsRequest {
+    /// <p>The filter criteria, in the <code>TaskRunFilterCriteria</code> structure, for the task run.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<TaskRunFilterCriteria>,
+    /// <p>The maximum number of results to return. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token for pagination of the results. The default is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The sorting criteria, in the <code>TaskRunSortCriteria</code> structure, for the task run.</p>
+    #[serde(rename = "Sort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort: Option<TaskRunSortCriteria>,
+    /// <p>The unique identifier of the machine learning transform.</p>
+    #[serde(rename = "TransformId")]
+    pub transform_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetMLTaskRunsResponse {
+    /// <p>A pagination token, if more results are available.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of task runs that are associated with the transform.</p>
+    #[serde(rename = "TaskRuns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_runs: Option<Vec<TaskRun>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetMLTransformRequest {
+    /// <p>The unique identifier of the transform, generated at the time that the transform was created.</p>
+    #[serde(rename = "TransformId")]
+    pub transform_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetMLTransformResponse {
+    /// <p>The date and time when the transform was created.</p>
+    #[serde(rename = "CreatedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_on: Option<f64>,
+    /// <p>A description of the transform.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The latest evaluation metrics.</p>
+    #[serde(rename = "EvaluationMetrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub evaluation_metrics: Option<EvaluationMetrics>,
+    /// <p>A list of AWS Glue table definitions used by the transform.</p>
+    #[serde(rename = "InputRecordTables")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_record_tables: Option<Vec<GlueTable>>,
+    /// <p>The number of labels available for this transform.</p>
+    #[serde(rename = "LabelCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub label_count: Option<i64>,
+    /// <p>The date and time when the transform was last modified.</p>
+    #[serde(rename = "LastModifiedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_on: Option<f64>,
+    /// <p>The number of AWS Glue data processing units (DPUs) that are allocated to task runs for this transform. You can allocate from 2 to 100 DPUs; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>. </p> <p>When the <code>WorkerType</code> field is set to a value other than <code>Standard</code>, the <code>MaxCapacity</code> field is set automatically and becomes read-only.</p>
+    #[serde(rename = "MaxCapacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_capacity: Option<f64>,
+    /// <p>The maximum number of times to retry a task for this transform after a task run fails.</p>
+    #[serde(rename = "MaxRetries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_retries: Option<i64>,
+    /// <p>The unique name given to the transform when it was created.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The number of workers of a defined <code>workerType</code> that are allocated when this task runs.</p>
+    #[serde(rename = "NumberOfWorkers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_workers: Option<i64>,
+    /// <p>The configuration parameters that are specific to the algorithm used.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<TransformParameters>,
+    /// <p>The name or Amazon Resource Name (ARN) of the IAM role with the required permissions.</p>
+    #[serde(rename = "Role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
+    /// <p>The <code>Map&lt;Column, Type&gt;</code> object that represents the schema that this transform accepts. Has an upper bound of 100 columns.</p>
+    #[serde(rename = "Schema")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema: Option<Vec<SchemaColumn>>,
+    /// <p>The last known status of the transform (to indicate whether it can be used or not). One of "NOT_READY", "READY", or "DELETING".</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The timeout for a task run for this transform in minutes. This is the maximum time that a task run for this transform can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours).</p>
+    #[serde(rename = "Timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<i64>,
+    /// <p>The unique identifier of the transform, generated at the time that the transform was created.</p>
+    #[serde(rename = "TransformId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_id: Option<String>,
+    /// <p><p>The type of predefined worker that is allocated when this task runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.</p> </li> </ul></p>
+    #[serde(rename = "WorkerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub worker_type: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetMLTransformsRequest {
+    /// <p>The filter transformation criteria.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<TransformFilterCriteria>,
+    /// <p>The maximum number of results to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A paginated token to offset the results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The sorting criteria.</p>
+    #[serde(rename = "Sort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort: Option<TransformSortCriteria>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetMLTransformsResponse {
+    /// <p>A pagination token, if more results are available.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of machine learning transforms.</p>
+    #[serde(rename = "Transforms")]
+    pub transforms: Vec<MLTransform>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetMappingRequest {
     /// <p>Parameters for the mapping.</p>
     #[serde(rename = "Location")]
@@ -2295,7 +2769,7 @@ pub struct GetMappingResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetPartitionRequest {
-    /// <p>The ID of the Data Catalog where the partition in question resides. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog where the partition in question resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -2321,14 +2795,14 @@ pub struct GetPartitionResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetPartitionsRequest {
-    /// <p>The ID of the Data Catalog where the partitions in question reside. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog where the partitions in question reside. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
     /// <p>The name of the catalog database where the partitions reside.</p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    /// <p>An expression filtering the partitions to be returned.</p> <p>The expression uses SQL syntax similar to the SQL <code>WHERE</code> filter clause. The SQL statement parser <a href="http://jsqlparser.sourceforge.net/home.php">JSQLParser</a> parses the expression. </p> <p> <i>Operators</i>: The following are the operators that you can use in the <code>Expression</code> API call:</p> <dl> <dt>=</dt> <dd> <p>Checks if the values of the two operands are equal or not; if yes, then the condition becomes true.</p> <p>Example: Assume 'variable a' holds 10 and 'variable b' holds 20. </p> <p>(a = b) is not true.</p> </dd> <dt>&lt; &gt;</dt> <dd> <p>Checks if the values of two operands are equal or not; if the values are not equal, then the condition becomes true.</p> <p>Example: (a &lt; &gt; b) is true.</p> </dd> <dt>&gt;</dt> <dd> <p>Checks if the value of the left operand is greater than the value of the right operand; if yes, then the condition becomes true.</p> <p>Example: (a &gt; b) is not true.</p> </dd> <dt>&lt;</dt> <dd> <p>Checks if the value of the left operand is less than the value of the right operand; if yes, then the condition becomes true.</p> <p>Example: (a &lt; b) is true.</p> </dd> <dt>&gt;=</dt> <dd> <p>Checks if the value of the left operand is greater than or equal to the value of the right operand; if yes, then the condition becomes true.</p> <p>Example: (a &gt;= b) is not true.</p> </dd> <dt>&lt;=</dt> <dd> <p>Checks if the value of the left operand is less than or equal to the value of the right operand; if yes, then the condition becomes true.</p> <p>Example: (a &lt;= b) is true.</p> </dd> <dt>AND, OR, IN, BETWEEN, LIKE, NOT, IS NULL</dt> <dd> <p>Logical operators.</p> </dd> </dl> <p> <i>Supported Partition Key Types</i>: The following are the the supported partition keys.</p> <ul> <li> <p> <code>string</code> </p> </li> <li> <p> <code>date</code> </p> </li> <li> <p> <code>timestamp</code> </p> </li> <li> <p> <code>int</code> </p> </li> <li> <p> <code>bigint</code> </p> </li> <li> <p> <code>long</code> </p> </li> <li> <p> <code>tinyint</code> </p> </li> <li> <p> <code>smallint</code> </p> </li> <li> <p> <code>decimal</code> </p> </li> </ul> <p>If an invalid type is encountered, an exception is thrown. </p> <p>The following list shows the valid operators on each type. When you define a crawler, the <code>partitionKey</code> type is created as a <code>STRING</code>, to be compatible with the catalog partitions. </p> <p> <i>Sample API Call</i>: </p>
+    /// <p>An expression that filters the partitions to be returned.</p> <p>The expression uses SQL syntax similar to the SQL <code>WHERE</code> filter clause. The SQL statement parser <a href="http://jsqlparser.sourceforge.net/home.php">JSQLParser</a> parses the expression. </p> <p> <i>Operators</i>: The following are the operators that you can use in the <code>Expression</code> API call:</p> <dl> <dt>=</dt> <dd> <p>Checks whether the values of the two operands are equal; if yes, then the condition becomes true.</p> <p>Example: Assume 'variable a' holds 10 and 'variable b' holds 20. </p> <p>(a = b) is not true.</p> </dd> <dt>&lt; &gt;</dt> <dd> <p>Checks whether the values of two operands are equal; if the values are not equal, then the condition becomes true.</p> <p>Example: (a &lt; &gt; b) is true.</p> </dd> <dt>&gt;</dt> <dd> <p>Checks whether the value of the left operand is greater than the value of the right operand; if yes, then the condition becomes true.</p> <p>Example: (a &gt; b) is not true.</p> </dd> <dt>&lt;</dt> <dd> <p>Checks whether the value of the left operand is less than the value of the right operand; if yes, then the condition becomes true.</p> <p>Example: (a &lt; b) is true.</p> </dd> <dt>&gt;=</dt> <dd> <p>Checks whether the value of the left operand is greater than or equal to the value of the right operand; if yes, then the condition becomes true.</p> <p>Example: (a &gt;= b) is not true.</p> </dd> <dt>&lt;=</dt> <dd> <p>Checks whether the value of the left operand is less than or equal to the value of the right operand; if yes, then the condition becomes true.</p> <p>Example: (a &lt;= b) is true.</p> </dd> <dt>AND, OR, IN, BETWEEN, LIKE, NOT, IS NULL</dt> <dd> <p>Logical operators.</p> </dd> </dl> <p> <i>Supported Partition Key Types</i>: The following are the supported partition keys.</p> <ul> <li> <p> <code>string</code> </p> </li> <li> <p> <code>date</code> </p> </li> <li> <p> <code>timestamp</code> </p> </li> <li> <p> <code>int</code> </p> </li> <li> <p> <code>bigint</code> </p> </li> <li> <p> <code>long</code> </p> </li> <li> <p> <code>tinyint</code> </p> </li> <li> <p> <code>smallint</code> </p> </li> <li> <p> <code>decimal</code> </p> </li> </ul> <p>If an invalid type is encountered, an exception is thrown. </p> <p>The following list shows the valid operators on each type. When you define a crawler, the <code>partitionKey</code> type is created as a <code>STRING</code>, to be compatible with the catalog partitions. </p> <p> <i>Sample API Call</i>: </p>
     #[serde(rename = "Expression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expression: Option<String>,
@@ -2352,7 +2826,7 @@ pub struct GetPartitionsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetPartitionsResponse {
-    /// <p>A continuation token, if the returned list of partitions does not does not include the last one.</p>
+    /// <p>A continuation token, if the returned list of partitions does not include the last one.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2431,7 +2905,7 @@ pub struct GetSecurityConfigurationRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetSecurityConfigurationResponse {
-    /// <p>The requested security configuration</p>
+    /// <p>The requested security configuration.</p>
     #[serde(rename = "SecurityConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_configuration: Option<SecurityConfiguration>,
@@ -2464,7 +2938,7 @@ pub struct GetSecurityConfigurationsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetTableRequest {
-    /// <p>The ID of the Data Catalog where the table resides. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog where the table resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -2487,7 +2961,7 @@ pub struct GetTableResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetTableVersionRequest {
-    /// <p>The ID of the Data Catalog where the tables reside. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog where the tables reside. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -2514,7 +2988,7 @@ pub struct GetTableVersionResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetTableVersionsRequest {
-    /// <p>The ID of the Data Catalog where the tables reside. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog where the tables reside. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -2549,7 +3023,7 @@ pub struct GetTableVersionsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetTablesRequest {
-    /// <p>The ID of the Data Catalog where the tables reside. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog where the tables reside. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -2646,7 +3120,7 @@ pub struct GetTriggersResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetUserDefinedFunctionRequest {
-    /// <p>The ID of the Data Catalog where the function to be retrieved is located. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog where the function to be retrieved is located. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -2669,7 +3143,7 @@ pub struct GetUserDefinedFunctionResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetUserDefinedFunctionsRequest {
-    /// <p>The ID of the Data Catalog where the functions to be retrieved are located. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog where the functions to be retrieved are located. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -2796,6 +3270,25 @@ pub struct GetWorkflowRunsResponse {
     pub runs: Option<Vec<WorkflowRun>>,
 }
 
+/// <p>The database and table in the AWS Glue Data Catalog that is used for input or output data.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GlueTable {
+    /// <p>A unique identifier for the AWS Glue Data Catalog.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+    /// <p>The name of the connection to the AWS Glue Data Catalog.</p>
+    #[serde(rename = "ConnectionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_name: Option<String>,
+    /// <p>A database name in the AWS Glue Data Catalog.</p>
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
+    /// <p>A table name in the AWS Glue Data Catalog.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
 /// <p>A classifier that uses <code>grok</code> patterns.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -2838,6 +3331,20 @@ pub struct ImportCatalogToGlueRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ImportCatalogToGlueResponse {}
+
+/// <p>Specifies configuration properties for an importing labels task run.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ImportLabelsTaskRunProperties {
+    /// <p>The Amazon Simple Storage Service (Amazon S3) path from where you will import the labels.</p>
+    #[serde(rename = "InputS3Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_s3_path: Option<String>,
+    /// <p>Indicates whether to overwrite your existing labels.</p>
+    #[serde(rename = "Replace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replace: Option<bool>,
+}
 
 /// <p>Specifies a JDBC data store to crawl.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -2884,6 +3391,10 @@ pub struct Job {
     #[serde(rename = "ExecutionProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_property: Option<ExecutionProperty>,
+    /// <p>Glue version determines the versions of Apache Spark and Python that AWS Glue supports. The Python version indicates the version supported for jobs of type Spark. </p> <p>For more information about the available AWS Glue versions and corresponding Spark and Python versions, see <a href="https://docs.aws.amazon.com/glue/latest/dg/add-job.html">Glue version</a> in the developer guide.</p> <p>Jobs that are created without specifying a Glue version default to Glue 0.9.</p>
+    #[serde(rename = "GlueVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub glue_version: Option<String>,
     /// <p>The last point in time when this job definition was modified.</p>
     #[serde(rename = "LastModifiedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2930,7 +3441,7 @@ pub struct Job {
     pub worker_type: Option<String>,
 }
 
-/// <p>Defines a point which a job can resume processing.</p>
+/// <p>Defines a point that a job can resume processing.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct JobBookmarkEntry {
@@ -2942,28 +3453,36 @@ pub struct JobBookmarkEntry {
     #[serde(rename = "JobBookmark")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_bookmark: Option<String>,
-    /// <p>Name of the job in question.</p>
+    /// <p>The name of the job in question.</p>
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
+    /// <p>The unique run identifier associated with the previous job run.</p>
+    #[serde(rename = "PreviousRunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub previous_run_id: Option<String>,
     /// <p>The run ID number.</p>
     #[serde(rename = "Run")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub run: Option<i64>,
-    /// <p>Version of the job.</p>
+    /// <p>The run ID number.</p>
+    #[serde(rename = "RunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub run_id: Option<String>,
+    /// <p>The version of the job.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<i64>,
 }
 
-/// <p>Specifies how Job bookmark data should be encrypted.</p>
+/// <p>Specifies how job bookmark data should be encrypted.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct JobBookmarksEncryption {
-    /// <p>The encryption mode to use for Job bookmarks data.</p>
+    /// <p>The encryption mode to use for job bookmarks data.</p>
     #[serde(rename = "JobBookmarksEncryptionMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_bookmarks_encryption_mode: Option<String>,
-    /// <p>The AWS ARN of the KMS key to be used to encrypt the data.</p>
+    /// <p>The Amazon Resource Name (ARN) of the KMS key to be used to encrypt the data.</p>
     #[serde(rename = "KmsKeyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_arn: Option<String>,
@@ -3020,6 +3539,10 @@ pub struct JobRun {
     #[serde(rename = "ExecutionTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_time: Option<i64>,
+    /// <p>Glue version determines the versions of Apache Spark and Python that AWS Glue supports. The Python version indicates the version supported for jobs of type Spark. </p> <p>For more information about the available AWS Glue versions and corresponding Spark and Python versions, see <a href="https://docs.aws.amazon.com/glue/latest/dg/add-job.html">Glue version</a> in the developer guide.</p> <p>Jobs that are created without specifying a Glue version default to Glue 0.9.</p>
+    #[serde(rename = "GlueVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub glue_version: Option<String>,
     /// <p>The ID of this job run.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3105,6 +3628,10 @@ pub struct JobUpdate {
     #[serde(rename = "ExecutionProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_property: Option<ExecutionProperty>,
+    /// <p>Glue version determines the versions of Apache Spark and Python that AWS Glue supports. The Python version indicates the version supported for jobs of type Spark. </p> <p>For more information about the available AWS Glue versions and corresponding Spark and Python versions, see <a href="https://docs.aws.amazon.com/glue/latest/dg/add-job.html">Glue version</a> in the developer guide.</p>
+    #[serde(rename = "GlueVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub glue_version: Option<String>,
     /// <p>This field is reserved for future use.</p>
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3165,6 +3692,16 @@ pub struct JsonClassifier {
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<i64>,
+}
+
+/// <p>Specifies configuration properties for a labeling set generation task run.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct LabelingSetGenerationTaskRunProperties {
+    /// <p>The Amazon Simple Storage Service (Amazon S3) path where you will generate the labeling set.</p>
+    #[serde(rename = "OutputS3Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_s3_path: Option<String>,
 }
 
 /// <p>Status and error information about the most recent crawl.</p>
@@ -3359,6 +3896,80 @@ pub struct Location {
     pub s3: Option<Vec<CodeGenNodeArg>>,
 }
 
+/// <p>A structure for a machine learning transform.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct MLTransform {
+    /// <p>A timestamp. The time and date that this machine learning transform was created.</p>
+    #[serde(rename = "CreatedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_on: Option<f64>,
+    /// <p>A user-defined, long-form description text for the machine learning transform. Descriptions are not guaranteed to be unique and can be changed at any time.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>An <code>EvaluationMetrics</code> object. Evaluation metrics provide an estimate of the quality of your machine learning transform.</p>
+    #[serde(rename = "EvaluationMetrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub evaluation_metrics: Option<EvaluationMetrics>,
+    /// <p>A list of AWS Glue table definitions used by the transform.</p>
+    #[serde(rename = "InputRecordTables")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_record_tables: Option<Vec<GlueTable>>,
+    /// <p>A count identifier for the labeling files generated by AWS Glue for this transform. As you create a better transform, you can iteratively download, label, and upload the labeling file.</p>
+    #[serde(rename = "LabelCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub label_count: Option<i64>,
+    /// <p>A timestamp. The last point in time when this machine learning transform was modified.</p>
+    #[serde(rename = "LastModifiedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_on: Option<f64>,
+    /// <p>The number of AWS Glue data processing units (DPUs) that are allocated to task runs for this transform. You can allocate from 2 to 100 DPUs; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>. </p> <p>When the <code>WorkerType</code> field is set to a value other than <code>Standard</code>, the <code>MaxCapacity</code> field is set automatically and becomes read-only.</p>
+    #[serde(rename = "MaxCapacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_capacity: Option<f64>,
+    /// <p>The maximum number of times to retry after an <code>MLTaskRun</code> of the machine learning transform fails.</p>
+    #[serde(rename = "MaxRetries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_retries: Option<i64>,
+    /// <p>A user-defined name for the machine learning transform. Names are not guaranteed unique and can be changed at any time.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The number of workers of a defined <code>workerType</code> that are allocated when a task of the transform runs.</p>
+    #[serde(rename = "NumberOfWorkers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_workers: Option<i64>,
+    /// <p>A <code>TransformParameters</code> object. You can use parameters to tune (customize) the behavior of the machine learning transform by specifying what data it learns from and your preference on various tradeoffs (such as precious vs. recall, or accuracy vs. cost).</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<TransformParameters>,
+    /// <p>The name or Amazon Resource Name (ARN) of the IAM role with the required permissions. This role needs permission to your Amazon Simple Storage Service (Amazon S3) sources, targets, temporary directory, scripts, and any libraries used by the task run for this transform.</p>
+    #[serde(rename = "Role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
+    /// <p>A map of key-value pairs representing the columns and data types that this transform can run against. Has an upper bound of 100 columns.</p>
+    #[serde(rename = "Schema")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema: Option<Vec<SchemaColumn>>,
+    /// <p>The current status of the machine learning transform.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The timeout in minutes of the machine learning transform.</p>
+    #[serde(rename = "Timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<i64>,
+    /// <p>The unique transform ID that is generated for the machine learning transform. The ID is guaranteed to be unique and does not change.</p>
+    #[serde(rename = "TransformId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_id: Option<String>,
+    /// <p><p>The type of predefined worker that is allocated when a task of this transform runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.</p> </li> </ul></p>
+    #[serde(rename = "WorkerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub worker_type: Option<String>,
+}
+
 /// <p>Defines a mapping.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MappingEntry {
@@ -3446,7 +4057,7 @@ pub struct Partition {
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>The name of the catalog database where the table in question is located.</p>
+    /// <p>The name of the catalog database in which to create the partition.</p>
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
@@ -3466,7 +4077,7 @@ pub struct Partition {
     #[serde(rename = "StorageDescriptor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_descriptor: Option<StorageDescriptor>,
-    /// <p>The name of the table in question.</p>
+    /// <p>The name of the database table in which to create the partition.</p>
     #[serde(rename = "TableName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_name: Option<String>,
@@ -3480,7 +4091,7 @@ pub struct Partition {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct PartitionError {
-    /// <p>Details about the partition error.</p>
+    /// <p>The details about the partition error.</p>
     #[serde(rename = "ErrorDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_detail: Option<ErrorDetail>,
@@ -3490,7 +4101,7 @@ pub struct PartitionError {
     pub partition_values: Option<Vec<String>>,
 }
 
-/// <p>The structure used to create and update a partion.</p>
+/// <p>The structure used to create and update a partition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PartitionInput {
     /// <p>The last time at which the partition was accessed.</p>
@@ -3567,9 +4178,39 @@ pub struct Predicate {
     pub logical: Option<String>,
 }
 
+/// <p>Permissions granted to a principal.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PrincipalPermissions {
+    /// <p>The permissions that are granted to the principal.</p>
+    #[serde(rename = "Permissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions: Option<Vec<String>>,
+    /// <p>The principal who is granted permissions.</p>
+    #[serde(rename = "Principal")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub principal: Option<DataLakePrincipal>,
+}
+
+/// <p>Defines a property predicate.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct PropertyPredicate {
+    /// <p>The comparator used to compare this property to others.</p>
+    #[serde(rename = "Comparator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comparator: Option<String>,
+    /// <p>The key of the property.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// <p>The value of the property.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutDataCatalogEncryptionSettingsRequest {
-    /// <p>The ID of the Data Catalog for which to set the security configuration. If none is provided, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog to set the security configuration for. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -3628,6 +4269,10 @@ pub struct ResetJobBookmarkRequest {
     /// <p>The name of the job in question.</p>
     #[serde(rename = "JobName")]
     pub job_name: String,
+    /// <p>The unique run identifier associated with this job run.</p>
+    #[serde(rename = "RunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub run_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -3639,7 +4284,7 @@ pub struct ResetJobBookmarkResponse {
     pub job_bookmark_entry: Option<JobBookmarkEntry>,
 }
 
-/// <p>URIs for function resources.</p>
+/// <p>The URIs for function resources.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResourceUri {
     /// <p>The type of the resource.</p>
@@ -3652,14 +4297,14 @@ pub struct ResourceUri {
     pub uri: Option<String>,
 }
 
-/// <p>Specifies how S3 data should be encrypted.</p>
+/// <p>Specifies how Amazon Simple Storage Service (Amazon S3) data should be encrypted.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3Encryption {
-    /// <p>The AWS ARN of the KMS key to be used to encrypt the data.</p>
+    /// <p>The Amazon Resource Name (ARN) of the KMS key to be used to encrypt the data.</p>
     #[serde(rename = "KmsKeyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_arn: Option<String>,
-    /// <p>The encryption mode to use for S3 data.</p>
+    /// <p>The encryption mode to use for Amazon S3 data.</p>
     #[serde(rename = "S3EncryptionMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_encryption_mode: Option<String>,
@@ -3705,6 +4350,60 @@ pub struct SchemaChangePolicy {
     pub update_behavior: Option<String>,
 }
 
+/// <p>A key-value pair representing a column and data type that this transform can run against. The <code>Schema</code> parameter of the <code>MLTransform</code> may contain up to 100 of these structures.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SchemaColumn {
+    /// <p>The type of data in the column.</p>
+    #[serde(rename = "DataType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_type: Option<String>,
+    /// <p>The name of the column.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct SearchTablesRequest {
+    /// <p>A unique identifier, consisting of <code> <i>account_id</i>/datalake</code>.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+    /// <p>A list of key-value pairs, and a comparator used to filter the search results. Returns all entities matching the predicate.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<PropertyPredicate>>,
+    /// <p>The maximum number of tables to return in a single response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A continuation token, included if this is a continuation call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A string used for a text search.</p> <p>Specifying a value in quotes filters based on an exact match to the value.</p>
+    #[serde(rename = "SearchText")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub search_text: Option<String>,
+    /// <p>A list of criteria for sorting the results by a field name, in an ascending or descending order.</p>
+    #[serde(rename = "SortCriteria")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_criteria: Option<Vec<SortCriterion>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SearchTablesResponse {
+    /// <p>A continuation token, present if the current list segment is not the last.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of the requested <code>Table</code> objects. The <code>SearchTables</code> response returns only the tables that you have access to.</p>
+    #[serde(rename = "TableList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_list: Option<Vec<Table>>,
+}
+
 /// <p>Specifies a security configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -3726,15 +4425,15 @@ pub struct SecurityConfiguration {
 /// <p>Defines a non-overlapping region of a table's partitions, allowing multiple requests to be executed in parallel.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct Segment {
-    /// <p>The zero-based index number of the this segment. For example, if the total number of segments is 4, SegmentNumber values will range from zero through three.</p>
+    /// <p>The zero-based index number of the segment. For example, if the total number of segments is 4, <code>SegmentNumber</code> values range from 0 through 3.</p>
     #[serde(rename = "SegmentNumber")]
     pub segment_number: i64,
-    /// <p>The total numer of segments.</p>
+    /// <p>The total number of segments.</p>
     #[serde(rename = "TotalSegments")]
     pub total_segments: i64,
 }
 
-/// <p>Information about a serialization/deserialization program (SerDe) which serves as an extractor and loader.</p>
+/// <p>Information about a serialization/deserialization program (SerDe) that serves as an extractor and loader.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SerDeInfo {
     /// <p>Name of the SerDe.</p>
@@ -3745,13 +4444,13 @@ pub struct SerDeInfo {
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Usually the class that implements the SerDe. An example is: <code>org.apache.hadoop.hive.serde2.columnar.ColumnarSerDe</code>.</p>
+    /// <p>Usually the class that implements the SerDe. An example is <code>org.apache.hadoop.hive.serde2.columnar.ColumnarSerDe</code>.</p>
     #[serde(rename = "SerializationLibrary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub serialization_library: Option<String>,
 }
 
-/// <p>Specifies skewed values in a table. Skewed are ones that occur with very high frequency.</p>
+/// <p>Specifies skewed values in a table. Skewed values are those that occur with very high frequency.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SkewedInfo {
     /// <p>A list of names of columns that contain skewed values.</p>
@@ -3766,6 +4465,16 @@ pub struct SkewedInfo {
     #[serde(rename = "SkewedColumnValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub skewed_column_values: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct SortCriterion {
+    #[serde(rename = "FieldName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub field_name: Option<String>,
+    #[serde(rename = "Sort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3789,6 +4498,48 @@ pub struct StartCrawlerScheduleRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct StartCrawlerScheduleResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartExportLabelsTaskRunRequest {
+    /// <p>The Amazon S3 path where you export the labels.</p>
+    #[serde(rename = "OutputS3Path")]
+    pub output_s3_path: String,
+    /// <p>The unique identifier of the machine learning transform.</p>
+    #[serde(rename = "TransformId")]
+    pub transform_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StartExportLabelsTaskRunResponse {
+    /// <p>The unique identifier for the task run.</p>
+    #[serde(rename = "TaskRunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_run_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartImportLabelsTaskRunRequest {
+    /// <p>The Amazon Simple Storage Service (Amazon S3) path from where you import the labels.</p>
+    #[serde(rename = "InputS3Path")]
+    pub input_s3_path: String,
+    /// <p>Indicates whether to overwrite your existing labels.</p>
+    #[serde(rename = "ReplaceAllLabels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replace_all_labels: Option<bool>,
+    /// <p>The unique identifier of the machine learning transform.</p>
+    #[serde(rename = "TransformId")]
+    pub transform_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StartImportLabelsTaskRunResponse {
+    /// <p>The unique identifier for the task run.</p>
+    #[serde(rename = "TaskRunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_run_id: Option<String>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartJobRunRequest {
@@ -3836,6 +4587,41 @@ pub struct StartJobRunResponse {
     #[serde(rename = "JobRunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_run_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartMLEvaluationTaskRunRequest {
+    /// <p>The unique identifier of the machine learning transform.</p>
+    #[serde(rename = "TransformId")]
+    pub transform_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StartMLEvaluationTaskRunResponse {
+    /// <p>The unique identifier associated with this run.</p>
+    #[serde(rename = "TaskRunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_run_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartMLLabelingSetGenerationTaskRunRequest {
+    /// <p>The Amazon Simple Storage Service (Amazon S3) path where you generate the labeling set.</p>
+    #[serde(rename = "OutputS3Path")]
+    pub output_s3_path: String,
+    /// <p>The unique identifier of the machine learning transform.</p>
+    #[serde(rename = "TransformId")]
+    pub transform_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StartMLLabelingSetGenerationTaskRunResponse {
+    /// <p>The unique run identifier that is associated with this task run.</p>
+    #[serde(rename = "TaskRunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_run_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3919,7 +4705,7 @@ pub struct StorageDescriptor {
     #[serde(rename = "Columns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub columns: Option<Vec<Column>>,
-    /// <p>True if the data in the table is compressed, or False if not.</p>
+    /// <p> <code>True</code> if the data in the table is compressed, or <code>False</code> if not.</p>
     #[serde(rename = "Compressed")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compressed: Option<bool>,
@@ -3927,7 +4713,7 @@ pub struct StorageDescriptor {
     #[serde(rename = "InputFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_format: Option<String>,
-    /// <p>The physical location of the table. By default this takes the form of the warehouse location, followed by the database location in the warehouse, followed by the table name.</p>
+    /// <p>The physical location of the table. By default, this takes the form of the warehouse location, followed by the database location in the warehouse, followed by the table name.</p>
     #[serde(rename = "Location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
@@ -3939,15 +4725,15 @@ pub struct StorageDescriptor {
     #[serde(rename = "OutputFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_format: Option<String>,
-    /// <p>User-supplied properties in key-value form.</p>
+    /// <p>The user-supplied properties in key-value form.</p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Serialization/deserialization (SerDe) information.</p>
+    /// <p>The serialization/deserialization (SerDe) information.</p>
     #[serde(rename = "SerdeInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub serde_info: Option<SerDeInfo>,
-    /// <p>Information about values that appear very frequently in a column (skewed values).</p>
+    /// <p>The information about values that appear frequently in a column (skewed values).</p>
     #[serde(rename = "SkewedInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub skewed_info: Option<SkewedInfo>,
@@ -3955,7 +4741,7 @@ pub struct StorageDescriptor {
     #[serde(rename = "SortColumns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_columns: Option<Vec<Order>>,
-    /// <p>True if the table data is stored in subdirectories, or False if not.</p>
+    /// <p> <code>True</code> if the table data is stored in subdirectories, or <code>False</code> if not.</p>
     #[serde(rename = "StoredAsSubDirectories")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stored_as_sub_directories: Option<bool>,
@@ -3965,34 +4751,38 @@ pub struct StorageDescriptor {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Table {
-    /// <p>Time when the table definition was created in the Data Catalog.</p>
+    /// <p>The time when the table definition was created in the Data Catalog.</p>
     #[serde(rename = "CreateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<f64>,
-    /// <p>Person or entity who created the table.</p>
+    /// <p>The person or entity who created the table.</p>
     #[serde(rename = "CreatedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_by: Option<String>,
-    /// <p>Name of the metadata database where the table metadata resides. For Hive compatibility, this must be all lowercase.</p>
+    /// <p>The name of the database where the table metadata resides. For Hive compatibility, this must be all lowercase.</p>
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    /// <p>Description of the table.</p>
+    /// <p>A description of the table.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Last time the table was accessed. This is usually taken from HDFS, and may not be reliable.</p>
+    /// <p>Indicates whether the table has been registered with AWS Lake Formation.</p>
+    #[serde(rename = "IsRegisteredWithLakeFormation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_registered_with_lake_formation: Option<bool>,
+    /// <p>The last time that the table was accessed. This is usually taken from HDFS, and might not be reliable.</p>
     #[serde(rename = "LastAccessTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_access_time: Option<f64>,
-    /// <p>Last time column statistics were computed for this table.</p>
+    /// <p>The last time that column statistics were computed for this table.</p>
     #[serde(rename = "LastAnalyzedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_analyzed_time: Option<f64>,
-    /// <p>Name of the table. For Hive compatibility, this must be entirely lowercase.</p>
+    /// <p>The table name. For Hive compatibility, this must be entirely lowercase.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>Owner of the table.</p>
+    /// <p>The owner of the table.</p>
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
@@ -4000,11 +4790,11 @@ pub struct Table {
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>A list of columns by which the table is partitioned. Only primitive types are supported as partition keys.</p> <p>When creating a table used by Athena, and you do not specify any <code>partitionKeys</code>, you must at least set the value of <code>partitionKeys</code> to an empty list. For example:</p> <p> <code>"PartitionKeys": []</code> </p>
+    /// <p>A list of columns by which the table is partitioned. Only primitive types are supported as partition keys.</p> <p>When you create a table used by Amazon Athena, and you do not specify any <code>partitionKeys</code>, you must at least set the value of <code>partitionKeys</code> to an empty list. For example:</p> <p> <code>"PartitionKeys": []</code> </p>
     #[serde(rename = "PartitionKeys")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub partition_keys: Option<Vec<Column>>,
-    /// <p>Retention time for this table.</p>
+    /// <p>The retention time for this table.</p>
     #[serde(rename = "Retention")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention: Option<i64>,
@@ -4016,7 +4806,7 @@ pub struct Table {
     #[serde(rename = "TableType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_type: Option<String>,
-    /// <p>Last time the table was updated.</p>
+    /// <p>The last time that the table was updated.</p>
     #[serde(rename = "UpdateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<f64>,
@@ -4034,35 +4824,35 @@ pub struct Table {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct TableError {
-    /// <p>Detail about the error.</p>
+    /// <p>The details about the error.</p>
     #[serde(rename = "ErrorDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_detail: Option<ErrorDetail>,
-    /// <p>Name of the table. For Hive compatibility, this must be entirely lowercase.</p>
+    /// <p>The name of the table. For Hive compatibility, this must be entirely lowercase.</p>
     #[serde(rename = "TableName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_name: Option<String>,
 }
 
-/// <p>Structure used to create or update the table.</p>
+/// <p>A structure used to define a table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TableInput {
-    /// <p>Description of the table.</p>
+    /// <p>A description of the table.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Last time the table was accessed.</p>
+    /// <p>The last time that the table was accessed.</p>
     #[serde(rename = "LastAccessTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_access_time: Option<f64>,
-    /// <p>Last time column statistics were computed for this table.</p>
+    /// <p>The last time that column statistics were computed for this table.</p>
     #[serde(rename = "LastAnalyzedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_analyzed_time: Option<f64>,
-    /// <p>Name of the table. For Hive compatibility, this is folded to lowercase when it is stored.</p>
+    /// <p>The table name. For Hive compatibility, this is folded to lowercase when it is stored.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>Owner of the table.</p>
+    /// <p>The table owner.</p>
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
@@ -4070,11 +4860,11 @@ pub struct TableInput {
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>A list of columns by which the table is partitioned. Only primitive types are supported as partition keys.</p> <p>When creating a table used by Athena, and you do not specify any <code>partitionKeys</code>, you must at least set the value of <code>partitionKeys</code> to an empty list. For example:</p> <p> <code>"PartitionKeys": []</code> </p>
+    /// <p>A list of columns by which the table is partitioned. Only primitive types are supported as partition keys.</p> <p>When you create a table used by Amazon Athena, and you do not specify any <code>partitionKeys</code>, you must at least set the value of <code>partitionKeys</code> to an empty list. For example:</p> <p> <code>"PartitionKeys": []</code> </p>
     #[serde(rename = "PartitionKeys")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub partition_keys: Option<Vec<Column>>,
-    /// <p>Retention time for this table.</p>
+    /// <p>The retention time for this table.</p>
     #[serde(rename = "Retention")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention: Option<i64>,
@@ -4100,7 +4890,7 @@ pub struct TableInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct TableVersion {
-    /// <p>The table in question</p>
+    /// <p>The table in question.</p>
     #[serde(rename = "Table")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table: Option<Table>,
@@ -4114,7 +4904,7 @@ pub struct TableVersion {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct TableVersionError {
-    /// <p>Detail about the error.</p>
+    /// <p>The details about the error.</p>
     #[serde(rename = "ErrorDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_detail: Option<ErrorDetail>,
@@ -4141,6 +4931,170 @@ pub struct TagResourceRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct TagResourceResponse {}
+
+/// <p>The sampling parameters that are associated with the machine learning transform.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TaskRun {
+    /// <p>The last point in time that the requested task run was completed.</p>
+    #[serde(rename = "CompletedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub completed_on: Option<f64>,
+    /// <p>The list of error strings associated with this task run.</p>
+    #[serde(rename = "ErrorString")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_string: Option<String>,
+    /// <p>The amount of time (in seconds) that the task run consumed resources.</p>
+    #[serde(rename = "ExecutionTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_time: Option<i64>,
+    /// <p>The last point in time that the requested task run was updated.</p>
+    #[serde(rename = "LastModifiedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_on: Option<f64>,
+    /// <p>The names of the log group for secure logging, associated with this task run.</p>
+    #[serde(rename = "LogGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_group_name: Option<String>,
+    /// <p>Specifies configuration properties associated with this task run.</p>
+    #[serde(rename = "Properties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub properties: Option<TaskRunProperties>,
+    /// <p>The date and time that this task run started.</p>
+    #[serde(rename = "StartedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub started_on: Option<f64>,
+    /// <p>The current status of the requested task run.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The unique identifier for this task run.</p>
+    #[serde(rename = "TaskRunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_run_id: Option<String>,
+    /// <p>The unique identifier for the transform.</p>
+    #[serde(rename = "TransformId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_id: Option<String>,
+}
+
+/// <p>The criteria that are used to filter the task runs for the machine learning transform.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TaskRunFilterCriteria {
+    /// <p>Filter on task runs started after this date.</p>
+    #[serde(rename = "StartedAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub started_after: Option<f64>,
+    /// <p>Filter on task runs started before this date.</p>
+    #[serde(rename = "StartedBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub started_before: Option<f64>,
+    /// <p>The current status of the task run.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The type of task run.</p>
+    #[serde(rename = "TaskRunType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_run_type: Option<String>,
+}
+
+/// <p>The configuration properties for the task run.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TaskRunProperties {
+    /// <p>The configuration properties for an exporting labels task run.</p>
+    #[serde(rename = "ExportLabelsTaskRunProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_labels_task_run_properties: Option<ExportLabelsTaskRunProperties>,
+    /// <p>The configuration properties for a find matches task run.</p>
+    #[serde(rename = "FindMatchesTaskRunProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub find_matches_task_run_properties: Option<FindMatchesTaskRunProperties>,
+    /// <p>The configuration properties for an importing labels task run.</p>
+    #[serde(rename = "ImportLabelsTaskRunProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_labels_task_run_properties: Option<ImportLabelsTaskRunProperties>,
+    /// <p>The configuration properties for a labeling set generation task run.</p>
+    #[serde(rename = "LabelingSetGenerationTaskRunProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub labeling_set_generation_task_run_properties: Option<LabelingSetGenerationTaskRunProperties>,
+    /// <p>The type of task run.</p>
+    #[serde(rename = "TaskType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_type: Option<String>,
+}
+
+/// <p>The sorting criteria that are used to sort the list of task runs for the machine learning transform.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TaskRunSortCriteria {
+    /// <p>The column to be used to sort the list of task runs for the machine learning transform.</p>
+    #[serde(rename = "Column")]
+    pub column: String,
+    /// <p>The sort direction to be used to sort the list of task runs for the machine learning transform.</p>
+    #[serde(rename = "SortDirection")]
+    pub sort_direction: String,
+}
+
+/// <p>The criteria used to filter the machine learning transforms.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TransformFilterCriteria {
+    /// <p>The time and date after which the transforms were created.</p>
+    #[serde(rename = "CreatedAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_after: Option<f64>,
+    /// <p>The time and date before which the transforms were created.</p>
+    #[serde(rename = "CreatedBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_before: Option<f64>,
+    /// <p>Filter on transforms last modified after this date.</p>
+    #[serde(rename = "LastModifiedAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_after: Option<f64>,
+    /// <p>Filter on transforms last modified before this date.</p>
+    #[serde(rename = "LastModifiedBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_before: Option<f64>,
+    /// <p>A unique transform name that is used to filter the machine learning transforms.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>Filters on datasets with a specific schema. The <code>Map&lt;Column, Type&gt;</code> object is an array of key-value pairs representing the schema this transform accepts, where <code>Column</code> is the name of a column, and <code>Type</code> is the type of the data such as an integer or string. Has an upper bound of 100 columns.</p>
+    #[serde(rename = "Schema")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema: Option<Vec<SchemaColumn>>,
+    /// <p>Filters the list of machine learning transforms by the last known status of the transforms (to indicate whether a transform can be used or not). One of "NOT_READY", "READY", or "DELETING".</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The type of machine learning transform that is used to filter the machine learning transforms.</p>
+    #[serde(rename = "TransformType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_type: Option<String>,
+}
+
+/// <p>The algorithm-specific parameters that are associated with the machine learning transform.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TransformParameters {
+    /// <p>The parameters for the find matches algorithm.</p>
+    #[serde(rename = "FindMatchesParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub find_matches_parameters: Option<FindMatchesParameters>,
+    /// <p>The type of machine learning transform.</p> <p>For information about the types of machine learning transforms, see <a href="http://docs.aws.amazon.com/glue/latest/dg/add-job-machine-learning-transform.html">Creating Machine Learning Transforms</a>.</p>
+    #[serde(rename = "TransformType")]
+    pub transform_type: String,
+}
+
+/// <p>The sorting criteria that are associated with the machine learning transform.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TransformSortCriteria {
+    /// <p>The column to be used in the sorting criteria that are associated with the machine learning transform.</p>
+    #[serde(rename = "Column")]
+    pub column: String,
+    /// <p>The sort direction to be used in the sorting criteria that are associated with the machine learning transform.</p>
+    #[serde(rename = "SortDirection")]
+    pub sort_direction: String,
+}
 
 /// <p>Information about a specific trigger.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -4375,7 +5329,7 @@ pub struct UpdateCsvClassifierRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDatabaseRequest {
-    /// <p>The ID of the Data Catalog in which the metadata database resides. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog in which the metadata database resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -4393,34 +5347,34 @@ pub struct UpdateDatabaseResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDevEndpointRequest {
-    /// <p>The map of arguments to add the map of arguments used to configure the DevEndpoint.</p>
+    /// <p>The map of arguments to add the map of arguments used to configure the <code>DevEndpoint</code>.</p>
     #[serde(rename = "AddArguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub add_arguments: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The list of public keys for the DevEndpoint to use.</p>
+    /// <p>The list of public keys for the <code>DevEndpoint</code> to use.</p>
     #[serde(rename = "AddPublicKeys")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub add_public_keys: Option<Vec<String>>,
-    /// <p>Custom Python or Java libraries to be loaded in the DevEndpoint.</p>
+    /// <p>Custom Python or Java libraries to be loaded in the <code>DevEndpoint</code>.</p>
     #[serde(rename = "CustomLibraries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_libraries: Option<DevEndpointCustomLibraries>,
-    /// <p>The list of argument keys to be deleted from the map of arguments used to configure the DevEndpoint.</p>
+    /// <p>The list of argument keys to be deleted from the map of arguments used to configure the <code>DevEndpoint</code>.</p>
     #[serde(rename = "DeleteArguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_arguments: Option<Vec<String>>,
-    /// <p>The list of public keys to be deleted from the DevEndpoint.</p>
+    /// <p>The list of public keys to be deleted from the <code>DevEndpoint</code>.</p>
     #[serde(rename = "DeletePublicKeys")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_public_keys: Option<Vec<String>>,
-    /// <p>The name of the DevEndpoint to be updated.</p>
+    /// <p>The name of the <code>DevEndpoint</code> to be updated.</p>
     #[serde(rename = "EndpointName")]
     pub endpoint_name: String,
-    /// <p>The public key for the DevEndpoint to use.</p>
+    /// <p>The public key for the <code>DevEndpoint</code> to use.</p>
     #[serde(rename = "PublicKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_key: Option<String>,
-    /// <p>True if the list of custom libraries to be loaded in the development endpoint needs to be updated, or False otherwise.</p>
+    /// <p> <code>True</code> if the list of custom libraries to be loaded in the development endpoint needs to be updated, or <code>False</code> if otherwise.</p>
     #[serde(rename = "UpdateEtlLibraries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub update_etl_libraries: Option<bool>,
@@ -4482,21 +5436,73 @@ pub struct UpdateJsonClassifierRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateMLTransformRequest {
+    /// <p>A description of the transform. The default is an empty string.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The number of AWS Glue data processing units (DPUs) that are allocated to task runs for this transform. You can allocate from 2 to 100 DPUs; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>. </p> <p>When the <code>WorkerType</code> field is set to a value other than <code>Standard</code>, the <code>MaxCapacity</code> field is set automatically and becomes read-only.</p>
+    #[serde(rename = "MaxCapacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_capacity: Option<f64>,
+    /// <p>The maximum number of times to retry a task for this transform after a task run fails.</p>
+    #[serde(rename = "MaxRetries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_retries: Option<i64>,
+    /// <p>The unique name that you gave the transform when you created it.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The number of workers of a defined <code>workerType</code> that are allocated when this task runs.</p>
+    #[serde(rename = "NumberOfWorkers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_workers: Option<i64>,
+    /// <p>The configuration parameters that are specific to the transform type (algorithm) used. Conditionally dependent on the transform type.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<TransformParameters>,
+    /// <p>The name or Amazon Resource Name (ARN) of the IAM role with the required permissions.</p>
+    #[serde(rename = "Role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
+    /// <p>The timeout for a task run for this transform in minutes. This is the maximum time that a task run for this transform can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours).</p>
+    #[serde(rename = "Timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<i64>,
+    /// <p>A unique identifier that was generated when the transform was created.</p>
+    #[serde(rename = "TransformId")]
+    pub transform_id: String,
+    /// <p><p>The type of predefined worker that is allocated when this task runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.</p> </li> </ul></p>
+    #[serde(rename = "WorkerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub worker_type: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateMLTransformResponse {
+    /// <p>The unique identifier for the transform that was updated.</p>
+    #[serde(rename = "TransformId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdatePartitionRequest {
-    /// <p>The ID of the Data Catalog where the partition to be updated resides. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog where the partition to be updated resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
     /// <p>The name of the catalog database in which the table in question resides.</p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    /// <p>The new partition object to which to update the partition.</p>
+    /// <p>The new partition object to update the partition to.</p>
     #[serde(rename = "PartitionInput")]
     pub partition_input: PartitionInput,
     /// <p>A list of the values defining the partition.</p>
     #[serde(rename = "PartitionValueList")]
     pub partition_value_list: Vec<String>,
-    /// <p>The name of the table where the partition to be updated is located.</p>
+    /// <p>The name of the table in which the partition to be updated is located.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
 }
@@ -4507,14 +5513,14 @@ pub struct UpdatePartitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateTableRequest {
-    /// <p>The ID of the Data Catalog where the table resides. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog where the table resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
     /// <p>The name of the catalog database in which the table resides. For Hive compatibility, this name is entirely lowercase.</p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    /// <p>By default, <code>UpdateTable</code> always creates an archived version of the table before updating it. If <code>skipArchive</code> is set to true, however, <code>UpdateTable</code> does not create the archived version.</p>
+    /// <p>By default, <code>UpdateTable</code> always creates an archived version of the table before updating it. However, if <code>skipArchive</code> is set to true, <code>UpdateTable</code> does not create the archived version.</p>
     #[serde(rename = "SkipArchive")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub skip_archive: Option<bool>,
@@ -4548,14 +5554,14 @@ pub struct UpdateTriggerResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateUserDefinedFunctionRequest {
-    /// <p>The ID of the Data Catalog where the function to be updated is located. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog where the function to be updated is located. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
     /// <p>The name of the catalog database where the function to be updated is located.</p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    /// <p>A <code>FunctionInput</code> object that re-defines the function in the Data Catalog.</p>
+    /// <p>A <code>FunctionInput</code> object that redefines the function in the Data Catalog.</p>
     #[serde(rename = "FunctionInput")]
     pub function_input: UserDefinedFunctionInput,
     /// <p>The name of the function.</p>
@@ -4637,7 +5643,7 @@ pub struct UserDefinedFunction {
     pub resource_uris: Option<Vec<ResourceUri>>,
 }
 
-/// <p>A structure used to create or updata a user-defined function.</p>
+/// <p>A structure used to create or update a user-defined function.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UserDefinedFunctionInput {
     /// <p>The Java class that contains the function code.</p>
@@ -5422,6 +6428,57 @@ impl Error for GlueBatchStopJobRunError {
         }
     }
 }
+/// Errors returned by CancelMLTaskRun
+#[derive(Debug, PartialEq)]
+pub enum CancelMLTaskRunError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl CancelMLTaskRunError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelMLTaskRunError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(CancelMLTaskRunError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(CancelMLTaskRunError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(CancelMLTaskRunError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(CancelMLTaskRunError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CancelMLTaskRunError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CancelMLTaskRunError {
+    fn description(&self) -> &str {
+        match *self {
+            CancelMLTaskRunError::EntityNotFound(ref cause) => cause,
+            CancelMLTaskRunError::InternalService(ref cause) => cause,
+            CancelMLTaskRunError::InvalidInput(ref cause) => cause,
+            CancelMLTaskRunError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateClassifier
 #[derive(Debug, PartialEq)]
 pub enum CreateClassifierError {
@@ -5787,6 +6844,79 @@ impl Error for CreateJobError {
             CreateJobError::InvalidInput(ref cause) => cause,
             CreateJobError::OperationTimeout(ref cause) => cause,
             CreateJobError::ResourceNumberLimitExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateMLTransform
+#[derive(Debug, PartialEq)]
+pub enum CreateMLTransformError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>A resource to be created or added already exists.</p>
+    AlreadyExists(String),
+    /// <p>The same unique identifier was associated with two different records.</p>
+    IdempotentParameterMismatch(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+    /// <p>A resource numerical limit was exceeded.</p>
+    ResourceNumberLimitExceeded(String),
+}
+
+impl CreateMLTransformError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMLTransformError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateMLTransformError::AccessDenied(err.msg))
+                }
+                "AlreadyExistsException" => {
+                    return RusotoError::Service(CreateMLTransformError::AlreadyExists(err.msg))
+                }
+                "IdempotentParameterMismatchException" => {
+                    return RusotoError::Service(
+                        CreateMLTransformError::IdempotentParameterMismatch(err.msg),
+                    )
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(CreateMLTransformError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(CreateMLTransformError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(CreateMLTransformError::OperationTimeout(err.msg))
+                }
+                "ResourceNumberLimitExceededException" => {
+                    return RusotoError::Service(
+                        CreateMLTransformError::ResourceNumberLimitExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateMLTransformError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateMLTransformError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateMLTransformError::AccessDenied(ref cause) => cause,
+            CreateMLTransformError::AlreadyExists(ref cause) => cause,
+            CreateMLTransformError::IdempotentParameterMismatch(ref cause) => cause,
+            CreateMLTransformError::InternalService(ref cause) => cause,
+            CreateMLTransformError::InvalidInput(ref cause) => cause,
+            CreateMLTransformError::OperationTimeout(ref cause) => cause,
+            CreateMLTransformError::ResourceNumberLimitExceeded(ref cause) => cause,
         }
     }
 }
@@ -6552,6 +7682,57 @@ impl Error for DeleteJobError {
             DeleteJobError::InternalService(ref cause) => cause,
             DeleteJobError::InvalidInput(ref cause) => cause,
             DeleteJobError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteMLTransform
+#[derive(Debug, PartialEq)]
+pub enum DeleteMLTransformError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl DeleteMLTransformError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMLTransformError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(DeleteMLTransformError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(DeleteMLTransformError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(DeleteMLTransformError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(DeleteMLTransformError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteMLTransformError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteMLTransformError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteMLTransformError::EntityNotFound(ref cause) => cause,
+            DeleteMLTransformError::InternalService(ref cause) => cause,
+            DeleteMLTransformError::InvalidInput(ref cause) => cause,
+            DeleteMLTransformError::OperationTimeout(ref cause) => cause,
         }
     }
 }
@@ -7678,6 +8859,57 @@ impl Error for GetJobError {
         }
     }
 }
+/// Errors returned by GetJobBookmark
+#[derive(Debug, PartialEq)]
+pub enum GetJobBookmarkError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl GetJobBookmarkError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobBookmarkError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetJobBookmarkError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(GetJobBookmarkError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetJobBookmarkError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(GetJobBookmarkError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetJobBookmarkError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetJobBookmarkError {
+    fn description(&self) -> &str {
+        match *self {
+            GetJobBookmarkError::EntityNotFound(ref cause) => cause,
+            GetJobBookmarkError::InternalService(ref cause) => cause,
+            GetJobBookmarkError::InvalidInput(ref cause) => cause,
+            GetJobBookmarkError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetJobRun
 #[derive(Debug, PartialEq)]
 pub enum GetJobRunError {
@@ -7828,6 +9060,210 @@ impl Error for GetJobsError {
             GetJobsError::InternalService(ref cause) => cause,
             GetJobsError::InvalidInput(ref cause) => cause,
             GetJobsError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetMLTaskRun
+#[derive(Debug, PartialEq)]
+pub enum GetMLTaskRunError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl GetMLTaskRunError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMLTaskRunError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetMLTaskRunError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(GetMLTaskRunError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetMLTaskRunError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(GetMLTaskRunError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetMLTaskRunError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetMLTaskRunError {
+    fn description(&self) -> &str {
+        match *self {
+            GetMLTaskRunError::EntityNotFound(ref cause) => cause,
+            GetMLTaskRunError::InternalService(ref cause) => cause,
+            GetMLTaskRunError::InvalidInput(ref cause) => cause,
+            GetMLTaskRunError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetMLTaskRuns
+#[derive(Debug, PartialEq)]
+pub enum GetMLTaskRunsError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl GetMLTaskRunsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMLTaskRunsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetMLTaskRunsError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(GetMLTaskRunsError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetMLTaskRunsError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(GetMLTaskRunsError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetMLTaskRunsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetMLTaskRunsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetMLTaskRunsError::EntityNotFound(ref cause) => cause,
+            GetMLTaskRunsError::InternalService(ref cause) => cause,
+            GetMLTaskRunsError::InvalidInput(ref cause) => cause,
+            GetMLTaskRunsError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetMLTransform
+#[derive(Debug, PartialEq)]
+pub enum GetMLTransformError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl GetMLTransformError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMLTransformError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetMLTransformError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(GetMLTransformError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetMLTransformError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(GetMLTransformError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetMLTransformError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetMLTransformError {
+    fn description(&self) -> &str {
+        match *self {
+            GetMLTransformError::EntityNotFound(ref cause) => cause,
+            GetMLTransformError::InternalService(ref cause) => cause,
+            GetMLTransformError::InvalidInput(ref cause) => cause,
+            GetMLTransformError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetMLTransforms
+#[derive(Debug, PartialEq)]
+pub enum GetMLTransformsError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl GetMLTransformsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMLTransformsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetMLTransformsError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(GetMLTransformsError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetMLTransformsError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(GetMLTransformsError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetMLTransformsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetMLTransformsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetMLTransformsError::EntityNotFound(ref cause) => cause,
+            GetMLTransformsError::InternalService(ref cause) => cause,
+            GetMLTransformsError::InvalidInput(ref cause) => cause,
+            GetMLTransformsError::OperationTimeout(ref cause) => cause,
         }
     }
 }
@@ -9453,6 +10889,51 @@ impl Error for ResetJobBookmarkError {
         }
     }
 }
+/// Errors returned by SearchTables
+#[derive(Debug, PartialEq)]
+pub enum SearchTablesError {
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl SearchTablesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchTablesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(SearchTablesError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(SearchTablesError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(SearchTablesError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for SearchTablesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SearchTablesError {
+    fn description(&self) -> &str {
+        match *self {
+            SearchTablesError::InternalService(ref cause) => cause,
+            SearchTablesError::InvalidInput(ref cause) => cause,
+            SearchTablesError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by StartCrawler
 #[derive(Debug, PartialEq)]
 pub enum StartCrawlerError {
@@ -9561,6 +11042,132 @@ impl Error for StartCrawlerScheduleError {
         }
     }
 }
+/// Errors returned by StartExportLabelsTaskRun
+#[derive(Debug, PartialEq)]
+pub enum StartExportLabelsTaskRunError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl StartExportLabelsTaskRunError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartExportLabelsTaskRunError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(StartExportLabelsTaskRunError::EntityNotFound(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(StartExportLabelsTaskRunError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(StartExportLabelsTaskRunError::InvalidInput(
+                        err.msg,
+                    ))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(StartExportLabelsTaskRunError::OperationTimeout(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StartExportLabelsTaskRunError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartExportLabelsTaskRunError {
+    fn description(&self) -> &str {
+        match *self {
+            StartExportLabelsTaskRunError::EntityNotFound(ref cause) => cause,
+            StartExportLabelsTaskRunError::InternalService(ref cause) => cause,
+            StartExportLabelsTaskRunError::InvalidInput(ref cause) => cause,
+            StartExportLabelsTaskRunError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by StartImportLabelsTaskRun
+#[derive(Debug, PartialEq)]
+pub enum StartImportLabelsTaskRunError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+    /// <p>A resource numerical limit was exceeded.</p>
+    ResourceNumberLimitExceeded(String),
+}
+
+impl StartImportLabelsTaskRunError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartImportLabelsTaskRunError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(StartImportLabelsTaskRunError::EntityNotFound(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(StartImportLabelsTaskRunError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(StartImportLabelsTaskRunError::InvalidInput(
+                        err.msg,
+                    ))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(StartImportLabelsTaskRunError::OperationTimeout(
+                        err.msg,
+                    ))
+                }
+                "ResourceNumberLimitExceededException" => {
+                    return RusotoError::Service(
+                        StartImportLabelsTaskRunError::ResourceNumberLimitExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StartImportLabelsTaskRunError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartImportLabelsTaskRunError {
+    fn description(&self) -> &str {
+        match *self {
+            StartImportLabelsTaskRunError::EntityNotFound(ref cause) => cause,
+            StartImportLabelsTaskRunError::InternalService(ref cause) => cause,
+            StartImportLabelsTaskRunError::InvalidInput(ref cause) => cause,
+            StartImportLabelsTaskRunError::OperationTimeout(ref cause) => cause,
+            StartImportLabelsTaskRunError::ResourceNumberLimitExceeded(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by StartJobRun
 #[derive(Debug, PartialEq)]
 pub enum StartJobRunError {
@@ -9623,6 +11230,150 @@ impl Error for StartJobRunError {
             StartJobRunError::InvalidInput(ref cause) => cause,
             StartJobRunError::OperationTimeout(ref cause) => cause,
             StartJobRunError::ResourceNumberLimitExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by StartMLEvaluationTaskRun
+#[derive(Debug, PartialEq)]
+pub enum StartMLEvaluationTaskRunError {
+    /// <p>Too many jobs are being run concurrently.</p>
+    ConcurrentRunsExceeded(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The machine learning transform is not ready to run.</p>
+    MLTransformNotReady(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl StartMLEvaluationTaskRunError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartMLEvaluationTaskRunError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentRunsExceededException" => {
+                    return RusotoError::Service(
+                        StartMLEvaluationTaskRunError::ConcurrentRunsExceeded(err.msg),
+                    )
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(StartMLEvaluationTaskRunError::EntityNotFound(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(StartMLEvaluationTaskRunError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(StartMLEvaluationTaskRunError::InvalidInput(
+                        err.msg,
+                    ))
+                }
+                "MLTransformNotReadyException" => {
+                    return RusotoError::Service(
+                        StartMLEvaluationTaskRunError::MLTransformNotReady(err.msg),
+                    )
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(StartMLEvaluationTaskRunError::OperationTimeout(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StartMLEvaluationTaskRunError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartMLEvaluationTaskRunError {
+    fn description(&self) -> &str {
+        match *self {
+            StartMLEvaluationTaskRunError::ConcurrentRunsExceeded(ref cause) => cause,
+            StartMLEvaluationTaskRunError::EntityNotFound(ref cause) => cause,
+            StartMLEvaluationTaskRunError::InternalService(ref cause) => cause,
+            StartMLEvaluationTaskRunError::InvalidInput(ref cause) => cause,
+            StartMLEvaluationTaskRunError::MLTransformNotReady(ref cause) => cause,
+            StartMLEvaluationTaskRunError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by StartMLLabelingSetGenerationTaskRun
+#[derive(Debug, PartialEq)]
+pub enum StartMLLabelingSetGenerationTaskRunError {
+    /// <p>Too many jobs are being run concurrently.</p>
+    ConcurrentRunsExceeded(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl StartMLLabelingSetGenerationTaskRunError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StartMLLabelingSetGenerationTaskRunError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentRunsExceededException" => {
+                    return RusotoError::Service(
+                        StartMLLabelingSetGenerationTaskRunError::ConcurrentRunsExceeded(err.msg),
+                    )
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(
+                        StartMLLabelingSetGenerationTaskRunError::EntityNotFound(err.msg),
+                    )
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(
+                        StartMLLabelingSetGenerationTaskRunError::InternalService(err.msg),
+                    )
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(
+                        StartMLLabelingSetGenerationTaskRunError::InvalidInput(err.msg),
+                    )
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(
+                        StartMLLabelingSetGenerationTaskRunError::OperationTimeout(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StartMLLabelingSetGenerationTaskRunError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartMLLabelingSetGenerationTaskRunError {
+    fn description(&self) -> &str {
+        match *self {
+            StartMLLabelingSetGenerationTaskRunError::ConcurrentRunsExceeded(ref cause) => cause,
+            StartMLLabelingSetGenerationTaskRunError::EntityNotFound(ref cause) => cause,
+            StartMLLabelingSetGenerationTaskRunError::InternalService(ref cause) => cause,
+            StartMLLabelingSetGenerationTaskRunError::InvalidInput(ref cause) => cause,
+            StartMLLabelingSetGenerationTaskRunError::OperationTimeout(ref cause) => cause,
         }
     }
 }
@@ -10414,6 +12165,63 @@ impl Error for UpdateJobError {
         }
     }
 }
+/// Errors returned by UpdateMLTransform
+#[derive(Debug, PartialEq)]
+pub enum UpdateMLTransformError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl UpdateMLTransformError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMLTransformError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateMLTransformError::AccessDenied(err.msg))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(UpdateMLTransformError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(UpdateMLTransformError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(UpdateMLTransformError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(UpdateMLTransformError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateMLTransformError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateMLTransformError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateMLTransformError::AccessDenied(ref cause) => cause,
+            UpdateMLTransformError::EntityNotFound(ref cause) => cause,
+            UpdateMLTransformError::InternalService(ref cause) => cause,
+            UpdateMLTransformError::InvalidInput(ref cause) => cause,
+            UpdateMLTransformError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdatePartition
 #[derive(Debug, PartialEq)]
 pub enum UpdatePartitionError {
@@ -10747,7 +12555,7 @@ pub trait Glue {
         input: BatchDeletePartitionRequest,
     ) -> RusotoFuture<BatchDeletePartitionResponse, BatchDeletePartitionError>;
 
-    /// <p><p>Deletes multiple tables at once.</p> <note> <p>After completing this operation, you will no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>BatchDeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note></p>
+    /// <p><p>Deletes multiple tables at once.</p> <note> <p>After completing this operation, you no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure the immediate deletion of all related resources, before calling <code>BatchDeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note></p>
     fn batch_delete_table(
         &self,
         input: BatchDeleteTableRequest,
@@ -10765,7 +12573,7 @@ pub trait Glue {
         input: BatchGetCrawlersRequest,
     ) -> RusotoFuture<BatchGetCrawlersResponse, BatchGetCrawlersError>;
 
-    /// <p>Returns a list of resource metadata for a given list of DevEndpoint names. After calling the <code>ListDevEndpoints</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
+    /// <p>Returns a list of resource metadata for a given list of development endpoint names. After calling the <code>ListDevEndpoints</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
     fn batch_get_dev_endpoints(
         &self,
         input: BatchGetDevEndpointsRequest,
@@ -10801,6 +12609,12 @@ pub trait Glue {
         input: BatchStopJobRunRequest,
     ) -> RusotoFuture<BatchStopJobRunResponse, GlueBatchStopJobRunError>;
 
+    /// <p>Cancels (stops) a task run. Machine learning task runs are asynchronous tasks that AWS Glue runs on your behalf as part of various machine learning workflows. You can cancel a machine learning task run at any time by calling <code>CancelMLTaskRun</code> with a task run's parent transform's <code>TransformID</code> and the task run's <code>TaskRunId</code>. </p>
+    fn cancel_ml_task_run(
+        &self,
+        input: CancelMLTaskRunRequest,
+    ) -> RusotoFuture<CancelMLTaskRunResponse, CancelMLTaskRunError>;
+
     /// <p>Creates a classifier in the user's account. This can be a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, a <code>JsonClassifier</code>, or a <code>CsvClassifier</code>, depending on which field of the request is present.</p>
     fn create_classifier(
         &self,
@@ -10825,7 +12639,7 @@ pub trait Glue {
         input: CreateDatabaseRequest,
     ) -> RusotoFuture<CreateDatabaseResponse, CreateDatabaseError>;
 
-    /// <p>Creates a new DevEndpoint.</p>
+    /// <p>Creates a new development endpoint.</p>
     fn create_dev_endpoint(
         &self,
         input: CreateDevEndpointRequest,
@@ -10836,6 +12650,12 @@ pub trait Glue {
         &self,
         input: CreateJobRequest,
     ) -> RusotoFuture<CreateJobResponse, CreateJobError>;
+
+    /// <p>Creates an AWS Glue machine learning transform. This operation creates the transform and all the necessary parameters to train it.</p> <p>Call this operation as the first step in the process of using a machine learning transform (such as the <code>FindMatches</code> transform) for deduplicating data. You can provide an optional <code>Description</code>, in addition to the parameters that you want to use for your algorithm.</p> <p>You must also specify certain parameters for the tasks that AWS Glue runs on your behalf as part of learning from your data and creating a high-quality machine learning transform. These parameters include <code>Role</code>, and optionally, <code>AllocatedCapacity</code>, <code>Timeout</code>, and <code>MaxRetries</code>. For more information, see <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-jobs-job.html">Jobs</a>.</p>
+    fn create_ml_transform(
+        &self,
+        input: CreateMLTransformRequest,
+    ) -> RusotoFuture<CreateMLTransformResponse, CreateMLTransformError>;
 
     /// <p>Creates a new partition.</p>
     fn create_partition(
@@ -10849,7 +12669,7 @@ pub trait Glue {
         input: CreateScriptRequest,
     ) -> RusotoFuture<CreateScriptResponse, CreateScriptError>;
 
-    /// <p>Creates a new security configuration.</p>
+    /// <p>Creates a new security configuration. A security configuration is a set of security properties that can be used by AWS Glue. You can use a security configuration to encrypt data at rest. For information about using security configurations in AWS Glue, see <a href="https://docs.aws.amazon.com/glue/latest/dg/encryption-security-configuration.html">Encrypting Data Written by Crawlers, Jobs, and Development Endpoints</a>.</p>
     fn create_security_configuration(
         &self,
         input: CreateSecurityConfigurationRequest,
@@ -10897,13 +12717,13 @@ pub trait Glue {
         input: DeleteCrawlerRequest,
     ) -> RusotoFuture<DeleteCrawlerResponse, DeleteCrawlerError>;
 
-    /// <p><p>Removes a specified Database from a Data Catalog.</p> <note> <p>After completing this operation, you will no longer have access to the tables (and all table versions and partitions that might belong to the tables) and the user-defined functions in the deleted database. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>DeleteDatabase</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, <code>DeletePartition</code> or <code>BatchDeletePartition</code>, <code>DeleteUserDefinedFunction</code>, and <code>DeleteTable</code> or <code>BatchDeleteTable</code>, to delete any resources that belong to the database.</p> </note></p>
+    /// <p><p>Removes a specified database from a Data Catalog.</p> <note> <p>After completing this operation, you no longer have access to the tables (and all table versions and partitions that might belong to the tables) and the user-defined functions in the deleted database. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure the immediate deletion of all related resources, before calling <code>DeleteDatabase</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, <code>DeletePartition</code> or <code>BatchDeletePartition</code>, <code>DeleteUserDefinedFunction</code>, and <code>DeleteTable</code> or <code>BatchDeleteTable</code>, to delete any resources that belong to the database.</p> </note></p>
     fn delete_database(
         &self,
         input: DeleteDatabaseRequest,
     ) -> RusotoFuture<DeleteDatabaseResponse, DeleteDatabaseError>;
 
-    /// <p>Deletes a specified DevEndpoint.</p>
+    /// <p>Deletes a specified development endpoint.</p>
     fn delete_dev_endpoint(
         &self,
         input: DeleteDevEndpointRequest,
@@ -10914,6 +12734,12 @@ pub trait Glue {
         &self,
         input: DeleteJobRequest,
     ) -> RusotoFuture<DeleteJobResponse, DeleteJobError>;
+
+    /// <p>Deletes an AWS Glue machine learning transform. Machine learning transforms are a special type of transform that use machine learning to learn the details of the transformation to be performed by learning from examples provided by humans. These transformations are then saved by AWS Glue. If you no longer need a transform, you can delete it by calling <code>DeleteMLTransforms</code>. However, any AWS Glue jobs that still reference the deleted transform will no longer succeed.</p>
+    fn delete_ml_transform(
+        &self,
+        input: DeleteMLTransformRequest,
+    ) -> RusotoFuture<DeleteMLTransformResponse, DeleteMLTransformError>;
 
     /// <p>Deletes a specified partition.</p>
     fn delete_partition(
@@ -10933,7 +12759,7 @@ pub trait Glue {
         input: DeleteSecurityConfigurationRequest,
     ) -> RusotoFuture<DeleteSecurityConfigurationResponse, DeleteSecurityConfigurationError>;
 
-    /// <p><p>Removes a table definition from the Data Catalog.</p> <note> <p>After completing this operation, you will no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>DeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note></p>
+    /// <p><p>Removes a table definition from the Data Catalog.</p> <note> <p>After completing this operation, you no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure the immediate deletion of all related resources, before calling <code>DeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note></p>
     fn delete_table(
         &self,
         input: DeleteTableRequest,
@@ -11023,7 +12849,7 @@ pub trait Glue {
         input: GetDatabaseRequest,
     ) -> RusotoFuture<GetDatabaseResponse, GetDatabaseError>;
 
-    /// <p>Retrieves all Databases defined in a given Data Catalog.</p>
+    /// <p>Retrieves all databases defined in a given Data Catalog.</p>
     fn get_databases(
         &self,
         input: GetDatabasesRequest,
@@ -11035,13 +12861,13 @@ pub trait Glue {
         input: GetDataflowGraphRequest,
     ) -> RusotoFuture<GetDataflowGraphResponse, GetDataflowGraphError>;
 
-    /// <p><p>Retrieves information about a specified DevEndpoint.</p> <note> <p>When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address, and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address.</p> </note></p>
+    /// <p><p>Retrieves information about a specified development endpoint.</p> <note> <p>When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address, and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address.</p> </note></p>
     fn get_dev_endpoint(
         &self,
         input: GetDevEndpointRequest,
     ) -> RusotoFuture<GetDevEndpointResponse, GetDevEndpointError>;
 
-    /// <p><p>Retrieves all the DevEndpoints in this AWS account.</p> <note> <p>When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address.</p> </note></p>
+    /// <p><p>Retrieves all the development endpoints in this AWS account.</p> <note> <p>When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address.</p> </note></p>
     fn get_dev_endpoints(
         &self,
         input: GetDevEndpointsRequest,
@@ -11049,6 +12875,12 @@ pub trait Glue {
 
     /// <p>Retrieves an existing job definition.</p>
     fn get_job(&self, input: GetJobRequest) -> RusotoFuture<GetJobResponse, GetJobError>;
+
+    /// <p>Returns information on a job bookmark entry.</p>
+    fn get_job_bookmark(
+        &self,
+        input: GetJobBookmarkRequest,
+    ) -> RusotoFuture<GetJobBookmarkResponse, GetJobBookmarkError>;
 
     /// <p>Retrieves the metadata for a given job run.</p>
     fn get_job_run(
@@ -11064,6 +12896,30 @@ pub trait Glue {
 
     /// <p>Retrieves all current job definitions.</p>
     fn get_jobs(&self, input: GetJobsRequest) -> RusotoFuture<GetJobsResponse, GetJobsError>;
+
+    /// <p>Gets details for a specific task run on a machine learning transform. Machine learning task runs are asynchronous tasks that AWS Glue runs on your behalf as part of various machine learning workflows. You can check the stats of any task run by calling <code>GetMLTaskRun</code> with the <code>TaskRunID</code> and its parent transform's <code>TransformID</code>.</p>
+    fn get_ml_task_run(
+        &self,
+        input: GetMLTaskRunRequest,
+    ) -> RusotoFuture<GetMLTaskRunResponse, GetMLTaskRunError>;
+
+    /// <p>Gets a list of runs for a machine learning transform. Machine learning task runs are asynchronous tasks that AWS Glue runs on your behalf as part of various machine learning workflows. You can get a sortable, filterable list of machine learning task runs by calling <code>GetMLTaskRuns</code> with their parent transform's <code>TransformID</code> and other optional parameters as documented in this section.</p> <p>This operation returns a list of historic runs and must be paginated.</p>
+    fn get_ml_task_runs(
+        &self,
+        input: GetMLTaskRunsRequest,
+    ) -> RusotoFuture<GetMLTaskRunsResponse, GetMLTaskRunsError>;
+
+    /// <p>Gets an AWS Glue machine learning transform artifact and all its corresponding metadata. Machine learning transforms are a special type of transform that use machine learning to learn the details of the transformation to be performed by learning from examples provided by humans. These transformations are then saved by AWS Glue. You can retrieve their metadata by calling <code>GetMLTransform</code>.</p>
+    fn get_ml_transform(
+        &self,
+        input: GetMLTransformRequest,
+    ) -> RusotoFuture<GetMLTransformResponse, GetMLTransformError>;
+
+    /// <p>Gets a sortable, filterable list of existing AWS Glue machine learning transforms. Machine learning transforms are a special type of transform that use machine learning to learn the details of the transformation to be performed by learning from examples provided by humans. These transformations are then saved by AWS Glue, and you can retrieve their metadata by calling <code>GetMLTransforms</code>.</p>
+    fn get_ml_transforms(
+        &self,
+        input: GetMLTransformsRequest,
+    ) -> RusotoFuture<GetMLTransformsResponse, GetMLTransformsError>;
 
     /// <p>Creates mappings.</p>
     fn get_mapping(
@@ -11145,7 +13001,7 @@ pub trait Glue {
         input: GetUserDefinedFunctionRequest,
     ) -> RusotoFuture<GetUserDefinedFunctionResponse, GetUserDefinedFunctionError>;
 
-    /// <p>Retrieves a multiple function definitions from the Data Catalog.</p>
+    /// <p>Retrieves multiple function definitions from the Data Catalog.</p>
     fn get_user_defined_functions(
         &self,
         input: GetUserDefinedFunctionsRequest,
@@ -11175,7 +13031,7 @@ pub trait Glue {
         input: GetWorkflowRunsRequest,
     ) -> RusotoFuture<GetWorkflowRunsResponse, GetWorkflowRunsError>;
 
-    /// <p>Imports an existing Athena Data Catalog to AWS Glue</p>
+    /// <p>Imports an existing Amazon Athena Data Catalog to AWS Glue</p>
     fn import_catalog_to_glue(
         &self,
         input: ImportCatalogToGlueRequest,
@@ -11232,6 +13088,12 @@ pub trait Glue {
         input: ResetJobBookmarkRequest,
     ) -> RusotoFuture<ResetJobBookmarkResponse, ResetJobBookmarkError>;
 
+    /// <p>Searches a set of tables based on properties in the table metadata as well as on the parent database. You can search against text or filter conditions. </p> <p>You can only get tables that you have access to based on the security policies defined in Lake Formation. You need at least a read-only access to the table for it to be returned. If you do not have access to all the columns in the table, these columns will not be searched against when returning the list of tables back to you. If you have access to the columns but not the data in the columns, those columns and the associated metadata for those columns will be included in the search. </p>
+    fn search_tables(
+        &self,
+        input: SearchTablesRequest,
+    ) -> RusotoFuture<SearchTablesResponse, SearchTablesError>;
+
     /// <p>Starts a crawl using the specified crawler, regardless of what is scheduled. If the crawler is already running, returns a <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-exceptions.html#aws-glue-api-exceptions-CrawlerRunningException">CrawlerRunningException</a>.</p>
     fn start_crawler(
         &self,
@@ -11244,11 +13106,38 @@ pub trait Glue {
         input: StartCrawlerScheduleRequest,
     ) -> RusotoFuture<StartCrawlerScheduleResponse, StartCrawlerScheduleError>;
 
+    /// <p>Begins an asynchronous task to export all labeled data for a particular transform. This task is the only label-related API call that is not part of the typical active learning workflow. You typically use <code>StartExportLabelsTaskRun</code> when you want to work with all of your existing labels at the same time, such as when you want to remove or change labels that were previously submitted as truth. This API operation accepts the <code>TransformId</code> whose labels you want to export and an Amazon Simple Storage Service (Amazon S3) path to export the labels to. The operation returns a <code>TaskRunId</code>. You can check on the status of your task run by calling the <code>GetMLTaskRun</code> API.</p>
+    fn start_export_labels_task_run(
+        &self,
+        input: StartExportLabelsTaskRunRequest,
+    ) -> RusotoFuture<StartExportLabelsTaskRunResponse, StartExportLabelsTaskRunError>;
+
+    /// <p>Enables you to provide additional labels (examples of truth) to be used to teach the machine learning transform and improve its quality. This API operation is generally used as part of the active learning workflow that starts with the <code>StartMLLabelingSetGenerationTaskRun</code> call and that ultimately results in improving the quality of your machine learning transform. </p> <p>After the <code>StartMLLabelingSetGenerationTaskRun</code> finishes, AWS Glue machine learning will have generated a series of questions for humans to answer. (Answering these questions is often called 'labeling' in the machine learning workflows). In the case of the <code>FindMatches</code> transform, these questions are of the form, “What is the correct way to group these rows together into groups composed entirely of matching records?” After the labeling process is finished, users upload their answers/labels with a call to <code>StartImportLabelsTaskRun</code>. After <code>StartImportLabelsTaskRun</code> finishes, all future runs of the machine learning transform use the new and improved labels and perform a higher-quality transformation.</p> <p>By default, <code>StartMLLabelingSetGenerationTaskRun</code> continually learns from and combines all labels that you upload unless you set <code>Replace</code> to true. If you set <code>Replace</code> to true, <code>StartImportLabelsTaskRun</code> deletes and forgets all previously uploaded labels and learns only from the exact set that you upload. Replacing labels can be helpful if you realize that you previously uploaded incorrect labels, and you believe that they are having a negative effect on your transform quality.</p> <p>You can check on the status of your task run by calling the <code>GetMLTaskRun</code> operation. </p>
+    fn start_import_labels_task_run(
+        &self,
+        input: StartImportLabelsTaskRunRequest,
+    ) -> RusotoFuture<StartImportLabelsTaskRunResponse, StartImportLabelsTaskRunError>;
+
     /// <p>Starts a job run using a job definition.</p>
     fn start_job_run(
         &self,
         input: StartJobRunRequest,
     ) -> RusotoFuture<StartJobRunResponse, StartJobRunError>;
+
+    /// <p>Starts a task to estimate the quality of the transform. </p> <p>When you provide label sets as examples of truth, AWS Glue machine learning uses some of those examples to learn from them. The rest of the labels are used as a test to estimate quality.</p> <p>Returns a unique identifier for the run. You can call <code>GetMLTaskRun</code> to get more information about the stats of the <code>EvaluationTaskRun</code>.</p>
+    fn start_ml_evaluation_task_run(
+        &self,
+        input: StartMLEvaluationTaskRunRequest,
+    ) -> RusotoFuture<StartMLEvaluationTaskRunResponse, StartMLEvaluationTaskRunError>;
+
+    /// <p>Starts the active learning workflow for your machine learning transform to improve the transform's quality by generating label sets and adding labels.</p> <p>When the <code>StartMLLabelingSetGenerationTaskRun</code> finishes, AWS Glue will have generated a "labeling set" or a set of questions for humans to answer.</p> <p>In the case of the <code>FindMatches</code> transform, these questions are of the form, “What is the correct way to group these rows together into groups composed entirely of matching records?” </p> <p>After the labeling process is finished, you can upload your labels with a call to <code>StartImportLabelsTaskRun</code>. After <code>StartImportLabelsTaskRun</code> finishes, all future runs of the machine learning transform will use the new and improved labels and perform a higher-quality transformation.</p>
+    fn start_ml_labeling_set_generation_task_run(
+        &self,
+        input: StartMLLabelingSetGenerationTaskRunRequest,
+    ) -> RusotoFuture<
+        StartMLLabelingSetGenerationTaskRunResponse,
+        StartMLLabelingSetGenerationTaskRunError,
+    >;
 
     /// <p>Starts an existing trigger. See <a href="https://docs.aws.amazon.com/glue/latest/dg/trigger-job.html">Triggering Jobs</a> for information about how different types of trigger are started.</p>
     fn start_trigger(
@@ -11322,7 +13211,7 @@ pub trait Glue {
         input: UpdateDatabaseRequest,
     ) -> RusotoFuture<UpdateDatabaseResponse, UpdateDatabaseError>;
 
-    /// <p>Updates a specified DevEndpoint.</p>
+    /// <p>Updates a specified development endpoint.</p>
     fn update_dev_endpoint(
         &self,
         input: UpdateDevEndpointRequest,
@@ -11333,6 +13222,12 @@ pub trait Glue {
         &self,
         input: UpdateJobRequest,
     ) -> RusotoFuture<UpdateJobResponse, UpdateJobError>;
+
+    /// <p>Updates an existing machine learning transform. Call this operation to tune the algorithm parameters to achieve better results.</p> <p>After calling this operation, you can call the <code>StartMLEvaluationTaskRun</code> operation to assess how well your new parameters achieved your goals (such as improving the quality of your machine learning transform, or making it more cost-effective).</p>
+    fn update_ml_transform(
+        &self,
+        input: UpdateMLTransformRequest,
+    ) -> RusotoFuture<UpdateMLTransformResponse, UpdateMLTransformError>;
 
     /// <p>Updates a partition.</p>
     fn update_partition(
@@ -11485,7 +13380,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p><p>Deletes multiple tables at once.</p> <note> <p>After completing this operation, you will no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>BatchDeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note></p>
+    /// <p><p>Deletes multiple tables at once.</p> <note> <p>After completing this operation, you no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure the immediate deletion of all related resources, before calling <code>BatchDeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note></p>
     fn batch_delete_table(
         &self,
         input: BatchDeleteTableRequest,
@@ -11569,7 +13464,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Returns a list of resource metadata for a given list of DevEndpoint names. After calling the <code>ListDevEndpoints</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
+    /// <p>Returns a list of resource metadata for a given list of development endpoint names. After calling the <code>ListDevEndpoints</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
     fn batch_get_dev_endpoints(
         &self,
         input: BatchGetDevEndpointsRequest,
@@ -11741,6 +13636,35 @@ impl Glue for GlueClient {
         })
     }
 
+    /// <p>Cancels (stops) a task run. Machine learning task runs are asynchronous tasks that AWS Glue runs on your behalf as part of various machine learning workflows. You can cancel a machine learning task run at any time by calling <code>CancelMLTaskRun</code> with a task run's parent transform's <code>TransformID</code> and the task run's <code>TaskRunId</code>. </p>
+    fn cancel_ml_task_run(
+        &self,
+        input: CancelMLTaskRunRequest,
+    ) -> RusotoFuture<CancelMLTaskRunResponse, CancelMLTaskRunError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.CancelMLTaskRun");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CancelMLTaskRunResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CancelMLTaskRunError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Creates a classifier in the user's account. This can be a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, a <code>JsonClassifier</code>, or a <code>CsvClassifier</code>, depending on which field of the request is present.</p>
     fn create_classifier(
         &self,
@@ -11857,7 +13781,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Creates a new DevEndpoint.</p>
+    /// <p>Creates a new development endpoint.</p>
     fn create_dev_endpoint(
         &self,
         input: CreateDevEndpointRequest,
@@ -11910,6 +13834,35 @@ impl Glue for GlueClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(CreateJobError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Creates an AWS Glue machine learning transform. This operation creates the transform and all the necessary parameters to train it.</p> <p>Call this operation as the first step in the process of using a machine learning transform (such as the <code>FindMatches</code> transform) for deduplicating data. You can provide an optional <code>Description</code>, in addition to the parameters that you want to use for your algorithm.</p> <p>You must also specify certain parameters for the tasks that AWS Glue runs on your behalf as part of learning from your data and creating a high-quality machine learning transform. These parameters include <code>Role</code>, and optionally, <code>AllocatedCapacity</code>, <code>Timeout</code>, and <code>MaxRetries</code>. For more information, see <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-jobs-job.html">Jobs</a>.</p>
+    fn create_ml_transform(
+        &self,
+        input: CreateMLTransformRequest,
+    ) -> RusotoFuture<CreateMLTransformResponse, CreateMLTransformError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.CreateMLTransform");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateMLTransformResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateMLTransformError::from_response(response))),
                 )
             }
         })
@@ -11973,7 +13926,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Creates a new security configuration.</p>
+    /// <p>Creates a new security configuration. A security configuration is a set of security properties that can be used by AWS Glue. You can use a security configuration to encrypt data at rest. For information about using security configurations in AWS Glue, see <a href="https://docs.aws.amazon.com/glue/latest/dg/encryption-security-configuration.html">Encrypting Data Written by Crawlers, Jobs, and Development Endpoints</a>.</p>
     fn create_security_configuration(
         &self,
         input: CreateSecurityConfigurationRequest,
@@ -12199,7 +14152,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p><p>Removes a specified Database from a Data Catalog.</p> <note> <p>After completing this operation, you will no longer have access to the tables (and all table versions and partitions that might belong to the tables) and the user-defined functions in the deleted database. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>DeleteDatabase</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, <code>DeletePartition</code> or <code>BatchDeletePartition</code>, <code>DeleteUserDefinedFunction</code>, and <code>DeleteTable</code> or <code>BatchDeleteTable</code>, to delete any resources that belong to the database.</p> </note></p>
+    /// <p><p>Removes a specified database from a Data Catalog.</p> <note> <p>After completing this operation, you no longer have access to the tables (and all table versions and partitions that might belong to the tables) and the user-defined functions in the deleted database. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure the immediate deletion of all related resources, before calling <code>DeleteDatabase</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, <code>DeletePartition</code> or <code>BatchDeletePartition</code>, <code>DeleteUserDefinedFunction</code>, and <code>DeleteTable</code> or <code>BatchDeleteTable</code>, to delete any resources that belong to the database.</p> </note></p>
     fn delete_database(
         &self,
         input: DeleteDatabaseRequest,
@@ -12228,7 +14181,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Deletes a specified DevEndpoint.</p>
+    /// <p>Deletes a specified development endpoint.</p>
     fn delete_dev_endpoint(
         &self,
         input: DeleteDevEndpointRequest,
@@ -12281,6 +14234,35 @@ impl Glue for GlueClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(DeleteJobError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Deletes an AWS Glue machine learning transform. Machine learning transforms are a special type of transform that use machine learning to learn the details of the transformation to be performed by learning from examples provided by humans. These transformations are then saved by AWS Glue. If you no longer need a transform, you can delete it by calling <code>DeleteMLTransforms</code>. However, any AWS Glue jobs that still reference the deleted transform will no longer succeed.</p>
+    fn delete_ml_transform(
+        &self,
+        input: DeleteMLTransformRequest,
+    ) -> RusotoFuture<DeleteMLTransformResponse, DeleteMLTransformError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.DeleteMLTransform");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteMLTransformResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteMLTransformError::from_response(response))),
                 )
             }
         })
@@ -12369,7 +14351,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p><p>Removes a table definition from the Data Catalog.</p> <note> <p>After completing this operation, you will no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>DeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note></p>
+    /// <p><p>Removes a table definition from the Data Catalog.</p> <note> <p>After completing this operation, you no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure the immediate deletion of all related resources, before calling <code>DeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note></p>
     fn delete_table(
         &self,
         input: DeleteTableRequest,
@@ -12800,7 +14782,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Retrieves all Databases defined in a given Data Catalog.</p>
+    /// <p>Retrieves all databases defined in a given Data Catalog.</p>
     fn get_databases(
         &self,
         input: GetDatabasesRequest,
@@ -12858,7 +14840,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p><p>Retrieves information about a specified DevEndpoint.</p> <note> <p>When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address, and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address.</p> </note></p>
+    /// <p><p>Retrieves information about a specified development endpoint.</p> <note> <p>When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address, and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address.</p> </note></p>
     fn get_dev_endpoint(
         &self,
         input: GetDevEndpointRequest,
@@ -12887,7 +14869,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p><p>Retrieves all the DevEndpoints in this AWS account.</p> <note> <p>When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address.</p> </note></p>
+    /// <p><p>Retrieves all the development endpoints in this AWS account.</p> <note> <p>When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address.</p> </note></p>
     fn get_dev_endpoints(
         &self,
         input: GetDevEndpointsRequest,
@@ -12936,6 +14918,35 @@ impl Glue for GlueClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(GetJobError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Returns information on a job bookmark entry.</p>
+    fn get_job_bookmark(
+        &self,
+        input: GetJobBookmarkRequest,
+    ) -> RusotoFuture<GetJobBookmarkResponse, GetJobBookmarkError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.GetJobBookmark");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetJobBookmarkResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetJobBookmarkError::from_response(response))),
                 )
             }
         })
@@ -13019,6 +15030,122 @@ impl Glue for GlueClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(GetJobsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Gets details for a specific task run on a machine learning transform. Machine learning task runs are asynchronous tasks that AWS Glue runs on your behalf as part of various machine learning workflows. You can check the stats of any task run by calling <code>GetMLTaskRun</code> with the <code>TaskRunID</code> and its parent transform's <code>TransformID</code>.</p>
+    fn get_ml_task_run(
+        &self,
+        input: GetMLTaskRunRequest,
+    ) -> RusotoFuture<GetMLTaskRunResponse, GetMLTaskRunError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.GetMLTaskRun");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetMLTaskRunResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetMLTaskRunError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Gets a list of runs for a machine learning transform. Machine learning task runs are asynchronous tasks that AWS Glue runs on your behalf as part of various machine learning workflows. You can get a sortable, filterable list of machine learning task runs by calling <code>GetMLTaskRuns</code> with their parent transform's <code>TransformID</code> and other optional parameters as documented in this section.</p> <p>This operation returns a list of historic runs and must be paginated.</p>
+    fn get_ml_task_runs(
+        &self,
+        input: GetMLTaskRunsRequest,
+    ) -> RusotoFuture<GetMLTaskRunsResponse, GetMLTaskRunsError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.GetMLTaskRuns");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetMLTaskRunsResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetMLTaskRunsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Gets an AWS Glue machine learning transform artifact and all its corresponding metadata. Machine learning transforms are a special type of transform that use machine learning to learn the details of the transformation to be performed by learning from examples provided by humans. These transformations are then saved by AWS Glue. You can retrieve their metadata by calling <code>GetMLTransform</code>.</p>
+    fn get_ml_transform(
+        &self,
+        input: GetMLTransformRequest,
+    ) -> RusotoFuture<GetMLTransformResponse, GetMLTransformError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.GetMLTransform");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetMLTransformResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetMLTransformError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Gets a sortable, filterable list of existing AWS Glue machine learning transforms. Machine learning transforms are a special type of transform that use machine learning to learn the details of the transformation to be performed by learning from examples provided by humans. These transformations are then saved by AWS Glue, and you can retrieve their metadata by calling <code>GetMLTransforms</code>.</p>
+    fn get_ml_transforms(
+        &self,
+        input: GetMLTransformsRequest,
+    ) -> RusotoFuture<GetMLTransformsResponse, GetMLTransformsError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.GetMLTransforms");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetMLTransformsResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetMLTransformsError::from_response(response))),
                 )
             }
         })
@@ -13439,7 +15566,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Retrieves a multiple function definitions from the Data Catalog.</p>
+    /// <p>Retrieves multiple function definitions from the Data Catalog.</p>
     fn get_user_defined_functions(
         &self,
         input: GetUserDefinedFunctionsRequest,
@@ -13578,7 +15705,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Imports an existing Athena Data Catalog to AWS Glue</p>
+    /// <p>Imports an existing Amazon Athena Data Catalog to AWS Glue</p>
     fn import_catalog_to_glue(
         &self,
         input: ImportCatalogToGlueRequest,
@@ -13861,6 +15988,35 @@ impl Glue for GlueClient {
         })
     }
 
+    /// <p>Searches a set of tables based on properties in the table metadata as well as on the parent database. You can search against text or filter conditions. </p> <p>You can only get tables that you have access to based on the security policies defined in Lake Formation. You need at least a read-only access to the table for it to be returned. If you do not have access to all the columns in the table, these columns will not be searched against when returning the list of tables back to you. If you have access to the columns but not the data in the columns, those columns and the associated metadata for those columns will be included in the search. </p>
+    fn search_tables(
+        &self,
+        input: SearchTablesRequest,
+    ) -> RusotoFuture<SearchTablesResponse, SearchTablesError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.SearchTables");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<SearchTablesResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SearchTablesError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Starts a crawl using the specified crawler, regardless of what is scheduled. If the crawler is already running, returns a <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-exceptions.html#aws-glue-api-exceptions-CrawlerRunningException">CrawlerRunningException</a>.</p>
     fn start_crawler(
         &self,
@@ -13918,6 +16074,58 @@ impl Glue for GlueClient {
         })
     }
 
+    /// <p>Begins an asynchronous task to export all labeled data for a particular transform. This task is the only label-related API call that is not part of the typical active learning workflow. You typically use <code>StartExportLabelsTaskRun</code> when you want to work with all of your existing labels at the same time, such as when you want to remove or change labels that were previously submitted as truth. This API operation accepts the <code>TransformId</code> whose labels you want to export and an Amazon Simple Storage Service (Amazon S3) path to export the labels to. The operation returns a <code>TaskRunId</code>. You can check on the status of your task run by calling the <code>GetMLTaskRun</code> API.</p>
+    fn start_export_labels_task_run(
+        &self,
+        input: StartExportLabelsTaskRunRequest,
+    ) -> RusotoFuture<StartExportLabelsTaskRunResponse, StartExportLabelsTaskRunError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.StartExportLabelsTaskRun");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartExportLabelsTaskRunResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(StartExportLabelsTaskRunError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Enables you to provide additional labels (examples of truth) to be used to teach the machine learning transform and improve its quality. This API operation is generally used as part of the active learning workflow that starts with the <code>StartMLLabelingSetGenerationTaskRun</code> call and that ultimately results in improving the quality of your machine learning transform. </p> <p>After the <code>StartMLLabelingSetGenerationTaskRun</code> finishes, AWS Glue machine learning will have generated a series of questions for humans to answer. (Answering these questions is often called 'labeling' in the machine learning workflows). In the case of the <code>FindMatches</code> transform, these questions are of the form, “What is the correct way to group these rows together into groups composed entirely of matching records?” After the labeling process is finished, users upload their answers/labels with a call to <code>StartImportLabelsTaskRun</code>. After <code>StartImportLabelsTaskRun</code> finishes, all future runs of the machine learning transform use the new and improved labels and perform a higher-quality transformation.</p> <p>By default, <code>StartMLLabelingSetGenerationTaskRun</code> continually learns from and combines all labels that you upload unless you set <code>Replace</code> to true. If you set <code>Replace</code> to true, <code>StartImportLabelsTaskRun</code> deletes and forgets all previously uploaded labels and learns only from the exact set that you upload. Replacing labels can be helpful if you realize that you previously uploaded incorrect labels, and you believe that they are having a negative effect on your transform quality.</p> <p>You can check on the status of your task run by calling the <code>GetMLTaskRun</code> operation. </p>
+    fn start_import_labels_task_run(
+        &self,
+        input: StartImportLabelsTaskRunRequest,
+    ) -> RusotoFuture<StartImportLabelsTaskRunResponse, StartImportLabelsTaskRunError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.StartImportLabelsTaskRun");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartImportLabelsTaskRunResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(StartImportLabelsTaskRunError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Starts a job run using a job definition.</p>
     fn start_job_run(
         &self,
@@ -13943,6 +16151,66 @@ impl Glue for GlueClient {
                         .from_err()
                         .and_then(|response| Err(StartJobRunError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Starts a task to estimate the quality of the transform. </p> <p>When you provide label sets as examples of truth, AWS Glue machine learning uses some of those examples to learn from them. The rest of the labels are used as a test to estimate quality.</p> <p>Returns a unique identifier for the run. You can call <code>GetMLTaskRun</code> to get more information about the stats of the <code>EvaluationTaskRun</code>.</p>
+    fn start_ml_evaluation_task_run(
+        &self,
+        input: StartMLEvaluationTaskRunRequest,
+    ) -> RusotoFuture<StartMLEvaluationTaskRunResponse, StartMLEvaluationTaskRunError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.StartMLEvaluationTaskRun");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartMLEvaluationTaskRunResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(StartMLEvaluationTaskRunError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Starts the active learning workflow for your machine learning transform to improve the transform's quality by generating label sets and adding labels.</p> <p>When the <code>StartMLLabelingSetGenerationTaskRun</code> finishes, AWS Glue will have generated a "labeling set" or a set of questions for humans to answer.</p> <p>In the case of the <code>FindMatches</code> transform, these questions are of the form, “What is the correct way to group these rows together into groups composed entirely of matching records?” </p> <p>After the labeling process is finished, you can upload your labels with a call to <code>StartImportLabelsTaskRun</code>. After <code>StartImportLabelsTaskRun</code> finishes, all future runs of the machine learning transform will use the new and improved labels and perform a higher-quality transformation.</p>
+    fn start_ml_labeling_set_generation_task_run(
+        &self,
+        input: StartMLLabelingSetGenerationTaskRunRequest,
+    ) -> RusotoFuture<
+        StartMLLabelingSetGenerationTaskRunResponse,
+        StartMLLabelingSetGenerationTaskRunError,
+    > {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSGlue.StartMLLabelingSetGenerationTaskRun",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartMLLabelingSetGenerationTaskRunResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(StartMLLabelingSetGenerationTaskRunError::from_response(
+                        response,
+                    ))
+                }))
             }
         })
     }
@@ -14293,7 +16561,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Updates a specified DevEndpoint.</p>
+    /// <p>Updates a specified development endpoint.</p>
     fn update_dev_endpoint(
         &self,
         input: UpdateDevEndpointRequest,
@@ -14346,6 +16614,35 @@ impl Glue for GlueClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(UpdateJobError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Updates an existing machine learning transform. Call this operation to tune the algorithm parameters to achieve better results.</p> <p>After calling this operation, you can call the <code>StartMLEvaluationTaskRun</code> operation to assess how well your new parameters achieved your goals (such as improving the quality of your machine learning transform, or making it more cost-effective).</p>
+    fn update_ml_transform(
+        &self,
+        input: UpdateMLTransformRequest,
+    ) -> RusotoFuture<UpdateMLTransformResponse, UpdateMLTransformError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.UpdateMLTransform");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateMLTransformResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateMLTransformError::from_response(response))),
                 )
             }
         })

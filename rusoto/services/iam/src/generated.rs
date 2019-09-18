@@ -755,7 +755,7 @@ impl ColumnNumberDeserializer {
         Ok(obj)
     }
 }
-/// <p>Contains information about a condition context key. It includes the name of the key and specifies the value (or values, if the context key supports multiple values) to use in the simulation. This information is used when evaluating the <code>Condition</code> elements of the input policies.</p> <p>This data type is used as an input parameter to <code> <a>SimulateCustomPolicy</a> </code> and <code> <a>SimulateCustomPolicy</a> </code>.</p>
+/// <p>Contains information about a condition context key. It includes the name of the key and specifies the value (or values, if the context key supports multiple values) to use in the simulation. This information is used when evaluating the <code>Condition</code> elements of the input policies.</p> <p>This data type is used as an input parameter to <code> <a>SimulateCustomPolicy</a> </code> and <code> <a>SimulatePrincipalPolicy</a> </code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ContextEntry {
     /// <p>The full name of a condition context key, including the service prefix. For example, <code>aws:SourceIp</code> or <code>s3:VersionId</code>.</p>
@@ -1270,7 +1270,7 @@ impl CreatePolicyVersionResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateRoleRequest {
-    /// <p>The trust relationship policy document that grants an entity permission to assume the role.</p> <p>In IAM, you must provide a JSON policy that has been converted to a string. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul> <p> Upon success, the response includes the same trust policy as a URL-encoded JSON string.</p>
+    /// <p>The trust relationship policy document that grants an entity permission to assume the role.</p> <p>In IAM, you must provide a JSON policy that has been converted to a string. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul> <p> Upon success, the response includes the same trust policy in JSON format.</p>
     pub assume_role_policy_document: String,
     /// <p>A description of the role.</p>
     pub description: Option<String>,
@@ -14579,10 +14579,7 @@ impl Error for GenerateServiceLastAccessedDetailsError {
 }
 /// Errors returned by GetAccessKeyLastUsed
 #[derive(Debug, PartialEq)]
-pub enum GetAccessKeyLastUsedError {
-    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
-    NoSuchEntity(String),
-}
+pub enum GetAccessKeyLastUsedError {}
 
 impl GetAccessKeyLastUsedError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccessKeyLastUsedError> {
@@ -14592,11 +14589,6 @@ impl GetAccessKeyLastUsedError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(GetAccessKeyLastUsedError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
                     _ => {}
                 }
             }
@@ -14619,9 +14611,7 @@ impl fmt::Display for GetAccessKeyLastUsedError {
 }
 impl Error for GetAccessKeyLastUsedError {
     fn description(&self) -> &str {
-        match *self {
-            GetAccessKeyLastUsedError::NoSuchEntity(ref cause) => cause,
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetAccountAuthorizationDetails

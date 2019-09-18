@@ -24,6 +24,18 @@ use rusoto_core::{Client, RusotoError, RusotoFuture};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
+/// <p>Describes an interface VPC endpoint (interface endpoint) that lets you create a private connection between the virtual private cloud (VPC) that you specify and AppStream 2.0. When you specify an interface endpoint for a stack, users of the stack can connect to AppStream 2.0 only through that endpoint. When you specify an interface endpoint for an image builder, administrators can connect to the image builder only through that endpoint.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AccessEndpoint {
+    /// <p>The type of interface endpoint.</p>
+    #[serde(rename = "EndpointType")]
+    pub endpoint_type: String,
+    /// <p>The identifier (ID) of the VPC in which the interface endpoint is used.</p>
+    #[serde(rename = "VpceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpce_id: Option<String>,
+}
+
 /// <p>Describes an application in the application catalog.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -240,6 +252,10 @@ pub struct CreateFleetRequest {
     #[serde(rename = "FleetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_type: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the fleet. To assume a role, a fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials.</p>
+    #[serde(rename = "IamRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_role_arn: Option<String>,
     /// <p><p>The amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the <code>DisconnectTimeoutInSeconds</code> time interval begins. Users are notified before they are disconnected due to inactivity. If they try to reconnect to the streaming session before the time interval specified in <code>DisconnectTimeoutInSeconds</code> elapses, they are connected to their previous session. Users are considered idle when they stop providing keyboard or mouse input during their streaming session. File uploads and downloads, audio in, audio out, and pixels changing do not qualify as user activity. If users continue to be idle after the time interval in <code>IdleDisconnectTimeoutInSeconds</code> elapses, they are disconnected.</p> <p>To prevent users from being disconnected due to inactivity, specify a value of 0. Otherwise, specify a value between 60 and 3600. The default value is 0.</p> <note> <p>If you enable this feature, we recommend that you specify a value that corresponds exactly to a whole number of minutes (for example, 60, 120, and 180). If you don&#39;t do this, the value is rounded to the nearest minute. For example, if you specify a value of 70, users are disconnected after 1 minute of inactivity. If you specify a value that is at the midpoint between two different minutes, the value is rounded up. For example, if you specify a value of 90, users are disconnected after 2 minutes of inactivity. </p> </note></p>
     #[serde(rename = "IdleDisconnectTimeoutInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -262,7 +278,7 @@ pub struct CreateFleetRequest {
     /// <p>A unique name for the fleet.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The tags to associate with the fleet. A tag is a key-value pair, and the value is optional. For example, Environment=Test. If you do not specify a value, Environment=. </p> <p>If you do not specify a value, the value is set to an empty string.</p> <p>Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following special characters: </p> <p>_ . : / = + \ - @</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>The tags to associate with the fleet. A tag is a key-value pair, and the value is optional. For example, Environment=Test. If you do not specify a value, Environment=. </p> <p>If you do not specify a value, the value is set to an empty string.</p> <p>Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following special characters: </p> <p>_ . : / = + \ - @</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -283,6 +299,10 @@ pub struct CreateFleetResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateImageBuilderRequest {
+    /// <p>The list of interface VPC endpoint (interface endpoint) objects. Administrators can connect to the image builder only through the specified endpoints.</p>
+    #[serde(rename = "AccessEndpoints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_endpoints: Option<Vec<AccessEndpoint>>,
     /// <p>The version of the AppStream 2.0 agent to use for this image builder. To use the latest version of the AppStream 2.0 agent, specify [LATEST]. </p>
     #[serde(rename = "AppstreamAgentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -303,6 +323,10 @@ pub struct CreateImageBuilderRequest {
     #[serde(rename = "EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the image builder. To assume a role, the image builder calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials.</p>
+    #[serde(rename = "IamRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_role_arn: Option<String>,
     /// <p>The ARN of the public, private, or shared image to use.</p>
     #[serde(rename = "ImageArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -317,7 +341,7 @@ pub struct CreateImageBuilderRequest {
     /// <p>A unique name for the image builder.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The tags to associate with the image builder. A tag is a key-value pair, and the value is optional. For example, Environment=Test. If you do not specify a value, Environment=. </p> <p>Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following special characters: </p> <p>_ . : / = + \ - @</p> <p>If you do not specify a value, the value is set to an empty string.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>The tags to associate with the image builder. A tag is a key-value pair, and the value is optional. For example, Environment=Test. If you do not specify a value, Environment=. </p> <p>Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following special characters: </p> <p>_ . : / = + \ - @</p> <p>If you do not specify a value, the value is set to an empty string.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -362,6 +386,10 @@ pub struct CreateImageBuilderStreamingURLResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateStackRequest {
+    /// <p>The list of interface VPC endpoint (interface endpoint) objects. Users of the stack can connect to AppStream 2.0 only through the specified endpoints.</p>
+    #[serde(rename = "AccessEndpoints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_endpoints: Option<Vec<AccessEndpoint>>,
     /// <p>The persistent application settings for users of a stack. When these settings are enabled, changes that users make to applications and Windows settings are automatically saved after each session and applied to the next session.</p>
     #[serde(rename = "ApplicationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -389,7 +417,7 @@ pub struct CreateStackRequest {
     #[serde(rename = "StorageConnectors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_connectors: Option<Vec<StorageConnector>>,
-    /// <p>The tags to associate with the stack. A tag is a key-value pair, and the value is optional. For example, Environment=Test. If you do not specify a value, Environment=. </p> <p>If you do not specify a value, the value is set to an empty string.</p> <p>Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following special characters: </p> <p>_ . : / = + \ - @</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>The tags to associate with the stack. A tag is a key-value pair, and the value is optional. For example, Environment=Test. If you do not specify a value, Environment=. </p> <p>If you do not specify a value, the value is set to an empty string.</p> <p>Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following special characters: </p> <p>_ . : / = + \ - @</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -417,7 +445,7 @@ pub struct CreateStreamingURLRequest {
     /// <p>The name of the fleet.</p>
     #[serde(rename = "FleetName")]
     pub fleet_name: String,
-    /// <p>The session context. For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/managing-stacks-fleets.html#managing-stacks-fleets-parameters">Session Context</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>The session context. For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/managing-stacks-fleets.html#managing-stacks-fleets-parameters">Session Context</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     #[serde(rename = "SessionContext")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub session_context: Option<String>,
@@ -989,7 +1017,7 @@ pub struct ExpireSessionResult {}
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Fleet {
-    /// <p>The ARN for the fleet.</p>
+    /// <p>The Amazon Resource Name (ARN) for the fleet.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
     /// <p>The capacity status for the fleet.</p>
@@ -1027,6 +1055,10 @@ pub struct Fleet {
     #[serde(rename = "FleetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_type: Option<String>,
+    /// <p>The ARN of the IAM role that is applied to the fleet. To assume a role, the fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials.</p>
+    #[serde(rename = "IamRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_role_arn: Option<String>,
     /// <p><p>The amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the <code>DisconnectTimeoutInSeconds</code> time interval begins. Users are notified before they are disconnected due to inactivity. If users try to reconnect to the streaming session before the time interval specified in <code>DisconnectTimeoutInSeconds</code> elapses, they are connected to their previous session. Users are considered idle when they stop providing keyboard or mouse input during their streaming session. File uploads and downloads, audio in, audio out, and pixels changing do not qualify as user activity. If users continue to be idle after the time interval in <code>IdleDisconnectTimeoutInSeconds</code> elapses, they are disconnected.</p> <p>To prevent users from being disconnected due to inactivity, specify a value of 0. Otherwise, specify a value between 60 and 3600. The default value is 0.</p> <note> <p>If you enable this feature, we recommend that you specify a value that corresponds exactly to a whole number of minutes (for example, 60, 120, and 180). If you don&#39;t do this, the value is rounded to the nearest minute. For example, if you specify a value of 70, users are disconnected after 1 minute of inactivity. If you specify a value that is at the midpoint between two different minutes, the value is rounded up. For example, if you specify a value of 90, users are disconnected after 2 minutes of inactivity. </p> </note></p>
     #[serde(rename = "IdleDisconnectTimeoutInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1145,6 +1177,10 @@ pub struct Image {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ImageBuilder {
+    /// <p>The list of virtual private cloud (VPC) interface endpoint objects. Administrators can connect to the image builder only through the specified endpoints.</p>
+    #[serde(rename = "AccessEndpoints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_endpoints: Option<Vec<AccessEndpoint>>,
     /// <p>The version of the AppStream 2.0 agent that is currently being used by the image builder. </p>
     #[serde(rename = "AppstreamAgentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1173,6 +1209,10 @@ pub struct ImageBuilder {
     #[serde(rename = "EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
+    /// <p>The ARN of the IAM role that is applied to the image builder. To assume a role, the image builder calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. </p>
+    #[serde(rename = "IamRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_role_arn: Option<String>,
     /// <p>The ARN of the image from which this builder was created.</p>
     #[serde(rename = "ImageArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1428,6 +1468,10 @@ pub struct SharedImagePermissions {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Stack {
+    /// <p>The list of virtual private cloud (VPC) interface endpoint objects. Users of the stack can connect to AppStream 2.0 only through the specified endpoints. </p>
+    #[serde(rename = "AccessEndpoints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_endpoints: Option<Vec<AccessEndpoint>>,
     /// <p>The persistent application settings for users of the stack.</p>
     #[serde(rename = "ApplicationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1643,6 +1687,10 @@ pub struct UpdateFleetRequest {
     #[serde(rename = "EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the fleet. To assume a role, a fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials.</p>
+    #[serde(rename = "IamRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_role_arn: Option<String>,
     /// <p><p>The amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the <code>DisconnectTimeoutInSeconds</code> time interval begins. Users are notified before they are disconnected due to inactivity. If users try to reconnect to the streaming session before the time interval specified in <code>DisconnectTimeoutInSeconds</code> elapses, they are connected to their previous session. Users are considered idle when they stop providing keyboard or mouse input during their streaming session. File uploads and downloads, audio in, audio out, and pixels changing do not qualify as user activity. If users continue to be idle after the time interval in <code>IdleDisconnectTimeoutInSeconds</code> elapses, they are disconnected. </p> <p>To prevent users from being disconnected due to inactivity, specify a value of 0. Otherwise, specify a value between 60 and 3600. The default value is 0.</p> <note> <p>If you enable this feature, we recommend that you specify a value that corresponds exactly to a whole number of minutes (for example, 60, 120, and 180). If you don&#39;t do this, the value is rounded to the nearest minute. For example, if you specify a value of 70, users are disconnected after 1 minute of inactivity. If you specify a value that is at the midpoint between two different minutes, the value is rounded up. For example, if you specify a value of 90, users are disconnected after 2 minutes of inactivity. </p> </note></p>
     #[serde(rename = "IdleDisconnectTimeoutInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1701,6 +1749,10 @@ pub struct UpdateImagePermissionsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateStackRequest {
+    /// <p>The list of interface VPC endpoint (interface endpoint) objects. Users of the stack can connect to AppStream 2.0 only through the specified endpoints.</p>
+    #[serde(rename = "AccessEndpoints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_endpoints: Option<Vec<AccessEndpoint>>,
     /// <p>The persistent application settings for users of a stack. When these settings are enabled, changes that users make to applications and Windows settings are automatically saved after each session and applied to the next session.</p>
     #[serde(rename = "ApplicationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2477,6 +2529,8 @@ pub enum CreateUsageReportSubscriptionError {
     InvalidAccountStatus(String),
     /// <p>The specified role is invalid.</p>
     InvalidRole(String),
+    /// <p>The requested limit exceeds the permitted limit for an account.</p>
+    LimitExceeded(String),
 }
 
 impl CreateUsageReportSubscriptionError {
@@ -2492,6 +2546,11 @@ impl CreateUsageReportSubscriptionError {
                 }
                 "InvalidRoleException" => {
                     return RusotoError::Service(CreateUsageReportSubscriptionError::InvalidRole(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateUsageReportSubscriptionError::LimitExceeded(
                         err.msg,
                     ))
                 }
@@ -2512,6 +2571,7 @@ impl Error for CreateUsageReportSubscriptionError {
         match *self {
             CreateUsageReportSubscriptionError::InvalidAccountStatus(ref cause) => cause,
             CreateUsageReportSubscriptionError::InvalidRole(ref cause) => cause,
+            CreateUsageReportSubscriptionError::LimitExceeded(ref cause) => cause,
         }
     }
 }
@@ -3532,10 +3592,14 @@ pub enum StartFleetError {
     ConcurrentModification(String),
     /// <p>The resource cannot be created because your AWS account is suspended. For assistance, contact AWS Support. </p>
     InvalidAccountStatus(String),
+    /// <p>The specified role is invalid.</p>
+    InvalidRole(String),
     /// <p>The requested limit exceeds the permitted limit for an account.</p>
     LimitExceeded(String),
     /// <p>The attempted operation is not permitted.</p>
     OperationNotPermitted(String),
+    /// <p>The specified resource exists and is not in use, but isn't available.</p>
+    ResourceNotAvailable(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
 }
@@ -3550,11 +3614,17 @@ impl StartFleetError {
                 "InvalidAccountStatusException" => {
                     return RusotoError::Service(StartFleetError::InvalidAccountStatus(err.msg))
                 }
+                "InvalidRoleException" => {
+                    return RusotoError::Service(StartFleetError::InvalidRole(err.msg))
+                }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartFleetError::LimitExceeded(err.msg))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(StartFleetError::OperationNotPermitted(err.msg))
+                }
+                "ResourceNotAvailableException" => {
+                    return RusotoError::Service(StartFleetError::ResourceNotAvailable(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StartFleetError::ResourceNotFound(err.msg))
@@ -3576,8 +3646,10 @@ impl Error for StartFleetError {
         match *self {
             StartFleetError::ConcurrentModification(ref cause) => cause,
             StartFleetError::InvalidAccountStatus(ref cause) => cause,
+            StartFleetError::InvalidRole(ref cause) => cause,
             StartFleetError::LimitExceeded(ref cause) => cause,
             StartFleetError::OperationNotPermitted(ref cause) => cause,
+            StartFleetError::ResourceNotAvailable(ref cause) => cause,
             StartFleetError::ResourceNotFound(ref cause) => cause,
         }
     }
@@ -4299,7 +4371,7 @@ pub trait AppStream {
         input: ListAssociatedStacksRequest,
     ) -> RusotoFuture<ListAssociatedStacksResult, ListAssociatedStacksError>;
 
-    /// <p>Retrieves a list of all tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>Retrieves a list of all tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -4326,13 +4398,13 @@ pub trait AppStream {
         input: StopImageBuilderRequest,
     ) -> RusotoFuture<StopImageBuilderResult, StopImageBuilderError>;
 
-    /// <p>Adds or overwrites one or more tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>. To disassociate tags from your resources, use <a>UntagResource</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>Adds or overwrites one or more tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>. To disassociate tags from your resources, use <a>UntagResource</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     fn tag_resource(
         &self,
         input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
 
-    /// <p>Disassociates one or more specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>Disassociates one or more specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -4344,7 +4416,7 @@ pub trait AppStream {
         input: UpdateDirectoryConfigRequest,
     ) -> RusotoFuture<UpdateDirectoryConfigResult, UpdateDirectoryConfigError>;
 
-    /// <p>Updates the specified fleet.</p> <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can update the <code>DisplayName</code>, <code>ComputeCapacity</code>, <code>ImageARN</code>, <code>ImageName</code>, and <code>DisconnectTimeoutInSeconds</code> attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you can't update it.</p>
+    /// <p>Updates the specified fleet.</p> <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can update the <code>DisplayName</code>, <code>ComputeCapacity</code>, <code>ImageARN</code>, <code>ImageName</code>, <code>IdleDisconnectTimeoutInSeconds</code>, and <code>DisconnectTimeoutInSeconds</code> attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you can't update it.</p>
     fn update_fleet(
         &self,
         input: UpdateFleetRequest,
@@ -5455,7 +5527,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Retrieves a list of all tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>Retrieves a list of all tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -5598,7 +5670,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Adds or overwrites one or more tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>. To disassociate tags from your resources, use <a>UntagResource</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>Adds or overwrites one or more tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>. To disassociate tags from your resources, use <a>UntagResource</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -5627,7 +5699,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Disassociates one or more specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>Disassociates one or more specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -5687,7 +5759,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Updates the specified fleet.</p> <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can update the <code>DisplayName</code>, <code>ComputeCapacity</code>, <code>ImageARN</code>, <code>ImageName</code>, and <code>DisconnectTimeoutInSeconds</code> attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you can't update it.</p>
+    /// <p>Updates the specified fleet.</p> <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can update the <code>DisplayName</code>, <code>ComputeCapacity</code>, <code>ImageARN</code>, <code>ImageName</code>, <code>IdleDisconnectTimeoutInSeconds</code>, and <code>DisconnectTimeoutInSeconds</code> attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you can't update it.</p>
     fn update_fleet(
         &self,
         input: UpdateFleetRequest,

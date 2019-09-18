@@ -42,6 +42,7 @@ pub struct AcceptInvitationRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct AcceptInvitationResponse {}
 
+/// <p>Contains information about the access keys.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct AccessKeyDetails {
@@ -63,6 +64,7 @@ pub struct AccessKeyDetails {
     pub user_type: Option<String>,
 }
 
+/// <p>Contains information about the account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AccountDetail {
     /// <p>Member account ID.</p>
@@ -73,6 +75,7 @@ pub struct AccountDetail {
     pub email: String,
 }
 
+/// <p>Contains information about action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Action {
@@ -112,6 +115,7 @@ pub struct ArchiveFindingsRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct ArchiveFindingsResponse {}
 
+/// <p>Contains information about the API operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct AwsApiCallAction {
@@ -137,6 +141,7 @@ pub struct AwsApiCallAction {
     pub service_name: Option<String>,
 }
 
+/// <p>Contains information about the city associated with the IP address.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct City {
@@ -146,8 +151,10 @@ pub struct City {
     pub city_name: Option<String>,
 }
 
+/// <p>Contains information about the condition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Condition {
+    /// <p>Represents an <b>equal</b> condition to be applied to a single field when querying for findings.</p>
     #[serde(rename = "Equals")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub equals: Option<Vec<String>>,
@@ -167,11 +174,13 @@ pub struct Condition {
     #[serde(rename = "LessThanOrEqual")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub less_than_or_equal: Option<i64>,
+    /// <p>Represents an <b>not equal</b> condition to be applied to a single field when querying for findings.</p>
     #[serde(rename = "NotEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub not_equals: Option<Vec<String>>,
 }
 
+/// <p>Contains information about the country.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Country {
@@ -439,7 +448,7 @@ pub struct DeleteMembersRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteMembersResponse {
-    /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
+    /// <p>The accounts that could not be processed.</p>
     #[serde(rename = "UnprocessedAccounts")]
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
@@ -487,6 +496,7 @@ pub struct DisassociateMembersResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
+/// <p>Contains information about the DNS request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DnsRequestAction {
@@ -496,6 +506,7 @@ pub struct DnsRequestAction {
     pub domain: Option<String>,
 }
 
+/// <p>Contains information about the domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DomainDetails {
@@ -505,61 +516,71 @@ pub struct DomainDetails {
     pub domain: Option<String>,
 }
 
+/// <p>Contains information about the reason that the finding was generated.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Evidence {
+    /// <p>A list of threat intelligence details related to the evidence.</p>
+    #[serde(rename = "ThreatIntelligenceDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub threat_intelligence_details: Option<Vec<ThreatIntelligenceDetail>>,
+}
+
+/// <p>Contains information about the finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Finding {
-    /// <p>AWS account ID where the activity occurred that prompted GuardDuty to generate a finding.</p>
+    /// <p>The ID of the account in which the finding was generated.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
-    /// <p>The ARN of a finding described by the action.</p>
+    /// <p>The ARN for the finding.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
-    /// <p>The confidence level of a finding.</p>
+    /// <p>The confidence score for the finding.</p>
     #[serde(rename = "Confidence")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub confidence: Option<f64>,
-    /// <p>The time stamp at which a finding was generated.</p>
+    /// <p>The time and date at which the finding was created.</p>
     #[serde(rename = "CreatedAt")]
     pub created_at: String,
-    /// <p>The description of a finding.</p>
+    /// <p>The description of the finding.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The identifier that corresponds to a finding described by the action.</p>
+    /// <p>The ID of the finding.</p>
     #[serde(rename = "Id")]
     pub id: String,
-    /// <p>The AWS resource partition.</p>
+    /// <p>The partition associated with the finding.</p>
     #[serde(rename = "Partition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub partition: Option<String>,
-    /// <p>The AWS region where the activity occurred that prompted GuardDuty to generate a finding.</p>
+    /// <p>The Region in which the finding was generated.</p>
     #[serde(rename = "Region")]
     pub region: String,
-    /// <p>The AWS resource associated with the activity that prompted GuardDuty to generate a finding.</p>
     #[serde(rename = "Resource")]
     pub resource: Resource,
-    /// <p>Findings' schema version.</p>
+    /// <p>The version of the schema used for the finding.</p>
     #[serde(rename = "SchemaVersion")]
     pub schema_version: String,
-    /// <p>Additional information assigned to the generated finding by GuardDuty.</p>
     #[serde(rename = "Service")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service: Option<Service>,
-    /// <p>The severity of a finding.</p>
+    /// <p>The severity of the finding.</p>
     #[serde(rename = "Severity")]
     pub severity: f64,
-    /// <p>The title of a finding.</p>
+    /// <p>The title for the finding.</p>
     #[serde(rename = "Title")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
-    /// <p>The type of a finding described by the action.</p>
+    /// <p>The type of the finding.</p>
     #[serde(rename = "Type")]
     pub type_: String,
-    /// <p>The time stamp at which a finding was last updated.</p>
+    /// <p>The time and date at which the finding was laste updated.</p>
     #[serde(rename = "UpdatedAt")]
     pub updated_at: String,
 }
 
+/// <p>Contains finding criteria information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FindingCriteria {
     /// <p>Represents a map of finding properties that match specified conditions and values when querying findings.</p>
@@ -568,6 +589,7 @@ pub struct FindingCriteria {
     pub criterion: Option<::std::collections::HashMap<String, Condition>>,
 }
 
+/// <p>Contains information about finding statistics.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct FindingStatistics {
@@ -577,6 +599,7 @@ pub struct FindingStatistics {
     pub count_by_severity: Option<::std::collections::HashMap<String, i64>>,
 }
 
+/// <p>Contains information about the </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GeoLocation {
@@ -814,6 +837,7 @@ pub struct GetThreatIntelSetResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>Contains information about the instance profile.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct IamInstanceProfile {
@@ -827,6 +851,7 @@ pub struct IamInstanceProfile {
     pub id: Option<String>,
 }
 
+/// <p>Contains information about the details of an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct InstanceDetails {
@@ -880,6 +905,7 @@ pub struct InstanceDetails {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// <p>Contains information about the invitation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Invitation {
@@ -1107,6 +1133,7 @@ pub struct ListTagsForResourceRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListTagsForResourceResponse {
+    /// <p>The tags associated with the resource.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -1139,6 +1166,7 @@ pub struct ListThreatIntelSetsResponse {
     pub threat_intel_set_ids: Vec<String>,
 }
 
+/// <p>Contains information about the port for the local connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct LocalPortDetails {
@@ -1152,10 +1180,11 @@ pub struct LocalPortDetails {
     pub port_name: Option<String>,
 }
 
+/// <p>Contains information about the Master account and invitation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Master {
-    /// <p>Master account ID</p>
+    /// <p>The ID of the account used as the Master account.</p>
     #[serde(rename = "AccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
@@ -1163,7 +1192,7 @@ pub struct Master {
     #[serde(rename = "InvitationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invitation_id: Option<String>,
-    /// <p>Timestamp at which the invitation was sent</p>
+    /// <p>Timestamp at which the invitation was sent.</p>
     #[serde(rename = "InvitedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invited_at: Option<String>,
@@ -1173,6 +1202,7 @@ pub struct Master {
     pub relationship_status: Option<String>,
 }
 
+/// <p>Continas information about the member account </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Member {
@@ -1201,6 +1231,7 @@ pub struct Member {
     pub updated_at: String,
 }
 
+/// <p>Contains information about the network connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct NetworkConnectionAction {
@@ -1230,6 +1261,7 @@ pub struct NetworkConnectionAction {
     pub remote_port_details: Option<RemotePortDetails>,
 }
 
+/// <p>Contains information about the network interface.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct NetworkInterface {
@@ -1275,6 +1307,7 @@ pub struct NetworkInterface {
     pub vpc_id: Option<String>,
 }
 
+/// <p>Continas information about the organization.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Organization {
@@ -1296,6 +1329,7 @@ pub struct Organization {
     pub org: Option<String>,
 }
 
+/// <p>Contains information about the port probe.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct PortProbeAction {
@@ -1309,6 +1343,7 @@ pub struct PortProbeAction {
     pub port_probe_details: Option<Vec<PortProbeDetail>>,
 }
 
+/// <p>Contains information about the port probe details.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct PortProbeDetail {
@@ -1322,6 +1357,7 @@ pub struct PortProbeDetail {
     pub remote_ip_details: Option<RemoteIpDetails>,
 }
 
+/// <p>Contains information about the private IP address.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct PrivateIpAddressDetails {
@@ -1335,6 +1371,7 @@ pub struct PrivateIpAddressDetails {
     pub private_ip_address: Option<String>,
 }
 
+/// <p>Contains information about the product code.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ProductCode {
@@ -1348,6 +1385,7 @@ pub struct ProductCode {
     pub product_type: Option<String>,
 }
 
+/// <p>Continas information about the remote IP address.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct RemoteIpDetails {
@@ -1373,6 +1411,7 @@ pub struct RemoteIpDetails {
     pub organization: Option<Organization>,
 }
 
+/// <p>Contains information about the remote port.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct RemotePortDetails {
@@ -1386,6 +1425,7 @@ pub struct RemotePortDetails {
     pub port_name: Option<String>,
 }
 
+/// <p>Contains information about the resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Resource {
@@ -1403,6 +1443,7 @@ pub struct Resource {
     pub resource_type: Option<String>,
 }
 
+/// <p>Contains information about the security group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct SecurityGroup {
@@ -1416,6 +1457,7 @@ pub struct SecurityGroup {
     pub group_name: Option<String>,
 }
 
+/// <p>Contains information about the service.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Service {
@@ -1443,6 +1485,10 @@ pub struct Service {
     #[serde(rename = "EventLastSeen")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_last_seen: Option<String>,
+    /// <p>An evidence object associated with the service.</p>
+    #[serde(rename = "Evidence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub evidence: Option<Evidence>,
     /// <p>Resource role information for this finding.</p>
     #[serde(rename = "ResourceRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1457,6 +1503,7 @@ pub struct Service {
     pub user_feedback: Option<String>,
 }
 
+/// <p>Contains information about the criteria for sorting.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SortCriteria {
     /// <p>Represents the finding attribute (for example, accountId) by which to sort findings.</p>
@@ -1505,6 +1552,7 @@ pub struct StopMonitoringMembersResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
+/// <p>Contains information about the tag associated with the resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Tag {
@@ -1532,6 +1580,20 @@ pub struct TagResourceRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// <p>An instance of a threat intelligence detail that constitutes evidence for the finding.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ThreatIntelligenceDetail {
+    /// <p>The name of the threat intelligence list that triggered the finding.</p>
+    #[serde(rename = "ThreatListName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub threat_list_name: Option<String>,
+    /// <p>A list of names of the threats in the threat intelligence list that triggered the finding.</p>
+    #[serde(rename = "ThreatNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub threat_names: Option<Vec<String>>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UnarchiveFindingsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings you want to unarchive.</p>
@@ -1546,6 +1608,7 @@ pub struct UnarchiveFindingsRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct UnarchiveFindingsResponse {}
 
+/// <p>Contains information about the accounts that were not processed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UnprocessedAccount {
@@ -3502,13 +3565,13 @@ pub trait GuardDuty {
         input: AcceptInvitationRequest,
     ) -> RusotoFuture<AcceptInvitationResponse, AcceptInvitationError>;
 
-    /// <p>Archives Amazon GuardDuty findings specified by the list of finding IDs.</p>
+    /// <p><p>Archives GuardDuty findings specified by the list of finding IDs.</p> <note> <p>Only the master account can archive findings. Member accounts do not have permission to archive findings from their accounts.</p> </note></p>
     fn archive_findings(
         &self,
         input: ArchiveFindingsRequest,
     ) -> RusotoFuture<ArchiveFindingsResponse, ArchiveFindingsError>;
 
-    /// <p>Creates a single Amazon GuardDuty detector. A detector is an object that represents the GuardDuty service. A detector must be created in order for GuardDuty to become operational.</p>
+    /// <p>Creates a single Amazon GuardDuty detector. A detector is a resource that represents the GuardDuty service. To start using GuardDuty, you must create a detector in each region that you enable the service. You can have only one detector per account per region.</p>
     fn create_detector(
         &self,
         input: CreateDetectorRequest,
@@ -3630,7 +3693,7 @@ pub trait GuardDuty {
         &self,
     ) -> RusotoFuture<GetInvitationsCountResponse, GetInvitationsCountError>;
 
-    /// <p>Provides the details for the GuardDuty master account to the current GuardDuty member account.</p>
+    /// <p>Provides the details for the GuardDuty master account associated with the current GuardDuty member account.</p>
     fn get_master_account(
         &self,
         input: GetMasterAccountRequest,
@@ -3834,7 +3897,7 @@ impl GuardDuty for GuardDutyClient {
         })
     }
 
-    /// <p>Archives Amazon GuardDuty findings specified by the list of finding IDs.</p>
+    /// <p><p>Archives GuardDuty findings specified by the list of finding IDs.</p> <note> <p>Only the master account can archive findings. Member accounts do not have permission to archive findings from their accounts.</p> </note></p>
     fn archive_findings(
         &self,
         input: ArchiveFindingsRequest,
@@ -3869,7 +3932,7 @@ impl GuardDuty for GuardDutyClient {
         })
     }
 
-    /// <p>Creates a single Amazon GuardDuty detector. A detector is an object that represents the GuardDuty service. A detector must be created in order for GuardDuty to become operational.</p>
+    /// <p>Creates a single Amazon GuardDuty detector. A detector is a resource that represents the GuardDuty service. To start using GuardDuty, you must create a detector in each region that you enable the service. You can have only one detector per account per region.</p>
     fn create_detector(
         &self,
         input: CreateDetectorRequest,
@@ -4552,7 +4615,7 @@ impl GuardDuty for GuardDutyClient {
         })
     }
 
-    /// <p>Provides the details for the GuardDuty master account to the current GuardDuty member account.</p>
+    /// <p>Provides the details for the GuardDuty master account associated with the current GuardDuty member account.</p>
     fn get_master_account(
         &self,
         input: GetMasterAccountRequest,

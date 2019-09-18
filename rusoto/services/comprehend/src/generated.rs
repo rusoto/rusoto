@@ -72,7 +72,7 @@ pub struct BatchDetectEntitiesItemResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDetectEntitiesRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document must contain fewer than 5,000 bytes of UTF-8 encoded characters.</p>
@@ -107,7 +107,7 @@ pub struct BatchDetectKeyPhrasesItemResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDetectKeyPhrasesRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -146,7 +146,7 @@ pub struct BatchDetectSentimentItemResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDetectSentimentRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -181,7 +181,7 @@ pub struct BatchDetectSyntaxItemResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDetectSyntaxRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -277,7 +277,7 @@ pub struct CreateDocumentClassifierRequest {
     /// <p>Specifies the format and location of the input data for the job.</p>
     #[serde(rename = "InputDataConfig")]
     pub input_data_config: DocumentClassifierInputDataConfig,
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>Enables the addition of output results configuration parameters for custom classifier jobs.</p>
@@ -516,7 +516,7 @@ pub struct DetectDominantLanguageResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetectEntitiesRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -535,7 +535,7 @@ pub struct DetectEntitiesResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetectKeyPhrasesRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -554,7 +554,7 @@ pub struct DetectKeyPhrasesResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetectSentimentRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -577,7 +577,7 @@ pub struct DetectSentimentResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetectSyntaxRequest {
-    /// <p>The language code of the input documents. You can specify English ("en") or Spanish ("es").</p>
+    /// <p>The language code of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt").</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A UTF-8 string. Each string must contain fewer that 5,000 bytes of UTF encoded characters.</p>
@@ -983,7 +983,7 @@ pub struct EntityRecognizerEntityList {
     pub s3_uri: String,
 }
 
-/// <p> Detailed information about the accuracy of an entity recognizer. </p>
+/// <p>Detailed information about the accuracy of an entity recognizer. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct EntityRecognizerEvaluationMetrics {
@@ -1032,7 +1032,7 @@ pub struct EntityRecognizerInputDataConfig {
     #[serde(rename = "EntityList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_list: Option<EntityRecognizerEntityList>,
-    /// <p>The entity types in the input data for an entity recognizer.</p>
+    /// <p>The entity types in the input data for an entity recognizer. A maximum of 12 entity types can be used at one time to train an entity recognizer.</p>
     #[serde(rename = "EntityTypes")]
     pub entity_types: Vec<EntityTypesListItem>,
 }
@@ -1045,7 +1045,7 @@ pub struct EntityRecognizerMetadata {
     #[serde(rename = "EntityTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_types: Option<Vec<EntityRecognizerMetadataEntityTypesListItem>>,
-    /// <p> Detailed information about the accuracy of an entity recognizer.</p>
+    /// <p>Detailed information about the accuracy of an entity recognizer.</p>
     #[serde(rename = "EvaluationMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub evaluation_metrics: Option<EntityRecognizerEvaluationMetrics>,
@@ -1063,6 +1063,14 @@ pub struct EntityRecognizerMetadata {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct EntityRecognizerMetadataEntityTypesListItem {
+    /// <p>Detailed information about the accuracy of the entity recognizer for a specific item on the list of entity types. </p>
+    #[serde(rename = "EvaluationMetrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub evaluation_metrics: Option<EntityTypesEvaluationMetrics>,
+    /// <p>indicates the number of times the given entity name was seen in the training data. </p>
+    #[serde(rename = "NumberOfTrainMentions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_train_mentions: Option<i64>,
     /// <p>Type of entity from the list of entity types in the metadata of an entity recognizer. </p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1125,6 +1133,24 @@ pub struct EntityRecognizerProperties {
     #[serde(rename = "VpcConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_config: Option<VpcConfig>,
+}
+
+/// <p>Detailed information about the accuracy of an entity recognizer for a specific entity type. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct EntityTypesEvaluationMetrics {
+    /// <p>A measure of how accurate the recognizer results are for for a specific entity type in the test data. It is derived from the <code>Precision</code> and <code>Recall</code> values. The <code>F1Score</code> is the harmonic average of the two scores. The highest score is 1, and the worst score is 0. </p>
+    #[serde(rename = "F1Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub f1_score: Option<f64>,
+    /// <p>A measure of the usefulness of the recognizer results for a specific entity type in the test data. High precision means that the recognizer returned substantially more relevant results than irrelevant ones. </p>
+    #[serde(rename = "Precision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub precision: Option<f64>,
+    /// <p>A measure of how complete the recognizer results are for a specific entity type in the test data. High recall means that the recognizer returned most of the relevant results.</p>
+    #[serde(rename = "Recall")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recall: Option<f64>,
 }
 
 /// <p>Information about an individual item on a list of entity types.</p>
@@ -1773,7 +1799,7 @@ pub struct StartKeyPhrasesDetectionJobRequest {
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>Specifies where to send the output files.</p>
@@ -1818,7 +1844,7 @@ pub struct StartSentimentDetectionJobRequest {
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>Specifies where to send the output files. </p>
@@ -2219,7 +2245,7 @@ pub enum BatchDetectEntitiesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -2282,7 +2308,7 @@ pub enum BatchDetectKeyPhrasesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -2349,7 +2375,7 @@ pub enum BatchDetectSentimentError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -2412,7 +2438,7 @@ pub enum BatchDetectSyntaxError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -2481,7 +2507,7 @@ pub enum CreateDocumentClassifierError {
     TooManyRequests(String),
     /// <p>The request contains more tags than can be associated with a resource (50 tags per resource). The maximum number of tags includes both existing tags and those included in your current request. </p>
     TooManyTags(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -2572,7 +2598,7 @@ pub enum CreateEntityRecognizerError {
     TooManyRequests(String),
     /// <p>The request contains more tags than can be associated with a resource (50 tags per resource). The maximum number of tags includes both existing tags and those included in your current request. </p>
     TooManyTags(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3340,7 +3366,7 @@ pub enum DetectEntitiesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3393,7 +3419,7 @@ pub enum DetectKeyPhrasesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3448,7 +3474,7 @@ pub enum DetectSentimentError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3501,7 +3527,7 @@ pub enum DetectSyntaxError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3548,7 +3574,7 @@ impl Error for DetectSyntaxError {
 pub enum ListDocumentClassificationJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3609,7 +3635,7 @@ impl Error for ListDocumentClassificationJobsError {
 pub enum ListDocumentClassifiersError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3668,7 +3694,7 @@ impl Error for ListDocumentClassifiersError {
 pub enum ListDominantLanguageDetectionJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3729,7 +3755,7 @@ impl Error for ListDominantLanguageDetectionJobsError {
 pub enum ListEntitiesDetectionJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3788,7 +3814,7 @@ impl Error for ListEntitiesDetectionJobsError {
 pub enum ListEntityRecognizersError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3845,7 +3871,7 @@ impl Error for ListEntityRecognizersError {
 pub enum ListKeyPhrasesDetectionJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3906,7 +3932,7 @@ impl Error for ListKeyPhrasesDetectionJobsError {
 pub enum ListSentimentDetectionJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -4014,7 +4040,7 @@ impl Error for ListTagsForResourceError {
 pub enum ListTopicsDetectionJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),

@@ -1,6 +1,6 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
-description = "AWS SDK for Rust - AWS OpsWorks for Chef Automate @ 2016-11-01"
+description = "AWS SDK for Rust - AWS OpsWorks CM @ 2016-11-01"
 documentation = "https://docs.rs/rusoto_opsworkscm"
 keywords = ["AWS", "Amazon", "opsworkscm"]
 license = "MIT"

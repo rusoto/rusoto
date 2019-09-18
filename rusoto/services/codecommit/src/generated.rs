@@ -105,6 +105,47 @@ pub struct BatchDescribeMergeConflictsOutput {
     pub source_commit_id: String,
 }
 
+/// <p>Returns information about errors in a BatchGetCommits operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BatchGetCommitsError {
+    /// <p>A commit ID that either could not be found or was not in a valid format.</p>
+    #[serde(rename = "commitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub commit_id: Option<String>,
+    /// <p>An error code that specifies whether the commit ID was not valid or not found.</p>
+    #[serde(rename = "errorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>An error message that provides detail about why the commit ID either was not found or was not valid.</p>
+    #[serde(rename = "errorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct BatchGetCommitsInput {
+    /// <p><p>The full commit IDs of the commits to get information about.</p> <note> <p>You must supply the full SHAs of each commit. You cannot use shortened SHAs.</p> </note></p>
+    #[serde(rename = "commitIds")]
+    pub commit_ids: Vec<String>,
+    /// <p>The name of the repository that contains the commits.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BatchGetCommitsOutput {
+    /// <p>An array of commit data type objects, each of which contains information about a specified commit.</p>
+    #[serde(rename = "commits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub commits: Option<Vec<Commit>>,
+    /// <p>Returns any commit IDs for which information could not be found. For example, if one of the commit IDs was a shortened SHA or that commit was not found in the specified repository, the ID will return an error object with additional information.</p>
+    #[serde(rename = "errors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub errors: Option<Vec<BatchGetCommitsError>>,
+}
+
 /// <p>Represents the input of a batch get repositories operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetRepositoriesInput {
@@ -2405,7 +2446,7 @@ pub struct RepositoryNameIdPair {
 /// <p>Information about a trigger for a repository.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RepositoryTrigger {
-    /// <p><p>The branches that will be included in the trigger configuration. If you specify an empty array, the trigger will apply to all branches.</p> <note> <p>While no content is required in the array, you must include the array itself.</p> </note></p>
+    /// <p><p>The branches that will be included in the trigger configuration. If you specify an empty array, the trigger will apply to all branches.</p> <note> <p>Although no content is required in the array, you must include the array itself.</p> </note></p>
     #[serde(rename = "branches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub branches: Option<Vec<String>>,
@@ -2413,10 +2454,10 @@ pub struct RepositoryTrigger {
     #[serde(rename = "customData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_data: Option<String>,
-    /// <p>The ARN of the resource that is the target for a trigger. For example, the ARN of a topic in Amazon Simple Notification Service (SNS).</p>
+    /// <p>The ARN of the resource that is the target for a trigger. For example, the ARN of a topic in Amazon SNS.</p>
     #[serde(rename = "destinationArn")]
     pub destination_arn: String,
-    /// <p><p>The repository events that will cause the trigger to run actions in another service, such as sending a notification through Amazon Simple Notification Service (SNS). </p> <note> <p>The valid value &quot;all&quot; cannot be used with any other values.</p> </note></p>
+    /// <p><p>The repository events that will cause the trigger to run actions in another service, such as sending a notification through Amazon SNS. </p> <note> <p>The valid value &quot;all&quot; cannot be used with any other values.</p> </note></p>
     #[serde(rename = "events")]
     pub events: Vec<String>,
     /// <p>The name of the trigger.</p>
@@ -2882,6 +2923,113 @@ impl Error for BatchDescribeMergeConflictsError {
             BatchDescribeMergeConflictsError::RepositoryDoesNotExist(ref cause) => cause,
             BatchDescribeMergeConflictsError::RepositoryNameRequired(ref cause) => cause,
             BatchDescribeMergeConflictsError::TipsDivergenceExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by BatchGetCommits
+#[derive(Debug, PartialEq)]
+pub enum BatchGetCommitsError {
+    /// <p>The maximum number of allowed commit IDs in a batch request is 100. Verify that your batch requests contains no more than 100 commit IDs, and then try again.</p>
+    CommitIdsLimitExceeded(String),
+
+    CommitIdsListRequired(String),
+    /// <p>An encryption integrity check failed.</p>
+    EncryptionIntegrityChecksFailed(String),
+    /// <p>An encryption key could not be accessed.</p>
+    EncryptionKeyAccessDenied(String),
+    /// <p>The encryption key is disabled.</p>
+    EncryptionKeyDisabled(String),
+    /// <p>No encryption key was found.</p>
+    EncryptionKeyNotFound(String),
+    /// <p>The encryption key is not available.</p>
+    EncryptionKeyUnavailable(String),
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
+    InvalidRepositoryName(String),
+    /// <p>The specified repository does not exist.</p>
+    RepositoryDoesNotExist(String),
+    /// <p>A repository name is required but was not specified.</p>
+    RepositoryNameRequired(String),
+}
+
+impl BatchGetCommitsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetCommitsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "CommitIdsLimitExceededException" => {
+                    return RusotoError::Service(BatchGetCommitsError::CommitIdsLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "CommitIdsListRequiredException" => {
+                    return RusotoError::Service(BatchGetCommitsError::CommitIdsListRequired(
+                        err.msg,
+                    ))
+                }
+                "EncryptionIntegrityChecksFailedException" => {
+                    return RusotoError::Service(
+                        BatchGetCommitsError::EncryptionIntegrityChecksFailed(err.msg),
+                    )
+                }
+                "EncryptionKeyAccessDeniedException" => {
+                    return RusotoError::Service(BatchGetCommitsError::EncryptionKeyAccessDenied(
+                        err.msg,
+                    ))
+                }
+                "EncryptionKeyDisabledException" => {
+                    return RusotoError::Service(BatchGetCommitsError::EncryptionKeyDisabled(
+                        err.msg,
+                    ))
+                }
+                "EncryptionKeyNotFoundException" => {
+                    return RusotoError::Service(BatchGetCommitsError::EncryptionKeyNotFound(
+                        err.msg,
+                    ))
+                }
+                "EncryptionKeyUnavailableException" => {
+                    return RusotoError::Service(BatchGetCommitsError::EncryptionKeyUnavailable(
+                        err.msg,
+                    ))
+                }
+                "InvalidRepositoryNameException" => {
+                    return RusotoError::Service(BatchGetCommitsError::InvalidRepositoryName(
+                        err.msg,
+                    ))
+                }
+                "RepositoryDoesNotExistException" => {
+                    return RusotoError::Service(BatchGetCommitsError::RepositoryDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "RepositoryNameRequiredException" => {
+                    return RusotoError::Service(BatchGetCommitsError::RepositoryNameRequired(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for BatchGetCommitsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for BatchGetCommitsError {
+    fn description(&self) -> &str {
+        match *self {
+            BatchGetCommitsError::CommitIdsLimitExceeded(ref cause) => cause,
+            BatchGetCommitsError::CommitIdsListRequired(ref cause) => cause,
+            BatchGetCommitsError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+            BatchGetCommitsError::EncryptionKeyAccessDenied(ref cause) => cause,
+            BatchGetCommitsError::EncryptionKeyDisabled(ref cause) => cause,
+            BatchGetCommitsError::EncryptionKeyNotFound(ref cause) => cause,
+            BatchGetCommitsError::EncryptionKeyUnavailable(ref cause) => cause,
+            BatchGetCommitsError::InvalidRepositoryName(ref cause) => cause,
+            BatchGetCommitsError::RepositoryDoesNotExist(ref cause) => cause,
+            BatchGetCommitsError::RepositoryNameRequired(ref cause) => cause,
         }
     }
 }
@@ -3733,6 +3881,8 @@ pub enum CreateUnreferencedMergeCommitError {
     CommitMessageLengthExceeded(String),
     /// <p>A commit was not specified.</p>
     CommitRequired(String),
+    /// <p>The merge cannot be completed because the target branch has been modified. Another user might have modified the target branch while the merge was in progress. Wait a few minutes, and then try again.</p>
+    ConcurrentReferenceUpdate(String),
     /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
     /// <p>An encryption key could not be accessed.</p>
@@ -3818,6 +3968,11 @@ impl CreateUnreferencedMergeCommitError {
                 "CommitRequiredException" => {
                     return RusotoError::Service(
                         CreateUnreferencedMergeCommitError::CommitRequired(err.msg),
+                    )
+                }
+                "ConcurrentReferenceUpdateException" => {
+                    return RusotoError::Service(
+                        CreateUnreferencedMergeCommitError::ConcurrentReferenceUpdate(err.msg),
                     )
                 }
                 "EncryptionIntegrityChecksFailedException" => {
@@ -4006,6 +4161,7 @@ impl Error for CreateUnreferencedMergeCommitError {
             CreateUnreferencedMergeCommitError::CommitDoesNotExist(ref cause) => cause,
             CreateUnreferencedMergeCommitError::CommitMessageLengthExceeded(ref cause) => cause,
             CreateUnreferencedMergeCommitError::CommitRequired(ref cause) => cause,
+            CreateUnreferencedMergeCommitError::ConcurrentReferenceUpdate(ref cause) => cause,
             CreateUnreferencedMergeCommitError::EncryptionIntegrityChecksFailed(ref cause) => cause,
             CreateUnreferencedMergeCommitError::EncryptionKeyAccessDenied(ref cause) => cause,
             CreateUnreferencedMergeCommitError::EncryptionKeyDisabled(ref cause) => cause,
@@ -6867,6 +7023,8 @@ pub enum MergeBranchesByFastForwardError {
     CommitDoesNotExist(String),
     /// <p>A commit was not specified.</p>
     CommitRequired(String),
+    /// <p>The merge cannot be completed because the target branch has been modified. Another user might have modified the target branch while the merge was in progress. Wait a few minutes, and then try again.</p>
+    ConcurrentReferenceUpdate(String),
     /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
     /// <p>An encryption key could not be accessed.</p>
@@ -6925,6 +7083,11 @@ impl MergeBranchesByFastForwardError {
                     return RusotoError::Service(MergeBranchesByFastForwardError::CommitRequired(
                         err.msg,
                     ))
+                }
+                "ConcurrentReferenceUpdateException" => {
+                    return RusotoError::Service(
+                        MergeBranchesByFastForwardError::ConcurrentReferenceUpdate(err.msg),
+                    )
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
@@ -7011,6 +7174,7 @@ impl Error for MergeBranchesByFastForwardError {
             MergeBranchesByFastForwardError::BranchNameRequired(ref cause) => cause,
             MergeBranchesByFastForwardError::CommitDoesNotExist(ref cause) => cause,
             MergeBranchesByFastForwardError::CommitRequired(ref cause) => cause,
+            MergeBranchesByFastForwardError::ConcurrentReferenceUpdate(ref cause) => cause,
             MergeBranchesByFastForwardError::EncryptionIntegrityChecksFailed(ref cause) => cause,
             MergeBranchesByFastForwardError::EncryptionKeyAccessDenied(ref cause) => cause,
             MergeBranchesByFastForwardError::EncryptionKeyDisabled(ref cause) => cause,
@@ -7042,6 +7206,8 @@ pub enum MergeBranchesBySquashError {
     CommitMessageLengthExceeded(String),
     /// <p>A commit was not specified.</p>
     CommitRequired(String),
+    /// <p>The merge cannot be completed because the target branch has been modified. Another user might have modified the target branch while the merge was in progress. Wait a few minutes, and then try again.</p>
+    ConcurrentReferenceUpdate(String),
     /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
     /// <p>An encryption key could not be accessed.</p>
@@ -7141,6 +7307,11 @@ impl MergeBranchesBySquashError {
                     return RusotoError::Service(MergeBranchesBySquashError::CommitRequired(
                         err.msg,
                     ))
+                }
+                "ConcurrentReferenceUpdateException" => {
+                    return RusotoError::Service(
+                        MergeBranchesBySquashError::ConcurrentReferenceUpdate(err.msg),
+                    )
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
@@ -7317,6 +7488,7 @@ impl Error for MergeBranchesBySquashError {
             MergeBranchesBySquashError::CommitDoesNotExist(ref cause) => cause,
             MergeBranchesBySquashError::CommitMessageLengthExceeded(ref cause) => cause,
             MergeBranchesBySquashError::CommitRequired(ref cause) => cause,
+            MergeBranchesBySquashError::ConcurrentReferenceUpdate(ref cause) => cause,
             MergeBranchesBySquashError::EncryptionIntegrityChecksFailed(ref cause) => cause,
             MergeBranchesBySquashError::EncryptionKeyAccessDenied(ref cause) => cause,
             MergeBranchesBySquashError::EncryptionKeyDisabled(ref cause) => cause,
@@ -7369,6 +7541,8 @@ pub enum MergeBranchesByThreeWayError {
     CommitMessageLengthExceeded(String),
     /// <p>A commit was not specified.</p>
     CommitRequired(String),
+    /// <p>The merge cannot be completed because the target branch has been modified. Another user might have modified the target branch while the merge was in progress. Wait a few minutes, and then try again.</p>
+    ConcurrentReferenceUpdate(String),
     /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
     /// <p>An encryption key could not be accessed.</p>
@@ -7468,6 +7642,11 @@ impl MergeBranchesByThreeWayError {
                     return RusotoError::Service(MergeBranchesByThreeWayError::CommitRequired(
                         err.msg,
                     ))
+                }
+                "ConcurrentReferenceUpdateException" => {
+                    return RusotoError::Service(
+                        MergeBranchesByThreeWayError::ConcurrentReferenceUpdate(err.msg),
+                    )
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
@@ -7650,6 +7829,7 @@ impl Error for MergeBranchesByThreeWayError {
             MergeBranchesByThreeWayError::CommitDoesNotExist(ref cause) => cause,
             MergeBranchesByThreeWayError::CommitMessageLengthExceeded(ref cause) => cause,
             MergeBranchesByThreeWayError::CommitRequired(ref cause) => cause,
+            MergeBranchesByThreeWayError::ConcurrentReferenceUpdate(ref cause) => cause,
             MergeBranchesByThreeWayError::EncryptionIntegrityChecksFailed(ref cause) => cause,
             MergeBranchesByThreeWayError::EncryptionKeyAccessDenied(ref cause) => cause,
             MergeBranchesByThreeWayError::EncryptionKeyDisabled(ref cause) => cause,
@@ -7690,6 +7870,8 @@ impl Error for MergeBranchesByThreeWayError {
 /// Errors returned by MergePullRequestByFastForward
 #[derive(Debug, PartialEq)]
 pub enum MergePullRequestByFastForwardError {
+    /// <p>The merge cannot be completed because the target branch has been modified. Another user might have modified the target branch while the merge was in progress. Wait a few minutes, and then try again.</p>
+    ConcurrentReferenceUpdate(String),
     /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
     /// <p>An encryption key could not be accessed.</p>
@@ -7732,6 +7914,11 @@ impl MergePullRequestByFastForwardError {
     ) -> RusotoError<MergePullRequestByFastForwardError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ConcurrentReferenceUpdateException" => {
+                    return RusotoError::Service(
+                        MergePullRequestByFastForwardError::ConcurrentReferenceUpdate(err.msg),
+                    )
+                }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
                         MergePullRequestByFastForwardError::EncryptionIntegrityChecksFailed(
@@ -7838,6 +8025,7 @@ impl fmt::Display for MergePullRequestByFastForwardError {
 impl Error for MergePullRequestByFastForwardError {
     fn description(&self) -> &str {
         match *self {
+            MergePullRequestByFastForwardError::ConcurrentReferenceUpdate(ref cause) => cause,
             MergePullRequestByFastForwardError::EncryptionIntegrityChecksFailed(ref cause) => cause,
             MergePullRequestByFastForwardError::EncryptionKeyAccessDenied(ref cause) => cause,
             MergePullRequestByFastForwardError::EncryptionKeyDisabled(ref cause) => cause,
@@ -7865,6 +8053,8 @@ impl Error for MergePullRequestByFastForwardError {
 pub enum MergePullRequestBySquashError {
     /// <p>The commit message is too long. Provide a shorter string. </p>
     CommitMessageLengthExceeded(String),
+    /// <p>The merge cannot be completed because the target branch has been modified. Another user might have modified the target branch while the merge was in progress. Wait a few minutes, and then try again.</p>
+    ConcurrentReferenceUpdate(String),
     /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
     /// <p>An encryption key could not be accessed.</p>
@@ -7944,6 +8134,11 @@ impl MergePullRequestBySquashError {
                 "CommitMessageLengthExceededException" => {
                     return RusotoError::Service(
                         MergePullRequestBySquashError::CommitMessageLengthExceeded(err.msg),
+                    )
+                }
+                "ConcurrentReferenceUpdateException" => {
+                    return RusotoError::Service(
+                        MergePullRequestBySquashError::ConcurrentReferenceUpdate(err.msg),
                     )
                 }
                 "EncryptionIntegrityChecksFailedException" => {
@@ -8141,6 +8336,7 @@ impl Error for MergePullRequestBySquashError {
     fn description(&self) -> &str {
         match *self {
             MergePullRequestBySquashError::CommitMessageLengthExceeded(ref cause) => cause,
+            MergePullRequestBySquashError::ConcurrentReferenceUpdate(ref cause) => cause,
             MergePullRequestBySquashError::EncryptionIntegrityChecksFailed(ref cause) => cause,
             MergePullRequestBySquashError::EncryptionKeyAccessDenied(ref cause) => cause,
             MergePullRequestBySquashError::EncryptionKeyDisabled(ref cause) => cause,
@@ -8188,6 +8384,8 @@ impl Error for MergePullRequestBySquashError {
 pub enum MergePullRequestByThreeWayError {
     /// <p>The commit message is too long. Provide a shorter string. </p>
     CommitMessageLengthExceeded(String),
+    /// <p>The merge cannot be completed because the target branch has been modified. Another user might have modified the target branch while the merge was in progress. Wait a few minutes, and then try again.</p>
+    ConcurrentReferenceUpdate(String),
     /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
     /// <p>An encryption key could not be accessed.</p>
@@ -8269,6 +8467,11 @@ impl MergePullRequestByThreeWayError {
                 "CommitMessageLengthExceededException" => {
                     return RusotoError::Service(
                         MergePullRequestByThreeWayError::CommitMessageLengthExceeded(err.msg),
+                    )
+                }
+                "ConcurrentReferenceUpdateException" => {
+                    return RusotoError::Service(
+                        MergePullRequestByThreeWayError::ConcurrentReferenceUpdate(err.msg),
                     )
                 }
                 "EncryptionIntegrityChecksFailedException" => {
@@ -8466,6 +8669,7 @@ impl Error for MergePullRequestByThreeWayError {
     fn description(&self) -> &str {
         match *self {
             MergePullRequestByThreeWayError::CommitMessageLengthExceeded(ref cause) => cause,
+            MergePullRequestByThreeWayError::ConcurrentReferenceUpdate(ref cause) => cause,
             MergePullRequestByThreeWayError::EncryptionIntegrityChecksFailed(ref cause) => cause,
             MergePullRequestByThreeWayError::EncryptionKeyAccessDenied(ref cause) => cause,
             MergePullRequestByThreeWayError::EncryptionKeyDisabled(ref cause) => cause,
@@ -10465,6 +10669,12 @@ pub trait CodeCommit {
         input: BatchDescribeMergeConflictsInput,
     ) -> RusotoFuture<BatchDescribeMergeConflictsOutput, BatchDescribeMergeConflictsError>;
 
+    /// <p>Returns information about the contents of one or more commits in a repository.</p>
+    fn batch_get_commits(
+        &self,
+        input: BatchGetCommitsInput,
+    ) -> RusotoFuture<BatchGetCommitsOutput, BatchGetCommitsError>;
+
     /// <p><p>Returns information about one or more repositories.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
     fn batch_get_repositories(
         &self,
@@ -10812,6 +11022,35 @@ impl CodeCommit for CodeCommitClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(BatchDescribeMergeConflictsError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Returns information about the contents of one or more commits in a repository.</p>
+    fn batch_get_commits(
+        &self,
+        input: BatchGetCommitsInput,
+    ) -> RusotoFuture<BatchGetCommitsOutput, BatchGetCommitsError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.BatchGetCommits");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<BatchGetCommitsOutput, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(BatchGetCommitsError::from_response(response))),
+                )
             }
         })
     }

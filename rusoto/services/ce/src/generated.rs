@@ -114,6 +114,48 @@ pub struct CoverageNormalizedUnits {
     pub total_running_normalized_units: Option<String>,
 }
 
+/// <p>Context about the current instance.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CurrentInstance {
+    /// <p> The currency code that Amazon Web Services used to calculate the costs for this instance.</p>
+    #[serde(rename = "CurrencyCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub currency_code: Option<String>,
+    /// <p> Current On Demand cost of operating this instance on a monthly basis.</p>
+    #[serde(rename = "MonthlyCost")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monthly_cost: Option<String>,
+    /// <p> Number of hours during the lookback period billed at On Demand rates.</p>
+    #[serde(rename = "OnDemandHoursInLookbackPeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub on_demand_hours_in_lookback_period: Option<String>,
+    /// <p> Number of hours during the lookback period covered by reservations.</p>
+    #[serde(rename = "ReservationCoveredHoursInLookbackPeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reservation_covered_hours_in_lookback_period: Option<String>,
+    /// <p> Details about the resource and utilization.</p>
+    #[serde(rename = "ResourceDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_details: Option<ResourceDetails>,
+    /// <p>Resource ID of the current instance.</p>
+    #[serde(rename = "ResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id: Option<String>,
+    /// <p> Utilization information of the current instance during the lookback period.</p>
+    #[serde(rename = "ResourceUtilization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_utilization: Option<ResourceUtilization>,
+    /// <p>Cost allocation resource tags applied to the instance.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<TagValues>>,
+    /// <p> The total number of hours the instance ran during the lookback period.</p>
+    #[serde(rename = "TotalRunningHoursInLookbackPeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_running_hours_in_lookback_period: Option<String>,
+}
+
 /// <p>The time period that you want the usage and costs for. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DateInterval {
@@ -190,6 +232,66 @@ pub struct EC2InstanceDetails {
     pub tenancy: Option<String>,
 }
 
+/// <p> Details on the Amazon EC2 Resource.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct EC2ResourceDetails {
+    /// <p> Hourly public On Demand rate for the instance type.</p>
+    #[serde(rename = "HourlyOnDemandRate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hourly_on_demand_rate: Option<String>,
+    /// <p> The type of Amazon Web Services instance.</p>
+    #[serde(rename = "InstanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_type: Option<String>,
+    /// <p> Memory capacity of Amazon Web Services instance.</p>
+    #[serde(rename = "Memory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub memory: Option<String>,
+    /// <p> Network performance capacity of the Amazon Web Services instance.</p>
+    #[serde(rename = "NetworkPerformance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_performance: Option<String>,
+    /// <p> The platform of the Amazon Web Services instance. The platform is the specific combination of operating system, license model, and software on an instance.</p>
+    #[serde(rename = "Platform")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub platform: Option<String>,
+    /// <p> The Amazon Web Services Region of the instance.</p>
+    #[serde(rename = "Region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region: Option<String>,
+    /// <p> The SKU of the product.</p>
+    #[serde(rename = "Sku")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sku: Option<String>,
+    /// <p> The disk storage of the Amazon Web Services instance (Not EBS storage).</p>
+    #[serde(rename = "Storage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage: Option<String>,
+    /// <p> Number of VCPU cores in the Amazon Web Services instance type.</p>
+    #[serde(rename = "Vcpu")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vcpu: Option<String>,
+}
+
+/// <p> Utilization metrics of the instance. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct EC2ResourceUtilization {
+    /// <p> Maximum observed or expected CPU utilization of the instance.</p>
+    #[serde(rename = "MaxCpuUtilizationPercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_cpu_utilization_percentage: Option<String>,
+    /// <p> Maximum observed or expected memory utilization of the instance.</p>
+    #[serde(rename = "MaxMemoryUtilizationPercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_memory_utilization_percentage: Option<String>,
+    /// <p> Maximum observed or expected storage utilization of the instance (does not measure EBS storage).</p>
+    #[serde(rename = "MaxStorageUtilizationPercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_storage_utilization_percentage: Option<String>,
+}
+
 /// <p>The Amazon EC2 hardware specifications that you want AWS to provide recommendations for.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EC2Specification {
@@ -255,7 +357,7 @@ pub struct ElastiCacheInstanceDetails {
     pub size_flex_eligible: Option<bool>,
 }
 
-/// <p><p>Use <code>Expression</code> to filter by cost or by usage. There are two patterns: </p> <ul> <li> <p>Simple dimension values - You can set the dimension name and values for the filters that you plan to use. For example, you can filter for <code>INSTANCE<em>TYPE==m4.xlarge OR INSTANCE</em>TYPE==c4.large</code>. The <code>Expression</code> for that looks like this:</p> <p> <code>{ &quot;Dimensions&quot;: { &quot;Key&quot;: &quot;INSTANCE<em>TYPE&quot;, &quot;Values&quot;: [ &quot;m4.xlarge&quot;, “c4.large” ] } }</code> </p> <p>The list of dimension values are OR&#39;d together to retrieve cost or usage data. You can create <code>Expression</code> and <code>DimensionValues</code> objects using either <code>with<em></code> methods or <code>set</em></code> methods in multiple lines. </p> </li> <li> <p>Compound dimension values with logical operations - You can use multiple <code>Expression</code> types and the logical operators <code>AND/OR/NOT</code> to create a list of one or more <code>Expression</code> objects. This allows you to filter on more advanced options. For example, you can filter on <code>((INSTANCE</em>TYPE == m4.large OR INSTANCE<em>TYPE == m3.large) OR (TAG.Type == Type1)) AND (USAGE</em>TYPE != DataTransfer)</code>. The <code>Expression</code> for that looks like this:</p> <p> <code>{ &quot;And&quot;: [ {&quot;Or&quot;: [ {&quot;Dimensions&quot;: { &quot;Key&quot;: &quot;INSTANCE<em>TYPE&quot;, &quot;Values&quot;: [ &quot;m4.x.large&quot;, &quot;c4.large&quot; ] }}, {&quot;Tags&quot;: { &quot;Key&quot;: &quot;TagName&quot;, &quot;Values&quot;: [&quot;Value1&quot;] } } ]}, {&quot;Not&quot;: {&quot;Dimensions&quot;: { &quot;Key&quot;: &quot;USAGE</em>TYPE&quot;, &quot;Values&quot;: [&quot;DataTransfer&quot;] }}} ] } </code> </p> <note> <p>Because each <code>Expression</code> can have only one operator, the service returns an error if more than one is specified. The following example shows an <code>Expression</code> object that creates an error.</p> </note> <p> <code> { &quot;And&quot;: [ ... ], &quot;DimensionValues&quot;: { &quot;Dimension&quot;: &quot;USAGE_TYPE&quot;, &quot;Values&quot;: [ &quot;DataTransfer&quot; ] } } </code> </p> </li> </ul></p>
+/// <p><p>Use <code>Expression</code> to filter by cost or by usage. There are two patterns: </p> <ul> <li> <p>Simple dimension values - You can set the dimension name and values for the filters that you plan to use. For example, you can filter for <code>REGION==us-east-1 OR REGION==us-west-1</code>. The <code>Expression</code> for that looks like this:</p> <p> <code>{ &quot;Dimensions&quot;: { &quot;Key&quot;: &quot;REGION&quot;, &quot;Values&quot;: [ &quot;us-east-1&quot;, “us-west-1” ] } }</code> </p> <p>The list of dimension values are OR&#39;d together to retrieve cost or usage data. You can create <code>Expression</code> and <code>DimensionValues</code> objects using either <code>with<em></code> methods or <code>set</em></code> methods in multiple lines. </p> </li> <li> <p>Compound dimension values with logical operations - You can use multiple <code>Expression</code> types and the logical operators <code>AND/OR/NOT</code> to create a list of one or more <code>Expression</code> objects. This allows you to filter on more advanced options. For example, you can filter on <code>((REGION == us-east-1 OR REGION == us-west-1) OR (TAG.Type == Type1)) AND (USAGE<em>TYPE != DataTransfer)</code>. The <code>Expression</code> for that looks like this:</p> <p> <code>{ &quot;And&quot;: [ {&quot;Or&quot;: [ {&quot;Dimensions&quot;: { &quot;Key&quot;: &quot;REGION&quot;, &quot;Values&quot;: [ &quot;us-east-1&quot;, &quot;us-west-1&quot; ] }}, {&quot;Tags&quot;: { &quot;Key&quot;: &quot;TagName&quot;, &quot;Values&quot;: [&quot;Value1&quot;] } } ]}, {&quot;Not&quot;: {&quot;Dimensions&quot;: { &quot;Key&quot;: &quot;USAGE</em>TYPE&quot;, &quot;Values&quot;: [&quot;DataTransfer&quot;] }}} ] } </code> </p> <note> <p>Because each <code>Expression</code> can have only one operator, the service returns an error if more than one is specified. The following example shows an <code>Expression</code> object that creates an error.</p> </note> <p> <code> { &quot;And&quot;: [ ... ], &quot;DimensionValues&quot;: { &quot;Dimension&quot;: &quot;USAGE<em>TYPE&quot;, &quot;Values&quot;: [ &quot;DataTransfer&quot; ] } } </code> </p> </li> </ul> <note> <p>For <code>GetRightsizingRecommendation</code> action, a combination of OR and NOT is not supported. OR is not supported between different dimensions, or dimensions and tags. NOT operators aren&#39;t supported. Dimentions are also limited to <code>LINKED</em>ACCOUNT</code>, <code>REGION</code>, or <code>RIGHTSIZING_TYPE</code>.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct Expression {
     /// <p>Return results that match both <code>Dimension</code> objects.</p>
@@ -560,6 +662,45 @@ pub struct GetReservationUtilizationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetRightsizingRecommendationRequest {
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<Expression>,
+    /// <p>The pagination token that indicates the next set of results that you want to retrieve.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>The number of recommendations that you want returned in a single response object.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+    /// <p>The specific service that you want recommendations for.</p>
+    #[serde(rename = "Service")]
+    pub service: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetRightsizingRecommendationResponse {
+    /// <p>Information regarding this specific recommendation set.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<RightsizingRecommendationMetadata>,
+    /// <p>The token to retrieve the next set of results.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>Recommendations to rightsize resources.</p>
+    #[serde(rename = "RightsizingRecommendations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rightsizing_recommendations: Option<Vec<RightsizingRecommendation>>,
+    /// <p>Summary of this recommendation set.</p>
+    #[serde(rename = "Summary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summary: Option<RightsizingRecommendationSummary>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetTagsRequest {
     /// <p>The token to retrieve the next set of results. AWS provides the token when the response from a previous call has more results than the maximum page size.</p>
     #[serde(rename = "NextPageToken")]
@@ -695,6 +836,16 @@ pub struct MetricValue {
     #[serde(rename = "Unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unit: Option<String>,
+}
+
+/// <p> Details on the modification recommendation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ModifyRecommendationDetail {
+    /// <p> Identifies whether this instance type is the Amazon Web Services default recommendation.</p>
+    #[serde(rename = "TargetInstances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_instances: Option<Vec<TargetInstance>>,
 }
 
 /// <p>Details about the Amazon RDS instances that AWS recommends that you purchase.</p>
@@ -1011,6 +1162,26 @@ pub struct ReservationUtilizationGroup {
     pub value: Option<String>,
 }
 
+/// <p>Details on the resource.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ResourceDetails {
+    /// <p>Details on the Amazon EC2 resource.</p>
+    #[serde(rename = "EC2ResourceDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ec2_resource_details: Option<EC2ResourceDetails>,
+}
+
+/// <p>Resource utilization of current resource. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ResourceUtilization {
+    /// <p>Utilization of current Amazon EC2 Instance </p>
+    #[serde(rename = "EC2ResourceUtilization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ec2_resource_utilization: Option<EC2ResourceUtilization>,
+}
+
 /// <p>The result that is associated with a time period.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1033,6 +1204,72 @@ pub struct ResultByTime {
     pub total: Option<::std::collections::HashMap<String, MetricValue>>,
 }
 
+/// <p>Recommendations to rightsize resources.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RightsizingRecommendation {
+    /// <p>The account that this recommendation is for.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p> Context regarding the current instance.</p>
+    #[serde(rename = "CurrentInstance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_instance: Option<CurrentInstance>,
+    /// <p> Details for modification recommendations. </p>
+    #[serde(rename = "ModifyRecommendationDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub modify_recommendation_detail: Option<ModifyRecommendationDetail>,
+    /// <p>Recommendation to either terminate or modify the resource.</p>
+    #[serde(rename = "RightsizingType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rightsizing_type: Option<String>,
+    /// <p>Details for termination recommendations.</p>
+    #[serde(rename = "TerminateRecommendationDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub terminate_recommendation_detail: Option<TerminateRecommendationDetail>,
+}
+
+/// <p>Metadata for this recommendation set.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RightsizingRecommendationMetadata {
+    /// <p> The time stamp for when Amazon Web Services made this recommendation.</p>
+    #[serde(rename = "GenerationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub generation_timestamp: Option<String>,
+    /// <p> How many days of previous usage that Amazon Web Services considers when making this recommendation.</p>
+    #[serde(rename = "LookbackPeriodInDays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lookback_period_in_days: Option<String>,
+    /// <p> The ID for this specific recommendation.</p>
+    #[serde(rename = "RecommendationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recommendation_id: Option<String>,
+}
+
+/// <p> Summary of rightsizing recommendations </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RightsizingRecommendationSummary {
+    /// <p> Estimated total savings resulting from modifications, on a monthly basis.</p>
+    #[serde(rename = "EstimatedTotalMonthlySavingsAmount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_total_monthly_savings_amount: Option<String>,
+    /// <p> The currency code that Amazon Web Services used to calculate the savings.</p>
+    #[serde(rename = "SavingsCurrencyCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub savings_currency_code: Option<String>,
+    /// <p> Savings percentage based on the recommended modifications, relative to the total On Demand costs associated with these instances.</p>
+    #[serde(rename = "SavingsPercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub savings_percentage: Option<String>,
+    /// <p> Total number of instance recommendations.</p>
+    #[serde(rename = "TotalRecommendationCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_recommendation_count: Option<String>,
+}
+
 /// <p>Hardware specifications for the service that you want recommendations for.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ServiceSpecification {
@@ -1043,7 +1280,7 @@ pub struct ServiceSpecification {
 }
 
 /// <p>The values that are available for a tag.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TagValues {
     /// <p>The key for the tag.</p>
     #[serde(rename = "Key")]
@@ -1053,6 +1290,50 @@ pub struct TagValues {
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
+}
+
+/// <p> Details on recommended instance.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TargetInstance {
+    /// <p> The currency code that Amazon Web Services used to calculate the costs for this instance.</p>
+    #[serde(rename = "CurrencyCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub currency_code: Option<String>,
+    /// <p> Indicates whether or not this recommendation is the defaulted Amazon Web Services recommendation.</p>
+    #[serde(rename = "DefaultTargetInstance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_target_instance: Option<bool>,
+    /// <p> Expected cost to operate this instance type on a monthly basis.</p>
+    #[serde(rename = "EstimatedMonthlyCost")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_monthly_cost: Option<String>,
+    /// <p> Estimated savings resulting from modification, on a monthly basis.</p>
+    #[serde(rename = "EstimatedMonthlySavings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_monthly_savings: Option<String>,
+    /// <p> Expected utilization metrics for target instance type.</p>
+    #[serde(rename = "ExpectedResourceUtilization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expected_resource_utilization: Option<ResourceUtilization>,
+    /// <p> Details on the target instance type. </p>
+    #[serde(rename = "ResourceDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_details: Option<ResourceDetails>,
+}
+
+/// <p> Details on termination recommendation. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TerminateRecommendationDetail {
+    /// <p> The currency code that Amazon Web Services used to calculate the costs for this instance.</p>
+    #[serde(rename = "CurrencyCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub currency_code: Option<String>,
+    /// <p> Estimated savings resulting from modification, on a monthly basis.</p>
+    #[serde(rename = "EstimatedMonthlySavings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_monthly_savings: Option<String>,
 }
 
 /// <p>The amount of utilization, in hours.</p>
@@ -1381,6 +1662,51 @@ impl Error for GetReservationUtilizationError {
         }
     }
 }
+/// Errors returned by GetRightsizingRecommendation
+#[derive(Debug, PartialEq)]
+pub enum GetRightsizingRecommendationError {
+    /// <p>The pagination token is invalid. Try again without a pagination token.</p>
+    InvalidNextToken(String),
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+}
+
+impl GetRightsizingRecommendationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetRightsizingRecommendationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        GetRightsizingRecommendationError::InvalidNextToken(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(GetRightsizingRecommendationError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetRightsizingRecommendationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetRightsizingRecommendationError {
+    fn description(&self) -> &str {
+        match *self {
+            GetRightsizingRecommendationError::InvalidNextToken(ref cause) => cause,
+            GetRightsizingRecommendationError::LimitExceeded(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetTags
 #[derive(Debug, PartialEq)]
 pub enum GetTagsError {
@@ -1445,7 +1771,7 @@ pub enum GetUsageForecastError {
     DataUnavailable(String),
     /// <p>You made too many calls in a short period of time. Try again later.</p>
     LimitExceeded(String),
-    /// <p>Cost Explorer was unable to identify the usage unit. Provide <code>UsageType/UsageTypeGroup</code> filter selections that contain matching units, for example: <code>hours</code>.(</p>
+    /// <p>Cost Explorer was unable to identify the usage unit. Provide <code>UsageType/UsageTypeGroup</code> filter selections that contain matching units, for example: <code>hours</code>.</p>
     UnresolvableUsageUnit(String),
 }
 
@@ -1525,6 +1851,12 @@ pub trait CostExplorer {
         &self,
         input: GetReservationUtilizationRequest,
     ) -> RusotoFuture<GetReservationUtilizationResponse, GetReservationUtilizationError>;
+
+    /// <p>Creates recommendations that helps you save cost by identifying idle and underutilized Amazon EC2 instances.</p> <p>Recommendations are generated to either downsize or terminate instances, along with providing savings detail and metrics. For details on calculation and function, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-what-is.html">Optimizing Your Cost with Rightsizing Recommendations</a>.</p>
+    fn get_rightsizing_recommendation(
+        &self,
+        input: GetRightsizingRecommendationRequest,
+    ) -> RusotoFuture<GetRightsizingRecommendationResponse, GetRightsizingRecommendationError>;
 
     /// <p>Queries for available tag keys and tag values for a specified period. You can search the tag values for an arbitrary string. </p>
     fn get_tags(&self, input: GetTagsRequest) -> RusotoFuture<GetTagsResponse, GetTagsError>;
@@ -1748,6 +2080,35 @@ impl CostExplorer for CostExplorerClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetReservationUtilizationError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Creates recommendations that helps you save cost by identifying idle and underutilized Amazon EC2 instances.</p> <p>Recommendations are generated to either downsize or terminate instances, along with providing savings detail and metrics. For details on calculation and function, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-what-is.html">Optimizing Your Cost with Rightsizing Recommendations</a>.</p>
+    fn get_rightsizing_recommendation(
+        &self,
+        input: GetRightsizingRecommendationRequest,
+    ) -> RusotoFuture<GetRightsizingRecommendationResponse, GetRightsizingRecommendationError> {
+        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSInsightsIndexService.GetRightsizingRecommendation",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetRightsizingRecommendationResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetRightsizingRecommendationError::from_response(response))
                 }))
             }
         })

@@ -771,6 +771,10 @@ pub struct Cluster {
     pub endpoint: Option<Endpoint>,
     /// <p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>
     pub enhanced_vpc_routing: Option<bool>,
+    /// <p>The date and time when the next snapshot is expected to be taken for clusters with a valid snapshot schedule and backups enabled. </p>
+    pub expected_next_snapshot_schedule_time: Option<String>,
+    /// <p><p> The status of next expected snapshot for clusters having a valid snapshot schedule and backups enabled. Possible values are the following:</p> <ul> <li> <p>OnTrack - The next snapshot is expected to be taken on time. </p> </li> <li> <p>Pending - The next snapshot is pending to be taken. </p> </li> </ul></p>
+    pub expected_next_snapshot_schedule_time_status: Option<String>,
     /// <p>A value that reports whether the Amazon Redshift cluster has finished applying any hardware security module (HSM) settings changes specified in a modify cluster command.</p> <p>Values: active, applying</p>
     pub hsm_status: Option<HsmStatus>,
     /// <p>A list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services.</p>
@@ -945,6 +949,18 @@ impl ClusterDeserializer {
                         "EnhancedVpcRouting",
                         stack,
                     )?);
+                }
+                "ExpectedNextSnapshotScheduleTime" => {
+                    obj.expected_next_snapshot_schedule_time = Some(
+                        TStampDeserializer::deserialize("ExpectedNextSnapshotScheduleTime", stack)?,
+                    );
+                }
+                "ExpectedNextSnapshotScheduleTimeStatus" => {
+                    obj.expected_next_snapshot_schedule_time_status =
+                        Some(StringDeserializer::deserialize(
+                            "ExpectedNextSnapshotScheduleTimeStatus",
+                            stack,
+                        )?);
                 }
                 "HsmStatus" => {
                     obj.hsm_status = Some(HsmStatusDeserializer::deserialize("HsmStatus", stack)?);
@@ -7876,7 +7892,7 @@ pub struct ResizeClusterMessage {
     pub cluster_identifier: String,
     /// <p>The new cluster type for the specified cluster.</p>
     pub cluster_type: Option<String>,
-    /// <p>The new node type for the nodes you are adding.</p>
+    /// <p>The new node type for the nodes you are adding. If not specified, the cluster's current node type is used.</p>
     pub node_type: Option<String>,
     /// <p>The new number of nodes for the cluster.</p>
     pub number_of_nodes: i64,
@@ -16578,7 +16594,7 @@ pub trait Redshift {
         input: DescribeSnapshotSchedulesMessage,
     ) -> RusotoFuture<DescribeSnapshotSchedulesOutputMessage, DescribeSnapshotSchedulesError>;
 
-    /// <p>Returns the total amount of snapshot usage and provisioned storage for a user in megabytes.</p>
+    /// <p>Returns the total amount of snapshot usage and provisioned storage in megabytes.</p>
     fn describe_storage(&self) -> RusotoFuture<CustomerStorageMessage, DescribeStorageError>;
 
     /// <p>Lists the status of one or more table restore requests made using the <a>RestoreTableFromClusterSnapshot</a> API action. If you don't specify a value for the <code>TableRestoreRequestId</code> parameter, then <code>DescribeTableRestoreStatus</code> returns the status of all table restore requests ordered by the date and time of the request in ascending order. Otherwise <code>DescribeTableRestoreStatus</code> returns the status of the table specified by <code>TableRestoreRequestId</code>.</p>
@@ -19085,7 +19101,7 @@ impl Redshift for RedshiftClient {
         })
     }
 
-    /// <p>Returns the total amount of snapshot usage and provisioned storage for a user in megabytes.</p>
+    /// <p>Returns the total amount of snapshot usage and provisioned storage in megabytes.</p>
     fn describe_storage(&self) -> RusotoFuture<CustomerStorageMessage, DescribeStorageError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();

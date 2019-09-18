@@ -288,7 +288,7 @@ pub struct CreateApplicationRequest {
     #[serde(rename = "Outputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub outputs: Option<Vec<Output>>,
-    /// <p>A list of one or more tags to assign to the application. A tag is a key-value pair that identifies an application. Note that the maximum number of application tags includes system tags. The maximum number of user-defined application tags is 50. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management Guide</i>.</p>
+    /// <p>A list of one or more tags to assign to the application. A tag is a key-value pair that identifies an application. Note that the maximum number of application tags includes system tags. The maximum number of user-defined application tags is 50. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-tagging.html">Using Tagging</a>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -568,7 +568,7 @@ pub struct InputLambdaProcessorDescription {
 /// <p>Represents an update to the <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_InputLambdaProcessor.html">InputLambdaProcessor</a> that is used to preprocess the records in the stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct InputLambdaProcessorUpdate {
-    /// <p><p>The Amazon Resource Name (ARN) of the new <a href="https://docs.aws.amazon.com/ambda/">AWS Lambda</a> function that is used to preprocess the records in the stream.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
+    /// <p><p>The Amazon Resource Name (ARN) of the new <a href="https://docs.aws.amazon.com/lambda/">AWS Lambda</a> function that is used to preprocess the records in the stream.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
     #[serde(rename = "ResourceARNUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn_update: Option<String>,
@@ -1198,7 +1198,7 @@ pub struct StopApplicationRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct StopApplicationResponse {}
 
-/// <p>A key-value pair (the value is optional) that you can define and assign to AWS resources. If you specify a tag that already exists, the tag value is replaced with the value that you specify in the request. Note that the maximum number of application tags includes system tags. The maximum number of user-defined application tags is 50. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management Guide</i>.</p>
+/// <p>A key-value pair (the value is optional) that you can define and assign to AWS resources. If you specify a tag that already exists, the tag value is replaced with the value that you specify in the request. Note that the maximum number of application tags includes system tags. The maximum number of user-defined application tags is 50. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-tagging.html">Using Tagging</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>The key of the key-value tag.</p>
@@ -2066,7 +2066,7 @@ impl Error for DescribeApplicationError {
 pub enum DiscoverInputSchemaError {
     /// <p>Specified input parameter value is invalid.</p>
     InvalidArgument(String),
-    /// <p>Discovery failed to get a record from the streaming source because of the Amazon Kinesis Streams ProvisionedThroughputExceededException. For more information, see <a href="kinesis/latest/APIReference/API_GetRecords.html">GetRecords</a> in the Amazon Kinesis Streams API Reference.</p>
+    /// <p>Discovery failed to get a record from the streaming source because of the Amazon Kinesis Streams ProvisionedThroughputExceededException. For more information, see <a href="https://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetRecords.html">GetRecords</a> in the Amazon Kinesis Streams API Reference.</p>
     ResourceProvisionedThroughputExceeded(String),
     /// <p>The service is unavailable. Back off and retry the operation. </p>
     ServiceUnavailable(String),
@@ -2587,7 +2587,7 @@ pub trait KinesisAnalytics {
         input: ListApplicationsRequest,
     ) -> RusotoFuture<ListApplicationsResponse, ListApplicationsError>;
 
-    /// <p>Retrieves the list of key-value tags assigned to the application.</p>
+    /// <p>Retrieves the list of key-value tags assigned to the application. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-tagging.html">Using Tagging</a>.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -2605,13 +2605,13 @@ pub trait KinesisAnalytics {
         input: StopApplicationRequest,
     ) -> RusotoFuture<StopApplicationResponse, StopApplicationError>;
 
-    /// <p>Adds one or more key-value tags to a Kinesis Analytics application. Note that the maximum number of application tags includes system tags. The maximum number of user-defined application tags is 50.</p>
+    /// <p>Adds one or more key-value tags to a Kinesis Analytics application. Note that the maximum number of application tags includes system tags. The maximum number of user-defined application tags is 50. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-tagging.html">Using Tagging</a>.</p>
     fn tag_resource(
         &self,
         input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
 
-    /// <p>Removes one or more tags from a Kinesis Analytics application.</p>
+    /// <p>Removes one or more tags from a Kinesis Analytics application. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-tagging.html">Using Tagging</a>.</p>
     fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -3103,7 +3103,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         })
     }
 
-    /// <p>Retrieves the list of key-value tags assigned to the application.</p>
+    /// <p>Retrieves the list of key-value tags assigned to the application. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-tagging.html">Using Tagging</a>.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -3192,7 +3192,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         })
     }
 
-    /// <p>Adds one or more key-value tags to a Kinesis Analytics application. Note that the maximum number of application tags includes system tags. The maximum number of user-defined application tags is 50.</p>
+    /// <p>Adds one or more key-value tags to a Kinesis Analytics application. Note that the maximum number of application tags includes system tags. The maximum number of user-defined application tags is 50. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-tagging.html">Using Tagging</a>.</p>
     fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -3221,7 +3221,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         })
     }
 
-    /// <p>Removes one or more tags from a Kinesis Analytics application.</p>
+    /// <p>Removes one or more tags from a Kinesis Analytics application. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-tagging.html">Using Tagging</a>.</p>
     fn untag_resource(
         &self,
         input: UntagResourceRequest,
