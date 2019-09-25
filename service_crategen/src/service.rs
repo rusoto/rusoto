@@ -153,10 +153,10 @@ impl<'b> Service<'b> {
                     "serde_urlencoded".to_owned(),
                     cargo::Dependency::Simple("0.5".into()),
                 );
-                dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.7".into()));
+                dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.8".into()));
             }
             "rest-xml" => {
-                dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.7".into()));
+                dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.8".into()));
             }
             "rest-json" => {
                 dependencies.insert(
