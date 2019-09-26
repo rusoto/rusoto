@@ -42,13 +42,13 @@ pub struct AccountQuota {
     pub used: Option<i64>,
 }
 
-/// <p><p/></p>
+/// <p>Associates a set of tags with an AWS DMS resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddTagsToResourceMessage {
-    /// <p>The Amazon Resource Name (ARN) of the AWS DMS resource the tag is to be added to. AWS DMS resources include a replication instance, endpoint, and a replication task.</p>
+    /// <p>Identifies the AWS DMS resource to which tags should be added. The value for this parameter is an Amazon Resource Name (ARN).</p> <p>For AWS DMS, you can tag a replication instance, an endpoint, or a replication task.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
-    /// <p>The tag to be assigned to the DMS resource.</p>
+    /// <p>One or more tags to be assigned to the resource.</p>
     #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
 }
@@ -64,7 +64,7 @@ pub struct ApplyPendingMaintenanceActionMessage {
     /// <p>The pending maintenance action to apply to this resource.</p>
     #[serde(rename = "ApplyAction")]
     pub apply_action: String,
-    /// <p><p>A value that specifies the type of opt-in request, or undoes an opt-in request. An opt-in request of type <code>immediate</code> cannot be undone.</p> <p>Valid values:</p> <ul> <li> <p> <code>immediate</code> - Apply the maintenance action immediately.</p> </li> <li> <p> <code>next-maintenance</code> - Apply the maintenance action during the next maintenance window for the resource.</p> </li> <li> <p> <code>undo-opt-in</code> - Cancel any existing <code>next-maintenance</code> opt-in requests.</p> </li> </ul></p>
+    /// <p><p>A value that specifies the type of opt-in request, or undoes an opt-in request. You can&#39;t undo an opt-in request of type <code>immediate</code>.</p> <p>Valid values:</p> <ul> <li> <p> <code>immediate</code> - Apply the maintenance action immediately.</p> </li> <li> <p> <code>next-maintenance</code> - Apply the maintenance action during the next maintenance window for the resource.</p> </li> <li> <p> <code>undo-opt-in</code> - Cancel any existing <code>next-maintenance</code> opt-in requests.</p> </li> </ul></p>
     #[serde(rename = "OptInType")]
     pub opt_in_type: String,
     /// <p>The Amazon Resource Name (ARN) of the AWS DMS resource that the pending maintenance action applies to.</p>
@@ -104,7 +104,7 @@ pub struct Certificate {
     #[serde(rename = "CertificateCreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_creation_date: Option<f64>,
-    /// <p>The customer-assigned name of the certificate. Valid characters are A-z and 0-9.</p>
+    /// <p>A customer-assigned name for the certificate. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>
     #[serde(rename = "CertificateIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_identifier: Option<String>,
@@ -112,11 +112,11 @@ pub struct Certificate {
     #[serde(rename = "CertificateOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_owner: Option<String>,
-    /// <p>The contents of the .pem X.509 certificate file for the certificate.</p>
+    /// <p>The contents of a <code>.pem</code> file, which contains an X.509 certificate.</p>
     #[serde(rename = "CertificatePem")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_pem: Option<String>,
-    /// <p>The location of the imported Oracle Wallet certificate for use with SSL.</p>
+    /// <p>The location of an imported Oracle Wallet certificate for use with SSL.</p>
     #[serde(rename = "CertificateWallet")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -184,7 +184,7 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    /// <p>The settings in JSON format for the DMS transfer type of source endpoint. </p> <p>Possible attributes include the following:</p> <ul> <li> <p> <code>serviceAccessRoleArn</code> - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p> <code>bucketName</code> - The name of the S3 bucket to use.</p> </li> <li> <p> <code>compressionType</code> - An optional parameter to use GZIP to compress the target files. To use GZIP, set this value to <code>NONE</code> (the default). To keep the files uncompressed, don't use this value. </p> </li> </ul> <p>Shorthand syntax for these attributes is as follows: <code>ServiceAccessRoleArn=string,BucketName=string,CompressionType=string</code> </p> <p>JSON syntax for these attributes is as follows: <code>{ "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </code> </p>
+    /// <p>The settings in JSON format for the DMS transfer type of source endpoint. </p> <p>Possible attributes include the following:</p> <ul> <li> <p> <code>serviceAccessRoleArn</code> - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p> <code>bucketName</code> - The name of the S3 bucket to use.</p> </li> <li> <p> <code>compressionType</code> - An optional parameter to use GZIP to compress the target files. To use GZIP, set this value to <code>NONE</code> (the default). To keep the files uncompressed, don't use this value.</p> </li> </ul> <p>Shorthand syntax for these attributes is as follows: <code>ServiceAccessRoleArn=string,BucketName=string,CompressionType=string</code> </p> <p>JSON syntax for these attributes is as follows: <code>{ "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </code> </p>
     #[serde(rename = "DmsTransferSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dms_transfer_settings: Option<DmsTransferSettings>,
@@ -199,25 +199,25 @@ pub struct CreateEndpointMessage {
     /// <p>The database endpoint identifier. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>
     #[serde(rename = "EndpointIdentifier")]
     pub endpoint_identifier: String,
-    /// <p>The type of endpoint.</p>
+    /// <p>The type of endpoint. Valid values are <code>source</code> and <code>target</code>.</p>
     #[serde(rename = "EndpointType")]
     pub endpoint_type: String,
-    /// <p>The type of engine for the endpoint. Valid values, depending on the <code>EndPointType</code> value, include <code>mysql</code>, <code>oracle</code>, <code>postgres</code>, <code>mariadb</code>, <code>aurora</code>, <code>aurora-postgresql</code>, <code>redshift</code>, <code>s3</code>, <code>db2</code>, <code>azuredb</code>, <code>sybase</code>, <code>dynamodb</code>, <code>mongodb</code>, and <code>sqlserver</code>.</p>
+    /// <p>The type of engine for the endpoint. Valid values, depending on the <code>EndpointType</code> value, include <code>mysql</code>, <code>oracle</code>, <code>postgres</code>, <code>mariadb</code>, <code>aurora</code>, <code>aurora-postgresql</code>, <code>redshift</code>, <code>s3</code>, <code>db2</code>, <code>azuredb</code>, <code>sybase</code>, <code>dynamodb</code>, <code>mongodb</code>, and <code>sqlserver</code>.</p>
     #[serde(rename = "EngineName")]
     pub engine_name: String,
     /// <p>The external table definition. </p>
     #[serde(rename = "ExternalTableDefinition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_table_definition: Option<String>,
-    /// <p>Additional attributes associated with the connection.</p>
+    /// <p>Additional attributes associated with the connection. Each attribute is specified as a name-value pair associated by an equal sign (=). Multiple attributes are separated by a semicolon (;) with no additional white space. For information on the attributes available for connecting your source or target endpoint, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Endpoints.html">Working with AWS DMS Endpoints</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "ExtraConnectionAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_connection_attributes: Option<String>,
-    /// <p>Settings in JSON format for the target Amazon Kinesis Data Streams endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping ">Using Object Mapping to Migrate Data to a Kinesis Data Stream</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    /// <p>Settings in JSON format for the target Amazon Kinesis Data Streams endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping">Using Object Mapping to Migrate Data to a Kinesis Data Stream</a> in the <i>AWS Database Migration User Guide.</i> </p>
     #[serde(rename = "KinesisSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_settings: Option<KinesisSettings>,
-    /// <p>The AWS KMS key identifier to use to encrypt the connection parameters. If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
+    /// <p>An AWS KMS key identifier that is used to encrypt the connection parameters for the endpoint.</p> <p>If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key.</p> <p>AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -248,11 +248,11 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "ServiceAccessRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_access_role_arn: Option<String>,
-    /// <p>The Secure Sockets Layer (SSL) mode to use for the SSL connection. The SSL mode can be one of four values: <code>none</code>, <code>require</code>, <code>verify-ca</code>, <code>verify-full</code>. The default value is <code>none</code>.</p>
+    /// <p>The Secure Sockets Layer (SSL) mode to use for the SSL connection. The default is <code>none</code> </p>
     #[serde(rename = "SslMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ssl_mode: Option<String>,
-    /// <p>Tags to be added to the endpoint.</p>
+    /// <p>One or more tags to be assigned to the endpoint.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -279,25 +279,25 @@ pub struct CreateEventSubscriptionMessage {
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p> A list of event categories for a source type that you want to subscribe to. You can see a list of the categories for a given source type by calling the <code>DescribeEventCategories</code> action or in the topic <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    /// <p>A list of event categories for a source type that you want to subscribe to. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "EventCategories")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_categories: Option<Vec<String>>,
     /// <p> The Amazon Resource Name (ARN) of the Amazon SNS topic created for event notification. The ARN is created by Amazon SNS when you create a topic and subscribe to it. </p>
     #[serde(rename = "SnsTopicArn")]
     pub sns_topic_arn: String,
-    /// <p> The list of identifiers of the event sources for which events will be returned. If not specified, then all sources are included in the response. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it cannot end with a hyphen or contain two consecutive hyphens. </p>
+    /// <p>A list of identifiers for which AWS DMS provides notification events.</p> <p>If you don't specify a value, notifications are provided for all sources.</p> <p>If you specify multiple values, they must be of the same type. For example, if you specify a database instance ID, then all of the other values must be database instance IDs.</p>
     #[serde(rename = "SourceIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_ids: Option<Vec<String>>,
-    /// <p> The type of AWS DMS resource that generates the events. For example, if you want to be notified of events generated by a replication instance, you set this parameter to <code>replication-instance</code>. If this value is not specified, all events are returned. </p> <p>Valid values: replication-instance | migration-task</p>
+    /// <p> The type of AWS DMS resource that generates the events. For example, if you want to be notified of events generated by a replication instance, you set this parameter to <code>replication-instance</code>. If this value is not specified, all events are returned. </p> <p>Valid values: <code>replication-instance</code> | <code>replication-task</code> </p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
-    /// <p>The name of the AWS DMS event notification subscription. </p> <p>Constraints: The name must be less than 255 characters. </p>
+    /// <p>The name of the AWS DMS event notification subscription. This name must be less than 255 characters.</p>
     #[serde(rename = "SubscriptionName")]
     pub subscription_name: String,
-    /// <p>A tag to be attached to the event subscription.</p>
+    /// <p>One or more tags to be assigned to the event subscription.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -320,11 +320,11 @@ pub struct CreateReplicationInstanceMessage {
     #[serde(rename = "AllocatedStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_storage: Option<i64>,
-    /// <p>Indicates that minor engine upgrades will be applied automatically to the replication instance during the maintenance window.</p> <p>Default: <code>true</code> </p>
+    /// <p>Indicates whether minor engine upgrades will be applied automatically to the replication instance during the maintenance window. This parameter defaults to <code>true</code>.</p> <p>Default: <code>true</code> </p>
     #[serde(rename = "AutoMinorVersionUpgrade")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_minor_version_upgrade: Option<bool>,
-    /// <p>The EC2 Availability Zone that the replication instance will be created in.</p> <p>Default: A random, system-chosen Availability Zone in the endpoint's region.</p> <p> Example: <code>us-east-1d</code> </p>
+    /// <p>The AWS Availability Zone where the replication instance will be created. The default value is a random, system-chosen Availability Zone in the endpoint's AWS Region, for example: <code>us-east-1d</code> </p>
     #[serde(rename = "AvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
@@ -336,15 +336,15 @@ pub struct CreateReplicationInstanceMessage {
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
-    /// <p>The AWS KMS key identifier that is used to encrypt the content on the replication instance. If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
+    /// <p>An AWS KMS key identifier that is used to encrypt the data on the replication instance.</p> <p>If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key.</p> <p>AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
+    /// <p> Specifies whether the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
     #[serde(rename = "MultiAZ")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub multi_az: Option<bool>,
-    /// <p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p> Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>Default: A 30-minute window selected at random from an 8-hour block of time per region, occurring on a random day of the week.</p> <p>Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Minimum 30-minute window.</p>
+    /// <p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p> Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>Default: A 30-minute window selected at random from an 8-hour block of time per AWS Region, occurring on a random day of the week.</p> <p>Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Minimum 30-minute window.</p>
     #[serde(rename = "PreferredMaintenanceWindow")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
@@ -362,7 +362,7 @@ pub struct CreateReplicationInstanceMessage {
     #[serde(rename = "ReplicationSubnetGroupIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_subnet_group_identifier: Option<String>,
-    /// <p>Tags to be associated with the replication instance.</p>
+    /// <p>One or more tags to be assigned to the replication instance.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -391,10 +391,10 @@ pub struct CreateReplicationSubnetGroupMessage {
     /// <p>The name for the replication subnet group. This value is stored as a lowercase string.</p> <p>Constraints: Must contain no more than 255 alphanumeric characters, periods, spaces, underscores, or hyphens. Must not be "default".</p> <p>Example: <code>mySubnetgroup</code> </p>
     #[serde(rename = "ReplicationSubnetGroupIdentifier")]
     pub replication_subnet_group_identifier: String,
-    /// <p>The EC2 subnet IDs for the subnet group.</p>
+    /// <p>One or more subnet IDs to be assigned to the subnet group.</p>
     #[serde(rename = "SubnetIds")]
     pub subnet_ids: Vec<String>,
-    /// <p>The tag to be assigned to the subnet group.</p>
+    /// <p>One or more tags to be assigned to the subnet group.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -425,30 +425,30 @@ pub struct CreateReplicationTaskMessage {
     #[serde(rename = "CdcStopPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_stop_position: Option<String>,
-    /// <p>The migration type.</p>
+    /// <p>The migration type. Valid values: <code>full-load</code> | <code>cdc</code> | <code>full-load-and-cdc</code> </p>
     #[serde(rename = "MigrationType")]
     pub migration_type: String,
-    /// <p>The Amazon Resource Name (ARN) of the replication instance.</p>
+    /// <p>The Amazon Resource Name (ARN) of a replication instance.</p>
     #[serde(rename = "ReplicationInstanceArn")]
     pub replication_instance_arn: String,
-    /// <p><p>The replication task identifier.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
+    /// <p><p>An identifier for the replication task.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     #[serde(rename = "ReplicationTaskIdentifier")]
     pub replication_task_identifier: String,
-    /// <p>Settings for the task, such as target metadata settings. For a complete list of task settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html">Task Settings for AWS Database Migration Service Tasks</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    /// <p>Overall settings for the task, in JSON format. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html">Task Settings</a> in the <i>AWS Database Migration User Guide.</i> </p>
     #[serde(rename = "ReplicationTaskSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_settings: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
+    /// <p>An Amazon Resource Name (ARN) that uniquely identifies the source endpoint.</p>
     #[serde(rename = "SourceEndpointArn")]
     pub source_endpoint_arn: String,
-    /// <p>When using the AWS CLI or boto3, provide the path of the JSON file that contains the table mappings. Precede the path with "file://". When working with the DMS API, provide the JSON as the parameter value.</p> <p>For example, --table-mappings file://mappingfile.json</p>
+    /// <p>The table mappings for the task, in JSON format. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TableMapping.html">Table Mapping</a> in the <i>AWS Database Migration User Guide.</i> </p>
     #[serde(rename = "TableMappings")]
     pub table_mappings: String,
-    /// <p>Tags to be added to the replication instance.</p>
+    /// <p>One or more tags to be assigned to the replication task.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
+    /// <p>An Amazon Resource Name (ARN) that uniquely identifies the target endpoint.</p>
     #[serde(rename = "TargetEndpointArn")]
     pub target_endpoint_arn: String,
 }
@@ -576,6 +576,10 @@ pub struct DescribeAccountAttributesResponse {
     #[serde(rename = "AccountQuotas")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_quotas: Option<Vec<AccountQuota>>,
+    /// <p><p>A unique AWS DMS identifier for an account in a particular AWS Region. The value of this identifier has the following format: <code>c99999999999</code>. DMS uses this identifier to name artifacts. For example, DMS uses this identifier to name the default Amazon S3 bucket for storing task assessment reports in a given AWS Region. The format of this S3 bucket name is the following: <code>dms-<i>AccountNumber</i>-<i>UniqueAccountIdentifier</i>.</code> Here is an example name for this default S3 bucket: <code>dms-111122223333-c44445555666</code>.</p> <note> <p>AWS DMS supports <code>UniqueAccountIdentifier</code> in versions 3.1.4 and later.</p> </note></p>
+    #[serde(rename = "UniqueAccountIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unique_account_identifier: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -584,7 +588,7 @@ pub struct DescribeCertificatesMessage {
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the vlue specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
@@ -663,7 +667,7 @@ pub struct DescribeEndpointTypesResponse {
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    /// <p>The type of endpoints that are supported.</p>
+    /// <p>The types of endpoints that are supported.</p>
     #[serde(rename = "SupportedEndpointTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_endpoint_types: Option<Vec<SupportedEndpointType>>,
@@ -707,7 +711,7 @@ pub struct DescribeEventCategoriesMessage {
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | migration-task</p>
+    /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | replication-task</p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
@@ -769,7 +773,7 @@ pub struct DescribeEventsMessage {
     #[serde(rename = "EndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    /// <p>A list of event categories for a source type that you want to subscribe to.</p>
+    /// <p>A list of event categories for the source type that you've chosen.</p>
     #[serde(rename = "EventCategories")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_categories: Option<Vec<String>>,
@@ -785,11 +789,11 @@ pub struct DescribeEventsMessage {
     #[serde(rename = "MaxRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
-    /// <p> The identifier of the event source. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens. It cannot end with a hyphen or contain two consecutive hyphens. </p>
+    /// <p> The identifier of an event source.</p>
     #[serde(rename = "SourceIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_identifier: Option<String>,
-    /// <p>The type of AWS DMS resource that generates events.</p> <p>Valid values: replication-instance | migration-task</p>
+    /// <p>The type of AWS DMS resource that generates events.</p> <p>Valid values: replication-instance | replication-task</p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
@@ -855,7 +859,7 @@ pub struct DescribePendingMaintenanceActionsMessage {
     #[serde(rename = "MaxRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
-    /// <p>The ARN of the replication instance.</p>
+    /// <p>The Amazon Resource Name (ARN) of the replication instance.</p>
     #[serde(rename = "ReplicationInstanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_arn: Option<String>,
@@ -1037,7 +1041,7 @@ pub struct DescribeReplicationTasksMessage {
     #[serde(rename = "MaxRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
-    /// <p>Set this flag to avoid returning setting information. Use this to reduce overhead when settings are too large. Choose TRUE to use this flag, otherwise choose FALSE (default).</p>
+    /// <p>An option to set to avoid returning information about settings. Use this to reduce overhead when setting information is too large. To use this option, choose <code>true</code>; otherwise, choose <code>false</code> (the default).</p>
     #[serde(rename = "WithoutSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub without_settings: Option<bool>,
@@ -1149,7 +1153,7 @@ pub struct DynamoDbSettings {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ElasticsearchSettings {
-    /// <p>The endpoint for the ElasticSearch cluster.</p>
+    /// <p>The endpoint for the Elasticsearch cluster.</p>
     #[serde(rename = "EndpointUri")]
     pub endpoint_uri: String,
     /// <p>The maximum number of seconds that DMS retries failed API requests to the Elasticsearch cluster.</p>
@@ -1197,7 +1201,7 @@ pub struct Endpoint {
     #[serde(rename = "EndpointIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_identifier: Option<String>,
-    /// <p>The type of endpoint.</p>
+    /// <p>The type of endpoint. Valid values are <code>source</code> and <code>target</code>.</p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
@@ -1205,7 +1209,7 @@ pub struct Endpoint {
     #[serde(rename = "EngineDisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_display_name: Option<String>,
-    /// <p>The database engine name. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, sybase, dynamodb, mongodb, and sqlserver.</p>
+    /// <p>The database engine name. Valid values, depending on the EndpointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, dynamodb, mongodb, and sqlserver.</p>
     #[serde(rename = "EngineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_name: Option<String>,
@@ -1225,7 +1229,7 @@ pub struct Endpoint {
     #[serde(rename = "KinesisSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_settings: Option<KinesisSettings>,
-    /// <p>The AWS KMS key identifier that is used to encrypt the content on the replication instance. If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
+    /// <p>An AWS KMS key identifier that is used to encrypt the connection parameters for the endpoint.</p> <p>If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key.</p> <p>AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -1237,7 +1241,7 @@ pub struct Endpoint {
     #[serde(rename = "Port")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    /// <p>Settings for the Amazon Redshift endpoint</p>
+    /// <p>Settings for the Amazon Redshift endpoint.</p>
     #[serde(rename = "RedshiftSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub redshift_settings: Option<RedshiftSettings>,
@@ -1253,7 +1257,7 @@ pub struct Endpoint {
     #[serde(rename = "ServiceAccessRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_access_role_arn: Option<String>,
-    /// <p>The SSL mode used to connect to the endpoint.</p> <p>SSL mode can be one of four values: none, require, verify-ca, verify-full. </p> <p>The default value is none.</p>
+    /// <p>The SSL mode used to connect to the endpoint. The default value is <code>none</code>.</p>
     #[serde(rename = "SslMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ssl_mode: Option<String>,
@@ -1283,11 +1287,11 @@ pub struct Event {
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    /// <p> The identifier of the event source. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it cannot end with a hyphen or contain two consecutive hyphens. </p> <p>Constraints:replication instance, endpoint, migration task</p>
+    /// <p> The identifier of an event source.</p>
     #[serde(rename = "SourceIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_identifier: Option<String>,
-    /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | endpoint | migration-task</p>
+    /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | endpoint | replication-task</p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
@@ -1297,11 +1301,11 @@ pub struct Event {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct EventCategoryGroup {
-    /// <p> A list of event categories for a <code>SourceType</code> that you want to subscribe to. </p>
+    /// <p> A list of event categories from a source type that you've chosen.</p>
     #[serde(rename = "EventCategories")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_categories: Option<Vec<String>>,
-    /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | replication-server | security-group | migration-task</p>
+    /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | replication-server | security-group | replication-task</p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
@@ -1335,7 +1339,7 @@ pub struct EventSubscription {
     #[serde(rename = "SourceIdsList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_ids_list: Option<Vec<String>>,
-    /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | replication-server | security-group | migration-task</p>
+    /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | replication-server | security-group | replication-task</p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
@@ -1362,14 +1366,14 @@ pub struct Filter {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ImportCertificateMessage {
-    /// <p>The customer-assigned name of the certificate. Valid characters are A-z and 0-9.</p>
+    /// <p>A customer-assigned name for the certificate. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>
     #[serde(rename = "CertificateIdentifier")]
     pub certificate_identifier: String,
-    /// <p>The contents of the .pem X.509 certificate file for the certificate.</p>
+    /// <p>The contents of a <code>.pem</code> file, which contains an X.509 certificate.</p>
     #[serde(rename = "CertificatePem")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_pem: Option<String>,
-    /// <p>The location of the imported Oracle Wallet certificate for use with SSL.</p>
+    /// <p>The location of an imported Oracle Wallet certificate for use with SSL.</p>
     #[serde(rename = "CertificateWallet")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -1458,11 +1462,11 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "EndpointIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_identifier: Option<String>,
-    /// <p>The type of endpoint.</p>
+    /// <p>The type of endpoint. Valid values are <code>source</code> and <code>target</code>.</p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
-    /// <p>The type of engine for the endpoint. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, sybase, dynamodb, mongodb, and sqlserver.</p>
+    /// <p>The type of engine for the endpoint. Valid values, depending on the EndpointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, dynamodb, mongodb, and sqlserver.</p>
     #[serde(rename = "EngineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_name: Option<String>,
@@ -1474,7 +1478,7 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "ExtraConnectionAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_connection_attributes: Option<String>,
-    /// <p>Settings in JSON format for the target Amazon Kinesis Data Streams endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping ">Using Object Mapping to Migrate Data to a Kinesis Data Stream</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    /// <p>Settings in JSON format for the target Amazon Kinesis Data Streams endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping">Using Object Mapping to Migrate Data to a Kinesis Data Stream</a> in the <i>AWS Database Migration User Guide.</i> </p>
     #[serde(rename = "KinesisSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_settings: Option<KinesisSettings>,
@@ -1505,7 +1509,7 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "ServiceAccessRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_access_role_arn: Option<String>,
-    /// <p>The SSL mode to be used.</p> <p>SSL mode can be one of four values: none, require, verify-ca, verify-full. </p> <p>The default value is none.</p>
+    /// <p>The SSL mode used to connect to the endpoint. The default value is <code>none</code>.</p>
     #[serde(rename = "SslMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ssl_mode: Option<String>,
@@ -1540,7 +1544,7 @@ pub struct ModifyEventSubscriptionMessage {
     #[serde(rename = "SnsTopicArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_topic_arn: Option<String>,
-    /// <p> The type of AWS DMS resource that generates the events you want to subscribe to. </p> <p>Valid values: replication-instance | migration-task</p>
+    /// <p> The type of AWS DMS resource that generates the events you want to subscribe to. </p> <p>Valid values: replication-instance | replication-task</p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
@@ -1566,7 +1570,7 @@ pub struct ModifyReplicationInstanceMessage {
     #[serde(rename = "AllocatedStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_storage: Option<i64>,
-    /// <p>Indicates that major version upgrades are allowed. Changing this parameter does not result in an outage and the change is asynchronously applied as soon as possible.</p> <p>Constraints: This parameter must be set to true when specifying a value for the <code>EngineVersion</code> parameter that is a different major version than the replication instance's current version.</p>
+    /// <p>Indicates that major version upgrades are allowed. Changing this parameter does not result in an outage, and the change is asynchronously applied as soon as possible.</p> <p>This parameter must be set to <code>true</code> when specifying a value for the <code>EngineVersion</code> parameter that is a different major version than the replication instance's current version.</p>
     #[serde(rename = "AllowMajorVersionUpgrade")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allow_major_version_upgrade: Option<bool>,
@@ -1582,7 +1586,7 @@ pub struct ModifyReplicationInstanceMessage {
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
-    /// <p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
+    /// <p> Specifies whether the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
     #[serde(rename = "MultiAZ")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub multi_az: Option<bool>,
@@ -1620,7 +1624,7 @@ pub struct ModifyReplicationInstanceResponse {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ModifyReplicationSubnetGroupMessage {
-    /// <p>The description of the replication instance subnet group.</p>
+    /// <p>A description for the replication instance subnet group.</p>
     #[serde(rename = "ReplicationSubnetGroupDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_subnet_group_description: Option<String>,
@@ -1657,7 +1661,7 @@ pub struct ModifyReplicationTaskMessage {
     #[serde(rename = "CdcStopPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_stop_position: Option<String>,
-    /// <p>The migration type.</p> <p>Valid values: full-load | cdc | full-load-and-cdc</p>
+    /// <p>The migration type. Valid values: <code>full-load</code> | <code>cdc</code> | <code>full-load-and-cdc</code> </p>
     #[serde(rename = "MigrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub migration_type: Option<String>,
@@ -1672,7 +1676,7 @@ pub struct ModifyReplicationTaskMessage {
     #[serde(rename = "ReplicationTaskSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_settings: Option<String>,
-    /// <p>When using the AWS CLI or boto3, provide the path of the JSON file that contains the table mappings. Precede the path with "file://". When working with the DMS API, provide the JSON as the parameter value.</p> <p>For example, --table-mappings file://mappingfile.json</p>
+    /// <p>When using the AWS CLI or boto3, provide the path of the JSON file that contains the table mappings. Precede the path with <code>file://</code>. When working with the DMS API, provide the JSON as the parameter value, for example: <code>--table-mappings file://mappingfile.json</code> </p>
     #[serde(rename = "TableMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_mappings: Option<String>,
@@ -1745,7 +1749,7 @@ pub struct MongoDbSettings {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct OrderableReplicationInstance {
-    /// <p>List of availability zones for this replication instance.</p>
+    /// <p>List of Availability Zones for this replication instance.</p>
     #[serde(rename = "AvailabilityZones")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zones: Option<Vec<String>>,
@@ -1769,6 +1773,10 @@ pub struct OrderableReplicationInstance {
     #[serde(rename = "MinAllocatedStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub min_allocated_storage: Option<i64>,
+    /// <p><p>The value returned when the specified <code>EngineVersion</code> of the replication instance is in Beta or test mode. This indicates some features might not work as expected.</p> <note> <p>AWS DMS supports <code>ReleaseStatus</code> in versions 3.1.4 and later.</p> </note></p>
+    #[serde(rename = "ReleaseStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub release_status: Option<String>,
     /// <p>The compute and memory capacity of the replication instance.</p> <p> Valid Values: <code>dms.t2.micro | dms.t2.small | dms.t2.medium | dms.t2.large | dms.c4.large | dms.c4.xlarge | dms.c4.2xlarge | dms.c4.4xlarge </code> </p>
     #[serde(rename = "ReplicationInstanceClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1832,15 +1840,15 @@ pub struct RebootReplicationInstanceResponse {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RedshiftSettings {
-    /// <p>Allows any date format, including invalid formats such as 00/00/00 00:00:00, to be loaded without generating an error. You can choose TRUE or FALSE (default).</p> <p>This parameter applies only to TIMESTAMP and DATE columns. Always use ACCEPTANYDATE with the DATEFORMAT parameter. If the date format for the data does not match the DATEFORMAT specification, Amazon Redshift inserts a NULL value into that field. </p>
+    /// <p>A value that indicates to allow any date format, including invalid formats such as 00/00/00 00:00:00, to be loaded without generating an error. You can choose <code>true</code> or <code>false</code> (the default).</p> <p>This parameter applies only to TIMESTAMP and DATE columns. Always use ACCEPTANYDATE with the DATEFORMAT parameter. If the date format for the data doesn't match the DATEFORMAT specification, Amazon Redshift inserts a NULL value into that field. </p>
     #[serde(rename = "AcceptAnyDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_any_date: Option<bool>,
-    /// <p>Code to run after connecting. This should be the code, not a filename.</p>
+    /// <p>Code to run after connecting. This parameter should contain the code itself, not the name of a file containing the code.</p>
     #[serde(rename = "AfterConnectScript")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub after_connect_script: Option<String>,
-    /// <p>The location where the CSV files are stored before being uploaded to the S3 bucket. </p>
+    /// <p>The location where the comma-separated value (.csv) files are stored before being uploaded to the S3 bucket. </p>
     #[serde(rename = "BucketFolder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket_folder: Option<String>,
@@ -1848,39 +1856,39 @@ pub struct RedshiftSettings {
     #[serde(rename = "BucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket_name: Option<String>,
-    /// <p>Sets the amount of time to wait (in milliseconds) before timing out, beginning from when you initially establish a connection.</p>
+    /// <p>A value that sets the amount of time to wait (in milliseconds) before timing out, beginning from when you initially establish a connection.</p>
     #[serde(rename = "ConnectionTimeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_timeout: Option<i64>,
-    /// <p>The name of the Amazon Redshift data warehouse (service) you are working with.</p>
+    /// <p>The name of the Amazon Redshift data warehouse (service) that you are working with.</p>
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    /// <p>The date format you are using. Valid values are <code>auto</code> (case-sensitive), your date format string enclosed in quotes, or NULL. If this is left unset (NULL), it defaults to a format of 'YYYY-MM-DD'. Using <code>auto</code> recognizes most strings, even some that are not supported when you use a date format string. </p> <p>If your date and time values use formats different from each other, set this to <code>auto</code>. </p>
+    /// <p>The date format that you are using. Valid values are <code>auto</code> (case-sensitive), your date format string enclosed in quotes, or NULL. If this parameter is left unset (NULL), it defaults to a format of 'YYYY-MM-DD'. Using <code>auto</code> recognizes most strings, even some that aren't supported when you use a date format string. </p> <p>If your date and time values use formats different from each other, set this to <code>auto</code>. </p>
     #[serde(rename = "DateFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub date_format: Option<String>,
-    /// <p>Specifies whether AWS DMS should migrate empty CHAR and VARCHAR fields as NULL. A value of TRUE sets empty CHAR and VARCHAR fields to null. The default is FALSE.</p>
+    /// <p>A value that specifies whether AWS DMS should migrate empty CHAR and VARCHAR fields as NULL. A value of <code>true</code> sets empty CHAR and VARCHAR fields to null. The default is <code>false</code>.</p>
     #[serde(rename = "EmptyAsNull")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub empty_as_null: Option<bool>,
-    /// <p>The type of server side encryption you want to use for your data. This is part of the endpoint settings or the extra connections attributes for Amazon S3. You can choose either SSE_S3 (default) or SSE_KMS. To use SSE_S3, create an IAM role with a policy that allows <code>"arn:aws:s3:::*"</code> to use the following actions: <code>"s3:PutObject", "s3:ListBucket"</code>.</p>
+    /// <p>The type of server-side encryption that you want to use for your data. This encryption type is part of the endpoint settings or the extra connections attributes for Amazon S3. You can choose either <code>SSE_S3</code> (the default) or <code>SSE_KMS</code>. To use <code>SSE_S3</code>, create an AWS Identity and Access Management (IAM) role with a policy that allows <code>"arn:aws:s3:::*"</code> to use the following actions: <code>"s3:PutObject", "s3:ListBucket"</code> </p>
     #[serde(rename = "EncryptionMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_mode: Option<String>,
-    /// <p>Specifies the number of threads used to upload a single file. This accepts a value between 1 and 64. It defaults to 10.</p>
+    /// <p>The number of threads used to upload a single file. This parameter accepts a value from 1 through 64. It defaults to 10.</p>
     #[serde(rename = "FileTransferUploadStreams")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_transfer_upload_streams: Option<i64>,
-    /// <p>Sets the amount of time to wait (in milliseconds) before timing out, beginning from when you begin loading.</p>
+    /// <p>The amount of time to wait (in milliseconds) before timing out, beginning from when you begin loading.</p>
     #[serde(rename = "LoadTimeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub load_timeout: Option<i64>,
-    /// <p>Specifies the maximum size (in KB) of any CSV file used to transfer data to Amazon Redshift. This accepts a value between 1 and 1048576. It defaults to 32768 KB (32 MB).</p>
+    /// <p>The maximum size (in KB) of any .csv file used to transfer data to Amazon Redshift. This accepts a value from 1 through 1,048,576. It defaults to 32,768 KB (32 MB).</p>
     #[serde(rename = "MaxFileSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_file_size: Option<i64>,
-    /// <p>The password for the user named in the username property.</p>
+    /// <p>The password for the user named in the <code>username</code> property.</p>
     #[serde(rename = "Password")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub password: Option<String>,
@@ -1888,15 +1896,15 @@ pub struct RedshiftSettings {
     #[serde(rename = "Port")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    /// <p>Removes surrounding quotation marks from strings in the incoming data. All characters within the quotation marks, including delimiters, are retained. Choose TRUE to remove quotation marks. The default is FALSE.</p>
+    /// <p>A value that specifies to remove surrounding quotation marks from strings in the incoming data. All characters within the quotation marks, including delimiters, are retained. Choose <code>true</code> to remove quotation marks. The default is <code>false</code>.</p>
     #[serde(rename = "RemoveQuotes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remove_quotes: Option<bool>,
-    /// <p>Replaces invalid characters specified in <code>ReplaceInvalidChars</code>, substituting the specified value instead. The default is "?".</p>
+    /// <p>A value that specifies to replaces the invalid characters specified in <code>ReplaceInvalidChars</code>, substituting the specified characters instead. The default is <code>"?"</code>.</p>
     #[serde(rename = "ReplaceChars")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replace_chars: Option<String>,
-    /// <p>A list of chars you want to replace. Use with <code>ReplaceChars</code>.</p>
+    /// <p>A list of characters that you want to replace. Use with <code>ReplaceChars</code>.</p>
     #[serde(rename = "ReplaceInvalidChars")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replace_invalid_chars: Option<String>,
@@ -1904,23 +1912,23 @@ pub struct RedshiftSettings {
     #[serde(rename = "ServerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_name: Option<String>,
-    /// <p>If you are using SSE_KMS for the <code>EncryptionMode</code>, provide the KMS Key ID. The key you use needs an attached policy that enables IAM user permissions and allows use of the key.</p>
+    /// <p>The AWS KMS key ID. If you are using <code>SSE_KMS</code> for the <code>EncryptionMode</code>, provide this key ID. The key that you use needs an attached policy that enables IAM user permissions and allows use of the key.</p>
     #[serde(rename = "ServerSideEncryptionKmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_side_encryption_kms_key_id: Option<String>,
-    /// <p>The ARN of the role that has access to the Redshift service.</p>
+    /// <p>The Amazon Resource Name (ARN) of the IAM role that has access to the Amazon Redshift service.</p>
     #[serde(rename = "ServiceAccessRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_access_role_arn: Option<String>,
-    /// <p>The time format you want to use. Valid values are <code>auto</code> (case-sensitive), 'timeformat_string', 'epochsecs', or 'epochmillisecs'. It defaults to 10. Using <code>auto</code> recognizes most strings, even some that are not supported when you use a time format string. </p> <p>If your date and time values use formats different from each other, set this to <code>auto</code>. </p>
+    /// <p>The time format that you want to use. Valid values are <code>auto</code> (case-sensitive), <code>'timeformat_string'</code>, <code>'epochsecs'</code>, or <code>'epochmillisecs'</code>. It defaults to 10. Using <code>auto</code> recognizes most strings, even some that aren't supported when you use a time format string. </p> <p>If your date and time values use formats different from each other, set this parameter to <code>auto</code>. </p>
     #[serde(rename = "TimeFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub time_format: Option<String>,
-    /// <p>Removes the trailing white space characters from a VARCHAR string. This parameter applies only to columns with a VARCHAR data type. Choose TRUE to remove unneeded white space. The default is FALSE.</p>
+    /// <p>A value that specifies to remove the trailing white space characters from a VARCHAR string. This parameter applies only to columns with a VARCHAR data type. Choose <code>true</code> to remove unneeded white space. The default is <code>false</code>.</p>
     #[serde(rename = "TrimBlanks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trim_blanks: Option<bool>,
-    /// <p>Truncates data in columns to the appropriate number of characters, so that it fits in the column. Applies only to columns with a VARCHAR or CHAR data type, and rows with a size of 4 MB or less. Choose TRUE to truncate data. The default is FALSE.</p>
+    /// <p>A value that specifies to truncate data in columns to the appropriate number of characters, so that the data fits in the column. This parameter applies only to columns with a VARCHAR or CHAR data type, and rows with a size of 4 MB or less. Choose <code>true</code> to truncate data. The default is <code>false</code>.</p>
     #[serde(rename = "TruncateColumns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub truncate_columns: Option<bool>,
@@ -1928,7 +1936,7 @@ pub struct RedshiftSettings {
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
-    /// <p>The size of the write buffer to use in rows. Valid values range from 1 to 2048. Defaults to 1024. Use this setting to tune performance. </p>
+    /// <p>The size of the write buffer to use in rows. Valid values range from 1 through 2,048. The default is 1,024. Use this setting to tune performance. </p>
     #[serde(rename = "WriteBufferSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub write_buffer_size: Option<i64>,
@@ -2004,10 +2012,10 @@ pub struct ReloadTablesResponse {
     pub replication_task_arn: Option<String>,
 }
 
-/// <p><p/></p>
+/// <p>Removes one or more tags from an AWS DMS resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemoveTagsFromResourceMessage {
-    /// <p>&gt;The Amazon Resource Name (ARN) of the AWS DMS resource the tag is to be removed from.</p>
+    /// <p>An AWS DMS resource from which you want to remove tag(s). The value for this parameter is an Amazon Resource Name (ARN).</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
     /// <p>The tag key (name) of the tag to be removed.</p>
@@ -2052,11 +2060,11 @@ pub struct ReplicationInstance {
     #[serde(rename = "InstanceCreateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_create_time: Option<f64>,
-    /// <p>The AWS KMS key identifier that is used to encrypt the content on the replication instance. If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
+    /// <p>An AWS KMS key identifier that is used to encrypt the data on the replication instance.</p> <p>If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key.</p> <p>AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
+    /// <p> Specifies whether the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
     #[serde(rename = "MultiAZ")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub multi_az: Option<bool>,
@@ -2084,11 +2092,11 @@ pub struct ReplicationInstance {
     #[serde(rename = "ReplicationInstanceIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_identifier: Option<String>,
-    /// <p>The private IP address of the replication instance.</p>
+    /// <p>One or more private IP addresses for the replication instance.</p>
     #[serde(rename = "ReplicationInstancePrivateIpAddresses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_private_ip_addresses: Option<Vec<String>>,
-    /// <p>The public IP address of the replication instance.</p>
+    /// <p>One or more public IP addresses for the replication instance.</p>
     #[serde(rename = "ReplicationInstancePublicIpAddresses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_public_ip_addresses: Option<Vec<String>>,
@@ -2140,7 +2148,7 @@ pub struct ReplicationPendingModifiedValues {
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
-    /// <p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
+    /// <p> Specifies whether the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
     #[serde(rename = "MultiAZ")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub multi_az: Option<bool>,
@@ -2154,7 +2162,7 @@ pub struct ReplicationPendingModifiedValues {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ReplicationSubnetGroup {
-    /// <p>The description of the replication subnet group.</p>
+    /// <p>A description for the replication subnet group.</p>
     #[serde(rename = "ReplicationSubnetGroupDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_subnet_group_description: Option<String>,
@@ -2180,7 +2188,7 @@ pub struct ReplicationSubnetGroup {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ReplicationTask {
-    /// <p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position "checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93"</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>
+    /// <p>Indicates when you want a change data capture (CDC) operation to start. Use either <code>CdcStartPosition</code> or <code>CdcStartTime</code> to specify when you want the CDC operation to start. Specifying both values results in an error.</p> <p>The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position "checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93"</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>
     #[serde(rename = "CdcStartPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_start_position: Option<String>,
@@ -2322,7 +2330,7 @@ pub struct ResourcePendingMaintenanceActions {
     #[serde(rename = "PendingMaintenanceActionDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pending_maintenance_action_details: Option<Vec<PendingMaintenanceAction>>,
-    /// <p>The Amazon Resource Name (ARN) of the DMS resource that the pending maintenance action applies to. For information about creating an ARN, see <a href="https://docs.aws.amazon.com/dms/latest/UserGuide/USER_Tagging.html#USER_Tagging.ARN"> Constructing an Amazon Resource Name (ARN)</a> in the DMS documentation.</p>
+    /// <p>The Amazon Resource Name (ARN) of the DMS resource that the pending maintenance action applies to. For information about creating an ARN, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Introduction.AWS.ARN.html"> Constructing an Amazon Resource Name (ARN) for AWS DMS</a> in the DMS documentation.</p>
     #[serde(rename = "ResourceIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_identifier: Option<String>,
@@ -2331,7 +2339,7 @@ pub struct ResourcePendingMaintenanceActions {
 /// <p>Settings for exporting data to Amazon S3. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3Settings {
-    /// <p> An optional parameter to set a folder name in the S3 bucket. If provided, tables are created in the path <code>&lt;bucketFolder&gt;/&lt;schema_name&gt;/&lt;table_name&gt;/</code>. If this parameter is not specified, then the path used is <code>&lt;schema_name&gt;/&lt;table_name&gt;/</code>. </p>
+    /// <p> An optional parameter to set a folder name in the S3 bucket. If provided, tables are created in the path <code> <i>bucketFolder</i>/<i>schema_name</i>/<i>table_name</i>/</code>. If this parameter is not specified, then the path used is <code> <i>schema_name</i>/<i>table_name</i>/</code>. </p>
     #[serde(rename = "BucketFolder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket_folder: Option<String>,
@@ -2339,11 +2347,11 @@ pub struct S3Settings {
     #[serde(rename = "BucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket_name: Option<String>,
-    /// <p>Option to write only <code>INSERT</code> operations to the comma-separated value (CSV) output files. By default, the first field in a CSV record contains the letter <code>I</code> (insert), <code>U</code> (update) or <code>D</code> (delete) to indicate whether the row was inserted, updated, or deleted at the source database. If <code>cdcInsertsOnly</code> is set to true, then only <code>INSERT</code>s are recorded in the CSV file, without the <code>I</code> annotation on each line. Valid values are <code>TRUE</code> and <code>FALSE</code>.</p>
+    /// <p><p>A value that enables a change data capture (CDC) load to write only INSERT operations to .csv or columnar storage (.parquet) output files. By default (the <code>false</code> setting), the first field in a .csv or .parquet record contains the letter I (INSERT), U (UPDATE), or D (DELETE). These values indicate whether the row was inserted, updated, or deleted at the source database for a CDC load to the target.</p> <p>If <code>cdcInsertsOnly</code> is set to <code>true</code> or <code>y</code>, only INSERTs from the source database are migrated to the .csv or .parquet file. For .csv format only, how these INSERTs are recorded depends on the value of <code>IncludeOpForFullLoad</code>. If <code>IncludeOpForFullLoad</code> is set to <code>true</code>, the first field of every CDC record is set to I to indicate the INSERT operation at the source. If <code>IncludeOpForFullLoad</code> is set to <code>false</code>, every CDC record is written without a first field to indicate the INSERT operation at the source. For more information about how these settings work together, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring.InsertOps">Indicating Source DB Operations in Migrated S3 Data</a> in the <i>AWS Database Migration Service User Guide.</i>.</p> <note> <p>AWS DMS supports this interaction between <code>CdcInsertsOnly</code> and <code>IncludeOpForFullLoad</code> in versions 3.1.4 and later. </p> </note></p>
     #[serde(rename = "CdcInsertsOnly")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_inserts_only: Option<bool>,
-    /// <p> An optional parameter to use GZIP to compress the target files. Set to GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed. Applies to both CSV and PARQUET data formats. </p>
+    /// <p> An optional parameter to use GZIP to compress the target files. Set to GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed. Applies to both .csv and .parquet file formats. </p>
     #[serde(rename = "CompressionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compression_type: Option<String>,
@@ -2355,27 +2363,27 @@ pub struct S3Settings {
     #[serde(rename = "CsvRowDelimiter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub csv_row_delimiter: Option<String>,
-    /// <p><p>The format of the data which you want to use for output. You can choose one of the following: </p> <ul> <li> <p> <code>CSV</code> : This is a row-based format with comma-separated values. </p> </li> <li> <p> <code>PARQUET</code> : Apache Parquet is a columnar storage format that features efficient compression and provides faster query response. </p> </li> </ul></p>
+    /// <p><p>The format of the data that you want to use for output. You can choose one of the following: </p> <ul> <li> <p> <code>csv</code> : This is a row-based file format with comma-separated values (.csv). </p> </li> <li> <p> <code>parquet</code> : Apache Parquet (.parquet) is a columnar storage file format that features efficient compression and provides faster query response. </p> </li> </ul></p>
     #[serde(rename = "DataFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_format: Option<String>,
-    /// <p>The size of one data page in bytes. Defaults to 1024 * 1024 bytes (1MiB). For <code>PARQUET</code> format only. </p>
+    /// <p>The size of one data page in bytes. This parameter defaults to 1024 * 1024 bytes (1 MiB). This number is used for .parquet file format only. </p>
     #[serde(rename = "DataPageSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_page_size: Option<i64>,
-    /// <p>The maximum size of an encoded dictionary page of a column. If the dictionary page exceeds this, this column is stored using an encoding type of <code>PLAIN</code>. Defaults to 1024 * 1024 bytes (1MiB), the maximum size of a dictionary page before it reverts to <code>PLAIN</code> encoding. For <code>PARQUET</code> format only. </p>
+    /// <p>The maximum size of an encoded dictionary page of a column. If the dictionary page exceeds this, this column is stored using an encoding type of <code>PLAIN</code>. This parameter defaults to 1024 * 1024 bytes (1 MiB), the maximum size of a dictionary page before it reverts to <code>PLAIN</code> encoding. This size is used for .parquet file format only. </p>
     #[serde(rename = "DictPageSizeLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dict_page_size_limit: Option<i64>,
-    /// <p>Enables statistics for Parquet pages and rowGroups. Choose <code>TRUE</code> to enable statistics, choose <code>FALSE</code> to disable. Statistics include <code>NULL</code>, <code>DISTINCT</code>, <code>MAX</code>, and <code>MIN</code> values. Defaults to <code>TRUE</code>. For <code>PARQUET</code> format only.</p>
+    /// <p>A value that enables statistics for Parquet pages and row groups. Choose <code>true</code> to enable statistics, <code>false</code> to disable. Statistics include <code>NULL</code>, <code>DISTINCT</code>, <code>MAX</code>, and <code>MIN</code> values. This parameter defaults to <code>true</code>. This value is used for .parquet file format only.</p>
     #[serde(rename = "EnableStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_statistics: Option<bool>,
-    /// <p><p>The type of encoding you are using: <code>RLE<em>DICTIONARY</code> (default), <code>PLAIN</code>, or <code>PLAIN</em>DICTIONARY</code>.</p> <ul> <li> <p> <code>RLE<em>DICTIONARY</code> uses a combination of bit-packing and run-length encoding to store repeated values more efficiently.</p> </li> <li> <p> <code>PLAIN</code> does not use encoding at all. Values are stored as they are.</p> </li> <li> <p> <code>PLAIN</em>DICTIONARY</code> builds a dictionary of the values encountered in a given column. The dictionary is stored in a dictionary page for each column chunk.</p> </li> </ul></p>
+    /// <p><p>The type of encoding you are using: </p> <ul> <li> <p> <code>RLE<em>DICTIONARY</code> uses a combination of bit-packing and run-length encoding to store repeated values more efficiently. This is the default.</p> </li> <li> <p> <code>PLAIN</code> doesn&#39;t use encoding at all. Values are stored as they are.</p> </li> <li> <p> <code>PLAIN</em>DICTIONARY</code> builds a dictionary of the values encountered in a given column. The dictionary is stored in a dictionary page for each column chunk.</p> </li> </ul></p>
     #[serde(rename = "EncodingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encoding_type: Option<String>,
-    /// <p><p>The type of server side encryption you want to use for your data. This is part of the endpoint settings or the extra connections attributes for Amazon S3. You can choose either <code>SSE<em>S3</code> (default) or <code>SSE</em>KMS</code>. To use <code>SSE_S3</code>, you need an IAM role with permission to allow <code>&quot;arn:aws:s3:::dms-*&quot;</code> to use the following actions:</p> <ul> <li> <p>s3:CreateBucket</p> </li> <li> <p>s3:ListBucket</p> </li> <li> <p>s3:DeleteBucket</p> </li> <li> <p>s3:GetBucketLocation</p> </li> <li> <p>s3:GetObject</p> </li> <li> <p>s3:PutObject</p> </li> <li> <p>s3:DeleteObject</p> </li> <li> <p>s3:GetObjectVersion</p> </li> <li> <p>s3:GetBucketPolicy</p> </li> <li> <p>s3:PutBucketPolicy</p> </li> <li> <p>s3:DeleteBucketPolicy</p> </li> </ul></p>
+    /// <p><p>The type of server-side encryption that you want to use for your data. This encryption type is part of the endpoint settings or the extra connections attributes for Amazon S3. You can choose either <code>SSE<em>S3</code> (the default) or <code>SSE</em>KMS</code>. To use <code>SSE_S3</code>, you need an AWS Identity and Access Management (IAM) role with permission to allow <code>&quot;arn:aws:s3:::dms-*&quot;</code> to use the following actions:</p> <ul> <li> <p> <code>s3:CreateBucket</code> </p> </li> <li> <p> <code>s3:ListBucket</code> </p> </li> <li> <p> <code>s3:DeleteBucket</code> </p> </li> <li> <p> <code>s3:GetBucketLocation</code> </p> </li> <li> <p> <code>s3:GetObject</code> </p> </li> <li> <p> <code>s3:PutObject</code> </p> </li> <li> <p> <code>s3:DeleteObject</code> </p> </li> <li> <p> <code>s3:GetObjectVersion</code> </p> </li> <li> <p> <code>s3:GetBucketPolicy</code> </p> </li> <li> <p> <code>s3:PutBucketPolicy</code> </p> </li> <li> <p> <code>s3:DeleteBucketPolicy</code> </p> </li> </ul></p>
     #[serde(rename = "EncryptionMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_mode: Option<String>,
@@ -2383,15 +2391,19 @@ pub struct S3Settings {
     #[serde(rename = "ExternalTableDefinition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_table_definition: Option<String>,
-    /// <p>The version of Apache Parquet format you want to use: <code>PARQUET_1_0</code> (default) or <code>PARQUET_2_0</code>.</p>
+    /// <p><p>A value that enables a full load to write INSERT operations to the comma-separated value (.csv) output files only to indicate how the rows were added to the source database.</p> <note> <p>AWS DMS supports <code>IncludeOpForFullLoad</code> in versions 3.1.4 and later.</p> </note> <p>For full load, records can only be inserted. By default (the <code>false</code> setting), no information is recorded in these output files for a full load to indicate that the rows were inserted at the source database. If <code>IncludeOpForFullLoad</code> is set to <code>true</code> or <code>y</code>, the INSERT is recorded as an I annotation in the first field of the .csv file. This allows the format of your target records from a full load to be consistent with the target records from a CDC load.</p> <note> <p>This setting works together with <code>CdcInsertsOnly</code> for output to .csv files only. For more information about how these settings work together, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring.InsertOps">Indicating Source DB Operations in Migrated S3 Data</a> in the <i>AWS Database Migration Service User Guide.</i>.</p> </note></p>
+    #[serde(rename = "IncludeOpForFullLoad")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_op_for_full_load: Option<bool>,
+    /// <p>The version of the Apache Parquet format that you want to use: <code>parquet_1_0</code> (the default) or <code>parquet_2_0</code>.</p>
     #[serde(rename = "ParquetVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parquet_version: Option<String>,
-    /// <p>The number of rows in a row group. A smaller row group size provides faster reads. But as the number of row groups grows, the slower writes become. Defaults to 10,000 (ten thousand) rows. For <code>PARQUET</code> format only. </p> <p>If you choose a value larger than the maximum, <code>RowGroupLength</code> is set to the max row group length in bytes (64 * 1024 * 1024). </p>
+    /// <p>The number of rows in a row group. A smaller row group size provides faster reads. But as the number of row groups grows, the slower writes become. This parameter defaults to 10,000 rows. This number is used for .parquet file format only. </p> <p>If you choose a value larger than the maximum, <code>RowGroupLength</code> is set to the max row group length in bytes (64 * 1024 * 1024). </p>
     #[serde(rename = "RowGroupLength")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub row_group_length: Option<i64>,
-    /// <p>If you are using SSE_KMS for the <code>EncryptionMode</code>, provide the KMS Key ID. The key you use needs an attached policy that enables IAM user permissions and allows use of the key.</p> <p>Here is a CLI example: <code>aws dms create-endpoint --endpoint-identifier &lt;value&gt; --endpoint-type target --engine-name s3 --s3-settings ServiceAccessRoleArn=&lt;value&gt;,BucketFolder=&lt;value&gt;,BucketName=&lt;value&gt;,EncryptionMode=SSE_KMS,ServerSideEncryptionKmsKeyId=&lt;value&gt; </code> </p>
+    /// <p>If you are using <code>SSE_KMS</code> for the <code>EncryptionMode</code>, provide the AWS KMS key ID. The key that you use needs an attached policy that enables AWS Identity and Access Management (IAM) user permissions and allows use of the key.</p> <p>Here is a CLI example: <code>aws dms create-endpoint --endpoint-identifier <i>value</i> --endpoint-type target --engine-name s3 --s3-settings ServiceAccessRoleArn=<i>value</i>,BucketFolder=<i>value</i>,BucketName=<i>value</i>,EncryptionMode=SSE_KMS,ServerSideEncryptionKmsKeyId=<i>value</i> </code> </p>
     #[serde(rename = "ServerSideEncryptionKmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_side_encryption_kms_key_id: Option<String>,
@@ -2399,6 +2411,10 @@ pub struct S3Settings {
     #[serde(rename = "ServiceAccessRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_access_role_arn: Option<String>,
+    /// <p>A value that includes a timestamp column in the Amazon S3 target endpoint data. AWS DMS includes an additional column in the migrated data when you set <code>timestampColumnName</code> to a non-blank value. </p> <note> <p>AWS DMS supports <code>TimestampColumnName</code> in versions 3.1.4 and later.</p> </note> <p>For a full load, each row of the timestamp column contains a timestamp for when the data was transferred from the source to the target by DMS. For a CDC load, each row of the timestamp column contains the timestamp for the commit of that row in the source database. The format for the timestamp column value is <code>yyyy-MM-dd HH:mm:ss.SSSSSS</code>. For CDC, the microsecond precision depends on the commit timestamp supported by DMS for the source database. When the <code>AddColumnName</code> setting is set to <code>true</code>, DMS also includes the name for the timestamp column that you set as the nonblank value of <code>timestampColumnName</code>.</p>
+    #[serde(rename = "TimestampColumnName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timestamp_column_name: Option<String>,
 }
 
 /// <p><p/></p>
@@ -2492,7 +2508,7 @@ pub struct Subnet {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct SupportedEndpointType {
-    /// <p>The type of endpoint.</p>
+    /// <p>The type of endpoint. Valid values are <code>source</code> and <code>target</code>.</p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
@@ -2500,7 +2516,7 @@ pub struct SupportedEndpointType {
     #[serde(rename = "EngineDisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_display_name: Option<String>,
-    /// <p>The database engine name. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, sybase, dynamodb, mongodb, and sqlserver.</p>
+    /// <p>The database engine name. Valid values, depending on the EndpointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, dynamodb, mongodb, and sqlserver.</p>
     #[serde(rename = "EngineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_name: Option<String>,
@@ -2720,7 +2736,7 @@ pub enum CreateEndpointError {
     AccessDeniedFault(String),
     /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    /// <p>AWS DMS cannot access the KMS key.</p>
+    /// <p>AWS DMS cannot access the AWS KMS key.</p>
     KMSKeyNotAccessibleFault(String),
     /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
@@ -2789,15 +2805,15 @@ impl Error for CreateEndpointError {
 /// Errors returned by CreateEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum CreateEventSubscriptionError {
-    /// <p>The ciphertext references a key that doesn't exist or DMS account doesn't have an access to</p>
+    /// <p>The ciphertext references a key that doesn't exist or that the DMS account doesn't have access to.</p>
     KMSAccessDeniedFault(String),
     /// <p>The specified master key (CMK) isn't enabled.</p>
     KMSDisabledFault(String),
-    /// <p>The state of the specified KMS resource isn't valid for this request.</p>
+    /// <p>The state of the specified AWS KMS resource isn't valid for this request.</p>
     KMSInvalidStateFault(String),
-    /// <p>The specified KMS entity or resource can't be found.</p>
+    /// <p>The specified AWS KMS entity or resource can't be found.</p>
     KMSNotFoundFault(String),
-    /// <p>This request triggered KMS request throttling.</p>
+    /// <p>This request triggered AWS KMS request throttling.</p>
     KMSThrottlingFault(String),
     /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
@@ -2904,7 +2920,7 @@ pub enum CreateReplicationInstanceError {
     InvalidResourceStateFault(String),
     /// <p>The subnet provided is invalid.</p>
     InvalidSubnet(String),
-    /// <p>AWS DMS cannot access the KMS key.</p>
+    /// <p>AWS DMS cannot access the AWS KMS key.</p>
     KMSKeyNotAccessibleFault(String),
     /// <p>The replication subnet group does not cover enough Availability Zones (AZs). Edit the replication subnet group and add more AZs.</p>
     ReplicationSubnetGroupDoesNotCoverEnoughAZs(String),
@@ -3090,7 +3106,7 @@ pub enum CreateReplicationTaskError {
     AccessDeniedFault(String),
     /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    /// <p>AWS DMS cannot access the KMS key.</p>
+    /// <p>AWS DMS cannot access the AWS KMS key.</p>
     KMSKeyNotAccessibleFault(String),
     /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
@@ -4145,7 +4161,7 @@ pub enum ModifyEndpointError {
     AccessDeniedFault(String),
     /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    /// <p>AWS DMS cannot access the KMS key.</p>
+    /// <p>AWS DMS cannot access the AWS KMS key.</p>
     KMSKeyNotAccessibleFault(String),
     /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
@@ -4206,15 +4222,15 @@ impl Error for ModifyEndpointError {
 /// Errors returned by ModifyEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum ModifyEventSubscriptionError {
-    /// <p>The ciphertext references a key that doesn't exist or DMS account doesn't have an access to</p>
+    /// <p>The ciphertext references a key that doesn't exist or that the DMS account doesn't have access to.</p>
     KMSAccessDeniedFault(String),
     /// <p>The specified master key (CMK) isn't enabled.</p>
     KMSDisabledFault(String),
-    /// <p>The state of the specified KMS resource isn't valid for this request.</p>
+    /// <p>The state of the specified AWS KMS resource isn't valid for this request.</p>
     KMSInvalidStateFault(String),
-    /// <p>The specified KMS entity or resource can't be found.</p>
+    /// <p>The specified AWS KMS entity or resource can't be found.</p>
     KMSNotFoundFault(String),
-    /// <p>This request triggered KMS request throttling.</p>
+    /// <p>This request triggered AWS KMS request throttling.</p>
     KMSThrottlingFault(String),
     /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
@@ -4469,7 +4485,7 @@ impl Error for ModifyReplicationSubnetGroupError {
 pub enum ModifyReplicationTaskError {
     /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    /// <p>AWS DMS cannot access the KMS key.</p>
+    /// <p>AWS DMS cannot access the AWS KMS key.</p>
     KMSKeyNotAccessibleFault(String),
     /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
@@ -4571,7 +4587,7 @@ impl Error for RebootReplicationInstanceError {
 pub enum RefreshSchemasError {
     /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    /// <p>AWS DMS cannot access the KMS key.</p>
+    /// <p>AWS DMS cannot access the AWS KMS key.</p>
     KMSKeyNotAccessibleFault(String),
     /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
@@ -4845,7 +4861,7 @@ impl Error for StopReplicationTaskError {
 pub enum TestConnectionError {
     /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    /// <p>AWS DMS cannot access the KMS key.</p>
+    /// <p>AWS DMS cannot access the AWS KMS key.</p>
     KMSKeyNotAccessibleFault(String),
     /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
@@ -4979,7 +4995,7 @@ pub trait DatabaseMigrationService {
         input: DeleteReplicationTaskMessage,
     ) -> RusotoFuture<DeleteReplicationTaskResponse, DeleteReplicationTaskError>;
 
-    /// <p>Lists all of the AWS DMS attributes for a customer account. The attributes include AWS DMS quotas for the account, such as the number of replication instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command does not take any parameters.</p>
+    /// <p>Lists all of the AWS DMS attributes for a customer account. These attributes include AWS DMS quotas for the account and a unique account identifier in a particular DMS region. DMS quotas include a list of resource quotas supported by the account, such as the number of replication instances allowed. The description for each resource quota, includes the quota name, current usage toward that quota, and the quota's maximum value. DMS uses the unique account identifier to name each artifact used by DMS in the given region.</p> <p>This command does not take any parameters.</p>
     fn describe_account_attributes(
         &self,
     ) -> RusotoFuture<DescribeAccountAttributesResponse, DescribeAccountAttributesError>;
@@ -5595,7 +5611,7 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         })
     }
 
-    /// <p>Lists all of the AWS DMS attributes for a customer account. The attributes include AWS DMS quotas for the account, such as the number of replication instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command does not take any parameters.</p>
+    /// <p>Lists all of the AWS DMS attributes for a customer account. These attributes include AWS DMS quotas for the account and a unique account identifier in a particular DMS region. DMS quotas include a list of resource quotas supported by the account, such as the number of replication instances allowed. The description for each resource quota, includes the quota name, current usage toward that quota, and the quota's maximum value. DMS uses the unique account identifier to name each artifact used by DMS in the given region.</p> <p>This command does not take any parameters.</p>
     fn describe_account_attributes(
         &self,
     ) -> RusotoFuture<DescribeAccountAttributesResponse, DescribeAccountAttributesError> {

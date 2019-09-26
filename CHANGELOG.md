@@ -6,6 +6,8 @@
 
 (Please put changes here)
 
+- Upgrade to botocore from `1.12.163` to `1.12.230`
+- The types `rusoto_events::{CloudWatchEvents,CloudWatchEventsClient}` were renamed to `rusoto_events::{EventBridge,EventBridgeClient}`
 - Deserialize PostTextResponse correctly by allowing null values in the slots field
 - Fix Profile Config Loading should ignore comments with '=' chars
 - Add App Mesh service

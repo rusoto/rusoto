@@ -1072,6 +1072,96 @@ impl AssignPrivateIpAddressesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct AssignPrivateIpAddressesResult {
+    /// <p>The private IP addresses assigned to the network interface.</p>
+    pub assigned_private_ip_addresses: Option<Vec<AssignedPrivateIpAddress>>,
+    /// <p>The ID of the network interface.</p>
+    pub network_interface_id: Option<String>,
+}
+
+struct AssignPrivateIpAddressesResultDeserializer;
+impl AssignPrivateIpAddressesResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AssignPrivateIpAddressesResult, XmlParseError> {
+        deserialize_elements::<_, AssignPrivateIpAddressesResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "assignedPrivateIpAddressesSet" => {
+                        obj.assigned_private_ip_addresses
+                            .get_or_insert(vec![])
+                            .extend(AssignedPrivateIpAddressListDeserializer::deserialize(
+                                "assignedPrivateIpAddressesSet",
+                                stack,
+                            )?);
+                    }
+                    "networkInterfaceId" => {
+                        obj.network_interface_id = Some(StringDeserializer::deserialize(
+                            "networkInterfaceId",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Describes the private IP addresses assigned to a network interface.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AssignedPrivateIpAddress {
+    /// <p>The private IP address assigned to the network interface.</p>
+    pub private_ip_address: Option<String>,
+}
+
+struct AssignedPrivateIpAddressDeserializer;
+impl AssignedPrivateIpAddressDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AssignedPrivateIpAddress, XmlParseError> {
+        deserialize_elements::<_, AssignedPrivateIpAddress, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "privateIpAddress" => {
+                        obj.private_ip_address =
+                            Some(StringDeserializer::deserialize("privateIpAddress", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+struct AssignedPrivateIpAddressListDeserializer;
+impl AssignedPrivateIpAddressListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<AssignedPrivateIpAddress>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(AssignedPrivateIpAddressDeserializer::deserialize(
+                    "item", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AssociateAddressRequest {
     /// <p>[EC2-VPC] The allocation ID. This is required for EC2-VPC.</p>
     pub allocation_id: Option<String>,
@@ -3026,7 +3116,6 @@ impl CancelCapacityReservationResultDeserializer {
         )
     }
 }
-/// <p>Contains the parameters for CancelConversionTask.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelConversionRequest {
     /// <p>The ID of the conversion task.</p>
@@ -3059,7 +3148,6 @@ impl CancelConversionRequestSerializer {
     }
 }
 
-/// <p>Contains the parameters for CancelExportTask.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelExportTaskRequest {
     /// <p>The ID of the export task. This is the ID returned by <code>CreateInstanceExportTask</code>.</p>
@@ -3082,7 +3170,6 @@ impl CancelExportTaskRequestSerializer {
     }
 }
 
-/// <p>Contains the parameters for CancelImportTask.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelImportTaskRequest {
     /// <p>The reason for canceling the task.</p>
@@ -3114,7 +3201,6 @@ impl CancelImportTaskRequestSerializer {
     }
 }
 
-/// <p>Contains the output for CancelImportTask.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelImportTaskResult {
     /// <p>The ID of the task being canceled.</p>
@@ -3587,8 +3673,12 @@ impl CancelledSpotInstanceRequestListDeserializer {
 pub struct CapacityReservation {
     /// <p>The Availability Zone in which the capacity is reserved.</p>
     pub availability_zone: Option<String>,
+    /// <p>The Availability Zone ID of the Capacity Reservation.</p>
+    pub availability_zone_id: Option<String>,
     /// <p>The remaining capacity. Indicates the number of instances that can be launched in the Capacity Reservation.</p>
     pub available_instance_count: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) of the Capacity Reservation.</p>
+    pub capacity_reservation_arn: Option<String>,
     /// <p>The ID of the Capacity Reservation.</p>
     pub capacity_reservation_id: Option<String>,
     /// <p>The date and time at which the Capacity Reservation was created.</p>
@@ -3607,13 +3697,15 @@ pub struct CapacityReservation {
     pub instance_platform: Option<String>,
     /// <p>The type of instance for which the Capacity Reservation reserves capacity.</p>
     pub instance_type: Option<String>,
-    /// <p><p>The current state of the Capacity Reservation. A Capacity Reservation can be in one of the following states:</p> <ul> <li> <p> <code>active</code> - The Capacity Reservation is active and the capacity is available for your use.</p> </li> <li> <p> <code>cancelled</code> - The Capacity Reservation expired automatically at the date and time specified in your request. The reserved capacity is no longer available for your use.</p> </li> <li> <p> <code>expired</code> - The Capacity Reservation was manually cancelled. The reserved capacity is no longer available for your use.</p> </li> <li> <p> <code>pending</code> - The Capacity Reservation request was successful but the capacity provisioning is still pending.</p> </li> <li> <p> <code>failed</code> - The Capacity Reservation request has failed. A request might fail due to invalid request parameters, capacity constraints, or instance limit constraints. Failed requests are retained for 60 minutes.</p> </li> </ul></p>
+    /// <p>The ID of the AWS account that owns the Capacity Reservation.</p>
+    pub owner_id: Option<String>,
+    /// <p><p>The current state of the Capacity Reservation. A Capacity Reservation can be in one of the following states:</p> <ul> <li> <p> <code>active</code> - The Capacity Reservation is active and the capacity is available for your use.</p> </li> <li> <p> <code>expired</code> - The Capacity Reservation expired automatically at the date and time specified in your request. The reserved capacity is no longer available for your use.</p> </li> <li> <p> <code>cancelled</code> - The Capacity Reservation was manually cancelled. The reserved capacity is no longer available for your use.</p> </li> <li> <p> <code>pending</code> - The Capacity Reservation request was successful but the capacity provisioning is still pending.</p> </li> <li> <p> <code>failed</code> - The Capacity Reservation request has failed. A request might fail due to invalid request parameters, capacity constraints, or instance limit constraints. Failed requests are retained for 60 minutes.</p> </li> </ul></p>
     pub state: Option<String>,
     /// <p>Any tags assigned to the Capacity Reservation.</p>
     pub tags: Option<Vec<Tag>>,
     /// <p><p>Indicates the tenancy of the Capacity Reservation. A Capacity Reservation can have one of the following tenancy settings:</p> <ul> <li> <p> <code>default</code> - The Capacity Reservation is created on hardware that is shared with other AWS accounts.</p> </li> <li> <p> <code>dedicated</code> - The Capacity Reservation is created on single-tenant hardware that is dedicated to a single AWS account.</p> </li> </ul></p>
     pub tenancy: Option<String>,
-    /// <p>The number of instances for which the Capacity Reservation reserves capacity.</p>
+    /// <p>The total number of instances for which the Capacity Reservation reserves capacity.</p>
     pub total_instance_count: Option<i64>,
 }
 
@@ -3630,9 +3722,21 @@ impl CapacityReservationDeserializer {
                     obj.availability_zone =
                         Some(StringDeserializer::deserialize("availabilityZone", stack)?);
                 }
+                "availabilityZoneId" => {
+                    obj.availability_zone_id = Some(StringDeserializer::deserialize(
+                        "availabilityZoneId",
+                        stack,
+                    )?);
+                }
                 "availableInstanceCount" => {
                     obj.available_instance_count = Some(IntegerDeserializer::deserialize(
                         "availableInstanceCount",
+                        stack,
+                    )?);
+                }
+                "capacityReservationArn" => {
+                    obj.capacity_reservation_arn = Some(StringDeserializer::deserialize(
+                        "capacityReservationArn",
                         stack,
                     )?);
                 }
@@ -3678,6 +3782,9 @@ impl CapacityReservationDeserializer {
                 "instanceType" => {
                     obj.instance_type =
                         Some(StringDeserializer::deserialize("instanceType", stack)?);
+                }
+                "ownerId" => {
+                    obj.owner_id = Some(StringDeserializer::deserialize("ownerId", stack)?);
                 }
                 "state" => {
                     obj.state = Some(CapacityReservationStateDeserializer::deserialize(
@@ -4721,7 +4828,7 @@ pub struct ClientVpnEndpoint {
     pub dns_servers: Option<Vec<String>>,
     /// <p>The ARN of the server certificate.</p>
     pub server_certificate_arn: Option<String>,
-    /// <p>Indicates whether VPN split tunneling is supported.</p>
+    /// <p>Indicates whether split-tunnel is enabled in the AWS Client VPN endpoint.</p> <p>For information about split-tunnel VPN endpoints, see <a href="https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/split-tunnel-vpn.html">Split-Tunnel AWS Client VPN Endpoint</a> in the <i>AWS Client VPN Administrator Guide</i>.</p>
     pub split_tunnel: Option<bool>,
     /// <p>The current state of the Client VPN endpoint.</p>
     pub status: Option<ClientVpnEndpointStatus>,
@@ -5533,9 +5640,9 @@ pub struct CopySnapshotRequest {
     pub destination_region: Option<String>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>Specifies whether the destination snapshot should be encrypted. You can encrypt a copy of an unencrypted snapshot, but you cannot use it to create an unencrypted copy of an encrypted snapshot. Your default CMK for EBS is used unless you specify a non-default AWS Key Management Service (AWS KMS) CMK using <code>KmsKeyId</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>To encrypt a copy of an unencrypted snapshot if encryption by default is not enabled, enable encryption using this parameter. Otherwise, omit this parameter. Encrypted snapshots are encrypted, even if you omit this parameter and encryption by default is not enabled. You cannot set this parameter to false. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub encrypted: Option<bool>,
-    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use to encrypt the volume. This parameter is only required if you want to use a customer-managed CMK; if this parameter is not specified, your AWS-managed CMK for the account is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID: For example, key/1234abcd-12ab-34cd-56ef-1234567890ab.</p> </li> <li> <p>Key alias: For example, alias/ExampleAlias. </p> </li> <li> <p>Key ARN: The key ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. </p> </li> <li> <p>Alias ARN: The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS authenticates <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. The action will eventually fail. </p>
+    /// <p>The identifier of the AWS Key Management Service (AWS KMS) customer master key (CMK) to use for Amazon EBS encryption. If this parameter is not specified, your AWS managed CMK for EBS is used. If <code>KmsKeyId</code> is specified, the encrypted state must be <code>true</code>.</p> <p>You can specify the CMK using any of the following:</p> <ul> <li> <p>Key ID. For example, key/1234abcd-12ab-34cd-56ef-1234567890ab.</p> </li> <li> <p>Key alias. For example, alias/ExampleAlias.</p> </li> <li> <p>Key ARN. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>.</p> </li> <li> <p>Alias ARN. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>.</p> </li> </ul> <p>AWS authenticates the CMK asynchronously. Therefore, if you specify an ID, alias, or ARN that is not valid, the action can appear to complete, but eventually fails.</p>
     pub kms_key_id: Option<String>,
     /// <p>When you copy an encrypted source snapshot using the Amazon EC2 Query API, you must supply a pre-signed URL. This parameter is optional for unencrypted snapshots. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Query-Requests.html">Query Requests</a>.</p> <p>The <code>PresignedUrl</code> should use the snapshot source endpoint, the <code>CopySnapshot</code> action, and include the <code>SourceRegion</code>, <code>SourceSnapshotId</code>, and <code>DestinationRegion</code> parameters. The <code>PresignedUrl</code> must be signed using AWS Signature Version 4. Because EBS snapshots are stored in Amazon S3, the signing algorithm for this parameter uses the same logic that is described in <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html">Authenticating Requests by Using Query Parameters (AWS Signature Version 4)</a> in the <i>Amazon Simple Storage Service API Reference</i>. An invalid or improperly signed <code>PresignedUrl</code> will cause the copy operation to fail asynchronously, and the snapshot will move to an <code>error</code> state.</p>
     pub presigned_url: Option<String>,
@@ -5641,7 +5748,7 @@ impl CpuOptionsDeserializer {
 pub struct CpuOptionsRequest {
     /// <p>The number of CPU cores for the instance.</p>
     pub core_count: Option<i64>,
-    /// <p>The number of threads per CPU core. To disable Intel Hyper-Threading Technology for the instance, specify a value of <code>1</code>. Otherwise, specify the default value of <code>2</code>.</p>
+    /// <p>The number of threads per CPU core. To disable multithreading for the instance, specify a value of <code>1</code>. Otherwise, specify the default value of <code>2</code>.</p>
     pub threads_per_core: Option<i64>,
 }
 
@@ -5666,7 +5773,9 @@ impl CpuOptionsRequestSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateCapacityReservationRequest {
     /// <p>The Availability Zone in which to create the Capacity Reservation.</p>
-    pub availability_zone: String,
+    pub availability_zone: Option<String>,
+    /// <p>The ID of the Availability Zone in which to create the Capacity Reservation.</p>
+    pub availability_zone_id: Option<String>,
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p> <p>Constraint: Maximum 64 ASCII characters.</p>
     pub client_token: Option<String>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
@@ -5702,10 +5811,12 @@ impl CreateCapacityReservationRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "AvailabilityZone"),
-            &obj.availability_zone,
-        );
+        if let Some(ref field_value) = obj.availability_zone {
+            params.put(&format!("{}{}", prefix, "AvailabilityZone"), &field_value);
+        }
+        if let Some(ref field_value) = obj.availability_zone_id {
+            params.put(&format!("{}{}", prefix, "AvailabilityZoneId"), &field_value);
+        }
         if let Some(ref field_value) = obj.client_token {
             params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
         }
@@ -5796,12 +5907,14 @@ pub struct CreateClientVpnEndpointRequest {
     pub connection_log_options: ConnectionLogOptions,
     /// <p>A brief description of the Client VPN endpoint.</p>
     pub description: Option<String>,
-    /// <p>Information about the DNS servers to be used for DNS resolution. A Client VPN endpoint can have up to two DNS servers. If no DNS server is specified, the DNS address of the VPC that is to be associated with Client VPN endpoint is used as the DNS server.</p>
+    /// <p>Information about the DNS servers to be used for DNS resolution. A Client VPN endpoint can have up to two DNS servers. If no DNS server is specified, the DNS address configured on the device is used for the DNS server.</p>
     pub dns_servers: Option<Vec<String>>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
     /// <p>The ARN of the server certificate. For more information, see the <a href="https://docs.aws.amazon.com/acm/latest/userguide/">AWS Certificate Manager User Guide</a>.</p>
     pub server_certificate_arn: String,
+    /// <p>Indicates whether split-tunnel is enabled on the AWS Client VPN endpoint.</p> <p>By default, split-tunnel on a VPN endpoint is disabled.</p> <p>For information about split-tunnel VPN endpoints, see <a href="https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/split-tunnel-vpn.html">Split-Tunnel AWS Client VPN Endpoint</a> in the <i>AWS Client VPN Administrator Guide</i>.</p>
+    pub split_tunnel: Option<bool>,
     /// <p>The tags to apply to the Client VPN endpoint during creation.</p>
     pub tag_specifications: Option<Vec<TagSpecification>>,
     /// <p>The transport protocol to be used by the VPN session.</p> <p>Default value: <code>udp</code> </p>
@@ -5851,6 +5964,9 @@ impl CreateClientVpnEndpointRequestSerializer {
             &format!("{}{}", prefix, "ServerCertificateArn"),
             &obj.server_certificate_arn,
         );
+        if let Some(ref field_value) = obj.split_tunnel {
+            params.put(&format!("{}{}", prefix, "SplitTunnel"), &field_value);
+        }
         if let Some(ref field_value) = obj.tag_specifications {
             TagSpecificationListSerializer::serialize(
                 params,
@@ -5991,10 +6107,12 @@ impl CreateClientVpnRouteResultDeserializer {
 pub struct CreateCustomerGatewayRequest {
     /// <p>For devices that support BGP, the customer gateway's BGP ASN.</p> <p>Default: 65000</p>
     pub bgp_asn: i64,
+    /// <p>The Amazon Resource Name (ARN) for the customer gateway certificate.</p>
+    pub certificate_arn: Option<String>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
     /// <p>The Internet-routable IP address for the customer gateway's outside interface. The address must be static.</p>
-    pub public_ip: String,
+    pub public_ip: Option<String>,
     /// <p>The type of VPN connection that this customer gateway supports (<code>ipsec.1</code>).</p>
     pub type_: String,
 }
@@ -6009,10 +6127,15 @@ impl CreateCustomerGatewayRequestSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "BgpAsn"), &obj.bgp_asn);
+        if let Some(ref field_value) = obj.certificate_arn {
+            params.put(&format!("{}{}", prefix, "CertificateArn"), &field_value);
+        }
         if let Some(ref field_value) = obj.dry_run {
             params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "IpAddress"), &obj.public_ip);
+        if let Some(ref field_value) = obj.public_ip {
+            params.put(&format!("{}{}", prefix, "IpAddress"), &field_value);
+        }
         params.put(&format!("{}{}", prefix, "Type"), &obj.type_);
     }
 }
@@ -6423,7 +6546,7 @@ pub struct CreateFleetRequest {
     pub excess_capacity_termination_policy: Option<String>,
     /// <p>The configuration for the EC2 Fleet.</p>
     pub launch_template_configs: Vec<FleetLaunchTemplateConfigRequest>,
-    /// <p>The allocation strategy of On-Demand Instances in an EC2 Fleet.</p>
+    /// <p>Describes the configuration of On-Demand Instances in an EC2 Fleet.</p>
     pub on_demand_options: Option<OnDemandOptionsRequest>,
     /// <p>Indicates whether EC2 Fleet should replace unhealthy instances.</p>
     pub replace_unhealthy_instances: Option<bool>,
@@ -6431,7 +6554,7 @@ pub struct CreateFleetRequest {
     pub spot_options: Option<SpotOptionsRequest>,
     /// <p>The key-value pair for tagging the EC2 Fleet request on creation. The value for <code>ResourceType</code> must be <code>fleet</code>, otherwise the fleet request fails. To tag instances at launch, specify the tags in the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html#create-launch-template">launch template</a>. For information about tagging after launch, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html#tag-resources">Tagging Your Resources</a>. </p>
     pub tag_specifications: Option<Vec<TagSpecification>>,
-    /// <p>The <code>TotalTargetCapacity</code>, <code>OnDemandTargetCapacity</code>, <code>SpotTargetCapacity</code>, and <code>DefaultCapacityType</code> structure.</p>
+    /// <p>The number of units to request.</p>
     pub target_capacity_specification: TargetCapacitySpecificationRequest,
     /// <p>Indicates whether running instances should be terminated when the EC2 Fleet expires.</p>
     pub terminate_instances_with_expiration: Option<bool>,
@@ -6573,6 +6696,8 @@ pub struct CreateFlowLogsRequest {
     pub log_destination: Option<String>,
     /// <p>Specifies the type of destination to which the flow log data is to be published. Flow log data can be published to CloudWatch Logs or Amazon S3. To publish flow log data to CloudWatch Logs, specify <code>cloud-watch-logs</code>. To publish flow log data to Amazon S3, specify <code>s3</code>.</p> <p>If you specify <code>LogDestinationType</code> as <code>s3</code>, do not specify <code>DeliverLogsPermissionArn</code> or <code>LogGroupName</code>.</p> <p>Default: <code>cloud-watch-logs</code> </p>
     pub log_destination_type: Option<String>,
+    /// <p>The fields to include in the flow log record, in the order in which they should appear. For a list of available fields, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html#flow-log-records">Flow Log Records</a>. If you omit this parameter, the flow log is created using the default format. If you specify this parameter, you must specify at least one field.</p> <p>Specify the fields using the <code>${field-id}</code> format, separated by spaces. For the AWS CLI, use single quotation marks (' ') to surround the parameter value.</p> <p>Only applicable to flow logs that are published to an Amazon S3 bucket.</p>
+    pub log_format: Option<String>,
     /// <p>The name of a new or existing CloudWatch Logs log group where Amazon EC2 publishes your flow logs.</p> <p>If you specify <code>LogDestinationType</code> as <code>s3</code>, do not specify <code>DeliverLogsPermissionArn</code> or <code>LogGroupName</code>.</p>
     pub log_group_name: Option<String>,
     /// <p>The ID of the subnet, network interface, or VPC for which you want to create a flow log.</p> <p>Constraints: Maximum of 1000 resources</p>
@@ -6609,6 +6734,9 @@ impl CreateFlowLogsRequestSerializer {
         }
         if let Some(ref field_value) = obj.log_destination_type {
             params.put(&format!("{}{}", prefix, "LogDestinationType"), &field_value);
+        }
+        if let Some(ref field_value) = obj.log_format {
+            params.put(&format!("{}{}", prefix, "LogFormat"), &field_value);
         }
         if let Some(ref field_value) = obj.log_group_name {
             params.put(&format!("{}{}", prefix, "LogGroupName"), &field_value);
@@ -6814,7 +6942,6 @@ impl CreateImageResultDeserializer {
         })
     }
 }
-/// <p>Contains the parameters for CreateInstanceExportTask.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateInstanceExportTaskRequest {
     /// <p>A description for the conversion task or the resource being exported. The maximum length is 255 bytes.</p>
@@ -6853,7 +6980,6 @@ impl CreateInstanceExportTaskRequestSerializer {
     }
 }
 
-/// <p>Contains the output for CreateInstanceExportTask.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateInstanceExportTaskResult {
     /// <p>Information about the instance export task.</p>
@@ -6969,6 +7095,8 @@ pub struct CreateLaunchTemplateRequest {
     pub launch_template_data: RequestLaunchTemplateData,
     /// <p>A name for the launch template.</p>
     pub launch_template_name: String,
+    /// <p>The tags to apply to the launch template during creation.</p>
+    pub tag_specifications: Option<Vec<TagSpecification>>,
     /// <p>A description for the first version of the launch template.</p>
     pub version_description: Option<String>,
 }
@@ -6997,6 +7125,13 @@ impl CreateLaunchTemplateRequestSerializer {
             &format!("{}{}", prefix, "LaunchTemplateName"),
             &obj.launch_template_name,
         );
+        if let Some(ref field_value) = obj.tag_specifications {
+            TagSpecificationListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TagSpecification"),
+                field_value,
+            );
+        }
         if let Some(ref field_value) = obj.version_description {
             params.put(&format!("{}{}", prefix, "VersionDescription"), &field_value);
         }
@@ -7046,7 +7181,7 @@ pub struct CreateLaunchTemplateVersionRequest {
     pub launch_template_id: Option<String>,
     /// <p>The name of the launch template. You must specify either the launch template ID or launch template name in the request.</p>
     pub launch_template_name: Option<String>,
-    /// <p>The version number of the launch template version on which to base the new version. The new version inherits the same launch parameters as the source version, except for parameters that you specify in LaunchTemplateData.</p>
+    /// <p>The version number of the launch template version on which to base the new version. The new version inherits the same launch parameters as the source version, except for parameters that you specify in <code>LaunchTemplateData</code>. Snapshots applied to the block device mapping are ignored when creating a new version unless they are explicitly included.</p>
     pub source_version: Option<String>,
     /// <p>A description for the version of the launch template.</p>
     pub version_description: Option<String>,
@@ -7375,7 +7510,7 @@ pub struct CreateNetworkInterfaceRequest {
     pub dry_run: Option<bool>,
     /// <p>The IDs of one or more security groups.</p>
     pub groups: Option<Vec<String>>,
-    /// <p>Indicates the type of network interface. To create an Elastic Fabric Adapter (EFA), specify <code>efa</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html"> Elastic Fabric Adapter</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>If you are not creating an EFA, specify <code>interface</code> or omit this parameter.</p>
+    /// <p>Indicates the type of network interface. To create an Elastic Fabric Adapter (EFA), specify <code>efa</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html"> Elastic Fabric Adapter</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub interface_type: Option<String>,
     /// <p>The number of IPv6 addresses to assign to a network interface. Amazon EC2 automatically selects the IPv6 addresses from the subnet range. You can't use this option if specifying specific IPv6 addresses. If your subnet has the <code>AssignIpv6AddressOnCreation</code> attribute set to <code>true</code>, you can specify <code>0</code> to override this setting.</p>
     pub ipv_6_address_count: Option<i64>,
@@ -7848,7 +7983,7 @@ impl CreateSnapshotRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateSnapshotsRequest {
-    /// <p>Copies the tags from the specified instance to all snapshots.</p>
+    /// <p>Copies the tags from the specified volume to corresponding snapshot.</p>
     pub copy_tags_from_source: Option<String>,
     /// <p> A description propagated to every snapshot specified by the instance.</p>
     pub description: Option<String>,
@@ -8079,6 +8214,409 @@ impl CreateTagsRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateTrafficMirrorFilterRequest {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
+    pub client_token: Option<String>,
+    /// <p>The description of the Traffic Mirror filter.</p>
+    pub description: Option<String>,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The tags to assign to a Traffic Mirror filter.</p>
+    pub tag_specifications: Option<Vec<TagSpecification>>,
+}
+
+/// Serialize `CreateTrafficMirrorFilterRequest` contents to a `SignedRequest`.
+struct CreateTrafficMirrorFilterRequestSerializer;
+impl CreateTrafficMirrorFilterRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateTrafficMirrorFilterRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.client_token {
+            params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
+        }
+        if let Some(ref field_value) = obj.description {
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+        }
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        if let Some(ref field_value) = obj.tag_specifications {
+            TagSpecificationListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TagSpecification"),
+                field_value,
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateTrafficMirrorFilterResult {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
+    pub client_token: Option<String>,
+    /// <p>Information about the Traffic Mirror filter.</p>
+    pub traffic_mirror_filter: Option<TrafficMirrorFilter>,
+}
+
+struct CreateTrafficMirrorFilterResultDeserializer;
+impl CreateTrafficMirrorFilterResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateTrafficMirrorFilterResult, XmlParseError> {
+        deserialize_elements::<_, CreateTrafficMirrorFilterResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "clientToken" => {
+                        obj.client_token =
+                            Some(StringDeserializer::deserialize("clientToken", stack)?);
+                    }
+                    "trafficMirrorFilter" => {
+                        obj.traffic_mirror_filter =
+                            Some(TrafficMirrorFilterDeserializer::deserialize(
+                                "trafficMirrorFilter",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateTrafficMirrorFilterRuleRequest {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
+    pub client_token: Option<String>,
+    /// <p>The description of the Traffic Mirror rule.</p>
+    pub description: Option<String>,
+    /// <p>The destination CIDR block to assign to the Traffic Mirror rule.</p>
+    pub destination_cidr_block: String,
+    /// <p>The destination port range.</p>
+    pub destination_port_range: Option<TrafficMirrorPortRangeRequest>,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The protocol, for example UDP, to assign to the Traffic Mirror rule.</p> <p>For information about the protocol value, see <a href="https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml">Protocol Numbers</a> on the Internet Assigned Numbers Authority (IANA) website.</p>
+    pub protocol: Option<i64>,
+    /// <p>The action to take (<code>accept</code> | <code>reject</code>) on the filtered traffic.</p>
+    pub rule_action: String,
+    /// <p>The number of the Traffic Mirror rule. This number must be unique for each Traffic Mirror rule in a given direction. The rules are processed in ascending order by rule number.</p>
+    pub rule_number: i64,
+    /// <p>The source CIDR block to assign to the Traffic Mirror rule.</p>
+    pub source_cidr_block: String,
+    /// <p>The source port range.</p>
+    pub source_port_range: Option<TrafficMirrorPortRangeRequest>,
+    /// <p>The type of traffic (<code>ingress</code> | <code>egress</code>).</p>
+    pub traffic_direction: String,
+    /// <p>The ID of the filter that this rule is associated with.</p>
+    pub traffic_mirror_filter_id: String,
+}
+
+/// Serialize `CreateTrafficMirrorFilterRuleRequest` contents to a `SignedRequest`.
+struct CreateTrafficMirrorFilterRuleRequestSerializer;
+impl CreateTrafficMirrorFilterRuleRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateTrafficMirrorFilterRuleRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.client_token {
+            params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
+        }
+        if let Some(ref field_value) = obj.description {
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "DestinationCidrBlock"),
+            &obj.destination_cidr_block,
+        );
+        if let Some(ref field_value) = obj.destination_port_range {
+            TrafficMirrorPortRangeRequestSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "DestinationPortRange"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        if let Some(ref field_value) = obj.protocol {
+            params.put(&format!("{}{}", prefix, "Protocol"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "RuleAction"), &obj.rule_action);
+        params.put(&format!("{}{}", prefix, "RuleNumber"), &obj.rule_number);
+        params.put(
+            &format!("{}{}", prefix, "SourceCidrBlock"),
+            &obj.source_cidr_block,
+        );
+        if let Some(ref field_value) = obj.source_port_range {
+            TrafficMirrorPortRangeRequestSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "SourcePortRange"),
+                field_value,
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "TrafficDirection"),
+            &obj.traffic_direction,
+        );
+        params.put(
+            &format!("{}{}", prefix, "TrafficMirrorFilterId"),
+            &obj.traffic_mirror_filter_id,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateTrafficMirrorFilterRuleResult {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
+    pub client_token: Option<String>,
+    /// <p>The Traffic Mirror rule.</p>
+    pub traffic_mirror_filter_rule: Option<TrafficMirrorFilterRule>,
+}
+
+struct CreateTrafficMirrorFilterRuleResultDeserializer;
+impl CreateTrafficMirrorFilterRuleResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateTrafficMirrorFilterRuleResult, XmlParseError> {
+        deserialize_elements::<_, CreateTrafficMirrorFilterRuleResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "clientToken" => {
+                        obj.client_token =
+                            Some(StringDeserializer::deserialize("clientToken", stack)?);
+                    }
+                    "trafficMirrorFilterRule" => {
+                        obj.traffic_mirror_filter_rule =
+                            Some(TrafficMirrorFilterRuleDeserializer::deserialize(
+                                "trafficMirrorFilterRule",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateTrafficMirrorSessionRequest {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
+    pub client_token: Option<String>,
+    /// <p>The description of the Traffic Mirror session.</p>
+    pub description: Option<String>,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the source network interface.</p>
+    pub network_interface_id: String,
+    /// <p>The number of bytes in each packet to mirror. These are bytes after the VXLAN header. Do not specify this parameter when you want to mirror the entire packet. To mirror a subset of the packet, set this to the length (in bytes) that you want to mirror. For example, if you set this value to 1network0, then the first 100 bytes that meet the filter criteria are copied to the target.</p> <p>If you do not want to mirror the entire packet, use the <code>PacketLength</code> parameter to specify the number of bytes in each packet to mirror.</p>
+    pub packet_length: Option<i64>,
+    /// <p>The session number determines the order in which sessions are evaluated when an interface is used by multiple sessions. The first session with a matching filter is the one that mirrors the packets.</p> <p>Valid values are 1-32766.</p>
+    pub session_number: i64,
+    /// <p>The tags to assign to a Traffic Mirror session.</p>
+    pub tag_specifications: Option<Vec<TagSpecification>>,
+    /// <p>The ID of the Traffic Mirror filter.</p>
+    pub traffic_mirror_filter_id: String,
+    /// <p>The ID of the Traffic Mirror target.</p>
+    pub traffic_mirror_target_id: String,
+    /// <p>The VXLAN ID for the Traffic Mirror session. For more information about the VXLAN protocol, see <a href="https://tools.ietf.org/html/rfc7348">RFC 7348</a>. If you do not specify a <code>VirtualNetworkId</code>, an account-wide unique id is chosen at random.</p>
+    pub virtual_network_id: Option<i64>,
+}
+
+/// Serialize `CreateTrafficMirrorSessionRequest` contents to a `SignedRequest`.
+struct CreateTrafficMirrorSessionRequestSerializer;
+impl CreateTrafficMirrorSessionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateTrafficMirrorSessionRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.client_token {
+            params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
+        }
+        if let Some(ref field_value) = obj.description {
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+        }
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "NetworkInterfaceId"),
+            &obj.network_interface_id,
+        );
+        if let Some(ref field_value) = obj.packet_length {
+            params.put(&format!("{}{}", prefix, "PacketLength"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "SessionNumber"),
+            &obj.session_number,
+        );
+        if let Some(ref field_value) = obj.tag_specifications {
+            TagSpecificationListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TagSpecification"),
+                field_value,
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "TrafficMirrorFilterId"),
+            &obj.traffic_mirror_filter_id,
+        );
+        params.put(
+            &format!("{}{}", prefix, "TrafficMirrorTargetId"),
+            &obj.traffic_mirror_target_id,
+        );
+        if let Some(ref field_value) = obj.virtual_network_id {
+            params.put(&format!("{}{}", prefix, "VirtualNetworkId"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateTrafficMirrorSessionResult {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
+    pub client_token: Option<String>,
+    /// <p>Information about the Traffic Mirror session.</p>
+    pub traffic_mirror_session: Option<TrafficMirrorSession>,
+}
+
+struct CreateTrafficMirrorSessionResultDeserializer;
+impl CreateTrafficMirrorSessionResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateTrafficMirrorSessionResult, XmlParseError> {
+        deserialize_elements::<_, CreateTrafficMirrorSessionResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "clientToken" => {
+                        obj.client_token =
+                            Some(StringDeserializer::deserialize("clientToken", stack)?);
+                    }
+                    "trafficMirrorSession" => {
+                        obj.traffic_mirror_session =
+                            Some(TrafficMirrorSessionDeserializer::deserialize(
+                                "trafficMirrorSession",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateTrafficMirrorTargetRequest {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
+    pub client_token: Option<String>,
+    /// <p>The description of the Traffic Mirror target.</p>
+    pub description: Option<String>,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The network interface ID that is associated with the target.</p>
+    pub network_interface_id: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the Network Load Balancer that is associated with the target.</p>
+    pub network_load_balancer_arn: Option<String>,
+    /// <p>The tags to assign to the Traffic Mirror target.</p>
+    pub tag_specifications: Option<Vec<TagSpecification>>,
+}
+
+/// Serialize `CreateTrafficMirrorTargetRequest` contents to a `SignedRequest`.
+struct CreateTrafficMirrorTargetRequestSerializer;
+impl CreateTrafficMirrorTargetRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateTrafficMirrorTargetRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.client_token {
+            params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
+        }
+        if let Some(ref field_value) = obj.description {
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+        }
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        if let Some(ref field_value) = obj.network_interface_id {
+            params.put(&format!("{}{}", prefix, "NetworkInterfaceId"), &field_value);
+        }
+        if let Some(ref field_value) = obj.network_load_balancer_arn {
+            params.put(
+                &format!("{}{}", prefix, "NetworkLoadBalancerArn"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.tag_specifications {
+            TagSpecificationListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TagSpecification"),
+                field_value,
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateTrafficMirrorTargetResult {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
+    pub client_token: Option<String>,
+    /// <p>Information about the Traffic Mirror target.</p>
+    pub traffic_mirror_target: Option<TrafficMirrorTarget>,
+}
+
+struct CreateTrafficMirrorTargetResultDeserializer;
+impl CreateTrafficMirrorTargetResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateTrafficMirrorTargetResult, XmlParseError> {
+        deserialize_elements::<_, CreateTrafficMirrorTargetResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "clientToken" => {
+                        obj.client_token =
+                            Some(StringDeserializer::deserialize("clientToken", stack)?);
+                    }
+                    "trafficMirrorTarget" => {
+                        obj.traffic_mirror_target =
+                            Some(TrafficMirrorTargetDeserializer::deserialize(
+                                "trafficMirrorTarget",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateTransitGatewayRequest {
     /// <p>A description of the transit gateway.</p>
@@ -8538,11 +9076,11 @@ pub struct CreateVolumeRequest {
     pub availability_zone: String,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>Specifies the encryption state of the volume. The default effect of setting the <code>Encrypted</code> parameter to <code>true</code> depends on the volume origin (new or from a snapshot), starting encryption state, ownership, and whether <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/account-level-encryption.html">account-level encryption</a> is enabled. Each default case can be overridden by specifying a customer master key (CMK) using the <code>KmsKeyId</code> parameter, in addition to setting <code>Encrypted</code> to <code>true</code>. For a complete list of possible encryption cases, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#encryption-by-default">Amazon EBS Encryption</a>.</p> <p>Encrypted Amazon EBS volumes may only be attached to instances that support Amazon EBS encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>.</p>
+    /// <p>Specifies whether the volume should be encrypted. The effect of setting the encryption state to <code>true</code> depends on the volume origin (new or from a snapshot), starting encryption state, ownership, and whether encryption by default is enabled. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#encryption-by-default">Encryption by Default</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Encrypted Amazon EBS volumes must be attached to instances that support Amazon EBS encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>.</p>
     pub encrypted: Option<bool>,
     /// <p>The number of I/O operations per second (IOPS) to provision for the volume, with a maximum ratio of 50 IOPS/GiB. Range is 100 to 64,000 IOPS for volumes in most Regions. Maximum IOPS of 64,000 is guaranteed only on <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances">Nitro-based instances</a>. Other instance families guarantee performance up to 32,000 IOPS. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>This parameter is valid only for Provisioned IOPS SSD (io1) volumes.</p>
     pub iops: Option<i64>,
-    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use to encrypt the volume. This parameter is only required if you want to use a customer-managed CMK; if this parameter is not specified, your AWS-managed CMK for the account is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID: For example, key/1234abcd-12ab-34cd-56ef-1234567890ab.</p> </li> <li> <p>Key alias: For example, alias/ExampleAlias. </p> </li> <li> <p>Key ARN: The key ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. </p> </li> <li> <p>Alias ARN: The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS authenticates <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. The action will eventually fail. </p>
+    /// <p>The identifier of the AWS Key Management Service (AWS KMS) customer master key (CMK) to use for Amazon EBS encryption. If this parameter is not specified, your AWS managed CMK for EBS is used. If <code>KmsKeyId</code> is specified, the encrypted state must be <code>true</code>.</p> <p>You can specify the CMK using any of the following:</p> <ul> <li> <p>Key ID. For example, key/1234abcd-12ab-34cd-56ef-1234567890ab.</p> </li> <li> <p>Key alias. For example, alias/ExampleAlias.</p> </li> <li> <p>Key ARN. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>.</p> </li> <li> <p>Alias ARN. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>.</p> </li> </ul> <p>AWS authenticates the CMK asynchronously. Therefore, if you specify an ID, alias, or ARN that is not valid, the action can appear to complete, but eventually fails.</p>
     pub kms_key_id: Option<String>,
     /// <p><p>The size of the volume, in GiBs.</p> <p>Constraints: 1-16,384 for <code>gp2</code>, 4-16,384 for <code>io1</code>, 500-16,384 for <code>st1</code>, 500-16,384 for <code>sc1</code>, and 1-1,024 for <code>standard</code>. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p> <p>Default: If you&#39;re creating the volume from a snapshot and don&#39;t specify a volume size, the default is the snapshot size.</p> <note> <p>At least one of Size or SnapshotId is required.</p> </note></p>
     pub size: Option<i64>,
@@ -8550,7 +9088,7 @@ pub struct CreateVolumeRequest {
     pub snapshot_id: Option<String>,
     /// <p>The tags to apply to the volume during creation.</p>
     pub tag_specifications: Option<Vec<TagSpecification>>,
-    /// <p>The volume type. This can be <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code> for Cold HDD, or <code>standard</code> for Magnetic volumes.</p> <p>Defaults: If no volume type is specified, the default is <code>standard</code> in us-east-1, eu-west-1, eu-central-1, us-west-2, us-west-1, sa-east-1, ap-northeast-1, ap-northeast-2, ap-southeast-1, ap-southeast-2, ap-south-1, us-gov-west-1, and cn-north-1. In all other Regions, EBS defaults to <code>gp2</code>.</p>
+    /// <p>The volume type. This can be <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code> for Cold HDD, or <code>standard</code> for Magnetic volumes.</p> <p>Default: <code>gp2</code> </p>
     pub volume_type: Option<String>,
 }
 
@@ -9025,7 +9563,7 @@ pub struct CreateVpnConnectionRequest {
     pub options: Option<VpnConnectionOptionsSpecification>,
     /// <p>The ID of the transit gateway. If you specify a transit gateway, you cannot specify a virtual private gateway.</p>
     pub transit_gateway_id: Option<String>,
-    /// <p>The type of VPN connection (<code>ipsec.1</code> | <code>ipsec.2</code>).</p>
+    /// <p>The type of VPN connection (<code>ipsec.1</code>).</p>
     pub type_: String,
     /// <p>The ID of the virtual private gateway. If you specify a virtual private gateway, you cannot specify a transit gateway.</p>
     pub vpn_gateway_id: Option<String>,
@@ -9247,6 +9785,8 @@ impl CurrencyCodeValuesDeserializer {
 pub struct CustomerGateway {
     /// <p>The customer gateway's Border Gateway Protocol (BGP) Autonomous System Number (ASN).</p>
     pub bgp_asn: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for the customer gateway certificate.</p>
+    pub certificate_arn: Option<String>,
     /// <p>The ID of the customer gateway.</p>
     pub customer_gateway_id: Option<String>,
     /// <p>The Internet-routable IP address of the customer gateway's outside interface.</p>
@@ -9270,6 +9810,10 @@ impl CustomerGatewayDeserializer {
             match name {
                 "bgpAsn" => {
                     obj.bgp_asn = Some(StringDeserializer::deserialize("bgpAsn", stack)?);
+                }
+                "certificateArn" => {
+                    obj.certificate_arn =
+                        Some(StringDeserializer::deserialize("certificateArn", stack)?);
                 }
                 "customerGatewayId" => {
                     obj.customer_gateway_id =
@@ -10698,6 +11242,238 @@ impl DeleteTagsRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteTrafficMirrorFilterRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the Traffic Mirror filter.</p>
+    pub traffic_mirror_filter_id: String,
+}
+
+/// Serialize `DeleteTrafficMirrorFilterRequest` contents to a `SignedRequest`.
+struct DeleteTrafficMirrorFilterRequestSerializer;
+impl DeleteTrafficMirrorFilterRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteTrafficMirrorFilterRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "TrafficMirrorFilterId"),
+            &obj.traffic_mirror_filter_id,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteTrafficMirrorFilterResult {
+    /// <p>The ID of the Traffic Mirror filter.</p>
+    pub traffic_mirror_filter_id: Option<String>,
+}
+
+struct DeleteTrafficMirrorFilterResultDeserializer;
+impl DeleteTrafficMirrorFilterResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteTrafficMirrorFilterResult, XmlParseError> {
+        deserialize_elements::<_, DeleteTrafficMirrorFilterResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "trafficMirrorFilterId" => {
+                        obj.traffic_mirror_filter_id = Some(StringDeserializer::deserialize(
+                            "trafficMirrorFilterId",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteTrafficMirrorFilterRuleRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the Traffic Mirror rule.</p>
+    pub traffic_mirror_filter_rule_id: String,
+}
+
+/// Serialize `DeleteTrafficMirrorFilterRuleRequest` contents to a `SignedRequest`.
+struct DeleteTrafficMirrorFilterRuleRequestSerializer;
+impl DeleteTrafficMirrorFilterRuleRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteTrafficMirrorFilterRuleRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "TrafficMirrorFilterRuleId"),
+            &obj.traffic_mirror_filter_rule_id,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteTrafficMirrorFilterRuleResult {
+    /// <p>The ID of the deleted Traffic Mirror rule.</p>
+    pub traffic_mirror_filter_rule_id: Option<String>,
+}
+
+struct DeleteTrafficMirrorFilterRuleResultDeserializer;
+impl DeleteTrafficMirrorFilterRuleResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteTrafficMirrorFilterRuleResult, XmlParseError> {
+        deserialize_elements::<_, DeleteTrafficMirrorFilterRuleResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "trafficMirrorFilterRuleId" => {
+                        obj.traffic_mirror_filter_rule_id = Some(StringDeserializer::deserialize(
+                            "trafficMirrorFilterRuleId",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteTrafficMirrorSessionRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the Traffic Mirror session.</p>
+    pub traffic_mirror_session_id: String,
+}
+
+/// Serialize `DeleteTrafficMirrorSessionRequest` contents to a `SignedRequest`.
+struct DeleteTrafficMirrorSessionRequestSerializer;
+impl DeleteTrafficMirrorSessionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteTrafficMirrorSessionRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "TrafficMirrorSessionId"),
+            &obj.traffic_mirror_session_id,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteTrafficMirrorSessionResult {
+    /// <p>The ID of the deleted Traffic Mirror session.</p>
+    pub traffic_mirror_session_id: Option<String>,
+}
+
+struct DeleteTrafficMirrorSessionResultDeserializer;
+impl DeleteTrafficMirrorSessionResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteTrafficMirrorSessionResult, XmlParseError> {
+        deserialize_elements::<_, DeleteTrafficMirrorSessionResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "trafficMirrorSessionId" => {
+                        obj.traffic_mirror_session_id = Some(StringDeserializer::deserialize(
+                            "trafficMirrorSessionId",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteTrafficMirrorTargetRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the Traffic Mirror target.</p>
+    pub traffic_mirror_target_id: String,
+}
+
+/// Serialize `DeleteTrafficMirrorTargetRequest` contents to a `SignedRequest`.
+struct DeleteTrafficMirrorTargetRequestSerializer;
+impl DeleteTrafficMirrorTargetRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteTrafficMirrorTargetRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "TrafficMirrorTargetId"),
+            &obj.traffic_mirror_target_id,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteTrafficMirrorTargetResult {
+    /// <p>The ID of the deleted Traffic Mirror target.</p>
+    pub traffic_mirror_target_id: Option<String>,
+}
+
+struct DeleteTrafficMirrorTargetResultDeserializer;
+impl DeleteTrafficMirrorTargetResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteTrafficMirrorTargetResult, XmlParseError> {
+        deserialize_elements::<_, DeleteTrafficMirrorTargetResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "trafficMirrorTargetId" => {
+                        obj.traffic_mirror_target_id = Some(StringDeserializer::deserialize(
+                            "trafficMirrorTargetId",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteTransitGatewayRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
@@ -12428,7 +13204,6 @@ impl DescribeConversionTaskListDeserializer {
         })
     }
 }
-/// <p>Contains the parameters for DescribeConversionTasks.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeConversionTasksRequest {
     /// <p>The conversion task IDs.</p>
@@ -12459,7 +13234,6 @@ impl DescribeConversionTasksRequestSerializer {
     }
 }
 
-/// <p>Contains the output for DescribeConversionTasks.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeConversionTasksResult {
     /// <p>Information about the conversion tasks.</p>
@@ -12819,7 +13593,94 @@ impl DescribeElasticGpusResultDeserializer {
         )
     }
 }
-/// <p>Contains the parameters for DescribeExportTasks.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeExportImageTasksRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The IDs of the export image tasks.</p>
+    pub export_image_task_ids: Option<Vec<String>>,
+    /// <p>Filter tasks using the <code>task-state</code> filter and one of the following values: <code>active</code>, <code>completed</code>, <code>deleting</code>, or <code>deleted</code>.</p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p>The maximum number of results to return in a single call.</p>
+    pub max_results: Option<i64>,
+    /// <p>A token that indicates the next page of results.</p>
+    pub next_token: Option<String>,
+}
+
+/// Serialize `DescribeExportImageTasksRequest` contents to a `SignedRequest`.
+struct DescribeExportImageTasksRequestSerializer;
+impl DescribeExportImageTasksRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeExportImageTasksRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        if let Some(ref field_value) = obj.export_image_task_ids {
+            ExportImageTaskIdListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ExportImageTaskId"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeExportImageTasksResult {
+    /// <p>Information about the export image tasks.</p>
+    pub export_image_tasks: Option<Vec<ExportImageTask>>,
+    /// <p>The token to use to get the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
+}
+
+struct DescribeExportImageTasksResultDeserializer;
+impl DescribeExportImageTasksResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeExportImageTasksResult, XmlParseError> {
+        deserialize_elements::<_, DescribeExportImageTasksResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "exportImageTaskSet" => {
+                        obj.export_image_tasks.get_or_insert(vec![]).extend(
+                            ExportImageTaskListDeserializer::deserialize(
+                                "exportImageTaskSet",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "nextToken" => {
+                        obj.next_token =
+                            Some(NextTokenDeserializer::deserialize("nextToken", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeExportTasksRequest {
     /// <p>The export task IDs.</p>
@@ -12845,7 +13706,6 @@ impl DescribeExportTasksRequestSerializer {
     }
 }
 
-/// <p>Contains the output for DescribeExportTasks.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeExportTasksResult {
     /// <p>Information about the export tasks.</p>
@@ -13980,7 +14840,7 @@ pub struct DescribeImagesRequest {
     pub dry_run: Option<bool>,
     /// <p>Scopes the images by users with explicit launch permissions. Specify an AWS account ID, <code>self</code> (the sender of the request), or <code>all</code> (public AMIs).</p>
     pub executable_users: Option<Vec<String>>,
-    /// <p><p>The filters.</p> <ul> <li> <p> <code>architecture</code> - The image architecture (<code>i386</code> | <code>x86_64</code>).</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean value that indicates whether the Amazon EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name specified in the block device mapping (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p> </li> <li> <p> <code>block-device-mapping.snapshot-id</code> - The ID of the snapshot used for the EBS volume.</p> </li> <li> <p> <code>block-device-mapping.volume-size</code> - The volume size of the EBS volume, in GiB.</p> </li> <li> <p> <code>block-device-mapping.volume-type</code> - The volume type of the EBS volume (<code>gp2</code> | <code>io1</code> | <code>st1 </code>| <code>sc1</code> | <code>standard</code>).</p> </li> <li> <p> <code>block-device-mapping.encrypted</code> - A Boolean that indicates whether the EBS volume is encrypted.</p> </li> <li> <p> <code>description</code> - The description of the image (provided during image creation).</p> </li> <li> <p> <code>ena-support</code> - A Boolean that indicates whether enhanced networking with ENA is enabled.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>image-id</code> - The ID of the image.</p> </li> <li> <p> <code>image-type</code> - The image type (<code>machine</code> | <code>kernel</code> | <code>ramdisk</code>).</p> </li> <li> <p> <code>is-public</code> - A Boolean that indicates whether the image is public.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>manifest-location</code> - The location of the image manifest.</p> </li> <li> <p> <code>name</code> - The name of the AMI (provided during image creation).</p> </li> <li> <p> <code>owner-alias</code> - String value from an Amazon-maintained list (<code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM console.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the image owner.</p> </li> <li> <p> <code>platform</code> - The platform. To only list Windows-based AMIs, use <code>windows</code>.</p> </li> <li> <p> <code>product-code</code> - The product code.</p> </li> <li> <p> <code>product-code.type</code> - The type of the product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>root-device-name</code> - The device name of the root device volume (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of the root device volume (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>state</code> - The state of the image (<code>available</code> | <code>pending</code> | <code>failed</code>).</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - The message for the state change.</p> </li> <li> <p> <code>sriov-net-support</code> - A value of <code>simple</code> indicates that enhanced networking with the Intel 82599 VF interface is enabled.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type (<code>paravirtual</code> | <code>hvm</code>).</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>architecture</code> - The image architecture (<code>i386</code> | <code>x86_64</code> | <code>arm64</code>).</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean value that indicates whether the Amazon EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name specified in the block device mapping (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p> </li> <li> <p> <code>block-device-mapping.snapshot-id</code> - The ID of the snapshot used for the EBS volume.</p> </li> <li> <p> <code>block-device-mapping.volume-size</code> - The volume size of the EBS volume, in GiB.</p> </li> <li> <p> <code>block-device-mapping.volume-type</code> - The volume type of the EBS volume (<code>gp2</code> | <code>io1</code> | <code>st1 </code>| <code>sc1</code> | <code>standard</code>).</p> </li> <li> <p> <code>block-device-mapping.encrypted</code> - A Boolean that indicates whether the EBS volume is encrypted.</p> </li> <li> <p> <code>description</code> - The description of the image (provided during image creation).</p> </li> <li> <p> <code>ena-support</code> - A Boolean that indicates whether enhanced networking with ENA is enabled.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>image-id</code> - The ID of the image.</p> </li> <li> <p> <code>image-type</code> - The image type (<code>machine</code> | <code>kernel</code> | <code>ramdisk</code>).</p> </li> <li> <p> <code>is-public</code> - A Boolean that indicates whether the image is public.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>manifest-location</code> - The location of the image manifest.</p> </li> <li> <p> <code>name</code> - The name of the AMI (provided during image creation).</p> </li> <li> <p> <code>owner-alias</code> - String value from an Amazon-maintained list (<code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM console.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the image owner.</p> </li> <li> <p> <code>platform</code> - The platform. To only list Windows-based AMIs, use <code>windows</code>.</p> </li> <li> <p> <code>product-code</code> - The product code.</p> </li> <li> <p> <code>product-code.type</code> - The type of the product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>root-device-name</code> - The device name of the root device volume (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of the root device volume (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>state</code> - The state of the image (<code>available</code> | <code>pending</code> | <code>failed</code>).</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - The message for the state change.</p> </li> <li> <p> <code>sriov-net-support</code> - A value of <code>simple</code> indicates that enhanced networking with the Intel 82599 VF interface is enabled.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type (<code>paravirtual</code> | <code>hvm</code>).</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The image IDs.</p> <p>Default: Describes all images available to you.</p>
     pub image_ids: Option<Vec<String>>,
@@ -14057,16 +14917,15 @@ impl DescribeImagesResultDeserializer {
         })
     }
 }
-/// <p>Contains the parameters for DescribeImportImageTasks.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeImportImageTasksRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>Filter tasks using the <code>task-state</code> filter and one of the following values: active, completed, deleting, deleted.</p>
+    /// <p>Filter tasks using the <code>task-state</code> filter and one of the following values: <code>active</code>, <code>completed</code>, <code>deleting</code>, or <code>deleted</code>.</p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>A list of import image task IDs.</p>
+    /// <p>The IDs of the import image tasks.</p>
     pub import_task_ids: Option<Vec<String>>,
-    /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>
+    /// <p>The maximum number of results to return in a single call.</p>
     pub max_results: Option<i64>,
     /// <p>A token that indicates the next page of results.</p>
     pub next_token: Option<String>,
@@ -14107,7 +14966,6 @@ impl DescribeImportImageTasksRequestSerializer {
     }
 }
 
-/// <p>Contains the output for DescribeImportImageTasks.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeImportImageTasksResult {
     /// <p>A list of zero or more import image tasks that are currently active or were completed or canceled in the previous 7 days.</p>
@@ -14146,7 +15004,6 @@ impl DescribeImportImageTasksResultDeserializer {
         )
     }
 }
-/// <p>Contains the parameters for DescribeImportSnapshotTasks.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeImportSnapshotTasksRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
@@ -14196,7 +15053,6 @@ impl DescribeImportSnapshotTasksRequestSerializer {
     }
 }
 
-/// <p>Contains the output for DescribeImportSnapshotTasks.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeImportSnapshotTasksResult {
     /// <p>A list of zero or more import snapshot tasks that are currently active or were completed or canceled in the previous 7 days.</p>
@@ -14452,7 +15308,7 @@ impl DescribeInstanceStatusResultDeserializer {
 pub struct DescribeInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>The filters.</p> <ul> <li> <p> <code>affinity</code> - The affinity setting for an instance running on a Dedicated Host (<code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>architecture</code> - The instance architecture (<code>i386</code> | <code>x86_64</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the instance.</p> </li> <li> <p> <code>block-device-mapping.attach-time</code> - The attach time for an EBS volume mapped to the instance, for example, <code>2010-09-15T17:15:20.000Z</code>.</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean that indicates whether the EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name specified in the block device mapping (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p> </li> <li> <p> <code>block-device-mapping.status</code> - The status for the EBS volume (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>block-device-mapping.volume-id</code> - The volume ID of the EBS volume.</p> </li> <li> <p> <code>client-token</code> - The idempotency token you provided when you launched the instance.</p> </li> <li> <p> <code>dns-name</code> - The public DNS name of the instance.</p> </li> <li> <p> <code>group-id</code> - The ID of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>group-name</code> - The name of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>hibernation-options.configured</code> - A Boolean that indicates whether the instance is enabled for hibernation. A value of <code>true</code> means that the instance is enabled for hibernation. </p> </li> <li> <p> <code>host-id</code> - The ID of the Dedicated Host on which the instance is running, if applicable.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type of the instance (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>iam-instance-profile.arn</code> - The instance profile associated with the instance. Specified as an ARN.</p> </li> <li> <p> <code>image-id</code> - The ID of the image used to launch the instance.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>instance-lifecycle</code> - Indicates whether this is a Spot Instance or a Scheduled Instance (<code>spot</code> | <code>scheduled</code>).</p> </li> <li> <p> <code>instance-state-code</code> - The state of the instance, as a 16-bit unsigned integer. The high byte is used for internal purposes and should be ignored. The low byte is set based on the state represented. The valid values are: 0 (pending), 16 (running), 32 (shutting-down), 48 (terminated), 64 (stopping), and 80 (stopped).</p> </li> <li> <p> <code>instance-state-name</code> - The state of the instance (<code>pending</code> | <code>running</code> | <code>shutting-down</code> | <code>terminated</code> | <code>stopping</code> | <code>stopped</code>).</p> </li> <li> <p> <code>instance-type</code> - The type of instance (for example, <code>t2.micro</code>).</p> </li> <li> <p> <code>instance.group-id</code> - The ID of the security group for the instance. </p> </li> <li> <p> <code>instance.group-name</code> - The name of the security group for the instance. </p> </li> <li> <p> <code>ip-address</code> - The public IPv4 address of the instance.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>key-name</code> - The name of the key pair used when the instance was launched.</p> </li> <li> <p> <code>launch-index</code> - When launching multiple instances, this is the index for the instance in the launch group (for example, 0, 1, 2, and so on). </p> </li> <li> <p> <code>launch-time</code> - The time when the instance was launched.</p> </li> <li> <p> <code>monitoring-state</code> - Indicates whether detailed monitoring is enabled (<code>disabled</code> | <code>enabled</code>).</p> </li> <li> <p> <code>network-interface.addresses.private-ip-address</code> - The private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.addresses.primary</code> - Specifies whether the IPv4 address of the network interface is the primary private IPv4 address.</p> </li> <li> <p> <code>network-interface.addresses.association.public-ip</code> - The ID of the association of an Elastic IP address (IPv4) with a network interface.</p> </li> <li> <p> <code>network-interface.addresses.association.ip-owner-id</code> - The owner ID of the private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.public-ip</code> - The address of the Elastic IP address (IPv4) bound to the network interface.</p> </li> <li> <p> <code>network-interface.association.ip-owner-id</code> - The owner of the Elastic IP address (IPv4) associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.allocation-id</code> - The allocation ID returned when you allocated the Elastic IP address (IPv4) for your network interface.</p> </li> <li> <p> <code>network-interface.association.association-id</code> - The association ID returned when the network interface was associated with an IPv4 address.</p> </li> <li> <p> <code>network-interface.attachment.attachment-id</code> - The ID of the interface attachment.</p> </li> <li> <p> <code>network-interface.attachment.instance-id</code> - The ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.instance-owner-id</code> - The owner ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.device-index</code> - The device index to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.status</code> - The status of the attachment (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>network-interface.attachment.attach-time</code> - The time that the network interface was attached to an instance.</p> </li> <li> <p> <code>network-interface.attachment.delete-on-termination</code> - Specifies whether the attachment is deleted when an instance is terminated.</p> </li> <li> <p> <code>network-interface.availability-zone</code> - The Availability Zone for the network interface.</p> </li> <li> <p> <code>network-interface.description</code> - The description of the network interface.</p> </li> <li> <p> <code>network-interface.group-id</code> - The ID of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.group-name</code> - The name of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.ipv6-addresses.ipv6-address</code> - The IPv6 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.mac-address</code> - The MAC address of the network interface.</p> </li> <li> <p> <code>network-interface.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface.owner-id</code> - The ID of the owner of the network interface.</p> </li> <li> <p> <code>network-interface.private-dns-name</code> - The private DNS name of the network interface.</p> </li> <li> <p> <code>network-interface.requester-id</code> - The requester ID for the network interface.</p> </li> <li> <p> <code>network-interface.requester-managed</code> - Indicates whether the network interface is being managed by AWS.</p> </li> <li> <p> <code>network-interface.status</code> - The status of the network interface (<code>available</code>) | <code>in-use</code>).</p> </li> <li> <p> <code>network-interface.source-dest-check</code> - Whether the network interface performs source/destination checking. A value of <code>true</code> means that checking is enabled, and <code>false</code> means that checking is disabled. The value must be <code>false</code> for the network interface to perform network address translation (NAT) in your VPC.</p> </li> <li> <p> <code>network-interface.subnet-id</code> - The ID of the subnet for the network interface.</p> </li> <li> <p> <code>network-interface.vpc-id</code> - The ID of the VPC for the network interface.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the instance owner.</p> </li> <li> <p> <code>placement-group-name</code> - The name of the placement group for the instance.</p> </li> <li> <p> <code>placement-partition-number</code> - The partition in which the instance is located.</p> </li> <li> <p> <code>platform</code> - The platform. To list only Windows instances, use <code>windows</code>.</p> </li> <li> <p> <code>private-dns-name</code> - The private IPv4 DNS name of the instance.</p> </li> <li> <p> <code>private-ip-address</code> - The private IPv4 address of the instance.</p> </li> <li> <p> <code>product-code</code> - The product code associated with the AMI used to launch the instance.</p> </li> <li> <p> <code>product-code.type</code> - The type of product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>reason</code> - The reason for the current state of the instance (for example, shows &quot;User Initiated [date]&quot; when you stop or terminate the instance). Similar to the state-reason-code filter.</p> </li> <li> <p> <code>requester-id</code> - The ID of the entity that launched the instance on your behalf (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>reservation-id</code> - The ID of the instance&#39;s reservation. A reservation ID is created any time you launch an instance. A reservation ID has a one-to-one relationship with an instance launch request, but can be associated with more than one instance if you launch multiple instances using the same launch request. For example, if you launch one instance, you get one reservation ID. If you launch ten instances using the same launch request, you also get one reservation ID.</p> </li> <li> <p> <code>root-device-name</code> - The device name of the root device volume (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of the root device volume (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>source-dest-check</code> - Indicates whether the instance performs source/destination checking. A value of <code>true</code> means that checking is enabled, and <code>false</code> means that checking is disabled. The value must be <code>false</code> for the instance to perform network address translation (NAT) in your VPC. </p> </li> <li> <p> <code>spot-instance-request-id</code> - The ID of the Spot Instance request.</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - A message that describes the state change.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet for the instance.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources that have a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>tenancy</code> - The tenancy of an instance (<code>dedicated</code> | <code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type of the instance (<code>paravirtual</code> | <code>hvm</code>).</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC that the instance is running in.</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>affinity</code> - The affinity setting for an instance running on a Dedicated Host (<code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>architecture</code> - The instance architecture (<code>i386</code> | <code>x86_64</code> | <code>arm64</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the instance.</p> </li> <li> <p> <code>block-device-mapping.attach-time</code> - The attach time for an EBS volume mapped to the instance, for example, <code>2010-09-15T17:15:20.000Z</code>.</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean that indicates whether the EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name specified in the block device mapping (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p> </li> <li> <p> <code>block-device-mapping.status</code> - The status for the EBS volume (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>block-device-mapping.volume-id</code> - The volume ID of the EBS volume.</p> </li> <li> <p> <code>client-token</code> - The idempotency token you provided when you launched the instance.</p> </li> <li> <p> <code>dns-name</code> - The public DNS name of the instance.</p> </li> <li> <p> <code>group-id</code> - The ID of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>group-name</code> - The name of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>hibernation-options.configured</code> - A Boolean that indicates whether the instance is enabled for hibernation. A value of <code>true</code> means that the instance is enabled for hibernation. </p> </li> <li> <p> <code>host-id</code> - The ID of the Dedicated Host on which the instance is running, if applicable.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type of the instance (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>iam-instance-profile.arn</code> - The instance profile associated with the instance. Specified as an ARN.</p> </li> <li> <p> <code>image-id</code> - The ID of the image used to launch the instance.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>instance-lifecycle</code> - Indicates whether this is a Spot Instance or a Scheduled Instance (<code>spot</code> | <code>scheduled</code>).</p> </li> <li> <p> <code>instance-state-code</code> - The state of the instance, as a 16-bit unsigned integer. The high byte is used for internal purposes and should be ignored. The low byte is set based on the state represented. The valid values are: 0 (pending), 16 (running), 32 (shutting-down), 48 (terminated), 64 (stopping), and 80 (stopped).</p> </li> <li> <p> <code>instance-state-name</code> - The state of the instance (<code>pending</code> | <code>running</code> | <code>shutting-down</code> | <code>terminated</code> | <code>stopping</code> | <code>stopped</code>).</p> </li> <li> <p> <code>instance-type</code> - The type of instance (for example, <code>t2.micro</code>).</p> </li> <li> <p> <code>instance.group-id</code> - The ID of the security group for the instance. </p> </li> <li> <p> <code>instance.group-name</code> - The name of the security group for the instance. </p> </li> <li> <p> <code>ip-address</code> - The public IPv4 address of the instance.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>key-name</code> - The name of the key pair used when the instance was launched.</p> </li> <li> <p> <code>launch-index</code> - When launching multiple instances, this is the index for the instance in the launch group (for example, 0, 1, 2, and so on). </p> </li> <li> <p> <code>launch-time</code> - The time when the instance was launched.</p> </li> <li> <p> <code>monitoring-state</code> - Indicates whether detailed monitoring is enabled (<code>disabled</code> | <code>enabled</code>).</p> </li> <li> <p> <code>network-interface.addresses.private-ip-address</code> - The private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.addresses.primary</code> - Specifies whether the IPv4 address of the network interface is the primary private IPv4 address.</p> </li> <li> <p> <code>network-interface.addresses.association.public-ip</code> - The ID of the association of an Elastic IP address (IPv4) with a network interface.</p> </li> <li> <p> <code>network-interface.addresses.association.ip-owner-id</code> - The owner ID of the private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.public-ip</code> - The address of the Elastic IP address (IPv4) bound to the network interface.</p> </li> <li> <p> <code>network-interface.association.ip-owner-id</code> - The owner of the Elastic IP address (IPv4) associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.allocation-id</code> - The allocation ID returned when you allocated the Elastic IP address (IPv4) for your network interface.</p> </li> <li> <p> <code>network-interface.association.association-id</code> - The association ID returned when the network interface was associated with an IPv4 address.</p> </li> <li> <p> <code>network-interface.attachment.attachment-id</code> - The ID of the interface attachment.</p> </li> <li> <p> <code>network-interface.attachment.instance-id</code> - The ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.instance-owner-id</code> - The owner ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.device-index</code> - The device index to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.status</code> - The status of the attachment (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>network-interface.attachment.attach-time</code> - The time that the network interface was attached to an instance.</p> </li> <li> <p> <code>network-interface.attachment.delete-on-termination</code> - Specifies whether the attachment is deleted when an instance is terminated.</p> </li> <li> <p> <code>network-interface.availability-zone</code> - The Availability Zone for the network interface.</p> </li> <li> <p> <code>network-interface.description</code> - The description of the network interface.</p> </li> <li> <p> <code>network-interface.group-id</code> - The ID of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.group-name</code> - The name of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.ipv6-addresses.ipv6-address</code> - The IPv6 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.mac-address</code> - The MAC address of the network interface.</p> </li> <li> <p> <code>network-interface.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface.owner-id</code> - The ID of the owner of the network interface.</p> </li> <li> <p> <code>network-interface.private-dns-name</code> - The private DNS name of the network interface.</p> </li> <li> <p> <code>network-interface.requester-id</code> - The requester ID for the network interface.</p> </li> <li> <p> <code>network-interface.requester-managed</code> - Indicates whether the network interface is being managed by AWS.</p> </li> <li> <p> <code>network-interface.status</code> - The status of the network interface (<code>available</code>) | <code>in-use</code>).</p> </li> <li> <p> <code>network-interface.source-dest-check</code> - Whether the network interface performs source/destination checking. A value of <code>true</code> means that checking is enabled, and <code>false</code> means that checking is disabled. The value must be <code>false</code> for the network interface to perform network address translation (NAT) in your VPC.</p> </li> <li> <p> <code>network-interface.subnet-id</code> - The ID of the subnet for the network interface.</p> </li> <li> <p> <code>network-interface.vpc-id</code> - The ID of the VPC for the network interface.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the instance owner.</p> </li> <li> <p> <code>placement-group-name</code> - The name of the placement group for the instance.</p> </li> <li> <p> <code>placement-partition-number</code> - The partition in which the instance is located.</p> </li> <li> <p> <code>platform</code> - The platform. To list only Windows instances, use <code>windows</code>.</p> </li> <li> <p> <code>private-dns-name</code> - The private IPv4 DNS name of the instance.</p> </li> <li> <p> <code>private-ip-address</code> - The private IPv4 address of the instance.</p> </li> <li> <p> <code>product-code</code> - The product code associated with the AMI used to launch the instance.</p> </li> <li> <p> <code>product-code.type</code> - The type of product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>reason</code> - The reason for the current state of the instance (for example, shows &quot;User Initiated [date]&quot; when you stop or terminate the instance). Similar to the state-reason-code filter.</p> </li> <li> <p> <code>requester-id</code> - The ID of the entity that launched the instance on your behalf (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>reservation-id</code> - The ID of the instance&#39;s reservation. A reservation ID is created any time you launch an instance. A reservation ID has a one-to-one relationship with an instance launch request, but can be associated with more than one instance if you launch multiple instances using the same launch request. For example, if you launch one instance, you get one reservation ID. If you launch ten instances using the same launch request, you also get one reservation ID.</p> </li> <li> <p> <code>root-device-name</code> - The device name of the root device volume (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of the root device volume (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>source-dest-check</code> - Indicates whether the instance performs source/destination checking. A value of <code>true</code> means that checking is enabled, and <code>false</code> means that checking is disabled. The value must be <code>false</code> for the instance to perform network address translation (NAT) in your VPC. </p> </li> <li> <p> <code>spot-instance-request-id</code> - The ID of the Spot Instance request.</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - A message that describes the state change.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet for the instance.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources that have a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>tenancy</code> - The tenancy of an instance (<code>dedicated</code> | <code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type of the instance (<code>paravirtual</code> | <code>hvm</code>).</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC that the instance is running in.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The instance IDs.</p> <p>Default: Describes all your instances.</p>
     pub instance_ids: Option<Vec<String>>,
@@ -15324,7 +16180,7 @@ impl DescribeNetworkInterfacePermissionsResultDeserializer {
 pub struct DescribeNetworkInterfacesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>addresses.private-ip-address</code> - The private IPv4 addresses associated with the network interface.</p> </li> <li> <p> <code>addresses.primary</code> - Whether the private IPv4 address is the primary IP address associated with the network interface. </p> </li> <li> <p> <code>addresses.association.public-ip</code> - The association ID returned when the network interface was associated with the Elastic IP address (IPv4).</p> </li> <li> <p> <code>addresses.association.owner-id</code> - The owner ID of the addresses associated with the network interface.</p> </li> <li> <p> <code>association.association-id</code> - The association ID returned when the network interface was associated with an IPv4 address.</p> </li> <li> <p> <code>association.allocation-id</code> - The allocation ID returned when you allocated the Elastic IP address (IPv4) for your network interface.</p> </li> <li> <p> <code>association.ip-owner-id</code> - The owner of the Elastic IP address (IPv4) associated with the network interface.</p> </li> <li> <p> <code>association.public-ip</code> - The address of the Elastic IP address (IPv4) bound to the network interface.</p> </li> <li> <p> <code>association.public-dns-name</code> - The public DNS name for the network interface (IPv4).</p> </li> <li> <p> <code>attachment.attachment-id</code> - The ID of the interface attachment.</p> </li> <li> <p> <code>attachment.attach.time</code> - The time that the network interface was attached to an instance.</p> </li> <li> <p> <code>attachment.delete-on-termination</code> - Indicates whether the attachment is deleted when an instance is terminated.</p> </li> <li> <p> <code>attachment.device-index</code> - The device index to which the network interface is attached.</p> </li> <li> <p> <code>attachment.instance-id</code> - The ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>attachment.instance-owner-id</code> - The owner ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>attachment.nat-gateway-id</code> - The ID of the NAT gateway to which the network interface is attached.</p> </li> <li> <p> <code>attachment.status</code> - The status of the attachment (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the network interface.</p> </li> <li> <p> <code>description</code> - The description of the network interface.</p> </li> <li> <p> <code>group-id</code> - The ID of a security group associated with the network interface.</p> </li> <li> <p> <code>group-name</code> - The name of a security group associated with the network interface.</p> </li> <li> <p> <code>ipv6-addresses.ipv6-address</code> - An IPv6 address associated with the network interface.</p> </li> <li> <p> <code>mac-address</code> - The MAC address of the network interface.</p> </li> <li> <p> <code>network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the network interface owner.</p> </li> <li> <p> <code>private-ip-address</code> - The private IPv4 address or addresses of the network interface.</p> </li> <li> <p> <code>private-dns-name</code> - The private DNS name of the network interface (IPv4).</p> </li> <li> <p> <code>requester-id</code> - The ID of the entity that launched the instance on your behalf (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>requester-managed</code> - Indicates whether the network interface is being managed by an AWS service (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>source-dest-check</code> - Indicates whether the network interface performs source/destination checking. A value of <code>true</code> means checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the network interface to perform network address translation (NAT) in your VPC. </p> </li> <li> <p> <code>status</code> - The status of the network interface. If the network interface is not attached to an instance, the status is <code>available</code>; if a network interface is attached to an instance the status is <code>in-use</code>.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet for the network interface.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the network interface.</p> </li> </ul></p>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>addresses.private-ip-address</code> - The private IPv4 addresses associated with the network interface.</p> </li> <li> <p> <code>addresses.primary</code> - Whether the private IPv4 address is the primary IP address associated with the network interface. </p> </li> <li> <p> <code>addresses.association.public-ip</code> - The association ID returned when the network interface was associated with the Elastic IP address (IPv4).</p> </li> <li> <p> <code>addresses.association.owner-id</code> - The owner ID of the addresses associated with the network interface.</p> </li> <li> <p> <code>association.association-id</code> - The association ID returned when the network interface was associated with an IPv4 address.</p> </li> <li> <p> <code>association.allocation-id</code> - The allocation ID returned when you allocated the Elastic IP address (IPv4) for your network interface.</p> </li> <li> <p> <code>association.ip-owner-id</code> - The owner of the Elastic IP address (IPv4) associated with the network interface.</p> </li> <li> <p> <code>association.public-ip</code> - The address of the Elastic IP address (IPv4) bound to the network interface.</p> </li> <li> <p> <code>association.public-dns-name</code> - The public DNS name for the network interface (IPv4).</p> </li> <li> <p> <code>attachment.attachment-id</code> - The ID of the interface attachment.</p> </li> <li> <p> <code>attachment.attach-time</code> - The time that the network interface was attached to an instance.</p> </li> <li> <p> <code>attachment.delete-on-termination</code> - Indicates whether the attachment is deleted when an instance is terminated.</p> </li> <li> <p> <code>attachment.device-index</code> - The device index to which the network interface is attached.</p> </li> <li> <p> <code>attachment.instance-id</code> - The ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>attachment.instance-owner-id</code> - The owner ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>attachment.nat-gateway-id</code> - The ID of the NAT gateway to which the network interface is attached.</p> </li> <li> <p> <code>attachment.status</code> - The status of the attachment (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the network interface.</p> </li> <li> <p> <code>description</code> - The description of the network interface.</p> </li> <li> <p> <code>group-id</code> - The ID of a security group associated with the network interface.</p> </li> <li> <p> <code>group-name</code> - The name of a security group associated with the network interface.</p> </li> <li> <p> <code>ipv6-addresses.ipv6-address</code> - An IPv6 address associated with the network interface.</p> </li> <li> <p> <code>mac-address</code> - The MAC address of the network interface.</p> </li> <li> <p> <code>network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the network interface owner.</p> </li> <li> <p> <code>private-ip-address</code> - The private IPv4 address or addresses of the network interface.</p> </li> <li> <p> <code>private-dns-name</code> - The private DNS name of the network interface (IPv4).</p> </li> <li> <p> <code>requester-id</code> - The ID of the entity that launched the instance on your behalf (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>requester-managed</code> - Indicates whether the network interface is being managed by an AWS service (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>source-dest-check</code> - Indicates whether the network interface performs source/destination checking. A value of <code>true</code> means checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the network interface to perform network address translation (NAT) in your VPC. </p> </li> <li> <p> <code>status</code> - The status of the network interface. If the network interface is not attached to an instance, the status is <code>available</code>; if a network interface is attached to an instance the status is <code>in-use</code>.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet for the network interface.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the network interface.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p>
     pub max_results: Option<i64>,
@@ -15711,11 +16567,13 @@ impl DescribePublicIpv4PoolsResultDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeRegionsRequest {
+    /// <p>Indicates whether to display all Regions, including Regions that are disabled for your account.</p>
+    pub all_regions: Option<bool>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>The filters.</p> <ul> <li> <p> <code>endpoint</code> - The endpoint of the Region (for example, <code>ec2.us-east-1.amazonaws.com</code>).</p> </li> <li> <p> <code>region-name</code> - The name of the Region (for example, <code>us-east-1</code>).</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>endpoint</code> - The endpoint of the Region (for example, <code>ec2.us-east-1.amazonaws.com</code>).</p> </li> <li> <p> <code>opt-in-status</code> - The opt-in status of the Region (<code>opt-in-not-required</code> | <code>opted-in</code> | <code>not-opted-in</code>).</p> </li> <li> <p> <code>region-name</code> - The name of the Region (for example, <code>us-east-1</code>).</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>The names of the Regions.</p>
+    /// <p>The names of the Regions. You can specify any Regions, whether they are enabled and disabled for your account.</p>
     pub region_names: Option<Vec<String>>,
 }
 
@@ -15728,6 +16586,9 @@ impl DescribeRegionsRequestSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.all_regions {
+            params.put(&format!("{}{}", prefix, "AllRegions"), &field_value);
+        }
         if let Some(ref field_value) = obj.dry_run {
             params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
@@ -17527,6 +18388,267 @@ impl DescribeTagsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeTrafficMirrorFiltersRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p><p>One or more filters. The possible values are:</p> <ul> <li> <p> <code>description</code>: The Traffic Mirror filter description.</p> </li> <li> <p> <code>traffic-mirror-filter-id</code>: The ID of the Traffic Mirror filter.</p> </li> </ul></p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
+    pub max_results: Option<i64>,
+    /// <p>The token for the next page of results.</p>
+    pub next_token: Option<String>,
+    /// <p>The ID of the Traffic Mirror filter.</p>
+    pub traffic_mirror_filter_ids: Option<Vec<String>>,
+}
+
+/// Serialize `DescribeTrafficMirrorFiltersRequest` contents to a `SignedRequest`.
+struct DescribeTrafficMirrorFiltersRequestSerializer;
+impl DescribeTrafficMirrorFiltersRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeTrafficMirrorFiltersRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+        if let Some(ref field_value) = obj.traffic_mirror_filter_ids {
+            ValueStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TrafficMirrorFilterId"),
+                field_value,
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeTrafficMirrorFiltersResult {
+    /// <p>The token to use to retrieve the next page of results. The value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
+    /// <p>Information about one or more Traffic Mirror filters.</p>
+    pub traffic_mirror_filters: Option<Vec<TrafficMirrorFilter>>,
+}
+
+struct DescribeTrafficMirrorFiltersResultDeserializer;
+impl DescribeTrafficMirrorFiltersResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeTrafficMirrorFiltersResult, XmlParseError> {
+        deserialize_elements::<_, DescribeTrafficMirrorFiltersResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "nextToken" => {
+                        obj.next_token = Some(StringDeserializer::deserialize("nextToken", stack)?);
+                    }
+                    "trafficMirrorFilterSet" => {
+                        obj.traffic_mirror_filters.get_or_insert(vec![]).extend(
+                            TrafficMirrorFilterSetDeserializer::deserialize(
+                                "trafficMirrorFilterSet",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeTrafficMirrorSessionsRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p><p>One or more filters. The possible values are:</p> <ul> <li> <p> <code>description</code>: The Traffic Mirror session description.</p> </li> <li> <p> <code>network-interface-id</code>: The ID of the Traffic Mirror session network interface.</p> </li> <li> <p> <code>owner-id</code>: The ID of the account that owns the Traffic Mirror session.</p> </li> <li> <p> <code>packet-length</code>: The assigned number of packets to mirror. </p> </li> <li> <p> <code>session-number</code>: The assigned session number. </p> </li> <li> <p> <code>traffic-mirror-filter-id</code>: The ID of the Traffic Mirror filter.</p> </li> <li> <p> <code>traffic-mirror-session-id</code>: The ID of the Traffic Mirror session.</p> </li> <li> <p> <code>traffic-mirror-target-id</code>: The ID of the Traffic Mirror target.</p> </li> <li> <p> <code>virtual-network-id</code>: The virtual network ID of the Traffic Mirror session.</p> </li> </ul></p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
+    pub max_results: Option<i64>,
+    /// <p>The token for the next page of results.</p>
+    pub next_token: Option<String>,
+    /// <p>The ID of the Traffic Mirror session.</p>
+    pub traffic_mirror_session_ids: Option<Vec<String>>,
+}
+
+/// Serialize `DescribeTrafficMirrorSessionsRequest` contents to a `SignedRequest`.
+struct DescribeTrafficMirrorSessionsRequestSerializer;
+impl DescribeTrafficMirrorSessionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeTrafficMirrorSessionsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+        if let Some(ref field_value) = obj.traffic_mirror_session_ids {
+            ValueStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TrafficMirrorSessionId"),
+                field_value,
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeTrafficMirrorSessionsResult {
+    /// <p>The token to use to retrieve the next page of results. The value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
+    /// <p>Describes one or more Traffic Mirror sessions. By default, all Traffic Mirror sessions are described. Alternatively, you can filter the results.</p>
+    pub traffic_mirror_sessions: Option<Vec<TrafficMirrorSession>>,
+}
+
+struct DescribeTrafficMirrorSessionsResultDeserializer;
+impl DescribeTrafficMirrorSessionsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeTrafficMirrorSessionsResult, XmlParseError> {
+        deserialize_elements::<_, DescribeTrafficMirrorSessionsResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "nextToken" => {
+                        obj.next_token = Some(StringDeserializer::deserialize("nextToken", stack)?);
+                    }
+                    "trafficMirrorSessionSet" => {
+                        obj.traffic_mirror_sessions.get_or_insert(vec![]).extend(
+                            TrafficMirrorSessionSetDeserializer::deserialize(
+                                "trafficMirrorSessionSet",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeTrafficMirrorTargetsRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p><p>One or more filters. The possible values are:</p> <ul> <li> <p> <code>description</code>: The Traffic Mirror target description.</p> </li> <li> <p> <code>network-interface-id</code>: The ID of the Traffic Mirror session network interface.</p> </li> <li> <p> <code>network-load-balancer-arn</code>: The Amazon Resource Name (ARN) of the Network Load Balancer that is associated with the session.</p> </li> <li> <p> <code>owner-id</code>: The ID of the account that owns the Traffic Mirror session.</p> </li> <li> <p> <code>traffic-mirror-target-id</code>: The ID of the Traffic Mirror target.</p> </li> </ul></p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
+    pub max_results: Option<i64>,
+    /// <p>The token for the next page of results.</p>
+    pub next_token: Option<String>,
+    /// <p>The ID of the Traffic Mirror targets.</p>
+    pub traffic_mirror_target_ids: Option<Vec<String>>,
+}
+
+/// Serialize `DescribeTrafficMirrorTargetsRequest` contents to a `SignedRequest`.
+struct DescribeTrafficMirrorTargetsRequestSerializer;
+impl DescribeTrafficMirrorTargetsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeTrafficMirrorTargetsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+        if let Some(ref field_value) = obj.traffic_mirror_target_ids {
+            ValueStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TrafficMirrorTargetId"),
+                field_value,
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeTrafficMirrorTargetsResult {
+    /// <p>The token to use to retrieve the next page of results. The value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
+    /// <p>Information about one or more Traffic Mirror targets.</p>
+    pub traffic_mirror_targets: Option<Vec<TrafficMirrorTarget>>,
+}
+
+struct DescribeTrafficMirrorTargetsResultDeserializer;
+impl DescribeTrafficMirrorTargetsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeTrafficMirrorTargetsResult, XmlParseError> {
+        deserialize_elements::<_, DescribeTrafficMirrorTargetsResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "nextToken" => {
+                        obj.next_token = Some(StringDeserializer::deserialize("nextToken", stack)?);
+                    }
+                    "trafficMirrorTargetSet" => {
+                        obj.traffic_mirror_targets.get_or_insert(vec![]).extend(
+                            TrafficMirrorTargetSetDeserializer::deserialize(
+                                "trafficMirrorTargetSet",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeTransitGatewayAttachmentsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -18274,6 +19396,17 @@ impl DescribeVpcAttributeResultDeserializer {
         )
     }
 }
+struct DescribeVpcClassicLinkDnsSupportNextTokenDeserializer;
+impl DescribeVpcClassicLinkDnsSupportNextTokenDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcClassicLinkDnsSupportRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
@@ -18330,8 +19463,12 @@ impl DescribeVpcClassicLinkDnsSupportResultDeserializer {
             |name, stack, obj| {
                 match name {
                     "nextToken" => {
-                        obj.next_token =
-                            Some(NextTokenDeserializer::deserialize("nextToken", stack)?);
+                        obj.next_token = Some(
+                            DescribeVpcClassicLinkDnsSupportNextTokenDeserializer::deserialize(
+                                "nextToken",
+                                stack,
+                            )?,
+                        );
                     }
                     "vpcs" => {
                         obj.vpcs.get_or_insert(vec![]).extend(
@@ -18856,7 +19993,7 @@ impl DescribeVpcEndpointServicesResultDeserializer {
 pub struct DescribeVpcEndpointsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>service-name</code>: The name of the service.</p> </li> <li> <p> <code>vpc-id</code>: The ID of the VPC in which the endpoint resides.</p> </li> <li> <p> <code>vpc-endpoint-id</code>: The ID of the endpoint.</p> </li> <li> <p> <code>vpc-endpoint-state</code>: The state of the endpoint. (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>)</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> </ul></p>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>service-name</code>: The name of the service.</p> </li> <li> <p> <code>vpc-id</code>: The ID of the VPC in which the endpoint resides.</p> </li> <li> <p> <code>vpc-endpoint-id</code>: The ID of the endpoint.</p> </li> <li> <p> <code>vpc-endpoint-state</code> - The state of the endpoint (<code>pendingAcceptance</code> | <code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code> | <code>rejected</code> | <code>failed</code>).</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p> <p>Constraint: If the value is greater than 1000, we return only 1000 items.</p>
     pub max_results: Option<i64>,
@@ -19338,7 +20475,7 @@ pub struct DetachNetworkInterfaceRequest {
     pub attachment_id: String,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>Specifies whether to force a detachment.</p>
+    /// <p><p>Specifies whether to force a detachment.</p> <note> <ul> <li> <p>Use the <code>Force</code> parameter only as a last resort to detach a network interface from a failed instance. </p> </li> <li> <p>If you use the <code>Force</code> parameter to detach a network interface, you might not be able to attach a different network interface to the same index on the instance without first stopping and starting the instance.</p> </li> <li> <p>If you force the detachment of a network interface, the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html">instance metadata</a> might not get updated. This means that the attributes associated with the detached network interface might still be visible. The instance metadata will get updated when you stop and start the instance.</p> </li> </ul> </note></p>
     pub force: Option<bool>,
 }
 
@@ -19661,7 +20798,7 @@ impl DisableEbsEncryptionByDefaultRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DisableEbsEncryptionByDefaultResult {
-    /// <p>Account-level encryption status after performing the action.</p>
+    /// <p>The updated status of encryption by default.</p>
     pub ebs_encryption_by_default: Option<bool>,
 }
 
@@ -20544,17 +21681,17 @@ impl DoubleDeserializer {
 pub struct EbsBlockDevice {
     /// <p>Indicates whether the EBS volume is deleted on instance termination.</p>
     pub delete_on_termination: Option<bool>,
-    /// <p>Indicates whether the encryption state of an EBS volume is changed while being restored from a backing snapshot. The default effect of setting the <code>Encrypted</code> parameter to <code>true</code> through the console, API, or CLI depends on the volume's origin (new or from a snapshot), starting encryption state, ownership, and whether <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/account-level-encryption.html">account-level encryption</a> is enabled. Each default case can be overridden by specifying a customer master key (CMK) with the <code>KmsKeyId</code> parameter in addition to setting <code>Encrypted</code> to <code>true</code>. For a complete list of possible encryption cases, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#encryption-parameters">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>In no case can you remove encryption from an encrypted volume.</p> <p>Encrypted volumes can only be attached to instances that support Amazon EBS encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>.</p>
+    /// <p>Indicates whether the encryption state of an EBS volume is changed while being restored from a backing snapshot. The effect of setting the encryption state to <code>true</code> depends on the volume origin (new or from a snapshot), starting encryption state, ownership, and whether encryption by default is enabled. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#encryption-parameters">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>In no case can you remove encryption from an encrypted volume.</p> <p>Encrypted volumes can only be attached to instances that support Amazon EBS encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>.</p>
     pub encrypted: Option<bool>,
     /// <p>The number of I/O operations per second (IOPS) that the volume supports. For <code>io1</code> volumes, this represents the number of IOPS that are provisioned for the volume. For <code>gp2</code> volumes, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Constraints: Range is 100-16,000 IOPS for <code>gp2</code> volumes and 100 to 64,000IOPS for <code>io1</code> volumes in most Regions. Maximum <code>io1</code> IOPS of 64,000 is guaranteed only on <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances">Nitro-based instances</a>. Other instance families guarantee performance up to 32,000 IOPS. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Condition: This parameter is required for requests to create <code>io1</code> volumes; it is not used in requests to create <code>gp2</code>, <code>st1</code>, <code>sc1</code>, or <code>standard</code> volumes.</p>
     pub iops: Option<i64>,
-    /// <p>Identifier (key ID, key alias, ID ARN, or alias ARN) for a user-managed CMK under which the EBS volume is encrypted.</p> <p>This parameter is only supported on <code>BlockDeviceMapping</code> objects called by <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RunInstances.html">RunInstances</a>, <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RequestSpotFleet.html">RequestSpotFleet</a>, and <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RequestSpotInstances.html">RequestSpotInstances</a>.</p>
+    /// <p>Identifier (key ID, key alias, ID ARN, or alias ARN) for a customer managed CMK under which the EBS volume is encrypted.</p> <p>This parameter is only supported on <code>BlockDeviceMapping</code> objects called by <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RunInstances.html">RunInstances</a>, <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RequestSpotFleet.html">RequestSpotFleet</a>, and <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RequestSpotInstances.html">RequestSpotInstances</a>.</p>
     pub kms_key_id: Option<String>,
     /// <p>The ID of the snapshot.</p>
     pub snapshot_id: Option<String>,
     /// <p>The size of the volume, in GiB.</p> <p>Default: If you're creating the volume from a snapshot and don't specify a volume size, the default is the snapshot size.</p> <p>Constraints: 1-16384 for General Purpose SSD (<code>gp2</code>), 4-16384 for Provisioned IOPS SSD (<code>io1</code>), 500-16384 for Throughput Optimized HDD (<code>st1</code>), 500-16384 for Cold HDD (<code>sc1</code>), and 1-1024 for Magnetic (<code>standard</code>) volumes. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p>
     pub volume_size: Option<i64>,
-    /// <p>The volume type. If you set the type to <code>io1</code>, you must also set the <b>Iops</b> property.</p> <p>Default: <code>standard</code> </p>
+    /// <p>The volume type. If you set the type to <code>io1</code>, you must also specify the IOPS that the volume supports.</p> <p>Default: <code>gp2</code> </p>
     pub volume_type: Option<String>,
 }
 
@@ -21222,7 +22359,7 @@ impl EnableEbsEncryptionByDefaultRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EnableEbsEncryptionByDefaultResult {
-    /// <p>Account-level encryption status after performing the action.</p>
+    /// <p>The updated status of encryption by default.</p>
     pub ebs_encryption_by_default: Option<bool>,
 }
 
@@ -21721,6 +22858,219 @@ impl ExportEnvironmentDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ExportImageRequest {
+    /// <p>Token to enable idempotency for export image requests.</p>
+    pub client_token: Option<String>,
+    /// <p>A description of the image being exported. The maximum length is 255 bytes.</p>
+    pub description: Option<String>,
+    /// <p>The disk image format.</p>
+    pub disk_image_format: String,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the image.</p>
+    pub image_id: String,
+    /// <p>The name of the role that grants VM Import/Export permission to export images to your S3 bucket. If this parameter is not specified, the default role is named 'vmimport'.</p>
+    pub role_name: Option<String>,
+    /// <p>Information about the destination S3 bucket. The bucket must exist and grant WRITE and READ_ACP permissions to the AWS account vm-import-export@amazon.com.</p>
+    pub s3_export_location: ExportTaskS3LocationRequest,
+}
+
+/// Serialize `ExportImageRequest` contents to a `SignedRequest`.
+struct ExportImageRequestSerializer;
+impl ExportImageRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ExportImageRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.client_token {
+            params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
+        }
+        if let Some(ref field_value) = obj.description {
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "DiskImageFormat"),
+            &obj.disk_image_format,
+        );
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "ImageId"), &obj.image_id);
+        if let Some(ref field_value) = obj.role_name {
+            params.put(&format!("{}{}", prefix, "RoleName"), &field_value);
+        }
+        ExportTaskS3LocationRequestSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "S3ExportLocation"),
+            &obj.s3_export_location,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ExportImageResult {
+    /// <p>A description of the image being exported.</p>
+    pub description: Option<String>,
+    /// <p>The disk image format for the exported image.</p>
+    pub disk_image_format: Option<String>,
+    /// <p>The ID of the export image task.</p>
+    pub export_image_task_id: Option<String>,
+    /// <p>The ID of the image.</p>
+    pub image_id: Option<String>,
+    /// <p>The percent complete of the export image task.</p>
+    pub progress: Option<String>,
+    /// <p>The name of the role that grants VM Import/Export permission to export images to your S3 bucket.</p>
+    pub role_name: Option<String>,
+    /// <p>Information about the destination S3 bucket.</p>
+    pub s3_export_location: Option<ExportTaskS3Location>,
+    /// <p>The status of the export image task. The possible values are <code>active</code>, <code>completed</code>, <code>deleting</code>, and <code>deleted</code>.</p>
+    pub status: Option<String>,
+    /// <p>The status message for the export image task.</p>
+    pub status_message: Option<String>,
+}
+
+struct ExportImageResultDeserializer;
+impl ExportImageResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ExportImageResult, XmlParseError> {
+        deserialize_elements::<_, ExportImageResult, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "description" => {
+                    obj.description = Some(StringDeserializer::deserialize("description", stack)?);
+                }
+                "diskImageFormat" => {
+                    obj.disk_image_format = Some(DiskImageFormatDeserializer::deserialize(
+                        "diskImageFormat",
+                        stack,
+                    )?);
+                }
+                "exportImageTaskId" => {
+                    obj.export_image_task_id =
+                        Some(StringDeserializer::deserialize("exportImageTaskId", stack)?);
+                }
+                "imageId" => {
+                    obj.image_id = Some(StringDeserializer::deserialize("imageId", stack)?);
+                }
+                "progress" => {
+                    obj.progress = Some(StringDeserializer::deserialize("progress", stack)?);
+                }
+                "roleName" => {
+                    obj.role_name = Some(StringDeserializer::deserialize("roleName", stack)?);
+                }
+                "s3ExportLocation" => {
+                    obj.s3_export_location = Some(ExportTaskS3LocationDeserializer::deserialize(
+                        "s3ExportLocation",
+                        stack,
+                    )?);
+                }
+                "status" => {
+                    obj.status = Some(StringDeserializer::deserialize("status", stack)?);
+                }
+                "statusMessage" => {
+                    obj.status_message =
+                        Some(StringDeserializer::deserialize("statusMessage", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>Describes an export image task.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ExportImageTask {
+    /// <p>A description of the image being exported.</p>
+    pub description: Option<String>,
+    /// <p>The ID of the export image task.</p>
+    pub export_image_task_id: Option<String>,
+    /// <p>The ID of the image.</p>
+    pub image_id: Option<String>,
+    /// <p>The percent complete of the export image task.</p>
+    pub progress: Option<String>,
+    /// <p>Information about the destination S3 bucket.</p>
+    pub s3_export_location: Option<ExportTaskS3Location>,
+    /// <p>The status of the export image task. The possible values are <code>active</code>, <code>completed</code>, <code>deleting</code>, and <code>deleted</code>.</p>
+    pub status: Option<String>,
+    /// <p>The status message for the export image task.</p>
+    pub status_message: Option<String>,
+}
+
+struct ExportImageTaskDeserializer;
+impl ExportImageTaskDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ExportImageTask, XmlParseError> {
+        deserialize_elements::<_, ExportImageTask, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "description" => {
+                    obj.description = Some(StringDeserializer::deserialize("description", stack)?);
+                }
+                "exportImageTaskId" => {
+                    obj.export_image_task_id =
+                        Some(StringDeserializer::deserialize("exportImageTaskId", stack)?);
+                }
+                "imageId" => {
+                    obj.image_id = Some(StringDeserializer::deserialize("imageId", stack)?);
+                }
+                "progress" => {
+                    obj.progress = Some(StringDeserializer::deserialize("progress", stack)?);
+                }
+                "s3ExportLocation" => {
+                    obj.s3_export_location = Some(ExportTaskS3LocationDeserializer::deserialize(
+                        "s3ExportLocation",
+                        stack,
+                    )?);
+                }
+                "status" => {
+                    obj.status = Some(StringDeserializer::deserialize("status", stack)?);
+                }
+                "statusMessage" => {
+                    obj.status_message =
+                        Some(StringDeserializer::deserialize("statusMessage", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `ExportImageTaskIdList` contents to a `SignedRequest`.
+struct ExportImageTaskIdListSerializer;
+impl ExportImageTaskIdListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+struct ExportImageTaskListDeserializer;
+impl ExportImageTaskListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<ExportImageTask>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(ExportImageTaskDeserializer::deserialize("item", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>Describes an instance export task.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ExportTask {
@@ -21807,6 +23157,61 @@ impl ExportTaskListDeserializer {
         })
     }
 }
+/// <p>Describes the destination for an export image task.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ExportTaskS3Location {
+    /// <p>The destination S3 bucket.</p>
+    pub s3_bucket: Option<String>,
+    /// <p>The prefix (logical hierarchy) in the bucket.</p>
+    pub s3_prefix: Option<String>,
+}
+
+struct ExportTaskS3LocationDeserializer;
+impl ExportTaskS3LocationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ExportTaskS3Location, XmlParseError> {
+        deserialize_elements::<_, ExportTaskS3Location, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "s3Bucket" => {
+                    obj.s3_bucket = Some(StringDeserializer::deserialize("s3Bucket", stack)?);
+                }
+                "s3Prefix" => {
+                    obj.s3_prefix = Some(StringDeserializer::deserialize("s3Prefix", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>Describes the destination for an export image task.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ExportTaskS3LocationRequest {
+    /// <p>The destination S3 bucket.</p>
+    pub s3_bucket: String,
+    /// <p>The prefix (logical hierarchy) in the bucket.</p>
+    pub s3_prefix: Option<String>,
+}
+
+/// Serialize `ExportTaskS3LocationRequest` contents to a `SignedRequest`.
+struct ExportTaskS3LocationRequestSerializer;
+impl ExportTaskS3LocationRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ExportTaskS3LocationRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "S3Bucket"), &obj.s3_bucket);
+        if let Some(ref field_value) = obj.s3_prefix {
+            params.put(&format!("{}{}", prefix, "S3Prefix"), &field_value);
+        }
+    }
+}
+
 struct ExportTaskStateDeserializer;
 impl ExportTaskStateDeserializer {
     #[allow(unused_variables)]
@@ -21905,7 +23310,7 @@ impl ExportToS3TaskSpecificationSerializer {
 pub struct ExportTransitGatewayRoutesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters. The possible values are:</p> <ul> <li> <p> <code>attachment.transit-gateway-attachment-id</code>- The id of the transit gateway attachment.</p> </li> <li> <p> <code>attachment.resource-id</code> - The resource id of the transit gateway attachment.</p> </li> <li> <p> <code>route-search.exact-match</code> - The exact match of the specified filter.</p> </li> <li> <p> <code>route-search.longest-prefix-match</code> - The longest prefix that matches the route.</p> </li> <li> <p> <code>route-search.subnet-of-match</code> - The routes with a subnet that match the specified CIDR filter.</p> </li> <li> <p> <code>route-search.supernet-of-match</code> - The routes with a CIDR that encompass the CIDR filter. For example, if you have 10.0.1.0/29 and 10.0.1.0/31 routes in your route table and you specify supernet-of-match as 10.0.1.0/30, then the result returns 10.0.1.0/29.</p> </li> <li> <p> <code>state</code> - The state of the attachment (<code>available</code> | <code>deleted</code> | <code>deleting</code> | <code>failed</code> | <code>modifying</code> | <code>pendingAcceptance</code> | <code>pending</code> | <code>rollingBack</code> | <code>rejected</code> | <code>rejecting</code>).</p> </li> <li> <p> <code>transit-gateway-route-destination-cidr-block</code> - The CIDR range.</p> </li> <li> <p> <code>type</code> - The type of roue (<code>active</code> | <code>blackhole</code>).</p> </li> </ul></p>
+    /// <p><p>One or more filters. The possible values are:</p> <ul> <li> <p> <code>attachment.transit-gateway-attachment-id</code> - The id of the transit gateway attachment.</p> </li> <li> <p> <code>attachment.resource-id</code> - The resource id of the transit gateway attachment.</p> </li> <li> <p> <code>route-search.exact-match</code> - The exact match of the specified filter.</p> </li> <li> <p> <code>route-search.longest-prefix-match</code> - The longest prefix that matches the route.</p> </li> <li> <p> <code>route-search.subnet-of-match</code> - The routes with a subnet that match the specified CIDR filter.</p> </li> <li> <p> <code>route-search.supernet-of-match</code> - The routes with a CIDR that encompass the CIDR filter. For example, if you have 10.0.1.0/29 and 10.0.1.0/31 routes in your route table and you specify supernet-of-match as 10.0.1.0/30, then the result returns 10.0.1.0/29.</p> </li> <li> <p> <code>state</code> - The state of the attachment (<code>available</code> | <code>deleted</code> | <code>deleting</code> | <code>failed</code> | <code>modifying</code> | <code>pendingAcceptance</code> | <code>pending</code> | <code>rollingBack</code> | <code>rejected</code> | <code>rejecting</code>).</p> </li> <li> <p> <code>transit-gateway-route-destination-cidr-block</code> - The CIDR range.</p> </li> <li> <p> <code>type</code> - The type of route (<code>active</code> | <code>blackhole</code>).</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The name of the S3 bucket.</p>
     pub s3_bucket: String,
@@ -22568,7 +23973,7 @@ pub struct FleetLaunchTemplateSpecificationRequest {
     pub launch_template_id: Option<String>,
     /// <p>The name of the launch template.</p>
     pub launch_template_name: Option<String>,
-    /// <p>The version number of the launch template. </p>
+    /// <p>The version number of the launch template. Note: This is a required parameter and will be updated soon. </p>
     pub version: Option<String>,
 }
 
@@ -22673,6 +24078,8 @@ pub struct FlowLog {
     pub log_destination: Option<String>,
     /// <p>Specifies the type of destination to which the flow log data is published. Flow log data can be published to CloudWatch Logs or Amazon S3.</p>
     pub log_destination_type: Option<String>,
+    /// <p>The format of the flow log record.</p>
+    pub log_format: Option<String>,
     /// <p>The name of the flow log group.</p>
     pub log_group_name: Option<String>,
     /// <p>The ID of the resource on which the flow log was created.</p>
@@ -22726,6 +24133,9 @@ impl FlowLogDeserializer {
                         "logDestinationType",
                         stack,
                     )?);
+                }
+                "logFormat" => {
+                    obj.log_format = Some(StringDeserializer::deserialize("logFormat", stack)?);
                 }
                 "logGroupName" => {
                     obj.log_group_name =
@@ -22998,6 +24408,115 @@ impl GatewayTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetCapacityReservationUsageRequest {
+    /// <p>The ID of the Capacity Reservation.</p>
+    pub capacity_reservation_id: String,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the returned nextToken value.</p> <p>Valid range: Minimum value of 1. Maximum value of 1000.</p>
+    pub max_results: Option<i64>,
+    /// <p>The token to retrieve the next page of results.</p>
+    pub next_token: Option<String>,
+}
+
+/// Serialize `GetCapacityReservationUsageRequest` contents to a `SignedRequest`.
+struct GetCapacityReservationUsageRequestSerializer;
+impl GetCapacityReservationUsageRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetCapacityReservationUsageRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "CapacityReservationId"),
+            &obj.capacity_reservation_id,
+        );
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetCapacityReservationUsageResult {
+    /// <p>The remaining capacity. Indicates the number of instances that can be launched in the Capacity Reservation.</p>
+    pub available_instance_count: Option<i64>,
+    /// <p>The ID of the Capacity Reservation.</p>
+    pub capacity_reservation_id: Option<String>,
+    /// <p>The type of instance for which the Capacity Reservation reserves capacity.</p>
+    pub instance_type: Option<String>,
+    /// <p>Information about the Capacity Reservation usage.</p>
+    pub instance_usages: Option<Vec<InstanceUsage>>,
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
+    /// <p><p>The current state of the Capacity Reservation. A Capacity Reservation can be in one of the following states:</p> <ul> <li> <p> <code>active</code> - The Capacity Reservation is active and the capacity is available for your use.</p> </li> <li> <p> <code>expired</code> - The Capacity Reservation expired automatically at the date and time specified in your request. The reserved capacity is no longer available for your use.</p> </li> <li> <p> <code>cancelled</code> - The Capacity Reservation was manually cancelled. The reserved capacity is no longer available for your use.</p> </li> <li> <p> <code>pending</code> - The Capacity Reservation request was successful but the capacity provisioning is still pending.</p> </li> <li> <p> <code>failed</code> - The Capacity Reservation request has failed. A request might fail due to invalid request parameters, capacity constraints, or instance limit constraints. Failed requests are retained for 60 minutes.</p> </li> </ul></p>
+    pub state: Option<String>,
+    /// <p>The number of instances for which the Capacity Reservation reserves capacity.</p>
+    pub total_instance_count: Option<i64>,
+}
+
+struct GetCapacityReservationUsageResultDeserializer;
+impl GetCapacityReservationUsageResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetCapacityReservationUsageResult, XmlParseError> {
+        deserialize_elements::<_, GetCapacityReservationUsageResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "availableInstanceCount" => {
+                        obj.available_instance_count = Some(IntegerDeserializer::deserialize(
+                            "availableInstanceCount",
+                            stack,
+                        )?);
+                    }
+                    "capacityReservationId" => {
+                        obj.capacity_reservation_id = Some(StringDeserializer::deserialize(
+                            "capacityReservationId",
+                            stack,
+                        )?);
+                    }
+                    "instanceType" => {
+                        obj.instance_type =
+                            Some(StringDeserializer::deserialize("instanceType", stack)?);
+                    }
+                    "instanceUsageSet" => {
+                        obj.instance_usages.get_or_insert(vec![]).extend(
+                            InstanceUsageSetDeserializer::deserialize("instanceUsageSet", stack)?,
+                        );
+                    }
+                    "nextToken" => {
+                        obj.next_token = Some(StringDeserializer::deserialize("nextToken", stack)?);
+                    }
+                    "state" => {
+                        obj.state = Some(CapacityReservationStateDeserializer::deserialize(
+                            "state", stack,
+                        )?);
+                    }
+                    "totalInstanceCount" => {
+                        obj.total_instance_count = Some(IntegerDeserializer::deserialize(
+                            "totalInstanceCount",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetConsoleOutputRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -23146,7 +24665,7 @@ impl GetEbsDefaultKmsKeyIdRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetEbsDefaultKmsKeyIdResult {
-    /// <p>The full ARN of the default CMK that your account uses to encrypt an EBS volume when no CMK is specified in the API call that creates the volume.</p>
+    /// <p>The Amazon Resource Name (ARN) of the default CMK for encryption by default.</p>
     pub kms_key_id: Option<String>,
 }
 
@@ -23195,7 +24714,7 @@ impl GetEbsEncryptionByDefaultRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetEbsEncryptionByDefaultResult {
-    /// <p>Indicates whether default encryption for EBS volumes is enabled or disabled.</p>
+    /// <p>Indicates whether encryption by default is enabled.</p>
     pub ebs_encryption_by_default: Option<bool>,
 }
 
@@ -24569,6 +26088,84 @@ impl HypervisorTypeDeserializer {
         Ok(obj)
     }
 }
+struct IKEVersionsListDeserializer;
+impl IKEVersionsListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<IKEVersionsListValue>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(IKEVersionsListValueDeserializer::deserialize(
+                    "item", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>The internet key exchange (IKE) version permitted for the VPN tunnel.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct IKEVersionsListValue {
+    /// <p>The IKE version.</p>
+    pub value: Option<String>,
+}
+
+struct IKEVersionsListValueDeserializer;
+impl IKEVersionsListValueDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<IKEVersionsListValue, XmlParseError> {
+        deserialize_elements::<_, IKEVersionsListValue, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "value" => {
+                    obj.value = Some(StringDeserializer::deserialize("value", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `IKEVersionsRequestList` contents to a `SignedRequest`.
+struct IKEVersionsRequestListSerializer;
+impl IKEVersionsRequestListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<IKEVersionsRequestListValue>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            IKEVersionsRequestListValueSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+/// <p>The IKE version that is permitted for the VPN tunnel.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct IKEVersionsRequestListValue {
+    /// <p>The IKE version.</p>
+    pub value: Option<String>,
+}
+
+/// Serialize `IKEVersionsRequestListValue` contents to a `SignedRequest`.
+struct IKEVersionsRequestListValueSerializer;
+impl IKEVersionsRequestListValueSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &IKEVersionsRequestListValue) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.value {
+            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+        }
+    }
+}
+
 /// <p>Describes an IAM instance profile.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct IamInstanceProfile {
@@ -24871,7 +26468,7 @@ pub struct Image {
     pub name: Option<String>,
     /// <p>The AWS account ID of the image owner.</p>
     pub owner_id: Option<String>,
-    /// <p>The value is <code>Windows</code> for Windows AMIs; otherwise blank.</p>
+    /// <p>This value is set to <code>windows</code> for Windows AMIs; otherwise, it is blank.</p>
     pub platform: Option<String>,
     /// <p>Any product codes associated with the AMI.</p>
     pub product_codes: Option<Vec<ProductCode>>,
@@ -25263,10 +26860,9 @@ impl ImportClientVpnClientCertificateRevocationListResultDeserializer {
         )
     }
 }
-/// <p>Contains the parameters for ImportImage.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportImageRequest {
-    /// <p>The architecture of the virtual machine.</p> <p>Valid values: <code>i386</code> | <code>x86_64</code> </p>
+    /// <p>The architecture of the virtual machine.</p> <p>Valid values: <code>i386</code> | <code>x86_64</code> | <code>arm64</code> </p>
     pub architecture: Option<String>,
     /// <p>The client-specific data.</p>
     pub client_data: Option<ClientData>,
@@ -25284,7 +26880,7 @@ pub struct ImportImageRequest {
     pub hypervisor: Option<String>,
     /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use when creating the encrypted AMI. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID</p> </li> <li> <p>Key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>.</p> </li> <li> <p>ARN using key ID. The ID ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>.</p> </li> <li> <p>ARN using key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS parses <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. This action will eventually report failure. </p> <p>The specified CMK must exist in the Region that the AMI is being copied to.</p>
     pub kms_key_id: Option<String>,
-    /// <p>The license type to be used for the Amazon Machine Image (AMI) after importing.</p> <p> <b>Note:</b> You may only use BYOL if you have existing licenses with rights to use these licenses in a third party cloud like AWS. For more information, see <a href="https://docs.aws.amazon.com/vm-import/latest/userguide/vmimport-image-import.html#prerequisites-image">Prerequisites</a> in the VM Import/Export User Guide.</p> <p>Valid values include:</p> <ul> <li> <p> <code>Auto</code> - Detects the source-system operating system (OS) and applies the appropriate license.</p> </li> <li> <p> <code>AWS</code> - Replaces the source-system license with an AWS license, if appropriate.</p> </li> <li> <p> <code>BYOL</code> - Retains the source-system license, if appropriate.</p> </li> </ul> <p>Default value: <code>Auto</code> </p>
+    /// <p>The license type to be used for the Amazon Machine Image (AMI) after importing.</p> <p>By default, we detect the source-system operating system (OS) and apply the appropriate license. Specify <code>AWS</code> to replace the source-system license with an AWS license, if appropriate. Specify <code>BYOL</code> to retain the source-system license, if appropriate.</p> <p>To use <code>BYOL</code>, you must have existing licenses with rights to use these licenses in a third party cloud, such as AWS. For more information, see <a href="https://docs.aws.amazon.com/vm-import/latest/userguide/vmimport-image-import.html#prerequisites-image">Prerequisites</a> in the VM Import/Export User Guide.</p>
     pub license_type: Option<String>,
     /// <p>The operating system of the virtual machine.</p> <p>Valid values: <code>Windows</code> | <code>Linux</code> </p>
     pub platform: Option<String>,
@@ -25348,7 +26944,6 @@ impl ImportImageRequestSerializer {
     }
 }
 
-/// <p>Contains the output for ImportImage.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportImageResult {
     /// <p>The architecture of the virtual machine.</p>
@@ -25441,7 +27036,7 @@ impl ImportImageResultDeserializer {
 /// <p>Describes an import image task.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportImageTask {
-    /// <p>The architecture of the virtual machine.</p> <p>Valid values: <code>i386</code> | <code>x86_64</code> </p>
+    /// <p>The architecture of the virtual machine.</p> <p>Valid values: <code>i386</code> | <code>x86_64</code> | <code>arm64</code> </p>
     pub architecture: Option<String>,
     /// <p>A description of the import task.</p>
     pub description: Option<String>,
@@ -25636,7 +27231,6 @@ impl ImportInstanceLaunchSpecificationSerializer {
     }
 }
 
-/// <p>Contains the parameters for ImportInstance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportInstanceRequest {
     /// <p>A description for the instance being imported.</p>
@@ -25684,7 +27278,6 @@ impl ImportInstanceRequestSerializer {
     }
 }
 
-/// <p>Contains the output for ImportInstance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportInstanceResult {
     /// <p>Information about the conversion task.</p>
@@ -25909,7 +27502,6 @@ impl ImportKeyPairResultDeserializer {
         })
     }
 }
-/// <p>Contains the parameters for ImportSnapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportSnapshotRequest {
     /// <p>The client-specific data.</p>
@@ -25974,7 +27566,6 @@ impl ImportSnapshotRequestSerializer {
     }
 }
 
-/// <p>Contains the output for ImportSnapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportSnapshotResult {
     /// <p>A description of the import snapshot task.</p>
@@ -26081,7 +27672,6 @@ impl ImportTaskIdListSerializer {
     }
 }
 
-/// <p>Contains the parameters for ImportVolume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportVolumeRequest {
     /// <p>The Availability Zone for the resulting EBS volume.</p>
@@ -26120,7 +27710,6 @@ impl ImportVolumeRequestSerializer {
     }
 }
 
-/// <p>Contains the output for ImportVolume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportVolumeResult {
     /// <p>Information about the conversion task.</p>
@@ -27592,7 +29181,7 @@ pub struct InstanceNetworkInterfaceSpecification {
     pub private_ip_addresses: Option<Vec<PrivateIpAddressSpecification>>,
     /// <p>The number of secondary private IPv4 addresses. You can't specify this option and specify more than one private IP address using the private IP addresses option. You cannot specify this option if you're launching more than one instance in a <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RunInstances.html">RunInstances</a> request.</p>
     pub secondary_private_ip_address_count: Option<i64>,
-    /// <p>The ID of the subnet associated with the network string. Applies only if creating a network interface when launching an instance.</p>
+    /// <p>The ID of the subnet associated with the network interface. Applies only if creating a network interface when launching an instance.</p>
     pub subnet_id: Option<String>,
 }
 
@@ -28253,6 +29842,56 @@ impl InstanceTypeListSerializer {
     }
 }
 
+/// <p>Information about the Capacity Reservation usage.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InstanceUsage {
+    /// <p>The ID of the AWS account that is making use of the Capacity Reservation.</p>
+    pub account_id: Option<String>,
+    /// <p>The number of instances the AWS account currently has in the Capacity Reservation.</p>
+    pub used_instance_count: Option<i64>,
+}
+
+struct InstanceUsageDeserializer;
+impl InstanceUsageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InstanceUsage, XmlParseError> {
+        deserialize_elements::<_, InstanceUsage, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "accountId" => {
+                    obj.account_id = Some(StringDeserializer::deserialize("accountId", stack)?);
+                }
+                "usedInstanceCount" => {
+                    obj.used_instance_count = Some(IntegerDeserializer::deserialize(
+                        "usedInstanceCount",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+struct InstanceUsageSetDeserializer;
+impl InstanceUsageSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<InstanceUsage>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(InstanceUsageDeserializer::deserialize("item", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
 struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(unused_variables)]
@@ -29596,7 +31235,7 @@ impl LaunchTemplateCpuOptionsDeserializer {
 pub struct LaunchTemplateCpuOptionsRequest {
     /// <p>The number of CPU cores for the instance.</p>
     pub core_count: Option<i64>,
-    /// <p>The number of threads per CPU core. To disable Intel Hyper-Threading Technology for the instance, specify a value of 1. Otherwise, specify the default value of 2.</p>
+    /// <p>The number of threads per CPU core. To disable multithreading for the instance, specify a value of 1. Otherwise, specify the default value of 2.</p>
     pub threads_per_core: Option<i64>,
 }
 
@@ -31407,7 +33046,7 @@ impl ModifyCapacityReservationRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyCapacityReservationResult {
-    /// <p>Information about the Capacity Reservation.</p>
+    /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
 }
 
@@ -31447,6 +33086,8 @@ pub struct ModifyClientVpnEndpointRequest {
     pub dry_run: Option<bool>,
     /// <p>The ARN of the server certificate to be used. The server certificate must be provisioned in AWS Certificate Manager (ACM).</p>
     pub server_certificate_arn: Option<String>,
+    /// <p>Indicates whether the VPN is split-tunnel.</p> <p>For information about split-tunnel VPN endpoints, see <a href="https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/split-tunnel-vpn.html">Split-Tunnel AWS Client VPN Endpoint</a> in the <i>AWS Client VPN Administrator Guide</i>.</p>
+    pub split_tunnel: Option<bool>,
 }
 
 /// Serialize `ModifyClientVpnEndpointRequest` contents to a `SignedRequest`.
@@ -31488,6 +33129,9 @@ impl ModifyClientVpnEndpointRequestSerializer {
                 &field_value,
             );
         }
+        if let Some(ref field_value) = obj.split_tunnel {
+            params.put(&format!("{}{}", prefix, "SplitTunnel"), &field_value);
+        }
     }
 }
 
@@ -31523,7 +33167,7 @@ impl ModifyClientVpnEndpointResultDeserializer {
 pub struct ModifyEbsDefaultKmsKeyIdRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use to encrypt the volume. This parameter is only required if you want to use a customer-managed CMK; if this parameter is not specified, your AWS-managed CMK for the account is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID: For example, key/1234abcd-12ab-34cd-56ef-1234567890ab.</p> </li> <li> <p>Key alias: For example, alias/ExampleAlias. </p> </li> <li> <p>Key ARN: The key ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. </p> </li> <li> <p>Alias ARN: The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS authenticates <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. The action will eventually fail. </p>
+    /// <p>The identifier of the AWS Key Management Service (AWS KMS) customer master key (CMK) to use for Amazon EBS encryption. If this parameter is not specified, your AWS managed CMK for EBS is used. If <code>KmsKeyId</code> is specified, the encrypted state must be <code>true</code>.</p> <p>You can specify the CMK using any of the following:</p> <ul> <li> <p>Key ID. For example, key/1234abcd-12ab-34cd-56ef-1234567890ab.</p> </li> <li> <p>Key alias. For example, alias/ExampleAlias.</p> </li> <li> <p>Key ARN. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>.</p> </li> <li> <p>Alias ARN. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>.</p> </li> </ul> <p>AWS authenticates the CMK asynchronously. Therefore, if you specify an ID, alias, or ARN that is not valid, the action can appear to complete, but eventually fails.</p>
     pub kms_key_id: String,
 }
 
@@ -31545,7 +33189,7 @@ impl ModifyEbsDefaultKmsKeyIdRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyEbsDefaultKmsKeyIdResult {
-    /// <p>The full ARN of the default CMK that your account uses to encrypt an EBS volume when no CMK is specified in the API call that creates the volume.</p>
+    /// <p>The Amazon Resource Name (ARN) of the default CMK for encryption by default.</p>
     pub kms_key_id: Option<String>,
 }
 
@@ -32632,6 +34276,8 @@ impl ModifySnapshotAttributeRequestSerializer {
 pub struct ModifySpotFleetRequestRequest {
     /// <p>Indicates whether running Spot Instances should be terminated if the target capacity of the Spot Fleet request is decreased below the current size of the Spot Fleet.</p>
     pub excess_capacity_termination_policy: Option<String>,
+    /// <p>The number of On-Demand Instances in the fleet.</p>
+    pub on_demand_target_capacity: Option<i64>,
     /// <p>The ID of the Spot Fleet request.</p>
     pub spot_fleet_request_id: String,
     /// <p>The size of the fleet.</p>
@@ -32650,6 +34296,12 @@ impl ModifySpotFleetRequestRequestSerializer {
         if let Some(ref field_value) = obj.excess_capacity_termination_policy {
             params.put(
                 &format!("{}{}", prefix, "ExcessCapacityTerminationPolicy"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.on_demand_target_capacity {
+            params.put(
+                &format!("{}{}", prefix, "OnDemandTargetCapacity"),
                 &field_value,
             );
         }
@@ -32729,6 +34381,315 @@ impl ModifySubnetAttributeRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyTrafficMirrorFilterNetworkServicesRequest {
+    /// <p>The network service, for example Amazon DNS, that you want to mirror.</p>
+    pub add_network_services: Option<Vec<String>>,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The network service, for example Amazon DNS, that you no longer want to mirror.</p>
+    pub remove_network_services: Option<Vec<String>>,
+    /// <p>The ID of the Traffic Mirror filter.</p>
+    pub traffic_mirror_filter_id: String,
+}
+
+/// Serialize `ModifyTrafficMirrorFilterNetworkServicesRequest` contents to a `SignedRequest`.
+struct ModifyTrafficMirrorFilterNetworkServicesRequestSerializer;
+impl ModifyTrafficMirrorFilterNetworkServicesRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &ModifyTrafficMirrorFilterNetworkServicesRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.add_network_services {
+            TrafficMirrorNetworkServiceListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "AddNetworkService"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        if let Some(ref field_value) = obj.remove_network_services {
+            TrafficMirrorNetworkServiceListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "RemoveNetworkService"),
+                field_value,
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "TrafficMirrorFilterId"),
+            &obj.traffic_mirror_filter_id,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyTrafficMirrorFilterNetworkServicesResult {
+    /// <p>The Traffic Mirror filter that the network service is associated with.</p>
+    pub traffic_mirror_filter: Option<TrafficMirrorFilter>,
+}
+
+struct ModifyTrafficMirrorFilterNetworkServicesResultDeserializer;
+impl ModifyTrafficMirrorFilterNetworkServicesResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyTrafficMirrorFilterNetworkServicesResult, XmlParseError> {
+        deserialize_elements::<_, ModifyTrafficMirrorFilterNetworkServicesResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "trafficMirrorFilter" => {
+                        obj.traffic_mirror_filter =
+                            Some(TrafficMirrorFilterDeserializer::deserialize(
+                                "trafficMirrorFilter",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyTrafficMirrorFilterRuleRequest {
+    /// <p>The description to assign to the Traffic Mirror rule.</p>
+    pub description: Option<String>,
+    /// <p>The destination CIDR block to assign to the Traffic Mirror rule.</p>
+    pub destination_cidr_block: Option<String>,
+    /// <p>The destination ports that are associated with the Traffic Mirror rule.</p>
+    pub destination_port_range: Option<TrafficMirrorPortRangeRequest>,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The protocol, for example TCP, to assign to the Traffic Mirror rule.</p>
+    pub protocol: Option<i64>,
+    /// <p>The properties that you want to remove from the Traffic Mirror filter rule.</p> <p>When you remove a property from a Traffic Mirror filter rule, the property is set to the default.</p>
+    pub remove_fields: Option<Vec<String>>,
+    /// <p>The action to assign to the rule.</p>
+    pub rule_action: Option<String>,
+    /// <p>The number of the Traffic Mirror rule. This number must be unique for each Traffic Mirror rule in a given direction. The rules are processed in ascending order by rule number.</p>
+    pub rule_number: Option<i64>,
+    /// <p>The source CIDR block to assign to the Traffic Mirror rule.</p>
+    pub source_cidr_block: Option<String>,
+    /// <p>The port range to assign to the Traffic Mirror rule.</p>
+    pub source_port_range: Option<TrafficMirrorPortRangeRequest>,
+    /// <p>The type of traffic (<code>ingress</code> | <code>egress</code>) to assign to the rule.</p>
+    pub traffic_direction: Option<String>,
+    /// <p>The ID of the Traffic Mirror rule.</p>
+    pub traffic_mirror_filter_rule_id: String,
+}
+
+/// Serialize `ModifyTrafficMirrorFilterRuleRequest` contents to a `SignedRequest`.
+struct ModifyTrafficMirrorFilterRuleRequestSerializer;
+impl ModifyTrafficMirrorFilterRuleRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyTrafficMirrorFilterRuleRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.description {
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+        }
+        if let Some(ref field_value) = obj.destination_cidr_block {
+            params.put(
+                &format!("{}{}", prefix, "DestinationCidrBlock"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.destination_port_range {
+            TrafficMirrorPortRangeRequestSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "DestinationPortRange"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        if let Some(ref field_value) = obj.protocol {
+            params.put(&format!("{}{}", prefix, "Protocol"), &field_value);
+        }
+        if let Some(ref field_value) = obj.remove_fields {
+            TrafficMirrorFilterRuleFieldListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "RemoveField"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.rule_action {
+            params.put(&format!("{}{}", prefix, "RuleAction"), &field_value);
+        }
+        if let Some(ref field_value) = obj.rule_number {
+            params.put(&format!("{}{}", prefix, "RuleNumber"), &field_value);
+        }
+        if let Some(ref field_value) = obj.source_cidr_block {
+            params.put(&format!("{}{}", prefix, "SourceCidrBlock"), &field_value);
+        }
+        if let Some(ref field_value) = obj.source_port_range {
+            TrafficMirrorPortRangeRequestSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "SourcePortRange"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.traffic_direction {
+            params.put(&format!("{}{}", prefix, "TrafficDirection"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "TrafficMirrorFilterRuleId"),
+            &obj.traffic_mirror_filter_rule_id,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyTrafficMirrorFilterRuleResult {
+    /// <p>Modifies a Traffic Mirror rule.</p>
+    pub traffic_mirror_filter_rule: Option<TrafficMirrorFilterRule>,
+}
+
+struct ModifyTrafficMirrorFilterRuleResultDeserializer;
+impl ModifyTrafficMirrorFilterRuleResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyTrafficMirrorFilterRuleResult, XmlParseError> {
+        deserialize_elements::<_, ModifyTrafficMirrorFilterRuleResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "trafficMirrorFilterRule" => {
+                        obj.traffic_mirror_filter_rule =
+                            Some(TrafficMirrorFilterRuleDeserializer::deserialize(
+                                "trafficMirrorFilterRule",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyTrafficMirrorSessionRequest {
+    /// <p>The description to assign to the Traffic Mirror session.</p>
+    pub description: Option<String>,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The number of bytes in each packet to mirror. These are bytes after the VXLAN header. To mirror a subset, set this to the length (in bytes) to mirror. For example, if you set this value to 100, then the first 100 bytes that meet the filter criteria are copied to the target. Do not specify this parameter when you want to mirror the entire packet.</p>
+    pub packet_length: Option<i64>,
+    /// <p>The properties that you want to remove from the Traffic Mirror session.</p> <p>When you remove a property from a Traffic Mirror session, the property is set to the default.</p>
+    pub remove_fields: Option<Vec<String>>,
+    /// <p>The session number determines the order in which sessions are evaluated when an interface is used by multiple sessions. The first session with a matching filter is the one that mirrors the packets.</p> <p>Valid values are 1-32766.</p>
+    pub session_number: Option<i64>,
+    /// <p>The ID of the Traffic Mirror filter.</p>
+    pub traffic_mirror_filter_id: Option<String>,
+    /// <p>The ID of the Traffic Mirror session.</p>
+    pub traffic_mirror_session_id: String,
+    /// <p>The Traffic Mirror target. The target must be in the same VPC as the source, or have a VPC peering connection with the source.</p>
+    pub traffic_mirror_target_id: Option<String>,
+    /// <p>The virtual network ID of the Traffic Mirror session.</p>
+    pub virtual_network_id: Option<i64>,
+}
+
+/// Serialize `ModifyTrafficMirrorSessionRequest` contents to a `SignedRequest`.
+struct ModifyTrafficMirrorSessionRequestSerializer;
+impl ModifyTrafficMirrorSessionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyTrafficMirrorSessionRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.description {
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+        }
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        if let Some(ref field_value) = obj.packet_length {
+            params.put(&format!("{}{}", prefix, "PacketLength"), &field_value);
+        }
+        if let Some(ref field_value) = obj.remove_fields {
+            TrafficMirrorSessionFieldListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "RemoveField"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.session_number {
+            params.put(&format!("{}{}", prefix, "SessionNumber"), &field_value);
+        }
+        if let Some(ref field_value) = obj.traffic_mirror_filter_id {
+            params.put(
+                &format!("{}{}", prefix, "TrafficMirrorFilterId"),
+                &field_value,
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "TrafficMirrorSessionId"),
+            &obj.traffic_mirror_session_id,
+        );
+        if let Some(ref field_value) = obj.traffic_mirror_target_id {
+            params.put(
+                &format!("{}{}", prefix, "TrafficMirrorTargetId"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.virtual_network_id {
+            params.put(&format!("{}{}", prefix, "VirtualNetworkId"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyTrafficMirrorSessionResult {
+    /// <p>Information about the Traffic Mirror session.</p>
+    pub traffic_mirror_session: Option<TrafficMirrorSession>,
+}
+
+struct ModifyTrafficMirrorSessionResultDeserializer;
+impl ModifyTrafficMirrorSessionResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyTrafficMirrorSessionResult, XmlParseError> {
+        deserialize_elements::<_, ModifyTrafficMirrorSessionResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "trafficMirrorSession" => {
+                        obj.traffic_mirror_session =
+                            Some(TrafficMirrorSessionDeserializer::deserialize(
+                                "trafficMirrorSession",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyTransitGatewayVpcAttachmentRequest {
     /// <p>The IDs of one or more subnets to add. You can specify at most one subnet per Availability Zone.</p>
@@ -33070,7 +35031,7 @@ pub struct ModifyVpcEndpointRequest {
     pub add_subnet_ids: Option<Vec<String>>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>A policy to attach to the endpoint that controls access to the service. The policy must be in valid JSON format. If this parameter is not specified, we attach a default policy that allows full access to the service.</p>
+    /// <p>A policy to attach to the endpoint that controls access to the service. The policy must be in valid JSON format.</p>
     pub policy_document: Option<String>,
     /// <p>(Interface endpoint) Indicate whether a private hosted zone is associated with the VPC.</p>
     pub private_dns_enabled: Option<bool>,
@@ -33479,6 +35440,8 @@ impl ModifyVpcTenancyResultDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyVpnConnectionRequest {
+    /// <p>The ID of the customer gateway at your end of the VPN connection.</p>
+    pub customer_gateway_id: Option<String>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
     /// <p>The ID of the transit gateway.</p>
@@ -33498,6 +35461,9 @@ impl ModifyVpnConnectionRequestSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.customer_gateway_id {
+            params.put(&format!("{}{}", prefix, "CustomerGatewayId"), &field_value);
+        }
         if let Some(ref field_value) = obj.dry_run {
             params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
         }
@@ -33544,6 +35510,271 @@ impl ModifyVpnConnectionResultDeserializer {
         )
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyVpnTunnelCertificateRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the AWS Site-to-Site VPN connection.</p>
+    pub vpn_connection_id: String,
+    /// <p>The external IP address of the VPN tunnel.</p>
+    pub vpn_tunnel_outside_ip_address: String,
+}
+
+/// Serialize `ModifyVpnTunnelCertificateRequest` contents to a `SignedRequest`.
+struct ModifyVpnTunnelCertificateRequestSerializer;
+impl ModifyVpnTunnelCertificateRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyVpnTunnelCertificateRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "VpnConnectionId"),
+            &obj.vpn_connection_id,
+        );
+        params.put(
+            &format!("{}{}", prefix, "VpnTunnelOutsideIpAddress"),
+            &obj.vpn_tunnel_outside_ip_address,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyVpnTunnelCertificateResult {
+    pub vpn_connection: Option<VpnConnection>,
+}
+
+struct ModifyVpnTunnelCertificateResultDeserializer;
+impl ModifyVpnTunnelCertificateResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyVpnTunnelCertificateResult, XmlParseError> {
+        deserialize_elements::<_, ModifyVpnTunnelCertificateResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "vpnConnection" => {
+                        obj.vpn_connection = Some(VpnConnectionDeserializer::deserialize(
+                            "vpnConnection",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyVpnTunnelOptionsRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The tunnel options to modify.</p>
+    pub tunnel_options: ModifyVpnTunnelOptionsSpecification,
+    /// <p>The ID of the AWS Site-to-Site VPN connection.</p>
+    pub vpn_connection_id: String,
+    /// <p>The external IP address of the VPN tunnel.</p>
+    pub vpn_tunnel_outside_ip_address: String,
+}
+
+/// Serialize `ModifyVpnTunnelOptionsRequest` contents to a `SignedRequest`.
+struct ModifyVpnTunnelOptionsRequestSerializer;
+impl ModifyVpnTunnelOptionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyVpnTunnelOptionsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        ModifyVpnTunnelOptionsSpecificationSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "TunnelOptions"),
+            &obj.tunnel_options,
+        );
+        params.put(
+            &format!("{}{}", prefix, "VpnConnectionId"),
+            &obj.vpn_connection_id,
+        );
+        params.put(
+            &format!("{}{}", prefix, "VpnTunnelOutsideIpAddress"),
+            &obj.vpn_tunnel_outside_ip_address,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyVpnTunnelOptionsResult {
+    pub vpn_connection: Option<VpnConnection>,
+}
+
+struct ModifyVpnTunnelOptionsResultDeserializer;
+impl ModifyVpnTunnelOptionsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyVpnTunnelOptionsResult, XmlParseError> {
+        deserialize_elements::<_, ModifyVpnTunnelOptionsResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "vpnConnection" => {
+                        obj.vpn_connection = Some(VpnConnectionDeserializer::deserialize(
+                            "vpnConnection",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>The AWS Site-to-Site VPN tunnel options to modify.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyVpnTunnelOptionsSpecification {
+    /// <p>The number of seconds after which a DPD timeout occurs.</p> <p>Constraints: A value between 0 and 30.</p> <p>Default: <code>30</code> </p>
+    pub dpd_timeout_seconds: Option<i64>,
+    /// <p>The IKE versions that are permitted for the VPN tunnel.</p> <p>Valid values: <code>ikev1</code> | <code>ikev2</code> </p>
+    pub ike_versions: Option<Vec<IKEVersionsRequestListValue>>,
+    /// <p>One or more Diffie-Hellman group numbers that are permitted for the VPN tunnel for phase 1 IKE negotiations.</p> <p>Valid values: <code>2</code> | <code>14</code> | <code>15</code> | <code>16</code> | <code>17</code> | <code>18</code> | <code>22</code> | <code>23</code> | <code>24</code> </p>
+    pub phase_1dh_group_numbers: Option<Vec<Phase1DHGroupNumbersRequestListValue>>,
+    /// <p>One or more encryption algorithms that are permitted for the VPN tunnel for phase 1 IKE negotiations.</p> <p>Valid values: <code>AES128</code> | <code>AES256</code> </p>
+    pub phase_1_encryption_algorithms: Option<Vec<Phase1EncryptionAlgorithmsRequestListValue>>,
+    /// <p>One or more integrity algorithms that are permitted for the VPN tunnel for phase 1 IKE negotiations.</p> <p>Valid values: <code>SHA1</code> | <code>SHA2-256</code> </p>
+    pub phase_1_integrity_algorithms: Option<Vec<Phase1IntegrityAlgorithmsRequestListValue>>,
+    /// <p>The lifetime for phase 1 of the IKE negotiation, in seconds.</p> <p>Constraints: A value between 900 and 28,800.</p> <p>Default: <code>28800</code> </p>
+    pub phase_1_lifetime_seconds: Option<i64>,
+    /// <p>One or more Diffie-Hellman group numbers that are permitted for the VPN tunnel for phase 2 IKE negotiations.</p> <p>Valid values: <code>2</code> | <code>5</code> | <code>14</code> | <code>15</code> | <code>16</code> | <code>17</code> | <code>18</code> | <code>22</code> | <code>23</code> | <code>24</code> </p>
+    pub phase_2dh_group_numbers: Option<Vec<Phase2DHGroupNumbersRequestListValue>>,
+    /// <p>One or more encryption algorithms that are permitted for the VPN tunnel for phase 2 IKE negotiations.</p> <p>Valid values: <code>AES128</code> | <code>AES256</code> </p>
+    pub phase_2_encryption_algorithms: Option<Vec<Phase2EncryptionAlgorithmsRequestListValue>>,
+    /// <p>One or more integrity algorithms that are permitted for the VPN tunnel for phase 2 IKE negotiations.</p> <p>Valid values: <code>SHA1</code> | <code>SHA2-256</code> </p>
+    pub phase_2_integrity_algorithms: Option<Vec<Phase2IntegrityAlgorithmsRequestListValue>>,
+    /// <p>The lifetime for phase 2 of the IKE negotiation, in seconds.</p> <p>Constraints: A value between 900 and 3,600. The value must be less than the value for <code>Phase1LifetimeSeconds</code>.</p> <p>Default: <code>3600</code> </p>
+    pub phase_2_lifetime_seconds: Option<i64>,
+    /// <p>The pre-shared key (PSK) to establish initial authentication between the virtual private gateway and the customer gateway.</p> <p>Constraints: Allowed characters are alphanumeric characters, periods (.), and underscores (_). Must be between 8 and 64 characters in length and cannot start with zero (0).</p>
+    pub pre_shared_key: Option<String>,
+    /// <p>The percentage of the rekey window (determined by <code>RekeyMarginTimeSeconds</code>) during which the rekey time is randomly selected.</p> <p>Constraints: A value between 0 and 100.</p> <p>Default: <code>100</code> </p>
+    pub rekey_fuzz_percentage: Option<i64>,
+    /// <p>The margin time, in seconds, before the phase 2 lifetime expires, during which the AWS side of the VPN connection performs an IKE rekey. The exact time of the rekey is randomly selected based on the value for <code>RekeyFuzzPercentage</code>.</p> <p>Constraints: A value between 60 and half of <code>Phase2LifetimeSeconds</code>.</p> <p>Default: <code>540</code> </p>
+    pub rekey_margin_time_seconds: Option<i64>,
+    /// <p>The number of packets in an IKE replay window.</p> <p>Constraints: A value between 64 and 2048.</p> <p>Default: <code>1024</code> </p>
+    pub replay_window_size: Option<i64>,
+    /// <p><p>The range of inside IP addresses for the tunnel. Any specified CIDR blocks must be unique across all VPN connections that use the same virtual private gateway. </p> <p>Constraints: A size /30 CIDR block from the <code>169.254.0.0/16</code> range. The following CIDR blocks are reserved and cannot be used:</p> <ul> <li> <p> <code>169.254.0.0/30</code> </p> </li> <li> <p> <code>169.254.1.0/30</code> </p> </li> <li> <p> <code>169.254.2.0/30</code> </p> </li> <li> <p> <code>169.254.3.0/30</code> </p> </li> <li> <p> <code>169.254.4.0/30</code> </p> </li> <li> <p> <code>169.254.5.0/30</code> </p> </li> <li> <p> <code>169.254.169.252/30</code> </p> </li> </ul></p>
+    pub tunnel_inside_cidr: Option<String>,
+}
+
+/// Serialize `ModifyVpnTunnelOptionsSpecification` contents to a `SignedRequest`.
+struct ModifyVpnTunnelOptionsSpecificationSerializer;
+impl ModifyVpnTunnelOptionsSpecificationSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyVpnTunnelOptionsSpecification) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dpd_timeout_seconds {
+            params.put(&format!("{}{}", prefix, "DPDTimeoutSeconds"), &field_value);
+        }
+        if let Some(ref field_value) = obj.ike_versions {
+            IKEVersionsRequestListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "IKEVersion"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.phase_1dh_group_numbers {
+            Phase1DHGroupNumbersRequestListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Phase1DHGroupNumber"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.phase_1_encryption_algorithms {
+            Phase1EncryptionAlgorithmsRequestListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Phase1EncryptionAlgorithm"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.phase_1_integrity_algorithms {
+            Phase1IntegrityAlgorithmsRequestListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Phase1IntegrityAlgorithm"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.phase_1_lifetime_seconds {
+            params.put(
+                &format!("{}{}", prefix, "Phase1LifetimeSeconds"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.phase_2dh_group_numbers {
+            Phase2DHGroupNumbersRequestListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Phase2DHGroupNumber"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.phase_2_encryption_algorithms {
+            Phase2EncryptionAlgorithmsRequestListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Phase2EncryptionAlgorithm"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.phase_2_integrity_algorithms {
+            Phase2IntegrityAlgorithmsRequestListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Phase2IntegrityAlgorithm"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.phase_2_lifetime_seconds {
+            params.put(
+                &format!("{}{}", prefix, "Phase2LifetimeSeconds"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.pre_shared_key {
+            params.put(&format!("{}{}", prefix, "PreSharedKey"), &field_value);
+        }
+        if let Some(ref field_value) = obj.rekey_fuzz_percentage {
+            params.put(
+                &format!("{}{}", prefix, "RekeyFuzzPercentage"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.rekey_margin_time_seconds {
+            params.put(
+                &format!("{}{}", prefix, "RekeyMarginTimeSeconds"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.replay_window_size {
+            params.put(&format!("{}{}", prefix, "ReplayWindowSize"), &field_value);
+        }
+        if let Some(ref field_value) = obj.tunnel_inside_cidr {
+            params.put(&format!("{}{}", prefix, "TunnelInsideCidr"), &field_value);
+        }
+    }
+}
+
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct MonitorInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
@@ -33762,7 +35993,7 @@ pub struct NatGateway {
     pub nat_gateway_addresses: Option<Vec<NatGatewayAddress>>,
     /// <p>The ID of the NAT gateway.</p>
     pub nat_gateway_id: Option<String>,
-    /// <p>Reserved. If you need to sustain traffic greater than the <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html">documented limits</a>, contact us through the <a href="https://console.aws.amazon.com/support/home?">Support Center</a>.</p>
+    /// <p>Reserved. If you need to sustain traffic greater than the <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html">documented limits</a>, contact us through the <a href="https://console.aws.amazon.com/support/home?">Support Center</a>.</p>
     pub provisioned_bandwidth: Option<ProvisionedBandwidth>,
     /// <p><p>The state of the NAT gateway.</p> <ul> <li> <p> <code>pending</code>: The NAT gateway is being created and is not ready to process traffic.</p> </li> <li> <p> <code>failed</code>: The NAT gateway could not be created. Check the <code>failureCode</code> and <code>failureMessage</code> fields for the reason.</p> </li> <li> <p> <code>available</code>: The NAT gateway is able to process traffic. This status remains until you delete the NAT gateway, and does not indicate the health of the NAT gateway.</p> </li> <li> <p> <code>deleting</code>: The NAT gateway is in the process of being terminated and may still be processing traffic.</p> </li> <li> <p> <code>deleted</code>: The NAT gateway has been terminated and is no longer processing traffic.</p> </li> </ul></p>
     pub state: Option<String>,
@@ -34879,11 +37110,13 @@ impl OnDemandAllocationStrategyDeserializer {
         Ok(obj)
     }
 }
-/// <p>The allocation strategy of On-Demand Instances in an EC2 Fleet.</p>
+/// <p>Describes the configuration of On-Demand Instances in an EC2 Fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct OnDemandOptions {
     /// <p>The order of the launch template overrides to use in fulfilling On-Demand capacity. If you specify <code>lowest-price</code>, EC2 Fleet uses price to determine the order, launching the lowest price first. If you specify <code>prioritized</code>, EC2 Fleet uses the priority that you assigned to each launch template override, launching the highest priority first. If you do not specify a value, EC2 Fleet defaults to <code>lowest-price</code>.</p>
     pub allocation_strategy: Option<String>,
+    /// <p>The maximum amount per hour for On-Demand Instances that you're willing to pay.</p>
+    pub max_total_price: Option<String>,
     /// <p>The minimum target capacity for On-Demand Instances in the fleet. If the minimum target capacity is not reached, the fleet launches no instances.</p>
     pub min_target_capacity: Option<i64>,
     /// <p>Indicates that the fleet launches all On-Demand Instances into a single Availability Zone.</p>
@@ -34907,6 +37140,10 @@ impl OnDemandOptionsDeserializer {
                             "allocationStrategy",
                             stack,
                         )?);
+                }
+                "maxTotalPrice" => {
+                    obj.max_total_price =
+                        Some(StringDeserializer::deserialize("maxTotalPrice", stack)?);
                 }
                 "minTargetCapacity" => {
                     obj.min_target_capacity = Some(IntegerDeserializer::deserialize(
@@ -34932,11 +37169,13 @@ impl OnDemandOptionsDeserializer {
         })
     }
 }
-/// <p>The allocation strategy of On-Demand Instances in an EC2 Fleet.</p>
+/// <p>Describes the configuration of On-Demand Instances in an EC2 Fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct OnDemandOptionsRequest {
     /// <p>The order of the launch template overrides to use in fulfilling On-Demand capacity. If you specify <code>lowest-price</code>, EC2 Fleet uses price to determine the order, launching the lowest price first. If you specify <code>prioritized</code>, EC2 Fleet uses the priority that you assigned to each launch template override, launching the highest priority first. If you do not specify a value, EC2 Fleet defaults to <code>lowest-price</code>.</p>
     pub allocation_strategy: Option<String>,
+    /// <p>The maximum amount per hour for On-Demand Instances that you're willing to pay.</p>
+    pub max_total_price: Option<String>,
     /// <p>The minimum target capacity for On-Demand Instances in the fleet. If the minimum target capacity is not reached, the fleet launches no instances.</p>
     pub min_target_capacity: Option<i64>,
     /// <p>Indicates that the fleet launches all On-Demand Instances into a single Availability Zone.</p>
@@ -34956,6 +37195,9 @@ impl OnDemandOptionsRequestSerializer {
 
         if let Some(ref field_value) = obj.allocation_strategy {
             params.put(&format!("{}{}", prefix, "AllocationStrategy"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_total_price {
+            params.put(&format!("{}{}", prefix, "MaxTotalPrice"), &field_value);
         }
         if let Some(ref field_value) = obj.min_target_capacity {
             params.put(&format!("{}{}", prefix, "MinTargetCapacity"), &field_value);
@@ -35135,6 +37377,522 @@ impl PermissionGroupDeserializer {
         Ok(obj)
     }
 }
+struct Phase1DHGroupNumbersListDeserializer;
+impl Phase1DHGroupNumbersListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Phase1DHGroupNumbersListValue>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(Phase1DHGroupNumbersListValueDeserializer::deserialize(
+                    "item", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>The Diffie-Hellmann group number for phase 1 IKE negotiations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct Phase1DHGroupNumbersListValue {
+    /// <p>The Diffie-Hellmann group number.</p>
+    pub value: Option<i64>,
+}
+
+struct Phase1DHGroupNumbersListValueDeserializer;
+impl Phase1DHGroupNumbersListValueDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Phase1DHGroupNumbersListValue, XmlParseError> {
+        deserialize_elements::<_, Phase1DHGroupNumbersListValue, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "value" => {
+                        obj.value = Some(IntegerDeserializer::deserialize("value", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `Phase1DHGroupNumbersRequestList` contents to a `SignedRequest`.
+struct Phase1DHGroupNumbersRequestListSerializer;
+impl Phase1DHGroupNumbersRequestListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Phase1DHGroupNumbersRequestListValue>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            Phase1DHGroupNumbersRequestListValueSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+/// <p>Specifies a Diffie-Hellman group number for the VPN tunnel for phase 1 IKE negotiations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct Phase1DHGroupNumbersRequestListValue {
+    /// <p>The Diffie-Hellmann group number.</p>
+    pub value: Option<i64>,
+}
+
+/// Serialize `Phase1DHGroupNumbersRequestListValue` contents to a `SignedRequest`.
+struct Phase1DHGroupNumbersRequestListValueSerializer;
+impl Phase1DHGroupNumbersRequestListValueSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Phase1DHGroupNumbersRequestListValue) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.value {
+            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+        }
+    }
+}
+
+struct Phase1EncryptionAlgorithmsListDeserializer;
+impl Phase1EncryptionAlgorithmsListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Phase1EncryptionAlgorithmsListValue>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(
+                    Phase1EncryptionAlgorithmsListValueDeserializer::deserialize("item", stack)?,
+                );
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>The encryption algorithm for phase 1 IKE negotiations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct Phase1EncryptionAlgorithmsListValue {
+    /// <p>The value for the encryption algorithm.</p>
+    pub value: Option<String>,
+}
+
+struct Phase1EncryptionAlgorithmsListValueDeserializer;
+impl Phase1EncryptionAlgorithmsListValueDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Phase1EncryptionAlgorithmsListValue, XmlParseError> {
+        deserialize_elements::<_, Phase1EncryptionAlgorithmsListValue, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "value" => {
+                        obj.value = Some(StringDeserializer::deserialize("value", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `Phase1EncryptionAlgorithmsRequestList` contents to a `SignedRequest`.
+struct Phase1EncryptionAlgorithmsRequestListSerializer;
+impl Phase1EncryptionAlgorithmsRequestListSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &Vec<Phase1EncryptionAlgorithmsRequestListValue>,
+    ) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            Phase1EncryptionAlgorithmsRequestListValueSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+/// <p>Specifies the encryption algorithm for the VPN tunnel for phase 1 IKE negotiations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct Phase1EncryptionAlgorithmsRequestListValue {
+    /// <p>The value for the encryption algorithm.</p>
+    pub value: Option<String>,
+}
+
+/// Serialize `Phase1EncryptionAlgorithmsRequestListValue` contents to a `SignedRequest`.
+struct Phase1EncryptionAlgorithmsRequestListValueSerializer;
+impl Phase1EncryptionAlgorithmsRequestListValueSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &Phase1EncryptionAlgorithmsRequestListValue,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.value {
+            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+        }
+    }
+}
+
+struct Phase1IntegrityAlgorithmsListDeserializer;
+impl Phase1IntegrityAlgorithmsListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Phase1IntegrityAlgorithmsListValue>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(Phase1IntegrityAlgorithmsListValueDeserializer::deserialize(
+                    "item", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>The integrity algorithm for phase 1 IKE negotiations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct Phase1IntegrityAlgorithmsListValue {
+    /// <p>The value for the integrity algorithm.</p>
+    pub value: Option<String>,
+}
+
+struct Phase1IntegrityAlgorithmsListValueDeserializer;
+impl Phase1IntegrityAlgorithmsListValueDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Phase1IntegrityAlgorithmsListValue, XmlParseError> {
+        deserialize_elements::<_, Phase1IntegrityAlgorithmsListValue, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "value" => {
+                        obj.value = Some(StringDeserializer::deserialize("value", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `Phase1IntegrityAlgorithmsRequestList` contents to a `SignedRequest`.
+struct Phase1IntegrityAlgorithmsRequestListSerializer;
+impl Phase1IntegrityAlgorithmsRequestListSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &Vec<Phase1IntegrityAlgorithmsRequestListValue>,
+    ) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            Phase1IntegrityAlgorithmsRequestListValueSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+/// <p>Specifies the integrity algorithm for the VPN tunnel for phase 1 IKE negotiations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct Phase1IntegrityAlgorithmsRequestListValue {
+    /// <p>The value for the integrity algorithm.</p>
+    pub value: Option<String>,
+}
+
+/// Serialize `Phase1IntegrityAlgorithmsRequestListValue` contents to a `SignedRequest`.
+struct Phase1IntegrityAlgorithmsRequestListValueSerializer;
+impl Phase1IntegrityAlgorithmsRequestListValueSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Phase1IntegrityAlgorithmsRequestListValue) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.value {
+            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+        }
+    }
+}
+
+struct Phase2DHGroupNumbersListDeserializer;
+impl Phase2DHGroupNumbersListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Phase2DHGroupNumbersListValue>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(Phase2DHGroupNumbersListValueDeserializer::deserialize(
+                    "item", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>The Diffie-Hellmann group number for phase 2 IKE negotiations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct Phase2DHGroupNumbersListValue {
+    /// <p>The Diffie-Hellmann group number.</p>
+    pub value: Option<i64>,
+}
+
+struct Phase2DHGroupNumbersListValueDeserializer;
+impl Phase2DHGroupNumbersListValueDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Phase2DHGroupNumbersListValue, XmlParseError> {
+        deserialize_elements::<_, Phase2DHGroupNumbersListValue, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "value" => {
+                        obj.value = Some(IntegerDeserializer::deserialize("value", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `Phase2DHGroupNumbersRequestList` contents to a `SignedRequest`.
+struct Phase2DHGroupNumbersRequestListSerializer;
+impl Phase2DHGroupNumbersRequestListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Phase2DHGroupNumbersRequestListValue>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            Phase2DHGroupNumbersRequestListValueSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+/// <p>Specifies a Diffie-Hellman group number for the VPN tunnel for phase 2 IKE negotiations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct Phase2DHGroupNumbersRequestListValue {
+    /// <p>The Diffie-Hellmann group number.</p>
+    pub value: Option<i64>,
+}
+
+/// Serialize `Phase2DHGroupNumbersRequestListValue` contents to a `SignedRequest`.
+struct Phase2DHGroupNumbersRequestListValueSerializer;
+impl Phase2DHGroupNumbersRequestListValueSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Phase2DHGroupNumbersRequestListValue) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.value {
+            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+        }
+    }
+}
+
+struct Phase2EncryptionAlgorithmsListDeserializer;
+impl Phase2EncryptionAlgorithmsListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Phase2EncryptionAlgorithmsListValue>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(
+                    Phase2EncryptionAlgorithmsListValueDeserializer::deserialize("item", stack)?,
+                );
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>The encryption algorithm for phase 2 IKE negotiations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct Phase2EncryptionAlgorithmsListValue {
+    /// <p>The encryption algorithm.</p>
+    pub value: Option<String>,
+}
+
+struct Phase2EncryptionAlgorithmsListValueDeserializer;
+impl Phase2EncryptionAlgorithmsListValueDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Phase2EncryptionAlgorithmsListValue, XmlParseError> {
+        deserialize_elements::<_, Phase2EncryptionAlgorithmsListValue, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "value" => {
+                        obj.value = Some(StringDeserializer::deserialize("value", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `Phase2EncryptionAlgorithmsRequestList` contents to a `SignedRequest`.
+struct Phase2EncryptionAlgorithmsRequestListSerializer;
+impl Phase2EncryptionAlgorithmsRequestListSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &Vec<Phase2EncryptionAlgorithmsRequestListValue>,
+    ) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            Phase2EncryptionAlgorithmsRequestListValueSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+/// <p>Specifies the encryption algorithm for the VPN tunnel for phase 2 IKE negotiations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct Phase2EncryptionAlgorithmsRequestListValue {
+    /// <p>The encryption algorithm.</p>
+    pub value: Option<String>,
+}
+
+/// Serialize `Phase2EncryptionAlgorithmsRequestListValue` contents to a `SignedRequest`.
+struct Phase2EncryptionAlgorithmsRequestListValueSerializer;
+impl Phase2EncryptionAlgorithmsRequestListValueSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &Phase2EncryptionAlgorithmsRequestListValue,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.value {
+            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+        }
+    }
+}
+
+struct Phase2IntegrityAlgorithmsListDeserializer;
+impl Phase2IntegrityAlgorithmsListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Phase2IntegrityAlgorithmsListValue>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(Phase2IntegrityAlgorithmsListValueDeserializer::deserialize(
+                    "item", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>The integrity algorithm for phase 2 IKE negotiations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct Phase2IntegrityAlgorithmsListValue {
+    /// <p>The integrity algorithm.</p>
+    pub value: Option<String>,
+}
+
+struct Phase2IntegrityAlgorithmsListValueDeserializer;
+impl Phase2IntegrityAlgorithmsListValueDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Phase2IntegrityAlgorithmsListValue, XmlParseError> {
+        deserialize_elements::<_, Phase2IntegrityAlgorithmsListValue, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "value" => {
+                        obj.value = Some(StringDeserializer::deserialize("value", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `Phase2IntegrityAlgorithmsRequestList` contents to a `SignedRequest`.
+struct Phase2IntegrityAlgorithmsRequestListSerializer;
+impl Phase2IntegrityAlgorithmsRequestListSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &Vec<Phase2IntegrityAlgorithmsRequestListValue>,
+    ) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            Phase2IntegrityAlgorithmsRequestListValueSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+/// <p>Specifies the integrity algorithm for the VPN tunnel for phase 2 IKE negotiations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct Phase2IntegrityAlgorithmsRequestListValue {
+    /// <p>The integrity algorithm.</p>
+    pub value: Option<String>,
+}
+
+/// Serialize `Phase2IntegrityAlgorithmsRequestListValue` contents to a `SignedRequest`.
+struct Phase2IntegrityAlgorithmsRequestListValueSerializer;
+impl Phase2IntegrityAlgorithmsRequestListValueSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Phase2IntegrityAlgorithmsRequestListValue) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.value {
+            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+        }
+    }
+}
+
 /// <p>Describes the placement of an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Placement {
@@ -36075,18 +38833,18 @@ impl ProvisionByoipCidrResultDeserializer {
         )
     }
 }
-/// <p>Reserved. If you need to sustain traffic greater than the <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html">documented limits</a>, contact us through the <a href="https://console.aws.amazon.com/support/home?">Support Center</a>.</p>
+/// <p>Reserved. If you need to sustain traffic greater than the <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html">documented limits</a>, contact us through the <a href="https://console.aws.amazon.com/support/home?">Support Center</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ProvisionedBandwidth {
-    /// <p>Reserved. If you need to sustain traffic greater than the <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html">documented limits</a>, contact us through the <a href="https://console.aws.amazon.com/support/home?">Support Center</a>.</p>
+    /// <p>Reserved. If you need to sustain traffic greater than the <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html">documented limits</a>, contact us through the <a href="https://console.aws.amazon.com/support/home?">Support Center</a>.</p>
     pub provision_time: Option<String>,
-    /// <p>Reserved. If you need to sustain traffic greater than the <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html">documented limits</a>, contact us through the <a href="https://console.aws.amazon.com/support/home?">Support Center</a>.</p>
+    /// <p>Reserved. If you need to sustain traffic greater than the <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html">documented limits</a>, contact us through the <a href="https://console.aws.amazon.com/support/home?">Support Center</a>.</p>
     pub provisioned: Option<String>,
-    /// <p>Reserved. If you need to sustain traffic greater than the <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html">documented limits</a>, contact us through the <a href="https://console.aws.amazon.com/support/home?">Support Center</a>.</p>
+    /// <p>Reserved. If you need to sustain traffic greater than the <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html">documented limits</a>, contact us through the <a href="https://console.aws.amazon.com/support/home?">Support Center</a>.</p>
     pub request_time: Option<String>,
-    /// <p>Reserved. If you need to sustain traffic greater than the <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html">documented limits</a>, contact us through the <a href="https://console.aws.amazon.com/support/home?">Support Center</a>.</p>
+    /// <p>Reserved. If you need to sustain traffic greater than the <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html">documented limits</a>, contact us through the <a href="https://console.aws.amazon.com/support/home?">Support Center</a>.</p>
     pub requested: Option<String>,
-    /// <p>Reserved. If you need to sustain traffic greater than the <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html">documented limits</a>, contact us through the <a href="https://console.aws.amazon.com/support/home?">Support Center</a>.</p>
+    /// <p>Reserved. If you need to sustain traffic greater than the <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html">documented limits</a>, contact us through the <a href="https://console.aws.amazon.com/support/home?">Support Center</a>.</p>
     pub status: Option<String>,
 }
 
@@ -36771,6 +39529,8 @@ impl RecurringChargesListDeserializer {
 pub struct Region {
     /// <p>The Region service endpoint.</p>
     pub endpoint: Option<String>,
+    /// <p>The Region opt-in status. The possible values are <code>opt-in-not-required</code>, <code>opted-in</code>, and <code>not-opted-in</code>.</p>
+    pub opt_in_status: Option<String>,
     /// <p>The name of the Region.</p>
     pub region_name: Option<String>,
 }
@@ -36783,6 +39543,10 @@ impl RegionDeserializer {
             match name {
                 "regionEndpoint" => {
                     obj.endpoint = Some(StringDeserializer::deserialize("regionEndpoint", stack)?);
+                }
+                "optInStatus" => {
+                    obj.opt_in_status =
+                        Some(StringDeserializer::deserialize("optInStatus", stack)?);
                 }
                 "regionName" => {
                     obj.region_name = Some(StringDeserializer::deserialize("regionName", stack)?);
@@ -37728,7 +40492,7 @@ pub struct RequestLaunchTemplateData {
     pub license_specifications: Option<Vec<LaunchTemplateLicenseConfigurationRequest>>,
     /// <p>The monitoring for the instance.</p>
     pub monitoring: Option<LaunchTemplatesMonitoringRequest>,
-    /// <p>One or more network interfaces. If you specify a network interface, you must specify any security groups as part of the network interface.</p>
+    /// <p>One or more network interfaces. If you specify a network interface, you must specify any security groups and subnets as part of the network interface.</p>
     pub network_interfaces: Option<Vec<LaunchTemplateInstanceNetworkInterfaceSpecificationRequest>>,
     /// <p>The placement for the instance.</p>
     pub placement: Option<LaunchTemplatePlacementRequest>,
@@ -38117,7 +40881,7 @@ pub struct RequestSpotLaunchSpecification {
     pub security_group_ids: Option<Vec<String>>,
     /// <p>One or more security groups. When requesting instances in a VPC, you must specify the IDs of the security groups. When requesting instances in EC2-Classic, you can specify the names or the IDs of the security groups.</p>
     pub security_groups: Option<Vec<String>>,
-    /// <p>The ID of the subnet in which to launch the instance.</p>
+    /// <p>The IDs of the subnets in which to launch the instance. To specify multiple subnets, separate them using commas; for example, "subnet-1234abcdeexample1, subnet-0987cdef6example2".</p>
     pub subnet_id: Option<String>,
     /// <p>The Base64-encoded user data for the instance. User data is limited to 16 KB.</p>
     pub user_data: Option<String>,
@@ -39218,7 +41982,7 @@ impl ResetEbsDefaultKmsKeyIdRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResetEbsDefaultKmsKeyIdResult {
-    /// <p>The full ARN of the default CMK that your account uses to encrypt an EBS volume when no CMK is specified in the API call that creates the volume.</p>
+    /// <p>The Amazon Resource Name (ARN) of the default CMK for EBS encryption by default.</p>
     pub kms_key_id: Option<String>,
 }
 
@@ -40419,7 +43183,7 @@ pub struct RunInstancesRequest {
     pub min_count: i64,
     /// <p>Specifies whether detailed monitoring is enabled for the instance.</p>
     pub monitoring: Option<RunInstancesMonitoringEnabled>,
-    /// <p>The network interfaces to associate with the instance. If you specify a network interface, you must specify any security groups as part of the network interface.</p>
+    /// <p>The network interfaces to associate with the instance. If you specify a network interface, you must specify any security groups and subnets as part of the network interface.</p>
     pub network_interfaces: Option<Vec<InstanceNetworkInterfaceSpecification>>,
     /// <p>The placement for the instance.</p>
     pub placement: Option<Placement>,
@@ -40431,7 +43195,7 @@ pub struct RunInstancesRequest {
     pub security_group_ids: Option<Vec<String>>,
     /// <p>[EC2-Classic, default VPC] The names of the security groups. For a nondefault VPC, you must use security group IDs instead.</p> <p>If you specify a network interface, you must specify any security groups as part of the network interface.</p> <p>Default: Amazon EC2 uses the default security group.</p>
     pub security_groups: Option<Vec<String>>,
-    /// <p>[EC2-VPC] The ID of the subnet to launch the instance into.</p> <p>You cannot specify this option and the network interfaces option in the same request.</p>
+    /// <p>[EC2-VPC] The ID of the subnet to launch the instance into.</p> <p>If you specify a network interface, you must specify any subnets as part of the network interface.</p>
     pub subnet_id: Option<String>,
     /// <p>The tags to apply to the resources during launch. You can only tag instances and volumes on launch. The specified tags are applied to all instances or volumes that are created during launch. To tag a resource after it has been created, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html">CreateTags</a>.</p>
     pub tag_specifications: Option<Vec<TagSpecification>>,
@@ -41240,7 +44004,7 @@ pub struct ScheduledInstancesEbs {
     pub snapshot_id: Option<String>,
     /// <p>The size of the volume, in GiB.</p> <p>Default: If you're creating the volume from a snapshot and don't specify a volume size, the default is the snapshot size.</p>
     pub volume_size: Option<i64>,
-    /// <p>The volume type. <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, Throughput Optimized HDD for <code>st1</code>, Cold HDD for <code>sc1</code>, or <code>standard</code> for Magnetic.</p> <p>Default: <code>standard</code> </p>
+    /// <p>The volume type. <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, Throughput Optimized HDD for <code>st1</code>, Cold HDD for <code>sc1</code>, or <code>standard</code> for Magnetic.</p> <p>Default: <code>gp2</code> </p>
     pub volume_type: Option<String>,
 }
 
@@ -41657,7 +44421,7 @@ impl ScopeDeserializer {
 pub struct SearchTransitGatewayRoutesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters. The possible values are:</p> <ul> <li> <p> <code>attachment.transit-gateway-attachment-id</code>- The id of the transit gateway attachment.</p> </li> <li> <p> <code>attachment.resource-id</code> - The resource id of the transit gateway attachment.</p> </li> <li> <p> <code>attachment.resource-type</code> - The attachment resource type (<code>vpc</code> | <code>vpn</code>).</p> </li> <li> <p> <code>route-search.exact-match</code> - The exact match of the specified filter.</p> </li> <li> <p> <code>route-search.longest-prefix-match</code> - The longest prefix that matches the route.</p> </li> <li> <p> <code>route-search.subnet-of-match</code> - The routes with a subnet that match the specified CIDR filter.</p> </li> <li> <p> <code>route-search.supernet-of-match</code> - The routes with a CIDR that encompass the CIDR filter. For example, if you have 10.0.1.0/29 and 10.0.1.0/31 routes in your route table and you specify supernet-of-match as 10.0.1.0/30, then the result returns 10.0.1.0/29.</p> </li> <li> <p> <code>state</code> - The state of the attachment (<code>available</code> | <code>deleted</code> | <code>deleting</code> | <code>failed</code> | <code>modifying</code> | <code>pendingAcceptance</code> | <code>pending</code> | <code>rollingBack</code> | <code>rejected</code> | <code>rejecting</code>).</p> </li> <li> <p> <code>type</code> - The type of roue (<code>active</code> | <code>blackhole</code>).</p> </li> </ul></p>
+    /// <p><p>One or more filters. The possible values are:</p> <ul> <li> <p> <code>attachment.transit-gateway-attachment-id</code>- The id of the transit gateway attachment.</p> </li> <li> <p> <code>attachment.resource-id</code> - The resource id of the transit gateway attachment.</p> </li> <li> <p> <code>attachment.resource-type</code> - The attachment resource type (<code>vpc</code> | <code>vpn</code>).</p> </li> <li> <p> <code>route-search.exact-match</code> - The exact match of the specified filter.</p> </li> <li> <p> <code>route-search.longest-prefix-match</code> - The longest prefix that matches the route.</p> </li> <li> <p> <code>route-search.subnet-of-match</code> - The routes with a subnet that match the specified CIDR filter.</p> </li> <li> <p> <code>route-search.supernet-of-match</code> - The routes with a CIDR that encompass the CIDR filter. For example, if you have 10.0.1.0/29 and 10.0.1.0/31 routes in your route table and you specify supernet-of-match as 10.0.1.0/30, then the result returns 10.0.1.0/29.</p> </li> <li> <p> <code>state</code> - The state of the route (<code>active</code> | <code>blackhole</code>).</p> </li> <li> <p> <code>type</code> - The type of route (<code>propagated</code> | <code>static</code>).</p> </li> </ul></p>
     pub filters: Vec<Filter>,
     /// <p>The maximum number of routes to return.</p>
     pub max_results: Option<i64>,
@@ -41940,6 +44704,30 @@ impl SecurityGroupStringListSerializer {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
         }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SendDiagnosticInterruptRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the instance.</p>
+    pub instance_id: String,
+}
+
+/// Serialize `SendDiagnosticInterruptRequest` contents to a `SignedRequest`.
+struct SendDiagnosticInterruptRequestSerializer;
+impl SendDiagnosticInterruptRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SendDiagnosticInterruptRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
     }
 }
 
@@ -42299,13 +45087,13 @@ impl SlotStartTimeRangeRequestSerializer {
 /// <p>Describes a snapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Snapshot {
-    /// <p>The data encryption key identifier for the snapshot. This value is a unique identifier that corresponds to the data encryption key that was used to encrypt the original volume or snapshot copy. Because data encryption keys are inherited by volumes created from snapshots, and vice versa, if snapshots share the same data encryption key identifier, then they belong to the same volume/snapshot lineage. This parameter is only returned by the <a>DescribeSnapshots</a> API operation.</p>
+    /// <p>The data encryption key identifier for the snapshot. This value is a unique identifier that corresponds to the data encryption key that was used to encrypt the original volume or snapshot copy. Because data encryption keys are inherited by volumes created from snapshots, and vice versa, if snapshots share the same data encryption key identifier, then they belong to the same volume/snapshot lineage. This parameter is only returned by <a>DescribeSnapshots</a>.</p>
     pub data_encryption_key_id: Option<String>,
     /// <p>The description for the snapshot.</p>
     pub description: Option<String>,
     /// <p>Indicates whether the snapshot is encrypted.</p>
     pub encrypted: Option<bool>,
-    /// <p>The full ARN of the AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to protect the volume encryption key for the parent volume.</p>
+    /// <p>The Amazon Resource Name (ARN) of the AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to protect the volume encryption key for the parent volume.</p>
     pub kms_key_id: Option<String>,
     /// <p> Value from an Amazon-maintained list (<code>amazon</code> | <code>self</code> | <code>all</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM console. </p>
     pub owner_alias: Option<String>,
@@ -42319,7 +45107,7 @@ pub struct Snapshot {
     pub start_time: Option<String>,
     /// <p>The snapshot state.</p>
     pub state: Option<String>,
-    /// <p>Encrypted Amazon EBS snapshots are copied asynchronously. If a snapshot copy operation fails (for example, if the proper AWS Key Management Service (AWS KMS) permissions are not obtained) this field displays error state details to help you diagnose why the error occurred. This parameter is only returned by the <a>DescribeSnapshots</a> API operation.</p>
+    /// <p>Encrypted Amazon EBS snapshots are copied asynchronously. If a snapshot copy operation fails (for example, if the proper AWS Key Management Service (AWS KMS) permissions are not obtained) this field displays error state details to help you diagnose why the error occurred. This parameter is only returned by <a>DescribeSnapshots</a>.</p>
     pub state_message: Option<String>,
     /// <p>Any tags assigned to the snapshot.</p>
     pub tags: Option<Vec<Tag>>,
@@ -42536,12 +45324,12 @@ impl SnapshotIdStringListSerializer {
     }
 }
 
-/// <p>Object that contains information about a snapshot.</p>
+/// <p>Information about a snapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SnapshotInfo {
     /// <p>Description specified by the CreateSnapshotRequest that has been applied to all snapshots.</p>
     pub description: Option<String>,
-    /// <p>Boolean that specifies whether or not this snapshot is encrypted.</p>
+    /// <p>Indicates whether the snapshot is encrypted.</p>
     pub encrypted: Option<bool>,
     /// <p>Account id used when creating this snapshot.</p>
     pub owner_id: Option<String>,
@@ -42805,7 +45593,7 @@ impl SpotDatafeedSubscriptionDeserializer {
 pub struct SpotFleetLaunchSpecification {
     /// <p>Deprecated.</p>
     pub addressing_type: Option<String>,
-    /// <p>One or more block devices that are mapped to the Spot instances. You can't specify both a snapshot ID and an encryption value. This is because only blank volumes can be encrypted on creation. If a snapshot is the basis for a volume, it is not blank and its encryption status is used for the volume encryption status.</p>
+    /// <p>One or more block devices that are mapped to the Spot Instances. You can't specify both a snapshot ID and an encryption value. This is because only blank volumes can be encrypted on creation. If a snapshot is the basis for a volume, it is not blank and its encryption status is used for the volume encryption status.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     /// <p>Indicates whether the instances are optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p> <p>Default: <code>false</code> </p>
     pub ebs_optimized: Option<bool>,
@@ -42831,7 +45619,7 @@ pub struct SpotFleetLaunchSpecification {
     pub security_groups: Option<Vec<GroupIdentifier>>,
     /// <p>The maximum price per unit hour that you are willing to pay for a Spot Instance. If this value is not specified, the default is the Spot price specified for the fleet. To determine the Spot price per unit hour, divide the Spot price by the value of <code>WeightedCapacity</code>.</p>
     pub spot_price: Option<String>,
-    /// <p>The ID of the subnet in which to launch the instances. To specify multiple subnets, separate them using commas; for example, "subnet-a61dafcf, subnet-65ea5f08".</p>
+    /// <p>The IDs of the subnets in which to launch the instances. To specify multiple subnets, separate them using commas; for example, "subnet-1234abcdeexample1, subnet-0987cdef6example2".</p>
     pub subnet_id: Option<String>,
     /// <p>The tags to apply during creation.</p>
     pub tag_specifications: Option<Vec<SpotFleetTagSpecification>>,
@@ -43142,7 +45930,7 @@ impl SpotFleetRequestConfigDeserializer {
 /// <p>Describes the configuration of a Spot Fleet request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SpotFleetRequestConfigData {
-    /// <p>Indicates how to allocate the target capacity across the Spot pools specified by the Spot Fleet request. The default is <code>lowestPrice</code>.</p>
+    /// <p>Indicates how to allocate the target Spot Instance capacity across the Spot Instance pools specified by the Spot Fleet request.</p> <p>If the allocation strategy is <code>lowestPrice</code>, Spot Fleet launches instances from the Spot Instance pools with the lowest price. This is the default allocation strategy.</p> <p>If the allocation strategy is <code>diversified</code>, Spot Fleet launches instances from all the Spot Instance pools that you specify.</p> <p>If the allocation strategy is <code>capacityOptimized</code>, Spot Fleet launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching.</p>
     pub allocation_strategy: Option<String>,
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of your listings. This helps to avoid duplicate listings. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -43166,10 +45954,14 @@ pub struct SpotFleetRequestConfigData {
     pub on_demand_allocation_strategy: Option<String>,
     /// <p>The number of On-Demand units fulfilled by this request compared to the set target On-Demand capacity.</p>
     pub on_demand_fulfilled_capacity: Option<f64>,
+    /// <p>The maximum amount per hour for On-Demand Instances that you're willing to pay. You can use the <code>onDemandMaxTotalPrice</code> parameter, the <code>spotMaxTotalPrice</code> parameter, or both parameters to ensure that your fleet cost does not exceed your budget. If you set a maximum price per hour for the On-Demand Instances and Spot Instances in your request, Spot Fleet will launch instances until it reaches the maximum amount you're willing to pay. When the maximum amount you're willing to pay is reached, the fleet stops launching instances even if it hasn’t met the target capacity.</p>
+    pub on_demand_max_total_price: Option<String>,
     /// <p>The number of On-Demand units to request. You can choose to set the target capacity in terms of instances or a performance characteristic that is important to your application workload, such as vCPUs, memory, or I/O. If the request type is <code>maintain</code>, you can specify a target capacity of 0 and add capacity later.</p>
     pub on_demand_target_capacity: Option<i64>,
     /// <p>Indicates whether Spot Fleet should replace unhealthy instances.</p>
     pub replace_unhealthy_instances: Option<bool>,
+    /// <p>The maximum amount per hour for Spot Instances that you're willing to pay. You can use the <code>spotdMaxTotalPrice</code> parameter, the <code>onDemandMaxTotalPrice</code> parameter, or both parameters to ensure that your fleet cost does not exceed your budget. If you set a maximum price per hour for the On-Demand Instances and Spot Instances in your request, Spot Fleet will launch instances until it reaches the maximum amount you're willing to pay. When the maximum amount you're willing to pay is reached, the fleet stops launching instances even if it hasn’t met the target capacity.</p>
+    pub spot_max_total_price: Option<String>,
     /// <p>The maximum price per unit hour that you are willing to pay for a Spot Instance. The default is the On-Demand price.</p>
     pub spot_price: Option<String>,
     /// <p>The number of units to request for the Spot Fleet. You can choose to set the target capacity in terms of instances or a performance characteristic that is important to your application workload, such as vCPUs, memory, or I/O. If the request type is <code>maintain</code>, you can specify a target capacity of 0 and add capacity later.</p>
@@ -43271,6 +46063,12 @@ impl SpotFleetRequestConfigDataDeserializer {
                             stack,
                         )?);
                     }
+                    "onDemandMaxTotalPrice" => {
+                        obj.on_demand_max_total_price = Some(StringDeserializer::deserialize(
+                            "onDemandMaxTotalPrice",
+                            stack,
+                        )?);
+                    }
                     "onDemandTargetCapacity" => {
                         obj.on_demand_target_capacity = Some(IntegerDeserializer::deserialize(
                             "onDemandTargetCapacity",
@@ -43282,6 +46080,10 @@ impl SpotFleetRequestConfigDataDeserializer {
                             "replaceUnhealthyInstances",
                             stack,
                         )?);
+                    }
+                    "spotMaxTotalPrice" => {
+                        obj.spot_max_total_price =
+                            Some(StringDeserializer::deserialize("spotMaxTotalPrice", stack)?);
                     }
                     "spotPrice" => {
                         obj.spot_price = Some(StringDeserializer::deserialize("spotPrice", stack)?);
@@ -43389,6 +46191,12 @@ impl SpotFleetRequestConfigDataSerializer {
                 &field_value,
             );
         }
+        if let Some(ref field_value) = obj.on_demand_max_total_price {
+            params.put(
+                &format!("{}{}", prefix, "OnDemandMaxTotalPrice"),
+                &field_value,
+            );
+        }
         if let Some(ref field_value) = obj.on_demand_target_capacity {
             params.put(
                 &format!("{}{}", prefix, "OnDemandTargetCapacity"),
@@ -43400,6 +46208,9 @@ impl SpotFleetRequestConfigDataSerializer {
                 &format!("{}{}", prefix, "ReplaceUnhealthyInstances"),
                 &field_value,
             );
+        }
+        if let Some(ref field_value) = obj.spot_max_total_price {
+            params.put(&format!("{}{}", prefix, "SpotMaxTotalPrice"), &field_value);
         }
         if let Some(ref field_value) = obj.spot_price {
             params.put(&format!("{}{}", prefix, "SpotPrice"), &field_value);
@@ -43858,12 +46669,14 @@ impl SpotMarketOptionsSerializer {
 /// <p>Describes the configuration of Spot Instances in an EC2 Fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SpotOptions {
-    /// <p>Indicates how to allocate the target capacity across the Spot pools specified by the Spot Fleet request. The default is <code>lowest-price</code>.</p>
+    /// <p>Indicates how to allocate the target Spot Instance capacity across the Spot Instance pools specified by the EC2 Fleet.</p> <p>If the allocation strategy is <code>lowestPrice</code>, EC2 Fleet launches instances from the Spot Instance pools with the lowest price. This is the default allocation strategy.</p> <p>If the allocation strategy is <code>diversified</code>, EC2 Fleet launches instances from all the Spot Instance pools that you specify.</p> <p>If the allocation strategy is <code>capacityOptimized</code>, EC2 Fleet launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching.</p>
     pub allocation_strategy: Option<String>,
     /// <p>The behavior when a Spot Instance is interrupted. The default is <code>terminate</code>.</p>
     pub instance_interruption_behavior: Option<String>,
     /// <p>The number of Spot pools across which to allocate your target Spot capacity. Valid only when <b>AllocationStrategy</b> is set to <code>lowestPrice</code>. EC2 Fleet selects the cheapest Spot pools and evenly allocates your target Spot capacity across the number of Spot pools that you specify.</p>
     pub instance_pools_to_use_count: Option<i64>,
+    /// <p>The maximum amount per hour for Spot Instances that you're willing to pay.</p>
+    pub max_total_price: Option<String>,
     /// <p>The minimum target capacity for Spot Instances in the fleet. If the minimum target capacity is not reached, the fleet launches no instances.</p>
     pub min_target_capacity: Option<i64>,
     /// <p>Indicates that the fleet launches all Spot Instances into a single Availability Zone.</p>
@@ -43901,6 +46714,10 @@ impl SpotOptionsDeserializer {
                         stack,
                     )?);
                 }
+                "maxTotalPrice" => {
+                    obj.max_total_price =
+                        Some(StringDeserializer::deserialize("maxTotalPrice", stack)?);
+                }
                 "minTargetCapacity" => {
                     obj.min_target_capacity = Some(IntegerDeserializer::deserialize(
                         "minTargetCapacity",
@@ -43928,12 +46745,14 @@ impl SpotOptionsDeserializer {
 /// <p>Describes the configuration of Spot Instances in an EC2 Fleet request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SpotOptionsRequest {
-    /// <p>Indicates how to allocate the target capacity across the Spot pools specified by the Spot Fleet request. The default is <code>lowestPrice</code>.</p>
+    /// <p>Indicates how to allocate the target Spot Instance capacity across the Spot Instance pools specified by the EC2 Fleet.</p> <p>If the allocation strategy is <code>lowestPrice</code>, EC2 Fleet launches instances from the Spot Instance pools with the lowest price. This is the default allocation strategy.</p> <p>If the allocation strategy is <code>diversified</code>, EC2 Fleet launches instances from all the Spot Instance pools that you specify.</p> <p>If the allocation strategy is <code>capacityOptimized</code>, EC2 Fleet launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching.</p>
     pub allocation_strategy: Option<String>,
     /// <p>The behavior when a Spot Instance is interrupted. The default is <code>terminate</code>.</p>
     pub instance_interruption_behavior: Option<String>,
     /// <p>The number of Spot pools across which to allocate your target Spot capacity. Valid only when Spot <b>AllocationStrategy</b> is set to <code>lowest-price</code>. EC2 Fleet selects the cheapest Spot pools and evenly allocates your target Spot capacity across the number of Spot pools that you specify.</p>
     pub instance_pools_to_use_count: Option<i64>,
+    /// <p>The maximum amount per hour for Spot Instances that you're willing to pay.</p>
+    pub max_total_price: Option<String>,
     /// <p>The minimum target capacity for Spot Instances in the fleet. If the minimum target capacity is not reached, the fleet launches no instances.</p>
     pub min_target_capacity: Option<i64>,
     /// <p>Indicates that the fleet launches all Spot Instances into a single Availability Zone.</p>
@@ -43965,6 +46784,9 @@ impl SpotOptionsRequestSerializer {
                 &format!("{}{}", prefix, "InstancePoolsToUseCount"),
                 &field_value,
             );
+        }
+        if let Some(ref field_value) = obj.max_total_price {
+            params.put(&format!("{}{}", prefix, "MaxTotalPrice"), &field_value);
         }
         if let Some(ref field_value) = obj.min_target_capacity {
             params.put(&format!("{}{}", prefix, "MinTargetCapacity"), &field_value);
@@ -44987,7 +47809,7 @@ impl TagListSerializer {
 /// <p>The tags to apply to a resource when the resource is being created.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TagSpecification {
-    /// <p>The type of resource to tag. Currently, the resource types that support tagging on creation are <code>fleet</code>, <code>dedicated-host</code>, <code>instance</code>, <code>snapshot</code>, and <code>volume</code>. To tag a resource after it has been created, see <a>CreateTags</a>.</p>
+    /// <p>The type of resource to tag. Currently, the resource types that support tagging on creation are: <code>capacity-reservation</code> | <code>client-vpn-endpoint</code> | <code>dedicated-host</code> | <code>fleet</code> | <code>instance</code> | <code>launch-template</code> | <code>snapshot</code> | <code>transit-gateway</code> | <code>transit-gateway-attachment</code> | <code>transit-gateway-route-table</code> | <code>volume</code>.</p> <p>To tag a resource after it has been created, see <a>CreateTags</a>.</p>
     pub resource_type: Option<String>,
     /// <p>The tags to apply to the resource.</p>
     pub tags: Option<Vec<Tag>>,
@@ -45022,14 +47844,14 @@ impl TagSpecificationListSerializer {
     }
 }
 
-/// <p>The number of units to request. You can choose to set the target capacity in terms of instances or a performance characteristic that is important to your application workload, such as vCPUs, memory, or I/O. If the request type is <code>maintain</code>, you can specify a target capacity of 0 and add capacity later.</p>
+/// <p>The number of units to request. You can choose to set the target capacity in terms of instances or a performance characteristic that is important to your application workload, such as vCPUs, memory, or I/O. If the request type is <code>maintain</code>, you can specify a target capacity of 0 and add capacity later.</p> <p>You can use the On-Demand Instance <code>MaxTotalPrice</code> parameter, the Spot Instance <code>MaxTotalPrice</code>, or both to ensure your fleet cost does not exceed your budget. If you set a maximum price per hour for the On-Demand Instances and Spot Instances in your request, EC2 Fleet will launch instances until it reaches the maximum amount you're willing to pay. When the maximum amount you're willing to pay is reached, the fleet stops launching instances even if it hasn’t met the target capacity. The <code>MaxTotalPrice</code> parameters are located in and </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TargetCapacitySpecification {
     /// <p>The default <code>TotalTargetCapacity</code>, which is either <code>Spot</code> or <code>On-Demand</code>.</p>
     pub default_target_capacity_type: Option<String>,
-    /// <p>The number of On-Demand units to request.</p>
+    /// <p>The number of On-Demand units to request. If you specify a target capacity for Spot units, you cannot specify a target capacity for On-Demand units.</p>
     pub on_demand_target_capacity: Option<i64>,
-    /// <p>The maximum number of Spot units to launch.</p>
+    /// <p>The maximum number of Spot units to launch. If you specify a target capacity for On-Demand units, you cannot specify a target capacity for Spot units.</p>
     pub spot_target_capacity: Option<i64>,
     /// <p>The number of units to request, filled using <code>DefaultTargetCapacityType</code>.</p>
     pub total_target_capacity: Option<i64>,
@@ -45079,7 +47901,7 @@ impl TargetCapacitySpecificationDeserializer {
         )
     }
 }
-/// <p>The number of units to request. You can choose to set the target capacity in terms of instances or a performance characteristic that is important to your application workload, such as vCPUs, memory, or I/O. If the request type is <code>maintain</code>, you can specify a target capacity of 0 and add capacity later.</p>
+/// <p>The number of units to request. You can choose to set the target capacity as the number of instances. Or you can set the target capacity to a performance characteristic that is important to your application workload, such as vCPUs, memory, or I/O. If the request type is <code>maintain</code>, you can specify a target capacity of 0 and add capacity later.</p> <p>You can use the On-Demand Instance <code>MaxTotalPrice</code> parameter, the Spot Instance <code>MaxTotalPrice</code> parameter, or both parameters to ensure that your fleet cost does not exceed your budget. If you set a maximum price per hour for the On-Demand Instances and Spot Instances in your request, EC2 Fleet will launch instances until it reaches the maximum amount you're willing to pay. When the maximum amount you're willing to pay is reached, the fleet stops launching instances even if it hasn’t met the target capacity. The <code>MaxTotalPrice</code> parameters are located in and .</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TargetCapacitySpecificationRequest {
     /// <p>The default <code>TotalTargetCapacity</code>, which is either <code>Spot</code> or <code>On-Demand</code>.</p>
@@ -45667,6 +48489,564 @@ impl TerminateInstancesResultDeserializer {
                 Ok(())
             },
         )
+    }
+}
+struct TrafficDirectionDeserializer;
+impl TrafficDirectionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Describes the Traffic Mirror filter.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TrafficMirrorFilter {
+    /// <p>The description of the Traffic Mirror filter.</p>
+    pub description: Option<String>,
+    /// <p>Information about the egress rules that are associated with the Traffic Mirror filter.</p>
+    pub egress_filter_rules: Option<Vec<TrafficMirrorFilterRule>>,
+    /// <p>Information about the ingress rules that are associated with the Traffic Mirror filter.</p>
+    pub ingress_filter_rules: Option<Vec<TrafficMirrorFilterRule>>,
+    /// <p>The network service traffic that is associated with the Traffic Mirror filter.</p>
+    pub network_services: Option<Vec<String>>,
+    /// <p>The tags assigned to the Traffic Mirror filter.</p>
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The ID of the Traffic Mirror filter.</p>
+    pub traffic_mirror_filter_id: Option<String>,
+}
+
+struct TrafficMirrorFilterDeserializer;
+impl TrafficMirrorFilterDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TrafficMirrorFilter, XmlParseError> {
+        deserialize_elements::<_, TrafficMirrorFilter, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "description" => {
+                    obj.description = Some(StringDeserializer::deserialize("description", stack)?);
+                }
+                "egressFilterRuleSet" => {
+                    obj.egress_filter_rules.get_or_insert(vec![]).extend(
+                        TrafficMirrorFilterRuleListDeserializer::deserialize(
+                            "egressFilterRuleSet",
+                            stack,
+                        )?,
+                    );
+                }
+                "ingressFilterRuleSet" => {
+                    obj.ingress_filter_rules.get_or_insert(vec![]).extend(
+                        TrafficMirrorFilterRuleListDeserializer::deserialize(
+                            "ingressFilterRuleSet",
+                            stack,
+                        )?,
+                    );
+                }
+                "networkServiceSet" => {
+                    obj.network_services.get_or_insert(vec![]).extend(
+                        TrafficMirrorNetworkServiceListDeserializer::deserialize(
+                            "networkServiceSet",
+                            stack,
+                        )?,
+                    );
+                }
+                "tagSet" => {
+                    obj.tags
+                        .get_or_insert(vec![])
+                        .extend(TagListDeserializer::deserialize("tagSet", stack)?);
+                }
+                "trafficMirrorFilterId" => {
+                    obj.traffic_mirror_filter_id = Some(StringDeserializer::deserialize(
+                        "trafficMirrorFilterId",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>Describes the Traffic Mirror rule.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TrafficMirrorFilterRule {
+    /// <p>The description of the Traffic Mirror rule.</p>
+    pub description: Option<String>,
+    /// <p>The destination CIDR block assigned to the Traffic Mirror rule.</p>
+    pub destination_cidr_block: Option<String>,
+    /// <p>The destination port range assigned to the Traffic Mirror rule.</p>
+    pub destination_port_range: Option<TrafficMirrorPortRange>,
+    /// <p>The protocol assigned to the Traffic Mirror rule.</p>
+    pub protocol: Option<i64>,
+    /// <p>The action assigned to the Traffic Mirror rule.</p>
+    pub rule_action: Option<String>,
+    /// <p>The rule number of the Traffic Mirror rule.</p>
+    pub rule_number: Option<i64>,
+    /// <p>The source CIDR block assigned to the Traffic Mirror rule.</p>
+    pub source_cidr_block: Option<String>,
+    /// <p>The source port range assigned to the Traffic Mirror rule.</p>
+    pub source_port_range: Option<TrafficMirrorPortRange>,
+    /// <p>The traffic direction assigned to the Traffic Mirror rule.</p>
+    pub traffic_direction: Option<String>,
+    /// <p>The ID of the Traffic Mirror filter that the rule is associated with.</p>
+    pub traffic_mirror_filter_id: Option<String>,
+    /// <p>The ID of the Traffic Mirror rule.</p>
+    pub traffic_mirror_filter_rule_id: Option<String>,
+}
+
+struct TrafficMirrorFilterRuleDeserializer;
+impl TrafficMirrorFilterRuleDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TrafficMirrorFilterRule, XmlParseError> {
+        deserialize_elements::<_, TrafficMirrorFilterRule, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "description" => {
+                        obj.description =
+                            Some(StringDeserializer::deserialize("description", stack)?);
+                    }
+                    "destinationCidrBlock" => {
+                        obj.destination_cidr_block = Some(StringDeserializer::deserialize(
+                            "destinationCidrBlock",
+                            stack,
+                        )?);
+                    }
+                    "destinationPortRange" => {
+                        obj.destination_port_range =
+                            Some(TrafficMirrorPortRangeDeserializer::deserialize(
+                                "destinationPortRange",
+                                stack,
+                            )?);
+                    }
+                    "protocol" => {
+                        obj.protocol = Some(IntegerDeserializer::deserialize("protocol", stack)?);
+                    }
+                    "ruleAction" => {
+                        obj.rule_action = Some(TrafficMirrorRuleActionDeserializer::deserialize(
+                            "ruleAction",
+                            stack,
+                        )?);
+                    }
+                    "ruleNumber" => {
+                        obj.rule_number =
+                            Some(IntegerDeserializer::deserialize("ruleNumber", stack)?);
+                    }
+                    "sourceCidrBlock" => {
+                        obj.source_cidr_block =
+                            Some(StringDeserializer::deserialize("sourceCidrBlock", stack)?);
+                    }
+                    "sourcePortRange" => {
+                        obj.source_port_range =
+                            Some(TrafficMirrorPortRangeDeserializer::deserialize(
+                                "sourcePortRange",
+                                stack,
+                            )?);
+                    }
+                    "trafficDirection" => {
+                        obj.traffic_direction = Some(TrafficDirectionDeserializer::deserialize(
+                            "trafficDirection",
+                            stack,
+                        )?);
+                    }
+                    "trafficMirrorFilterId" => {
+                        obj.traffic_mirror_filter_id = Some(StringDeserializer::deserialize(
+                            "trafficMirrorFilterId",
+                            stack,
+                        )?);
+                    }
+                    "trafficMirrorFilterRuleId" => {
+                        obj.traffic_mirror_filter_rule_id = Some(StringDeserializer::deserialize(
+                            "trafficMirrorFilterRuleId",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `TrafficMirrorFilterRuleFieldList` contents to a `SignedRequest`.
+struct TrafficMirrorFilterRuleFieldListSerializer;
+impl TrafficMirrorFilterRuleFieldListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+struct TrafficMirrorFilterRuleListDeserializer;
+impl TrafficMirrorFilterRuleListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<TrafficMirrorFilterRule>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(TrafficMirrorFilterRuleDeserializer::deserialize(
+                    "item", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+struct TrafficMirrorFilterSetDeserializer;
+impl TrafficMirrorFilterSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<TrafficMirrorFilter>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(TrafficMirrorFilterDeserializer::deserialize("item", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+struct TrafficMirrorNetworkServiceDeserializer;
+impl TrafficMirrorNetworkServiceDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct TrafficMirrorNetworkServiceListDeserializer;
+impl TrafficMirrorNetworkServiceListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(TrafficMirrorNetworkServiceDeserializer::deserialize(
+                    "item", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `TrafficMirrorNetworkServiceList` contents to a `SignedRequest`.
+struct TrafficMirrorNetworkServiceListSerializer;
+impl TrafficMirrorNetworkServiceListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+/// <p>Describes the Traffic Mirror port range.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TrafficMirrorPortRange {
+    /// <p>The start of the Traffic Mirror port range. This applies to the TCP and UDP protocols.</p>
+    pub from_port: Option<i64>,
+    /// <p>The end of the Traffic Mirror port range. This applies to the TCP and UDP protocols.</p>
+    pub to_port: Option<i64>,
+}
+
+struct TrafficMirrorPortRangeDeserializer;
+impl TrafficMirrorPortRangeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TrafficMirrorPortRange, XmlParseError> {
+        deserialize_elements::<_, TrafficMirrorPortRange, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "fromPort" => {
+                    obj.from_port = Some(IntegerDeserializer::deserialize("fromPort", stack)?);
+                }
+                "toPort" => {
+                    obj.to_port = Some(IntegerDeserializer::deserialize("toPort", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>Information about the Traffic Mirror filter rule port range.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TrafficMirrorPortRangeRequest {
+    /// <p>The first port in the Traffic Mirror port range. This applies to the TCP and UDP protocols.</p>
+    pub from_port: Option<i64>,
+    /// <p>The last port in the Traffic Mirror port range. This applies to the TCP and UDP protocols.</p>
+    pub to_port: Option<i64>,
+}
+
+/// Serialize `TrafficMirrorPortRangeRequest` contents to a `SignedRequest`.
+struct TrafficMirrorPortRangeRequestSerializer;
+impl TrafficMirrorPortRangeRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &TrafficMirrorPortRangeRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.from_port {
+            params.put(&format!("{}{}", prefix, "FromPort"), &field_value);
+        }
+        if let Some(ref field_value) = obj.to_port {
+            params.put(&format!("{}{}", prefix, "ToPort"), &field_value);
+        }
+    }
+}
+
+struct TrafficMirrorRuleActionDeserializer;
+impl TrafficMirrorRuleActionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Describes a Traffic Mirror session.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TrafficMirrorSession {
+    /// <p>The description of the Traffic Mirror session.</p>
+    pub description: Option<String>,
+    /// <p>The ID of the Traffic Mirror session's network interface.</p>
+    pub network_interface_id: Option<String>,
+    /// <p>The ID of the account that owns the Traffic Mirror session.</p>
+    pub owner_id: Option<String>,
+    /// <p>The number of bytes in each packet to mirror. These are the bytes after the VXLAN header. To mirror a subset, set this to the length (in bytes) to mirror. For example, if you set this value to 100, then the first 100 bytes that meet the filter criteria are copied to the target. Do not specify this parameter when you want to mirror the entire packet</p>
+    pub packet_length: Option<i64>,
+    /// <p>The session number determines the order in which sessions are evaluated when an interface is used by multiple sessions. The first session with a matching filter is the one that mirrors the packets.</p> <p>Valid values are 1-32766.</p>
+    pub session_number: Option<i64>,
+    /// <p>The tags assigned to the Traffic Mirror session.</p>
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The ID of the Traffic Mirror filter.</p>
+    pub traffic_mirror_filter_id: Option<String>,
+    /// <p>The ID for the Traffic Mirror session.</p>
+    pub traffic_mirror_session_id: Option<String>,
+    /// <p>The ID of the Traffic Mirror target.</p>
+    pub traffic_mirror_target_id: Option<String>,
+    /// <p>The virtual network ID associated with the Traffic Mirror session.</p>
+    pub virtual_network_id: Option<i64>,
+}
+
+struct TrafficMirrorSessionDeserializer;
+impl TrafficMirrorSessionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TrafficMirrorSession, XmlParseError> {
+        deserialize_elements::<_, TrafficMirrorSession, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "description" => {
+                    obj.description = Some(StringDeserializer::deserialize("description", stack)?);
+                }
+                "networkInterfaceId" => {
+                    obj.network_interface_id = Some(StringDeserializer::deserialize(
+                        "networkInterfaceId",
+                        stack,
+                    )?);
+                }
+                "ownerId" => {
+                    obj.owner_id = Some(StringDeserializer::deserialize("ownerId", stack)?);
+                }
+                "packetLength" => {
+                    obj.packet_length =
+                        Some(IntegerDeserializer::deserialize("packetLength", stack)?);
+                }
+                "sessionNumber" => {
+                    obj.session_number =
+                        Some(IntegerDeserializer::deserialize("sessionNumber", stack)?);
+                }
+                "tagSet" => {
+                    obj.tags
+                        .get_or_insert(vec![])
+                        .extend(TagListDeserializer::deserialize("tagSet", stack)?);
+                }
+                "trafficMirrorFilterId" => {
+                    obj.traffic_mirror_filter_id = Some(StringDeserializer::deserialize(
+                        "trafficMirrorFilterId",
+                        stack,
+                    )?);
+                }
+                "trafficMirrorSessionId" => {
+                    obj.traffic_mirror_session_id = Some(StringDeserializer::deserialize(
+                        "trafficMirrorSessionId",
+                        stack,
+                    )?);
+                }
+                "trafficMirrorTargetId" => {
+                    obj.traffic_mirror_target_id = Some(StringDeserializer::deserialize(
+                        "trafficMirrorTargetId",
+                        stack,
+                    )?);
+                }
+                "virtualNetworkId" => {
+                    obj.virtual_network_id =
+                        Some(IntegerDeserializer::deserialize("virtualNetworkId", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `TrafficMirrorSessionFieldList` contents to a `SignedRequest`.
+struct TrafficMirrorSessionFieldListSerializer;
+impl TrafficMirrorSessionFieldListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+struct TrafficMirrorSessionSetDeserializer;
+impl TrafficMirrorSessionSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<TrafficMirrorSession>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(TrafficMirrorSessionDeserializer::deserialize(
+                    "item", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>Describes a Traffic Mirror target.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TrafficMirrorTarget {
+    /// <p>Information about the Traffic Mirror target.</p>
+    pub description: Option<String>,
+    /// <p>The network interface ID that is attached to the target.</p>
+    pub network_interface_id: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the Network Load Balancer.</p>
+    pub network_load_balancer_arn: Option<String>,
+    /// <p>The ID of the account that owns the Traffic Mirror target.</p>
+    pub owner_id: Option<String>,
+    /// <p>The tags assigned to the Traffic Mirror target.</p>
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The ID of the Traffic Mirror target.</p>
+    pub traffic_mirror_target_id: Option<String>,
+    /// <p>The type of Traffic Mirror target.</p>
+    pub type_: Option<String>,
+}
+
+struct TrafficMirrorTargetDeserializer;
+impl TrafficMirrorTargetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TrafficMirrorTarget, XmlParseError> {
+        deserialize_elements::<_, TrafficMirrorTarget, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "description" => {
+                    obj.description = Some(StringDeserializer::deserialize("description", stack)?);
+                }
+                "networkInterfaceId" => {
+                    obj.network_interface_id = Some(StringDeserializer::deserialize(
+                        "networkInterfaceId",
+                        stack,
+                    )?);
+                }
+                "networkLoadBalancerArn" => {
+                    obj.network_load_balancer_arn = Some(StringDeserializer::deserialize(
+                        "networkLoadBalancerArn",
+                        stack,
+                    )?);
+                }
+                "ownerId" => {
+                    obj.owner_id = Some(StringDeserializer::deserialize("ownerId", stack)?);
+                }
+                "tagSet" => {
+                    obj.tags
+                        .get_or_insert(vec![])
+                        .extend(TagListDeserializer::deserialize("tagSet", stack)?);
+                }
+                "trafficMirrorTargetId" => {
+                    obj.traffic_mirror_target_id = Some(StringDeserializer::deserialize(
+                        "trafficMirrorTargetId",
+                        stack,
+                    )?);
+                }
+                "type" => {
+                    obj.type_ = Some(TrafficMirrorTargetTypeDeserializer::deserialize(
+                        "type", stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+struct TrafficMirrorTargetSetDeserializer;
+impl TrafficMirrorTargetSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<TrafficMirrorTarget>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(TrafficMirrorTargetDeserializer::deserialize("item", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+struct TrafficMirrorTargetTypeDeserializer;
+impl TrafficMirrorTargetTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
     }
 }
 struct TrafficTypeDeserializer;
@@ -46904,18 +50284,174 @@ impl TransportProtocolDeserializer {
         Ok(obj)
     }
 }
-
-/// Serialize `TunnelOptionsList` contents to a `SignedRequest`.
-struct TunnelOptionsListSerializer;
-impl TunnelOptionsListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<VpnTunnelOptionsSpecification>) {
-        for (index, obj) in obj.iter().enumerate() {
-            let key = format!("{}.{}", name, index + 1);
-            VpnTunnelOptionsSpecificationSerializer::serialize(params, &key, obj);
-        }
-    }
+/// <p>The VPN tunnel options.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TunnelOption {
+    /// <p>The number of seconds after which a DPD timeout occurs.</p>
+    pub dpd_timeout_seconds: Option<i64>,
+    /// <p>The IKE versions that are permitted for the VPN tunnel.</p>
+    pub ike_versions: Option<Vec<IKEVersionsListValue>>,
+    /// <p>The external IP address of the VPN tunnel.</p>
+    pub outside_ip_address: Option<String>,
+    /// <p>The permitted Diffie-Hellman group numbers for the VPN tunnel for phase 1 IKE negotiations.</p>
+    pub phase_1dh_group_numbers: Option<Vec<Phase1DHGroupNumbersListValue>>,
+    /// <p>The permitted encryption algorithms for the VPN tunnel for phase 1 IKE negotiations.</p>
+    pub phase_1_encryption_algorithms: Option<Vec<Phase1EncryptionAlgorithmsListValue>>,
+    /// <p>The permitted integrity algorithms for the VPN tunnel for phase 1 IKE negotiations.</p>
+    pub phase_1_integrity_algorithms: Option<Vec<Phase1IntegrityAlgorithmsListValue>>,
+    /// <p>The lifetime for phase 1 of the IKE negotiation, in seconds.</p>
+    pub phase_1_lifetime_seconds: Option<i64>,
+    /// <p>The permitted Diffie-Hellman group numbers for the VPN tunnel for phase 2 IKE negotiations.</p>
+    pub phase_2dh_group_numbers: Option<Vec<Phase2DHGroupNumbersListValue>>,
+    /// <p>The permitted encryption algorithms for the VPN tunnel for phase 2 IKE negotiations.</p>
+    pub phase_2_encryption_algorithms: Option<Vec<Phase2EncryptionAlgorithmsListValue>>,
+    /// <p>The permitted integrity algorithms for the VPN tunnel for phase 2 IKE negotiations.</p>
+    pub phase_2_integrity_algorithms: Option<Vec<Phase2IntegrityAlgorithmsListValue>>,
+    /// <p>The lifetime for phase 2 of the IKE negotiation, in seconds.</p>
+    pub phase_2_lifetime_seconds: Option<i64>,
+    /// <p>The pre-shared key (PSK) to establish initial authentication between the virtual private gateway and the customer gateway.</p>
+    pub pre_shared_key: Option<String>,
+    /// <p>The percentage of the rekey window determined by <code>RekeyMarginTimeSeconds</code> during which the rekey time is randomly selected.</p>
+    pub rekey_fuzz_percentage: Option<i64>,
+    /// <p>The margin time, in seconds, before the phase 2 lifetime expires, during which the AWS side of the VPN connection performs an IKE rekey.</p>
+    pub rekey_margin_time_seconds: Option<i64>,
+    /// <p>The number of packets in an IKE replay window.</p>
+    pub replay_window_size: Option<i64>,
+    /// <p>The range of inside IP addresses for the tunnel.</p>
+    pub tunnel_inside_cidr: Option<String>,
 }
 
+struct TunnelOptionDeserializer;
+impl TunnelOptionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TunnelOption, XmlParseError> {
+        deserialize_elements::<_, TunnelOption, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "dpdTimeoutSeconds" => {
+                    obj.dpd_timeout_seconds = Some(IntegerDeserializer::deserialize(
+                        "dpdTimeoutSeconds",
+                        stack,
+                    )?);
+                }
+                "ikeVersionSet" => {
+                    obj.ike_versions.get_or_insert(vec![]).extend(
+                        IKEVersionsListDeserializer::deserialize("ikeVersionSet", stack)?,
+                    );
+                }
+                "outsideIpAddress" => {
+                    obj.outside_ip_address =
+                        Some(StringDeserializer::deserialize("outsideIpAddress", stack)?);
+                }
+                "phase1DHGroupNumberSet" => {
+                    obj.phase_1dh_group_numbers.get_or_insert(vec![]).extend(
+                        Phase1DHGroupNumbersListDeserializer::deserialize(
+                            "phase1DHGroupNumberSet",
+                            stack,
+                        )?,
+                    );
+                }
+                "phase1EncryptionAlgorithmSet" => {
+                    obj.phase_1_encryption_algorithms
+                        .get_or_insert(vec![])
+                        .extend(Phase1EncryptionAlgorithmsListDeserializer::deserialize(
+                            "phase1EncryptionAlgorithmSet",
+                            stack,
+                        )?);
+                }
+                "phase1IntegrityAlgorithmSet" => {
+                    obj.phase_1_integrity_algorithms
+                        .get_or_insert(vec![])
+                        .extend(Phase1IntegrityAlgorithmsListDeserializer::deserialize(
+                            "phase1IntegrityAlgorithmSet",
+                            stack,
+                        )?);
+                }
+                "phase1LifetimeSeconds" => {
+                    obj.phase_1_lifetime_seconds = Some(IntegerDeserializer::deserialize(
+                        "phase1LifetimeSeconds",
+                        stack,
+                    )?);
+                }
+                "phase2DHGroupNumberSet" => {
+                    obj.phase_2dh_group_numbers.get_or_insert(vec![]).extend(
+                        Phase2DHGroupNumbersListDeserializer::deserialize(
+                            "phase2DHGroupNumberSet",
+                            stack,
+                        )?,
+                    );
+                }
+                "phase2EncryptionAlgorithmSet" => {
+                    obj.phase_2_encryption_algorithms
+                        .get_or_insert(vec![])
+                        .extend(Phase2EncryptionAlgorithmsListDeserializer::deserialize(
+                            "phase2EncryptionAlgorithmSet",
+                            stack,
+                        )?);
+                }
+                "phase2IntegrityAlgorithmSet" => {
+                    obj.phase_2_integrity_algorithms
+                        .get_or_insert(vec![])
+                        .extend(Phase2IntegrityAlgorithmsListDeserializer::deserialize(
+                            "phase2IntegrityAlgorithmSet",
+                            stack,
+                        )?);
+                }
+                "phase2LifetimeSeconds" => {
+                    obj.phase_2_lifetime_seconds = Some(IntegerDeserializer::deserialize(
+                        "phase2LifetimeSeconds",
+                        stack,
+                    )?);
+                }
+                "preSharedKey" => {
+                    obj.pre_shared_key =
+                        Some(StringDeserializer::deserialize("preSharedKey", stack)?);
+                }
+                "rekeyFuzzPercentage" => {
+                    obj.rekey_fuzz_percentage = Some(IntegerDeserializer::deserialize(
+                        "rekeyFuzzPercentage",
+                        stack,
+                    )?);
+                }
+                "rekeyMarginTimeSeconds" => {
+                    obj.rekey_margin_time_seconds = Some(IntegerDeserializer::deserialize(
+                        "rekeyMarginTimeSeconds",
+                        stack,
+                    )?);
+                }
+                "replayWindowSize" => {
+                    obj.replay_window_size =
+                        Some(IntegerDeserializer::deserialize("replayWindowSize", stack)?);
+                }
+                "tunnelInsideCidr" => {
+                    obj.tunnel_inside_cidr =
+                        Some(StringDeserializer::deserialize("tunnelInsideCidr", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+struct TunnelOptionsListDeserializer;
+impl TunnelOptionsListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<TunnelOption>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(TunnelOptionDeserializer::deserialize("item", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UnassignIpv6AddressesRequest {
     /// <p>The IPv6 addresses to unassign from the network interface.</p>
@@ -47712,6 +51248,8 @@ impl VersionStringListSerializer {
 pub struct VgwTelemetry {
     /// <p>The number of accepted routes.</p>
     pub accepted_route_count: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) of the VPN tunnel endpoint certificate.</p>
+    pub certificate_arn: Option<String>,
     /// <p>The date and time of the last change in status.</p>
     pub last_status_change: Option<String>,
     /// <p>The Internet-routable IP address of the virtual private gateway's outside interface.</p>
@@ -47736,6 +51274,10 @@ impl VgwTelemetryDeserializer {
                         "acceptedRouteCount",
                         stack,
                     )?);
+                }
+                "certificateArn" => {
+                    obj.certificate_arn =
+                        Some(StringDeserializer::deserialize("certificateArn", stack)?);
                 }
                 "lastStatusChange" => {
                     obj.last_status_change = Some(DateTimeDeserializer::deserialize(
@@ -47797,11 +51339,11 @@ pub struct Volume {
     pub availability_zone: Option<String>,
     /// <p>The time stamp when volume creation was initiated.</p>
     pub create_time: Option<String>,
-    /// <p>Indicates whether the volume will be encrypted.</p>
+    /// <p>Indicates whether the volume is encrypted.</p>
     pub encrypted: Option<bool>,
     /// <p>The number of I/O operations per second (IOPS) that the volume supports. For Provisioned IOPS SSD volumes, this represents the number of IOPS that are provisioned for the volume. For General Purpose SSD volumes, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Constraints: Range is 100-16,000 IOPS for <code>gp2</code> volumes and 100 to 64,000IOPS for <code>io1</code> volumes, in most Regions. The maximum IOPS for <code>io1</code> of 64,000 is guaranteed only on <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances">Nitro-based instances</a>. Other instance families guarantee performance up to 32,000 IOPS.</p> <p>Condition: This parameter is required for requests to create <code>io1</code> volumes; it is not used in requests to create <code>gp2</code>, <code>st1</code>, <code>sc1</code>, or <code>standard</code> volumes.</p>
     pub iops: Option<i64>,
-    /// <p>The full ARN of the AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to protect the volume encryption key for the volume.</p>
+    /// <p>The Amazon Resource Name (ARN) of the AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to protect the volume encryption key for the volume.</p>
     pub kms_key_id: Option<String>,
     /// <p>The size of the volume, in GiBs.</p>
     pub size: Option<i64>,
@@ -48751,6 +52293,8 @@ pub struct VpcEndpoint {
     pub groups: Option<Vec<SecurityGroupIdentifier>>,
     /// <p>(Interface endpoint) One or more network interfaces for the endpoint.</p>
     pub network_interface_ids: Option<Vec<String>>,
+    /// <p>The ID of the AWS account that owns the VPC endpoint.</p>
+    pub owner_id: Option<String>,
     /// <p>The policy document associated with the endpoint, if applicable.</p>
     pub policy_document: Option<String>,
     /// <p>(Interface endpoint) Indicates whether the VPC is associated with a private hosted zone.</p>
@@ -48804,6 +52348,9 @@ impl VpcEndpointDeserializer {
                     obj.network_interface_ids.get_or_insert(vec![]).extend(
                         ValueStringListDeserializer::deserialize("networkInterfaceIdSet", stack)?,
                     );
+                }
+                "ownerId" => {
+                    obj.owner_id = Some(StringDeserializer::deserialize("ownerId", stack)?);
                 }
                 "policyDocument" => {
                     obj.policy_document =
@@ -48864,6 +52411,10 @@ impl VpcEndpointDeserializer {
 pub struct VpcEndpointConnection {
     /// <p>The date and time the VPC endpoint was created.</p>
     pub creation_timestamp: Option<String>,
+    /// <p>The DNS entries for the VPC endpoint.</p>
+    pub dns_entries: Option<Vec<DnsEntry>>,
+    /// <p>The Amazon Resource Names (ARNs) of the network load balancers for the service.</p>
+    pub network_load_balancer_arns: Option<Vec<String>>,
     /// <p>The ID of the service to which the endpoint is connected.</p>
     pub service_id: Option<String>,
     /// <p>The ID of the VPC endpoint.</p>
@@ -48888,6 +52439,19 @@ impl VpcEndpointConnectionDeserializer {
                         "creationTimestamp",
                         stack,
                     )?);
+                }
+                "dnsEntrySet" => {
+                    obj.dns_entries
+                        .get_or_insert(vec![])
+                        .extend(DnsEntrySetDeserializer::deserialize("dnsEntrySet", stack)?);
+                }
+                "networkLoadBalancerArnSet" => {
+                    obj.network_load_balancer_arns.get_or_insert(vec![]).extend(
+                        ValueStringListDeserializer::deserialize(
+                            "networkLoadBalancerArnSet",
+                            stack,
+                        )?,
+                    );
                 }
                 "serviceId" => {
                     obj.service_id = Some(StringDeserializer::deserialize("serviceId", stack)?);
@@ -49443,6 +53007,8 @@ impl VpnConnectionListDeserializer {
 pub struct VpnConnectionOptions {
     /// <p>Indicates whether the VPN connection uses static routes only. Static routes must be used for devices that don't support BGP.</p>
     pub static_routes_only: Option<bool>,
+    /// <p>Indicates the VPN tunnel options.</p>
+    pub tunnel_options: Option<Vec<TunnelOption>>,
 }
 
 struct VpnConnectionOptionsDeserializer;
@@ -49457,6 +53023,11 @@ impl VpnConnectionOptionsDeserializer {
                 "staticRoutesOnly" => {
                     obj.static_routes_only =
                         Some(BooleanDeserializer::deserialize("staticRoutesOnly", stack)?);
+                }
+                "tunnelOptionSet" => {
+                    obj.tunnel_options.get_or_insert(vec![]).extend(
+                        TunnelOptionsListDeserializer::deserialize("tunnelOptionSet", stack)?,
+                    );
                 }
                 _ => skip_tree(stack),
             }
@@ -49486,7 +53057,7 @@ impl VpnConnectionOptionsSpecificationSerializer {
             params.put(&format!("{}{}", prefix, "StaticRoutesOnly"), &field_value);
         }
         if let Some(ref field_value) = obj.tunnel_options {
-            TunnelOptionsListSerializer::serialize(
+            VpnTunnelOptionsSpecificationsListSerializer::serialize(
                 params,
                 &format!("{}{}", prefix, "TunnelOptions"),
                 field_value,
@@ -49690,8 +53261,34 @@ impl VpnStaticRouteSourceDeserializer {
 /// <p>The tunnel options for a VPN connection.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct VpnTunnelOptionsSpecification {
-    /// <p>The pre-shared key (PSK) to establish initial authentication between the virtual private gateway and customer gateway.</p> <p>Constraints: Allowed characters are alphanumeric characters and ._. Must be between 8 and 64 characters in length and cannot start with zero (0).</p>
+    /// <p>The number of seconds after which a DPD timeout occurs.</p> <p>Constraints: A value between 0 and 30.</p> <p>Default: <code>30</code> </p>
+    pub dpd_timeout_seconds: Option<i64>,
+    /// <p>The IKE versions that are permitted for the VPN tunnel.</p> <p>Valid values: <code>ikev1</code> | <code>ikev2</code> </p>
+    pub ike_versions: Option<Vec<IKEVersionsRequestListValue>>,
+    /// <p>One or more Diffie-Hellman group numbers that are permitted for the VPN tunnel for phase 1 IKE negotiations.</p> <p>Valid values: <code>2</code> | <code>14</code> | <code>15</code> | <code>16</code> | <code>17</code> | <code>18</code> | <code>22</code> | <code>23</code> | <code>24</code> </p>
+    pub phase_1dh_group_numbers: Option<Vec<Phase1DHGroupNumbersRequestListValue>>,
+    /// <p>One or more encryption algorithms that are permitted for the VPN tunnel for phase 1 IKE negotiations.</p> <p>Valid values: <code>AES128</code> | <code>AES256</code> </p>
+    pub phase_1_encryption_algorithms: Option<Vec<Phase1EncryptionAlgorithmsRequestListValue>>,
+    /// <p>One or more integrity algorithms that are permitted for the VPN tunnel for phase 1 IKE negotiations.</p> <p>Valid values: <code>SHA1</code> | <code>SHA2-256</code> </p>
+    pub phase_1_integrity_algorithms: Option<Vec<Phase1IntegrityAlgorithmsRequestListValue>>,
+    /// <p>The lifetime for phase 1 of the IKE negotiation, in seconds.</p> <p>Constraints: A value between 900 and 28,800.</p> <p>Default: <code>28800</code> </p>
+    pub phase_1_lifetime_seconds: Option<i64>,
+    /// <p>One or more Diffie-Hellman group numbers that are permitted for the VPN tunnel for phase 2 IKE negotiations.</p> <p>Valid values: <code>2</code> | <code>5</code> | <code>14</code> | <code>15</code> | <code>16</code> | <code>17</code> | <code>18</code> | <code>22</code> | <code>23</code> | <code>24</code> </p>
+    pub phase_2dh_group_numbers: Option<Vec<Phase2DHGroupNumbersRequestListValue>>,
+    /// <p>One or more encryption algorithms that are permitted for the VPN tunnel for phase 2 IKE negotiations.</p> <p>Valid values: <code>AES128</code> | <code>AES256</code> </p>
+    pub phase_2_encryption_algorithms: Option<Vec<Phase2EncryptionAlgorithmsRequestListValue>>,
+    /// <p>One or more integrity algorithms that are permitted for the VPN tunnel for phase 2 IKE negotiations.</p> <p>Valid values: <code>SHA1</code> | <code>SHA2-256</code> </p>
+    pub phase_2_integrity_algorithms: Option<Vec<Phase2IntegrityAlgorithmsRequestListValue>>,
+    /// <p>The lifetime for phase 2 of the IKE negotiation, in seconds.</p> <p>Constraints: A value between 900 and 3,600. The value must be less than the value for <code>Phase1LifetimeSeconds</code>.</p> <p>Default: <code>3600</code> </p>
+    pub phase_2_lifetime_seconds: Option<i64>,
+    /// <p>The pre-shared key (PSK) to establish initial authentication between the virtual private gateway and customer gateway.</p> <p>Constraints: Allowed characters are alphanumeric characters, periods (.), and underscores (_). Must be between 8 and 64 characters in length and cannot start with zero (0).</p>
     pub pre_shared_key: Option<String>,
+    /// <p>The percentage of the rekey window (determined by <code>RekeyMarginTimeSeconds</code>) during which the rekey time is randomly selected.</p> <p>Constraints: A value between 0 and 100.</p> <p>Default: <code>100</code> </p>
+    pub rekey_fuzz_percentage: Option<i64>,
+    /// <p>The margin time, in seconds, before the phase 2 lifetime expires, during which the AWS side of the VPN connection performs an IKE rekey. The exact time of the rekey is randomly selected based on the value for <code>RekeyFuzzPercentage</code>.</p> <p>Constraints: A value between 60 and half of <code>Phase2LifetimeSeconds</code>.</p> <p>Default: <code>540</code> </p>
+    pub rekey_margin_time_seconds: Option<i64>,
+    /// <p>The number of packets in an IKE replay window.</p> <p>Constraints: A value between 64 and 2048.</p> <p>Default: <code>1024</code> </p>
+    pub replay_window_size: Option<i64>,
     /// <p><p>The range of inside IP addresses for the tunnel. Any specified CIDR blocks must be unique across all VPN connections that use the same virtual private gateway. </p> <p>Constraints: A size /30 CIDR block from the <code>169.254.0.0/16</code> range. The following CIDR blocks are reserved and cannot be used:</p> <ul> <li> <p> <code>169.254.0.0/30</code> </p> </li> <li> <p> <code>169.254.1.0/30</code> </p> </li> <li> <p> <code>169.254.2.0/30</code> </p> </li> <li> <p> <code>169.254.3.0/30</code> </p> </li> <li> <p> <code>169.254.4.0/30</code> </p> </li> <li> <p> <code>169.254.5.0/30</code> </p> </li> <li> <p> <code>169.254.169.252/30</code> </p> </li> </ul></p>
     pub tunnel_inside_cidr: Option<String>,
 }
@@ -49705,11 +53302,101 @@ impl VpnTunnelOptionsSpecificationSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.dpd_timeout_seconds {
+            params.put(&format!("{}{}", prefix, "DPDTimeoutSeconds"), &field_value);
+        }
+        if let Some(ref field_value) = obj.ike_versions {
+            IKEVersionsRequestListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "IKEVersion"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.phase_1dh_group_numbers {
+            Phase1DHGroupNumbersRequestListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Phase1DHGroupNumber"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.phase_1_encryption_algorithms {
+            Phase1EncryptionAlgorithmsRequestListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Phase1EncryptionAlgorithm"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.phase_1_integrity_algorithms {
+            Phase1IntegrityAlgorithmsRequestListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Phase1IntegrityAlgorithm"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.phase_1_lifetime_seconds {
+            params.put(
+                &format!("{}{}", prefix, "Phase1LifetimeSeconds"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.phase_2dh_group_numbers {
+            Phase2DHGroupNumbersRequestListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Phase2DHGroupNumber"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.phase_2_encryption_algorithms {
+            Phase2EncryptionAlgorithmsRequestListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Phase2EncryptionAlgorithm"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.phase_2_integrity_algorithms {
+            Phase2IntegrityAlgorithmsRequestListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Phase2IntegrityAlgorithm"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.phase_2_lifetime_seconds {
+            params.put(
+                &format!("{}{}", prefix, "Phase2LifetimeSeconds"),
+                &field_value,
+            );
+        }
         if let Some(ref field_value) = obj.pre_shared_key {
             params.put(&format!("{}{}", prefix, "PreSharedKey"), &field_value);
         }
+        if let Some(ref field_value) = obj.rekey_fuzz_percentage {
+            params.put(
+                &format!("{}{}", prefix, "RekeyFuzzPercentage"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.rekey_margin_time_seconds {
+            params.put(
+                &format!("{}{}", prefix, "RekeyMarginTimeSeconds"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.replay_window_size {
+            params.put(&format!("{}{}", prefix, "ReplayWindowSize"), &field_value);
+        }
         if let Some(ref field_value) = obj.tunnel_inside_cidr {
             params.put(&format!("{}{}", prefix, "TunnelInsideCidr"), &field_value);
+        }
+    }
+}
+
+/// Serialize `VpnTunnelOptionsSpecificationsList` contents to a `SignedRequest`.
+struct VpnTunnelOptionsSpecificationsListSerializer;
+impl VpnTunnelOptionsSpecificationsListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<VpnTunnelOptionsSpecification>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            VpnTunnelOptionsSpecificationSerializer::serialize(params, &key, obj);
         }
     }
 }
@@ -52524,6 +56211,162 @@ impl Error for CreateTagsError {
         match *self {}
     }
 }
+/// Errors returned by CreateTrafficMirrorFilter
+#[derive(Debug, PartialEq)]
+pub enum CreateTrafficMirrorFilterError {}
+
+impl CreateTrafficMirrorFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTrafficMirrorFilterError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateTrafficMirrorFilterError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateTrafficMirrorFilterError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by CreateTrafficMirrorFilterRule
+#[derive(Debug, PartialEq)]
+pub enum CreateTrafficMirrorFilterRuleError {}
+
+impl CreateTrafficMirrorFilterRuleError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateTrafficMirrorFilterRuleError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateTrafficMirrorFilterRuleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateTrafficMirrorFilterRuleError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by CreateTrafficMirrorSession
+#[derive(Debug, PartialEq)]
+pub enum CreateTrafficMirrorSessionError {}
+
+impl CreateTrafficMirrorSessionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateTrafficMirrorSessionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateTrafficMirrorSessionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateTrafficMirrorSessionError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by CreateTrafficMirrorTarget
+#[derive(Debug, PartialEq)]
+pub enum CreateTrafficMirrorTargetError {}
+
+impl CreateTrafficMirrorTargetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTrafficMirrorTargetError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateTrafficMirrorTargetError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateTrafficMirrorTargetError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by CreateTransitGateway
 #[derive(Debug, PartialEq)]
 pub enum CreateTransitGatewayError {}
@@ -53986,6 +57829,162 @@ impl Error for DeleteTagsError {
         match *self {}
     }
 }
+/// Errors returned by DeleteTrafficMirrorFilter
+#[derive(Debug, PartialEq)]
+pub enum DeleteTrafficMirrorFilterError {}
+
+impl DeleteTrafficMirrorFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTrafficMirrorFilterError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteTrafficMirrorFilterError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteTrafficMirrorFilterError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by DeleteTrafficMirrorFilterRule
+#[derive(Debug, PartialEq)]
+pub enum DeleteTrafficMirrorFilterRuleError {}
+
+impl DeleteTrafficMirrorFilterRuleError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteTrafficMirrorFilterRuleError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteTrafficMirrorFilterRuleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteTrafficMirrorFilterRuleError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by DeleteTrafficMirrorSession
+#[derive(Debug, PartialEq)]
+pub enum DeleteTrafficMirrorSessionError {}
+
+impl DeleteTrafficMirrorSessionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteTrafficMirrorSessionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteTrafficMirrorSessionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteTrafficMirrorSessionError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by DeleteTrafficMirrorTarget
+#[derive(Debug, PartialEq)]
+pub enum DeleteTrafficMirrorTargetError {}
+
+impl DeleteTrafficMirrorTargetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTrafficMirrorTargetError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteTrafficMirrorTargetError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteTrafficMirrorTargetError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by DeleteTransitGateway
 #[derive(Debug, PartialEq)]
 pub enum DeleteTransitGatewayError {}
@@ -55260,6 +59259,44 @@ impl fmt::Display for DescribeElasticGpusError {
     }
 }
 impl Error for DescribeElasticGpusError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by DescribeExportImageTasks
+#[derive(Debug, PartialEq)]
+pub enum DescribeExportImageTasksError {}
+
+impl DescribeExportImageTasksError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeExportImageTasksError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeExportImageTasksError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeExportImageTasksError {
     fn description(&self) -> &str {
         match *self {}
     }
@@ -57430,6 +61467,126 @@ impl Error for DescribeTagsError {
         match *self {}
     }
 }
+/// Errors returned by DescribeTrafficMirrorFilters
+#[derive(Debug, PartialEq)]
+pub enum DescribeTrafficMirrorFiltersError {}
+
+impl DescribeTrafficMirrorFiltersError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeTrafficMirrorFiltersError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeTrafficMirrorFiltersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeTrafficMirrorFiltersError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by DescribeTrafficMirrorSessions
+#[derive(Debug, PartialEq)]
+pub enum DescribeTrafficMirrorSessionsError {}
+
+impl DescribeTrafficMirrorSessionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeTrafficMirrorSessionsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeTrafficMirrorSessionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeTrafficMirrorSessionsError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by DescribeTrafficMirrorTargets
+#[derive(Debug, PartialEq)]
+pub enum DescribeTrafficMirrorTargetsError {}
+
+impl DescribeTrafficMirrorTargetsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeTrafficMirrorTargetsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeTrafficMirrorTargetsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeTrafficMirrorTargetsError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by DescribeTransitGatewayAttachments
 #[derive(Debug, PartialEq)]
 pub enum DescribeTransitGatewayAttachmentsError {}
@@ -59226,6 +63383,44 @@ impl Error for ExportClientVpnClientConfigurationError {
         match *self {}
     }
 }
+/// Errors returned by ExportImage
+#[derive(Debug, PartialEq)]
+pub enum ExportImageError {}
+
+impl ExportImageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExportImageError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ExportImageError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ExportImageError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by ExportTransitGatewayRoutes
 #[derive(Debug, PartialEq)]
 pub enum ExportTransitGatewayRoutesError {}
@@ -59262,6 +63457,46 @@ impl fmt::Display for ExportTransitGatewayRoutesError {
     }
 }
 impl Error for ExportTransitGatewayRoutesError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by GetCapacityReservationUsage
+#[derive(Debug, PartialEq)]
+pub enum GetCapacityReservationUsageError {}
+
+impl GetCapacityReservationUsageError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetCapacityReservationUsageError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for GetCapacityReservationUsageError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetCapacityReservationUsageError {
     fn description(&self) -> &str {
         match *self {}
     }
@@ -60692,6 +64927,126 @@ impl Error for ModifySubnetAttributeError {
         match *self {}
     }
 }
+/// Errors returned by ModifyTrafficMirrorFilterNetworkServices
+#[derive(Debug, PartialEq)]
+pub enum ModifyTrafficMirrorFilterNetworkServicesError {}
+
+impl ModifyTrafficMirrorFilterNetworkServicesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifyTrafficMirrorFilterNetworkServicesError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ModifyTrafficMirrorFilterNetworkServicesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyTrafficMirrorFilterNetworkServicesError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by ModifyTrafficMirrorFilterRule
+#[derive(Debug, PartialEq)]
+pub enum ModifyTrafficMirrorFilterRuleError {}
+
+impl ModifyTrafficMirrorFilterRuleError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifyTrafficMirrorFilterRuleError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ModifyTrafficMirrorFilterRuleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyTrafficMirrorFilterRuleError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by ModifyTrafficMirrorSession
+#[derive(Debug, PartialEq)]
+pub enum ModifyTrafficMirrorSessionError {}
+
+impl ModifyTrafficMirrorSessionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifyTrafficMirrorSessionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ModifyTrafficMirrorSessionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyTrafficMirrorSessionError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by ModifyTransitGatewayVpcAttachment
 #[derive(Debug, PartialEq)]
 pub enum ModifyTransitGatewayVpcAttachmentError {}
@@ -61116,6 +65471,84 @@ impl fmt::Display for ModifyVpnConnectionError {
     }
 }
 impl Error for ModifyVpnConnectionError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by ModifyVpnTunnelCertificate
+#[derive(Debug, PartialEq)]
+pub enum ModifyVpnTunnelCertificateError {}
+
+impl ModifyVpnTunnelCertificateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifyVpnTunnelCertificateError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ModifyVpnTunnelCertificateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyVpnTunnelCertificateError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by ModifyVpnTunnelOptions
+#[derive(Debug, PartialEq)]
+pub enum ModifyVpnTunnelOptionsError {}
+
+impl ModifyVpnTunnelOptionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyVpnTunnelOptionsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ModifyVpnTunnelOptionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyVpnTunnelOptionsError {
     fn description(&self) -> &str {
         match *self {}
     }
@@ -62474,6 +66907,44 @@ impl Error for SearchTransitGatewayRoutesError {
         match *self {}
     }
 }
+/// Errors returned by SendDiagnosticInterrupt
+#[derive(Debug, PartialEq)]
+pub enum SendDiagnosticInterruptError {}
+
+impl SendDiagnosticInterruptError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendDiagnosticInterruptError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for SendDiagnosticInterruptError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SendDiagnosticInterruptError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by StartInstances
 #[derive(Debug, PartialEq)]
 pub enum StartInstancesError {}
@@ -62928,7 +67399,7 @@ pub trait Ec2 {
     fn assign_private_ip_addresses(
         &self,
         input: AssignPrivateIpAddressesRequest,
-    ) -> RusotoFuture<(), AssignPrivateIpAddressesError>;
+    ) -> RusotoFuture<AssignPrivateIpAddressesResult, AssignPrivateIpAddressesError>;
 
     /// <p><p>Associates an Elastic IP address with an instance or a network interface. Before you can use an Elastic IP address, you must allocate it to your account.</p> <p>An Elastic IP address is for use in either the EC2-Classic platform or in a VPC. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>[EC2-Classic, VPC in an EC2-VPC-only account] If the Elastic IP address is already associated with a different instance, it is disassociated from that instance and associated with the specified instance. If you associate an Elastic IP address with an instance that has an existing Elastic IP address, the existing address is disassociated from the instance, but remains allocated to your account.</p> <p>[VPC in an EC2-Classic account] If you don&#39;t specify a private IP address, the Elastic IP address is associated with the primary IP address. If the Elastic IP address is already associated with a different instance or a network interface, you get an error unless you allow reassociation. You cannot associate an Elastic IP address with an instance or network interface that has an existing Elastic IP address.</p> <important> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn&#39;t return an error, and you may be charged for each time the Elastic IP address is remapped to the same instance. For more information, see the <i>Elastic IP Addresses</i> section of <a href="http://aws.amazon.com/ec2/pricing/">Amazon EC2 Pricing</a>.</p> </important></p>
     fn associate_address(
@@ -62942,7 +67413,7 @@ pub trait Ec2 {
         input: AssociateClientVpnTargetNetworkRequest,
     ) -> RusotoFuture<AssociateClientVpnTargetNetworkResult, AssociateClientVpnTargetNetworkError>;
 
-    /// <p>Associates a set of DHCP options (that you've previously created) with the specified VPC, or associates no DHCP options with the VPC.</p> <p>After you associate the options with the VPC, any existing instances and all new instances that you launch in that VPC use the options. You don't need to restart or relaunch the instances. They automatically pick up the changes within a few hours, depending on how frequently the instance renews its DHCP lease. You can explicitly renew the lease using the operating system on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Associates a set of DHCP options (that you've previously created) with the specified VPC, or associates no DHCP options with the VPC.</p> <p>After you associate the options with the VPC, any existing instances and all new instances that you launch in that VPC use the options. You don't need to restart or relaunch the instances. They automatically pick up the changes within a few hours, depending on how frequently the instance renews its DHCP lease. You can explicitly renew the lease using the operating system on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn associate_dhcp_options(
         &self,
         input: AssociateDhcpOptionsRequest,
@@ -62954,7 +67425,7 @@ pub trait Ec2 {
         input: AssociateIamInstanceProfileRequest,
     ) -> RusotoFuture<AssociateIamInstanceProfileResult, AssociateIamInstanceProfileError>;
 
-    /// <p>Associates a subnet with a route table. The subnet and route table must be in the same VPC. This association causes traffic originating from the subnet to be routed according to the routes in the route table. The action returns an association ID, which you need in order to disassociate the route table from the subnet later. A route table can be associated with multiple subnets.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Associates a subnet with a route table. The subnet and route table must be in the same VPC. This association causes traffic originating from the subnet to be routed according to the routes in the route table. The action returns an association ID, which you need in order to disassociate the route table from the subnet later. A route table can be associated with multiple subnets.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn associate_route_table(
         &self,
         input: AssociateRouteTableRequest,
@@ -62972,7 +67443,7 @@ pub trait Ec2 {
         input: AssociateTransitGatewayRouteTableRequest,
     ) -> RusotoFuture<AssociateTransitGatewayRouteTableResult, AssociateTransitGatewayRouteTableError>;
 
-    /// <p>Associates a CIDR block with your VPC. You can associate a secondary IPv4 CIDR block, or you can associate an Amazon-provided IPv6 CIDR block. The IPv6 CIDR block size is fixed at /56.</p> <p>For more information about associating CIDR blocks with your VPC and applicable restrictions, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html#VPC_Sizing">VPC and Subnet Sizing</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Associates a CIDR block with your VPC. You can associate a secondary IPv4 CIDR block, or you can associate an Amazon-provided IPv6 CIDR block. The IPv6 CIDR block size is fixed at /56.</p> <p>For more information about associating CIDR blocks with your VPC and applicable restrictions, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html#VPC_Sizing">VPC and Subnet Sizing</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn associate_vpc_cidr_block(
         &self,
         input: AssociateVpcCidrBlockRequest,
@@ -62984,7 +67455,7 @@ pub trait Ec2 {
         input: AttachClassicLinkVpcRequest,
     ) -> RusotoFuture<AttachClassicLinkVpcResult, AttachClassicLinkVpcError>;
 
-    /// <p>Attaches an internet gateway to a VPC, enabling connectivity between the internet and the VPC. For more information about your VPC and internet gateway, see the <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/">Amazon Virtual Private Cloud User Guide</a>.</p>
+    /// <p>Attaches an internet gateway to a VPC, enabling connectivity between the internet and the VPC. For more information about your VPC and internet gateway, see the <a href="https://docs.aws.amazon.com/vpc/latest/userguide/">Amazon Virtual Private Cloud User Guide</a>.</p>
     fn attach_internet_gateway(
         &self,
         input: AttachInternetGatewayRequest,
@@ -62996,7 +67467,7 @@ pub trait Ec2 {
         input: AttachNetworkInterfaceRequest,
     ) -> RusotoFuture<AttachNetworkInterfaceResult, AttachNetworkInterfaceError>;
 
-    /// <p>Attaches an EBS volume to a running or stopped instance and exposes it to the instance with the specified device name.</p> <p>Encrypted EBS volumes may only be attached to instances that support Amazon EBS encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For a list of supported device names, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-attaching-volume.html">Attaching an EBS Volume to an Instance</a>. Any device names that aren't reserved for instance store volumes can be used for EBS volumes. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html">Amazon EC2 Instance Store</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>If a volume has an AWS Marketplace product code:</p> <ul> <li> <p>The volume can be attached only to a stopped instance.</p> </li> <li> <p>AWS Marketplace product codes are copied from the volume to the instance.</p> </li> <li> <p>You must be subscribed to the product.</p> </li> <li> <p>The instance type and operating system of the instance must support the product. For example, you can't detach a volume from a Windows instance and attach it to a Linux instance.</p> </li> </ul> <p>For more information about EBS volumes, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-attaching-volume.html">Attaching Amazon EBS Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Attaches an EBS volume to a running or stopped instance and exposes it to the instance with the specified device name.</p> <p>Encrypted EBS volumes must be attached to instances that support Amazon EBS encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>After you attach an EBS volume, you must make it available. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html">Making an EBS Volume Available For Use</a>.</p> <p>If a volume has an AWS Marketplace product code:</p> <ul> <li> <p>The volume can be attached only to a stopped instance.</p> </li> <li> <p>AWS Marketplace product codes are copied from the volume to the instance.</p> </li> <li> <p>You must be subscribed to the product.</p> </li> <li> <p>The instance type and operating system of the instance must support the product. For example, you can't detach a volume from a Windows instance and attach it to a Linux instance.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-attaching-volume.html">Attaching Amazon EBS Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn attach_volume(
         &self,
         input: AttachVolumeRequest,
@@ -63095,7 +67566,7 @@ pub trait Ec2 {
     /// <p>Initiates the copy of an AMI from the specified source Region to the current Region. You specify the destination Region by using its endpoint when making the request.</p> <p>Copies of encrypted backing snapshots for the AMI are encrypted. Copies of unencrypted backing snapshots remain unencrypted, unless you set <code>Encrypted</code> during the copy operation. You cannot create an unencrypted copy of an encrypted backing snapshot.</p> <p>For more information about the prerequisites and limits when copying an AMI, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/CopyingAMIs.html">Copying an AMI</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn copy_image(&self, input: CopyImageRequest) -> RusotoFuture<CopyImageResult, CopyImageError>;
 
-    /// <p>Copies a point-in-time snapshot of an EBS volume and stores it in Amazon S3. You can copy the snapshot within the same Region or from one Region to another. You can use the snapshot to create EBS volumes or Amazon Machine Images (AMIs). The snapshot is copied to the regional endpoint that you send the HTTP request to.</p> <p>Copies of encrypted EBS snapshots remain encrypted. Copies of unencrypted snapshots remain unencrypted, unless the <code>Encrypted</code> flag is specified during the snapshot copy operation. By default, encrypted snapshot copies use the default AWS Key Management Service (AWS KMS) customer master key (CMK); however, you can specify a non-default CMK with the <code>KmsKeyId</code> parameter.</p> <p>To copy an encrypted snapshot that has been shared from another account, you must have permissions for the CMK used to encrypt the snapshot.</p> <p>Snapshots created by copying another snapshot have an arbitrary volume ID that should not be used for any purpose.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-copy-snapshot.html">Copying an Amazon EBS Snapshot</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Copies a point-in-time snapshot of an EBS volume and stores it in Amazon S3. You can copy the snapshot within the same Region or from one Region to another. You can use the snapshot to create EBS volumes or Amazon Machine Images (AMIs).</p> <p>Copies of encrypted EBS snapshots remain encrypted. Copies of unencrypted snapshots remain unencrypted, unless you enable encryption for the snapshot copy operation. By default, encrypted snapshot copies use the default AWS Key Management Service (AWS KMS) customer master key (CMK); however, you can specify a different CMK.</p> <p>To copy an encrypted snapshot that has been shared from another account, you must have permissions for the CMK used to encrypt the snapshot.</p> <p>Snapshots created by copying another snapshot have an arbitrary volume ID that should not be used for any purpose.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-copy-snapshot.html">Copying an Amazon EBS Snapshot</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn copy_snapshot(
         &self,
         input: CopySnapshotRequest,
@@ -63119,25 +67590,25 @@ pub trait Ec2 {
         input: CreateClientVpnRouteRequest,
     ) -> RusotoFuture<CreateClientVpnRouteResult, CreateClientVpnRouteError>;
 
-    /// <p><p>Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the Internet-routable IP address of the customer gateway&#39;s external interface. The IP address must be static and may be behind a device performing network address translation (NAT).</p> <p>For devices that use Border Gateway Protocol (BGP), you can also provide the device&#39;s BGP Autonomous System Number (ASN). You can use an existing ASN assigned to your network. If you don&#39;t have an ASN already, you can use a private ASN (in the 64512 - 65534 range).</p> <note> <p>Amazon EC2 supports all 2-byte ASN numbers in the range of 1 - 65534, with the exception of 7224, which is reserved in the <code>us-east-1</code> Region, and 9059, which is reserved in the <code>eu-west-1</code> Region.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">AWS Site-to-Site VPN</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p> <important> <p>You cannot create more than one customer gateway with the same VPN type, IP address, and BGP ASN parameter values. If you run an identical request more than one time, the first request creates the customer gateway, and subsequent requests return information about the existing customer gateway. The subsequent requests do not create new customer gateway resources.</p> </important></p>
+    /// <p><p>Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the Internet-routable IP address of the customer gateway&#39;s external interface. The IP address must be static and can be behind a device performing network address translation (NAT).</p> <p>For devices that use Border Gateway Protocol (BGP), you can also provide the device&#39;s BGP Autonomous System Number (ASN). You can use an existing ASN assigned to your network. If you don&#39;t have an ASN already, you can use a private ASN (in the 64512 - 65534 range).</p> <note> <p>Amazon EC2 supports all 2-byte ASN numbers in the range of 1 - 65534, with the exception of 7224, which is reserved in the <code>us-east-1</code> Region, and 9059, which is reserved in the <code>eu-west-1</code> Region.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">AWS Site-to-Site VPN</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p> <important> <p>You cannot create more than one customer gateway with the same VPN type, IP address, and BGP ASN parameter values. If you run an identical request more than one time, the first request creates the customer gateway, and subsequent requests return information about the existing customer gateway. The subsequent requests do not create new customer gateway resources.</p> </important></p>
     fn create_customer_gateway(
         &self,
         input: CreateCustomerGatewayRequest,
     ) -> RusotoFuture<CreateCustomerGatewayResult, CreateCustomerGatewayError>;
 
-    /// <p>Creates a default subnet with a size <code>/20</code> IPv4 CIDR block in the specified Availability Zone in your default VPC. You can have only one default subnet per Availability Zone. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/default-vpc.html#create-default-subnet">Creating a Default Subnet</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a default subnet with a size <code>/20</code> IPv4 CIDR block in the specified Availability Zone in your default VPC. You can have only one default subnet per Availability Zone. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/default-vpc.html#create-default-subnet">Creating a Default Subnet</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_default_subnet(
         &self,
         input: CreateDefaultSubnetRequest,
     ) -> RusotoFuture<CreateDefaultSubnetResult, CreateDefaultSubnetError>;
 
-    /// <p>Creates a default VPC with a size <code>/16</code> IPv4 CIDR block and a default subnet in each Availability Zone. For more information about the components of a default VPC, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/default-vpc.html">Default VPC and Default Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. You cannot specify the components of the default VPC yourself.</p> <p>If you deleted your previous default VPC, you can create a default VPC. You cannot have more than one default VPC per Region.</p> <p>If your account supports EC2-Classic, you cannot use this action to create a default VPC in a Region that supports EC2-Classic. If you want a default VPC in a Region that supports EC2-Classic, see "I really want a default VPC for my existing EC2 account. Is that possible?" in the <a href="http://aws.amazon.com/vpc/faqs/#Default_VPCs">Default VPCs FAQ</a>.</p>
+    /// <p>Creates a default VPC with a size <code>/16</code> IPv4 CIDR block and a default subnet in each Availability Zone. For more information about the components of a default VPC, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/default-vpc.html">Default VPC and Default Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. You cannot specify the components of the default VPC yourself.</p> <p>If you deleted your previous default VPC, you can create a default VPC. You cannot have more than one default VPC per Region.</p> <p>If your account supports EC2-Classic, you cannot use this action to create a default VPC in a Region that supports EC2-Classic. If you want a default VPC in a Region that supports EC2-Classic, see "I really want a default VPC for my existing EC2 account. Is that possible?" in the <a href="http://aws.amazon.com/vpc/faqs/#Default_VPCs">Default VPCs FAQ</a>.</p>
     fn create_default_vpc(
         &self,
         input: CreateDefaultVpcRequest,
     ) -> RusotoFuture<CreateDefaultVpcResult, CreateDefaultVpcError>;
 
-    /// <p>Creates a set of DHCP options for your VPC. After creating the set, you must associate it with the VPC, causing all existing and new instances that you launch in the VPC to use this set of DHCP options. The following are the individual DHCP options you can specify. For more information about the options, see <a href="http://www.ietf.org/rfc/rfc2132.txt">RFC 2132</a>.</p> <ul> <li> <p> <code>domain-name-servers</code> - The IP addresses of up to four domain name servers, or AmazonProvidedDNS. The default DHCP option set specifies AmazonProvidedDNS. If specifying more than one domain name server, specify the IP addresses in a single parameter, separated by commas. ITo have your instance to receive a custom DNS hostname as specified in <code>domain-name</code>, you must set <code>domain-name-servers</code> to a custom DNS server.</p> </li> <li> <p> <code>domain-name</code> - If you're using AmazonProvidedDNS in <code>us-east-1</code>, specify <code>ec2.internal</code>. If you're using AmazonProvidedDNS in another Region, specify <code>region.compute.internal</code> (for example, <code>ap-northeast-1.compute.internal</code>). Otherwise, specify a domain name (for example, <code>MyCompany.com</code>). This value is used to complete unqualified DNS hostnames. <b>Important</b>: Some Linux operating systems accept multiple domain names separated by spaces. However, Windows and other Linux operating systems treat the value as a single domain, which results in unexpected behavior. If your DHCP options set is associated with a VPC that has instances with multiple operating systems, specify only one domain name.</p> </li> <li> <p> <code>ntp-servers</code> - The IP addresses of up to four Network Time Protocol (NTP) servers.</p> </li> <li> <p> <code>netbios-name-servers</code> - The IP addresses of up to four NetBIOS name servers.</p> </li> <li> <p> <code>netbios-node-type</code> - The NetBIOS node type (1, 2, 4, or 8). We recommend that you specify 2 (broadcast and multicast are not currently supported). For more information about these node types, see <a href="http://www.ietf.org/rfc/rfc2132.txt">RFC 2132</a>.</p> </li> </ul> <p>Your VPC automatically starts out with a set of DHCP options that includes only a DNS server that we provide (AmazonProvidedDNS). If you create a set of options, and if your VPC has an internet gateway, make sure to set the <code>domain-name-servers</code> option either to <code>AmazonProvidedDNS</code> or to a domain name server of your choice. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a set of DHCP options for your VPC. After creating the set, you must associate it with the VPC, causing all existing and new instances that you launch in the VPC to use this set of DHCP options. The following are the individual DHCP options you can specify. For more information about the options, see <a href="http://www.ietf.org/rfc/rfc2132.txt">RFC 2132</a>.</p> <ul> <li> <p> <code>domain-name-servers</code> - The IP addresses of up to four domain name servers, or AmazonProvidedDNS. The default DHCP option set specifies AmazonProvidedDNS. If specifying more than one domain name server, specify the IP addresses in a single parameter, separated by commas. To have your instance receive a custom DNS hostname as specified in <code>domain-name</code>, you must set <code>domain-name-servers</code> to a custom DNS server.</p> </li> <li> <p> <code>domain-name</code> - If you're using AmazonProvidedDNS in <code>us-east-1</code>, specify <code>ec2.internal</code>. If you're using AmazonProvidedDNS in another Region, specify <code>region.compute.internal</code> (for example, <code>ap-northeast-1.compute.internal</code>). Otherwise, specify a domain name (for example, <code>MyCompany.com</code>). This value is used to complete unqualified DNS hostnames. <b>Important</b>: Some Linux operating systems accept multiple domain names separated by spaces. However, Windows and other Linux operating systems treat the value as a single domain, which results in unexpected behavior. If your DHCP options set is associated with a VPC that has instances with multiple operating systems, specify only one domain name.</p> </li> <li> <p> <code>ntp-servers</code> - The IP addresses of up to four Network Time Protocol (NTP) servers.</p> </li> <li> <p> <code>netbios-name-servers</code> - The IP addresses of up to four NetBIOS name servers.</p> </li> <li> <p> <code>netbios-node-type</code> - The NetBIOS node type (1, 2, 4, or 8). We recommend that you specify 2 (broadcast and multicast are not currently supported). For more information about these node types, see <a href="http://www.ietf.org/rfc/rfc2132.txt">RFC 2132</a>.</p> </li> </ul> <p>Your VPC automatically starts out with a set of DHCP options that includes only a DNS server that we provide (AmazonProvidedDNS). If you create a set of options, and if your VPC has an internet gateway, make sure to set the <code>domain-name-servers</code> option either to <code>AmazonProvidedDNS</code> or to a domain name server of your choice. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_dhcp_options(
         &self,
         input: CreateDhcpOptionsRequest,
@@ -63155,7 +67626,7 @@ pub trait Ec2 {
         input: CreateFleetRequest,
     ) -> RusotoFuture<CreateFleetResult, CreateFleetError>;
 
-    /// <p>Creates one or more flow logs to capture information about IP traffic for a specific network interface, subnet, or VPC. </p> <p>Flow log data for a monitored network interface is recorded as flow log records, which are log events consisting of fields that describe the traffic flow. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/flow-logs.html#flow-log-records">Flow Log Records</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>When publishing to CloudWatch Logs, flow log records are published to a log group, and each network interface has a unique log stream in the log group. When publishing to Amazon S3, flow log records for all of the monitored network interfaces are published to a single log file object that is stored in the specified bucket.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/flow-logs.html">VPC Flow Logs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates one or more flow logs to capture information about IP traffic for a specific network interface, subnet, or VPC. </p> <p>Flow log data for a monitored network interface is recorded as flow log records, which are log events consisting of fields that describe the traffic flow. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html#flow-log-records">Flow Log Records</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>When publishing to CloudWatch Logs, flow log records are published to a log group, and each network interface has a unique log stream in the log group. When publishing to Amazon S3, flow log records for all of the monitored network interfaces are published to a single log file object that is stored in the specified bucket.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html">VPC Flow Logs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_flow_logs(
         &self,
         input: CreateFlowLogsRequest,
@@ -63179,7 +67650,7 @@ pub trait Ec2 {
         input: CreateInstanceExportTaskRequest,
     ) -> RusotoFuture<CreateInstanceExportTaskResult, CreateInstanceExportTaskError>;
 
-    /// <p>Creates an internet gateway for use with a VPC. After creating the internet gateway, you attach it to a VPC using <a>AttachInternetGateway</a>.</p> <p>For more information about your VPC and internet gateway, see the <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/">Amazon Virtual Private Cloud User Guide</a>.</p>
+    /// <p>Creates an internet gateway for use with a VPC. After creating the internet gateway, you attach it to a VPC using <a>AttachInternetGateway</a>.</p> <p>For more information about your VPC and internet gateway, see the <a href="https://docs.aws.amazon.com/vpc/latest/userguide/">Amazon Virtual Private Cloud User Guide</a>.</p>
     fn create_internet_gateway(
         &self,
         input: CreateInternetGatewayRequest,
@@ -63203,19 +67674,19 @@ pub trait Ec2 {
         input: CreateLaunchTemplateVersionRequest,
     ) -> RusotoFuture<CreateLaunchTemplateVersionResult, CreateLaunchTemplateVersionError>;
 
-    /// <p>Creates a NAT gateway in the specified public subnet. This action creates a network interface in the specified subnet with a private IP address from the IP address range of the subnet. Internet-bound traffic from a private subnet can be routed to the NAT gateway, therefore enabling instances in the private subnet to connect to the internet. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html">NAT Gateways</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a NAT gateway in the specified public subnet. This action creates a network interface in the specified subnet with a private IP address from the IP address range of the subnet. Internet-bound traffic from a private subnet can be routed to the NAT gateway, therefore enabling instances in the private subnet to connect to the internet. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html">NAT Gateways</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_nat_gateway(
         &self,
         input: CreateNatGatewayRequest,
     ) -> RusotoFuture<CreateNatGatewayResult, CreateNatGatewayError>;
 
-    /// <p>Creates a network ACL in a VPC. Network ACLs provide an optional layer of security (in addition to security groups) for the instances in your VPC.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a network ACL in a VPC. Network ACLs provide an optional layer of security (in addition to security groups) for the instances in your VPC.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_network_acl(
         &self,
         input: CreateNetworkAclRequest,
     ) -> RusotoFuture<CreateNetworkAclResult, CreateNetworkAclError>;
 
-    /// <p>Creates an entry (a rule) in a network ACL with the specified rule number. Each network ACL has a set of numbered ingress rules and a separate set of numbered egress rules. When determining whether a packet should be allowed in or out of a subnet associated with the ACL, we process the entries in the ACL according to the rule numbers, in ascending order. Each network ACL has a set of ingress rules and a separate set of egress rules.</p> <p>We recommend that you leave room between the rule numbers (for example, 100, 110, 120, ...), and not number them one right after the other (for example, 101, 102, 103, ...). This makes it easier to add a rule between existing ones without having to renumber the rules.</p> <p>After you add an entry, you can't modify it; you must either replace it, or create an entry and delete the old one.</p> <p>For more information about network ACLs, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates an entry (a rule) in a network ACL with the specified rule number. Each network ACL has a set of numbered ingress rules and a separate set of numbered egress rules. When determining whether a packet should be allowed in or out of a subnet associated with the ACL, we process the entries in the ACL according to the rule numbers, in ascending order. Each network ACL has a set of ingress rules and a separate set of egress rules.</p> <p>We recommend that you leave room between the rule numbers (for example, 100, 110, 120, ...), and not number them one right after the other (for example, 101, 102, 103, ...). This makes it easier to add a rule between existing ones without having to renumber the rules.</p> <p>After you add an entry, you can't modify it; you must either replace it, or create an entry and delete the old one.</p> <p>For more information about network ACLs, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_network_acl_entry(
         &self,
         input: CreateNetworkAclEntryRequest,
@@ -63245,13 +67716,13 @@ pub trait Ec2 {
         input: CreateReservedInstancesListingRequest,
     ) -> RusotoFuture<CreateReservedInstancesListingResult, CreateReservedInstancesListingError>;
 
-    /// <p>Creates a route in a route table within a VPC.</p> <p>You must specify one of the following targets: internet gateway or virtual private gateway, NAT instance, NAT gateway, VPC peering connection, network interface, or egress-only internet gateway.</p> <p>When determining how to route traffic, we use the route with the most specific match. For example, traffic is destined for the IPv4 address <code>192.0.2.3</code>, and the route table includes the following two IPv4 routes:</p> <ul> <li> <p> <code>192.0.2.0/24</code> (goes to some target A)</p> </li> <li> <p> <code>192.0.2.0/28</code> (goes to some target B)</p> </li> </ul> <p>Both routes apply to the traffic destined for <code>192.0.2.3</code>. However, the second route in the list covers a smaller number of IP addresses and is therefore more specific, so we use that route to determine where to target the traffic.</p> <p>For more information about route tables, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a route in a route table within a VPC.</p> <p>You must specify one of the following targets: internet gateway or virtual private gateway, NAT instance, NAT gateway, VPC peering connection, network interface, or egress-only internet gateway.</p> <p>When determining how to route traffic, we use the route with the most specific match. For example, traffic is destined for the IPv4 address <code>192.0.2.3</code>, and the route table includes the following two IPv4 routes:</p> <ul> <li> <p> <code>192.0.2.0/24</code> (goes to some target A)</p> </li> <li> <p> <code>192.0.2.0/28</code> (goes to some target B)</p> </li> </ul> <p>Both routes apply to the traffic destined for <code>192.0.2.3</code>. However, the second route in the list covers a smaller number of IP addresses and is therefore more specific, so we use that route to determine where to target the traffic.</p> <p>For more information about route tables, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_route(
         &self,
         input: CreateRouteRequest,
     ) -> RusotoFuture<CreateRouteResult, CreateRouteError>;
 
-    /// <p>Creates a route table for the specified VPC. After you create a route table, you can add routes and associate the table with a subnet.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a route table for the specified VPC. After you create a route table, you can add routes and associate the table with a subnet.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_route_table(
         &self,
         input: CreateRouteTableRequest,
@@ -63281,7 +67752,7 @@ pub trait Ec2 {
         input: CreateSpotDatafeedSubscriptionRequest,
     ) -> RusotoFuture<CreateSpotDatafeedSubscriptionResult, CreateSpotDatafeedSubscriptionError>;
 
-    /// <p>Creates a subnet in an existing VPC.</p> <p>When you create each subnet, you provide the VPC ID and IPv4 CIDR block for the subnet. After you create a subnet, you can't change its CIDR block. The size of the subnet's IPv4 CIDR block can be the same as a VPC's IPv4 CIDR block, or a subset of a VPC's IPv4 CIDR block. If you create more than one subnet in a VPC, the subnets' CIDR blocks must not overlap. The smallest IPv4 subnet (and VPC) you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses).</p> <p>If you've associated an IPv6 CIDR block with your VPC, you can create a subnet with an IPv6 CIDR block that uses a /64 prefix length. </p> <important> <p>AWS reserves both the first four and the last IPv4 address in each subnet's CIDR block. They're not available for use.</p> </important> <p>If you add more than one subnet to a VPC, they're set up in a star topology with a logical router in the middle.</p> <p>If you launch an instance in a VPC using an Amazon EBS-backed AMI, the IP address doesn't change if you stop and restart the instance (unlike a similar instance launched outside a VPC, which gets a new IP address when restarted). It's therefore possible to have a subnet with no running instances (they're all stopped), but no remaining IP addresses available.</p> <p>For more information about subnets, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a subnet in an existing VPC.</p> <p>When you create each subnet, you provide the VPC ID and IPv4 CIDR block for the subnet. After you create a subnet, you can't change its CIDR block. The size of the subnet's IPv4 CIDR block can be the same as a VPC's IPv4 CIDR block, or a subset of a VPC's IPv4 CIDR block. If you create more than one subnet in a VPC, the subnets' CIDR blocks must not overlap. The smallest IPv4 subnet (and VPC) you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses).</p> <p>If you've associated an IPv6 CIDR block with your VPC, you can create a subnet with an IPv6 CIDR block that uses a /64 prefix length. </p> <important> <p>AWS reserves both the first four and the last IPv4 address in each subnet's CIDR block. They're not available for use.</p> </important> <p>If you add more than one subnet to a VPC, they're set up in a star topology with a logical router in the middle.</p> <p>If you launch an instance in a VPC using an Amazon EBS-backed AMI, the IP address doesn't change if you stop and restart the instance (unlike a similar instance launched outside a VPC, which gets a new IP address when restarted). It's therefore possible to have a subnet with no running instances (they're all stopped), but no remaining IP addresses available.</p> <p>For more information about subnets, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_subnet(
         &self,
         input: CreateSubnetRequest,
@@ -63289,6 +67760,30 @@ pub trait Ec2 {
 
     /// <p>Adds or overwrites the specified tags for the specified Amazon EC2 resource or resources. Each resource can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique per resource.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. For more information about creating IAM policies that control users' access to resources based on tags, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-iam-actions-resources.html">Supported Resource-Level Permissions for Amazon EC2 API Actions</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_tags(&self, input: CreateTagsRequest) -> RusotoFuture<(), CreateTagsError>;
+
+    /// <p>Creates a Traffic Mirror filter.</p> <p>A Traffic Mirror filter is a set of rules that defines the traffic to mirror.</p> <p>By default, no traffic is mirrored. To mirror traffic, use <a>CreateTrafficMirrorFilterRule</a> to add Traffic Mirror rules to the filter. The rules you add define what traffic gets mirrored. You can also use <a>ModifyTrafficMirrorFilterNetworkServices</a> to mirror supported network services.</p>
+    fn create_traffic_mirror_filter(
+        &self,
+        input: CreateTrafficMirrorFilterRequest,
+    ) -> RusotoFuture<CreateTrafficMirrorFilterResult, CreateTrafficMirrorFilterError>;
+
+    /// <p>Creates a Traffic Mirror rule. </p> <p>A Traffic Mirror rule defines the Traffic Mirror source traffic to mirror.</p> <p>You need the Traffic Mirror filter ID when you create the rule.</p>
+    fn create_traffic_mirror_filter_rule(
+        &self,
+        input: CreateTrafficMirrorFilterRuleRequest,
+    ) -> RusotoFuture<CreateTrafficMirrorFilterRuleResult, CreateTrafficMirrorFilterRuleError>;
+
+    /// <p>Creates a Traffic Mirror session.</p> <p>A Traffic Mirror session actively copies packets from a Traffic Mirror source to a Traffic Mirror target. Create a filter, and then assign it to the session to define a subset of the traffic to mirror, for example all TCP traffic.</p> <p>The Traffic Mirror source and the Traffic Mirror target (monitoring appliances) can be in the same VPC, or in a different VPC connected via VPC peering or a transit gateway. </p> <p>By default, no traffic is mirrored. Use <a>CreateTrafficMirrorFilter</a> to create filter rules that specify the traffic to mirror.</p>
+    fn create_traffic_mirror_session(
+        &self,
+        input: CreateTrafficMirrorSessionRequest,
+    ) -> RusotoFuture<CreateTrafficMirrorSessionResult, CreateTrafficMirrorSessionError>;
+
+    /// <p>Creates a target for your Traffic Mirror session.</p> <p>A Traffic Mirror target is the destination for mirrored traffic. The Traffic Mirror source and the Traffic Mirror target (monitoring appliances) can be in the same VPC, or in different VPCs connected via VPC peering or a transit gateway.</p> <p>A Traffic Mirror target can be a network interface, or a Network Load Balancer.</p> <p>To use the target in a Traffic Mirror session, use <a>CreateTrafficMirrorSession</a>.</p>
+    fn create_traffic_mirror_target(
+        &self,
+        input: CreateTrafficMirrorTargetRequest,
+    ) -> RusotoFuture<CreateTrafficMirrorTargetResult, CreateTrafficMirrorTargetError>;
 
     /// <p>Creates a transit gateway.</p> <p>You can use a transit gateway to interconnect your virtual private clouds (VPC) and on-premises networks. After the transit gateway enters the <code>available</code> state, you can attach your VPCs and VPN connections to the transit gateway.</p> <p>To attach your VPCs, use <a>CreateTransitGatewayVpcAttachment</a>.</p> <p>To attach a VPN connection, use <a>CreateCustomerGateway</a> to create a customer gateway and specify the ID of the customer gateway and the ID of the transit gateway in a call to <a>CreateVpnConnection</a>.</p> <p>When you create a transit gateway, we create a default transit gateway route table and use it as the default association route table and the default propagation route table. You can use <a>CreateTransitGatewayRouteTable</a> to create additional transit gateway route tables. If you disable automatic route propagation, we do not create a default transit gateway route table. You can use <a>EnableTransitGatewayRouteTablePropagation</a> to propagate routes from a resource attachment to a transit gateway route table. If you disable automatic associations, you can use <a>AssociateTransitGatewayRouteTable</a> to associate a resource attachment with a transit gateway route table.</p>
     fn create_transit_gateway(
@@ -63314,13 +67809,13 @@ pub trait Ec2 {
         input: CreateTransitGatewayVpcAttachmentRequest,
     ) -> RusotoFuture<CreateTransitGatewayVpcAttachmentResult, CreateTransitGatewayVpcAttachmentError>;
 
-    /// <p>Creates an EBS volume that can be attached to an instance in the same Availability Zone. The volume is created in the regional endpoint that you send the HTTP request to. For more information see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html">Regions and Endpoints</a>.</p> <p>You can create a new empty volume or restore a volume from an EBS snapshot. Any AWS Marketplace product codes from the snapshot are propagated to the volume.</p> <p>You can create encrypted volumes with the <code>Encrypted</code> parameter. Encrypted volumes may only be attached to instances that support Amazon EBS encryption. Volumes that are created from encrypted snapshots are also automatically encrypted. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can tag your volumes during creation. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-creating-volume.html">Creating an Amazon EBS Volume</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Creates an EBS volume that can be attached to an instance in the same Availability Zone. The volume is created in the regional endpoint that you send the HTTP request to. For more information see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html">Regions and Endpoints</a>.</p> <p>You can create a new empty volume or restore a volume from an EBS snapshot. Any AWS Marketplace product codes from the snapshot are propagated to the volume.</p> <p>You can create encrypted volumes. Encrypted volumes must be attached to instances that support Amazon EBS encryption. Volumes that are created from encrypted snapshots are also automatically encrypted. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can tag your volumes during creation. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-creating-volume.html">Creating an Amazon EBS Volume</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_volume(&self, input: CreateVolumeRequest) -> RusotoFuture<Volume, CreateVolumeError>;
 
-    /// <p>Creates a VPC with the specified IPv4 CIDR block. The smallest VPC you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses). For more information about how large to make your VPC, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can optionally request an Amazon-provided IPv6 CIDR block for the VPC. The IPv6 CIDR block uses a /56 prefix length, and is allocated from Amazon's pool of IPv6 addresses. You cannot choose the IPv6 range for your VPC.</p> <p>By default, each instance you launch in the VPC has the default DHCP options, which include only a default DNS server that we provide (AmazonProvidedDNS). For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can specify the instance tenancy value for the VPC when you create it. You can't change this value for the VPC after you create it. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-instance.html">Dedicated Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Creates a VPC with the specified IPv4 CIDR block. The smallest VPC you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses). For more information about how large to make your VPC, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can optionally request an Amazon-provided IPv6 CIDR block for the VPC. The IPv6 CIDR block uses a /56 prefix length, and is allocated from Amazon's pool of IPv6 addresses. You cannot choose the IPv6 range for your VPC.</p> <p>By default, each instance you launch in the VPC has the default DHCP options, which include only a default DNS server that we provide (AmazonProvidedDNS). For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can specify the instance tenancy value for the VPC when you create it. You can't change this value for the VPC after you create it. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-instance.html">Dedicated Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_vpc(&self, input: CreateVpcRequest) -> RusotoFuture<CreateVpcResult, CreateVpcError>;
 
-    /// <p>Creates a VPC endpoint for a specified service. An endpoint enables you to create a private connection between your VPC and the service. The service may be provided by AWS, an AWS Marketplace partner, or another AWS account. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-endpoints.html">VPC Endpoints</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>A <code>gateway</code> endpoint serves as a target for a route in your route table for traffic destined for the AWS service. You can specify an endpoint policy to attach to the endpoint that will control access to the service from your VPC. You can also specify the VPC route tables that use the endpoint.</p> <p>An <code>interface</code> endpoint is a network interface in your subnet that serves as an endpoint for communicating with the specified service. You can specify the subnets in which to create an endpoint, and the security groups to associate with the endpoint network interface.</p> <p>Use <a>DescribeVpcEndpointServices</a> to get a list of supported services.</p>
+    /// <p>Creates a VPC endpoint for a specified service. An endpoint enables you to create a private connection between your VPC and the service. The service may be provided by AWS, an AWS Marketplace partner, or another AWS account. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints.html">VPC Endpoints</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>A <code>gateway</code> endpoint serves as a target for a route in your route table for traffic destined for the AWS service. You can specify an endpoint policy to attach to the endpoint that will control access to the service from your VPC. You can also specify the VPC route tables that use the endpoint.</p> <p>An <code>interface</code> endpoint is a network interface in your subnet that serves as an endpoint for communicating with the specified service. You can specify the subnets in which to create an endpoint, and the security groups to associate with the endpoint network interface.</p> <p>Use <a>DescribeVpcEndpointServices</a> to get a list of supported services.</p>
     fn create_vpc_endpoint(
         &self,
         input: CreateVpcEndpointRequest,
@@ -63335,7 +67830,7 @@ pub trait Ec2 {
         CreateVpcEndpointConnectionNotificationError,
     >;
 
-    /// <p>Creates a VPC endpoint service configuration to which service consumers (AWS accounts, IAM users, and IAM roles) can connect. Service consumers can create an interface VPC endpoint to connect to your service.</p> <p>To create an endpoint service configuration, you must first create a Network Load Balancer for your service. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/endpoint-service.html">VPC Endpoint Services</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. </p>
+    /// <p>Creates a VPC endpoint service configuration to which service consumers (AWS accounts, IAM users, and IAM roles) can connect. Service consumers can create an interface VPC endpoint to connect to your service.</p> <p>To create an endpoint service configuration, you must first create a Network Load Balancer for your service. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-service.html">VPC Endpoint Services</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. </p>
     fn create_vpc_endpoint_service_configuration(
         &self,
         input: CreateVpcEndpointServiceConfigurationRequest,
@@ -63344,13 +67839,13 @@ pub trait Ec2 {
         CreateVpcEndpointServiceConfigurationError,
     >;
 
-    /// <p>Requests a VPC peering connection between two VPCs: a requester VPC that you own and an accepter VPC with which to create the connection. The accepter VPC can belong to another AWS account and can be in a different Region to the requester VPC. The requester VPC and accepter VPC cannot have overlapping CIDR blocks.</p> <note> <p>Limitations and rules apply to a VPC peering connection. For more information, see the <a href="https://docs.aws.amazon.com/AmazonVPC/latest/PeeringGuide/vpc-peering-basics.html#vpc-peering-limitations">limitations</a> section in the <i>VPC Peering Guide</i>.</p> </note> <p>The owner of the accepter VPC must accept the peering request to activate the peering connection. The VPC peering connection request expires after 7 days, after which it cannot be accepted or rejected.</p> <p>If you create a VPC peering connection request between VPCs with overlapping CIDR blocks, the VPC peering connection has a status of <code>failed</code>.</p>
+    /// <p>Requests a VPC peering connection between two VPCs: a requester VPC that you own and an accepter VPC with which to create the connection. The accepter VPC can belong to another AWS account and can be in a different Region to the requester VPC. The requester VPC and accepter VPC cannot have overlapping CIDR blocks.</p> <note> <p>Limitations and rules apply to a VPC peering connection. For more information, see the <a href="https://docs.aws.amazon.com/vpc/latest/peering/vpc-peering-basics.html#vpc-peering-limitations">limitations</a> section in the <i>VPC Peering Guide</i>.</p> </note> <p>The owner of the accepter VPC must accept the peering request to activate the peering connection. The VPC peering connection request expires after 7 days, after which it cannot be accepted or rejected.</p> <p>If you create a VPC peering connection request between VPCs with overlapping CIDR blocks, the VPC peering connection has a status of <code>failed</code>.</p>
     fn create_vpc_peering_connection(
         &self,
         input: CreateVpcPeeringConnectionRequest,
     ) -> RusotoFuture<CreateVpcPeeringConnectionResult, CreateVpcPeeringConnectionError>;
 
-    /// <p>Creates a VPN connection between an existing virtual private gateway and a VPN customer gateway. The supported connection types are <code>ipsec.1</code> and <code>ipsec.2</code>.</p> <p>The response includes information that you need to give to your network administrator to configure your customer gateway.</p> <important> <p>We strongly recommend that you use HTTPS when calling this operation because the response contains sensitive cryptographic information for configuring your customer gateway.</p> </important> <p>If you decide to shut down your VPN connection for any reason and later create a new VPN connection, you must reconfigure your customer gateway with the new information returned from this call.</p> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">AWS Site-to-Site VPN</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p>
+    /// <p>Creates a VPN connection between an existing virtual private gateway and a VPN customer gateway. The supported connection type is <code>ipsec.1</code>.</p> <p>The response includes information that you need to give to your network administrator to configure your customer gateway.</p> <important> <p>We strongly recommend that you use HTTPS when calling this operation because the response contains sensitive cryptographic information for configuring your customer gateway.</p> </important> <p>If you decide to shut down your VPN connection for any reason and later create a new VPN connection, you must reconfigure your customer gateway with the new information returned from this call.</p> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">AWS Site-to-Site VPN</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p>
     fn create_vpn_connection(
         &self,
         input: CreateVpnConnectionRequest,
@@ -63505,6 +68000,30 @@ pub trait Ec2 {
 
     /// <p>Deletes the specified set of tags from the specified set of resources.</p> <p>To list the current tags, use <a>DescribeTags</a>. For more information about tags, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn delete_tags(&self, input: DeleteTagsRequest) -> RusotoFuture<(), DeleteTagsError>;
+
+    /// <p>Deletes the specified Traffic Mirror filter.</p> <p>You cannot delete a Traffic Mirror filter that is in use by a Traffic Mirror session.</p>
+    fn delete_traffic_mirror_filter(
+        &self,
+        input: DeleteTrafficMirrorFilterRequest,
+    ) -> RusotoFuture<DeleteTrafficMirrorFilterResult, DeleteTrafficMirrorFilterError>;
+
+    /// <p>Deletes the specified Traffic Mirror rule.</p>
+    fn delete_traffic_mirror_filter_rule(
+        &self,
+        input: DeleteTrafficMirrorFilterRuleRequest,
+    ) -> RusotoFuture<DeleteTrafficMirrorFilterRuleResult, DeleteTrafficMirrorFilterRuleError>;
+
+    /// <p>Deletes the specified Traffic Mirror session.</p>
+    fn delete_traffic_mirror_session(
+        &self,
+        input: DeleteTrafficMirrorSessionRequest,
+    ) -> RusotoFuture<DeleteTrafficMirrorSessionResult, DeleteTrafficMirrorSessionError>;
+
+    /// <p>Deletes the specified Traffic Mirror target.</p> <p>You cannot delete a Traffic Mirror target that is in use by a Traffic Mirror session.</p>
+    fn delete_traffic_mirror_target(
+        &self,
+        input: DeleteTrafficMirrorTargetRequest,
+    ) -> RusotoFuture<DeleteTrafficMirrorTargetResult, DeleteTrafficMirrorTargetError>;
 
     /// <p>Deletes the specified transit gateway.</p>
     fn delete_transit_gateway(
@@ -63689,7 +68208,7 @@ pub trait Ec2 {
         input: DescribeCustomerGatewaysRequest,
     ) -> RusotoFuture<DescribeCustomerGatewaysResult, DescribeCustomerGatewaysError>;
 
-    /// <p>Describes one or more of your DHCP options sets.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Describes one or more of your DHCP options sets.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn describe_dhcp_options(
         &self,
         input: DescribeDhcpOptionsRequest,
@@ -63710,7 +68229,13 @@ pub trait Ec2 {
         input: DescribeElasticGpusRequest,
     ) -> RusotoFuture<DescribeElasticGpusResult, DescribeElasticGpusError>;
 
-    /// <p>Describes the specified export tasks or all your export tasks.</p>
+    /// <p>Describes the specified export image tasks or all your export image tasks.</p>
+    fn describe_export_image_tasks(
+        &self,
+        input: DescribeExportImageTasksRequest,
+    ) -> RusotoFuture<DescribeExportImageTasksResult, DescribeExportImageTasksError>;
+
+    /// <p>Describes the specified export instance tasks or all your export instance tasks.</p>
     fn describe_export_tasks(
         &self,
         input: DescribeExportTasksRequest,
@@ -63836,7 +68361,7 @@ pub trait Ec2 {
         input: DescribeInstanceStatusRequest,
     ) -> RusotoFuture<DescribeInstanceStatusResult, DescribeInstanceStatusError>;
 
-    /// <p>Describes the specified instances or all of your instances.</p> <p>If you specify one or more instance IDs, Amazon EC2 returns information for those instances. If you do not specify instance IDs, Amazon EC2 returns information for all relevant instances. If you specify an instance ID that is not valid, an error is returned. If you specify an instance that you do not own, it is not included in the returned results.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If you describe instances in the rare case where an Availability Zone is experiencing a service disruption and you specify instance IDs that are in the affected zone, or do not specify any instance IDs at all, the call fails. If you describe instances and specify only instance IDs that are in an unaffected zone, the call works normally.</p>
+    /// <p>Describes the specified instances or all of AWS account's instances.</p> <p>If you specify one or more instance IDs, Amazon EC2 returns information for those instances. If you do not specify instance IDs, Amazon EC2 returns information for all relevant instances. If you specify an instance ID that is not valid, an error is returned. If you specify an instance that you do not own, it is not included in the returned results.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If you describe instances in the rare case where an Availability Zone is experiencing a service disruption and you specify instance IDs that are in the affected zone, or do not specify any instance IDs at all, the call fails. If you describe instances and specify only instance IDs that are in an unaffected zone, the call works normally.</p>
     fn describe_instances(
         &self,
         input: DescribeInstancesRequest,
@@ -63878,7 +68403,7 @@ pub trait Ec2 {
         input: DescribeNatGatewaysRequest,
     ) -> RusotoFuture<DescribeNatGatewaysResult, DescribeNatGatewaysError>;
 
-    /// <p>Describes one or more of your network ACLs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Describes one or more of your network ACLs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn describe_network_acls(
         &self,
         input: DescribeNetworkAclsRequest,
@@ -63929,7 +68454,7 @@ pub trait Ec2 {
         input: DescribePublicIpv4PoolsRequest,
     ) -> RusotoFuture<DescribePublicIpv4PoolsResult, DescribePublicIpv4PoolsError>;
 
-    /// <p>Describes the Regions that are currently available to you. The API returns a list of all the Regions, including Regions that are disabled for your account. For information about enabling Regions for your account, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/manage-account-payment.html#manage-account-payment-enable-disable-regions">Enabling and Disabling Regions</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> <p>For a list of the Regions supported by Amazon EC2, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region"> Regions and Endpoints</a>.</p>
+    /// <p>Describes the Regions that are enabled for your account, or all Regions.</p> <p>For a list of the Regions supported by Amazon EC2, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region"> Regions and Endpoints</a>.</p> <p>For information about enabling and disabling Regions for your account, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande-manage.html">Managing AWS Regions</a> in the <i>AWS General Reference</i>.</p>
     fn describe_regions(
         &self,
         input: DescribeRegionsRequest,
@@ -63965,7 +68490,7 @@ pub trait Ec2 {
         DescribeReservedInstancesOfferingsError,
     >;
 
-    /// <p>Describes one or more of your route tables.</p> <p>Each subnet in your VPC must be associated with a route table. If a subnet is not explicitly associated with any route table, it is implicitly associated with the main route table. This command does not return the subnet ID for implicit associations.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Describes one or more of your route tables.</p> <p>Each subnet in your VPC must be associated with a route table. If a subnet is not explicitly associated with any route table, it is implicitly associated with the main route table. This command does not return the subnet ID for implicit associations.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn describe_route_tables(
         &self,
         input: DescribeRouteTablesRequest,
@@ -64052,7 +68577,7 @@ pub trait Ec2 {
         input: DescribeStaleSecurityGroupsRequest,
     ) -> RusotoFuture<DescribeStaleSecurityGroupsResult, DescribeStaleSecurityGroupsError>;
 
-    /// <p>Describes one or more of your subnets.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Describes one or more of your subnets.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn describe_subnets(
         &self,
         input: DescribeSubnetsRequest,
@@ -64063,6 +68588,24 @@ pub trait Ec2 {
         &self,
         input: DescribeTagsRequest,
     ) -> RusotoFuture<DescribeTagsResult, DescribeTagsError>;
+
+    /// <p>Describes one or more Traffic Mirror filters.</p>
+    fn describe_traffic_mirror_filters(
+        &self,
+        input: DescribeTrafficMirrorFiltersRequest,
+    ) -> RusotoFuture<DescribeTrafficMirrorFiltersResult, DescribeTrafficMirrorFiltersError>;
+
+    /// <p>Describes one or more Traffic Mirror sessions. By default, all Traffic Mirror sessions are described. Alternatively, you can filter the results.</p>
+    fn describe_traffic_mirror_sessions(
+        &self,
+        input: DescribeTrafficMirrorSessionsRequest,
+    ) -> RusotoFuture<DescribeTrafficMirrorSessionsResult, DescribeTrafficMirrorSessionsError>;
+
+    /// <p>Information about one or more Traffic Mirror targets.</p>
+    fn describe_traffic_mirror_targets(
+        &self,
+        input: DescribeTrafficMirrorTargetsRequest,
+    ) -> RusotoFuture<DescribeTrafficMirrorTargetsResult, DescribeTrafficMirrorTargetsError>;
 
     /// <p>Describes one or more attachments between resources and transit gateways. By default, all attachments are described. Alternatively, you can filter the results by attachment ID, attachment state, resource ID, or resource owner.</p>
     fn describe_transit_gateway_attachments(
@@ -64232,7 +68775,7 @@ pub trait Ec2 {
         input: DetachVpnGatewayRequest,
     ) -> RusotoFuture<(), DetachVpnGatewayError>;
 
-    /// <p>Disables default encryption for EBS volumes that are created in your account in the current region.</p> <p>Call this API if you have enabled default encryption using <a>EnableEbsEncryptionByDefault</a> and want to disable default EBS encryption. Once default EBS encryption is disabled, you can still create an encrypted volume by setting <i>encrypted</i> to <i>true</i> in the API call that creates the volume. </p> <p>Disabling default EBS encryption will not change the encryption status of any of your existing volumes.</p>
+    /// <p>Disables EBS encryption by default for your account in the current Region.</p> <p>After you disable encryption by default, you can still create encrypted volumes by enabling encryption when you create each volume.</p> <p>Disabling encryption by default does not change the encryption status of your existing volumes.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn disable_ebs_encryption_by_default(
         &self,
         input: DisableEbsEncryptionByDefaultRequest,
@@ -64286,7 +68829,7 @@ pub trait Ec2 {
         input: DisassociateIamInstanceProfileRequest,
     ) -> RusotoFuture<DisassociateIamInstanceProfileResult, DisassociateIamInstanceProfileError>;
 
-    /// <p>Disassociates a subnet from a route table.</p> <p>After you perform this action, the subnet no longer uses the routes in the route table. Instead, it uses the routes in the VPC's main route table. For more information about route tables, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Disassociates a subnet from a route table.</p> <p>After you perform this action, the subnet no longer uses the routes in the route table. Instead, it uses the routes in the VPC's main route table. For more information about route tables, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn disassociate_route_table(
         &self,
         input: DisassociateRouteTableRequest,
@@ -64313,7 +68856,7 @@ pub trait Ec2 {
         input: DisassociateVpcCidrBlockRequest,
     ) -> RusotoFuture<DisassociateVpcCidrBlockResult, DisassociateVpcCidrBlockError>;
 
-    /// <p>Enables default encryption for EBS volumes that are created in your account in the current region.</p> <p>Once encryption is enabled with this action, EBS volumes that are created in your account will always be encrypted even if encryption is not specified at launch. This setting overrides the <i>encrypted</i> setting to <i>true</i> in all API calls that create EBS volumes in your account. A volume will be encrypted even if you specify <i>encryption</i> to be <i>false</i> in the API call that creates the volume.</p> <p>If you do not specify a customer master key (CMK) in the API call that creates the EBS volume, then the volume is encrypted to your AWS account's managed CMK.</p> <p>You can specify a CMK of your choice using <a>ModifyEbsDefaultKmsKeyId</a>.</p> <p>Enabling encryption-by-default for EBS volumes has no effect on existing unencrypted volumes in your account. Encrypting the data in these requires manual action. You can either create an encrypted snapshot of an unencrypted volume, or encrypt a copy of an unencrypted snapshot. Any volume restored from an encrypted snapshot is also encrypted. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html">Amazon EBS Snapshots</a>.</p> <p>After EBS encryption-by-default is enabled, you can no longer launch older-generation instance types that do not support encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>.</p>
+    /// <p>Enables EBS encryption by default for your account in the current Region.</p> <p>After you enable encryption by default, the EBS volumes that you create are are always encrypted, either using the default CMK or the CMK that you specified when you created each volume. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can specify the default CMK for encryption by default using <a>ModifyEbsDefaultKmsKeyId</a> or <a>ResetEbsDefaultKmsKeyId</a>.</p> <p>Enabling encryption by default has no effect on the encryption status of your existing volumes.</p> <p>After you enable encryption by default, you can no longer launch instances using instance types that do not support encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>.</p>
     fn enable_ebs_encryption_by_default(
         &self,
         input: EnableEbsEncryptionByDefaultRequest,
@@ -64370,11 +68913,23 @@ pub trait Ec2 {
         ExportClientVpnClientConfigurationError,
     >;
 
+    /// <p>Exports an Amazon Machine Image (AMI) to a VM file. For more information, see <a href="https://docs.aws.amazon.com/vm-import/latest/userguide/vmexport_image.html">Exporting a VM Directory from an Amazon Machine Image (AMI)</a> in the <i>VM Import/Export User Guide</i>.</p>
+    fn export_image(
+        &self,
+        input: ExportImageRequest,
+    ) -> RusotoFuture<ExportImageResult, ExportImageError>;
+
     /// <p>Exports routes from the specified transit gateway route table to the specified S3 bucket. By default, all routes are exported. Alternatively, you can filter by CIDR range.</p>
     fn export_transit_gateway_routes(
         &self,
         input: ExportTransitGatewayRoutesRequest,
     ) -> RusotoFuture<ExportTransitGatewayRoutesResult, ExportTransitGatewayRoutesError>;
+
+    /// <p>Gets usage information about a Capacity Reservation. If the Capacity Reservation is shared, it shows usage information for the Capacity Reservation owner and each AWS account that is currently using the shared capacity. If the Capacity Reservation is not shared, it shows only the Capacity Reservation owner's usage.</p>
+    fn get_capacity_reservation_usage(
+        &self,
+        input: GetCapacityReservationUsageRequest,
+    ) -> RusotoFuture<GetCapacityReservationUsageResult, GetCapacityReservationUsageError>;
 
     /// <p>Gets the console output for the specified instance. For Linux instances, the instance console output displays the exact console output that would normally be displayed on a physical monitor attached to a computer. For Windows instances, the instance console output includes the last three system event log errors.</p> <p>By default, the console output returns buffered information that was posted shortly after an instance transition state (start, stop, reboot, or terminate). This information is available for at least one hour after the most recent post. Only the most recent 64 KB of console output is available.</p> <p>You can optionally retrieve the latest serial console output at any time during the instance lifecycle. This option is supported on instance types that use the Nitro hypervisor.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-console.html#instance-console-console-output">Instance Console Output</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn get_console_output(
@@ -64388,13 +68943,13 @@ pub trait Ec2 {
         input: GetConsoleScreenshotRequest,
     ) -> RusotoFuture<GetConsoleScreenshotResult, GetConsoleScreenshotError>;
 
-    /// <p>Describes the default customer master key (CMK) that your account uses to encrypt EBS volumes if you don’t specify a CMK in the API call. You can change this default using <a>ModifyEbsDefaultKmsKeyId</a>.</p>
+    /// <p>Describes the default customer master key (CMK) for EBS encryption by default for your account in this Region. You can change the default CMK for encryption by default using <a>ModifyEbsDefaultKmsKeyId</a> or <a>ResetEbsDefaultKmsKeyId</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn get_ebs_default_kms_key_id(
         &self,
         input: GetEbsDefaultKmsKeyIdRequest,
     ) -> RusotoFuture<GetEbsDefaultKmsKeyIdResult, GetEbsDefaultKmsKeyIdError>;
 
-    /// <p>Describes whether default EBS encryption is enabled for your account in the current region.</p>
+    /// <p>Describes whether EBS encryption by default is enabled for your account in the current Region.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn get_ebs_encryption_by_default(
         &self,
         input: GetEbsEncryptionByDefaultRequest,
@@ -64502,13 +69057,13 @@ pub trait Ec2 {
         input: ModifyClientVpnEndpointRequest,
     ) -> RusotoFuture<ModifyClientVpnEndpointResult, ModifyClientVpnEndpointError>;
 
-    /// <p>Changes the customer master key (CMK) that your account uses to encrypt EBS volumes if you don't specify a CMK in the API call.</p> <p>By default, your account has an AWS-managed CMK that is used for encrypting an EBS volume when no CMK is specified in the API call that creates the volume. By calling this API, you can specify a customer-managed CMK to use in place of the AWS-managed CMK.</p> <p>Note: Deleting or disabling the CMK that you have specified to act as your default CMK will result in instance-launch failures.</p>
+    /// <p>Changes the default customer master key (CMK) for EBS encryption by default for your account in this Region.</p> <p>AWS creates a unique AWS managed CMK in each Region for use with encryption by default. If you change the default CMK to a customer managed CMK, it is used instead of the AWS managed CMK. To reset the default CMK to the AWS managed CMK for EBS, use <a>ResetEbsDefaultKmsKeyId</a>.</p> <p>If you delete or disable the customer managed CMK that you specified for use with encryption by default, your instances will fail to launch.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn modify_ebs_default_kms_key_id(
         &self,
         input: ModifyEbsDefaultKmsKeyIdRequest,
     ) -> RusotoFuture<ModifyEbsDefaultKmsKeyIdResult, ModifyEbsDefaultKmsKeyIdError>;
 
-    /// <p>Modifies the specified EC2 Fleet.</p> <p>While the EC2 Fleet is being modified, it is in the <code>modifying</code> state.</p>
+    /// <p>Modifies the specified EC2 Fleet.</p> <p>You can only modify an EC2 Fleet request of type <code>maintain</code>.</p> <p>While the EC2 Fleet is being modified, it is in the <code>modifying</code> state.</p> <p>To scale up your EC2 Fleet, increase its target capacity. The EC2 Fleet launches the additional Spot Instances according to the allocation strategy for the EC2 Fleet request. If the allocation strategy is <code>lowestPrice</code>, the EC2 Fleet launches instances using the Spot Instance pool with the lowest price. If the allocation strategy is <code>diversified</code>, the EC2 Fleet distributes the instances across the Spot Instance pools. If the allocation strategy is <code>capacityOptimized</code>, EC2 Fleet launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching.</p> <p>To scale down your EC2 Fleet, decrease its target capacity. First, the EC2 Fleet cancels any open requests that exceed the new target capacity. You can request that the EC2 Fleet terminate Spot Instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is <code>lowestPrice</code>, the EC2 Fleet terminates the instances with the highest price per unit. If the allocation strategy is <code>capacityOptimized</code>, the EC2 Fleet terminates the instances in the Spot Instance pools that have the least available Spot Instance capacity. If the allocation strategy is <code>diversified</code>, the EC2 Fleet terminates instances across the Spot Instance pools. Alternatively, you can request that the EC2 Fleet keep the fleet at its current size, but not replace any Spot Instances that are interrupted or that you terminate manually.</p> <p>If you are finished with your EC2 Fleet for now, but will use it again later, you can set the target capacity to 0.</p>
     fn modify_fleet(
         &self,
         input: ModifyFleetRequest,
@@ -64595,13 +69150,13 @@ pub trait Ec2 {
         input: ModifyReservedInstancesRequest,
     ) -> RusotoFuture<ModifyReservedInstancesResult, ModifyReservedInstancesError>;
 
-    /// <p>Adds or removes permission settings for the specified snapshot. You may add or remove specified AWS account IDs from a snapshot's list of create volume permissions, but you cannot do both in a single API call. If you need to both add and remove account IDs for a snapshot, you must use multiple API calls.</p> <p>Encrypted snapshots and snapshots with AWS Marketplace product codes cannot be made public. Snapshots encrypted with your default CMK cannot be shared with other accounts.</p> <p>For more information about modifying snapshot permissions, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-modifying-snapshot-permissions.html">Sharing Snapshots</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Adds or removes permission settings for the specified snapshot. You may add or remove specified AWS account IDs from a snapshot's list of create volume permissions, but you cannot do both in a single operation. If you need to both add and remove account IDs for a snapshot, you must use multiple operations. You can make up to 500 modifications to a snapshot in a single operation.</p> <p>Encrypted snapshots and snapshots with AWS Marketplace product codes cannot be made public. Snapshots encrypted with your default CMK cannot be shared with other accounts.</p> <p>For more information about modifying snapshot permissions, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-modifying-snapshot-permissions.html">Sharing Snapshots</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn modify_snapshot_attribute(
         &self,
         input: ModifySnapshotAttributeRequest,
     ) -> RusotoFuture<(), ModifySnapshotAttributeError>;
 
-    /// <p>Modifies the specified Spot Fleet request.</p> <p>You can only modify a Spot Fleet request of type <code>maintain</code>.</p> <p>While the Spot Fleet request is being modified, it is in the <code>modifying</code> state.</p> <p>To scale up your Spot Fleet, increase its target capacity. The Spot Fleet launches the additional Spot Instances according to the allocation strategy for the Spot Fleet request. If the allocation strategy is <code>lowestPrice</code>, the Spot Fleet launches instances using the Spot pool with the lowest price. If the allocation strategy is <code>diversified</code>, the Spot Fleet distributes the instances across the Spot pools.</p> <p>To scale down your Spot Fleet, decrease its target capacity. First, the Spot Fleet cancels any open requests that exceed the new target capacity. You can request that the Spot Fleet terminate Spot Instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is <code>lowestPrice</code>, the Spot Fleet terminates the instances with the highest price per unit. If the allocation strategy is <code>diversified</code>, the Spot Fleet terminates instances across the Spot pools. Alternatively, you can request that the Spot Fleet keep the fleet at its current size, but not replace any Spot Instances that are interrupted or that you terminate manually.</p> <p>If you are finished with your Spot Fleet for now, but will use it again later, you can set the target capacity to 0.</p>
+    /// <p>Modifies the specified Spot Fleet request.</p> <p>You can only modify a Spot Fleet request of type <code>maintain</code>.</p> <p>While the Spot Fleet request is being modified, it is in the <code>modifying</code> state.</p> <p>To scale up your Spot Fleet, increase its target capacity. The Spot Fleet launches the additional Spot Instances according to the allocation strategy for the Spot Fleet request. If the allocation strategy is <code>lowestPrice</code>, the Spot Fleet launches instances using the Spot Instance pool with the lowest price. If the allocation strategy is <code>diversified</code>, the Spot Fleet distributes the instances across the Spot Instance pools. If the allocation strategy is <code>capacityOptimized</code>, Spot Fleet launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching.</p> <p>To scale down your Spot Fleet, decrease its target capacity. First, the Spot Fleet cancels any open requests that exceed the new target capacity. You can request that the Spot Fleet terminate Spot Instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is <code>lowestPrice</code>, the Spot Fleet terminates the instances with the highest price per unit. If the allocation strategy is <code>capacityOptimized</code>, the Spot Fleet terminates the instances in the Spot Instance pools that have the least available Spot Instance capacity. If the allocation strategy is <code>diversified</code>, the Spot Fleet terminates instances across the Spot Instance pools. Alternatively, you can request that the Spot Fleet keep the fleet at its current size, but not replace any Spot Instances that are interrupted or that you terminate manually.</p> <p>If you are finished with your Spot Fleet for now, but will use it again later, you can set the target capacity to 0.</p>
     fn modify_spot_fleet_request(
         &self,
         input: ModifySpotFleetRequestRequest,
@@ -64613,13 +69168,34 @@ pub trait Ec2 {
         input: ModifySubnetAttributeRequest,
     ) -> RusotoFuture<(), ModifySubnetAttributeError>;
 
+    /// <p>Allows or restricts mirroring network services.</p> <p> By default, Amazon DNS network services are not eligible for Traffic Mirror. Use <code>AddNetworkServices</code> to add network services to a Traffic Mirror filter. When a network service is added to the Traffic Mirror filter, all traffic related to that network service will be mirrored. When you no longer want to mirror network services, use <code>RemoveNetworkServices</code> to remove the network services from the Traffic Mirror filter. </p> <p>FFor information about filter rule properties, see <a href="https://docs.aws.amazon.com/vpc/latest/mirroring/traffic-mirroring-considerations.html#traffic-mirroring-network-services">Network Services</a> in the <i>Traffic Mirroring User Guide </i>.</p>
+    fn modify_traffic_mirror_filter_network_services(
+        &self,
+        input: ModifyTrafficMirrorFilterNetworkServicesRequest,
+    ) -> RusotoFuture<
+        ModifyTrafficMirrorFilterNetworkServicesResult,
+        ModifyTrafficMirrorFilterNetworkServicesError,
+    >;
+
+    /// <p>Modifies the specified Traffic Mirror rule.</p> <p> <code>DestinationCidrBlock</code> and <code>SourceCidrBlock</code> must both be an IPv4 range or an IPv6 range.</p>
+    fn modify_traffic_mirror_filter_rule(
+        &self,
+        input: ModifyTrafficMirrorFilterRuleRequest,
+    ) -> RusotoFuture<ModifyTrafficMirrorFilterRuleResult, ModifyTrafficMirrorFilterRuleError>;
+
+    /// <p>Modifies a Traffic Mirror session.</p>
+    fn modify_traffic_mirror_session(
+        &self,
+        input: ModifyTrafficMirrorSessionRequest,
+    ) -> RusotoFuture<ModifyTrafficMirrorSessionResult, ModifyTrafficMirrorSessionError>;
+
     /// <p>Modifies the specified VPC attachment.</p>
     fn modify_transit_gateway_vpc_attachment(
         &self,
         input: ModifyTransitGatewayVpcAttachmentRequest,
     ) -> RusotoFuture<ModifyTransitGatewayVpcAttachmentResult, ModifyTransitGatewayVpcAttachmentError>;
 
-    /// <p>You can modify several parameters of an existing EBS volume, including volume size, volume type, and IOPS capacity. If your EBS volume is attached to a current-generation EC2 instance type, you may be able to apply these changes without stopping the instance or detaching the volume from it. For more information about modifying an EBS volume running Linux, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html">Modifying the Size, IOPS, or Type of an EBS Volume on Linux</a>. For more information about modifying an EBS volume running Windows, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html">Modifying the Size, IOPS, or Type of an EBS Volume on Windows</a>. </p> <p> When you complete a resize operation on your volume, you need to extend the volume's file-system size to take advantage of the new storage capacity. For information about extending a Linux file system, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#recognize-expanded-volume-linux">Extending a Linux File System</a>. For information about extending a Windows file system, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html#recognize-expanded-volume-windows">Extending a Windows File System</a>. </p> <p> You can use CloudWatch Events to check the status of a modification to an EBS volume. For information about CloudWatch Events, see the <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/">Amazon CloudWatch Events User Guide</a>. You can also track the status of a modification using the <a>DescribeVolumesModifications</a> API. For information about tracking status changes using either method, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#monitoring_mods">Monitoring Volume Modifications</a>. </p> <p>With previous-generation instance types, resizing an EBS volume may require detaching and reattaching the volume or stopping and restarting the instance. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html">Modifying the Size, IOPS, or Type of an EBS Volume on Linux</a> and <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html">Modifying the Size, IOPS, or Type of an EBS Volume on Windows</a>.</p> <p>If you reach the maximum volume modification rate per volume limit, you will need to wait at least six hours before applying further modifications to the affected EBS volume.</p>
+    /// <p>You can modify several parameters of an existing EBS volume, including volume size, volume type, and IOPS capacity. If your EBS volume is attached to a current-generation EC2 instance type, you may be able to apply these changes without stopping the instance or detaching the volume from it. For more information about modifying an EBS volume running Linux, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html">Modifying the Size, IOPS, or Type of an EBS Volume on Linux</a>. For more information about modifying an EBS volume running Windows, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html">Modifying the Size, IOPS, or Type of an EBS Volume on Windows</a>. </p> <p> When you complete a resize operation on your volume, you need to extend the volume's file-system size to take advantage of the new storage capacity. For information about extending a Linux file system, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#recognize-expanded-volume-linux">Extending a Linux File System</a>. For information about extending a Windows file system, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html#recognize-expanded-volume-windows">Extending a Windows File System</a>. </p> <p> You can use CloudWatch Events to check the status of a modification to an EBS volume. For information about CloudWatch Events, see the <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/">Amazon CloudWatch Events User Guide</a>. You can also track the status of a modification using <a>DescribeVolumesModifications</a>. For information about tracking status changes using either method, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#monitoring_mods">Monitoring Volume Modifications</a>. </p> <p>With previous-generation instance types, resizing an EBS volume may require detaching and reattaching the volume or stopping and restarting the instance. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html">Modifying the Size, IOPS, or Type of an EBS Volume on Linux</a> and <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html">Modifying the Size, IOPS, or Type of an EBS Volume on Windows</a>.</p> <p>If you reach the maximum volume modification rate per volume limit, you will need to wait at least six hours before applying further modifications to the affected EBS volume.</p>
     fn modify_volume(
         &self,
         input: ModifyVolumeRequest,
@@ -64637,7 +69213,7 @@ pub trait Ec2 {
         input: ModifyVpcAttributeRequest,
     ) -> RusotoFuture<(), ModifyVpcAttributeError>;
 
-    /// <p>Modifies attributes of a specified VPC endpoint. The attributes that you can modify depend on the type of VPC endpoint (interface or gateway). For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-endpoints.html">VPC Endpoints</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Modifies attributes of a specified VPC endpoint. The attributes that you can modify depend on the type of VPC endpoint (interface or gateway). For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints.html">VPC Endpoints</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn modify_vpc_endpoint(
         &self,
         input: ModifyVpcEndpointRequest,
@@ -64661,7 +69237,7 @@ pub trait Ec2 {
         ModifyVpcEndpointServiceConfigurationError,
     >;
 
-    /// <p>Modifies the permissions for your <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/endpoint-service.html">VPC endpoint service</a>. You can add or remove permissions for service consumers (IAM users, IAM roles, and AWS accounts) to connect to your endpoint service.</p> <p>If you grant permissions to all principals, the service is public. Any users who know the name of a public service can send a request to attach an endpoint. If the service does not require manual approval, attachments are automatically approved.</p>
+    /// <p>Modifies the permissions for your <a href="https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-service.html">VPC endpoint service</a>. You can add or remove permissions for service consumers (IAM users, IAM roles, and AWS accounts) to connect to your endpoint service.</p> <p>If you grant permissions to all principals, the service is public. Any users who know the name of a public service can send a request to attach an endpoint. If the service does not require manual approval, attachments are automatically approved.</p>
     fn modify_vpc_endpoint_service_permissions(
         &self,
         input: ModifyVpcEndpointServicePermissionsRequest,
@@ -64682,11 +69258,23 @@ pub trait Ec2 {
         input: ModifyVpcTenancyRequest,
     ) -> RusotoFuture<ModifyVpcTenancyResult, ModifyVpcTenancyError>;
 
-    /// <p>Modifies the target gateway of a AWS Site-to-Site VPN connection. The following migration options are available:</p> <ul> <li> <p>An existing virtual private gateway to a new virtual private gateway</p> </li> <li> <p>An existing virtual private gateway to a transit gateway</p> </li> <li> <p>An existing transit gateway to a new transit gateway</p> </li> <li> <p>An existing transit gateway to a virtual private gateway</p> </li> </ul> <p>Before you perform the migration to the new gateway, you must configure the new gateway. Use <a>CreateVpnGateway</a> to create a virtual private gateway, or <a>CreateTransitGateway</a> to create a transit gateway.</p> <p>This step is required when you migrate from a virtual private gateway with static routes to a transit gateway. </p> <p>You must delete the static routes before you migrate to the new gateway.</p> <p>Keep a copy of the static route before you delete it. You will need to add back these routes to the transit gateway after the VPN connection migration is complete.</p> <p>After you migrate to the new gateway, you might need to modify your VPC route table. Use <a>CreateRoute</a> and <a>DeleteRoute</a> to make the changes described in <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/modify-vpn-target.html#step-update-routing">VPN Gateway Target Modification Required VPC Route Table Updates</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p> <p> When the new gateway is a transit gateway, modify the transit gateway route table to allow traffic between the VPC and the AWS Site-to-Site VPN connection. Use <a>CreateTransitGatewayRoute</a> to add the routes.</p> <p> If you deleted VPN static routes, you must add the static routes to the transit gateway route table.</p> <p>After you perform this operation, the AWS VPN endpoint's IP addresses on the AWS side and the tunnel options remain intact. Your s2slong; connection will be temporarily unavailable for approximately 10 minutes while we provision the new endpoints </p>
+    /// <p>Modifies the target gateway of an AWS Site-to-Site VPN connection. The following migration options are available:</p> <ul> <li> <p>An existing virtual private gateway to a new virtual private gateway</p> </li> <li> <p>An existing virtual private gateway to a transit gateway</p> </li> <li> <p>An existing transit gateway to a new transit gateway</p> </li> <li> <p>An existing transit gateway to a virtual private gateway</p> </li> </ul> <p>Before you perform the migration to the new gateway, you must configure the new gateway. Use <a>CreateVpnGateway</a> to create a virtual private gateway, or <a>CreateTransitGateway</a> to create a transit gateway.</p> <p>This step is required when you migrate from a virtual private gateway with static routes to a transit gateway. </p> <p>You must delete the static routes before you migrate to the new gateway.</p> <p>Keep a copy of the static route before you delete it. You will need to add back these routes to the transit gateway after the VPN connection migration is complete.</p> <p>After you migrate to the new gateway, you might need to modify your VPC route table. Use <a>CreateRoute</a> and <a>DeleteRoute</a> to make the changes described in <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/modify-vpn-target.html#step-update-routing">VPN Gateway Target Modification Required VPC Route Table Updates</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p> <p> When the new gateway is a transit gateway, modify the transit gateway route table to allow traffic between the VPC and the AWS Site-to-Site VPN connection. Use <a>CreateTransitGatewayRoute</a> to add the routes.</p> <p> If you deleted VPN static routes, you must add the static routes to the transit gateway route table.</p> <p>After you perform this operation, the AWS VPN endpoint's IP addresses on the AWS side and the tunnel options remain intact. Your s2slong; connection will be temporarily unavailable for approximately 10 minutes while we provision the new endpoints </p>
     fn modify_vpn_connection(
         &self,
         input: ModifyVpnConnectionRequest,
     ) -> RusotoFuture<ModifyVpnConnectionResult, ModifyVpnConnectionError>;
+
+    /// <p>Modifies the VPN tunnel endpoint certificate.</p>
+    fn modify_vpn_tunnel_certificate(
+        &self,
+        input: ModifyVpnTunnelCertificateRequest,
+    ) -> RusotoFuture<ModifyVpnTunnelCertificateResult, ModifyVpnTunnelCertificateError>;
+
+    /// <p>Modifies the options for a VPN tunnel in an AWS Site-to-Site VPN connection. You can modify multiple options for a tunnel in a single request, but you can only modify one tunnel at a time. For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPNTunnels.html">Site-to-Site VPN Tunnel Options for Your Site-to-Site VPN Connection</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p>
+    fn modify_vpn_tunnel_options(
+        &self,
+        input: ModifyVpnTunnelOptionsRequest,
+    ) -> RusotoFuture<ModifyVpnTunnelOptionsResult, ModifyVpnTunnelOptionsError>;
 
     /// <p>Enables detailed monitoring for a running instance. Otherwise, basic monitoring is enabled. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html">Monitoring Your Instances and Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>To disable detailed monitoring, see .</p>
     fn monitor_instances(
@@ -64775,22 +69363,22 @@ pub trait Ec2 {
         ReplaceIamInstanceProfileAssociationError,
     >;
 
-    /// <p>Changes which network ACL a subnet is associated with. By default when you create a subnet, it's automatically associated with the default network ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>This is an idempotent operation.</p>
+    /// <p>Changes which network ACL a subnet is associated with. By default when you create a subnet, it's automatically associated with the default network ACL. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>This is an idempotent operation.</p>
     fn replace_network_acl_association(
         &self,
         input: ReplaceNetworkAclAssociationRequest,
     ) -> RusotoFuture<ReplaceNetworkAclAssociationResult, ReplaceNetworkAclAssociationError>;
 
-    /// <p>Replaces an entry (rule) in a network ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Replaces an entry (rule) in a network ACL. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn replace_network_acl_entry(
         &self,
         input: ReplaceNetworkAclEntryRequest,
     ) -> RusotoFuture<(), ReplaceNetworkAclEntryError>;
 
-    /// <p>Replaces an existing route within a route table in a VPC. You must provide only one of the following: internet gateway or virtual private gateway, NAT instance, NAT gateway, VPC peering connection, network interface, or egress-only internet gateway.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Replaces an existing route within a route table in a VPC. You must provide only one of the following: internet gateway or virtual private gateway, NAT instance, NAT gateway, VPC peering connection, network interface, or egress-only internet gateway.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn replace_route(&self, input: ReplaceRouteRequest) -> RusotoFuture<(), ReplaceRouteError>;
 
-    /// <p>Changes the route table associated with a given subnet in a VPC. After the operation completes, the subnet uses the routes in the new route table it's associated with. For more information about route tables, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can also use ReplaceRouteTableAssociation to change which table is the main route table in the VPC. You just specify the main route table's association ID and the route table to be the new main route table.</p>
+    /// <p>Changes the route table associated with a given subnet in a VPC. After the operation completes, the subnet uses the routes in the new route table it's associated with. For more information about route tables, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can also use ReplaceRouteTableAssociation to change which table is the main route table in the VPC. You just specify the main route table's association ID and the route table to be the new main route table.</p>
     fn replace_route_table_association(
         &self,
         input: ReplaceRouteTableAssociationRequest,
@@ -64808,7 +69396,7 @@ pub trait Ec2 {
         input: ReportInstanceStatusRequest,
     ) -> RusotoFuture<(), ReportInstanceStatusError>;
 
-    /// <p>Creates a Spot Fleet request.</p> <p>The Spot Fleet request specifies the total target capacity and the On-Demand target capacity. Amazon EC2 calculates the difference between the total capacity and On-Demand capacity, and launches the difference as Spot capacity.</p> <p>You can submit a single request that includes multiple launch specifications that vary by instance type, AMI, Availability Zone, or subnet.</p> <p>By default, the Spot Fleet requests Spot Instances in the Spot pool where the price per unit is the lowest. Each launch specification can include its own instance weighting that reflects the value of the instance type to your application workload.</p> <p>Alternatively, you can specify that the Spot Fleet distribute the target capacity across the Spot pools included in its launch specifications. By ensuring that the Spot Instances in your Spot Fleet are in different Spot pools, you can improve the availability of your fleet.</p> <p>You can specify tags for the Spot Instances. You cannot tag other resource types in a Spot Fleet request because only the <code>instance</code> resource type is supported.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-requests.html">Spot Fleet Requests</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
+    /// <p>Creates a Spot Fleet request.</p> <p>The Spot Fleet request specifies the total target capacity and the On-Demand target capacity. Amazon EC2 calculates the difference between the total capacity and On-Demand capacity, and launches the difference as Spot capacity.</p> <p>You can submit a single request that includes multiple launch specifications that vary by instance type, AMI, Availability Zone, or subnet.</p> <p>By default, the Spot Fleet requests Spot Instances in the Spot Instance pool where the price per unit is the lowest. Each launch specification can include its own instance weighting that reflects the value of the instance type to your application workload.</p> <p>Alternatively, you can specify that the Spot Fleet distribute the target capacity across the Spot pools included in its launch specifications. By ensuring that the Spot Instances in your Spot Fleet are in different Spot pools, you can improve the availability of your fleet.</p> <p>You can specify tags for the Spot Instances. You cannot tag other resource types in a Spot Fleet request because only the <code>instance</code> resource type is supported.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-requests.html">Spot Fleet Requests</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     fn request_spot_fleet(
         &self,
         input: RequestSpotFleetRequest,
@@ -64820,7 +69408,7 @@ pub trait Ec2 {
         input: RequestSpotInstancesRequest,
     ) -> RusotoFuture<RequestSpotInstancesResult, RequestSpotInstancesError>;
 
-    /// <p>Resets the account's default customer master key (CMK) to the account's AWS-managed default CMK. This default CMK is used to encrypt EBS volumes when you have enabled EBS encryption by default without specifying a CMK in the API call. If you have not enabled encryption by default, then this CMK is used when you set the <code>Encrypted</code> parameter to true without specifying a custom CMK in the API call.</p> <p>Call this API if you have modified the default CMK that is used for encrypting your EBS volume using <a>ModifyEbsDefaultKmsKeyId</a> and you want to reset it to the AWS-managed default CMK. After resetting, you can continue to provide a CMK of your choice in the API call that creates the volume. However, if no CMK is specified, your account will encrypt the volume to the AWS-managed default CMK.</p>
+    /// <p>Resets the default customer master key (CMK) for EBS encryption for your account in this Region to the AWS managed CMK for EBS.</p> <p>After resetting the default CMK to the AWS managed CMK, you can continue to encrypt by a customer managed CMK by specifying it when you create the volume. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn reset_ebs_default_kms_key_id(
         &self,
         input: ResetEbsDefaultKmsKeyIdRequest,
@@ -64897,6 +69485,12 @@ pub trait Ec2 {
         &self,
         input: SearchTransitGatewayRoutesRequest,
     ) -> RusotoFuture<SearchTransitGatewayRoutesResult, SearchTransitGatewayRoutesError>;
+
+    /// <p>Sends a diagnostic interrupt to the specified Amazon EC2 instance to trigger a <i>kernel panic</i> (on Linux instances), or a <i>blue screen</i>/<i>stop error</i> (on Windows instances). For instances based on Intel and AMD processors, the interrupt is received as a <i>non-maskable interrupt</i> (NMI).</p> <p>In general, the operating system crashes and reboots when a kernel panic or stop error is triggered. The operating system can also be configured to perform diagnostic tasks, such as generating a memory dump file, loading a secondary kernel, or obtaining a call trace.</p> <p>Before sending a diagnostic interrupt to your instance, ensure that its operating system is configured to perform the required diagnostic tasks.</p> <p>For more information about configuring your operating system to generate a crash dump when a kernel panic or stop error occurs, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/diagnostic-interrupt.html">Send a Diagnostic Interrupt</a> (Linux instances) or <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/diagnostic-interrupt.html">Send a Diagnostic Interrupt</a> (Windows instances).</p>
+    fn send_diagnostic_interrupt(
+        &self,
+        input: SendDiagnosticInterruptRequest,
+    ) -> RusotoFuture<(), SendDiagnosticInterruptError>;
 
     /// <p>Starts an Amazon EBS-backed instance that you've previously stopped.</p> <p>Instances that use Amazon EBS volumes as their root devices can be quickly stopped and started. When an instance is stopped, the compute resources are released and you are not billed for instance usage. However, your root partition Amazon EBS volume remains and continues to persist your data, and you are charged for Amazon EBS volume usage. You can restart your instance at any time. Every time you start your Windows instance, Amazon EC2 charges you for a full instance hour. If you stop and restart your Windows instance, a new instance hour begins and Amazon EC2 charges you for another full instance hour even if you are still within the same 60-minute period when it was stopped. Every time you start your Linux instance, Amazon EC2 charges a one-minute minimum for instance usage, and thereafter charges per second for instance usage.</p> <p>Before stopping an instance, make sure it is in a state from which it can be restarted. Stopping an instance does not preserve data stored in RAM.</p> <p>Performing this operation on an instance that uses an instance store as its root device returns an error.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html">Stopping Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn start_instances(
@@ -65435,7 +70029,7 @@ impl Ec2 for Ec2Client {
     fn assign_private_ip_addresses(
         &self,
         input: AssignPrivateIpAddressesRequest,
-    ) -> RusotoFuture<(), AssignPrivateIpAddressesError> {
+    ) -> RusotoFuture<AssignPrivateIpAddressesResult, AssignPrivateIpAddressesError> {
         let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
         let mut params = Params::new();
 
@@ -65452,7 +70046,27 @@ impl Ec2 for Ec2Client {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = AssignPrivateIpAddressesResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = AssignPrivateIpAddressesResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
 
@@ -65552,7 +70166,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Associates a set of DHCP options (that you've previously created) with the specified VPC, or associates no DHCP options with the VPC.</p> <p>After you associate the options with the VPC, any existing instances and all new instances that you launch in that VPC use the options. You don't need to restart or relaunch the instances. They automatically pick up the changes within a few hours, depending on how frequently the instance renews its DHCP lease. You can explicitly renew the lease using the operating system on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Associates a set of DHCP options (that you've previously created) with the specified VPC, or associates no DHCP options with the VPC.</p> <p>After you associate the options with the VPC, any existing instances and all new instances that you launch in that VPC use the options. You don't need to restart or relaunch the instances. They automatically pick up the changes within a few hours, depending on how frequently the instance renews its DHCP lease. You can explicitly renew the lease using the operating system on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn associate_dhcp_options(
         &self,
         input: AssociateDhcpOptionsRequest,
@@ -65624,7 +70238,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Associates a subnet with a route table. The subnet and route table must be in the same VPC. This association causes traffic originating from the subnet to be routed according to the routes in the route table. The action returns an association ID, which you need in order to disassociate the route table from the subnet later. A route table can be associated with multiple subnets.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Associates a subnet with a route table. The subnet and route table must be in the same VPC. This association causes traffic originating from the subnet to be routed according to the routes in the route table. The action returns an association ID, which you need in order to disassociate the route table from the subnet later. A route table can be associated with multiple subnets.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn associate_route_table(
         &self,
         input: AssociateRouteTableRequest,
@@ -65764,7 +70378,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Associates a CIDR block with your VPC. You can associate a secondary IPv4 CIDR block, or you can associate an Amazon-provided IPv6 CIDR block. The IPv6 CIDR block size is fixed at /56.</p> <p>For more information about associating CIDR blocks with your VPC and applicable restrictions, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html#VPC_Sizing">VPC and Subnet Sizing</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Associates a CIDR block with your VPC. You can associate a secondary IPv4 CIDR block, or you can associate an Amazon-provided IPv6 CIDR block. The IPv6 CIDR block size is fixed at /56.</p> <p>For more information about associating CIDR blocks with your VPC and applicable restrictions, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html#VPC_Sizing">VPC and Subnet Sizing</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn associate_vpc_cidr_block(
         &self,
         input: AssociateVpcCidrBlockRequest,
@@ -65856,7 +70470,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Attaches an internet gateway to a VPC, enabling connectivity between the internet and the VPC. For more information about your VPC and internet gateway, see the <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/">Amazon Virtual Private Cloud User Guide</a>.</p>
+    /// <p>Attaches an internet gateway to a VPC, enabling connectivity between the internet and the VPC. For more information about your VPC and internet gateway, see the <a href="https://docs.aws.amazon.com/vpc/latest/userguide/">Amazon Virtual Private Cloud User Guide</a>.</p>
     fn attach_internet_gateway(
         &self,
         input: AttachInternetGatewayRequest,
@@ -65926,7 +70540,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Attaches an EBS volume to a running or stopped instance and exposes it to the instance with the specified device name.</p> <p>Encrypted EBS volumes may only be attached to instances that support Amazon EBS encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For a list of supported device names, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-attaching-volume.html">Attaching an EBS Volume to an Instance</a>. Any device names that aren't reserved for instance store volumes can be used for EBS volumes. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html">Amazon EC2 Instance Store</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>If a volume has an AWS Marketplace product code:</p> <ul> <li> <p>The volume can be attached only to a stopped instance.</p> </li> <li> <p>AWS Marketplace product codes are copied from the volume to the instance.</p> </li> <li> <p>You must be subscribed to the product.</p> </li> <li> <p>The instance type and operating system of the instance must support the product. For example, you can't detach a volume from a Windows instance and attach it to a Linux instance.</p> </li> </ul> <p>For more information about EBS volumes, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-attaching-volume.html">Attaching Amazon EBS Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Attaches an EBS volume to a running or stopped instance and exposes it to the instance with the specified device name.</p> <p>Encrypted EBS volumes must be attached to instances that support Amazon EBS encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>After you attach an EBS volume, you must make it available. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html">Making an EBS Volume Available For Use</a>.</p> <p>If a volume has an AWS Marketplace product code:</p> <ul> <li> <p>The volume can be attached only to a stopped instance.</p> </li> <li> <p>AWS Marketplace product codes are copied from the volume to the instance.</p> </li> <li> <p>You must be subscribed to the product.</p> </li> <li> <p>The instance type and operating system of the instance must support the product. For example, you can't detach a volume from a Windows instance and attach it to a Linux instance.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-attaching-volume.html">Attaching Amazon EBS Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn attach_volume(
         &self,
         input: AttachVolumeRequest,
@@ -66629,7 +71243,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Copies a point-in-time snapshot of an EBS volume and stores it in Amazon S3. You can copy the snapshot within the same Region or from one Region to another. You can use the snapshot to create EBS volumes or Amazon Machine Images (AMIs). The snapshot is copied to the regional endpoint that you send the HTTP request to.</p> <p>Copies of encrypted EBS snapshots remain encrypted. Copies of unencrypted snapshots remain unencrypted, unless the <code>Encrypted</code> flag is specified during the snapshot copy operation. By default, encrypted snapshot copies use the default AWS Key Management Service (AWS KMS) customer master key (CMK); however, you can specify a non-default CMK with the <code>KmsKeyId</code> parameter.</p> <p>To copy an encrypted snapshot that has been shared from another account, you must have permissions for the CMK used to encrypt the snapshot.</p> <p>Snapshots created by copying another snapshot have an arbitrary volume ID that should not be used for any purpose.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-copy-snapshot.html">Copying an Amazon EBS Snapshot</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Copies a point-in-time snapshot of an EBS volume and stores it in Amazon S3. You can copy the snapshot within the same Region or from one Region to another. You can use the snapshot to create EBS volumes or Amazon Machine Images (AMIs).</p> <p>Copies of encrypted EBS snapshots remain encrypted. Copies of unencrypted snapshots remain unencrypted, unless you enable encryption for the snapshot copy operation. By default, encrypted snapshot copies use the default AWS Key Management Service (AWS KMS) customer master key (CMK); however, you can specify a different CMK.</p> <p>To copy an encrypted snapshot that has been shared from another account, you must have permissions for the CMK used to encrypt the snapshot.</p> <p>Snapshots created by copying another snapshot have an arbitrary volume ID that should not be used for any purpose.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-copy-snapshot.html">Copying an Amazon EBS Snapshot</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn copy_snapshot(
         &self,
         input: CopySnapshotRequest,
@@ -66812,7 +71426,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p><p>Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the Internet-routable IP address of the customer gateway&#39;s external interface. The IP address must be static and may be behind a device performing network address translation (NAT).</p> <p>For devices that use Border Gateway Protocol (BGP), you can also provide the device&#39;s BGP Autonomous System Number (ASN). You can use an existing ASN assigned to your network. If you don&#39;t have an ASN already, you can use a private ASN (in the 64512 - 65534 range).</p> <note> <p>Amazon EC2 supports all 2-byte ASN numbers in the range of 1 - 65534, with the exception of 7224, which is reserved in the <code>us-east-1</code> Region, and 9059, which is reserved in the <code>eu-west-1</code> Region.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">AWS Site-to-Site VPN</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p> <important> <p>You cannot create more than one customer gateway with the same VPN type, IP address, and BGP ASN parameter values. If you run an identical request more than one time, the first request creates the customer gateway, and subsequent requests return information about the existing customer gateway. The subsequent requests do not create new customer gateway resources.</p> </important></p>
+    /// <p><p>Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the Internet-routable IP address of the customer gateway&#39;s external interface. The IP address must be static and can be behind a device performing network address translation (NAT).</p> <p>For devices that use Border Gateway Protocol (BGP), you can also provide the device&#39;s BGP Autonomous System Number (ASN). You can use an existing ASN assigned to your network. If you don&#39;t have an ASN already, you can use a private ASN (in the 64512 - 65534 range).</p> <note> <p>Amazon EC2 supports all 2-byte ASN numbers in the range of 1 - 65534, with the exception of 7224, which is reserved in the <code>us-east-1</code> Region, and 9059, which is reserved in the <code>eu-west-1</code> Region.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">AWS Site-to-Site VPN</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p> <important> <p>You cannot create more than one customer gateway with the same VPN type, IP address, and BGP ASN parameter values. If you run an identical request more than one time, the first request creates the customer gateway, and subsequent requests return information about the existing customer gateway. The subsequent requests do not create new customer gateway resources.</p> </important></p>
     fn create_customer_gateway(
         &self,
         input: CreateCustomerGatewayRequest,
@@ -66857,7 +71471,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a default subnet with a size <code>/20</code> IPv4 CIDR block in the specified Availability Zone in your default VPC. You can have only one default subnet per Availability Zone. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/default-vpc.html#create-default-subnet">Creating a Default Subnet</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a default subnet with a size <code>/20</code> IPv4 CIDR block in the specified Availability Zone in your default VPC. You can have only one default subnet per Availability Zone. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/default-vpc.html#create-default-subnet">Creating a Default Subnet</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_default_subnet(
         &self,
         input: CreateDefaultSubnetRequest,
@@ -66904,7 +71518,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a default VPC with a size <code>/16</code> IPv4 CIDR block and a default subnet in each Availability Zone. For more information about the components of a default VPC, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/default-vpc.html">Default VPC and Default Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. You cannot specify the components of the default VPC yourself.</p> <p>If you deleted your previous default VPC, you can create a default VPC. You cannot have more than one default VPC per Region.</p> <p>If your account supports EC2-Classic, you cannot use this action to create a default VPC in a Region that supports EC2-Classic. If you want a default VPC in a Region that supports EC2-Classic, see "I really want a default VPC for my existing EC2 account. Is that possible?" in the <a href="http://aws.amazon.com/vpc/faqs/#Default_VPCs">Default VPCs FAQ</a>.</p>
+    /// <p>Creates a default VPC with a size <code>/16</code> IPv4 CIDR block and a default subnet in each Availability Zone. For more information about the components of a default VPC, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/default-vpc.html">Default VPC and Default Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. You cannot specify the components of the default VPC yourself.</p> <p>If you deleted your previous default VPC, you can create a default VPC. You cannot have more than one default VPC per Region.</p> <p>If your account supports EC2-Classic, you cannot use this action to create a default VPC in a Region that supports EC2-Classic. If you want a default VPC in a Region that supports EC2-Classic, see "I really want a default VPC for my existing EC2 account. Is that possible?" in the <a href="http://aws.amazon.com/vpc/faqs/#Default_VPCs">Default VPCs FAQ</a>.</p>
     fn create_default_vpc(
         &self,
         input: CreateDefaultVpcRequest,
@@ -66952,7 +71566,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a set of DHCP options for your VPC. After creating the set, you must associate it with the VPC, causing all existing and new instances that you launch in the VPC to use this set of DHCP options. The following are the individual DHCP options you can specify. For more information about the options, see <a href="http://www.ietf.org/rfc/rfc2132.txt">RFC 2132</a>.</p> <ul> <li> <p> <code>domain-name-servers</code> - The IP addresses of up to four domain name servers, or AmazonProvidedDNS. The default DHCP option set specifies AmazonProvidedDNS. If specifying more than one domain name server, specify the IP addresses in a single parameter, separated by commas. ITo have your instance to receive a custom DNS hostname as specified in <code>domain-name</code>, you must set <code>domain-name-servers</code> to a custom DNS server.</p> </li> <li> <p> <code>domain-name</code> - If you're using AmazonProvidedDNS in <code>us-east-1</code>, specify <code>ec2.internal</code>. If you're using AmazonProvidedDNS in another Region, specify <code>region.compute.internal</code> (for example, <code>ap-northeast-1.compute.internal</code>). Otherwise, specify a domain name (for example, <code>MyCompany.com</code>). This value is used to complete unqualified DNS hostnames. <b>Important</b>: Some Linux operating systems accept multiple domain names separated by spaces. However, Windows and other Linux operating systems treat the value as a single domain, which results in unexpected behavior. If your DHCP options set is associated with a VPC that has instances with multiple operating systems, specify only one domain name.</p> </li> <li> <p> <code>ntp-servers</code> - The IP addresses of up to four Network Time Protocol (NTP) servers.</p> </li> <li> <p> <code>netbios-name-servers</code> - The IP addresses of up to four NetBIOS name servers.</p> </li> <li> <p> <code>netbios-node-type</code> - The NetBIOS node type (1, 2, 4, or 8). We recommend that you specify 2 (broadcast and multicast are not currently supported). For more information about these node types, see <a href="http://www.ietf.org/rfc/rfc2132.txt">RFC 2132</a>.</p> </li> </ul> <p>Your VPC automatically starts out with a set of DHCP options that includes only a DNS server that we provide (AmazonProvidedDNS). If you create a set of options, and if your VPC has an internet gateway, make sure to set the <code>domain-name-servers</code> option either to <code>AmazonProvidedDNS</code> or to a domain name server of your choice. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a set of DHCP options for your VPC. After creating the set, you must associate it with the VPC, causing all existing and new instances that you launch in the VPC to use this set of DHCP options. The following are the individual DHCP options you can specify. For more information about the options, see <a href="http://www.ietf.org/rfc/rfc2132.txt">RFC 2132</a>.</p> <ul> <li> <p> <code>domain-name-servers</code> - The IP addresses of up to four domain name servers, or AmazonProvidedDNS. The default DHCP option set specifies AmazonProvidedDNS. If specifying more than one domain name server, specify the IP addresses in a single parameter, separated by commas. To have your instance receive a custom DNS hostname as specified in <code>domain-name</code>, you must set <code>domain-name-servers</code> to a custom DNS server.</p> </li> <li> <p> <code>domain-name</code> - If you're using AmazonProvidedDNS in <code>us-east-1</code>, specify <code>ec2.internal</code>. If you're using AmazonProvidedDNS in another Region, specify <code>region.compute.internal</code> (for example, <code>ap-northeast-1.compute.internal</code>). Otherwise, specify a domain name (for example, <code>MyCompany.com</code>). This value is used to complete unqualified DNS hostnames. <b>Important</b>: Some Linux operating systems accept multiple domain names separated by spaces. However, Windows and other Linux operating systems treat the value as a single domain, which results in unexpected behavior. If your DHCP options set is associated with a VPC that has instances with multiple operating systems, specify only one domain name.</p> </li> <li> <p> <code>ntp-servers</code> - The IP addresses of up to four Network Time Protocol (NTP) servers.</p> </li> <li> <p> <code>netbios-name-servers</code> - The IP addresses of up to four NetBIOS name servers.</p> </li> <li> <p> <code>netbios-node-type</code> - The NetBIOS node type (1, 2, 4, or 8). We recommend that you specify 2 (broadcast and multicast are not currently supported). For more information about these node types, see <a href="http://www.ietf.org/rfc/rfc2132.txt">RFC 2132</a>.</p> </li> </ul> <p>Your VPC automatically starts out with a set of DHCP options that includes only a DNS server that we provide (AmazonProvidedDNS). If you create a set of options, and if your VPC has an internet gateway, make sure to set the <code>domain-name-servers</code> option either to <code>AmazonProvidedDNS</code> or to a domain name server of your choice. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_dhcp_options(
         &self,
         input: CreateDhcpOptionsRequest,
@@ -67094,7 +71708,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates one or more flow logs to capture information about IP traffic for a specific network interface, subnet, or VPC. </p> <p>Flow log data for a monitored network interface is recorded as flow log records, which are log events consisting of fields that describe the traffic flow. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/flow-logs.html#flow-log-records">Flow Log Records</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>When publishing to CloudWatch Logs, flow log records are published to a log group, and each network interface has a unique log stream in the log group. When publishing to Amazon S3, flow log records for all of the monitored network interfaces are published to a single log file object that is stored in the specified bucket.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/flow-logs.html">VPC Flow Logs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates one or more flow logs to capture information about IP traffic for a specific network interface, subnet, or VPC. </p> <p>Flow log data for a monitored network interface is recorded as flow log records, which are log events consisting of fields that describe the traffic flow. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html#flow-log-records">Flow Log Records</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>When publishing to CloudWatch Logs, flow log records are published to a log group, and each network interface has a unique log stream in the log group. When publishing to Amazon S3, flow log records for all of the monitored network interfaces are published to a single log file object that is stored in the specified bucket.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html">VPC Flow Logs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_flow_logs(
         &self,
         input: CreateFlowLogsRequest,
@@ -67281,7 +71895,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates an internet gateway for use with a VPC. After creating the internet gateway, you attach it to a VPC using <a>AttachInternetGateway</a>.</p> <p>For more information about your VPC and internet gateway, see the <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/">Amazon Virtual Private Cloud User Guide</a>.</p>
+    /// <p>Creates an internet gateway for use with a VPC. After creating the internet gateway, you attach it to a VPC using <a>AttachInternetGateway</a>.</p> <p>For more information about your VPC and internet gateway, see the <a href="https://docs.aws.amazon.com/vpc/latest/userguide/">Amazon Virtual Private Cloud User Guide</a>.</p>
     fn create_internet_gateway(
         &self,
         input: CreateInternetGatewayRequest,
@@ -67463,7 +72077,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a NAT gateway in the specified public subnet. This action creates a network interface in the specified subnet with a private IP address from the IP address range of the subnet. Internet-bound traffic from a private subnet can be routed to the NAT gateway, therefore enabling instances in the private subnet to connect to the internet. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html">NAT Gateways</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a NAT gateway in the specified public subnet. This action creates a network interface in the specified subnet with a private IP address from the IP address range of the subnet. Internet-bound traffic from a private subnet can be routed to the NAT gateway, therefore enabling instances in the private subnet to connect to the internet. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html">NAT Gateways</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_nat_gateway(
         &self,
         input: CreateNatGatewayRequest,
@@ -67511,7 +72125,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a network ACL in a VPC. Network ACLs provide an optional layer of security (in addition to security groups) for the instances in your VPC.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a network ACL in a VPC. Network ACLs provide an optional layer of security (in addition to security groups) for the instances in your VPC.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_network_acl(
         &self,
         input: CreateNetworkAclRequest,
@@ -67559,7 +72173,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates an entry (a rule) in a network ACL with the specified rule number. Each network ACL has a set of numbered ingress rules and a separate set of numbered egress rules. When determining whether a packet should be allowed in or out of a subnet associated with the ACL, we process the entries in the ACL according to the rule numbers, in ascending order. Each network ACL has a set of ingress rules and a separate set of egress rules.</p> <p>We recommend that you leave room between the rule numbers (for example, 100, 110, 120, ...), and not number them one right after the other (for example, 101, 102, 103, ...). This makes it easier to add a rule between existing ones without having to renumber the rules.</p> <p>After you add an entry, you can't modify it; you must either replace it, or create an entry and delete the old one.</p> <p>For more information about network ACLs, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates an entry (a rule) in a network ACL with the specified rule number. Each network ACL has a set of numbered ingress rules and a separate set of numbered egress rules. When determining whether a packet should be allowed in or out of a subnet associated with the ACL, we process the entries in the ACL according to the rule numbers, in ascending order. Each network ACL has a set of ingress rules and a separate set of egress rules.</p> <p>We recommend that you leave room between the rule numbers (for example, 100, 110, 120, ...), and not number them one right after the other (for example, 101, 102, 103, ...). This makes it easier to add a rule between existing ones without having to renumber the rules.</p> <p>After you add an entry, you can't modify it; you must either replace it, or create an entry and delete the old one.</p> <p>For more information about network ACLs, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_network_acl_entry(
         &self,
         input: CreateNetworkAclEntryRequest,
@@ -67750,7 +72364,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a route in a route table within a VPC.</p> <p>You must specify one of the following targets: internet gateway or virtual private gateway, NAT instance, NAT gateway, VPC peering connection, network interface, or egress-only internet gateway.</p> <p>When determining how to route traffic, we use the route with the most specific match. For example, traffic is destined for the IPv4 address <code>192.0.2.3</code>, and the route table includes the following two IPv4 routes:</p> <ul> <li> <p> <code>192.0.2.0/24</code> (goes to some target A)</p> </li> <li> <p> <code>192.0.2.0/28</code> (goes to some target B)</p> </li> </ul> <p>Both routes apply to the traffic destined for <code>192.0.2.3</code>. However, the second route in the list covers a smaller number of IP addresses and is therefore more specific, so we use that route to determine where to target the traffic.</p> <p>For more information about route tables, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a route in a route table within a VPC.</p> <p>You must specify one of the following targets: internet gateway or virtual private gateway, NAT instance, NAT gateway, VPC peering connection, network interface, or egress-only internet gateway.</p> <p>When determining how to route traffic, we use the route with the most specific match. For example, traffic is destined for the IPv4 address <code>192.0.2.3</code>, and the route table includes the following two IPv4 routes:</p> <ul> <li> <p> <code>192.0.2.0/24</code> (goes to some target A)</p> </li> <li> <p> <code>192.0.2.0/28</code> (goes to some target B)</p> </li> </ul> <p>Both routes apply to the traffic destined for <code>192.0.2.3</code>. However, the second route in the list covers a smaller number of IP addresses and is therefore more specific, so we use that route to determine where to target the traffic.</p> <p>For more information about route tables, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_route(
         &self,
         input: CreateRouteRequest,
@@ -67796,7 +72410,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a route table for the specified VPC. After you create a route table, you can add routes and associate the table with a subnet.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a route table for the specified VPC. After you create a route table, you can add routes and associate the table with a subnet.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_route_table(
         &self,
         input: CreateRouteTableRequest,
@@ -68030,7 +72644,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a subnet in an existing VPC.</p> <p>When you create each subnet, you provide the VPC ID and IPv4 CIDR block for the subnet. After you create a subnet, you can't change its CIDR block. The size of the subnet's IPv4 CIDR block can be the same as a VPC's IPv4 CIDR block, or a subset of a VPC's IPv4 CIDR block. If you create more than one subnet in a VPC, the subnets' CIDR blocks must not overlap. The smallest IPv4 subnet (and VPC) you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses).</p> <p>If you've associated an IPv6 CIDR block with your VPC, you can create a subnet with an IPv6 CIDR block that uses a /64 prefix length. </p> <important> <p>AWS reserves both the first four and the last IPv4 address in each subnet's CIDR block. They're not available for use.</p> </important> <p>If you add more than one subnet to a VPC, they're set up in a star topology with a logical router in the middle.</p> <p>If you launch an instance in a VPC using an Amazon EBS-backed AMI, the IP address doesn't change if you stop and restart the instance (unlike a similar instance launched outside a VPC, which gets a new IP address when restarted). It's therefore possible to have a subnet with no running instances (they're all stopped), but no remaining IP addresses available.</p> <p>For more information about subnets, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a subnet in an existing VPC.</p> <p>When you create each subnet, you provide the VPC ID and IPv4 CIDR block for the subnet. After you create a subnet, you can't change its CIDR block. The size of the subnet's IPv4 CIDR block can be the same as a VPC's IPv4 CIDR block, or a subset of a VPC's IPv4 CIDR block. If you create more than one subnet in a VPC, the subnets' CIDR blocks must not overlap. The smallest IPv4 subnet (and VPC) you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses).</p> <p>If you've associated an IPv6 CIDR block with your VPC, you can create a subnet with an IPv6 CIDR block that uses a /64 prefix length. </p> <important> <p>AWS reserves both the first four and the last IPv4 address in each subnet's CIDR block. They're not available for use.</p> </important> <p>If you add more than one subnet to a VPC, they're set up in a star topology with a logical router in the middle.</p> <p>If you launch an instance in a VPC using an Amazon EBS-backed AMI, the IP address doesn't change if you stop and restart the instance (unlike a similar instance launched outside a VPC, which gets a new IP address when restarted). It's therefore possible to have a subnet with no running instances (they're all stopped), but no remaining IP addresses available.</p> <p>For more information about subnets, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_subnet(
         &self,
         input: CreateSubnetRequest,
@@ -68098,6 +72712,186 @@ impl Ec2 for Ec2Client {
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
+        })
+    }
+
+    /// <p>Creates a Traffic Mirror filter.</p> <p>A Traffic Mirror filter is a set of rules that defines the traffic to mirror.</p> <p>By default, no traffic is mirrored. To mirror traffic, use <a>CreateTrafficMirrorFilterRule</a> to add Traffic Mirror rules to the filter. The rules you add define what traffic gets mirrored. You can also use <a>ModifyTrafficMirrorFilterNetworkServices</a> to mirror supported network services.</p>
+    fn create_traffic_mirror_filter(
+        &self,
+        input: CreateTrafficMirrorFilterRequest,
+    ) -> RusotoFuture<CreateTrafficMirrorFilterResult, CreateTrafficMirrorFilterError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateTrafficMirrorFilter");
+        params.put("Version", "2016-11-15");
+        CreateTrafficMirrorFilterRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateTrafficMirrorFilterError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = CreateTrafficMirrorFilterResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = CreateTrafficMirrorFilterResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Creates a Traffic Mirror rule. </p> <p>A Traffic Mirror rule defines the Traffic Mirror source traffic to mirror.</p> <p>You need the Traffic Mirror filter ID when you create the rule.</p>
+    fn create_traffic_mirror_filter_rule(
+        &self,
+        input: CreateTrafficMirrorFilterRuleRequest,
+    ) -> RusotoFuture<CreateTrafficMirrorFilterRuleResult, CreateTrafficMirrorFilterRuleError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateTrafficMirrorFilterRule");
+        params.put("Version", "2016-11-15");
+        CreateTrafficMirrorFilterRuleRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateTrafficMirrorFilterRuleError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = CreateTrafficMirrorFilterRuleResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = CreateTrafficMirrorFilterRuleResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Creates a Traffic Mirror session.</p> <p>A Traffic Mirror session actively copies packets from a Traffic Mirror source to a Traffic Mirror target. Create a filter, and then assign it to the session to define a subset of the traffic to mirror, for example all TCP traffic.</p> <p>The Traffic Mirror source and the Traffic Mirror target (monitoring appliances) can be in the same VPC, or in a different VPC connected via VPC peering or a transit gateway. </p> <p>By default, no traffic is mirrored. Use <a>CreateTrafficMirrorFilter</a> to create filter rules that specify the traffic to mirror.</p>
+    fn create_traffic_mirror_session(
+        &self,
+        input: CreateTrafficMirrorSessionRequest,
+    ) -> RusotoFuture<CreateTrafficMirrorSessionResult, CreateTrafficMirrorSessionError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateTrafficMirrorSession");
+        params.put("Version", "2016-11-15");
+        CreateTrafficMirrorSessionRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateTrafficMirrorSessionError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = CreateTrafficMirrorSessionResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = CreateTrafficMirrorSessionResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Creates a target for your Traffic Mirror session.</p> <p>A Traffic Mirror target is the destination for mirrored traffic. The Traffic Mirror source and the Traffic Mirror target (monitoring appliances) can be in the same VPC, or in different VPCs connected via VPC peering or a transit gateway.</p> <p>A Traffic Mirror target can be a network interface, or a Network Load Balancer.</p> <p>To use the target in a Traffic Mirror session, use <a>CreateTrafficMirrorSession</a>.</p>
+    fn create_traffic_mirror_target(
+        &self,
+        input: CreateTrafficMirrorTargetRequest,
+    ) -> RusotoFuture<CreateTrafficMirrorTargetResult, CreateTrafficMirrorTargetError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateTrafficMirrorTarget");
+        params.put("Version", "2016-11-15");
+        CreateTrafficMirrorTargetRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateTrafficMirrorTargetError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = CreateTrafficMirrorTargetResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = CreateTrafficMirrorTargetResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
 
@@ -68287,7 +73081,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates an EBS volume that can be attached to an instance in the same Availability Zone. The volume is created in the regional endpoint that you send the HTTP request to. For more information see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html">Regions and Endpoints</a>.</p> <p>You can create a new empty volume or restore a volume from an EBS snapshot. Any AWS Marketplace product codes from the snapshot are propagated to the volume.</p> <p>You can create encrypted volumes with the <code>Encrypted</code> parameter. Encrypted volumes may only be attached to instances that support Amazon EBS encryption. Volumes that are created from encrypted snapshots are also automatically encrypted. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can tag your volumes during creation. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-creating-volume.html">Creating an Amazon EBS Volume</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Creates an EBS volume that can be attached to an instance in the same Availability Zone. The volume is created in the regional endpoint that you send the HTTP request to. For more information see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html">Regions and Endpoints</a>.</p> <p>You can create a new empty volume or restore a volume from an EBS snapshot. Any AWS Marketplace product codes from the snapshot are propagated to the volume.</p> <p>You can create encrypted volumes. Encrypted volumes must be attached to instances that support Amazon EBS encryption. Volumes that are created from encrypted snapshots are also automatically encrypted. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can tag your volumes during creation. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-creating-volume.html">Creating an Amazon EBS Volume</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_volume(&self, input: CreateVolumeRequest) -> RusotoFuture<Volume, CreateVolumeError> {
         let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
         let mut params = Params::new();
@@ -68329,7 +73123,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a VPC with the specified IPv4 CIDR block. The smallest VPC you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses). For more information about how large to make your VPC, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can optionally request an Amazon-provided IPv6 CIDR block for the VPC. The IPv6 CIDR block uses a /56 prefix length, and is allocated from Amazon's pool of IPv6 addresses. You cannot choose the IPv6 range for your VPC.</p> <p>By default, each instance you launch in the VPC has the default DHCP options, which include only a default DNS server that we provide (AmazonProvidedDNS). For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can specify the instance tenancy value for the VPC when you create it. You can't change this value for the VPC after you create it. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-instance.html">Dedicated Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Creates a VPC with the specified IPv4 CIDR block. The smallest VPC you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses). For more information about how large to make your VPC, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can optionally request an Amazon-provided IPv6 CIDR block for the VPC. The IPv6 CIDR block uses a /56 prefix length, and is allocated from Amazon's pool of IPv6 addresses. You cannot choose the IPv6 range for your VPC.</p> <p>By default, each instance you launch in the VPC has the default DHCP options, which include only a default DNS server that we provide (AmazonProvidedDNS). For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can specify the instance tenancy value for the VPC when you create it. You can't change this value for the VPC after you create it. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-instance.html">Dedicated Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_vpc(&self, input: CreateVpcRequest) -> RusotoFuture<CreateVpcResult, CreateVpcError> {
         let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
         let mut params = Params::new();
@@ -68372,7 +73166,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a VPC endpoint for a specified service. An endpoint enables you to create a private connection between your VPC and the service. The service may be provided by AWS, an AWS Marketplace partner, or another AWS account. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-endpoints.html">VPC Endpoints</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>A <code>gateway</code> endpoint serves as a target for a route in your route table for traffic destined for the AWS service. You can specify an endpoint policy to attach to the endpoint that will control access to the service from your VPC. You can also specify the VPC route tables that use the endpoint.</p> <p>An <code>interface</code> endpoint is a network interface in your subnet that serves as an endpoint for communicating with the specified service. You can specify the subnets in which to create an endpoint, and the security groups to associate with the endpoint network interface.</p> <p>Use <a>DescribeVpcEndpointServices</a> to get a list of supported services.</p>
+    /// <p>Creates a VPC endpoint for a specified service. An endpoint enables you to create a private connection between your VPC and the service. The service may be provided by AWS, an AWS Marketplace partner, or another AWS account. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints.html">VPC Endpoints</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>A <code>gateway</code> endpoint serves as a target for a route in your route table for traffic destined for the AWS service. You can specify an endpoint policy to attach to the endpoint that will control access to the service from your VPC. You can also specify the VPC route tables that use the endpoint.</p> <p>An <code>interface</code> endpoint is a network interface in your subnet that serves as an endpoint for communicating with the specified service. You can specify the subnets in which to create an endpoint, and the security groups to associate with the endpoint network interface.</p> <p>Use <a>DescribeVpcEndpointServices</a> to get a list of supported services.</p>
     fn create_vpc_endpoint(
         &self,
         input: CreateVpcEndpointRequest,
@@ -68475,7 +73269,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a VPC endpoint service configuration to which service consumers (AWS accounts, IAM users, and IAM roles) can connect. Service consumers can create an interface VPC endpoint to connect to your service.</p> <p>To create an endpoint service configuration, you must first create a Network Load Balancer for your service. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/endpoint-service.html">VPC Endpoint Services</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. </p>
+    /// <p>Creates a VPC endpoint service configuration to which service consumers (AWS accounts, IAM users, and IAM roles) can connect. Service consumers can create an interface VPC endpoint to connect to your service.</p> <p>To create an endpoint service configuration, you must first create a Network Load Balancer for your service. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-service.html">VPC Endpoint Services</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. </p>
     fn create_vpc_endpoint_service_configuration(
         &self,
         input: CreateVpcEndpointServiceConfigurationRequest,
@@ -68525,7 +73319,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Requests a VPC peering connection between two VPCs: a requester VPC that you own and an accepter VPC with which to create the connection. The accepter VPC can belong to another AWS account and can be in a different Region to the requester VPC. The requester VPC and accepter VPC cannot have overlapping CIDR blocks.</p> <note> <p>Limitations and rules apply to a VPC peering connection. For more information, see the <a href="https://docs.aws.amazon.com/AmazonVPC/latest/PeeringGuide/vpc-peering-basics.html#vpc-peering-limitations">limitations</a> section in the <i>VPC Peering Guide</i>.</p> </note> <p>The owner of the accepter VPC must accept the peering request to activate the peering connection. The VPC peering connection request expires after 7 days, after which it cannot be accepted or rejected.</p> <p>If you create a VPC peering connection request between VPCs with overlapping CIDR blocks, the VPC peering connection has a status of <code>failed</code>.</p>
+    /// <p>Requests a VPC peering connection between two VPCs: a requester VPC that you own and an accepter VPC with which to create the connection. The accepter VPC can belong to another AWS account and can be in a different Region to the requester VPC. The requester VPC and accepter VPC cannot have overlapping CIDR blocks.</p> <note> <p>Limitations and rules apply to a VPC peering connection. For more information, see the <a href="https://docs.aws.amazon.com/vpc/latest/peering/vpc-peering-basics.html#vpc-peering-limitations">limitations</a> section in the <i>VPC Peering Guide</i>.</p> </note> <p>The owner of the accepter VPC must accept the peering request to activate the peering connection. The VPC peering connection request expires after 7 days, after which it cannot be accepted or rejected.</p> <p>If you create a VPC peering connection request between VPCs with overlapping CIDR blocks, the VPC peering connection has a status of <code>failed</code>.</p>
     fn create_vpc_peering_connection(
         &self,
         input: CreateVpcPeeringConnectionRequest,
@@ -68570,7 +73364,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a VPN connection between an existing virtual private gateway and a VPN customer gateway. The supported connection types are <code>ipsec.1</code> and <code>ipsec.2</code>.</p> <p>The response includes information that you need to give to your network administrator to configure your customer gateway.</p> <important> <p>We strongly recommend that you use HTTPS when calling this operation because the response contains sensitive cryptographic information for configuring your customer gateway.</p> </important> <p>If you decide to shut down your VPN connection for any reason and later create a new VPN connection, you must reconfigure your customer gateway with the new information returned from this call.</p> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">AWS Site-to-Site VPN</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p>
+    /// <p>Creates a VPN connection between an existing virtual private gateway and a VPN customer gateway. The supported connection type is <code>ipsec.1</code>.</p> <p>The response includes information that you need to give to your network administrator to configure your customer gateway.</p> <important> <p>We strongly recommend that you use HTTPS when calling this operation because the response contains sensitive cryptographic information for configuring your customer gateway.</p> </important> <p>If you decide to shut down your VPN connection for any reason and later create a new VPN connection, you must reconfigure your customer gateway with the new information returned from this call.</p> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">AWS Site-to-Site VPN</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p>
     fn create_vpn_connection(
         &self,
         input: CreateVpnConnectionRequest,
@@ -69548,6 +74342,186 @@ impl Ec2 for Ec2Client {
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
+        })
+    }
+
+    /// <p>Deletes the specified Traffic Mirror filter.</p> <p>You cannot delete a Traffic Mirror filter that is in use by a Traffic Mirror session.</p>
+    fn delete_traffic_mirror_filter(
+        &self,
+        input: DeleteTrafficMirrorFilterRequest,
+    ) -> RusotoFuture<DeleteTrafficMirrorFilterResult, DeleteTrafficMirrorFilterError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteTrafficMirrorFilter");
+        params.put("Version", "2016-11-15");
+        DeleteTrafficMirrorFilterRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteTrafficMirrorFilterError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteTrafficMirrorFilterResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteTrafficMirrorFilterResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Deletes the specified Traffic Mirror rule.</p>
+    fn delete_traffic_mirror_filter_rule(
+        &self,
+        input: DeleteTrafficMirrorFilterRuleRequest,
+    ) -> RusotoFuture<DeleteTrafficMirrorFilterRuleResult, DeleteTrafficMirrorFilterRuleError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteTrafficMirrorFilterRule");
+        params.put("Version", "2016-11-15");
+        DeleteTrafficMirrorFilterRuleRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteTrafficMirrorFilterRuleError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteTrafficMirrorFilterRuleResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteTrafficMirrorFilterRuleResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Deletes the specified Traffic Mirror session.</p>
+    fn delete_traffic_mirror_session(
+        &self,
+        input: DeleteTrafficMirrorSessionRequest,
+    ) -> RusotoFuture<DeleteTrafficMirrorSessionResult, DeleteTrafficMirrorSessionError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteTrafficMirrorSession");
+        params.put("Version", "2016-11-15");
+        DeleteTrafficMirrorSessionRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteTrafficMirrorSessionError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteTrafficMirrorSessionResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteTrafficMirrorSessionResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Deletes the specified Traffic Mirror target.</p> <p>You cannot delete a Traffic Mirror target that is in use by a Traffic Mirror session.</p>
+    fn delete_traffic_mirror_target(
+        &self,
+        input: DeleteTrafficMirrorTargetRequest,
+    ) -> RusotoFuture<DeleteTrafficMirrorTargetResult, DeleteTrafficMirrorTargetError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteTrafficMirrorTarget");
+        params.put("Version", "2016-11-15");
+        DeleteTrafficMirrorTargetRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteTrafficMirrorTargetError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteTrafficMirrorTargetResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteTrafficMirrorTargetResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
 
@@ -70829,7 +75803,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes one or more of your DHCP options sets.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Describes one or more of your DHCP options sets.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn describe_dhcp_options(
         &self,
         input: DescribeDhcpOptionsRequest,
@@ -70973,7 +75947,52 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes the specified export tasks or all your export tasks.</p>
+    /// <p>Describes the specified export image tasks or all your export image tasks.</p>
+    fn describe_export_image_tasks(
+        &self,
+        input: DescribeExportImageTasksRequest,
+    ) -> RusotoFuture<DescribeExportImageTasksResult, DescribeExportImageTasksError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeExportImageTasks");
+        params.put("Version", "2016-11-15");
+        DescribeExportImageTasksRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeExportImageTasksError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DescribeExportImageTasksResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DescribeExportImageTasksResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Describes the specified export instance tasks or all your export instance tasks.</p>
     fn describe_export_tasks(
         &self,
         input: DescribeExportTasksRequest,
@@ -71901,7 +76920,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes the specified instances or all of your instances.</p> <p>If you specify one or more instance IDs, Amazon EC2 returns information for those instances. If you do not specify instance IDs, Amazon EC2 returns information for all relevant instances. If you specify an instance ID that is not valid, an error is returned. If you specify an instance that you do not own, it is not included in the returned results.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If you describe instances in the rare case where an Availability Zone is experiencing a service disruption and you specify instance IDs that are in the affected zone, or do not specify any instance IDs at all, the call fails. If you describe instances and specify only instance IDs that are in an unaffected zone, the call works normally.</p>
+    /// <p>Describes the specified instances or all of AWS account's instances.</p> <p>If you specify one or more instance IDs, Amazon EC2 returns information for those instances. If you do not specify instance IDs, Amazon EC2 returns information for all relevant instances. If you specify an instance ID that is not valid, an error is returned. If you specify an instance that you do not own, it is not included in the returned results.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If you describe instances in the rare case where an Availability Zone is experiencing a service disruption and you specify instance IDs that are in the affected zone, or do not specify any instance IDs at all, the call fails. If you describe instances and specify only instance IDs that are in an unaffected zone, the call works normally.</p>
     fn describe_instances(
         &self,
         input: DescribeInstancesRequest,
@@ -72225,7 +77244,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes one or more of your network ACLs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Describes one or more of your network ACLs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn describe_network_acls(
         &self,
         input: DescribeNetworkAclsRequest,
@@ -72597,7 +77616,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes the Regions that are currently available to you. The API returns a list of all the Regions, including Regions that are disabled for your account. For information about enabling Regions for your account, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/manage-account-payment.html#manage-account-payment-enable-disable-regions">Enabling and Disabling Regions</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> <p>For a list of the Regions supported by Amazon EC2, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region"> Regions and Endpoints</a>.</p>
+    /// <p>Describes the Regions that are enabled for your account, or all Regions.</p> <p>For a list of the Regions supported by Amazon EC2, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region"> Regions and Endpoints</a>.</p> <p>For information about enabling and disabling Regions for your account, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande-manage.html">Managing AWS Regions</a> in the <i>AWS General Reference</i>.</p>
     fn describe_regions(
         &self,
         input: DescribeRegionsRequest,
@@ -72838,7 +77857,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes one or more of your route tables.</p> <p>Each subnet in your VPC must be associated with a route table. If a subnet is not explicitly associated with any route table, it is implicitly associated with the main route table. This command does not return the subnet ID for implicit associations.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Describes one or more of your route tables.</p> <p>Each subnet in your VPC must be associated with a route table. If a subnet is not explicitly associated with any route table, it is implicitly associated with the main route table. This command does not return the subnet ID for implicit associations.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn describe_route_tables(
         &self,
         input: DescribeRouteTablesRequest,
@@ -73487,7 +78506,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes one or more of your subnets.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Describes one or more of your subnets.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn describe_subnets(
         &self,
         input: DescribeSubnetsRequest,
@@ -73574,6 +78593,141 @@ impl Ec2 for Ec2Client {
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     result =
                         DescribeTagsResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Describes one or more Traffic Mirror filters.</p>
+    fn describe_traffic_mirror_filters(
+        &self,
+        input: DescribeTrafficMirrorFiltersRequest,
+    ) -> RusotoFuture<DescribeTrafficMirrorFiltersResult, DescribeTrafficMirrorFiltersError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeTrafficMirrorFilters");
+        params.put("Version", "2016-11-15");
+        DescribeTrafficMirrorFiltersRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeTrafficMirrorFiltersError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DescribeTrafficMirrorFiltersResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DescribeTrafficMirrorFiltersResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Describes one or more Traffic Mirror sessions. By default, all Traffic Mirror sessions are described. Alternatively, you can filter the results.</p>
+    fn describe_traffic_mirror_sessions(
+        &self,
+        input: DescribeTrafficMirrorSessionsRequest,
+    ) -> RusotoFuture<DescribeTrafficMirrorSessionsResult, DescribeTrafficMirrorSessionsError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeTrafficMirrorSessions");
+        params.put("Version", "2016-11-15");
+        DescribeTrafficMirrorSessionsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeTrafficMirrorSessionsError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DescribeTrafficMirrorSessionsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DescribeTrafficMirrorSessionsResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Information about one or more Traffic Mirror targets.</p>
+    fn describe_traffic_mirror_targets(
+        &self,
+        input: DescribeTrafficMirrorTargetsRequest,
+    ) -> RusotoFuture<DescribeTrafficMirrorTargetsResult, DescribeTrafficMirrorTargetsError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeTrafficMirrorTargets");
+        params.put("Version", "2016-11-15");
+        DescribeTrafficMirrorTargetsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeTrafficMirrorTargetsError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DescribeTrafficMirrorTargetsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DescribeTrafficMirrorTargetsResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
                 }
                 // parse non-payload
                 Ok(result)
@@ -74745,7 +79899,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Disables default encryption for EBS volumes that are created in your account in the current region.</p> <p>Call this API if you have enabled default encryption using <a>EnableEbsEncryptionByDefault</a> and want to disable default EBS encryption. Once default EBS encryption is disabled, you can still create an encrypted volume by setting <i>encrypted</i> to <i>true</i> in the API call that creates the volume. </p> <p>Disabling default EBS encryption will not change the encryption status of any of your existing volumes.</p>
+    /// <p>Disables EBS encryption by default for your account in the current Region.</p> <p>After you disable encryption by default, you can still create encrypted volumes by enabling encryption when you create each volume.</p> <p>Disabling encryption by default does not change the encryption status of your existing volumes.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn disable_ebs_encryption_by_default(
         &self,
         input: DisableEbsEncryptionByDefaultRequest,
@@ -75084,7 +80238,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Disassociates a subnet from a route table.</p> <p>After you perform this action, the subnet no longer uses the routes in the route table. Instead, it uses the routes in the VPC's main route table. For more information about route tables, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Disassociates a subnet from a route table.</p> <p>After you perform this action, the subnet no longer uses the routes in the route table. Instead, it uses the routes in the VPC's main route table. For more information about route tables, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn disassociate_route_table(
         &self,
         input: DisassociateRouteTableRequest,
@@ -75249,7 +80403,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Enables default encryption for EBS volumes that are created in your account in the current region.</p> <p>Once encryption is enabled with this action, EBS volumes that are created in your account will always be encrypted even if encryption is not specified at launch. This setting overrides the <i>encrypted</i> setting to <i>true</i> in all API calls that create EBS volumes in your account. A volume will be encrypted even if you specify <i>encryption</i> to be <i>false</i> in the API call that creates the volume.</p> <p>If you do not specify a customer master key (CMK) in the API call that creates the EBS volume, then the volume is encrypted to your AWS account's managed CMK.</p> <p>You can specify a CMK of your choice using <a>ModifyEbsDefaultKmsKeyId</a>.</p> <p>Enabling encryption-by-default for EBS volumes has no effect on existing unencrypted volumes in your account. Encrypting the data in these requires manual action. You can either create an encrypted snapshot of an unencrypted volume, or encrypt a copy of an unencrypted snapshot. Any volume restored from an encrypted snapshot is also encrypted. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html">Amazon EBS Snapshots</a>.</p> <p>After EBS encryption-by-default is enabled, you can no longer launch older-generation instance types that do not support encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>.</p>
+    /// <p>Enables EBS encryption by default for your account in the current Region.</p> <p>After you enable encryption by default, the EBS volumes that you create are are always encrypted, either using the default CMK or the CMK that you specified when you created each volume. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can specify the default CMK for encryption by default using <a>ModifyEbsDefaultKmsKeyId</a> or <a>ResetEbsDefaultKmsKeyId</a>.</p> <p>Enabling encryption by default has no effect on the encryption status of your existing volumes.</p> <p>After you enable encryption by default, you can no longer launch instances using instance types that do not support encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>.</p>
     fn enable_ebs_encryption_by_default(
         &self,
         input: EnableEbsEncryptionByDefaultRequest,
@@ -75592,6 +80746,52 @@ impl Ec2 for Ec2Client {
         })
     }
 
+    /// <p>Exports an Amazon Machine Image (AMI) to a VM file. For more information, see <a href="https://docs.aws.amazon.com/vm-import/latest/userguide/vmexport_image.html">Exporting a VM Directory from an Amazon Machine Image (AMI)</a> in the <i>VM Import/Export User Guide</i>.</p>
+    fn export_image(
+        &self,
+        input: ExportImageRequest,
+    ) -> RusotoFuture<ExportImageResult, ExportImageError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ExportImage");
+        params.put("Version", "2016-11-15");
+        ExportImageRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ExportImageError::from_response(response))),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ExportImageResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        ExportImageResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
     /// <p>Exports routes from the specified transit gateway route table to the specified S3 bucket. By default, all routes are exported. Alternatively, you can filter by CIDR range.</p>
     fn export_transit_gateway_routes(
         &self,
@@ -75627,6 +80827,51 @@ impl Ec2 for Ec2Client {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     result = ExportTransitGatewayRoutesResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Gets usage information about a Capacity Reservation. If the Capacity Reservation is shared, it shows usage information for the Capacity Reservation owner and each AWS account that is currently using the shared capacity. If the Capacity Reservation is not shared, it shows only the Capacity Reservation owner's usage.</p>
+    fn get_capacity_reservation_usage(
+        &self,
+        input: GetCapacityReservationUsageRequest,
+    ) -> RusotoFuture<GetCapacityReservationUsageResult, GetCapacityReservationUsageError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetCapacityReservationUsage");
+        params.put("Version", "2016-11-15");
+        GetCapacityReservationUsageRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetCapacityReservationUsageError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = GetCapacityReservationUsageResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = GetCapacityReservationUsageResultDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -75732,7 +80977,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes the default customer master key (CMK) that your account uses to encrypt EBS volumes if you don’t specify a CMK in the API call. You can change this default using <a>ModifyEbsDefaultKmsKeyId</a>.</p>
+    /// <p>Describes the default customer master key (CMK) for EBS encryption by default for your account in this Region. You can change the default CMK for encryption by default using <a>ModifyEbsDefaultKmsKeyId</a> or <a>ResetEbsDefaultKmsKeyId</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn get_ebs_default_kms_key_id(
         &self,
         input: GetEbsDefaultKmsKeyIdRequest,
@@ -75777,7 +81022,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes whether default EBS encryption is enabled for your account in the current region.</p>
+    /// <p>Describes whether EBS encryption by default is enabled for your account in the current Region.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn get_ebs_encryption_by_default(
         &self,
         input: GetEbsEncryptionByDefaultRequest,
@@ -76549,7 +81794,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Changes the customer master key (CMK) that your account uses to encrypt EBS volumes if you don't specify a CMK in the API call.</p> <p>By default, your account has an AWS-managed CMK that is used for encrypting an EBS volume when no CMK is specified in the API call that creates the volume. By calling this API, you can specify a customer-managed CMK to use in place of the AWS-managed CMK.</p> <p>Note: Deleting or disabling the CMK that you have specified to act as your default CMK will result in instance-launch failures.</p>
+    /// <p>Changes the default customer master key (CMK) for EBS encryption by default for your account in this Region.</p> <p>AWS creates a unique AWS managed CMK in each Region for use with encryption by default. If you change the default CMK to a customer managed CMK, it is used instead of the AWS managed CMK. To reset the default CMK to the AWS managed CMK for EBS, use <a>ResetEbsDefaultKmsKeyId</a>.</p> <p>If you delete or disable the customer managed CMK that you specified for use with encryption by default, your instances will fail to launch.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn modify_ebs_default_kms_key_id(
         &self,
         input: ModifyEbsDefaultKmsKeyIdRequest,
@@ -76594,7 +81839,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Modifies the specified EC2 Fleet.</p> <p>While the EC2 Fleet is being modified, it is in the <code>modifying</code> state.</p>
+    /// <p>Modifies the specified EC2 Fleet.</p> <p>You can only modify an EC2 Fleet request of type <code>maintain</code>.</p> <p>While the EC2 Fleet is being modified, it is in the <code>modifying</code> state.</p> <p>To scale up your EC2 Fleet, increase its target capacity. The EC2 Fleet launches the additional Spot Instances according to the allocation strategy for the EC2 Fleet request. If the allocation strategy is <code>lowestPrice</code>, the EC2 Fleet launches instances using the Spot Instance pool with the lowest price. If the allocation strategy is <code>diversified</code>, the EC2 Fleet distributes the instances across the Spot Instance pools. If the allocation strategy is <code>capacityOptimized</code>, EC2 Fleet launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching.</p> <p>To scale down your EC2 Fleet, decrease its target capacity. First, the EC2 Fleet cancels any open requests that exceed the new target capacity. You can request that the EC2 Fleet terminate Spot Instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is <code>lowestPrice</code>, the EC2 Fleet terminates the instances with the highest price per unit. If the allocation strategy is <code>capacityOptimized</code>, the EC2 Fleet terminates the instances in the Spot Instance pools that have the least available Spot Instance capacity. If the allocation strategy is <code>diversified</code>, the EC2 Fleet terminates instances across the Spot Instance pools. Alternatively, you can request that the EC2 Fleet keep the fleet at its current size, but not replace any Spot Instances that are interrupted or that you terminate manually.</p> <p>If you are finished with your EC2 Fleet for now, but will use it again later, you can set the target capacity to 0.</p>
     fn modify_fleet(
         &self,
         input: ModifyFleetRequest,
@@ -77146,7 +82391,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Adds or removes permission settings for the specified snapshot. You may add or remove specified AWS account IDs from a snapshot's list of create volume permissions, but you cannot do both in a single API call. If you need to both add and remove account IDs for a snapshot, you must use multiple API calls.</p> <p>Encrypted snapshots and snapshots with AWS Marketplace product codes cannot be made public. Snapshots encrypted with your default CMK cannot be shared with other accounts.</p> <p>For more information about modifying snapshot permissions, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-modifying-snapshot-permissions.html">Sharing Snapshots</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Adds or removes permission settings for the specified snapshot. You may add or remove specified AWS account IDs from a snapshot's list of create volume permissions, but you cannot do both in a single operation. If you need to both add and remove account IDs for a snapshot, you must use multiple operations. You can make up to 500 modifications to a snapshot in a single operation.</p> <p>Encrypted snapshots and snapshots with AWS Marketplace product codes cannot be made public. Snapshots encrypted with your default CMK cannot be shared with other accounts.</p> <p>For more information about modifying snapshot permissions, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-modifying-snapshot-permissions.html">Sharing Snapshots</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn modify_snapshot_attribute(
         &self,
         input: ModifySnapshotAttributeRequest,
@@ -77171,7 +82416,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Modifies the specified Spot Fleet request.</p> <p>You can only modify a Spot Fleet request of type <code>maintain</code>.</p> <p>While the Spot Fleet request is being modified, it is in the <code>modifying</code> state.</p> <p>To scale up your Spot Fleet, increase its target capacity. The Spot Fleet launches the additional Spot Instances according to the allocation strategy for the Spot Fleet request. If the allocation strategy is <code>lowestPrice</code>, the Spot Fleet launches instances using the Spot pool with the lowest price. If the allocation strategy is <code>diversified</code>, the Spot Fleet distributes the instances across the Spot pools.</p> <p>To scale down your Spot Fleet, decrease its target capacity. First, the Spot Fleet cancels any open requests that exceed the new target capacity. You can request that the Spot Fleet terminate Spot Instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is <code>lowestPrice</code>, the Spot Fleet terminates the instances with the highest price per unit. If the allocation strategy is <code>diversified</code>, the Spot Fleet terminates instances across the Spot pools. Alternatively, you can request that the Spot Fleet keep the fleet at its current size, but not replace any Spot Instances that are interrupted or that you terminate manually.</p> <p>If you are finished with your Spot Fleet for now, but will use it again later, you can set the target capacity to 0.</p>
+    /// <p>Modifies the specified Spot Fleet request.</p> <p>You can only modify a Spot Fleet request of type <code>maintain</code>.</p> <p>While the Spot Fleet request is being modified, it is in the <code>modifying</code> state.</p> <p>To scale up your Spot Fleet, increase its target capacity. The Spot Fleet launches the additional Spot Instances according to the allocation strategy for the Spot Fleet request. If the allocation strategy is <code>lowestPrice</code>, the Spot Fleet launches instances using the Spot Instance pool with the lowest price. If the allocation strategy is <code>diversified</code>, the Spot Fleet distributes the instances across the Spot Instance pools. If the allocation strategy is <code>capacityOptimized</code>, Spot Fleet launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching.</p> <p>To scale down your Spot Fleet, decrease its target capacity. First, the Spot Fleet cancels any open requests that exceed the new target capacity. You can request that the Spot Fleet terminate Spot Instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is <code>lowestPrice</code>, the Spot Fleet terminates the instances with the highest price per unit. If the allocation strategy is <code>capacityOptimized</code>, the Spot Fleet terminates the instances in the Spot Instance pools that have the least available Spot Instance capacity. If the allocation strategy is <code>diversified</code>, the Spot Fleet terminates instances across the Spot Instance pools. Alternatively, you can request that the Spot Fleet keep the fleet at its current size, but not replace any Spot Instances that are interrupted or that you terminate manually.</p> <p>If you are finished with your Spot Fleet for now, but will use it again later, you can set the target capacity to 0.</p>
     fn modify_spot_fleet_request(
         &self,
         input: ModifySpotFleetRequestRequest,
@@ -77241,6 +82486,149 @@ impl Ec2 for Ec2Client {
         })
     }
 
+    /// <p>Allows or restricts mirroring network services.</p> <p> By default, Amazon DNS network services are not eligible for Traffic Mirror. Use <code>AddNetworkServices</code> to add network services to a Traffic Mirror filter. When a network service is added to the Traffic Mirror filter, all traffic related to that network service will be mirrored. When you no longer want to mirror network services, use <code>RemoveNetworkServices</code> to remove the network services from the Traffic Mirror filter. </p> <p>FFor information about filter rule properties, see <a href="https://docs.aws.amazon.com/vpc/latest/mirroring/traffic-mirroring-considerations.html#traffic-mirroring-network-services">Network Services</a> in the <i>Traffic Mirroring User Guide </i>.</p>
+    fn modify_traffic_mirror_filter_network_services(
+        &self,
+        input: ModifyTrafficMirrorFilterNetworkServicesRequest,
+    ) -> RusotoFuture<
+        ModifyTrafficMirrorFilterNetworkServicesResult,
+        ModifyTrafficMirrorFilterNetworkServicesError,
+    > {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyTrafficMirrorFilterNetworkServices");
+        params.put("Version", "2016-11-15");
+        ModifyTrafficMirrorFilterNetworkServicesRequestSerializer::serialize(
+            &mut params,
+            "",
+            &input,
+        );
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyTrafficMirrorFilterNetworkServicesError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ModifyTrafficMirrorFilterNetworkServicesResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        ModifyTrafficMirrorFilterNetworkServicesResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Modifies the specified Traffic Mirror rule.</p> <p> <code>DestinationCidrBlock</code> and <code>SourceCidrBlock</code> must both be an IPv4 range or an IPv6 range.</p>
+    fn modify_traffic_mirror_filter_rule(
+        &self,
+        input: ModifyTrafficMirrorFilterRuleRequest,
+    ) -> RusotoFuture<ModifyTrafficMirrorFilterRuleResult, ModifyTrafficMirrorFilterRuleError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyTrafficMirrorFilterRule");
+        params.put("Version", "2016-11-15");
+        ModifyTrafficMirrorFilterRuleRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyTrafficMirrorFilterRuleError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ModifyTrafficMirrorFilterRuleResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = ModifyTrafficMirrorFilterRuleResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Modifies a Traffic Mirror session.</p>
+    fn modify_traffic_mirror_session(
+        &self,
+        input: ModifyTrafficMirrorSessionRequest,
+    ) -> RusotoFuture<ModifyTrafficMirrorSessionResult, ModifyTrafficMirrorSessionError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyTrafficMirrorSession");
+        params.put("Version", "2016-11-15");
+        ModifyTrafficMirrorSessionRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyTrafficMirrorSessionError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ModifyTrafficMirrorSessionResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = ModifyTrafficMirrorSessionResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
     /// <p>Modifies the specified VPC attachment.</p>
     fn modify_transit_gateway_vpc_attachment(
         &self,
@@ -77289,7 +82677,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>You can modify several parameters of an existing EBS volume, including volume size, volume type, and IOPS capacity. If your EBS volume is attached to a current-generation EC2 instance type, you may be able to apply these changes without stopping the instance or detaching the volume from it. For more information about modifying an EBS volume running Linux, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html">Modifying the Size, IOPS, or Type of an EBS Volume on Linux</a>. For more information about modifying an EBS volume running Windows, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html">Modifying the Size, IOPS, or Type of an EBS Volume on Windows</a>. </p> <p> When you complete a resize operation on your volume, you need to extend the volume's file-system size to take advantage of the new storage capacity. For information about extending a Linux file system, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#recognize-expanded-volume-linux">Extending a Linux File System</a>. For information about extending a Windows file system, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html#recognize-expanded-volume-windows">Extending a Windows File System</a>. </p> <p> You can use CloudWatch Events to check the status of a modification to an EBS volume. For information about CloudWatch Events, see the <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/">Amazon CloudWatch Events User Guide</a>. You can also track the status of a modification using the <a>DescribeVolumesModifications</a> API. For information about tracking status changes using either method, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#monitoring_mods">Monitoring Volume Modifications</a>. </p> <p>With previous-generation instance types, resizing an EBS volume may require detaching and reattaching the volume or stopping and restarting the instance. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html">Modifying the Size, IOPS, or Type of an EBS Volume on Linux</a> and <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html">Modifying the Size, IOPS, or Type of an EBS Volume on Windows</a>.</p> <p>If you reach the maximum volume modification rate per volume limit, you will need to wait at least six hours before applying further modifications to the affected EBS volume.</p>
+    /// <p>You can modify several parameters of an existing EBS volume, including volume size, volume type, and IOPS capacity. If your EBS volume is attached to a current-generation EC2 instance type, you may be able to apply these changes without stopping the instance or detaching the volume from it. For more information about modifying an EBS volume running Linux, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html">Modifying the Size, IOPS, or Type of an EBS Volume on Linux</a>. For more information about modifying an EBS volume running Windows, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html">Modifying the Size, IOPS, or Type of an EBS Volume on Windows</a>. </p> <p> When you complete a resize operation on your volume, you need to extend the volume's file-system size to take advantage of the new storage capacity. For information about extending a Linux file system, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#recognize-expanded-volume-linux">Extending a Linux File System</a>. For information about extending a Windows file system, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html#recognize-expanded-volume-windows">Extending a Windows File System</a>. </p> <p> You can use CloudWatch Events to check the status of a modification to an EBS volume. For information about CloudWatch Events, see the <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/">Amazon CloudWatch Events User Guide</a>. You can also track the status of a modification using <a>DescribeVolumesModifications</a>. For information about tracking status changes using either method, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#monitoring_mods">Monitoring Volume Modifications</a>. </p> <p>With previous-generation instance types, resizing an EBS volume may require detaching and reattaching the volume or stopping and restarting the instance. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html">Modifying the Size, IOPS, or Type of an EBS Volume on Linux</a> and <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html">Modifying the Size, IOPS, or Type of an EBS Volume on Windows</a>.</p> <p>If you reach the maximum volume modification rate per volume limit, you will need to wait at least six hours before applying further modifications to the affected EBS volume.</p>
     fn modify_volume(
         &self,
         input: ModifyVolumeRequest,
@@ -77388,7 +82776,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Modifies attributes of a specified VPC endpoint. The attributes that you can modify depend on the type of VPC endpoint (interface or gateway). For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-endpoints.html">VPC Endpoints</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Modifies attributes of a specified VPC endpoint. The attributes that you can modify depend on the type of VPC endpoint (interface or gateway). For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints.html">VPC Endpoints</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn modify_vpc_endpoint(
         &self,
         input: ModifyVpcEndpointRequest,
@@ -77541,7 +82929,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Modifies the permissions for your <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/endpoint-service.html">VPC endpoint service</a>. You can add or remove permissions for service consumers (IAM users, IAM roles, and AWS accounts) to connect to your endpoint service.</p> <p>If you grant permissions to all principals, the service is public. Any users who know the name of a public service can send a request to attach an endpoint. If the service does not require manual approval, attachments are automatically approved.</p>
+    /// <p>Modifies the permissions for your <a href="https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-service.html">VPC endpoint service</a>. You can add or remove permissions for service consumers (IAM users, IAM roles, and AWS accounts) to connect to your endpoint service.</p> <p>If you grant permissions to all principals, the service is public. Any users who know the name of a public service can send a request to attach an endpoint. If the service does not require manual approval, attachments are automatically approved.</p>
     fn modify_vpc_endpoint_service_permissions(
         &self,
         input: ModifyVpcEndpointServicePermissionsRequest,
@@ -77687,7 +83075,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Modifies the target gateway of a AWS Site-to-Site VPN connection. The following migration options are available:</p> <ul> <li> <p>An existing virtual private gateway to a new virtual private gateway</p> </li> <li> <p>An existing virtual private gateway to a transit gateway</p> </li> <li> <p>An existing transit gateway to a new transit gateway</p> </li> <li> <p>An existing transit gateway to a virtual private gateway</p> </li> </ul> <p>Before you perform the migration to the new gateway, you must configure the new gateway. Use <a>CreateVpnGateway</a> to create a virtual private gateway, or <a>CreateTransitGateway</a> to create a transit gateway.</p> <p>This step is required when you migrate from a virtual private gateway with static routes to a transit gateway. </p> <p>You must delete the static routes before you migrate to the new gateway.</p> <p>Keep a copy of the static route before you delete it. You will need to add back these routes to the transit gateway after the VPN connection migration is complete.</p> <p>After you migrate to the new gateway, you might need to modify your VPC route table. Use <a>CreateRoute</a> and <a>DeleteRoute</a> to make the changes described in <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/modify-vpn-target.html#step-update-routing">VPN Gateway Target Modification Required VPC Route Table Updates</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p> <p> When the new gateway is a transit gateway, modify the transit gateway route table to allow traffic between the VPC and the AWS Site-to-Site VPN connection. Use <a>CreateTransitGatewayRoute</a> to add the routes.</p> <p> If you deleted VPN static routes, you must add the static routes to the transit gateway route table.</p> <p>After you perform this operation, the AWS VPN endpoint's IP addresses on the AWS side and the tunnel options remain intact. Your s2slong; connection will be temporarily unavailable for approximately 10 minutes while we provision the new endpoints </p>
+    /// <p>Modifies the target gateway of an AWS Site-to-Site VPN connection. The following migration options are available:</p> <ul> <li> <p>An existing virtual private gateway to a new virtual private gateway</p> </li> <li> <p>An existing virtual private gateway to a transit gateway</p> </li> <li> <p>An existing transit gateway to a new transit gateway</p> </li> <li> <p>An existing transit gateway to a virtual private gateway</p> </li> </ul> <p>Before you perform the migration to the new gateway, you must configure the new gateway. Use <a>CreateVpnGateway</a> to create a virtual private gateway, or <a>CreateTransitGateway</a> to create a transit gateway.</p> <p>This step is required when you migrate from a virtual private gateway with static routes to a transit gateway. </p> <p>You must delete the static routes before you migrate to the new gateway.</p> <p>Keep a copy of the static route before you delete it. You will need to add back these routes to the transit gateway after the VPN connection migration is complete.</p> <p>After you migrate to the new gateway, you might need to modify your VPC route table. Use <a>CreateRoute</a> and <a>DeleteRoute</a> to make the changes described in <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/modify-vpn-target.html#step-update-routing">VPN Gateway Target Modification Required VPC Route Table Updates</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p> <p> When the new gateway is a transit gateway, modify the transit gateway route table to allow traffic between the VPC and the AWS Site-to-Site VPN connection. Use <a>CreateTransitGatewayRoute</a> to add the routes.</p> <p> If you deleted VPN static routes, you must add the static routes to the transit gateway route table.</p> <p>After you perform this operation, the AWS VPN endpoint's IP addresses on the AWS side and the tunnel options remain intact. Your s2slong; connection will be temporarily unavailable for approximately 10 minutes while we provision the new endpoints </p>
     fn modify_vpn_connection(
         &self,
         input: ModifyVpnConnectionRequest,
@@ -77724,6 +83112,96 @@ impl Ec2 for Ec2Client {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     result = ModifyVpnConnectionResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Modifies the VPN tunnel endpoint certificate.</p>
+    fn modify_vpn_tunnel_certificate(
+        &self,
+        input: ModifyVpnTunnelCertificateRequest,
+    ) -> RusotoFuture<ModifyVpnTunnelCertificateResult, ModifyVpnTunnelCertificateError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyVpnTunnelCertificate");
+        params.put("Version", "2016-11-15");
+        ModifyVpnTunnelCertificateRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyVpnTunnelCertificateError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ModifyVpnTunnelCertificateResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = ModifyVpnTunnelCertificateResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Modifies the options for a VPN tunnel in an AWS Site-to-Site VPN connection. You can modify multiple options for a tunnel in a single request, but you can only modify one tunnel at a time. For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPNTunnels.html">Site-to-Site VPN Tunnel Options for Your Site-to-Site VPN Connection</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p>
+    fn modify_vpn_tunnel_options(
+        &self,
+        input: ModifyVpnTunnelOptionsRequest,
+    ) -> RusotoFuture<ModifyVpnTunnelOptionsResult, ModifyVpnTunnelOptionsError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyVpnTunnelOptions");
+        params.put("Version", "2016-11-15");
+        ModifyVpnTunnelOptionsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyVpnTunnelOptionsError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ModifyVpnTunnelOptionsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = ModifyVpnTunnelOptionsResultDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -78352,7 +83830,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Changes which network ACL a subnet is associated with. By default when you create a subnet, it's automatically associated with the default network ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>This is an idempotent operation.</p>
+    /// <p>Changes which network ACL a subnet is associated with. By default when you create a subnet, it's automatically associated with the default network ACL. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>This is an idempotent operation.</p>
     fn replace_network_acl_association(
         &self,
         input: ReplaceNetworkAclAssociationRequest,
@@ -78397,7 +83875,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Replaces an entry (rule) in a network ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Replaces an entry (rule) in a network ACL. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn replace_network_acl_entry(
         &self,
         input: ReplaceNetworkAclEntryRequest,
@@ -78422,7 +83900,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Replaces an existing route within a route table in a VPC. You must provide only one of the following: internet gateway or virtual private gateway, NAT instance, NAT gateway, VPC peering connection, network interface, or egress-only internet gateway.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Replaces an existing route within a route table in a VPC. You must provide only one of the following: internet gateway or virtual private gateway, NAT instance, NAT gateway, VPC peering connection, network interface, or egress-only internet gateway.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn replace_route(&self, input: ReplaceRouteRequest) -> RusotoFuture<(), ReplaceRouteError> {
         let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
         let mut params = Params::new();
@@ -78447,7 +83925,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Changes the route table associated with a given subnet in a VPC. After the operation completes, the subnet uses the routes in the new route table it's associated with. For more information about route tables, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can also use ReplaceRouteTableAssociation to change which table is the main route table in the VPC. You just specify the main route table's association ID and the route table to be the new main route table.</p>
+    /// <p>Changes the route table associated with a given subnet in a VPC. After the operation completes, the subnet uses the routes in the new route table it's associated with. For more information about route tables, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can also use ReplaceRouteTableAssociation to change which table is the main route table in the VPC. You just specify the main route table's association ID and the route table to be the new main route table.</p>
     fn replace_route_table_association(
         &self,
         input: ReplaceRouteTableAssociationRequest,
@@ -78564,7 +84042,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a Spot Fleet request.</p> <p>The Spot Fleet request specifies the total target capacity and the On-Demand target capacity. Amazon EC2 calculates the difference between the total capacity and On-Demand capacity, and launches the difference as Spot capacity.</p> <p>You can submit a single request that includes multiple launch specifications that vary by instance type, AMI, Availability Zone, or subnet.</p> <p>By default, the Spot Fleet requests Spot Instances in the Spot pool where the price per unit is the lowest. Each launch specification can include its own instance weighting that reflects the value of the instance type to your application workload.</p> <p>Alternatively, you can specify that the Spot Fleet distribute the target capacity across the Spot pools included in its launch specifications. By ensuring that the Spot Instances in your Spot Fleet are in different Spot pools, you can improve the availability of your fleet.</p> <p>You can specify tags for the Spot Instances. You cannot tag other resource types in a Spot Fleet request because only the <code>instance</code> resource type is supported.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-requests.html">Spot Fleet Requests</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
+    /// <p>Creates a Spot Fleet request.</p> <p>The Spot Fleet request specifies the total target capacity and the On-Demand target capacity. Amazon EC2 calculates the difference between the total capacity and On-Demand capacity, and launches the difference as Spot capacity.</p> <p>You can submit a single request that includes multiple launch specifications that vary by instance type, AMI, Availability Zone, or subnet.</p> <p>By default, the Spot Fleet requests Spot Instances in the Spot Instance pool where the price per unit is the lowest. Each launch specification can include its own instance weighting that reflects the value of the instance type to your application workload.</p> <p>Alternatively, you can specify that the Spot Fleet distribute the target capacity across the Spot pools included in its launch specifications. By ensuring that the Spot Instances in your Spot Fleet are in different Spot pools, you can improve the availability of your fleet.</p> <p>You can specify tags for the Spot Instances. You cannot tag other resource types in a Spot Fleet request because only the <code>instance</code> resource type is supported.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-requests.html">Spot Fleet Requests</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     fn request_spot_fleet(
         &self,
         input: RequestSpotFleetRequest,
@@ -78659,7 +84137,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Resets the account's default customer master key (CMK) to the account's AWS-managed default CMK. This default CMK is used to encrypt EBS volumes when you have enabled EBS encryption by default without specifying a CMK in the API call. If you have not enabled encryption by default, then this CMK is used when you set the <code>Encrypted</code> parameter to true without specifying a custom CMK in the API call.</p> <p>Call this API if you have modified the default CMK that is used for encrypting your EBS volume using <a>ModifyEbsDefaultKmsKeyId</a> and you want to reset it to the AWS-managed default CMK. After resetting, you can continue to provide a CMK of your choice in the API call that creates the volume. However, if no CMK is specified, your account will encrypt the volume to the AWS-managed default CMK.</p>
+    /// <p>Resets the default customer master key (CMK) for EBS encryption for your account in this Region to the AWS managed CMK for EBS.</p> <p>After resetting the default CMK to the AWS managed CMK, you can continue to encrypt by a customer managed CMK by specifying it when you create the volume. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn reset_ebs_default_kms_key_id(
         &self,
         input: ResetEbsDefaultKmsKeyIdRequest,
@@ -79123,6 +84601,31 @@ impl Ec2 for Ec2Client {
                 // parse non-payload
                 Ok(result)
             }))
+        })
+    }
+
+    /// <p>Sends a diagnostic interrupt to the specified Amazon EC2 instance to trigger a <i>kernel panic</i> (on Linux instances), or a <i>blue screen</i>/<i>stop error</i> (on Windows instances). For instances based on Intel and AMD processors, the interrupt is received as a <i>non-maskable interrupt</i> (NMI).</p> <p>In general, the operating system crashes and reboots when a kernel panic or stop error is triggered. The operating system can also be configured to perform diagnostic tasks, such as generating a memory dump file, loading a secondary kernel, or obtaining a call trace.</p> <p>Before sending a diagnostic interrupt to your instance, ensure that its operating system is configured to perform the required diagnostic tasks.</p> <p>For more information about configuring your operating system to generate a crash dump when a kernel panic or stop error occurs, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/diagnostic-interrupt.html">Send a Diagnostic Interrupt</a> (Linux instances) or <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/diagnostic-interrupt.html">Send a Diagnostic Interrupt</a> (Windows instances).</p>
+    fn send_diagnostic_interrupt(
+        &self,
+        input: SendDiagnosticInterruptRequest,
+    ) -> RusotoFuture<(), SendDiagnosticInterruptError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "SendDiagnosticInterrupt");
+        params.put("Version", "2016-11-15");
+        SendDiagnosticInterruptRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(SendDiagnosticInterruptError::from_response(response))
+                }));
+            }
+
+            Box::new(future::ok(::std::mem::drop(response)))
         })
     }
 

@@ -1,6 +1,6 @@
 
 # Rusoto Eks
-Rust SDK for Amazon Elastic Container Service for Kubernetes
+Rust SDK for Amazon Elastic Kubernetes Service
 
 You may be looking for:
 

@@ -228,7 +228,7 @@ pub struct ComputeResource {
     #[serde(rename = "spotIamFleetRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spot_iam_fleet_role: Option<String>,
-    /// <p>The VPC subnets into which the compute resources are launched. </p>
+    /// <p>The VPC subnets into which the compute resources are launched. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">VPCs and Subnets</a> in the <i>Amazon VPC User Guide</i>.</p>
     #[serde(rename = "subnets")]
     pub subnets: Vec<String>,
     /// <p>Key-value pair tags to be applied to resources that are launched in the compute environment. For AWS Batch, these take the form of "String1": "String2", where String1 is the tag key and String2 is the tag value—for example, { "Name": "AWS Batch Instance - C4OnDemand" }.</p>
@@ -289,6 +289,10 @@ pub struct ContainerDetail {
     #[serde(rename = "jobRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_role_arn: Option<String>,
+    /// <p>Linux-specific modifications that are applied to the container, such as details for device mappings.</p>
+    #[serde(rename = "linuxParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub linux_parameters: Option<LinuxParameters>,
     /// <p>The name of the CloudWatch Logs log stream associated with the container. The log group for AWS Batch jobs is <code>/aws/batch/job</code>. Each container attempt receives a log stream name when they reach the <code>RUNNING</code> status.</p>
     #[serde(rename = "logStreamName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -395,6 +399,10 @@ pub struct ContainerProperties {
     #[serde(rename = "jobRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_role_arn: Option<String>,
+    /// <p>Linux-specific modifications that are applied to the container, such as details for device mappings.</p>
+    #[serde(rename = "linuxParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub linux_parameters: Option<LinuxParameters>,
     /// <p><p>The hard limit (in MiB) of memory to present to the container. If your container attempts to exceed the memory specified here, the container is killed. This parameter maps to <code>Memory</code> in the <a href="https://docs.docker.com/engine/api/v1.23/#create-a-container">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.23/">Docker Remote API</a> and the <code>--memory</code> option to <a href="https://docs.docker.com/engine/reference/run/">docker run</a>. You must specify at least 4 MiB of memory for a job.</p> <note> <p>If you are trying to maximize your resource utilization by providing your jobs as much memory as possible for a particular instance type, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/memory-management.html">Memory Management</a> in the <i>AWS Batch User Guide</i>.</p> </note></p>
     #[serde(rename = "memory")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -653,6 +661,22 @@ pub struct DescribeJobsResponse {
     pub jobs: Option<Vec<JobDetail>>,
 }
 
+/// <p>An object representing a container instance host device.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Device {
+    /// <p>The path inside the container at which to expose the host device. By default the <code>hostPath</code> value is used.</p>
+    #[serde(rename = "containerPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_path: Option<String>,
+    /// <p>The path for the device on the host container instance.</p>
+    #[serde(rename = "hostPath")]
+    pub host_path: String,
+    /// <p>The explicit permissions to provide to the container for the device. By default, the container has permissions for <code>read</code>, <code>write</code>, and <code>mknod</code> for the device.</p>
+    #[serde(rename = "permissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions: Option<Vec<String>>,
+}
+
 /// <p>Determine whether your data volume persists on the host container instance and where it is stored. If this parameter is empty, then the Docker daemon assigns a host path for your data volume, but the data is not guaranteed to persist after the containers associated with it stop running.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Host {
@@ -772,7 +796,7 @@ pub struct JobDetail {
     /// <p>The Unix timestamp (in seconds and milliseconds) for when the job was started (when the job transitioned from the <code>STARTING</code> state to the <code>RUNNING</code> state).</p>
     #[serde(rename = "startedAt")]
     pub started_at: i64,
-    /// <p><p>The current status for the job. </p> <note> <p>If your jobs do not progress to <code>STARTING</code>, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/troubleshooting.html#job_stuck_in_runnable">Jobs Stuck in <code>RUNNABLE</code> Status</a> in the troubleshooting section of the <i>AWS Batch User Guide</i>.</p> </note></p>
+    /// <p><p>The current status for the job. </p> <note> <p>If your jobs do not progress to <code>STARTING</code>, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/troubleshooting.html#job_stuck_in_runnable">Jobs Stuck in RUNNABLE Status</a> in the troubleshooting section of the <i>AWS Batch User Guide</i>.</p> </note></p>
     #[serde(rename = "status")]
     pub status: String,
     /// <p>A short, human-readable string to provide additional details about the current status of the job. </p>
@@ -899,6 +923,15 @@ pub struct LaunchTemplateSpecification {
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+/// <p>Linux-specific modifications that are applied to the container, such as details for device mappings.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct LinuxParameters {
+    /// <p>Any host devices to expose to the container. This parameter maps to <code>Devices</code> in the <a href="https://docs.docker.com/engine/api/v1.23/#create-a-container">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.23/">Docker Remote API</a> and the <code>--device</code> option to <a href="https://docs.docker.com/engine/reference/run/">docker run</a>.</p>
+    #[serde(rename = "devices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub devices: Option<Vec<Device>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]

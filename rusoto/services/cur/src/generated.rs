@@ -65,6 +65,18 @@ pub struct DescribeReportDefinitionsResponse {
     pub report_definitions: Option<Vec<ReportDefinition>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ModifyReportDefinitionRequest {
+    #[serde(rename = "ReportDefinition")]
+    pub report_definition: ReportDefinition,
+    #[serde(rename = "ReportName")]
+    pub report_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ModifyReportDefinitionResponse {}
+
 /// <p>Creates a Cost and Usage Report.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutReportDefinitionRequest {
@@ -182,6 +194,41 @@ impl Error for DescribeReportDefinitionsError {
         }
     }
 }
+/// Errors returned by ModifyReportDefinition
+#[derive(Debug, PartialEq)]
+pub enum ModifyReportDefinitionError {
+    /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
+    InternalError(String),
+}
+
+impl ModifyReportDefinitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyReportDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(ModifyReportDefinitionError::InternalError(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ModifyReportDefinitionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyReportDefinitionError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifyReportDefinitionError::InternalError(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by PutReportDefinition
 #[derive(Debug, PartialEq)]
 pub enum PutReportDefinitionError {
@@ -244,6 +291,12 @@ pub trait CostAndUsageReport {
         &self,
         input: DescribeReportDefinitionsRequest,
     ) -> RusotoFuture<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError>;
+
+    /// <p>Allows you to programatically update your report preferences.</p>
+    fn modify_report_definition(
+        &self,
+        input: ModifyReportDefinitionRequest,
+    ) -> RusotoFuture<ModifyReportDefinitionResponse, ModifyReportDefinitionError>;
 
     /// <p>Creates a new report using the description that you provide.</p>
     fn put_report_definition(
@@ -344,6 +397,37 @@ impl CostAndUsageReport for CostAndUsageReportClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReportDefinitionsError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Allows you to programatically update your report preferences.</p>
+    fn modify_report_definition(
+        &self,
+        input: ModifyReportDefinitionRequest,
+    ) -> RusotoFuture<ModifyReportDefinitionResponse, ModifyReportDefinitionError> {
+        let mut request = SignedRequest::new("POST", "cur", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSOrigamiServiceGatewayService.ModifyReportDefinition",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ModifyReportDefinitionResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ModifyReportDefinitionError::from_response(response))
+                    }),
+                )
             }
         })
     }
