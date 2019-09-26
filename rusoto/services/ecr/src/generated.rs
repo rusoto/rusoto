@@ -2658,10 +2658,7 @@ impl EcrClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> EcrClient {
-        EcrClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -2675,10 +2672,14 @@ impl EcrClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        EcrClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> EcrClient {
+        EcrClient { client, region }
     }
 }
 
