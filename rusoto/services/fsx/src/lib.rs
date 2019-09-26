@@ -1,3 +1,4 @@
+
 // =================================================================
 //
 //                           * WARNING *
@@ -10,9 +11,7 @@
 //
 // =================================================================
 
-#![doc(
-    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
-)]
+#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
 //! <p>Amazon FSx is a fully managed service that makes it easy for storage and application administrators to launch and use shared file storage.</p>
 //!
 //! If you're using the service, you're probably looking for [FsxClient](struct.FsxClient.html) and [Fsx](trait.Fsx.html).
@@ -25,8 +24,9 @@ extern crate serde;
 extern crate serde_derive;
 extern crate serde_json;
 
-mod custom;
 mod generated;
+mod custom;
 
-pub use crate::custom::*;
 pub use crate::generated::*;
+pub use crate::custom::*;
+            

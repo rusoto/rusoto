@@ -1,3 +1,4 @@
+
 // =================================================================
 //
 //                           * WARNING *
@@ -10,9 +11,7 @@
 //
 // =================================================================
 
-#![doc(
-    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
-)]
+#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
 //! <pre><code>           &lt;p&gt;The operations for managing an Amazon MSK cluster.&lt;/p&gt;
 //! </code></pre>
 //!
@@ -26,8 +25,9 @@ extern crate serde;
 extern crate serde_derive;
 extern crate serde_json;
 
-mod custom;
 mod generated;
+mod custom;
 
-pub use crate::custom::*;
 pub use crate::generated::*;
+pub use crate::custom::*;
+            

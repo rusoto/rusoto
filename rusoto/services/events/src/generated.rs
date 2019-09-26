@@ -2753,11 +2753,11 @@ impl EventBridgeClient {
         credentials_provider: P,
         region: region::Region,
     ) -> EventBridgeClient
-        where
-            P: ProvideAwsCredentials + Send + Sync + 'static,
-            P::Future: Send,
-            D: DispatchSignedRequest + Send + Sync + 'static,
-            D::Future: Send,
+    where
+        P: ProvideAwsCredentials + Send + Sync + 'static,
+        P::Future: Send,
+        D: DispatchSignedRequest + Send + Sync + 'static,
+        D::Future: Send,
     {
         Self::new_with_client(
             Client::new_with(credentials_provider, request_dispatcher),

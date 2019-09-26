@@ -1,3 +1,4 @@
+
 // =================================================================
 //
 //                           * WARNING *
@@ -10,9 +11,7 @@
 //
 // =================================================================
 
-#![doc(
-    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
-)]
+#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
 //! <p><fullname>AWS IoT</fullname> <p>AWS IoT-Data enables secure, bi-directional communication between Internet-connected things (such as sensors, actuators, embedded devices, or smart appliances) and the AWS cloud. It implements a broker for applications and things to publish messages over HTTP (Publish) and retrieve, update, and delete thing shadows. A thing shadow is a persistent representation of your things and their state in the AWS cloud.</p></p>
 //!
 //! If you're using the service, you're probably looking for [IotDataClient](struct.IotDataClient.html) and [IotData](trait.IotData.html).
@@ -24,8 +23,9 @@ extern crate serde;
 #[macro_use]
 extern crate serde_derive;
 
-mod custom;
 mod generated;
+mod custom;
 
-pub use crate::custom::*;
 pub use crate::generated::*;
+pub use crate::custom::*;
+            

@@ -1,3 +1,4 @@
+
 // =================================================================
 //
 //                           * WARNING *
@@ -10,9 +11,7 @@
 //
 // =================================================================
 
-#![doc(
-    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
-)]
+#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
 //! <p>Describes all of the AWS IoT 1-Click device-related API operations for the service.
 //! Also provides sample requests, responses, and errors for the supported web services
 //! protocols.</p>
@@ -27,8 +26,9 @@ extern crate serde;
 extern crate serde_derive;
 extern crate serde_json;
 
-mod custom;
 mod generated;
+mod custom;
 
-pub use crate::custom::*;
 pub use crate::generated::*;
+pub use crate::custom::*;
+            

@@ -1,3 +1,4 @@
+
 // =================================================================
 //
 //                           * WARNING *
@@ -10,9 +11,7 @@
 //
 // =================================================================
 
-#![doc(
-    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
-)]
+#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
 //! <p>Provides translation between one source language and another of the same set of languages.</p>
 //!
 //! If you're using the service, you're probably looking for [TranslateClient](struct.TranslateClient.html) and [Translate](trait.Translate.html).
@@ -25,8 +24,9 @@ extern crate serde;
 extern crate serde_derive;
 extern crate serde_json;
 
-mod custom;
 mod generated;
+mod custom;
 
-pub use crate::custom::*;
 pub use crate::generated::*;
+pub use crate::custom::*;
+            

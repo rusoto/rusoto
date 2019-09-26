@@ -14771,4 +14771,5 @@ mod protocol_tests {
         let result = client.get_hosted_zone(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
+
 }
