@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -11,7 +10,9 @@
 //
 // =================================================================
 
-#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
+#![doc(
+    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
+)]
 //! <p>DAX is a managed caching service engineered for Amazon DynamoDB. DAX dramatically speeds up database reads by caching frequently-accessed data from DynamoDB, so applications can access that data with sub-millisecond latency. You can create a DAX cluster easily, using the AWS Management Console. With a few simple modifications to your code, your application can begin taking advantage of the DAX cluster and realize significant improvements in read performance.</p>
 //!
 //! If you're using the service, you're probably looking for [DynamodbAcceleratorClient](struct.DynamodbAcceleratorClient.html) and [DynamodbAccelerator](trait.DynamodbAccelerator.html).
@@ -24,9 +25,8 @@ extern crate serde;
 extern crate serde_derive;
 extern crate serde_json;
 
-mod generated;
 mod custom;
+mod generated;
 
-pub use crate::generated::*;
 pub use crate::custom::*;
-            
+pub use crate::generated::*;

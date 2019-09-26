@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -11,7 +10,9 @@
 //
 // =================================================================
 
-#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
+#![doc(
+    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
+)]
 //! <p><p/></p>
 //!
 //! If you're using the service, you're probably looking for [S3Client](struct.S3Client.html) and [S3](trait.S3.html).
@@ -19,13 +20,12 @@
 extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
-extern crate xml;
 #[cfg(nightly)]
 extern crate test;
+extern crate xml;
 
-mod generated;
 mod custom;
+mod generated;
 
-pub use crate::generated::*;
 pub use crate::custom::*;
-            
+pub use crate::generated::*;

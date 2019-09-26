@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -11,7 +10,9 @@
 //
 // =================================================================
 
-#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
+#![doc(
+    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
+)]
 //! <p>Using the Amazon Cognito User Pools API, you can create a user pool to manage directories and users. You can authenticate a user to obtain tokens related to user identity and access policies.</p> <p>This API reference provides information about user pools in Amazon Cognito User Pools.</p> <p>For more information, see the Amazon Cognito Documentation.</p>
 //!
 //! If you're using the service, you're probably looking for [CognitoIdentityProviderClient](struct.CognitoIdentityProviderClient.html) and [CognitoIdentityProvider](trait.CognitoIdentityProvider.html).
@@ -24,9 +25,8 @@ extern crate serde;
 extern crate serde_derive;
 extern crate serde_json;
 
-mod generated;
 mod custom;
+mod generated;
 
-pub use crate::generated::*;
 pub use crate::custom::*;
-            
+pub use crate::generated::*;

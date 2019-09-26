@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -11,7 +10,9 @@
 //
 // =================================================================
 
-#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
+#![doc(
+    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
+)]
 //! <p> The Amazon SageMaker runtime API. </p>
 //!
 //! If you're using the service, you're probably looking for [SageMakerRuntimeClient](struct.SageMakerRuntimeClient.html) and [SageMakerRuntime](trait.SageMakerRuntime.html).
@@ -23,9 +24,8 @@ extern crate serde;
 #[macro_use]
 extern crate serde_derive;
 
-mod generated;
 mod custom;
+mod generated;
 
-pub use crate::generated::*;
 pub use crate::custom::*;
-            
+pub use crate::generated::*;

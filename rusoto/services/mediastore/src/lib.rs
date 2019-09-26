@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -11,7 +10,9 @@
 //
 // =================================================================
 
-#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
+#![doc(
+    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
+)]
 //! <p>An AWS Elemental MediaStore container is a namespace that holds folders and objects. You use a container endpoint to create, read, and delete objects. </p>
 //!
 //! If you're using the service, you're probably looking for [MediaStoreClient](struct.MediaStoreClient.html) and [MediaStore](trait.MediaStore.html).
@@ -24,9 +25,8 @@ extern crate serde;
 extern crate serde_derive;
 extern crate serde_json;
 
-mod generated;
 mod custom;
+mod generated;
 
-pub use crate::generated::*;
 pub use crate::custom::*;
-            
+pub use crate::generated::*;
