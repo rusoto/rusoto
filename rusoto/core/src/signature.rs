@@ -21,7 +21,7 @@ use md5;
 use sha2::{Digest, Sha256};
 use time::now_utc;
 use time::Tm;
-use url::percent_encoding::{percent_decode, utf8_percent_encode, EncodeSet};
+use percent_encoding::{percent_decode, utf8_percent_encode, AsciiSet, NON_ALPHANUMERIC};
 
 use crate::credential::AwsCredentials;
 use crate::param::{Params, ServiceParams};
@@ -422,7 +422,7 @@ impl SignedRequest {
         // Normalize URI paths according to RFC 3986. Remove redundant and relative path components. Each path segment must be URI-encoded twice (except for Amazon S3 which only gets URI-encoded once).
         // see https://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html
         let canonical_uri = if &self.service != "s3" {
-            utf8_percent_encode(&self.canonical_uri, StrictPathEncodeSet).collect::<String>()
+            utf8_percent_encode(&self.canonical_uri, &STRICT_PATH_ENCODE_SET).collect::<String>()
         } else {
             self.canonical_uri.clone()
         };
@@ -660,45 +660,25 @@ fn build_canonical_query_string_with_plus(
 // characters (0-9 and uppercase A-F). For example, the space character must be
 // encoded as %20 (not using '+', as some encoding schemes do) and extended UTF-8
 // characters must be in the form %XY%ZA%BC
-#[derive(Clone)]
-/// This struct is used to maintain the strict URI encoding standard as proposed by RFC 3986
-pub struct StrictEncodeSet;
+/// This constant is used to maintain the strict URI encoding standard as proposed by RFC 3986
+pub const STRICT_ENCODE_SET: AsciiSet = NON_ALPHANUMERIC
+    .remove(b'-')
+    .remove(b'.')
+    .remove(b'_')
+    .remove(b'~');
 
-impl EncodeSet for StrictEncodeSet {
-    #[inline]
-    fn contains(&self, byte: u8) -> bool {
-        let upper = byte >= 0x41 && byte <= 0x5a;
-        let lower = byte >= 0x61 && byte <= 0x7a;
-        let numeric = byte >= 0x30 && byte <= 0x39;
-        let hyphen = byte == 0x2d;
-        let underscore = byte == 0x5f;
-        let tilde = byte == 0x7e;
-        let period = byte == 0x2e;
-        !(upper || lower || numeric || hyphen || underscore || tilde || period)
-    }
-}
-
-#[derive(Clone)]
 /// This struct is used to maintain the URI path encoding
-pub struct StrictPathEncodeSet;
-
-impl EncodeSet for StrictPathEncodeSet {
-    #[inline]
-    fn contains(&self, byte: u8) -> bool {
-        let slash = byte == b'/';
-        !slash && StrictEncodeSet.contains(byte)
-    }
-}
+pub const STRICT_PATH_ENCODE_SET: AsciiSet = STRICT_ENCODE_SET.remove(b'/');
 
 #[inline]
 #[doc(hidden)]
 pub fn encode_uri_path(uri: &str) -> String {
-    utf8_percent_encode(uri, StrictPathEncodeSet).collect::<String>()
+    utf8_percent_encode(uri, &STRICT_PATH_ENCODE_SET).collect::<String>()
 }
 
 #[inline]
 fn encode_uri_strict(uri: &str) -> String {
-    utf8_percent_encode(&decode_uri(uri), StrictEncodeSet).collect::<String>()
+    utf8_percent_encode(&decode_uri(uri), &STRICT_ENCODE_SET).collect::<String>()
 }
 
 #[inline]
