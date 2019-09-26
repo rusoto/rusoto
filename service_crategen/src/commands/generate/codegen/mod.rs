@@ -188,10 +188,7 @@ where
             ///
             /// The client will use the default credentials provider and tls client.
             pub fn new(region: region::Region) -> {type_name} {{
-                {type_name} {{
-                    client: Client::shared(),
-                    region
-                }}
+                Self::new_with_client(Client::shared(), region)
             }}
 
             pub fn new_with<P, D>(request_dispatcher: D, credentials_provider: P, region: region::Region) -> {type_name}
@@ -200,8 +197,13 @@ where
                       D: DispatchSignedRequest + Send + Sync + 'static,
                       D::Future: Send
             {{
+                Self::new_with_client(Client::new_with(credentials_provider, request_dispatcher), region)
+            }}
+
+            pub fn new_with_client(client: Client, region: region::Region) -> {type_name}
+            {{
                 {type_name} {{
-                    client: Client::new_with(credentials_provider, request_dispatcher),
+                    client,
                     region
                 }}
             }}
