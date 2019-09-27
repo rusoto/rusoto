@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -155,7 +154,7 @@ pub struct ApiStage {
     pub throttle: Option<::std::collections::HashMap<String, ThrottleSettings>>,
 }
 
-/// <p><p>Represents an authorization layer for methods. If enabled on a method, API Gateway will activate the authorizer when a client calls the method.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorization</a> </div></p>
+/// <p><p>Represents an authorization layer for methods. If enabled on a method, API Gateway will activate the authorizer when a client calls the method.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html">Use Lambda Function as Authorizer</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html">Use Cognito User Pool as Authorizer</a> </div></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Authorizer {
@@ -183,7 +182,7 @@ pub struct Authorizer {
     #[serde(rename = "identitySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_source: Option<String>,
-    /// <p>A validation expression for the incoming identity token. For <code>TOKEN</code> authorizers, this value is a regular expression. API Gateway will match the <code>aud</code> field of the incoming token from the client against the specified regular expression. It will invoke the authorizer's Lambda function when there is a match. Otherwise, it will return a 401 Unauthorized response without calling the Lambda function. The validation expression does not apply to the <code>REQUEST</code> authorizer.</p>
+    /// <p>A validation expression for the incoming identity token. For <code>TOKEN</code> authorizers, this value is a regular expression. For <code>COGNITO_USER_POOLS</code> authorizers, API Gateway will match the <code>aud</code> field of the incoming token from the client against the specified regular expression. It will invoke the authorizer's Lambda function when there is a match. Otherwise, it will return a 401 Unauthorized response without calling the Lambda function. The validation expression does not apply to the <code>REQUEST</code> authorizer.</p>
     #[serde(rename = "identityValidationExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_validation_expression: Option<String>,
@@ -201,7 +200,7 @@ pub struct Authorizer {
     pub type_: Option<String>,
 }
 
-/// <p><p>Represents a collection of <a>Authorizer</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorization</a> </div></p>
+/// <p><p>Represents a collection of <a>Authorizer</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html">Use Lambda Function as Authorizer</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html">Use Cognito User Pool as Authorizer</a> </div></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Authorizers {
@@ -369,7 +368,7 @@ pub struct CreateAuthorizerRequest {
     #[serde(rename = "identitySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_source: Option<String>,
-    /// <p>A validation expression for the incoming identity token. For <code>TOKEN</code> authorizers, this value is a regular expression. API Gateway will match the <code>aud</code> field of the incoming token from the client against the specified regular expression. It will invoke the authorizer's Lambda function when there is a match. Otherwise, it will return a 401 Unauthorized response without calling the Lambda function. The validation expression does not apply to the <code>REQUEST</code> authorizer.</p>
+    /// <p>A validation expression for the incoming identity token. For <code>TOKEN</code> authorizers, this value is a regular expression. For <code>COGNITO_USER_POOLS</code> authorizers, API Gateway will match the <code>aud</code> field of the incoming token from the client against the specified regular expression. It will invoke the authorizer's Lambda function when there is a match. Otherwise, it will return a 401 Unauthorized response without calling the Lambda function. The validation expression does not apply to the <code>REQUEST</code> authorizer.</p>
     #[serde(rename = "identityValidationExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_validation_expression: Option<String>,
@@ -391,7 +390,7 @@ pub struct CreateAuthorizerRequest {
 /// <p>Requests API Gateway to create a new <a>BasePathMapping</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateBasePathMappingRequest {
-    /// <p>The base path name that callers of the API must provide as part of the URL after the domain name. This value must be unique for all of the mappings across a single API. Leave this blank if you do not want callers to specify a base path name after the domain name.</p>
+    /// <p>The base path name that callers of the API must provide as part of the URL after the domain name. This value must be unique for all of the mappings across a single API. Specify '(none)' if you do not want callers to specify a base path name after the domain name.</p>
     #[serde(rename = "basePath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub base_path: Option<String>,
@@ -401,7 +400,7 @@ pub struct CreateBasePathMappingRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// <p>The name of the API's stage that you want to use for this mapping. Leave this blank if you do not want callers to explicitly specify the stage name after any base path name.</p>
+    /// <p>The name of the API's stage that you want to use for this mapping. Specify '(none)' if you do not want callers to explicitly specify the stage name after any base path name.</p>
     #[serde(rename = "stage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage: Option<String>,
@@ -518,6 +517,10 @@ pub struct CreateDomainNameRequest {
     #[serde(rename = "regionalCertificateName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub regional_certificate_name: Option<String>,
+    /// <p>The Transport Layer Security (TLS) version + cipher suite for this <a>DomainName</a>. The valid values are <code>TLS_1_0</code> and <code>TLS_1_2</code>.</p>
+    #[serde(rename = "securityPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_policy: Option<String>,
     /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with <code>aws:</code>. The tag value can be up to 256 characters.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -653,7 +656,7 @@ pub struct CreateStageRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// <p>[Required] The name for the <a>Stage</a> resource.</p>
+    /// <p>[Required] The name for the <a>Stage</a> resource. Stage names can only contain alphanumeric characters, hyphens, and underscores. Maximum length is 128 characters.</p>
     #[serde(rename = "stageName")]
     pub stage_name: String,
     /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with <code>aws:</code>. The tag value can be up to 256 characters.</p>
@@ -753,7 +756,7 @@ pub struct DeleteAuthorizerRequest {
 /// <p>A request to delete the <a>BasePathMapping</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteBasePathMappingRequest {
-    /// <p>[Required] The base path name of the <a>BasePathMapping</a> resource to delete.</p>
+    /// <p>[Required] The base path name of the <a>BasePathMapping</a> resource to delete.</p> <p>To specify an empty base path, set this parameter to <code>'(none)'</code>.</p>
     #[serde(rename = "basePath")]
     pub base_path: String,
     /// <p>[Required] The domain name of the <a>BasePathMapping</a> resource to delete.</p>
@@ -1144,6 +1147,14 @@ pub struct DomainName {
     #[serde(rename = "domainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
+    /// <p>The status of the <a>DomainName</a> migration. The valid values are <code>AVAILABLE</code> and <code>UPDATING</code>. If the status is <code>UPDATING</code>, the domain cannot be modified further until the existing operation is complete. If it is <code>AVAILABLE</code>, the domain can be updated.</p>
+    #[serde(rename = "domainNameStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name_status: Option<String>,
+    /// <p>An optional text message containing detailed information about status of the <a>DomainName</a> migration.</p>
+    #[serde(rename = "domainNameStatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name_status_message: Option<String>,
     /// <p>The endpoint configuration of this <a>DomainName</a> showing the endpoint types of the domain name. </p>
     #[serde(rename = "endpointConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1164,6 +1175,10 @@ pub struct DomainName {
     #[serde(rename = "regionalHostedZoneId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub regional_hosted_zone_id: Option<String>,
+    /// <p>The Transport Layer Security (TLS) version + cipher suite for this <a>DomainName</a>. The valid values are <code>TLS_1_0</code> and <code>TLS_1_2</code>.</p>
+    #[serde(rename = "securityPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_policy: Option<String>,
     /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1348,7 +1363,7 @@ pub struct GetAuthorizersRequest {
 /// <p>Request to describe a <a>BasePathMapping</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetBasePathMappingRequest {
-    /// <p>[Required] The base path name that callers of the API must provide as part of the URL after the domain name. This value must be unique for all of the mappings across a single API. Leave this blank if you do not want callers to specify any base path name after the domain name.</p>
+    /// <p>[Required] The base path name that callers of the API must provide as part of the URL after the domain name. This value must be unique for all of the mappings across a single API. Specify '(none)' if you do not want callers to specify any base path name after the domain name.</p>
     #[serde(rename = "basePath")]
     pub base_path: String,
     /// <p>[Required] The domain name of the <a>BasePathMapping</a> resource to be described.</p>
@@ -1824,7 +1839,7 @@ pub struct GetTagsRequest {
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
-    /// <p>[Required] The ARN of a resource that can be tagged. The resource ARN must be URL-encoded. At present, <a>Stage</a> is the only taggable resource.</p>
+    /// <p>[Required] The ARN of a resource that can be tagged. The resource ARN must be URL-encoded.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
 }
@@ -1991,7 +2006,7 @@ pub struct ImportRestApiRequest {
     #[serde(rename = "failOnWarnings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fail_on_warnings: Option<bool>,
-    /// <p><p>A key-value map of context-specific query string parameters specifying the behavior of different API importing operations. The following shows operation-specific parameters and their supported values.</p> <p> To exclude <a>DocumentationParts</a> from the import, set <code>parameters</code> as <code>ignore=documentation</code>.</p> <p> To configure the endpoint type, set <code>parameters</code> as <code>endpointConfigurationTypes=EDGE</code>, <code>endpointConfigurationTypes=REGIONAL</code>, or <code>endpointConfigurationTypes=PRIVATE</code>. The default endpoint type is <code>EDGE</code>.</p> <p> To handle imported <code>basePath</code>, set <code>parameters</code> as <code>basePath=ignore</code>, <code>basePath=prepend</code> or <code>basePath=split</code>.</p> <p>For example, the AWS CLI command to exclude documentation from the imported API is:</p> <pre><code>aws apigateway import-rest-api --parameters ignore=documentation --body &#39;file:///path/to/imported-api-body.json&#39;</code></pre> <p>The AWS CLI command to set the regional endpoint on the imported API is:</p> <pre><code>aws apigateway import-rest-api --parameters endpointConfigurationTypes=REGIONAL --body &#39;file:///path/to/imported-api-body.json&#39;</code></pre></p>
+    /// <p><p>A key-value map of context-specific query string parameters specifying the behavior of different API importing operations. The following shows operation-specific parameters and their supported values.</p> <p> To exclude <a>DocumentationParts</a> from the import, set <code>parameters</code> as <code>ignore=documentation</code>.</p> <p> To configure the endpoint type, set <code>parameters</code> as <code>endpointConfigurationTypes=EDGE</code>, <code>endpointConfigurationTypes=REGIONAL</code>, or <code>endpointConfigurationTypes=PRIVATE</code>. The default endpoint type is <code>EDGE</code>.</p> <p> To handle imported <code>basepath</code>, set <code>parameters</code> as <code>basepath=ignore</code>, <code>basepath=prepend</code> or <code>basepath=split</code>.</p> <p>For example, the AWS CLI command to exclude documentation from the imported API is:</p> <pre><code>aws apigateway import-rest-api --parameters ignore=documentation --body &#39;file:///path/to/imported-api-body.json&#39;</code></pre> <p>The AWS CLI command to set the regional endpoint on the imported API is:</p> <pre><code>aws apigateway import-rest-api --parameters endpointConfigurationTypes=REGIONAL --body &#39;file:///path/to/imported-api-body.json&#39;</code></pre></p>
     #[serde(rename = "parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
@@ -2001,11 +2016,11 @@ pub struct ImportRestApiRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Integration {
-    /// <p>Specifies the integration's cache key parameters.</p>
+    /// <p>A list of request parameters whose values API Gateway caches. To be valid values for <code>cacheKeyParameters</code>, these parameters must also be specified for <a>Method</a> <code>requestParameters</code>.</p>
     #[serde(rename = "cacheKeyParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_key_parameters: Option<Vec<String>>,
-    /// <p>Specifies the integration's cache namespace.</p>
+    /// <p>An API-specific tag group of related cached parameters. To be valid values for <code>cacheKeyParameters</code>, these parameters must also be specified for <a>Method</a> <code>requestParameters</code>.</p>
     #[serde(rename = "cacheNamespace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_namespace: Option<String>,
@@ -2017,7 +2032,7 @@ pub struct Integration {
     #[serde(rename = "connectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
-    /// <p>Specifies how to handle request payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a request payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a request payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the request payload will be passed through from the method request to integration request without modification, provided that the <code>passthroughBehaviors</code> is configured to support payload pass-through.</p>
+    /// <p>Specifies how to handle request payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a request payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a request payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the request payload will be passed through from the method request to integration request without modification, provided that the <code>passthroughBehavior</code> is configured to support payload pass-through.</p>
     #[serde(rename = "contentHandling")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_handling: Option<String>,
@@ -2117,7 +2132,7 @@ pub struct Method {
     #[serde(rename = "methodResponses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub method_responses: Option<::std::collections::HashMap<String, MethodResponse>>,
-    /// <p>A human-friendly operation identifier for the method. For example, you can assign the <code>operationName</code> of <code>ListPets</code> for the <code>GET /pets</code> method in <a href="https://petstore-demo-endpoint.execute-api.com/petstore/pets">PetStore</a> example.</p>
+    /// <p>A human-friendly operation identifier for the method. For example, you can assign the <code>operationName</code> of <code>ListPets</code> for the <code>GET /pets</code> method in the <code>PetStore</code> example.</p>
     #[serde(rename = "operationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation_name: Option<String>,
@@ -2299,11 +2314,11 @@ pub struct PutGatewayResponseRequest {
 /// <p>Sets up a method's integration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutIntegrationRequest {
-    /// <p>Specifies a put integration input's cache key parameters.</p>
+    /// <p>An API-specific tag group of related cached parameters.</p>
     #[serde(rename = "cacheKeyParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_key_parameters: Option<Vec<String>>,
-    /// <p>Specifies a put integration input's cache namespace.</p>
+    /// <p>A list of request parameters whose values are to be cached.</p>
     #[serde(rename = "cacheNamespace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_namespace: Option<String>,
@@ -2315,7 +2330,7 @@ pub struct PutIntegrationRequest {
     #[serde(rename = "connectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
-    /// <p>Specifies how to handle request payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a request payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a request payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the request payload will be passed through from the method request to integration request without modification, provided that the <code>passthroughBehaviors</code> is configured to support payload pass-through.</p>
+    /// <p>Specifies how to handle request payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a request payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a request payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the request payload will be passed through from the method request to integration request without modification, provided that the <code>passthroughBehavior</code> is configured to support payload pass-through.</p>
     #[serde(rename = "contentHandling")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_handling: Option<String>,
@@ -2415,7 +2430,7 @@ pub struct PutMethodRequest {
     /// <p>[Required] Specifies the method request's HTTP method type.</p>
     #[serde(rename = "httpMethod")]
     pub http_method: String,
-    /// <p>A human-friendly operation identifier for the method. For example, you can assign the <code>operationName</code> of <code>ListPets</code> for the <code>GET /pets</code> method in <a href="https://petstore-demo-endpoint.execute-api.com/petstore/pets">PetStore</a> example.</p>
+    /// <p>A human-friendly operation identifier for the method. For example, you can assign the <code>operationName</code> of <code>ListPets</code> for the <code>GET /pets</code> method in the <code>PetStore</code> example.</p>
     #[serde(rename = "operationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation_name: Option<String>,
@@ -2774,7 +2789,7 @@ pub struct Stage {
     #[serde(rename = "methodSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub method_settings: Option<::std::collections::HashMap<String, MethodSetting>>,
-    /// <p>The name of the stage is the first path segment in the Uniform Resource Identifier (URI) of a call to API Gateway.</p>
+    /// <p>The name of the stage is the first path segment in the Uniform Resource Identifier (URI) of a call to API Gateway. Stage names can only contain alphanumeric characters, hyphens, and underscores. Maximum length is 128 characters.</p>
     #[serde(rename = "stageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_name: Option<String>,
@@ -2822,7 +2837,7 @@ pub struct Stages {
 /// <p>Adds or updates a tag on a given resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TagResourceRequest {
-    /// <p>[Required] The ARN of a resource that can be tagged. The resource ARN must be URL-encoded. At present, <a>Stage</a> is the only taggable resource.</p>
+    /// <p>[Required] The ARN of a resource that can be tagged. The resource ARN must be URL-encoded.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
     /// <p>[Required] The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with <code>aws:</code>. The tag value can be up to 256 characters.</p>
@@ -3002,7 +3017,7 @@ pub struct ThrottleSettings {
 /// <p>Removes a tag from a given resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UntagResourceRequest {
-    /// <p>[Required] The ARN of a resource that can be tagged. The resource ARN must be URL-encoded. At present, <a>Stage</a> is the only taggable resource.</p>
+    /// <p>[Required] The ARN of a resource that can be tagged. The resource ARN must be URL-encoded.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
     /// <p>[Required] The Tag keys to delete.</p>
@@ -3049,7 +3064,7 @@ pub struct UpdateAuthorizerRequest {
 /// <p>A request to change information about the <a>BasePathMapping</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateBasePathMappingRequest {
-    /// <p>[Required] The base path of the <a>BasePathMapping</a> resource to change.</p>
+    /// <p>[Required] The base path of the <a>BasePathMapping</a> resource to change.</p> <p>To specify an empty base path, set this parameter to <code>'(none)'</code>.</p>
     #[serde(rename = "basePath")]
     pub base_path: String,
     /// <p>[Required] The domain name of the <a>BasePathMapping</a> resource to change.</p>
@@ -10441,7 +10456,7 @@ pub trait ApiGateway {
     /// <p>Adds or updates a tag on a given resource.</p>
     fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
 
-    /// <p><p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorizers</a> </div></p>
+    /// <p><p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html">Use Lambda Function as Authorizer</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html">Use Cognito User Pool as Authorizer</a> </div></p>
     fn test_invoke_authorizer(
         &self,
         input: TestInvokeAuthorizerRequest,
@@ -10584,10 +10599,7 @@ impl ApiGatewayClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> ApiGatewayClient {
-        ApiGatewayClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -10601,10 +10613,14 @@ impl ApiGatewayClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        ApiGatewayClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> ApiGatewayClient {
+        ApiGatewayClient { client, region }
     }
 }
 
@@ -13822,7 +13838,7 @@ impl ApiGateway for ApiGatewayClient {
         })
     }
 
-    /// <p><p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorizers</a> </div></p>
+    /// <p><p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html">Use Lambda Function as Authorizer</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html">Use Cognito User Pool as Authorizer</a> </div></p>
     fn test_invoke_authorizer(
         &self,
         input: TestInvokeAuthorizerRequest,

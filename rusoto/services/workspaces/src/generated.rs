@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -113,6 +112,36 @@ pub struct ComputeType {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CopyWorkspaceImageRequest {
+    /// <p>A description of the image.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the image.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The identifier of the source image.</p>
+    #[serde(rename = "SourceImageId")]
+    pub source_image_id: String,
+    /// <p>The identifier of the source Region.</p>
+    #[serde(rename = "SourceRegion")]
+    pub source_region: String,
+    /// <p>The tags for the image.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CopyWorkspaceImageResult {
+    /// <p>The identifier of the image.</p>
+    #[serde(rename = "ImageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -722,10 +751,6 @@ pub struct RebuildRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RebuildWorkspacesRequest {
-    /// <p>Reserved.</p>
-    #[serde(rename = "AdditionalInfo")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub additional_info: Option<String>,
     /// <p>The WorkSpace to rebuild. You can specify a single WorkSpace.</p>
     #[serde(rename = "RebuildWorkspaceRequests")]
     pub rebuild_workspace_requests: Vec<RebuildRequest>,
@@ -1304,6 +1329,85 @@ impl Error for AuthorizeIpRulesError {
             AuthorizeIpRulesError::InvalidResourceState(ref cause) => cause,
             AuthorizeIpRulesError::ResourceLimitExceeded(ref cause) => cause,
             AuthorizeIpRulesError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CopyWorkspaceImage
+#[derive(Debug, PartialEq)]
+pub enum CopyWorkspaceImageError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>This operation is not supported.</p>
+    OperationNotSupported(String),
+    /// <p>The specified resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>Your resource limits have been exceeded.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>The specified resource is not available.</p>
+    ResourceUnavailable(String),
+}
+
+impl CopyWorkspaceImageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyWorkspaceImageError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::AccessDenied(err.msg))
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::InvalidParameterValues(
+                        err.msg,
+                    ))
+                }
+                "OperationNotSupportedException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::OperationNotSupported(
+                        err.msg,
+                    ))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::ResourceAlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::ResourceNotFound(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::ResourceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CopyWorkspaceImageError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CopyWorkspaceImageError {
+    fn description(&self) -> &str {
+        match *self {
+            CopyWorkspaceImageError::AccessDenied(ref cause) => cause,
+            CopyWorkspaceImageError::InvalidParameterValues(ref cause) => cause,
+            CopyWorkspaceImageError::OperationNotSupported(ref cause) => cause,
+            CopyWorkspaceImageError::ResourceAlreadyExists(ref cause) => cause,
+            CopyWorkspaceImageError::ResourceLimitExceeded(ref cause) => cause,
+            CopyWorkspaceImageError::ResourceNotFound(ref cause) => cause,
+            CopyWorkspaceImageError::ResourceUnavailable(ref cause) => cause,
         }
     }
 }
@@ -2653,6 +2757,12 @@ pub trait Workspaces {
         input: AuthorizeIpRulesRequest,
     ) -> RusotoFuture<AuthorizeIpRulesResult, AuthorizeIpRulesError>;
 
+    /// <p>Copies the specified image from the specified Region to the current Region.</p>
+    fn copy_workspace_image(
+        &self,
+        input: CopyWorkspaceImageRequest,
+    ) -> RusotoFuture<CopyWorkspaceImageResult, CopyWorkspaceImageError>;
+
     /// <p>Creates an IP access control group.</p> <p>An IP access control group provides you with the ability to control the IP addresses from which users are allowed to access their WorkSpaces. To specify the CIDR address ranges, add rules to your IP access control group and then associate the group with your directory. You can add rules when you create the group or at any time using <a>AuthorizeIpRules</a>.</p> <p>There is a default IP access control group associated with your directory. If you don't associate an IP access control group with your directory, the default group is used. The default group includes a default rule that allows users to access their WorkSpaces from anywhere. You cannot modify the default IP access control group for your directory.</p>
     fn create_ip_group(
         &self,
@@ -2683,7 +2793,7 @@ pub trait Workspaces {
         input: DeleteTagsRequest,
     ) -> RusotoFuture<DeleteTagsResult, DeleteTagsError>;
 
-    /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image. </p>
+    /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image and un-share the image if it is shared with other accounts. </p>
     fn delete_workspace_image(
         &self,
         input: DeleteWorkspaceImageRequest,
@@ -2785,7 +2895,7 @@ pub trait Workspaces {
         input: ModifyWorkspacePropertiesRequest,
     ) -> RusotoFuture<ModifyWorkspacePropertiesResult, ModifyWorkspacePropertiesError>;
 
-    /// <p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, or rebuild. An AutoStop WorkSpace in this state is not stopped. Users can log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>
+    /// <p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, rebuild, or restore. An AutoStop WorkSpace in this state is not stopped. Users cannot log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>
     fn modify_workspace_state(
         &self,
         input: ModifyWorkspaceStateRequest,
@@ -2845,10 +2955,7 @@ impl WorkspacesClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> WorkspacesClient {
-        WorkspacesClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -2862,10 +2969,14 @@ impl WorkspacesClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        WorkspacesClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> WorkspacesClient {
+        WorkspacesClient { client, region }
     }
 }
 
@@ -2923,6 +3034,35 @@ impl Workspaces for WorkspacesClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(AuthorizeIpRulesError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Copies the specified image from the specified Region to the current Region.</p>
+    fn copy_workspace_image(
+        &self,
+        input: CopyWorkspaceImageRequest,
+    ) -> RusotoFuture<CopyWorkspaceImageResult, CopyWorkspaceImageError> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.CopyWorkspaceImage");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CopyWorkspaceImageResult, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CopyWorkspaceImageError::from_response(response))),
                 )
             }
         })
@@ -3073,7 +3213,7 @@ impl Workspaces for WorkspacesClient {
         })
     }
 
-    /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image. </p>
+    /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image and un-share the image if it is shared with other accounts. </p>
     fn delete_workspace_image(
         &self,
         input: DeleteWorkspaceImageRequest,
@@ -3557,7 +3697,7 @@ impl Workspaces for WorkspacesClient {
         })
     }
 
-    /// <p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, or rebuild. An AutoStop WorkSpace in this state is not stopped. Users can log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>
+    /// <p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, rebuild, or restore. An AutoStop WorkSpace in this state is not stopped. Users cannot log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>
     fn modify_workspace_state(
         &self,
         input: ModifyWorkspaceStateRequest,

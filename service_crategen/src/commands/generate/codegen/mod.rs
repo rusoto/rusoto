@@ -131,11 +131,10 @@ where
         //  must be updated to generate the changes.
         //
         // =================================================================
+        #![allow(warnings)]
 
         use std::error::Error;
         use std::fmt;
-
-        #[allow(warnings)]
         use futures::future;
         use futures::Future;
         use rusoto_core::request::{{BufferedHttpResponse, DispatchSignedRequest}};
@@ -188,10 +187,7 @@ where
             ///
             /// The client will use the default credentials provider and tls client.
             pub fn new(region: region::Region) -> {type_name} {{
-                {type_name} {{
-                    client: Client::shared(),
-                    region
-                }}
+                Self::new_with_client(Client::shared(), region)
             }}
 
             pub fn new_with<P, D>(request_dispatcher: D, credentials_provider: P, region: region::Region) -> {type_name}
@@ -200,8 +196,13 @@ where
                       D: DispatchSignedRequest + Send + Sync + 'static,
                       D::Future: Send
             {{
+                Self::new_with_client(Client::new_with(credentials_provider, request_dispatcher), region)
+            }}
+
+            pub fn new_with_client(client: Client, region: region::Region) -> {type_name}
+            {{
                 {type_name} {{
-                    client: Client::new_with(credentials_provider, request_dispatcher),
+                    client,
                     region
                 }}
             }}
@@ -284,7 +285,7 @@ fn is_streaming_shape(service: &Service<'_>, name: &str) -> bool {
         .any(|(_, shape)| streaming_members(shape).any(|member| member.shape == name))
 }
 
-// do any type name mutation needed to avoid collisions with Rust types
+// do any type name mutation for shapes needed to avoid collisions with Rust types and Error enum types
 fn mutate_type_name(service: &Service<'_>, type_name: &str) -> String {
     let capitalized = util::capitalize_first(type_name.to_owned());
 
@@ -309,6 +310,12 @@ fn mutate_type_name(service: &Service<'_>, type_name: &str) -> String {
 
         // EC2 has an CreateFleetError struct, avoid collision with our error enum
         "CreateFleetError" => "EC2CreateFleetError".to_owned(),
+
+        // codecommit has a BatchDescribeMergeConflictsError, avoid collision with our error enum
+        "BatchDescribeMergeConflictsError" => "CodeCommitBatchDescribeMergeConflictsError".to_owned(),
+
+        // codecommit has a BatchGetCommitsError, avoid collision with our error enum
+        "BatchGetCommitsError" => "CodeCommitBatchGetCommitsError".to_owned(),
 
         // otherwise make sure it's rust-idiomatic and capitalized
         _ => without_underscores,

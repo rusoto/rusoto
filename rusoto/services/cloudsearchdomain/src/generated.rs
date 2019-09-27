@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -474,10 +473,7 @@ impl CloudSearchDomainClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> CloudSearchDomainClient {
-        CloudSearchDomainClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -491,10 +487,14 @@ impl CloudSearchDomainClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        CloudSearchDomainClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CloudSearchDomainClient {
+        CloudSearchDomainClient { client, region }
     }
 }
 
@@ -549,7 +549,8 @@ impl CloudSearchDomain for CloudSearchDomainClient {
         if let Some(ref x) = input.stats {
             params.put("stats", x);
         }
-        params.put("format", "sdk&pretty");
+        params.put("format", "sdk");
+        params.put("pretty", "true");
         request.set_params(params);
 
         self.client.sign_and_dispatch(request, |response| {
@@ -586,7 +587,8 @@ impl CloudSearchDomain for CloudSearchDomainClient {
             params.put("size", x);
         }
         params.put("suggester", &input.suggester);
-        params.put("format", "sdk&pretty");
+        params.put("format", "sdk");
+        params.put("pretty", "true");
         request.set_params(params);
 
         self.client.sign_and_dispatch(request, |response| {

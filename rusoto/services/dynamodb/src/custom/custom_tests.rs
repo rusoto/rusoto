@@ -1,8 +1,8 @@
-use crate::generated::{AttributeValue};
+use crate::generated::AttributeValue;
 
 #[test]
 fn attribute_value_default_is_empty() {
-    let all_default = AttributeValue{
+    let all_default = AttributeValue {
         ..Default::default()
     };
 
@@ -12,7 +12,7 @@ fn attribute_value_default_is_empty() {
 
 #[test]
 fn attribute_value_with_blob_contains_only_blob() {
-    let all_default = AttributeValue{
+    let all_default = AttributeValue {
         b: Some("foo".bytes().collect()),
         ..Default::default()
     };
@@ -23,7 +23,7 @@ fn attribute_value_with_blob_contains_only_blob() {
 
 #[test]
 fn attribute_value_with_number_contains_only_number() {
-    let all_default = AttributeValue{
+    let all_default = AttributeValue {
         n: Some(1234.to_string()),
         ..Default::default()
     };
@@ -34,11 +34,11 @@ fn attribute_value_with_number_contains_only_number() {
 
 #[test]
 fn attribute_value_with_binary_set() {
-    let all_default = AttributeValue{
+    let all_default = AttributeValue {
         bs: Some(vec![
             "foo".bytes().collect(),
             "bar".bytes().collect(),
-            "baz".bytes().collect()
+            "baz".bytes().collect(),
         ]),
         ..Default::default()
     };

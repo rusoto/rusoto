@@ -1,6 +1,6 @@
 
 # Rusoto OpsWorksCM
-Rust SDK for AWS OpsWorks for Chef Automate
+Rust SDK for AWS OpsWorks CM
 
 You may be looking for:
 

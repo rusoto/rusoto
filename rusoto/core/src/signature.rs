@@ -21,7 +21,7 @@ use md5;
 use sha2::{Digest, Sha256};
 use time::now_utc;
 use time::Tm;
-use url::percent_encoding::{percent_decode, utf8_percent_encode, EncodeSet};
+use percent_encoding::{percent_decode, utf8_percent_encode, AsciiSet, NON_ALPHANUMERIC};
 
 use crate::credential::AwsCredentials;
 use crate::param::{Params, ServiceParams};
@@ -254,10 +254,7 @@ impl SignedRequest {
         debug!("Presigning request URL");
 
         self.sign(creds);
-        let hostname = match self.hostname {
-            Some(ref h) => h.to_string(),
-            None => build_hostname(&self.service, &self.region),
-        };
+        let hostname = self.hostname();
 
         let current_time = now_utc();
         let current_time_fmted = current_time.strftime("%Y%m%dT%H%M%SZ").unwrap();
@@ -312,16 +309,12 @@ impl SignedRequest {
 
         let payload = if should_sha256_sign_payload {
             match self.payload {
-                None => {
-                    Cow::Borrowed(EMPTY_SHA256_HASH)
-                }
+                None => Cow::Borrowed(EMPTY_SHA256_HASH),
                 Some(SignedRequestPayload::Buffer(ref payload)) => {
                     let (digest, _len) = digest_payload(&payload);
                     Cow::Owned(digest)
                 }
-                Some(SignedRequestPayload::Stream(ref _stream)) => {
-                    Cow::Borrowed(UNSIGNED_PAYLOAD)
-                }
+                Some(SignedRequestPayload::Stream(ref _stream)) => Cow::Borrowed(UNSIGNED_PAYLOAD),
             }
         } else {
             Cow::Borrowed(UNSIGNED_PAYLOAD)
@@ -381,28 +374,48 @@ impl SignedRequest {
         self.sign_with_plus(creds, false)
     }
 
-    /// Signs the request using Amazon Signature version 4 to verify identity.
-    /// Authorization header uses AWS4-HMAC-SHA256 for signing.
-    pub fn sign_with_plus(&mut self, creds: &AwsCredentials, should_treat_plus_literally: bool) {
-        debug!("Creating request to send to AWS.");
-        let hostname = match self.hostname {
-            Some(ref h) => h.to_string(),
-            None => build_hostname(&self.service, &self.region),
-        };
+    /// Complement SignedRequest by ensuring the following HTTP headers are set accordingly:
+    /// - host
+    /// - content-type
+    /// - content-length (if applicable)
+    pub fn complement(&mut self) {
+        self.complement_with_plus(false)
+    }
 
+    /// Complement SignedRequest by ensuring the following HTTP headers are set accordingly:
+    /// - host
+    /// - content-type
+    /// - content-length (if applicable)
+    pub fn complement_with_plus(&mut self, should_treat_plus_literally: bool) {
+        // build the canonical request
+        self.canonical_uri = self.canonical_path();
+        self.canonical_query_string =
+            build_canonical_query_string_with_plus(&self.params, should_treat_plus_literally);
         // Gotta remove and re-add headers since by default they append the value.  If we're following
         // a 307 redirect we end up with Three Stooges in the headers with duplicate values.
         self.remove_header("host");
-        self.add_header("host", &hostname);
-
-        if let Some(ref token) = *creds.token() {
-            self.remove_header("X-Amz-Security-Token");
-            self.add_header("X-Amz-Security-Token", token);
+        self.add_header("host", &self.hostname());
+        // if there's no content-type header set, set it to the default value
+        if let Entry::Vacant(entry) = self.headers.entry("content-type".to_owned()) {
+            let mut values = Vec::new();
+            values.push(b"application/octet-stream".to_vec());
+            entry.insert(values);
         }
+        let len = match self.payload {
+            None => Some(0),
+            Some(SignedRequestPayload::Buffer(ref payload)) => Some(payload.len()),
+            Some(SignedRequestPayload::Stream(ref stream)) => stream.size_hint(),
+        };
+        if let Some(len) = len {
+            self.remove_header("content-length");
+            self.add_header("content-length", &format!("{}", len));
+        }
+    }
 
-        self.canonical_query_string =
-            build_canonical_query_string_with_plus(&self.params, should_treat_plus_literally);
-
+    /// Signs the request using Amazon Signature version 4 to verify identity.
+    /// Authorization header uses AWS4-HMAC-SHA256 for signing.
+    pub fn sign_with_plus(&mut self, creds: &AwsCredentials, should_treat_plus_literally: bool) {
+        self.complement_with_plus(should_treat_plus_literally);
         let date = now_utc();
         self.remove_header("x-amz-date");
         self.add_header(
@@ -410,42 +423,33 @@ impl SignedRequest {
             &date.strftime("%Y%m%dT%H%M%SZ").unwrap().to_string(),
         );
 
-        // if there's no content-type header set, set it to the default value
-        if let Entry::Vacant(entry) = self.headers.entry("content-type".to_owned()) {
-            let mut values = Vec::new();
-            values.push(b"application/octet-stream".to_vec());
-            entry.insert(values);
+        if let Some(ref token) = *creds.token() {
+            self.remove_header("X-Amz-Security-Token");
+            self.add_header("X-Amz-Security-Token", token);
         }
-
-        // build the canonical request
-        self.canonical_uri = canonical_uri(&self.path, &self.region);
-        // Normalize URI paths according to RFC 3986. Remove redundant and relative path components. Each path segment must be URI-encoded twice (except for Amazon S3 which only gets URI-encoded once).
-        // see https://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html
-        let canonical_uri = if &self.service != "s3" {
-            utf8_percent_encode(&self.canonical_uri, StrictPathEncodeSet).collect::<String>()
-        } else {
-            self.canonical_uri.clone()
-        };
-
-        let (digest, len) = match self.payload {
-            None => {
-                (Cow::Borrowed(EMPTY_SHA256_HASH), Some(0))
-            }
-            Some(SignedRequestPayload::Buffer(ref payload)) => {
-                let (digest, len) = digest_payload(&payload);
-                (Cow::Owned(digest), Some(len))
-            }
-            Some(SignedRequestPayload::Stream(ref stream)) => {
-                (Cow::Borrowed(UNSIGNED_PAYLOAD), stream.size_hint())
-            }
-        };
-
-        self.remove_header("x-amz-content-sha256");
-        self.add_header("x-amz-content-sha256", &digest);
 
         let signed_headers = signed_headers(&self.headers);
 
         let canonical_headers = canonical_headers(&self.headers);
+
+        let digest = match self.payload {
+            None => Cow::Borrowed(EMPTY_SHA256_HASH),
+            Some(SignedRequestPayload::Buffer(ref payload)) => {
+                let (digest, _) = digest_payload(&payload);
+                Cow::Owned(digest)
+            }
+            Some(SignedRequestPayload::Stream(_)) => Cow::Borrowed(UNSIGNED_PAYLOAD),
+        };
+        self.remove_header("x-amz-content-sha256");
+        self.add_header("x-amz-content-sha256", &digest);
+
+        // Normalize URI paths according to RFC 3986. Remove redundant and relative path components. Each path segment must be URI-encoded twice (except for Amazon S3 which only gets URI-encoded once).
+        // see https://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html
+        let canonical_uri = if &self.service != "s3" {
+            utf8_percent_encode(&self.canonical_uri, &STRICT_PATH_ENCODE_SET).collect::<String>()
+        } else {
+            self.canonical_uri.clone()
+        };
 
         let canonical_request = format!(
             "{}\n{}\n{}\n{}\n{}\n{}",
@@ -456,11 +460,6 @@ impl SignedRequest {
             signed_headers,
             digest
         );
-
-        if let Some(len) = len {
-            self.remove_header("content-length");
-            self.add_header("content-length", &format!("{}", len));
-        }
 
         // use the hashed canonical request to build the string to sign
         let hashed_canonical_request = to_hexdigest(&canonical_request);
@@ -660,45 +659,25 @@ fn build_canonical_query_string_with_plus(
 // characters (0-9 and uppercase A-F). For example, the space character must be
 // encoded as %20 (not using '+', as some encoding schemes do) and extended UTF-8
 // characters must be in the form %XY%ZA%BC
-#[derive(Clone)]
-/// This struct is used to maintain the strict URI encoding standard as proposed by RFC 3986
-pub struct StrictEncodeSet;
+/// This constant is used to maintain the strict URI encoding standard as proposed by RFC 3986
+pub const STRICT_ENCODE_SET: AsciiSet = NON_ALPHANUMERIC
+    .remove(b'-')
+    .remove(b'.')
+    .remove(b'_')
+    .remove(b'~');
 
-impl EncodeSet for StrictEncodeSet {
-    #[inline]
-    fn contains(&self, byte: u8) -> bool {
-        let upper = byte >= 0x41 && byte <= 0x5a;
-        let lower = byte >= 0x61 && byte <= 0x7a;
-        let numeric = byte >= 0x30 && byte <= 0x39;
-        let hyphen = byte == 0x2d;
-        let underscore = byte == 0x5f;
-        let tilde = byte == 0x7e;
-        let period = byte == 0x2e;
-        !(upper || lower || numeric || hyphen || underscore || tilde || period)
-    }
-}
-
-#[derive(Clone)]
 /// This struct is used to maintain the URI path encoding
-pub struct StrictPathEncodeSet;
-
-impl EncodeSet for StrictPathEncodeSet {
-    #[inline]
-    fn contains(&self, byte: u8) -> bool {
-        let slash = byte == b'/';
-        !slash && StrictEncodeSet.contains(byte)
-    }
-}
+pub const STRICT_PATH_ENCODE_SET: AsciiSet = STRICT_ENCODE_SET.remove(b'/');
 
 #[inline]
 #[doc(hidden)]
 pub fn encode_uri_path(uri: &str) -> String {
-    utf8_percent_encode(uri, StrictPathEncodeSet).collect::<String>()
+    utf8_percent_encode(uri, &STRICT_PATH_ENCODE_SET).collect::<String>()
 }
 
 #[inline]
 fn encode_uri_strict(uri: &str) -> String {
-    utf8_percent_encode(&decode_uri(uri), StrictEncodeSet).collect::<String>()
+    utf8_percent_encode(&decode_uri(uri), &STRICT_ENCODE_SET).collect::<String>()
 }
 
 #[inline]

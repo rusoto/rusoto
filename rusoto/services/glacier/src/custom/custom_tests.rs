@@ -2,8 +2,8 @@ extern crate rusoto_mock;
 
 use crate::generated::*;
 
-use rusoto_core::Region;
 use self::rusoto_mock::*;
+use rusoto_core::Region;
 
 #[test]
 fn test_initiate_multipart_part_response() {
@@ -40,5 +40,9 @@ fn test_upload_multipart_part_response() {
         .upload_multipart_part(upload_part_copy_req)
         .sync()
         .expect("Should parse empty body");
-    assert_eq!(result.checksum.unwrap(), "42", "Should handle checksum in response");
+    assert_eq!(
+        result.checksum.unwrap(),
+        "42",
+        "Should handle checksum in response"
+    );
 }

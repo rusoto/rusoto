@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -140,10 +139,10 @@ pub struct ActionContext {
 /// <p>Represents information about an action declaration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ActionDeclaration {
-    /// <p>The configuration information for the action type.</p>
+    /// <p>Specifies the action type and the provider of the action.</p>
     #[serde(rename = "actionTypeId")]
     pub action_type_id: ActionTypeId,
-    /// <p>The action declaration's configuration.</p>
+    /// <p>The action's configuration. These are key-value pairs that specify input values for an action. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#action-requirements">Action Structure Requirements in CodePipeline</a>. For the list of configuration properties for the AWS CloudFormation action type in CodePipeline, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/continuous-delivery-codepipeline-action-reference.html">Configuration Properties Reference</a> in the <i>AWS CloudFormation User Guide</i>. For template snippets with examples, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/continuous-delivery-codepipeline-parameter-override-functions.html">Using Parameter Override Functions with CodePipeline Pipelines</a> in the <i>AWS CloudFormation User Guide</i>.</p> <p>The values can be represented in either JSON or YAML format. For example, the JSON configuration item format is as follows: </p> <p> <i>JSON:</i> </p> <p> <code>"Configuration" : { Key : Value },</code> </p>
     #[serde(rename = "configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<::std::collections::HashMap<String, String>>,
@@ -525,7 +524,7 @@ pub struct ArtifactRevision {
     pub revision_url: Option<String>,
 }
 
-/// <p>The Amazon S3 bucket where artifacts are stored for the pipeline.</p>
+/// <p><p>The Amazon S3 bucket where artifacts are stored for the pipeline.</p> <note> <p>You must include either <code>artifactStore</code> or <code>artifactStores</code> in your pipeline, but you cannot use both. If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ArtifactStore {
     /// <p>The encryption key used to encrypt the data in the artifact store, such as an AWS Key Management Service (AWS KMS) key. If this is undefined, the default key for Amazon S3 is used.</p>
@@ -720,7 +719,7 @@ pub struct EnableStageTransitionInput {
 /// <p>Represents information about the key used to encrypt data in the artifact store, such as an AWS Key Management Service (AWS KMS) key.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EncryptionKey {
-    /// <p>The ID used to identify the key. For an AWS KMS key, this is the key ID or key ARN.</p>
+    /// <p><p>The ID used to identify the key. For an AWS KMS key, you can use the key ID, the key ARN, or the alias ARN.</p> <note> <p>Aliases are recognized only in the account that created the customer master key (CMK). For cross-account actions, you can only use the key ID or key ARN to identify the key.</p> </note></p>
     #[serde(rename = "id")]
     pub id: String,
     /// <p>The type of encryption key, such as an AWS Key Management Service (AWS KMS) key. When creating or updating a pipeline, the value must be set to 'KMS'.</p>
@@ -757,6 +756,20 @@ pub struct ExecutionDetails {
     #[serde(rename = "summary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub summary: Option<String>,
+}
+
+/// <p>The interaction or event that started a pipeline execution.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ExecutionTrigger {
+    /// <p>Detail related to the event that started a pipeline execution, such as the webhook ARN of the webhook that triggered the pipeline execution or the user ARN for a user-initiated <code>start-pipeline-execution</code> CLI command.</p>
+    #[serde(rename = "triggerDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trigger_detail: Option<String>,
+    /// <p>The type of change-detection method, command, or user interaction that started a pipeline execution.</p>
+    #[serde(rename = "triggerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trigger_type: Option<String>,
 }
 
 /// <p>Represents information about failure details.</p>
@@ -1213,11 +1226,11 @@ pub struct PipelineContext {
 /// <p>Represents the structure of actions and stages to be performed in the pipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PipelineDeclaration {
-    /// <p>Represents information about the Amazon S3 bucket where artifacts are stored for the pipeline. </p>
+    /// <p><p>Represents information about the Amazon S3 bucket where artifacts are stored for the pipeline.</p> <note> <p>You must include either <code>artifactStore</code> or <code>artifactStores</code> in your pipeline, but you cannot use both. If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p> </note></p>
     #[serde(rename = "artifactStore")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub artifact_store: Option<ArtifactStore>,
-    /// <p>A mapping of <code>artifactStore</code> objects and their corresponding regions. There must be an artifact store for the pipeline region and for each cross-region action within the pipeline. You can only use either <code>artifactStore</code> or <code>artifactStores</code>, not both.</p> <p>If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p>
+    /// <p><p>A mapping of <code>artifactStore</code> objects and their corresponding regions. There must be an artifact store for the pipeline region and for each cross-region action within the pipeline.</p> <note> <p>You must include either <code>artifactStore</code> or <code>artifactStores</code> in your pipeline, but you cannot use both. If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p> </note></p>
     #[serde(rename = "artifactStores")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub artifact_stores: Option<::std::collections::HashMap<String, ArtifactStore>>,
@@ -1286,6 +1299,10 @@ pub struct PipelineExecutionSummary {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p>The interaction or event that started a pipeline execution, such as automated change detection or a <code>StartPipelineExecution</code> API call.</p>
+    #[serde(rename = "trigger")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trigger: Option<ExecutionTrigger>,
 }
 
 /// <p>Information about a pipeline.</p>
@@ -3539,7 +3556,7 @@ pub trait CodePipeline {
         input: CreateCustomActionTypeInput,
     ) -> RusotoFuture<CreateCustomActionTypeOutput, CreateCustomActionTypeError>;
 
-    /// <p>Creates a pipeline.</p>
+    /// <p><p>Creates a pipeline.</p> <note> <p>In the pipeline structure, you must include either <code>artifactStore</code> or <code>artifactStores</code> in your pipeline, but you cannot use both. If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p> </note></p>
     fn create_pipeline(
         &self,
         input: CreatePipelineInput,
@@ -3746,10 +3763,7 @@ impl CodePipelineClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> CodePipelineClient {
-        CodePipelineClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -3763,10 +3777,14 @@ impl CodePipelineClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        CodePipelineClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CodePipelineClient {
+        CodePipelineClient { client, region }
     }
 }
 
@@ -3860,7 +3878,7 @@ impl CodePipeline for CodePipelineClient {
         })
     }
 
-    /// <p>Creates a pipeline.</p>
+    /// <p><p>Creates a pipeline.</p> <note> <p>In the pipeline structure, you must include either <code>artifactStore</code> or <code>artifactStores</code> in your pipeline, but you cannot use both. If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p> </note></p>
     fn create_pipeline(
         &self,
         input: CreatePipelineInput,

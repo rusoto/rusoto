@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -217,6 +216,18 @@ pub struct AddThingToThingGroupRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct AddThingToThingGroupResponse {}
 
+/// <p>Parameters used when defining a mitigation action that move a set of things to a thing group.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AddThingsToThingGroupParams {
+    /// <p>Specifies if this mitigation action can move the things that triggered the mitigation action even if they are part of one or more dynamic things groups.</p>
+    #[serde(rename = "overrideDynamicGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub override_dynamic_groups: Option<bool>,
+    /// <p>The list of groups to which you want to add the things that triggered the mitigation action. You can add a thing to a maximum of 10 groups, but you cannot add a thing to more than one group in the same hierarchy.</p>
+    #[serde(rename = "thingGroupNames")]
+    pub thing_group_names: Vec<String>,
+}
+
 /// <p>A structure containing the alert target ARN and the role ARN.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AlertTarget {
@@ -327,7 +338,7 @@ pub struct AttributePayload {
     #[serde(rename = "attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
-    /// <p><p>Specifies whether the list of attributes provided in the <code>AttributePayload</code> is merged with the attributes stored in the registry, instead of overwriting them.</p> <p>To remove an attribute, call <code>UpdateThing</code> with an empty attribute value.</p> <note> <p>The <code>merge</code> attribute is only valid when calling <code>UpdateThing</code>.</p> </note></p>
+    /// <p><p>Specifies whether the list of attributes provided in the <code>AttributePayload</code> is merged with the attributes stored in the registry, instead of overwriting them.</p> <p>To remove an attribute, call <code>UpdateThing</code> with an empty attribute value.</p> <note> <p>The <code>merge</code> attribute is only valid when calling <code>UpdateThing</code> or <code>UpdateThingGroup</code>.</p> </note></p>
     #[serde(rename = "merge")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub merge: Option<bool>,
@@ -346,23 +357,23 @@ pub struct AuditCheckConfiguration {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct AuditCheckDetails {
-    /// <p>True if the check completed and found all resources compliant.</p>
+    /// <p>True if the check is complete and found all resources compliant.</p>
     #[serde(rename = "checkCompliant")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub check_compliant: Option<bool>,
-    /// <p>The completion status of this check, one of "IN_PROGRESS", "WAITING_FOR_DATA_COLLECTION", "CANCELED", "COMPLETED_COMPLIANT", "COMPLETED_NON_COMPLIANT", or "FAILED".</p>
+    /// <p>The completion status of this check. One of "IN_PROGRESS", "WAITING_FOR_DATA_COLLECTION", "CANCELED", "COMPLETED_COMPLIANT", "COMPLETED_NON_COMPLIANT", or "FAILED".</p>
     #[serde(rename = "checkRunStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub check_run_status: Option<String>,
-    /// <p>The code of any error encountered when performing this check during this audit. One of "INSUFFICIENT_PERMISSIONS", or "AUDIT_CHECK_DISABLED".</p>
+    /// <p>The code of any error encountered when this check is performed during this audit. One of "INSUFFICIENT_PERMISSIONS" or "AUDIT_CHECK_DISABLED".</p>
     #[serde(rename = "errorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    /// <p>The message associated with any error encountered when performing this check during this audit.</p>
+    /// <p>The message associated with any error encountered when this check is performed during this audit.</p>
     #[serde(rename = "message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    /// <p>The number of resources that the check found non-compliant.</p>
+    /// <p>The number of resources that were found noncompliant during the check.</p>
     #[serde(rename = "nonCompliantResourcesCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub non_compliant_resources_count: Option<i64>,
@@ -380,19 +391,23 @@ pub struct AuditFinding {
     #[serde(rename = "checkName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub check_name: Option<String>,
+    /// <p>A unique identifier for this set of audit findings. This identifier is used to apply mitigation tasks to one or more sets of findings.</p>
+    #[serde(rename = "findingId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finding_id: Option<String>,
     /// <p>The time the result (finding) was discovered.</p>
     #[serde(rename = "findingTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finding_time: Option<f64>,
-    /// <p>The resource that was found to be non-compliant with the audit check.</p>
+    /// <p>The resource that was found to be noncompliant with the audit check.</p>
     #[serde(rename = "nonCompliantResource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub non_compliant_resource: Option<NonCompliantResource>,
-    /// <p>The reason the resource was non-compliant.</p>
+    /// <p>The reason the resource was noncompliant.</p>
     #[serde(rename = "reasonForNonCompliance")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reason_for_non_compliance: Option<String>,
-    /// <p>A code which indicates the reason that the resource was non-compliant.</p>
+    /// <p>A code that indicates the reason that the resource was noncompliant.</p>
     #[serde(rename = "reasonForNonComplianceCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reason_for_non_compliance_code: Option<String>,
@@ -404,7 +419,7 @@ pub struct AuditFinding {
     #[serde(rename = "severity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub severity: Option<String>,
-    /// <p>The ID of the audit that generated this result (finding)</p>
+    /// <p>The ID of the audit that generated this result (finding).</p>
     #[serde(rename = "taskId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_id: Option<String>,
@@ -412,6 +427,83 @@ pub struct AuditFinding {
     #[serde(rename = "taskStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_start_time: Option<f64>,
+}
+
+/// <p>Returned by ListAuditMitigationActionsTask, this object contains information that describes a mitigation action that has been started.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AuditMitigationActionExecutionMetadata {
+    /// <p>The unique identifier for the mitigation action being applied by the task.</p>
+    #[serde(rename = "actionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_id: Option<String>,
+    /// <p>The friendly name of the mitigation action being applied by the task.</p>
+    #[serde(rename = "actionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_name: Option<String>,
+    /// <p>The date and time when the task was completed or canceled. Blank if the task is still running.</p>
+    #[serde(rename = "endTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>If an error occurred, the code that indicates which type of error occurred.</p>
+    #[serde(rename = "errorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>The unique identifier for the findings to which the task and associated mitigation action are applied.</p>
+    #[serde(rename = "findingId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finding_id: Option<String>,
+    /// <p>If an error occurred, a message that describes the error.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The date and time when the task was started.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p>The current status of the task being executed.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The unique identifier for the task that applies the mitigation action.</p>
+    #[serde(rename = "taskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_id: Option<String>,
+}
+
+/// <p>Information about an audit mitigation actions task that is returned by <code>ListAuditMitigationActionsTasks</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AuditMitigationActionsTaskMetadata {
+    /// <p>The time at which the audit mitigation actions task was started.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p>The unique identifier for the task.</p>
+    #[serde(rename = "taskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_id: Option<String>,
+    /// <p>The current state of the audit mitigation actions task.</p>
+    #[serde(rename = "taskStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_status: Option<String>,
+}
+
+/// <p>Used in MitigationActionParams, this information identifies the target findings to which the mitigation actions are applied. Only one entry appears.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AuditMitigationActionsTaskTarget {
+    /// <p>Specifies a filter in the form of an audit check and set of reason codes that identify the findings from the audit to which the audit mitigation actions task apply.</p>
+    #[serde(rename = "auditCheckToReasonCodeFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audit_check_to_reason_code_filter: Option<::std::collections::HashMap<String, Vec<String>>>,
+    /// <p>If the task will apply a mitigation action to findings from a specific audit, this value uniquely identifies the audit.</p>
+    #[serde(rename = "auditTaskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audit_task_id: Option<String>,
+    /// <p>If the task will apply a mitigation action to one or more listed findings, this value uniquely identifies those findings.</p>
+    #[serde(rename = "findingIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finding_ids: Option<Vec<String>>,
 }
 
 /// <p>Information about the targets to which audit notifications are sent.</p>
@@ -439,11 +531,11 @@ pub struct AuditTaskMetadata {
     #[serde(rename = "taskId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_id: Option<String>,
-    /// <p>The status of this audit: one of "IN_PROGRESS", "COMPLETED", "FAILED" or "CANCELED".</p>
+    /// <p>The status of this audit. One of "IN_PROGRESS", "COMPLETED", "FAILED", or "CANCELED".</p>
     #[serde(rename = "taskStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_status: Option<String>,
-    /// <p>The type of this audit: one of "ON_DEMAND_AUDIT_TASK" or "SCHEDULED_AUDIT_TASK".</p>
+    /// <p>The type of this audit. One of "ON_DEMAND_AUDIT_TASK" or "SCHEDULED_AUDIT_TASK".</p>
     #[serde(rename = "taskType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_type: Option<String>,
@@ -684,6 +776,17 @@ pub struct CACertificateDescription {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub validity: Option<CertificateValidity>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CancelAuditMitigationActionsTaskRequest {
+    /// <p>The unique identifier for the task that you want to cancel. </p>
+    #[serde(rename = "taskId")]
+    pub task_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CancelAuditMitigationActionsTaskResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CancelAuditTaskRequest {
@@ -1202,6 +1305,36 @@ pub struct CreateKeysAndCertificateResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateMitigationActionRequest {
+    /// <p>A friendly name for the action. Choose a friendly name that accurately describes the action (for example, <code>EnableLoggingAction</code>).</p>
+    #[serde(rename = "actionName")]
+    pub action_name: String,
+    /// <p>Defines the type of action and the parameters for that action.</p>
+    #[serde(rename = "actionParams")]
+    pub action_params: MitigationActionParams,
+    /// <p>The ARN of the IAM role that is used to apply the mitigation action.</p>
+    #[serde(rename = "roleArn")]
+    pub role_arn: String,
+    /// <p>Metadata that can be used to manage the mitigation action.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateMitigationActionResponse {
+    /// <p>The ARN for the new mitigation action.</p>
+    #[serde(rename = "actionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_arn: Option<String>,
+    /// <p>A unique identifier for the new mitigation action.</p>
+    #[serde(rename = "actionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateOTAUpdateRequest {
     /// <p>A list of additional OTA update parameters which are name-value pairs.</p>
     #[serde(rename = "additionalParameters")]
@@ -1365,21 +1498,21 @@ pub struct CreateScheduledAuditRequest {
     #[serde(rename = "dayOfMonth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub day_of_month: Option<String>,
-    /// <p>The day of the week on which the scheduled audit takes place. Can be one of "SUN", "MON", "TUE", "WED", "THU", "FRI" or "SAT". This field is required if the "frequency" parameter is set to "WEEKLY" or "BIWEEKLY".</p>
+    /// <p>The day of the week on which the scheduled audit takes place. Can be one of "SUN", "MON", "TUE", "WED", "THU", "FRI", or "SAT". This field is required if the "frequency" parameter is set to "WEEKLY" or "BIWEEKLY".</p>
     #[serde(rename = "dayOfWeek")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub day_of_week: Option<String>,
-    /// <p>How often the scheduled audit takes place. Can be one of "DAILY", "WEEKLY", "BIWEEKLY" or "MONTHLY". The actual start time of each audit is determined by the system.</p>
+    /// <p>How often the scheduled audit takes place. Can be one of "DAILY", "WEEKLY", "BIWEEKLY" or "MONTHLY". The start time of each audit is determined by the system.</p>
     #[serde(rename = "frequency")]
     pub frequency: String,
     /// <p>The name you want to give to the scheduled audit. (Max. 128 chars)</p>
     #[serde(rename = "scheduledAuditName")]
     pub scheduled_audit_name: String,
-    /// <p>Metadata which can be used to manage the scheduled audit.</p>
+    /// <p>Metadata that can be used to manage the scheduled audit.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>Which checks are performed during the scheduled audit. Checks must be enabled for your account. (Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.)</p>
+    /// <p>Which checks are performed during the scheduled audit. Checks must be enabled for your account. (Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks, including those that are enabled or use <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.)</p>
     #[serde(rename = "targetCheckNames")]
     pub target_check_names: Vec<String>,
 }
@@ -1395,7 +1528,7 @@ pub struct CreateScheduledAuditResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateSecurityProfileRequest {
-    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code> but it is also retained for any metric specified here.</p>
+    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code>, but it is also retained for any metric specified here.</p>
     #[serde(rename = "additionalMetricsToRetain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_metrics_to_retain: Option<Vec<String>>,
@@ -1414,7 +1547,7 @@ pub struct CreateSecurityProfileRequest {
     /// <p>The name you are giving to the security profile.</p>
     #[serde(rename = "securityProfileName")]
     pub security_profile_name: String,
-    /// <p>Metadata which can be used to manage the security profile.</p>
+    /// <p>Metadata that can be used to manage the security profile.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1676,7 +1809,7 @@ pub struct DeleteCertificateRequest {
     /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
     #[serde(rename = "certificateId")]
     pub certificate_id: String,
-    /// <p>Forces a certificate request to be deleted.</p>
+    /// <p>Forces the deletion of a certificate if it is inactive and is not attached to an IoT thing.</p>
     #[serde(rename = "forceDelete")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub force_delete: Option<bool>,
@@ -1724,6 +1857,17 @@ pub struct DeleteJobRequest {
     #[serde(rename = "jobId")]
     pub job_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteMitigationActionRequest {
+    /// <p>The name of the mitigation action that you want to delete.</p>
+    #[serde(rename = "actionName")]
+    pub action_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteMitigationActionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteOTAUpdateRequest {
@@ -1796,7 +1940,7 @@ pub struct DeleteScheduledAuditResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteSecurityProfileRequest {
-    /// <p>The expected version of the security profile. A new version is generated whenever the security profile is updated. If you specify a value that is different than the actual version, a <code>VersionConflictException</code> is thrown.</p>
+    /// <p>The expected version of the security profile. A new version is generated whenever the security profile is updated. If you specify a value that is different from the actual version, a <code>VersionConflictException</code> is thrown.</p>
     #[serde(rename = "expectedVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expected_version: Option<i64>,
@@ -1930,10 +2074,65 @@ pub struct DescribeAccountAuditConfigurationResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audit_notification_target_configurations:
         Option<::std::collections::HashMap<String, AuditNotificationTarget>>,
-    /// <p>The ARN of the role that grants permission to AWS IoT to access information about your devices, policies, certificates and other items as necessary when performing an audit.</p> <p>On the first call to <code>UpdateAccountAuditConfiguration</code> this parameter is required.</p>
+    /// <p>The ARN of the role that grants permission to AWS IoT to access information about your devices, policies, certificates, and other items as required when performing an audit.</p> <p>On the first call to <code>UpdateAccountAuditConfiguration</code>, this parameter is required.</p>
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeAuditFindingRequest {
+    /// <p>A unique identifier for a single audit finding. You can use this identifier to apply mitigation actions to the finding.</p>
+    #[serde(rename = "findingId")]
+    pub finding_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeAuditFindingResponse {
+    #[serde(rename = "finding")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finding: Option<AuditFinding>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeAuditMitigationActionsTaskRequest {
+    /// <p>The unique identifier for the audit mitigation task.</p>
+    #[serde(rename = "taskId")]
+    pub task_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeAuditMitigationActionsTaskResponse {
+    /// <p>Specifies the mitigation actions and their parameters that are applied as part of this task.</p>
+    #[serde(rename = "actionsDefinition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actions_definition: Option<Vec<MitigationAction>>,
+    /// <p>Specifies the mitigation actions that should be applied to specific audit checks.</p>
+    #[serde(rename = "auditCheckToActionsMapping")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audit_check_to_actions_mapping: Option<::std::collections::HashMap<String, Vec<String>>>,
+    /// <p>The date and time when the task was completed or canceled.</p>
+    #[serde(rename = "endTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The date and time when the task was started.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p>Identifies the findings to which the mitigation actions are applied. This can be by audit checks, by audit task, or a set of findings.</p>
+    #[serde(rename = "target")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<AuditMitigationActionsTaskTarget>,
+    /// <p>Aggregate counts of the results when the mitigation tasks were applied to the findings for this audit mitigation actions task.</p>
+    #[serde(rename = "taskStatistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_statistics: Option<::std::collections::HashMap<String, TaskStatisticsForAuditCheck>>,
+    /// <p>The current status of the task.</p>
+    #[serde(rename = "taskStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_status: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2183,6 +2382,50 @@ pub struct DescribeJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeMitigationActionRequest {
+    /// <p>The friendly name that uniquely identifies the mitigation action.</p>
+    #[serde(rename = "actionName")]
+    pub action_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeMitigationActionResponse {
+    /// <p>The ARN that identifies this migration action.</p>
+    #[serde(rename = "actionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_arn: Option<String>,
+    /// <p>A unique identifier for this action.</p>
+    #[serde(rename = "actionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_id: Option<String>,
+    /// <p>The friendly name that uniquely identifies the mitigation action.</p>
+    #[serde(rename = "actionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_name: Option<String>,
+    /// <p>Parameters that control how the mitigation action is applied, specific to the type of mitigation action.</p>
+    #[serde(rename = "actionParams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_params: Option<MitigationActionParams>,
+    /// <p>The type of mitigation action.</p>
+    #[serde(rename = "actionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_type: Option<String>,
+    /// <p>The date and time when the mitigation action was added to your AWS account.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>The date and time when the mitigation action was last changed.</p>
+    #[serde(rename = "lastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
+    /// <p>The ARN of the IAM role used to apply this action.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeRoleAliasRequest {
     /// <p>The role alias to describe.</p>
     #[serde(rename = "roleAlias")]
@@ -2212,11 +2455,11 @@ pub struct DescribeScheduledAuditResponse {
     #[serde(rename = "dayOfMonth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub day_of_month: Option<String>,
-    /// <p>The day of the week on which the scheduled audit takes place. One of "SUN", "MON", "TUE", "WED", "THU", "FRI" or "SAT".</p>
+    /// <p>The day of the week on which the scheduled audit takes place. One of "SUN", "MON", "TUE", "WED", "THU", "FRI", or "SAT".</p>
     #[serde(rename = "dayOfWeek")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub day_of_week: Option<String>,
-    /// <p>How often the scheduled audit takes place. One of "DAILY", "WEEKLY", "BIWEEKLY" or "MONTHLY". The actual start time of each audit is determined by the system.</p>
+    /// <p>How often the scheduled audit takes place. One of "DAILY", "WEEKLY", "BIWEEKLY", or "MONTHLY". The start time of each audit is determined by the system.</p>
     #[serde(rename = "frequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub frequency: Option<String>,
@@ -2228,7 +2471,7 @@ pub struct DescribeScheduledAuditResponse {
     #[serde(rename = "scheduledAuditName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scheduled_audit_name: Option<String>,
-    /// <p>Which checks are performed during the scheduled audit. (Note that checks must be enabled for your account. (Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.)</p>
+    /// <p>Which checks are performed during the scheduled audit. Checks must be enabled for your account. (Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks, including those that are enabled or use <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.)</p>
     #[serde(rename = "targetCheckNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_check_names: Option<Vec<String>>,
@@ -2244,7 +2487,7 @@ pub struct DescribeSecurityProfileRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeSecurityProfileResponse {
-    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code> but it is also retained for any metric specified here.</p>
+    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code>, but it is also retained for any metric specified here.</p>
     #[serde(rename = "additionalMetricsToRetain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_metrics_to_retain: Option<Vec<String>>,
@@ -2648,6 +2891,17 @@ pub struct ElasticsearchAction {
     pub type_: String,
 }
 
+/// <p>Parameters used when defining a mitigation action that enable AWS IoT logging.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EnableIoTLoggingParams {
+    /// <p>Specifies the types of information to be logged.</p>
+    #[serde(rename = "logLevel")]
+    pub log_level: String,
+    /// <p>The ARN of the IAM role used for logging.</p>
+    #[serde(rename = "roleArnForLogging")]
+    pub role_arn_for_logging: String,
+}
+
 /// <p>The input for the EnableTopicRuleRequest operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct EnableTopicRuleRequest {
@@ -3012,7 +3266,7 @@ pub struct ImplicitDeny {
     pub policies: Option<Vec<Policy>>,
 }
 
-/// <p>Sends messge data to an AWS IoT Analytics channel.</p>
+/// <p>Sends message data to an AWS IoT Analytics channel.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct IotAnalyticsAction {
     /// <p>(deprecated) The ARN of the IoT Analytics channel to which message data will be sent.</p>
@@ -3409,7 +3663,7 @@ pub struct ListAttachedPoliciesRequest {
     #[serde(rename = "recursive")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recursive: Option<bool>,
-    /// <p>The group for which the policies will be listed.</p>
+    /// <p>The group or principal for which the policies will be listed.</p>
     #[serde(rename = "target")]
     pub target: String,
 }
@@ -3445,7 +3699,7 @@ pub struct ListAuditFindingsRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Information identifying the non-compliant resource.</p>
+    /// <p>Information identifying the noncompliant resource.</p>
     #[serde(rename = "resourceIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_identifier: Option<ResourceIdentifier>,
@@ -3473,6 +3727,84 @@ pub struct ListAuditFindingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListAuditMitigationActionsExecutionsRequest {
+    /// <p>Specify this filter to limit results to those with a specific status.</p>
+    #[serde(rename = "actionStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_status: Option<String>,
+    /// <p>Specify this filter to limit results to those that were applied to a specific audit finding.</p>
+    #[serde(rename = "findingId")]
+    pub finding_id: String,
+    /// <p>The maximum number of results to return at one time. The default is 25.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Specify this filter to limit results to actions for a specific audit mitigation actions task.</p>
+    #[serde(rename = "taskId")]
+    pub task_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListAuditMitigationActionsExecutionsResponse {
+    /// <p>A set of task execution results based on the input parameters. Details include the mitigation action applied, start time, and task status.</p>
+    #[serde(rename = "actionsExecutions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actions_executions: Option<Vec<AuditMitigationActionExecutionMetadata>>,
+    /// <p>The token for the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListAuditMitigationActionsTasksRequest {
+    /// <p>Specify this filter to limit results to tasks that were applied to results for a specific audit.</p>
+    #[serde(rename = "auditTaskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audit_task_id: Option<String>,
+    /// <p>Specify this filter to limit results to tasks that were completed or canceled on or before a specific date and time.</p>
+    #[serde(rename = "endTime")]
+    pub end_time: f64,
+    /// <p>Specify this filter to limit results to tasks that were applied to a specific audit finding.</p>
+    #[serde(rename = "findingId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finding_id: Option<String>,
+    /// <p>The maximum number of results to return at one time. The default is 25.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Specify this filter to limit results to tasks that began on or after a specific date and time.</p>
+    #[serde(rename = "startTime")]
+    pub start_time: f64,
+    /// <p>Specify this filter to limit results to tasks that are in a specific state.</p>
+    #[serde(rename = "taskStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_status: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListAuditMitigationActionsTasksResponse {
+    /// <p>The token for the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The collection of audit mitigation tasks that matched the filter criteria.</p>
+    #[serde(rename = "tasks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tasks: Option<Vec<AuditMitigationActionsTaskMetadata>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListAuditTasksRequest {
     /// <p>The end of the time period.</p>
     #[serde(rename = "endTime")]
@@ -3485,10 +3817,10 @@ pub struct ListAuditTasksRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The beginning of the time period. Note that audit information is retained for a limited time (180 days). Requesting a start time prior to what is retained results in an "InvalidRequestException".</p>
+    /// <p>The beginning of the time period. Audit information is retained for a limited time (180 days). Requesting a start time prior to what is retained results in an "InvalidRequestException".</p>
     #[serde(rename = "startTime")]
     pub start_time: f64,
-    /// <p>A filter to limit the output to audits with the specified completion status: can be one of "IN_PROGRESS", "COMPLETED", "FAILED" or "CANCELED".</p>
+    /// <p>A filter to limit the output to audits with the specified completion status: can be one of "IN_PROGRESS", "COMPLETED", "FAILED", or "CANCELED".</p>
     #[serde(rename = "taskStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_status: Option<String>,
@@ -3800,6 +4132,35 @@ pub struct ListJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListMitigationActionsRequest {
+    /// <p>Specify a value to limit the result to mitigation actions with a specific action type.</p>
+    #[serde(rename = "actionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_type: Option<String>,
+    /// <p>The maximum number of results to return at one time. The default is 25.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListMitigationActionsResponse {
+    /// <p>A set of actions that matched the specified filter criteria.</p>
+    #[serde(rename = "actionIdentifiers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_identifiers: Option<Vec<MitigationActionIdentifier>>,
+    /// <p>The token for the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListOTAUpdatesRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -4070,7 +4431,7 @@ pub struct ListSecurityProfilesForTargetRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>If true, return child groups as well.</p>
+    /// <p>If true, return child groups too.</p>
     #[serde(rename = "recursive")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recursive: Option<bool>,
@@ -4600,7 +4961,7 @@ pub struct ListViolationEventsResponse {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The security profile violation alerts issued for this account during the given time frame, potentially filtered by security profile, behavior violated, or thing (device) violating.</p>
+    /// <p>The security profile violation alerts issued for this account during the given time period, potentially filtered by security profile, behavior violated, or thing (device) violating.</p>
     #[serde(rename = "violationEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub violation_events: Option<Vec<ViolationEvent>>,
@@ -4661,19 +5022,88 @@ pub struct MetricValue {
     pub ports: Option<Vec<i64>>,
 }
 
-/// <p>Information about the resource that was non-compliant with the audit check.</p>
+/// <p>Describes which changes should be applied as part of a mitigation action.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct MitigationAction {
+    /// <p>The set of parameters for this mitigation action. The parameters vary, depending on the kind of action you apply.</p>
+    #[serde(rename = "actionParams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_params: Option<MitigationActionParams>,
+    /// <p>A unique identifier for the mitigation action.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>A user-friendly name for the mitigation action.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The IAM role ARN used to apply this mitigation action.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
+/// <p>Information that identifies a mitigation action. This information is returned by ListMitigationActions.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct MitigationActionIdentifier {
+    /// <p>The IAM role ARN used to apply this mitigation action.</p>
+    #[serde(rename = "actionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_arn: Option<String>,
+    /// <p>The friendly name of the mitigation action.</p>
+    #[serde(rename = "actionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_name: Option<String>,
+    /// <p>The date when this mitigation action was created.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+}
+
+/// <p>The set of parameters for this mitigation action. You can specify only one type of parameter (in other words, you can apply only one action for each defined mitigation action).</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MitigationActionParams {
+    /// <p>Parameters to define a mitigation action that moves devices associated with a certificate to one or more specified thing groups, typically for quarantine.</p>
+    #[serde(rename = "addThingsToThingGroupParams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub add_things_to_thing_group_params: Option<AddThingsToThingGroupParams>,
+    /// <p>Parameters to define a mitigation action that enables AWS IoT logging at a specified level of detail.</p>
+    #[serde(rename = "enableIoTLoggingParams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_io_t_logging_params: Option<EnableIoTLoggingParams>,
+    /// <p>Parameters to define a mitigation action that publishes findings to Amazon SNS. You can implement your own custom actions in response to the Amazon SNS messages.</p>
+    #[serde(rename = "publishFindingToSnsParams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub publish_finding_to_sns_params: Option<PublishFindingToSnsParams>,
+    /// <p>Parameters to define a mitigation action that adds a blank policy to restrict permissions.</p>
+    #[serde(rename = "replaceDefaultPolicyVersionParams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replace_default_policy_version_params: Option<ReplaceDefaultPolicyVersionParams>,
+    /// <p>Parameters to define a mitigation action that changes the state of the CA certificate to inactive.</p>
+    #[serde(rename = "updateCACertificateParams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_ca_certificate_params: Option<UpdateCACertificateParams>,
+    /// <p>Parameters to define a mitigation action that changes the state of the device certificate to inactive.</p>
+    #[serde(rename = "updateDeviceCertificateParams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_device_certificate_params: Option<UpdateDeviceCertificateParams>,
+}
+
+/// <p>Information about the resource that was noncompliant with the audit check.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct NonCompliantResource {
-    /// <p>Additional information about the non-compliant resource.</p>
+    /// <p>Other information about the noncompliant resource.</p>
     #[serde(rename = "additionalInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_info: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Information identifying the non-compliant resource.</p>
+    /// <p>Information that identifies the noncompliant resource.</p>
     #[serde(rename = "resourceIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_identifier: Option<ResourceIdentifier>,
-    /// <p>The type of the non-compliant resource.</p>
+    /// <p>The type of the noncompliant resource.</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -4872,10 +5302,18 @@ pub struct PresignedUrlConfig {
     pub role_arn: Option<String>,
 }
 
+/// <p>Parameters to define a mitigation action that publishes findings to Amazon SNS. You can implement your own custom actions in response to the Amazon SNS messages.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PublishFindingToSnsParams {
+    /// <p>The ARN of the topic to which you want to publish the findings.</p>
+    #[serde(rename = "topicArn")]
+    pub topic_arn: String,
+}
+
 /// <p>The input for the DynamoActionVS action that specifies the DynamoDB table to which the message data will be written.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PutItemInput {
-    /// <p>The table where the message data will be written</p>
+    /// <p>The table where the message data will be written.</p>
     #[serde(rename = "tableName")]
     pub table_name: String,
 }
@@ -5013,11 +5451,11 @@ pub struct RejectCertificateTransferRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct RelatedResource {
-    /// <p>Additional information about the resource.</p>
+    /// <p>Other information about the resource.</p>
     #[serde(rename = "additionalInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_info: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Information identifying the resource.</p>
+    /// <p>Information that identifies the resource.</p>
     #[serde(rename = "resourceIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_identifier: Option<ResourceIdentifier>,
@@ -5075,6 +5513,14 @@ pub struct RemoveThingFromThingGroupRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct RemoveThingFromThingGroupResponse {}
 
+/// <p>Parameters to define a mitigation action that adds a blank policy to restrict permissions.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ReplaceDefaultPolicyVersionParams {
+    /// <p>The name of the template to be applied. The only supported value is <code>BLANK_POLICY</code>.</p>
+    #[serde(rename = "templateName")]
+    pub template_name: String,
+}
+
 /// <p>The input for the ReplaceTopicRule operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ReplaceTopicRuleRequest {
@@ -5089,6 +5535,10 @@ pub struct ReplaceTopicRuleRequest {
 /// <p>Describes an action to republish to another topic.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RepublishAction {
+    /// <p>The Quality of Service (QoS) level to use when republishing messages.</p>
+    #[serde(rename = "qos")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub qos: Option<i64>,
     /// <p>The ARN of the IAM role that grants access.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
@@ -5097,7 +5547,7 @@ pub struct RepublishAction {
     pub topic: String,
 }
 
-/// <p>Information identifying the non-compliant resource.</p>
+/// <p>Information that identifies the noncompliant resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResourceIdentifier {
     /// <p>The account with which the resource is associated.</p>
@@ -5112,7 +5562,7 @@ pub struct ResourceIdentifier {
     #[serde(rename = "clientId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_id: Option<String>,
-    /// <p>The ID of the Cognito Identity Pool.</p>
+    /// <p>The ID of the Amazon Cognito identity pool.</p>
     #[serde(rename = "cognitoIdentityPoolId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cognito_identity_pool_id: Option<String>,
@@ -5231,7 +5681,7 @@ pub struct ScheduledAuditMetadata {
     #[serde(rename = "dayOfWeek")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub day_of_week: Option<String>,
-    /// <p>How often the scheduled audit takes place.</p>
+    /// <p>How often the scheduled audit occurs.</p>
     #[serde(rename = "frequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub frequency: Option<String>,
@@ -5433,8 +5883,33 @@ pub struct SqsAction {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartAuditMitigationActionsTaskRequest {
+    /// <p>For an audit check, specifies which mitigation actions to apply. Those actions must be defined in your AWS account.</p>
+    #[serde(rename = "auditCheckToActionsMapping")]
+    pub audit_check_to_actions_mapping: ::std::collections::HashMap<String, Vec<String>>,
+    /// <p>Each audit mitigation task must have a unique client request token. If you try to start a new task with the same token as a task that already exists, an exception occurs. If you omit this value, a unique client request token is generated automatically.</p>
+    #[serde(rename = "clientRequestToken")]
+    pub client_request_token: String,
+    /// <p>Specifies the audit findings to which the mitigation actions are applied. You can apply them to a type of audit check, to all findings from an audit, or to a speecific set of findings.</p>
+    #[serde(rename = "target")]
+    pub target: AuditMitigationActionsTaskTarget,
+    /// <p>A unique identifier for the task. You can use this identifier to check the status of the task or to cancel it.</p>
+    #[serde(rename = "taskId")]
+    pub task_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StartAuditMitigationActionsTaskResponse {
+    /// <p>The unique identifier for the audit mitigation task. This matches the <code>taskId</code> that you specified in the request.</p>
+    #[serde(rename = "taskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartOnDemandAuditTaskRequest {
-    /// <p>Which checks are performed during the audit. The checks you specify must be enabled for your account or an exception occurs. Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.</p>
+    /// <p>Which checks are performed during the audit. The checks you specify must be enabled for your account or an exception occurs. Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks, including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.</p>
     #[serde(rename = "targetCheckNames")]
     pub target_check_names: Vec<String>,
 }
@@ -5660,7 +6135,7 @@ pub struct TaskStatistics {
     #[serde(rename = "compliantChecks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compliant_checks: Option<i64>,
-    /// <p>The number of checks </p>
+    /// <p>The number of checks.</p>
     #[serde(rename = "failedChecks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_checks: Option<i64>,
@@ -5668,7 +6143,7 @@ pub struct TaskStatistics {
     #[serde(rename = "inProgressChecks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub in_progress_checks: Option<i64>,
-    /// <p>The number of checks that found non-compliant resources.</p>
+    /// <p>The number of checks that found noncompliant resources.</p>
     #[serde(rename = "nonCompliantChecks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub non_compliant_checks: Option<i64>,
@@ -5680,6 +6155,32 @@ pub struct TaskStatistics {
     #[serde(rename = "waitingForDataCollectionChecks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub waiting_for_data_collection_checks: Option<i64>,
+}
+
+/// <p>Provides summary counts of how many tasks for findings are in a particular state. This information is included in the response from DescribeAuditMitigationActionsTask.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TaskStatisticsForAuditCheck {
+    /// <p>The number of findings to which the mitigation action task was canceled when applied.</p>
+    #[serde(rename = "canceledFindingsCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub canceled_findings_count: Option<i64>,
+    /// <p>The number of findings for which at least one of the actions failed when applied.</p>
+    #[serde(rename = "failedFindingsCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_findings_count: Option<i64>,
+    /// <p>The number of findings skipped because of filter conditions provided in the parameters to the command.</p>
+    #[serde(rename = "skippedFindingsCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub skipped_findings_count: Option<i64>,
+    /// <p>The number of findings for which all mitigation actions succeeded when applied.</p>
+    #[serde(rename = "succeededFindingsCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub succeeded_findings_count: Option<i64>,
+    /// <p>The total number of findings to which a task is being applied.</p>
+    #[serde(rename = "totalFindingsCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_findings_count: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -6127,7 +6628,7 @@ pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateAccountAuditConfigurationRequest {
-    /// <p>Specifies which audit checks are enabled and disabled for this account. Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are currently enabled.</p> <p>Note that some data collection may begin immediately when certain checks are enabled. When a check is disabled, any data collected so far in relation to the check is deleted.</p> <p>You cannot disable a check if it is used by any scheduled audit. You must first delete the check from the scheduled audit or delete the scheduled audit itself.</p> <p>On the first call to <code>UpdateAccountAuditConfiguration</code> this parameter is required and must specify at least one enabled check.</p>
+    /// <p>Specifies which audit checks are enabled and disabled for this account. Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks, including those that are currently enabled.</p> <p>Some data collection might start immediately when certain checks are enabled. When a check is disabled, any data collected so far in relation to the check is deleted.</p> <p>You cannot disable a check if it is used by any scheduled audit. You must first delete the check from the scheduled audit or delete the scheduled audit itself.</p> <p>On the first call to <code>UpdateAccountAuditConfiguration</code>, this parameter is required and must specify at least one enabled check.</p>
     #[serde(rename = "auditCheckConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audit_check_configurations:
@@ -6137,7 +6638,7 @@ pub struct UpdateAccountAuditConfigurationRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audit_notification_target_configurations:
         Option<::std::collections::HashMap<String, AuditNotificationTarget>>,
-    /// <p>The ARN of the role that grants permission to AWS IoT to access information about your devices, policies, certificates and other items as necessary when performing an audit.</p>
+    /// <p>The ARN of the role that grants permission to AWS IoT to access information about your devices, policies, certificates and other items as required when performing an audit.</p>
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
@@ -6206,6 +6707,14 @@ pub struct UpdateBillingGroupResponse {
     pub version: Option<i64>,
 }
 
+/// <p>Parameters to define a mitigation action that changes the state of the CA certificate to inactive.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct UpdateCACertificateParams {
+    /// <p>The action that you want to apply to the CA cerrtificate. The only supported value is <code>DEACTIVATE</code>.</p>
+    #[serde(rename = "action")]
+    pub action: String,
+}
+
 /// <p>The input to the UpdateCACertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateCACertificateRequest {
@@ -6224,7 +6733,7 @@ pub struct UpdateCACertificateRequest {
     #[serde(rename = "registrationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registration_config: Option<RegistrationConfig>,
-    /// <p>If true, remove auto registration.</p>
+    /// <p>If true, removes auto registration.</p>
     #[serde(rename = "removeAutoRegistration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remove_auto_registration: Option<bool>,
@@ -6239,6 +6748,14 @@ pub struct UpdateCertificateRequest {
     /// <p>The new status.</p> <p> <b>Note:</b> Setting the status to PENDING_TRANSFER will result in an exception being thrown. PENDING_TRANSFER is a status used internally by AWS IoT. It is not intended for developer use.</p> <p> <b>Note:</b> The status value REGISTER_INACTIVE is deprecated and should not be used.</p>
     #[serde(rename = "newStatus")]
     pub new_status: String,
+}
+
+/// <p>Parameters to define a mitigation action that changes the state of the device certificate to inactive.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct UpdateDeviceCertificateParams {
+    /// <p>The action that you want to apply to the device cerrtificate. The only supported value is <code>DEACTIVATE</code>.</p>
+    #[serde(rename = "action")]
+    pub action: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -6332,6 +6849,34 @@ pub struct UpdateJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateMitigationActionRequest {
+    /// <p>The friendly name for the mitigation action. You can't change the name by using <code>UpdateMitigationAction</code>. Instead, you must delete and re-create the mitigation action with the new name.</p>
+    #[serde(rename = "actionName")]
+    pub action_name: String,
+    /// <p>Defines the type of action and the parameters for that action.</p>
+    #[serde(rename = "actionParams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_params: Option<MitigationActionParams>,
+    /// <p>The ARN of the IAM role that is used to apply the mitigation action.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateMitigationActionResponse {
+    /// <p>The ARN for the new mitigation action.</p>
+    #[serde(rename = "actionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_arn: Option<String>,
+    /// <p>A unique identifier for the mitigation action.</p>
+    #[serde(rename = "actionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateRoleAliasRequest {
     /// <p>The number of seconds the credential will be valid.</p>
     #[serde(rename = "credentialDurationSeconds")]
@@ -6365,18 +6910,18 @@ pub struct UpdateScheduledAuditRequest {
     #[serde(rename = "dayOfMonth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub day_of_month: Option<String>,
-    /// <p>The day of the week on which the scheduled audit takes place. Can be one of "SUN", "MON", "TUE", "WED", "THU", "FRI" or "SAT". This field is required if the "frequency" parameter is set to "WEEKLY" or "BIWEEKLY".</p>
+    /// <p>The day of the week on which the scheduled audit takes place. Can be one of "SUN", "MON", "TUE", "WED", "THU", "FRI", or "SAT". This field is required if the "frequency" parameter is set to "WEEKLY" or "BIWEEKLY".</p>
     #[serde(rename = "dayOfWeek")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub day_of_week: Option<String>,
-    /// <p>How often the scheduled audit takes place. Can be one of "DAILY", "WEEKLY", "BIWEEKLY" or "MONTHLY". The actual start time of each audit is determined by the system.</p>
+    /// <p>How often the scheduled audit takes place. Can be one of "DAILY", "WEEKLY", "BIWEEKLY", or "MONTHLY". The start time of each audit is determined by the system.</p>
     #[serde(rename = "frequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub frequency: Option<String>,
     /// <p>The name of the scheduled audit. (Max. 128 chars)</p>
     #[serde(rename = "scheduledAuditName")]
     pub scheduled_audit_name: String,
-    /// <p>Which checks are performed during the scheduled audit. Checks must be enabled for your account. (Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.)</p>
+    /// <p>Which checks are performed during the scheduled audit. Checks must be enabled for your account. (Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks, including those that are enabled or use <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.)</p>
     #[serde(rename = "targetCheckNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_check_names: Option<Vec<String>>,
@@ -6393,7 +6938,7 @@ pub struct UpdateScheduledAuditResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateSecurityProfileRequest {
-    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code> but it is also retained for any metric specified here.</p>
+    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code>, but it is also retained for any metric specified here.</p>
     #[serde(rename = "additionalMetricsToRetain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_metrics_to_retain: Option<Vec<String>>,
@@ -6405,19 +6950,19 @@ pub struct UpdateSecurityProfileRequest {
     #[serde(rename = "behaviors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub behaviors: Option<Vec<Behavior>>,
-    /// <p>If true, delete all <code>additionalMetricsToRetain</code> defined for this security profile. If any <code>additionalMetricsToRetain</code> are defined in the current invocation an exception occurs.</p>
+    /// <p>If true, delete all <code>additionalMetricsToRetain</code> defined for this security profile. If any <code>additionalMetricsToRetain</code> are defined in the current invocation, an exception occurs.</p>
     #[serde(rename = "deleteAdditionalMetricsToRetain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_additional_metrics_to_retain: Option<bool>,
-    /// <p>If true, delete all <code>alertTargets</code> defined for this security profile. If any <code>alertTargets</code> are defined in the current invocation an exception occurs.</p>
+    /// <p>If true, delete all <code>alertTargets</code> defined for this security profile. If any <code>alertTargets</code> are defined in the current invocation, an exception occurs.</p>
     #[serde(rename = "deleteAlertTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_alert_targets: Option<bool>,
-    /// <p>If true, delete all <code>behaviors</code> defined for this security profile. If any <code>behaviors</code> are defined in the current invocation an exception occurs.</p>
+    /// <p>If true, delete all <code>behaviors</code> defined for this security profile. If any <code>behaviors</code> are defined in the current invocation, an exception occurs.</p>
     #[serde(rename = "deleteBehaviors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_behaviors: Option<bool>,
-    /// <p>The expected version of the security profile. A new version is generated whenever the security profile is updated. If you specify a value that is different than the actual version, a <code>VersionConflictException</code> is thrown.</p>
+    /// <p>The expected version of the security profile. A new version is generated whenever the security profile is updated. If you specify a value that is different from the actual version, a <code>VersionConflictException</code> is thrown.</p>
     #[serde(rename = "expectedVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expected_version: Option<i64>,
@@ -6433,7 +6978,7 @@ pub struct UpdateSecurityProfileRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateSecurityProfileResponse {
-    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the security profile's <code>behaviors</code> but it is also retained for any metric specified here.</p>
+    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the security profile's <code>behaviors</code>, but it is also retained for any metric specified here.</p>
     #[serde(rename = "additionalMetricsToRetain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_metrics_to_retain: Option<Vec<String>>,
@@ -7197,6 +7742,67 @@ impl Error for AttachThingPrincipalError {
         }
     }
 }
+/// Errors returned by CancelAuditMitigationActionsTask
+#[derive(Debug, PartialEq)]
+pub enum CancelAuditMitigationActionsTaskError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl CancelAuditMitigationActionsTaskError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CancelAuditMitigationActionsTaskError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(
+                        CancelAuditMitigationActionsTaskError::InternalFailure(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        CancelAuditMitigationActionsTaskError::InvalidRequest(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        CancelAuditMitigationActionsTaskError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CancelAuditMitigationActionsTaskError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CancelAuditMitigationActionsTaskError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CancelAuditMitigationActionsTaskError {
+    fn description(&self) -> &str {
+        match *self {
+            CancelAuditMitigationActionsTaskError::InternalFailure(ref cause) => cause,
+            CancelAuditMitigationActionsTaskError::InvalidRequest(ref cause) => cause,
+            CancelAuditMitigationActionsTaskError::ResourceNotFound(ref cause) => cause,
+            CancelAuditMitigationActionsTaskError::Throttling(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CancelAuditTask
 #[derive(Debug, PartialEq)]
 pub enum CancelAuditTaskError {
@@ -7918,6 +8524,71 @@ impl Error for CreateKeysAndCertificateError {
         }
     }
 }
+/// Errors returned by CreateMitigationAction
+#[derive(Debug, PartialEq)]
+pub enum CreateMitigationActionError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>A limit has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl CreateMitigationActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMitigationActionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateMitigationActionError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateMitigationActionError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateMitigationActionError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        CreateMitigationActionError::ResourceAlreadyExists(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateMitigationActionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateMitigationActionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateMitigationActionError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateMitigationActionError::InternalFailure(ref cause) => cause,
+            CreateMitigationActionError::InvalidRequest(ref cause) => cause,
+            CreateMitigationActionError::LimitExceeded(ref cause) => cause,
+            CreateMitigationActionError::ResourceAlreadyExists(ref cause) => cause,
+            CreateMitigationActionError::Throttling(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateOTAUpdate
 #[derive(Debug, PartialEq)]
 pub enum CreateOTAUpdateError {
@@ -8225,6 +8896,8 @@ pub enum CreateScheduledAuditError {
     InvalidRequest(String),
     /// <p>A limit has been exceeded.</p>
     LimitExceeded(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
     /// <p>The rate exceeds the limit.</p>
     Throttling(String),
 }
@@ -8243,6 +8916,11 @@ impl CreateScheduledAuditError {
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateScheduledAuditError::LimitExceeded(err.msg))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(CreateScheduledAuditError::ResourceAlreadyExists(
+                        err.msg,
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(CreateScheduledAuditError::Throttling(err.msg))
@@ -8265,6 +8943,7 @@ impl Error for CreateScheduledAuditError {
             CreateScheduledAuditError::InternalFailure(ref cause) => cause,
             CreateScheduledAuditError::InvalidRequest(ref cause) => cause,
             CreateScheduledAuditError::LimitExceeded(ref cause) => cause,
+            CreateScheduledAuditError::ResourceAlreadyExists(ref cause) => cause,
             CreateScheduledAuditError::Throttling(ref cause) => cause,
         }
     }
@@ -9166,6 +9845,55 @@ impl Error for DeleteJobExecutionError {
             DeleteJobExecutionError::ResourceNotFound(ref cause) => cause,
             DeleteJobExecutionError::ServiceUnavailable(ref cause) => cause,
             DeleteJobExecutionError::Throttling(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteMitigationAction
+#[derive(Debug, PartialEq)]
+pub enum DeleteMitigationActionError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl DeleteMitigationActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMitigationActionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteMitigationActionError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DeleteMitigationActionError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteMitigationActionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteMitigationActionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteMitigationActionError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteMitigationActionError::InternalFailure(ref cause) => cause,
+            DeleteMitigationActionError::InvalidRequest(ref cause) => cause,
+            DeleteMitigationActionError::Throttling(ref cause) => cause,
         }
     }
 }
@@ -10092,6 +10820,122 @@ impl Error for DescribeAccountAuditConfigurationError {
         }
     }
 }
+/// Errors returned by DescribeAuditFinding
+#[derive(Debug, PartialEq)]
+pub enum DescribeAuditFindingError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl DescribeAuditFindingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAuditFindingError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(DescribeAuditFindingError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeAuditFindingError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeAuditFindingError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeAuditFindingError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeAuditFindingError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeAuditFindingError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeAuditFindingError::InternalFailure(ref cause) => cause,
+            DescribeAuditFindingError::InvalidRequest(ref cause) => cause,
+            DescribeAuditFindingError::ResourceNotFound(ref cause) => cause,
+            DescribeAuditFindingError::Throttling(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeAuditMitigationActionsTask
+#[derive(Debug, PartialEq)]
+pub enum DescribeAuditMitigationActionsTaskError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl DescribeAuditMitigationActionsTaskError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeAuditMitigationActionsTaskError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(
+                        DescribeAuditMitigationActionsTaskError::InternalFailure(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        DescribeAuditMitigationActionsTaskError::InvalidRequest(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeAuditMitigationActionsTaskError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(
+                        DescribeAuditMitigationActionsTaskError::Throttling(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeAuditMitigationActionsTaskError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeAuditMitigationActionsTaskError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeAuditMitigationActionsTaskError::InternalFailure(ref cause) => cause,
+            DescribeAuditMitigationActionsTaskError::InvalidRequest(ref cause) => cause,
+            DescribeAuditMitigationActionsTaskError::ResourceNotFound(ref cause) => cause,
+            DescribeAuditMitigationActionsTaskError::Throttling(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeAuditTask
 #[derive(Debug, PartialEq)]
 pub enum DescribeAuditTaskError {
@@ -10738,6 +11582,63 @@ impl Error for DescribeJobExecutionError {
             DescribeJobExecutionError::ResourceNotFound(ref cause) => cause,
             DescribeJobExecutionError::ServiceUnavailable(ref cause) => cause,
             DescribeJobExecutionError::Throttling(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeMitigationAction
+#[derive(Debug, PartialEq)]
+pub enum DescribeMitigationActionError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl DescribeMitigationActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMitigationActionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(DescribeMitigationActionError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeMitigationActionError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeMitigationActionError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeMitigationActionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeMitigationActionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeMitigationActionError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeMitigationActionError::InternalFailure(ref cause) => cause,
+            DescribeMitigationActionError::InvalidRequest(ref cause) => cause,
+            DescribeMitigationActionError::ResourceNotFound(ref cause) => cause,
+            DescribeMitigationActionError::Throttling(ref cause) => cause,
         }
     }
 }
@@ -12449,6 +13350,112 @@ impl Error for ListAuditFindingsError {
         }
     }
 }
+/// Errors returned by ListAuditMitigationActionsExecutions
+#[derive(Debug, PartialEq)]
+pub enum ListAuditMitigationActionsExecutionsError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl ListAuditMitigationActionsExecutionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListAuditMitigationActionsExecutionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(
+                        ListAuditMitigationActionsExecutionsError::InternalFailure(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        ListAuditMitigationActionsExecutionsError::InvalidRequest(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(
+                        ListAuditMitigationActionsExecutionsError::Throttling(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListAuditMitigationActionsExecutionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListAuditMitigationActionsExecutionsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListAuditMitigationActionsExecutionsError::InternalFailure(ref cause) => cause,
+            ListAuditMitigationActionsExecutionsError::InvalidRequest(ref cause) => cause,
+            ListAuditMitigationActionsExecutionsError::Throttling(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListAuditMitigationActionsTasks
+#[derive(Debug, PartialEq)]
+pub enum ListAuditMitigationActionsTasksError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl ListAuditMitigationActionsTasksError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListAuditMitigationActionsTasksError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(
+                        ListAuditMitigationActionsTasksError::InternalFailure(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        ListAuditMitigationActionsTasksError::InvalidRequest(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListAuditMitigationActionsTasksError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListAuditMitigationActionsTasksError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListAuditMitigationActionsTasksError {
+    fn description(&self) -> &str {
+        match *self {
+            ListAuditMitigationActionsTasksError::InternalFailure(ref cause) => cause,
+            ListAuditMitigationActionsTasksError::InvalidRequest(ref cause) => cause,
+            ListAuditMitigationActionsTasksError::Throttling(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListAuditTasks
 #[derive(Debug, PartialEq)]
 pub enum ListAuditTasksError {
@@ -13000,6 +14007,55 @@ impl Error for ListJobsError {
             ListJobsError::ResourceNotFound(ref cause) => cause,
             ListJobsError::ServiceUnavailable(ref cause) => cause,
             ListJobsError::Throttling(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListMitigationActions
+#[derive(Debug, PartialEq)]
+pub enum ListMitigationActionsError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl ListMitigationActionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMitigationActionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListMitigationActionsError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListMitigationActionsError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListMitigationActionsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListMitigationActionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListMitigationActionsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListMitigationActionsError::InternalFailure(ref cause) => cause,
+            ListMitigationActionsError::InvalidRequest(ref cause) => cause,
+            ListMitigationActionsError::Throttling(ref cause) => cause,
         }
     }
 }
@@ -15457,6 +16513,75 @@ impl Error for SetV2LoggingOptionsError {
         }
     }
 }
+/// Errors returned by StartAuditMitigationActionsTask
+#[derive(Debug, PartialEq)]
+pub enum StartAuditMitigationActionsTaskError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>A limit has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>This exception occurs if you attempt to start a task with the same task-id as an existing task but with a different clientRequestToken.</p>
+    TaskAlreadyExists(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl StartAuditMitigationActionsTaskError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StartAuditMitigationActionsTaskError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(
+                        StartAuditMitigationActionsTaskError::InternalFailure(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        StartAuditMitigationActionsTaskError::InvalidRequest(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        StartAuditMitigationActionsTaskError::LimitExceeded(err.msg),
+                    )
+                }
+                "TaskAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        StartAuditMitigationActionsTaskError::TaskAlreadyExists(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(StartAuditMitigationActionsTaskError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StartAuditMitigationActionsTaskError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartAuditMitigationActionsTaskError {
+    fn description(&self) -> &str {
+        match *self {
+            StartAuditMitigationActionsTaskError::InternalFailure(ref cause) => cause,
+            StartAuditMitigationActionsTaskError::InvalidRequest(ref cause) => cause,
+            StartAuditMitigationActionsTaskError::LimitExceeded(ref cause) => cause,
+            StartAuditMitigationActionsTaskError::TaskAlreadyExists(ref cause) => cause,
+            StartAuditMitigationActionsTaskError::Throttling(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by StartOnDemandAuditTask
 #[derive(Debug, PartialEq)]
 pub enum StartOnDemandAuditTaskError {
@@ -16542,6 +17667,63 @@ impl Error for UpdateJobError {
         }
     }
 }
+/// Errors returned by UpdateMitigationAction
+#[derive(Debug, PartialEq)]
+pub enum UpdateMitigationActionError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl UpdateMitigationActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMitigationActionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(UpdateMitigationActionError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateMitigationActionError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateMitigationActionError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateMitigationActionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateMitigationActionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateMitigationActionError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateMitigationActionError::InternalFailure(ref cause) => cause,
+            UpdateMitigationActionError::InvalidRequest(ref cause) => cause,
+            UpdateMitigationActionError::ResourceNotFound(ref cause) => cause,
+            UpdateMitigationActionError::Throttling(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateRoleAlias
 #[derive(Debug, PartialEq)]
 pub enum UpdateRoleAliasError {
@@ -17061,7 +18243,7 @@ pub trait Iot {
         input: AttachPrincipalPolicyRequest,
     ) -> RusotoFuture<(), AttachPrincipalPolicyError>;
 
-    /// <p>Associates a Device Defender security profile with a thing group or with this account. Each thing group or account can have up to five security profiles associated with it.</p>
+    /// <p>Associates a Device Defender security profile with a thing group or this account. Each thing group or account can have up to five security profiles associated with it.</p>
     fn attach_security_profile(
         &self,
         input: AttachSecurityProfileRequest,
@@ -17072,6 +18254,12 @@ pub trait Iot {
         &self,
         input: AttachThingPrincipalRequest,
     ) -> RusotoFuture<AttachThingPrincipalResponse, AttachThingPrincipalError>;
+
+    /// <p>Cancels a mitigation action task that is in progress. If the task is not in progress, an InvalidRequestException occurs.</p>
+    fn cancel_audit_mitigation_actions_task(
+        &self,
+        input: CancelAuditMitigationActionsTaskRequest,
+    ) -> RusotoFuture<CancelAuditMitigationActionsTaskResponse, CancelAuditMitigationActionsTaskError>;
 
     /// <p>Cancels an audit that is in progress. The audit can be either scheduled or on-demand. If the audit is not in progress, an "InvalidRequestException" occurs.</p>
     fn cancel_audit_task(
@@ -17137,6 +18325,12 @@ pub trait Iot {
         &self,
         input: CreateKeysAndCertificateRequest,
     ) -> RusotoFuture<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError>;
+
+    /// <p>Defines an action that can be applied to audit findings by using StartAuditMitigationActionsTask. Each mitigation action can apply only one type of change.</p>
+    fn create_mitigation_action(
+        &self,
+        input: CreateMitigationActionRequest,
+    ) -> RusotoFuture<CreateMitigationActionResponse, CreateMitigationActionError>;
 
     /// <p>Creates an AWS IoT OTAUpdate on a target group of things or groups.</p>
     fn create_ota_update(
@@ -17228,7 +18422,7 @@ pub trait Iot {
         input: DeleteCACertificateRequest,
     ) -> RusotoFuture<DeleteCACertificateResponse, DeleteCACertificateError>;
 
-    /// <p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>
+    /// <p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy or IoT thing attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>
     fn delete_certificate(
         &self,
         input: DeleteCertificateRequest,
@@ -17248,6 +18442,12 @@ pub trait Iot {
         &self,
         input: DeleteJobExecutionRequest,
     ) -> RusotoFuture<(), DeleteJobExecutionError>;
+
+    /// <p>Deletes a defined mitigation action from your AWS account.</p>
+    fn delete_mitigation_action(
+        &self,
+        input: DeleteMitigationActionRequest,
+    ) -> RusotoFuture<DeleteMitigationActionResponse, DeleteMitigationActionError>;
 
     /// <p>Delete an OTA update.</p>
     fn delete_ota_update(
@@ -17337,6 +18537,21 @@ pub trait Iot {
         DescribeAccountAuditConfigurationError,
     >;
 
+    /// <p>Gets information about a single audit finding. Properties include the reason for noncompliance, the severity of the issue, and when the audit that returned the finding was started.</p>
+    fn describe_audit_finding(
+        &self,
+        input: DescribeAuditFindingRequest,
+    ) -> RusotoFuture<DescribeAuditFindingResponse, DescribeAuditFindingError>;
+
+    /// <p>Gets information about an audit mitigation task that is used to apply mitigation actions to a set of audit findings. Properties include the actions being applied, the audit checks to which they're being applied, the task status, and aggregated task statistics.</p>
+    fn describe_audit_mitigation_actions_task(
+        &self,
+        input: DescribeAuditMitigationActionsTaskRequest,
+    ) -> RusotoFuture<
+        DescribeAuditMitigationActionsTaskResponse,
+        DescribeAuditMitigationActionsTaskError,
+    >;
+
     /// <p>Gets information about a Device Defender audit.</p>
     fn describe_audit_task(
         &self,
@@ -17400,6 +18615,12 @@ pub trait Iot {
         &self,
         input: DescribeJobExecutionRequest,
     ) -> RusotoFuture<DescribeJobExecutionResponse, DescribeJobExecutionError>;
+
+    /// <p>Gets information about a mitigation action.</p>
+    fn describe_mitigation_action(
+        &self,
+        input: DescribeMitigationActionRequest,
+    ) -> RusotoFuture<DescribeMitigationActionResponse, DescribeMitigationActionError>;
 
     /// <p>Describes a role alias.</p>
     fn describe_role_alias(
@@ -17562,6 +18783,21 @@ pub trait Iot {
         input: ListAuditFindingsRequest,
     ) -> RusotoFuture<ListAuditFindingsResponse, ListAuditFindingsError>;
 
+    /// <p>Gets the status of audit mitigation action tasks that were executed.</p>
+    fn list_audit_mitigation_actions_executions(
+        &self,
+        input: ListAuditMitigationActionsExecutionsRequest,
+    ) -> RusotoFuture<
+        ListAuditMitigationActionsExecutionsResponse,
+        ListAuditMitigationActionsExecutionsError,
+    >;
+
+    /// <p>Gets a list of audit mitigation action tasks that match the specified filters.</p>
+    fn list_audit_mitigation_actions_tasks(
+        &self,
+        input: ListAuditMitigationActionsTasksRequest,
+    ) -> RusotoFuture<ListAuditMitigationActionsTasksResponse, ListAuditMitigationActionsTasksError>;
+
     /// <p>Lists the Device Defender audits that have been performed during a given time period.</p>
     fn list_audit_tasks(
         &self,
@@ -17618,6 +18854,12 @@ pub trait Iot {
 
     /// <p>Lists jobs.</p>
     fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError>;
+
+    /// <p>Gets a list of all mitigation actions that match the specified filter criteria.</p>
+    fn list_mitigation_actions(
+        &self,
+        input: ListMitigationActionsRequest,
+    ) -> RusotoFuture<ListMitigationActionsResponse, ListMitigationActionsError>;
 
     /// <p>Lists OTA updates.</p>
     fn list_ota_updates(
@@ -17775,7 +19017,7 @@ pub trait Iot {
         input: ListV2LoggingLevelsRequest,
     ) -> RusotoFuture<ListV2LoggingLevelsResponse, ListV2LoggingLevelsError>;
 
-    /// <p>Lists the Device Defender security profile violations discovered during the given time period. You can use filters to limit the results to those alerts issued for a particular security profile, behavior or thing (device).</p>
+    /// <p>Lists the Device Defender security profile violations discovered during the given time period. You can use filters to limit the results to those alerts issued for a particular security profile, behavior, or thing (device).</p>
     fn list_violation_events(
         &self,
         input: ListViolationEventsRequest,
@@ -17858,6 +19100,12 @@ pub trait Iot {
         &self,
         input: SetV2LoggingOptionsRequest,
     ) -> RusotoFuture<(), SetV2LoggingOptionsError>;
+
+    /// <p>Starts a task that applies a set of mitigation actions to the specified target.</p>
+    fn start_audit_mitigation_actions_task(
+        &self,
+        input: StartAuditMitigationActionsTaskRequest,
+    ) -> RusotoFuture<StartAuditMitigationActionsTaskResponse, StartAuditMitigationActionsTaskError>;
 
     /// <p>Starts an on-demand Device Defender audit.</p>
     fn start_on_demand_audit_task(
@@ -17958,13 +19206,19 @@ pub trait Iot {
     /// <p>Updates supported fields of the specified job.</p>
     fn update_job(&self, input: UpdateJobRequest) -> RusotoFuture<(), UpdateJobError>;
 
+    /// <p>Updates the definition for the specified mitigation action.</p>
+    fn update_mitigation_action(
+        &self,
+        input: UpdateMitigationActionRequest,
+    ) -> RusotoFuture<UpdateMitigationActionResponse, UpdateMitigationActionError>;
+
     /// <p>Updates a role alias.</p>
     fn update_role_alias(
         &self,
         input: UpdateRoleAliasRequest,
     ) -> RusotoFuture<UpdateRoleAliasResponse, UpdateRoleAliasError>;
 
-    /// <p>Updates a scheduled audit, including what checks are performed and how often the audit takes place.</p>
+    /// <p>Updates a scheduled audit, including which checks are performed and how often the audit takes place.</p>
     fn update_scheduled_audit(
         &self,
         input: UpdateScheduledAuditRequest,
@@ -18018,10 +19272,7 @@ impl IotClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> IotClient {
-        IotClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -18035,10 +19286,14 @@ impl IotClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        IotClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> IotClient {
+        IotClient { client, region }
     }
 }
 
@@ -18239,7 +19494,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Associates a Device Defender security profile with a thing group or with this account. Each thing group or account can have up to five security profiles associated with it.</p>
+    /// <p>Associates a Device Defender security profile with a thing group or this account. Each thing group or account can have up to five security profiles associated with it.</p>
     fn attach_security_profile(
         &self,
         input: AttachSecurityProfileRequest,
@@ -18310,6 +19565,40 @@ impl Iot for IotClient {
                         Err(AttachThingPrincipalError::from_response(response))
                     }),
                 )
+            }
+        })
+    }
+
+    /// <p>Cancels a mitigation action task that is in progress. If the task is not in progress, an InvalidRequestException occurs.</p>
+    fn cancel_audit_mitigation_actions_task(
+        &self,
+        input: CancelAuditMitigationActionsTaskRequest,
+    ) -> RusotoFuture<CancelAuditMitigationActionsTaskResponse, CancelAuditMitigationActionsTaskError>
+    {
+        let request_uri = format!(
+            "/audit/mitigationactions/tasks/{task_id}/cancel",
+            task_id = input.task_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CancelAuditMitigationActionsTaskResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CancelAuditMitigationActionsTaskError::from_response(
+                        response,
+                    ))
+                }))
             }
         })
     }
@@ -18689,6 +19978,41 @@ impl Iot for IotClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateKeysAndCertificateError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Defines an action that can be applied to audit findings by using StartAuditMitigationActionsTask. Each mitigation action can apply only one type of change.</p>
+    fn create_mitigation_action(
+        &self,
+        input: CreateMitigationActionRequest,
+    ) -> RusotoFuture<CreateMitigationActionResponse, CreateMitigationActionError> {
+        let request_uri = format!(
+            "/mitigationactions/actions/{action_name}",
+            action_name = input.action_name
+        );
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateMitigationActionResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateMitigationActionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -19224,7 +20548,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>
+    /// <p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy or IoT thing attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>
     fn delete_certificate(
         &self,
         input: DeleteCertificateRequest,
@@ -19369,6 +20693,39 @@ impl Iot for IotClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(DeleteJobExecutionError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Deletes a defined mitigation action from your AWS account.</p>
+    fn delete_mitigation_action(
+        &self,
+        input: DeleteMitigationActionRequest,
+    ) -> RusotoFuture<DeleteMitigationActionResponse, DeleteMitigationActionError> {
+        let request_uri = format!(
+            "/mitigationactions/actions/{action_name}",
+            action_name = input.action_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteMitigationActionResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteMitigationActionError::from_response(response))
+                    }),
                 )
             }
         })
@@ -19883,6 +21240,75 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Gets information about a single audit finding. Properties include the reason for noncompliance, the severity of the issue, and when the audit that returned the finding was started.</p>
+    fn describe_audit_finding(
+        &self,
+        input: DescribeAuditFindingRequest,
+    ) -> RusotoFuture<DescribeAuditFindingResponse, DescribeAuditFindingError> {
+        let request_uri = format!(
+            "/audit/findings/{finding_id}",
+            finding_id = input.finding_id
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeAuditFindingResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeAuditFindingError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Gets information about an audit mitigation task that is used to apply mitigation actions to a set of audit findings. Properties include the actions being applied, the audit checks to which they're being applied, the task status, and aggregated task statistics.</p>
+    fn describe_audit_mitigation_actions_task(
+        &self,
+        input: DescribeAuditMitigationActionsTaskRequest,
+    ) -> RusotoFuture<
+        DescribeAuditMitigationActionsTaskResponse,
+        DescribeAuditMitigationActionsTaskError,
+    > {
+        let request_uri = format!(
+            "/audit/mitigationactions/tasks/{task_id}",
+            task_id = input.task_id
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeAuditMitigationActionsTaskResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeAuditMitigationActionsTaskError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Gets information about a Device Defender audit.</p>
     fn describe_audit_task(
         &self,
@@ -20236,6 +21662,37 @@ impl Iot for IotClient {
                         Err(DescribeJobExecutionError::from_response(response))
                     }),
                 )
+            }
+        })
+    }
+
+    /// <p>Gets information about a mitigation action.</p>
+    fn describe_mitigation_action(
+        &self,
+        input: DescribeMitigationActionRequest,
+    ) -> RusotoFuture<DescribeMitigationActionResponse, DescribeMitigationActionError> {
+        let request_uri = format!(
+            "/mitigationactions/actions/{action_name}",
+            action_name = input.action_name
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeMitigationActionResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeMitigationActionError::from_response(response))
+                }))
             }
         })
     }
@@ -21166,6 +22623,105 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Gets the status of audit mitigation action tasks that were executed.</p>
+    fn list_audit_mitigation_actions_executions(
+        &self,
+        input: ListAuditMitigationActionsExecutionsRequest,
+    ) -> RusotoFuture<
+        ListAuditMitigationActionsExecutionsResponse,
+        ListAuditMitigationActionsExecutionsError,
+    > {
+        let request_uri = "/audit/mitigationactions/executions";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.action_status {
+            params.put("actionStatus", x);
+        }
+        params.put("findingId", &input.finding_id);
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        params.put("taskId", &input.task_id);
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListAuditMitigationActionsExecutionsResponse, _>(
+                    )?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListAuditMitigationActionsExecutionsError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Gets a list of audit mitigation action tasks that match the specified filters.</p>
+    fn list_audit_mitigation_actions_tasks(
+        &self,
+        input: ListAuditMitigationActionsTasksRequest,
+    ) -> RusotoFuture<ListAuditMitigationActionsTasksResponse, ListAuditMitigationActionsTasksError>
+    {
+        let request_uri = "/audit/mitigationactions/tasks";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.audit_task_id {
+            params.put("auditTaskId", x);
+        }
+        params.put("endTime", &input.end_time);
+        if let Some(ref x) = input.finding_id {
+            params.put("findingId", x);
+        }
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        params.put("startTime", &input.start_time);
+        if let Some(ref x) = input.task_status {
+            params.put("taskStatus", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListAuditMitigationActionsTasksResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListAuditMitigationActionsTasksError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Lists the Device Defender audits that have been performed during a given time period.</p>
     fn list_audit_tasks(
         &self,
@@ -21598,6 +23154,48 @@ impl Iot for IotClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(ListJobsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Gets a list of all mitigation actions that match the specified filter criteria.</p>
+    fn list_mitigation_actions(
+        &self,
+        input: ListMitigationActionsRequest,
+    ) -> RusotoFuture<ListMitigationActionsResponse, ListMitigationActionsError> {
+        let request_uri = "/mitigationactions/actions";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.action_type {
+            params.put("actionType", x);
+        }
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListMitigationActionsResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListMitigationActionsError::from_response(response))
+                    }),
                 )
             }
         })
@@ -22689,7 +24287,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Lists the Device Defender security profile violations discovered during the given time period. You can use filters to limit the results to those alerts issued for a particular security profile, behavior or thing (device).</p>
+    /// <p>Lists the Device Defender security profile violations discovered during the given time period. You can use filters to limit the results to those alerts issued for a particular security profile, behavior, or thing (device).</p>
     fn list_violation_events(
         &self,
         input: ListViolationEventsRequest,
@@ -23153,6 +24751,42 @@ impl Iot for IotClient {
                         Err(SetV2LoggingOptionsError::from_response(response))
                     }),
                 )
+            }
+        })
+    }
+
+    /// <p>Starts a task that applies a set of mitigation actions to the specified target.</p>
+    fn start_audit_mitigation_actions_task(
+        &self,
+        input: StartAuditMitigationActionsTaskRequest,
+    ) -> RusotoFuture<StartAuditMitigationActionsTaskResponse, StartAuditMitigationActionsTaskError>
+    {
+        let request_uri = format!(
+            "/audit/mitigationactions/tasks/{task_id}",
+            task_id = input.task_id
+        );
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartAuditMitigationActionsTaskResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(StartAuditMitigationActionsTaskError::from_response(
+                        response,
+                    ))
+                }))
             }
         })
     }
@@ -23736,6 +25370,41 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Updates the definition for the specified mitigation action.</p>
+    fn update_mitigation_action(
+        &self,
+        input: UpdateMitigationActionRequest,
+    ) -> RusotoFuture<UpdateMitigationActionResponse, UpdateMitigationActionError> {
+        let request_uri = format!(
+            "/mitigationactions/actions/{action_name}",
+            action_name = input.action_name
+        );
+
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateMitigationActionResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateMitigationActionError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Updates a role alias.</p>
     fn update_role_alias(
         &self,
@@ -23769,7 +25438,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Updates a scheduled audit, including what checks are performed and how often the audit takes place.</p>
+    /// <p>Updates a scheduled audit, including which checks are performed and how often the audit takes place.</p>
     fn update_scheduled_audit(
         &self,
         input: UpdateScheduledAuditRequest,

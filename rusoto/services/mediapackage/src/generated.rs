@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -270,6 +269,12 @@ pub struct DashEncryption {
 /// <p>A Dynamic Adaptive Streaming over HTTP (DASH) packaging configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DashPackage {
+    #[serde(rename = "AdTriggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ad_triggers: Option<Vec<String>>,
+    #[serde(rename = "AdsOnDeliveryRestrictions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ads_on_delivery_restrictions: Option<String>,
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption: Option<DashEncryption>,
@@ -533,6 +538,12 @@ pub struct HlsManifestCreateOrUpdateParameters {
     #[serde(rename = "AdMarkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ad_markers: Option<String>,
+    #[serde(rename = "AdTriggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ad_triggers: Option<Vec<String>>,
+    #[serde(rename = "AdsOnDeliveryRestrictions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ads_on_delivery_restrictions: Option<String>,
     /// <p>The ID of the manifest. The ID must be unique within the OriginEndpoint and it cannot be changed after it is created.</p>
     #[serde(rename = "Id")]
     pub id: String,
@@ -580,6 +591,12 @@ pub struct HlsPackage {
     #[serde(rename = "AdMarkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ad_markers: Option<String>,
+    #[serde(rename = "AdTriggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ad_triggers: Option<Vec<String>>,
+    #[serde(rename = "AdsOnDeliveryRestrictions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ads_on_delivery_restrictions: Option<String>,
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption: Option<HlsEncryption>,
@@ -2040,10 +2057,7 @@ impl MediaPackageClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> MediaPackageClient {
-        MediaPackageClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -2057,10 +2071,14 @@ impl MediaPackageClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        MediaPackageClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> MediaPackageClient {
+        MediaPackageClient { client, region }
     }
 }
 

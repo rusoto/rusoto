@@ -17,16 +17,13 @@
 //! end-to-end visibility and helping to ensure high availability for your applications.</p>
 //!
 //! <pre><code>     &lt;p&gt;App Mesh gives you consistent visibility and network traffic controls for every
-//! microservice in an application. You can use App Mesh with AWS Fargate, Amazon ECS, Amazon EKS, and
-//! Kubernetes on AWS.&lt;/p&gt;
+//! microservice in an application. You can use App Mesh with AWS Fargate, Amazon ECS, Amazon EKS,
+//! Kubernetes on AWS, and Amazon EC2.&lt;/p&gt;
 //! &lt;note&gt;
 //! &lt;p&gt;App Mesh supports microservice applications that use service discovery naming for their
-//! components. To use App Mesh, you must have an application running on Amazon EC2 instances,
-//! hosted in either Amazon ECS, Amazon EKS, or Kubernetes on AWS. For more information about
-//! service discovery on Amazon ECS, see &lt;a href=&quot;http://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-discovery.html&quot;&gt;Service
-//! Discovery&lt;/a&gt; in the &lt;i&gt;Amazon Elastic Container Service Developer Guide&lt;/i&gt;. Kubernetes
-//! &lt;code&gt;kube-dns&lt;/code&gt; and &lt;code&gt;coredns&lt;/code&gt; are supported. For more information,
-//! see &lt;a href=&quot;https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/&quot;&gt;DNS
+//! components. For more information about service discovery on Amazon ECS, see &lt;a href=&quot;http://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-discovery.html&quot;&gt;Service Discovery&lt;/a&gt; in the
+//! &lt;i&gt;Amazon Elastic Container Service Developer Guide&lt;/i&gt;. Kubernetes &lt;code&gt;kube-dns&lt;/code&gt; and
+//! &lt;code&gt;coredns&lt;/code&gt; are supported. For more information, see &lt;a href=&quot;https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/&quot;&gt;DNS
 //! for Services and Pods&lt;/a&gt; in the Kubernetes documentation.&lt;/p&gt;
 //! &lt;/note&gt;
 //! </code></pre>

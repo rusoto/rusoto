@@ -375,7 +375,7 @@
     "version": "0.40.0",
     "coreVersion": "0.40.0",
     "protocolVersion": "2015-10-07",
-    "baseTypeName": "CloudWatchEvents"
+    "baseTypeName": "EventBridge"
   },
   "firehose": {
     "version": "0.40.0",

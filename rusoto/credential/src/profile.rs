@@ -353,10 +353,10 @@ fn parse_credentials_file(
 
         // handle the opening of named profile blocks
         if profile_regex.is_match(&unwrapped_line) {
-            if profile_name.is_some() && access_key.is_some() && secret_key.is_some() {
-                let creds =
-                    AwsCredentials::new(access_key.unwrap(), secret_key.unwrap(), token, None);
-                profiles.insert(profile_name.unwrap(), creds);
+            if let (Some(profile), Some(key), Some(secret)) = (profile_name, access_key, secret_key)
+            {
+                let creds = AwsCredentials::new(key, secret, token, None);
+                profiles.insert(profile, creds);
             }
 
             access_key = None;
@@ -399,9 +399,9 @@ fn parse_credentials_file(
         }
     }
 
-    if profile_name.is_some() && access_key.is_some() && secret_key.is_some() {
-        let creds = AwsCredentials::new(access_key.unwrap(), secret_key.unwrap(), token, None);
-        profiles.insert(profile_name.unwrap(), creds);
+    if let (Some(profile), Some(key), Some(secret)) = (profile_name, access_key, secret_key) {
+        let creds = AwsCredentials::new(key, secret, token, None);
+        profiles.insert(profile, creds);
     }
 
     if profiles.is_empty() {
@@ -731,5 +731,4 @@ mod tests {
             ProfileProvider::default_profile_location()
         );
     }
-
 }

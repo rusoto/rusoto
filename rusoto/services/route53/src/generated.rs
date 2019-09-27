@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -4380,7 +4379,7 @@ pub struct ListResourceRecordSetsRequest {
     pub hosted_zone_id: String,
     /// <p>(Optional) The maximum number of resource records sets to include in the response body for this request. If the response includes more than <code>maxitems</code> resource record sets, the value of the <code>IsTruncated</code> element in the response is <code>true</code>, and the values of the <code>NextRecordName</code> and <code>NextRecordType</code> elements in the response identify the first resource record set in the next group of <code>maxitems</code> resource record sets.</p>
     pub max_items: Option<String>,
-    /// <p> <i>Weighted resource record sets only:</i> If results were truncated for a given DNS name and type, specify the value of <code>NextRecordIdentifier</code> from the previous response to get the next resource record set that has the current DNS name and type.</p>
+    /// <p> <i>Resource record sets that have a routing policy other than simple:</i> If results were truncated for a given DNS name and type, specify the value of <code>NextRecordIdentifier</code> from the previous response to get the next resource record set that has the current DNS name and type.</p>
     pub start_record_identifier: Option<String>,
     /// <p>The first name in the lexicographic ordering of resource record sets that you want to list.</p>
     pub start_record_name: Option<String>,
@@ -11856,10 +11855,7 @@ impl Route53Client {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> Route53Client {
-        Route53Client {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -11873,10 +11869,14 @@ impl Route53Client {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        Route53Client {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> Route53Client {
+        Route53Client { client, region }
     }
 }
 
@@ -14771,5 +14771,4 @@ mod protocol_tests {
         let result = client.get_hosted_zone(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
-
 }
