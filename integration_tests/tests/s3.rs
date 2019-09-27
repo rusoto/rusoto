@@ -2,9 +2,9 @@
 extern crate env_logger;
 extern crate futures;
 extern crate futures_fs;
+extern crate http;
 extern crate log;
 extern crate reqwest;
-extern crate http;
 extern crate rusoto_core;
 extern crate rusoto_s3;
 extern crate time;
@@ -20,14 +20,14 @@ use time::get_time;
 use futures::{Future, Stream};
 use futures_fs::FsPool;
 use rusoto_core::credential::{AwsCredentials, DefaultCredentialsProvider};
-use rusoto_core::{Region, ProvideAwsCredentials, RusotoError};
+use rusoto_core::{ProvideAwsCredentials, Region, RusotoError};
 use rusoto_s3::util::{PreSignedRequest, PreSignedRequestOption};
 use rusoto_s3::{
     CORSConfiguration, CORSRule, CompleteMultipartUploadRequest, CompletedMultipartUpload,
     CompletedPart, CopyObjectRequest, CreateBucketRequest, CreateMultipartUploadRequest,
-    DeleteBucketRequest, DeleteObjectRequest, GetObjectError, GetObjectRequest,
-    HeadObjectRequest, ListObjectsRequest, ListObjectsV2Request, PutBucketCorsRequest,
-    PutObjectRequest, S3Client, StreamingBody, UploadPartCopyRequest, UploadPartRequest, S3,
+    DeleteBucketRequest, DeleteObjectRequest, GetObjectError, GetObjectRequest, HeadObjectRequest,
+    ListObjectsRequest, ListObjectsV2Request, PutBucketCorsRequest, PutObjectRequest, S3Client,
+    StreamingBody, UploadPartCopyRequest, UploadPartRequest, S3,
 };
 
 type TestClient = S3Client;
@@ -77,7 +77,13 @@ fn test_all_the_things() {
     list_items_in_bucket(&client, &test_bucket);
 
     // do a multipart upload
-    test_multipart_upload(&client, &region, &credentials, &test_bucket, &multipart_filename);
+    test_multipart_upload(
+        &client,
+        &region,
+        &credentials,
+        &test_bucket,
+        &multipart_filename,
+    );
 
     // modify the bucket's CORS properties
     if cfg!(not(feature = "disable_minio_unsupported")) {
@@ -204,7 +210,13 @@ fn test_all_the_things() {
     test_delete_bucket(&client, &test_bucket);
 }
 
-fn test_multipart_upload(client: &TestClient, region: &Region, credentials: &AwsCredentials, bucket: &str, filename: &str) {
+fn test_multipart_upload(
+    client: &TestClient,
+    region: &Region,
+    credentials: &AwsCredentials,
+    bucket: &str,
+    filename: &str,
+) {
     let create_multipart_req = CreateMultipartUploadRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
@@ -756,8 +768,7 @@ fn test_get_object_with_presigned_url(
     println!("get object presigned url: {:#?}", presigned_url);
     let mut res = reqwest::get(&presigned_url).expect("Couldn't get object via presigned url");
     assert_eq!(res.status(), http::StatusCode::OK);
-    let size = res.content_length()
-        .unwrap_or(0);
+    let size = res.content_length().unwrap_or(0);
     assert!(size > 0);
     let mut buf: Vec<u8> = vec![];
     res.copy_to(&mut buf).expect("Copying failed");

@@ -4,9 +4,7 @@ extern crate rusoto_core;
 extern crate rusoto_ec2;
 
 use rusoto_core::{Region, RusotoError};
-use rusoto_ec2::{
-    CreateSnapshotRequest, DescribeInstancesRequest, Ec2, Ec2Client,
-};
+use rusoto_ec2::{CreateSnapshotRequest, DescribeInstancesRequest, Ec2, Ec2Client};
 use rusoto_ec2::{CreateTagsRequest, Tag};
 
 use std::str;

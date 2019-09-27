@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -1343,10 +1342,7 @@ impl MediaStoreClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> MediaStoreClient {
-        MediaStoreClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -1360,10 +1356,14 @@ impl MediaStoreClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        MediaStoreClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> MediaStoreClient {
+        MediaStoreClient { client, region }
     }
 }
 

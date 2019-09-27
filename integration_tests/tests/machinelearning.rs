@@ -19,7 +19,9 @@ fn should_describe_batch_predictions() {
 
     match client.describe_batch_predictions(request).sync() {
         Ok(_) => (),
-        Err(e) => assert!(e.to_string().contains("AmazonML is no longer available to new customers")),
+        Err(e) => assert!(e
+            .to_string()
+            .contains("AmazonML is no longer available to new customers")),
     };
 }
 #[test]
@@ -29,7 +31,9 @@ fn should_describe_data_sources() {
 
     match client.describe_data_sources(request).sync() {
         Ok(_) => (),
-        Err(e) => assert!(e.to_string().contains("AmazonML is no longer available to new customers")),
+        Err(e) => assert!(e
+            .to_string()
+            .contains("AmazonML is no longer available to new customers")),
     };
 }
 #[test]
@@ -39,6 +43,8 @@ fn should_describe_evaluations() {
 
     match client.describe_evaluations(request).sync() {
         Ok(_) => (),
-        Err(e) => assert!(e.to_string().contains("AmazonML is no longer available to new customers")),
+        Err(e) => assert!(e
+            .to_string()
+            .contains("AmazonML is no longer available to new customers")),
     };
 }

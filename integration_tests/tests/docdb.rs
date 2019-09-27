@@ -4,9 +4,7 @@ extern crate rusoto_core;
 extern crate rusoto_docdb;
 
 use rusoto_core::Region;
-use rusoto_docdb::{
-    Docdb, DocdbClient, DescribeDBClustersMessage,
-};
+use rusoto_docdb::{DescribeDBClustersMessage, Docdb, DocdbClient};
 
 #[test]
 fn should_describe_tags() {

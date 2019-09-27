@@ -1,8 +1,10 @@
 extern crate rusoto_mock;
 
-use rusoto_core::{Region, RusotoError};
-use crate::generated::{ListResourceRecordSetsError, ListResourceRecordSetsRequest, Route53, Route53Client};
 use crate::custom::util::quote_txt_record;
+use crate::generated::{
+    ListResourceRecordSetsError, ListResourceRecordSetsRequest, Route53, Route53Client,
+};
+use rusoto_core::{Region, RusotoError};
 
 use self::rusoto_mock::*;
 
@@ -30,11 +32,9 @@ fn test_parse_no_such_hosted_zone_error() {
     assert!(result.is_err());
     let err = result.err().unwrap();
     assert_eq!(
-        RusotoError::Service(
-            ListResourceRecordSetsError::NoSuchHostedZone(
-                "No hosted zone found with ID: NO-SUCH-ZONE".to_owned()
-            )
-        ),
+        RusotoError::Service(ListResourceRecordSetsError::NoSuchHostedZone(
+            "No hosted zone found with ID: NO-SUCH-ZONE".to_owned()
+        )),
         err
     );
 }
