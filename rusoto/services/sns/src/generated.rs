@@ -285,7 +285,7 @@ impl CreatePlatformApplicationInputSerializer {
 
         MapStringToStringSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Attributes"),
+            &format!("{}.entry.{}", prefix, "Attributes"),
             &obj.attributes,
         );
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
@@ -1587,7 +1587,7 @@ impl SetEndpointAttributesInputSerializer {
 
         MapStringToStringSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Attributes"),
+            &format!("{}.entry.{}", prefix, "Attributes"),
             &obj.attributes,
         );
         params.put(&format!("{}{}", prefix, "EndpointArn"), &obj.endpoint_arn);
@@ -1614,7 +1614,7 @@ impl SetPlatformApplicationAttributesInputSerializer {
 
         MapStringToStringSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Attributes"),
+            &format!("{}.entry.{}", prefix, "Attributes"),
             &obj.attributes,
         );
         params.put(
@@ -1642,7 +1642,7 @@ impl SetSMSAttributesInputSerializer {
 
         MapStringToStringSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "attributes"),
+            &format!("{}.entry.{}", prefix, "attributes"),
             &obj.attributes,
         );
     }
