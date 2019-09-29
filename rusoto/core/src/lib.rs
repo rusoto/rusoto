@@ -43,7 +43,7 @@ extern crate sha2;
 extern crate time;
 extern crate tokio;
 extern crate tokio_timer;
-extern crate url;
+extern crate percent_encoding;
 extern crate xml;
 
 mod client;

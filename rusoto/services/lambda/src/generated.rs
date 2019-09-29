@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -235,6 +234,9 @@ pub struct CreateEventSourceMappingRequest {
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>MyFunction</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction</code>.</p> </li> <li> <p> <b>Version or Alias ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction:PROD</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:MyFunction</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it's limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
     pub function_name: String,
+    #[serde(rename = "MaximumBatchingWindowInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_batching_window_in_seconds: Option<i64>,
     /// <p>The position in a stream from which to start reading. Required for Amazon Kinesis and Amazon DynamoDB Streams sources. <code>AT_TIMESTAMP</code> is only supported for Amazon Kinesis streams.</p>
     #[serde(rename = "StartingPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -423,6 +425,9 @@ pub struct EventSourceMappingConfiguration {
     #[serde(rename = "LastProcessingResult")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_processing_result: Option<String>,
+    #[serde(rename = "MaximumBatchingWindowInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_batching_window_in_seconds: Option<i64>,
     /// <p>The state of the event source mapping. It can be one of the following: <code>Creating</code>, <code>Enabling</code>, <code>Enabled</code>, <code>Disabling</code>, <code>Disabled</code>, <code>Updating</code>, or <code>Deleting</code>.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1323,6 +1328,9 @@ pub struct UpdateEventSourceMappingRequest {
     #[serde(rename = "FunctionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub function_name: Option<String>,
+    #[serde(rename = "MaximumBatchingWindowInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_batching_window_in_seconds: Option<i64>,
     /// <p>The identifier of the event source mapping.</p>
     #[serde(rename = "UUID")]
     pub uuid: String,
@@ -4002,10 +4010,7 @@ impl LambdaClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> LambdaClient {
-        LambdaClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -4019,10 +4024,14 @@ impl LambdaClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        LambdaClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> LambdaClient {
+        LambdaClient { client, region }
     }
 }
 

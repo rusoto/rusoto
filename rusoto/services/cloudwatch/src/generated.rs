@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -159,6 +158,181 @@ impl AlarmNamesSerializer {
     }
 }
 
+/// <p>An anomaly detection model associated with a particular CloudWatch metric athresnd statistic. You can use the model to display a band of expected normal values when the metric is graphed.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AnomalyDetector {
+    /// <p>The configuration specifies details about how the anomaly detection model is to be trained, including time ranges to exclude from use for training the model, and the time zone to use for the metric.</p>
+    pub configuration: Option<AnomalyDetectorConfiguration>,
+    /// <p>The metric dimensions associated with the anomaly detection model.</p>
+    pub dimensions: Option<Vec<Dimension>>,
+    /// <p>The name of the metric associated with the anomaly detection model.</p>
+    pub metric_name: Option<String>,
+    /// <p>The namespace of the metric associated with the anomaly detection model.</p>
+    pub namespace: Option<String>,
+    /// <p>The statistic associated with the anomaly detection model.</p>
+    pub stat: Option<String>,
+}
+
+struct AnomalyDetectorDeserializer;
+impl AnomalyDetectorDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AnomalyDetector, XmlParseError> {
+        deserialize_elements::<_, AnomalyDetector, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Configuration" => {
+                    obj.configuration =
+                        Some(AnomalyDetectorConfigurationDeserializer::deserialize(
+                            "Configuration",
+                            stack,
+                        )?);
+                }
+                "Dimensions" => {
+                    obj.dimensions
+                        .get_or_insert(vec![])
+                        .extend(DimensionsDeserializer::deserialize("Dimensions", stack)?);
+                }
+                "MetricName" => {
+                    obj.metric_name =
+                        Some(MetricNameDeserializer::deserialize("MetricName", stack)?);
+                }
+                "Namespace" => {
+                    obj.namespace = Some(NamespaceDeserializer::deserialize("Namespace", stack)?);
+                }
+                "Stat" => {
+                    obj.stat = Some(StatDeserializer::deserialize("Stat", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>The configuration specifies details about how the anomaly detection model is to be trained, including time ranges to exclude from use for training the model and the time zone to use for the metric.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AnomalyDetectorConfiguration {
+    /// <p>An array of time ranges to exclude from use when the anomaly detection model is trained. Use this to make sure that events that could cause unusual values for the metric, such as deployments, aren't used when CloudWatch creates the model.</p>
+    pub excluded_time_ranges: Option<Vec<Range>>,
+    /// <p>The time zone to use for the metric. This is useful to enable the model to automatically account for daylight savings time changes if the metric is sensitive to such time changes.</p> <p>To specify a time zone, use the name of the time zone as specified in the standard tz database. For more information, see <a href="https://en.wikipedia.org/wiki/Tz_database">tz database</a>.</p>
+    pub metric_timezone: Option<String>,
+}
+
+struct AnomalyDetectorConfigurationDeserializer;
+impl AnomalyDetectorConfigurationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AnomalyDetectorConfiguration, XmlParseError> {
+        deserialize_elements::<_, AnomalyDetectorConfiguration, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ExcludedTimeRanges" => {
+                        obj.excluded_time_ranges.get_or_insert(vec![]).extend(
+                            AnomalyDetectorExcludedTimeRangesDeserializer::deserialize(
+                                "ExcludedTimeRanges",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "MetricTimezone" => {
+                        obj.metric_timezone =
+                            Some(AnomalyDetectorMetricTimezoneDeserializer::deserialize(
+                                "MetricTimezone",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `AnomalyDetectorConfiguration` contents to a `SignedRequest`.
+struct AnomalyDetectorConfigurationSerializer;
+impl AnomalyDetectorConfigurationSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AnomalyDetectorConfiguration) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.excluded_time_ranges {
+            AnomalyDetectorExcludedTimeRangesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ExcludedTimeRanges"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.metric_timezone {
+            params.put(&format!("{}{}", prefix, "MetricTimezone"), &field_value);
+        }
+    }
+}
+
+struct AnomalyDetectorExcludedTimeRangesDeserializer;
+impl AnomalyDetectorExcludedTimeRangesDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Range>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(RangeDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `AnomalyDetectorExcludedTimeRanges` contents to a `SignedRequest`.
+struct AnomalyDetectorExcludedTimeRangesSerializer;
+impl AnomalyDetectorExcludedTimeRangesSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Range>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            RangeSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+struct AnomalyDetectorMetricTimezoneDeserializer;
+impl AnomalyDetectorMetricTimezoneDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct AnomalyDetectorsDeserializer;
+impl AnomalyDetectorsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<AnomalyDetector>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(AnomalyDetectorDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
 struct ComparisonOperatorDeserializer;
 impl ComparisonOperatorDeserializer {
     #[allow(unused_variables)]
@@ -526,6 +700,59 @@ impl DeleteAlarmsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteAnomalyDetectorInput {
+    /// <p>The metric dimensions associated with the anomaly detection model to delete.</p>
+    pub dimensions: Option<Vec<Dimension>>,
+    /// <p>The metric name associated with the anomaly detection model to delete.</p>
+    pub metric_name: String,
+    /// <p>The namespace associated with the anomaly detection model to delete.</p>
+    pub namespace: String,
+    /// <p>The statistic associated with the anomaly detection model to delete.</p>
+    pub stat: String,
+}
+
+/// Serialize `DeleteAnomalyDetectorInput` contents to a `SignedRequest`.
+struct DeleteAnomalyDetectorInputSerializer;
+impl DeleteAnomalyDetectorInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteAnomalyDetectorInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dimensions {
+            DimensionsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Dimensions"),
+                field_value,
+            );
+        }
+        params.put(&format!("{}{}", prefix, "MetricName"), &obj.metric_name);
+        params.put(&format!("{}{}", prefix, "Namespace"), &obj.namespace);
+        params.put(&format!("{}{}", prefix, "Stat"), &obj.stat);
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteAnomalyDetectorOutput {}
+
+struct DeleteAnomalyDetectorOutputDeserializer;
+impl DeleteAnomalyDetectorOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteAnomalyDetectorOutput, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = DeleteAnomalyDetectorOutput::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDashboardsInput {
     /// <p>The dashboards to be deleted. This parameter is required.</p>
     pub dashboard_names: Vec<String>,
@@ -809,6 +1036,87 @@ impl DescribeAlarmsOutputDeserializer {
             }
             Ok(())
         })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeAnomalyDetectorsInput {
+    /// <p>Limits the results to only the anomaly detection models that are associated with the specified metric dimensions. If there are multiple metrics that have these dimensions and have anomaly detection models associated, they're all returned.</p>
+    pub dimensions: Option<Vec<Dimension>>,
+    /// <p>The maximum number of results to return in one operation. The maximum value you can specify is 10.</p> <p>To retrieve the remaining results, make another call with the returned <code>NextToken</code> value. </p>
+    pub max_results: Option<i64>,
+    /// <p>Limits the results to only the anomaly detection models that are associated with the specified metric name. If there are multiple metrics with this name in different namespaces that have anomaly detection models, they're all returned.</p>
+    pub metric_name: Option<String>,
+    /// <p>Limits the results to only the anomaly detection models that are associated with the specified namespace.</p>
+    pub namespace: Option<String>,
+    /// <p>Use the token returned by the previous operation to request the next page of results.</p>
+    pub next_token: Option<String>,
+}
+
+/// Serialize `DescribeAnomalyDetectorsInput` contents to a `SignedRequest`.
+struct DescribeAnomalyDetectorsInputSerializer;
+impl DescribeAnomalyDetectorsInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeAnomalyDetectorsInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dimensions {
+            DimensionsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Dimensions"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
+        }
+        if let Some(ref field_value) = obj.metric_name {
+            params.put(&format!("{}{}", prefix, "MetricName"), &field_value);
+        }
+        if let Some(ref field_value) = obj.namespace {
+            params.put(&format!("{}{}", prefix, "Namespace"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeAnomalyDetectorsOutput {
+    /// <p>The list of anomaly detection models returned by the operation.</p>
+    pub anomaly_detectors: Option<Vec<AnomalyDetector>>,
+    /// <p>A token that you can use in a subsequent operation to retrieve the next set of results.</p>
+    pub next_token: Option<String>,
+}
+
+struct DescribeAnomalyDetectorsOutputDeserializer;
+impl DescribeAnomalyDetectorsOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeAnomalyDetectorsOutput, XmlParseError> {
+        deserialize_elements::<_, DescribeAnomalyDetectorsOutput, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "AnomalyDetectors" => {
+                        obj.anomaly_detectors.get_or_insert(vec![]).extend(
+                            AnomalyDetectorsDeserializer::deserialize("AnomalyDetectors", stack)?,
+                        );
+                    }
+                    "NextToken" => {
+                        obj.next_token =
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Expands the identity of a metric.</p>
@@ -1101,7 +1409,7 @@ impl GetDashboardOutputDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetMetricDataInput {
-    /// <p>The time stamp indicating the latest data to be returned.</p> <p>For better performance, specify <code>StartTime</code> and <code>EndTime</code> values that align with the value of the metric's <code>Period</code> and sync up with the beginning and end of an hour. For example, if the <code>Period</code> of a metric is 5 minutes, specifying 12:05 or 12:30 as <code>EndTime</code> can get a faster response from CloudWatch than setting 12:07 or 12:29 as the <code>EndTime</code>.</p>
+    /// <p>The time stamp indicating the latest data to be returned.</p> <p>The value specified is exclusive; results include data points up to the specified time stamp.</p> <p>For better performance, specify <code>StartTime</code> and <code>EndTime</code> values that align with the value of the metric's <code>Period</code> and sync up with the beginning and end of an hour. For example, if the <code>Period</code> of a metric is 5 minutes, specifying 12:05 or 12:30 as <code>EndTime</code> can get a faster response from CloudWatch than setting 12:07 or 12:29 as the <code>EndTime</code>.</p>
     pub end_time: String,
     /// <p>The maximum number of data points the request should return before paginating. If you omit this, the default of 100,800 is used.</p>
     pub max_datapoints: Option<i64>,
@@ -1111,7 +1419,7 @@ pub struct GetMetricDataInput {
     pub next_token: Option<String>,
     /// <p>The order in which data points should be returned. <code>TimestampDescending</code> returns the newest data first and paginates when the <code>MaxDatapoints</code> limit is reached. <code>TimestampAscending</code> returns the oldest data first and paginates when the <code>MaxDatapoints</code> limit is reached.</p>
     pub scan_by: Option<String>,
-    /// <p>The time stamp indicating the earliest data to be returned.</p> <p>For better performance, specify <code>StartTime</code> and <code>EndTime</code> values that align with the value of the metric's <code>Period</code> and sync up with the beginning and end of an hour. For example, if the <code>Period</code> of a metric is 5 minutes, specifying 12:05 or 12:30 as <code>StartTime</code> can get a faster response from CloudWatch than setting 12:07 or 12:29 as the <code>StartTime</code>.</p>
+    /// <p>The time stamp indicating the earliest data to be returned.</p> <p>The value specified is inclusive; results include data points with the specified time stamp. </p> <p>CloudWatch rounds the specified time stamp as follows:</p> <ul> <li> <p>Start time less than 15 days ago - Round down to the nearest whole minute. For example, 12:32:34 is rounded down to 12:32:00.</p> </li> <li> <p>Start time between 15 and 63 days ago - Round down to the nearest 5-minute clock interval. For example, 12:32:34 is rounded down to 12:30:00.</p> </li> <li> <p>Start time greater than 63 days ago - Round down to the nearest 1-hour clock interval. For example, 12:32:34 is rounded down to 12:00:00.</p> </li> </ul> <p>If you set <code>Period</code> to 5, 10, or 30, the start time of your request is rounded down to the nearest time that corresponds to even 5-, 10-, or 30-second divisions of a minute. For example, if you make a query at (HH:mm:ss) 01:05:23 for the previous 10-second period, the start time of your request is rounded down and you receive data from 01:05:10 to 01:05:20. If you make a query at 15:07:17 for the previous 5 minutes of data, using a period of 5 seconds, you receive data timestamped between 15:02:15 and 15:07:15. </p> <p>For better performance, specify <code>StartTime</code> and <code>EndTime</code> values that align with the value of the metric's <code>Period</code> and sync up with the beginning and end of an hour. For example, if the <code>Period</code> of a metric is 5 minutes, specifying 12:05 or 12:30 as <code>StartTime</code> can get a faster response from CloudWatch than setting 12:07 or 12:29 as the <code>StartTime</code>.</p>
     pub start_time: String,
 }
 
@@ -1199,7 +1507,7 @@ pub struct GetMetricStatisticsInput {
     pub start_time: String,
     /// <p>The metric statistics, other than percentile. For percentile statistics, use <code>ExtendedStatistics</code>. When calling <code>GetMetricStatistics</code>, you must specify either <code>Statistics</code> or <code>ExtendedStatistics</code>, but not both.</p>
     pub statistics: Option<Vec<String>>,
-    /// <p>The unit for a given metric. Metrics may be reported in multiple units. Not supplying a unit results in all units being returned. If you specify only a unit that the metric does not report, the results of the call are null.</p>
+    /// <p>The unit for a given metric. If you omit <code>Unit</code>, all data that was collected with any unit is returned, along with the corresponding units that were specified when the data was reported to CloudWatch. If you specify a unit, the operation returns only data data that was collected with that unit specified. If you specify a unit that does not match the data collected, the results of the operation are null. CloudWatch does not perform unit conversions.</p>
     pub unit: Option<String>,
 }
 
@@ -1711,9 +2019,9 @@ pub struct MetricAlarm {
     pub extended_statistic: Option<String>,
     /// <p>The actions to execute when this alarm transitions to the <code>INSUFFICIENT_DATA</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p>
     pub insufficient_data_actions: Option<Vec<String>>,
-    /// <p>The name of the metric associated with the alarm.</p>
+    /// <p>The name of the metric associated with the alarm, if this is an alarm based on a single metric.</p>
     pub metric_name: Option<String>,
-    /// <p><p/></p>
+    /// <p>An array of MetricDataQuery structures, used in an alarm based on a metric math expression. Each structure either retrieves a metric or performs a math expression. One item in the Metrics array is the math expression that the alarm watches. This expression by designated by having <code>ReturnValue</code> set to true.</p>
     pub metrics: Option<Vec<MetricDataQuery>>,
     /// <p>The namespace of the metric associated with the alarm.</p>
     pub namespace: Option<String>,
@@ -1733,6 +2041,8 @@ pub struct MetricAlarm {
     pub statistic: Option<String>,
     /// <p>The value to compare with the specified statistic.</p>
     pub threshold: Option<f64>,
+    /// <p>In an alarm based on an anomaly detection model, this is the ID of the <code>ANOMALY_DETECTION_BAND</code> function used as the threshold for the alarm.</p>
+    pub threshold_metric_id: Option<String>,
     /// <p>Sets how this alarm is to handle missing data points. If this parameter is omitted, the default behavior of <code>missing</code> is used.</p>
     pub treat_missing_data: Option<String>,
     /// <p>The unit of the metric associated with the alarm.</p>
@@ -1864,6 +2174,12 @@ impl MetricAlarmDeserializer {
                 }
                 "Threshold" => {
                     obj.threshold = Some(ThresholdDeserializer::deserialize("Threshold", stack)?);
+                }
+                "ThresholdMetricId" => {
+                    obj.threshold_metric_id = Some(MetricIdDeserializer::deserialize(
+                        "ThresholdMetricId",
+                        stack,
+                    )?);
                 }
                 "TreatMissingData" => {
                     obj.treat_missing_data = Some(TreatMissingDataDeserializer::deserialize(
@@ -2124,7 +2440,7 @@ pub struct MetricDatum {
     pub storage_resolution: Option<i64>,
     /// <p>The time the metric data was received, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
     pub timestamp: Option<String>,
-    /// <p>The unit of the metric.</p>
+    /// <p>When you are using a <code>Put</code> operation, this defines what unit you want to use when storing the metric.</p> <p>In a <code>Get</code> operation, this displays the unit that is used for the metric.</p>
     pub unit: Option<String>,
     /// <p>The value for the metric.</p> <p>Although the parameter accepts numbers of type Double, CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p>
     pub value: Option<f64>,
@@ -2230,7 +2546,7 @@ pub struct MetricStat {
     pub period: i64,
     /// <p>The statistic to return. It can include any CloudWatch statistic or extended statistic.</p>
     pub stat: String,
-    /// <p>The unit to use for the returned data points.</p>
+    /// <p>When you are using a <code>Put</code> operation, this defines what unit you want to use when storing the metric.</p> <p>In a <code>Get</code> operation, if you omit <code>Unit</code> then all data that was collected with any unit is returned, along with the corresponding units that were specified when the data was reported to CloudWatch. If you specify a unit, the operation returns only data data that was collected with that unit specified. If you specify a unit that does not match the data collected, the results of the operation are null. CloudWatch does not perform unit conversions.</p>
     pub unit: Option<String>,
 }
 
@@ -2345,6 +2661,68 @@ impl PeriodDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutAnomalyDetectorInput {
+    /// <p>The configuration specifies details about how the anomaly detection model is to be trained, including time ranges to exclude when training and updating the model. You can specify as many as 10 time ranges.</p> <p>The configuration can also include the time zone to use for the metric.</p> <p>You can in</p>
+    pub configuration: Option<AnomalyDetectorConfiguration>,
+    /// <p>The metric dimensions to create the anomaly detection model for.</p>
+    pub dimensions: Option<Vec<Dimension>>,
+    /// <p>The name of the metric to create the anomaly detection model for.</p>
+    pub metric_name: String,
+    /// <p>The namespace of the metric to create the anomaly detection model for.</p>
+    pub namespace: String,
+    /// <p>The statistic to use for the metric and the anomaly detection model.</p>
+    pub stat: String,
+}
+
+/// Serialize `PutAnomalyDetectorInput` contents to a `SignedRequest`.
+struct PutAnomalyDetectorInputSerializer;
+impl PutAnomalyDetectorInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PutAnomalyDetectorInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.configuration {
+            AnomalyDetectorConfigurationSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Configuration"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.dimensions {
+            DimensionsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Dimensions"),
+                field_value,
+            );
+        }
+        params.put(&format!("{}{}", prefix, "MetricName"), &obj.metric_name);
+        params.put(&format!("{}{}", prefix, "Namespace"), &obj.namespace);
+        params.put(&format!("{}{}", prefix, "Stat"), &obj.stat);
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutAnomalyDetectorOutput {}
+
+struct PutAnomalyDetectorOutputDeserializer;
+impl PutAnomalyDetectorOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutAnomalyDetectorOutput, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = PutAnomalyDetectorOutput::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutDashboardInput {
     /// <p>The detailed information about the dashboard in JSON format, including the widgets to include and their location on the dashboard. This parameter is required.</p> <p>For more information about the syntax, see <a>CloudWatch-Dashboard-Body-Structure</a>.</p>
     pub dashboard_body: String,
@@ -2403,7 +2781,7 @@ impl PutDashboardOutputDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutMetricAlarmInput {
-    /// <p>Indicates whether actions should be executed during any changes to the alarm state. The default is TRUE.</p>
+    /// <p>Indicates whether actions should be executed during any changes to the alarm state. The default is <code>TRUE</code>.</p>
     pub actions_enabled: Option<bool>,
     /// <p>The actions to execute when this alarm transitions to the <code>ALARM</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: <code>arn:aws:automate:<i>region</i>:ec2:stop</code> | <code>arn:aws:automate:<i>region</i>:ec2:terminate</code> | <code>arn:aws:automate:<i>region</i>:ec2:recover</code> | <code>arn:aws:automate:<i>region</i>:ec2:reboot</code> | <code>arn:aws:sns:<i>region</i>:<i>account-id</i>:<i>sns-topic-name</i> </code> | <code>arn:aws:autoscaling:<i>region</i>:<i>account-id</i>:scalingPolicy:<i>policy-id</i>autoScalingGroupName/<i>group-friendly-name</i>:policyName/<i>policy-friendly-name</i> </code> </p> <p>Valid Values (for use with IAM roles): <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Stop/1.0</code> | <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Terminate/1.0</code> | <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Reboot/1.0</code> </p>
     pub alarm_actions: Option<Vec<String>>,
@@ -2411,7 +2789,7 @@ pub struct PutMetricAlarmInput {
     pub alarm_description: Option<String>,
     /// <p>The name for the alarm. This name must be unique within your AWS account.</p>
     pub alarm_name: String,
-    /// <p> The arithmetic operation to use when comparing the specified statistic and threshold. The specified statistic value is used as the first operand.</p>
+    /// <p> The arithmetic operation to use when comparing the specified statistic and threshold. The specified statistic value is used as the first operand.</p> <p>The values <code>LessThanLowerOrGreaterThanUpperThreshold</code>, <code>LessThanLowerThreshold</code>, and <code>GreaterThanUpperThreshold</code> are used only for alarms based on anomaly detection models.</p>
     pub comparison_operator: String,
     /// <p>The number of datapoints that must be breaching to trigger the alarm. This is used only if you are setting an "M out of N" alarm. In that case, this value is the M. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#alarm-evaluation">Evaluating an Alarm</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
     pub datapoints_to_alarm: Option<i64>,
@@ -2425,25 +2803,27 @@ pub struct PutMetricAlarmInput {
     pub extended_statistic: Option<String>,
     /// <p>The actions to execute when this alarm transitions to the <code>INSUFFICIENT_DATA</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: <code>arn:aws:automate:<i>region</i>:ec2:stop</code> | <code>arn:aws:automate:<i>region</i>:ec2:terminate</code> | <code>arn:aws:automate:<i>region</i>:ec2:recover</code> | <code>arn:aws:automate:<i>region</i>:ec2:reboot</code> | <code>arn:aws:sns:<i>region</i>:<i>account-id</i>:<i>sns-topic-name</i> </code> | <code>arn:aws:autoscaling:<i>region</i>:<i>account-id</i>:scalingPolicy:<i>policy-id</i>autoScalingGroupName/<i>group-friendly-name</i>:policyName/<i>policy-friendly-name</i> </code> </p> <p>Valid Values (for use with IAM roles): <code>&gt;arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Stop/1.0</code> | <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Terminate/1.0</code> | <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Reboot/1.0</code> </p>
     pub insufficient_data_actions: Option<Vec<String>>,
-    /// <p>The name for the metric associated with the alarm.</p> <p>If you are creating an alarm based on a math expression, you cannot specify this parameter, or any of the <code>Dimensions</code>, <code>Period</code>, <code>Namespace</code>, <code>Statistic</code>, or <code>ExtendedStatistic</code> parameters. Instead, you specify all this information in the <code>Metrics</code> array.</p>
+    /// <p>The name for the metric associated with the alarm. For each <code>PutMetricAlarm</code> operation, you must specify either <code>MetricName</code> or a <code>Metrics</code> array.</p> <p>If you are creating an alarm based on a math expression, you cannot specify this parameter, or any of the <code>Dimensions</code>, <code>Period</code>, <code>Namespace</code>, <code>Statistic</code>, or <code>ExtendedStatistic</code> parameters. Instead, you specify all this information in the <code>Metrics</code> array.</p>
     pub metric_name: Option<String>,
-    /// <p>An array of <code>MetricDataQuery</code> structures that enable you to create an alarm based on the result of a metric math expression. Each item in the <code>Metrics</code> array either retrieves a metric or performs a math expression.</p> <p>One item in the <code>Metrics</code> array is the expression that the alarm watches. You designate this expression by setting <code>ReturnValue</code> to true for this object in the array. For more information, see <a>MetricDataQuery</a>.</p> <p>If you use the <code>Metrics</code> parameter, you cannot include the <code>MetricName</code>, <code>Dimensions</code>, <code>Period</code>, <code>Namespace</code>, <code>Statistic</code>, or <code>ExtendedStatistic</code> parameters of <code>PutMetricAlarm</code> in the same operation. Instead, you retrieve the metrics you are using in your math expression as part of the <code>Metrics</code> array.</p>
+    /// <p>An array of <code>MetricDataQuery</code> structures that enable you to create an alarm based on the result of a metric math expression. For each <code>PutMetricAlarm</code> operation, you must specify either <code>MetricName</code> or a <code>Metrics</code> array.</p> <p>Each item in the <code>Metrics</code> array either retrieves a metric or performs a math expression.</p> <p>One item in the <code>Metrics</code> array is the expression that the alarm watches. You designate this expression by setting <code>ReturnValue</code> to true for this object in the array. For more information, see <a>MetricDataQuery</a>.</p> <p>If you use the <code>Metrics</code> parameter, you cannot include the <code>MetricName</code>, <code>Dimensions</code>, <code>Period</code>, <code>Namespace</code>, <code>Statistic</code>, or <code>ExtendedStatistic</code> parameters of <code>PutMetricAlarm</code> in the same operation. Instead, you retrieve the metrics you are using in your math expression as part of the <code>Metrics</code> array.</p>
     pub metrics: Option<Vec<MetricDataQuery>>,
     /// <p>The namespace for the metric associated specified in <code>MetricName</code>.</p>
     pub namespace: Option<String>,
     /// <p>The actions to execute when this alarm transitions to an <code>OK</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: <code>arn:aws:automate:<i>region</i>:ec2:stop</code> | <code>arn:aws:automate:<i>region</i>:ec2:terminate</code> | <code>arn:aws:automate:<i>region</i>:ec2:recover</code> | <code>arn:aws:automate:<i>region</i>:ec2:reboot</code> | <code>arn:aws:sns:<i>region</i>:<i>account-id</i>:<i>sns-topic-name</i> </code> | <code>arn:aws:autoscaling:<i>region</i>:<i>account-id</i>:scalingPolicy:<i>policy-id</i>autoScalingGroupName/<i>group-friendly-name</i>:policyName/<i>policy-friendly-name</i> </code> </p> <p>Valid Values (for use with IAM roles): <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Stop/1.0</code> | <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Terminate/1.0</code> | <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Reboot/1.0</code> </p>
     pub ok_actions: Option<Vec<String>>,
-    /// <p>The length, in seconds, used each time the metric specified in <code>MetricName</code> is evaluated. Valid values are 10, 30, and any multiple of 60.</p> <p>Be sure to specify 10 or 30 only for metrics that are stored by a <code>PutMetricData</code> call with a <code>StorageResolution</code> of 1. If you specify a period of 10 or 30 for a metric that does not have sub-minute resolution, the alarm still attempts to gather data at the period rate that you specify. In this case, it does not receive data for the attempts that do not correspond to a one-minute data resolution, and the alarm may often lapse into INSUFFICENT_DATA status. Specifying 10 or 30 also sets this alarm as a high-resolution alarm, which has a higher charge than other alarms. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>An alarm's total current evaluation period can be no longer than one day, so <code>Period</code> multiplied by <code>EvaluationPeriods</code> cannot be more than 86,400 seconds.</p>
+    /// <p>The length, in seconds, used each time the metric specified in <code>MetricName</code> is evaluated. Valid values are 10, 30, and any multiple of 60.</p> <p> <code>Period</code> is required for alarms based on static thresholds. If you are creating an alarm based on a metric math expression, you specify the period for each metric within the objects in the <code>Metrics</code> array.</p> <p>Be sure to specify 10 or 30 only for metrics that are stored by a <code>PutMetricData</code> call with a <code>StorageResolution</code> of 1. If you specify a period of 10 or 30 for a metric that does not have sub-minute resolution, the alarm still attempts to gather data at the period rate that you specify. In this case, it does not receive data for the attempts that do not correspond to a one-minute data resolution, and the alarm may often lapse into INSUFFICENT_DATA status. Specifying 10 or 30 also sets this alarm as a high-resolution alarm, which has a higher charge than other alarms. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>An alarm's total current evaluation period can be no longer than one day, so <code>Period</code> multiplied by <code>EvaluationPeriods</code> cannot be more than 86,400 seconds.</p>
     pub period: Option<i64>,
     /// <p>The statistic for the metric specified in <code>MetricName</code>, other than percentile. For percentile statistics, use <code>ExtendedStatistic</code>. When you call <code>PutMetricAlarm</code> and specify a <code>MetricName</code>, you must specify either <code>Statistic</code> or <code>ExtendedStatistic,</code> but not both.</p>
     pub statistic: Option<String>,
     /// <p>A list of key-value pairs to associate with the alarm. You can associate as many as 50 tags with an alarm.</p> <p>Tags can help you organize and categorize your resources. You can also use them to scope user permissions, by granting a user permission to access or change only resources with certain tag values.</p>
     pub tags: Option<Vec<Tag>>,
-    /// <p>The value against which the specified statistic is compared.</p>
-    pub threshold: f64,
+    /// <p>The value against which the specified statistic is compared.</p> <p>This parameter is required for alarms based on static thresholds, but should not be used for alarms based on anomaly detection models.</p>
+    pub threshold: Option<f64>,
+    /// <p>If this is an alarm based on an anomaly detection model, make this value match the ID of the <code>ANOMALY_DETECTION_BAND</code> function.</p> <p>For an example of how to use this parameter, see the <b>Anomaly Detection Model Alarm</b> example on this page.</p> <p>If your alarm uses this parameter, it cannot have Auto Scaling actions.</p>
+    pub threshold_metric_id: Option<String>,
     /// <p> Sets how this alarm is to handle missing data points. If <code>TreatMissingData</code> is omitted, the default behavior of <code>missing</code> is used. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#alarms-and-missing-data">Configuring How CloudWatch Alarms Treats Missing Data</a>.</p> <p>Valid Values: <code>breaching | notBreaching | ignore | missing</code> </p>
     pub treat_missing_data: Option<String>,
-    /// <p>The unit of measure for the statistic. For example, the units for the Amazon EC2 NetworkIn metric are Bytes because NetworkIn tracks the number of bytes that an instance receives on all network interfaces. You can also specify a unit when you create a custom metric. Units help provide conceptual meaning to your data. Metric data points that specify a unit of measure, such as Percent, are aggregated separately.</p> <p>If you specify a unit, you must use a unit that is appropriate for the metric. Otherwise, the CloudWatch alarm can get stuck in the <code>INSUFFICIENT DATA</code> state. </p>
+    /// <p>The unit of measure for the statistic. For example, the units for the Amazon EC2 NetworkIn metric are Bytes because NetworkIn tracks the number of bytes that an instance receives on all network interfaces. You can also specify a unit when you create a custom metric. Units help provide conceptual meaning to your data. Metric data points that specify a unit of measure, such as Percent, are aggregated separately.</p> <p>If you don't specify <code>Unit</code>, CloudWatch retrieves all unit types that have been published for the metric and attempts to evaluate the alarm. Usually metrics are published with only one unit, so the alarm will work as intended.</p> <p>However, if the metric is published with multiple types of units and you don't specify a unit, the alarm's behavior is not defined and will behave un-predictably.</p> <p>We recommend omitting <code>Unit</code> so that you don't inadvertently specify an incorrect unit that is not published for this metric. Doing so causes the alarm to be stuck in the <code>INSUFFICIENT DATA</code> state.</p>
     pub unit: Option<String>,
 }
 
@@ -2533,7 +2913,12 @@ impl PutMetricAlarmInputSerializer {
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
-        params.put(&format!("{}{}", prefix, "Threshold"), &obj.threshold);
+        if let Some(ref field_value) = obj.threshold {
+            params.put(&format!("{}{}", prefix, "Threshold"), &field_value);
+        }
+        if let Some(ref field_value) = obj.threshold_metric_id {
+            params.put(&format!("{}{}", prefix, "ThresholdMetricId"), &field_value);
+        }
         if let Some(ref field_value) = obj.treat_missing_data {
             params.put(&format!("{}{}", prefix, "TreatMissingData"), &field_value);
         }
@@ -2547,7 +2932,7 @@ impl PutMetricAlarmInputSerializer {
 pub struct PutMetricDataInput {
     /// <p>The data for the metric. The array can include no more than 20 metrics per call.</p>
     pub metric_data: Vec<MetricDatum>,
-    /// <p>The namespace for the metric data.</p> <p>You cannot specify a namespace that begins with "AWS/". Namespaces that begin with "AWS/" are reserved for use by Amazon Web Services products.</p>
+    /// <p>The namespace for the metric data.</p> <p>To avoid conflicts with AWS service namespaces, you should not specify a namespace that begins with <code>AWS/</code> </p>
     pub namespace: String,
 }
 
@@ -2566,6 +2951,48 @@ impl PutMetricDataInputSerializer {
             &obj.metric_data,
         );
         params.put(&format!("{}{}", prefix, "Namespace"), &obj.namespace);
+    }
+}
+
+/// <p>Specifies one range of days or times to exclude from use for training an anomaly detection model.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct Range {
+    /// <p>The end time of the range to exclude. The format is <code>yyyy-MM-dd'T'HH:mm:ss</code>. For example, <code>2019-07-01T23:59:59</code>.</p>
+    pub end_time: String,
+    /// <p>The start time of the range to exclude. The format is <code>yyyy-MM-dd'T'HH:mm:ss</code>. For example, <code>2019-07-01T23:59:59</code>.</p>
+    pub start_time: String,
+}
+
+struct RangeDeserializer;
+impl RangeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Range, XmlParseError> {
+        deserialize_elements::<_, Range, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "EndTime" => {
+                    obj.end_time = TimestampDeserializer::deserialize("EndTime", stack)?;
+                }
+                "StartTime" => {
+                    obj.start_time = TimestampDeserializer::deserialize("StartTime", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `Range` contents to a `SignedRequest`.
+struct RangeSerializer;
+impl RangeSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Range) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "EndTime"), &obj.end_time);
+        params.put(&format!("{}{}", prefix, "StartTime"), &obj.start_time);
     }
 }
 
@@ -3074,6 +3501,79 @@ impl Error for DeleteAlarmsError {
         }
     }
 }
+/// Errors returned by DeleteAnomalyDetector
+#[derive(Debug, PartialEq)]
+pub enum DeleteAnomalyDetectorError {
+    /// <p>Request processing has failed due to some unknown error, exception, or failure.</p>
+    InternalServiceFault(String),
+    /// <p>The value of an input parameter is bad or out-of-range.</p>
+    InvalidParameterValue(String),
+    /// <p>An input parameter that is required is missing.</p>
+    MissingRequiredParameter(String),
+    /// <p>The named resource does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteAnomalyDetectorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAnomalyDetectorError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InternalServiceError" => {
+                        return RusotoError::Service(
+                            DeleteAnomalyDetectorError::InternalServiceFault(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return RusotoError::Service(
+                            DeleteAnomalyDetectorError::InvalidParameterValue(parsed_error.message),
+                        )
+                    }
+                    "MissingParameter" => {
+                        return RusotoError::Service(
+                            DeleteAnomalyDetectorError::MissingRequiredParameter(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ResourceNotFoundException" => {
+                        return RusotoError::Service(DeleteAnomalyDetectorError::ResourceNotFound(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteAnomalyDetectorError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteAnomalyDetectorError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteAnomalyDetectorError::InternalServiceFault(ref cause) => cause,
+            DeleteAnomalyDetectorError::InvalidParameterValue(ref cause) => cause,
+            DeleteAnomalyDetectorError::MissingRequiredParameter(ref cause) => cause,
+            DeleteAnomalyDetectorError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteDashboards
 #[derive(Debug, PartialEq)]
 pub enum DeleteDashboardsError {
@@ -3266,6 +3766,73 @@ impl fmt::Display for DescribeAlarmsForMetricError {
 impl Error for DescribeAlarmsForMetricError {
     fn description(&self) -> &str {
         match *self {}
+    }
+}
+/// Errors returned by DescribeAnomalyDetectors
+#[derive(Debug, PartialEq)]
+pub enum DescribeAnomalyDetectorsError {
+    /// <p>Request processing has failed due to some unknown error, exception, or failure.</p>
+    InternalServiceFault(String),
+    /// <p>The next token specified is invalid.</p>
+    InvalidNextToken(String),
+    /// <p>The value of an input parameter is bad or out-of-range.</p>
+    InvalidParameterValue(String),
+}
+
+impl DescribeAnomalyDetectorsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAnomalyDetectorsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InternalServiceError" => {
+                        return RusotoError::Service(
+                            DescribeAnomalyDetectorsError::InternalServiceFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidNextToken" => {
+                        return RusotoError::Service(
+                            DescribeAnomalyDetectorsError::InvalidNextToken(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return RusotoError::Service(
+                            DescribeAnomalyDetectorsError::InvalidParameterValue(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeAnomalyDetectorsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeAnomalyDetectorsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeAnomalyDetectorsError::InternalServiceFault(ref cause) => cause,
+            DescribeAnomalyDetectorsError::InvalidNextToken(ref cause) => cause,
+            DescribeAnomalyDetectorsError::InvalidParameterValue(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by DisableAlarmActions
@@ -3737,6 +4304,77 @@ impl Error for ListTagsForResourceError {
         }
     }
 }
+/// Errors returned by PutAnomalyDetector
+#[derive(Debug, PartialEq)]
+pub enum PutAnomalyDetectorError {
+    /// <p>Request processing has failed due to some unknown error, exception, or failure.</p>
+    InternalServiceFault(String),
+    /// <p>The value of an input parameter is bad or out-of-range.</p>
+    InvalidParameterValue(String),
+    /// <p>The operation exceeded one or more limits.</p>
+    LimitExceeded(String),
+    /// <p>An input parameter that is required is missing.</p>
+    MissingRequiredParameter(String),
+}
+
+impl PutAnomalyDetectorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutAnomalyDetectorError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InternalServiceError" => {
+                        return RusotoError::Service(PutAnomalyDetectorError::InternalServiceFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return RusotoError::Service(
+                            PutAnomalyDetectorError::InvalidParameterValue(parsed_error.message),
+                        )
+                    }
+                    "LimitExceededException" => {
+                        return RusotoError::Service(PutAnomalyDetectorError::LimitExceeded(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingParameter" => {
+                        return RusotoError::Service(
+                            PutAnomalyDetectorError::MissingRequiredParameter(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for PutAnomalyDetectorError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutAnomalyDetectorError {
+    fn description(&self) -> &str {
+        match *self {
+            PutAnomalyDetectorError::InternalServiceFault(ref cause) => cause,
+            PutAnomalyDetectorError::InvalidParameterValue(ref cause) => cause,
+            PutAnomalyDetectorError::LimitExceeded(ref cause) => cause,
+            PutAnomalyDetectorError::MissingRequiredParameter(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by PutDashboard
 #[derive(Debug, PartialEq)]
 pub enum PutDashboardError {
@@ -4109,8 +4747,14 @@ impl Error for UntagResourceError {
 }
 /// Trait representing the capabilities of the CloudWatch API. CloudWatch clients implement this trait.
 pub trait CloudWatch {
-    /// <p>Deletes the specified alarms. In the event of an error, no alarms are deleted.</p>
+    /// <p>Deletes the specified alarms. You can delete up to 50 alarms in one operation. In the event of an error, no alarms are deleted.</p>
     fn delete_alarms(&self, input: DeleteAlarmsInput) -> RusotoFuture<(), DeleteAlarmsError>;
+
+    /// <p>Deletes the specified anomaly detection model from your account.</p>
+    fn delete_anomaly_detector(
+        &self,
+        input: DeleteAnomalyDetectorInput,
+    ) -> RusotoFuture<DeleteAnomalyDetectorOutput, DeleteAnomalyDetectorError>;
 
     /// <p>Deletes all dashboards that you specify. You may specify up to 100 dashboards to delete. If there is an error during this call, no dashboards are deleted.</p>
     fn delete_dashboards(
@@ -4136,6 +4780,12 @@ pub trait CloudWatch {
         input: DescribeAlarmsForMetricInput,
     ) -> RusotoFuture<DescribeAlarmsForMetricOutput, DescribeAlarmsForMetricError>;
 
+    /// <p>Lists the anomaly detection models that you have created in your account. You can list all models in your account or filter the results to only the models that are related to a certain namespace, metric name, or metric dimension.</p>
+    fn describe_anomaly_detectors(
+        &self,
+        input: DescribeAnomalyDetectorsInput,
+    ) -> RusotoFuture<DescribeAnomalyDetectorsOutput, DescribeAnomalyDetectorsError>;
+
     /// <p>Disables the actions for the specified alarms. When an alarm's actions are disabled, the alarm actions do not execute when the alarm state changes.</p>
     fn disable_alarm_actions(
         &self,
@@ -4154,7 +4804,7 @@ pub trait CloudWatch {
         input: GetDashboardInput,
     ) -> RusotoFuture<GetDashboardOutput, GetDashboardError>;
 
-    /// <p>You can use the <code>GetMetricData</code> API to retrieve as many as 100 different metrics in a single request, with a total of as many as 100,800 datapoints. You can also optionally perform math expressions on the values of the returned statistics, to create new time series that represent new insights into your data. For example, using Lambda metrics, you could divide the Errors metric by the Invocations metric to get an error rate time series. For more information about metric math expressions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Calls to the <code>GetMetricData</code> API have a different pricing structure than calls to <code>GetMetricStatistics</code>. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p>
+    /// <p>You can use the <code>GetMetricData</code> API to retrieve as many as 100 different metrics in a single request, with a total of as many as 100,800 datapoints. You can also optionally perform math expressions on the values of the returned statistics, to create new time series that represent new insights into your data. For example, using Lambda metrics, you could divide the Errors metric by the Invocations metric to get an error rate time series. For more information about metric math expressions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Calls to the <code>GetMetricData</code> API have a different pricing structure than calls to <code>GetMetricStatistics</code>. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p> <p>If you omit <code>Unit</code> in your request, all data that was collected with any unit is returned, along with the corresponding units that were specified when the data was reported to CloudWatch. If you specify a unit, the operation returns only data data that was collected with that unit specified. If you specify a unit that does not match the data collected, the results of the operation are null. CloudWatch does not perform unit conversions.</p>
     fn get_metric_data(
         &self,
         input: GetMetricDataInput,
@@ -4190,13 +4840,19 @@ pub trait CloudWatch {
         input: ListTagsForResourceInput,
     ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError>;
 
-    /// <p>Creates a dashboard if it does not already exist, or updates an existing dashboard. If you update a dashboard, the entire contents are replaced with what you specify here.</p> <p>There is no limit to the number of dashboards in your account. All dashboards in your account are global, not region-specific.</p> <p>A simple way to create a dashboard using <code>PutDashboard</code> is to copy an existing dashboard. To copy an existing dashboard using the console, you can load the dashboard and then use the View/edit source command in the Actions menu to display the JSON block for that dashboard. Another way to copy a dashboard is to use <code>GetDashboard</code>, and then use the data returned within <code>DashboardBody</code> as the template for the new dashboard when you call <code>PutDashboard</code>.</p> <p>When you create a dashboard with <code>PutDashboard</code>, a good practice is to add a text widget at the top of the dashboard with a message that the dashboard was created by script and should not be changed in the console. This message could also point console users to the location of the <code>DashboardBody</code> script or the CloudFormation template used to create the dashboard.</p>
+    /// <p>Creates an anomaly detection model for a CloudWatch metric. You can use the model to display a band of expected normal values when the metric is graphed.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Anomaly_Detection.html">CloudWatch Anomaly Detection</a>.</p>
+    fn put_anomaly_detector(
+        &self,
+        input: PutAnomalyDetectorInput,
+    ) -> RusotoFuture<PutAnomalyDetectorOutput, PutAnomalyDetectorError>;
+
+    /// <p>Creates a dashboard if it does not already exist, or updates an existing dashboard. If you update a dashboard, the entire contents are replaced with what you specify here.</p> <p>All dashboards in your account are global, not region-specific.</p> <p>A simple way to create a dashboard using <code>PutDashboard</code> is to copy an existing dashboard. To copy an existing dashboard using the console, you can load the dashboard and then use the View/edit source command in the Actions menu to display the JSON block for that dashboard. Another way to copy a dashboard is to use <code>GetDashboard</code>, and then use the data returned within <code>DashboardBody</code> as the template for the new dashboard when you call <code>PutDashboard</code>.</p> <p>When you create a dashboard with <code>PutDashboard</code>, a good practice is to add a text widget at the top of the dashboard with a message that the dashboard was created by script and should not be changed in the console. This message could also point console users to the location of the <code>DashboardBody</code> script or the CloudFormation template used to create the dashboard.</p>
     fn put_dashboard(
         &self,
         input: PutDashboardInput,
     ) -> RusotoFuture<PutDashboardOutput, PutDashboardError>;
 
-    /// <p>Creates or updates an alarm and associates it with the specified metric or metric math expression.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is then evaluated and its state is set appropriately. Any actions associated with the new state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an IAM user, you must have Amazon EC2 permissions for some alarm operations:</p> <ul> <li> <p> <code>iam:CreateServiceLinkedRole</code> for all alarms with EC2 actions</p> </li> <li> <p> <code>ec2:DescribeInstanceStatus</code> and <code>ec2:DescribeInstances</code> for all alarms on EC2 instance status metrics</p> </li> <li> <p> <code>ec2:StopInstances</code> for alarms with stop actions</p> </li> <li> <p> <code>ec2:TerminateInstances</code> for alarms with terminate actions</p> </li> <li> <p>No specific permissions are needed for alarms with recover actions</p> </li> </ul> <p>If you have read/write permissions for Amazon CloudWatch but not for Amazon EC2, you can still create an alarm, but the stop or terminate actions are not performed. However, if you are later granted the required permissions, the alarm actions that you created earlier are performed.</p> <p>If you are using an IAM role (for example, an EC2 instance profile), you cannot stop or terminate the instance using alarm actions. However, you can still see the alarm state and perform any other actions such as Amazon SNS notifications or Auto Scaling policies.</p> <p>If you are using temporary security credentials granted using AWS STS, you cannot stop or terminate an EC2 instance using alarm actions.</p> <p>The first time you create an alarm in the AWS Management Console, the CLI, or by using the PutMetricAlarm API, CloudWatch creates the necessary service-linked role for you. The service-linked role is called <code>AWSServiceRoleForCloudWatchEvents</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">AWS service-linked role</a>.</p>
+    /// <p>Creates or updates an alarm and associates it with the specified metric, metric math expression, or anomaly detection model.</p> <p>Alarms based on anomaly detection models cannot have Auto Scaling actions.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is then evaluated and its state is set appropriately. Any actions associated with the new state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an IAM user, you must have Amazon EC2 permissions for some alarm operations:</p> <ul> <li> <p> <code>iam:CreateServiceLinkedRole</code> for all alarms with EC2 actions</p> </li> <li> <p> <code>ec2:DescribeInstanceStatus</code> and <code>ec2:DescribeInstances</code> for all alarms on EC2 instance status metrics</p> </li> <li> <p> <code>ec2:StopInstances</code> for alarms with stop actions</p> </li> <li> <p> <code>ec2:TerminateInstances</code> for alarms with terminate actions</p> </li> <li> <p>No specific permissions are needed for alarms with recover actions</p> </li> </ul> <p>If you have read/write permissions for Amazon CloudWatch but not for Amazon EC2, you can still create an alarm, but the stop or terminate actions are not performed. However, if you are later granted the required permissions, the alarm actions that you created earlier are performed.</p> <p>If you are using an IAM role (for example, an EC2 instance profile), you cannot stop or terminate the instance using alarm actions. However, you can still see the alarm state and perform any other actions such as Amazon SNS notifications or Auto Scaling policies.</p> <p>If you are using temporary security credentials granted using AWS STS, you cannot stop or terminate an EC2 instance using alarm actions.</p> <p>The first time you create an alarm in the AWS Management Console, the CLI, or by using the PutMetricAlarm API, CloudWatch creates the necessary service-linked role for you. The service-linked role is called <code>AWSServiceRoleForCloudWatchEvents</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">AWS service-linked role</a>.</p>
     fn put_metric_alarm(&self, input: PutMetricAlarmInput)
         -> RusotoFuture<(), PutMetricAlarmError>;
 
@@ -4230,10 +4886,7 @@ impl CloudWatchClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> CloudWatchClient {
-        CloudWatchClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -4247,15 +4900,19 @@ impl CloudWatchClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        CloudWatchClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CloudWatchClient {
+        CloudWatchClient { client, region }
     }
 }
 
 impl CloudWatch for CloudWatchClient {
-    /// <p>Deletes the specified alarms. In the event of an error, no alarms are deleted.</p>
+    /// <p>Deletes the specified alarms. You can delete up to 50 alarms in one operation. In the event of an error, no alarms are deleted.</p>
     fn delete_alarms(&self, input: DeleteAlarmsInput) -> RusotoFuture<(), DeleteAlarmsError> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
@@ -4277,6 +4934,54 @@ impl CloudWatch for CloudWatchClient {
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
+        })
+    }
+
+    /// <p>Deletes the specified anomaly detection model from your account.</p>
+    fn delete_anomaly_detector(
+        &self,
+        input: DeleteAnomalyDetectorInput,
+    ) -> RusotoFuture<DeleteAnomalyDetectorOutput, DeleteAnomalyDetectorError> {
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteAnomalyDetector");
+        params.put("Version", "2010-08-01");
+        DeleteAnomalyDetectorInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteAnomalyDetectorError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteAnomalyDetectorOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DeleteAnomalyDetectorOutputDeserializer::deserialize(
+                        "DeleteAnomalyDetectorResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
 
@@ -4480,6 +5185,54 @@ impl CloudWatch for CloudWatchClient {
         })
     }
 
+    /// <p>Lists the anomaly detection models that you have created in your account. You can list all models in your account or filter the results to only the models that are related to a certain namespace, metric name, or metric dimension.</p>
+    fn describe_anomaly_detectors(
+        &self,
+        input: DescribeAnomalyDetectorsInput,
+    ) -> RusotoFuture<DescribeAnomalyDetectorsOutput, DescribeAnomalyDetectorsError> {
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeAnomalyDetectors");
+        params.put("Version", "2010-08-01");
+        DescribeAnomalyDetectorsInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeAnomalyDetectorsError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DescribeAnomalyDetectorsOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeAnomalyDetectorsOutputDeserializer::deserialize(
+                        "DescribeAnomalyDetectorsResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
     /// <p>Disables the actions for the specified alarms. When an alarm's actions are disabled, the alarm actions do not execute when the alarm state changes.</p>
     fn disable_alarm_actions(
         &self,
@@ -4586,7 +5339,7 @@ impl CloudWatch for CloudWatchClient {
         })
     }
 
-    /// <p>You can use the <code>GetMetricData</code> API to retrieve as many as 100 different metrics in a single request, with a total of as many as 100,800 datapoints. You can also optionally perform math expressions on the values of the returned statistics, to create new time series that represent new insights into your data. For example, using Lambda metrics, you could divide the Errors metric by the Invocations metric to get an error rate time series. For more information about metric math expressions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Calls to the <code>GetMetricData</code> API have a different pricing structure than calls to <code>GetMetricStatistics</code>. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p>
+    /// <p>You can use the <code>GetMetricData</code> API to retrieve as many as 100 different metrics in a single request, with a total of as many as 100,800 datapoints. You can also optionally perform math expressions on the values of the returned statistics, to create new time series that represent new insights into your data. For example, using Lambda metrics, you could divide the Errors metric by the Invocations metric to get an error rate time series. For more information about metric math expressions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Calls to the <code>GetMetricData</code> API have a different pricing structure than calls to <code>GetMetricStatistics</code>. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p> <p>If you omit <code>Unit</code> in your request, all data that was collected with any unit is returned, along with the corresponding units that were specified when the data was reported to CloudWatch. If you specify a unit, the operation returns only data data that was collected with that unit specified. If you specify a unit that does not match the data collected, the results of the operation are null. CloudWatch does not perform unit conversions.</p>
     fn get_metric_data(
         &self,
         input: GetMetricDataInput,
@@ -4889,7 +5642,58 @@ impl CloudWatch for CloudWatchClient {
         })
     }
 
-    /// <p>Creates a dashboard if it does not already exist, or updates an existing dashboard. If you update a dashboard, the entire contents are replaced with what you specify here.</p> <p>There is no limit to the number of dashboards in your account. All dashboards in your account are global, not region-specific.</p> <p>A simple way to create a dashboard using <code>PutDashboard</code> is to copy an existing dashboard. To copy an existing dashboard using the console, you can load the dashboard and then use the View/edit source command in the Actions menu to display the JSON block for that dashboard. Another way to copy a dashboard is to use <code>GetDashboard</code>, and then use the data returned within <code>DashboardBody</code> as the template for the new dashboard when you call <code>PutDashboard</code>.</p> <p>When you create a dashboard with <code>PutDashboard</code>, a good practice is to add a text widget at the top of the dashboard with a message that the dashboard was created by script and should not be changed in the console. This message could also point console users to the location of the <code>DashboardBody</code> script or the CloudFormation template used to create the dashboard.</p>
+    /// <p>Creates an anomaly detection model for a CloudWatch metric. You can use the model to display a band of expected normal values when the metric is graphed.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Anomaly_Detection.html">CloudWatch Anomaly Detection</a>.</p>
+    fn put_anomaly_detector(
+        &self,
+        input: PutAnomalyDetectorInput,
+    ) -> RusotoFuture<PutAnomalyDetectorOutput, PutAnomalyDetectorError> {
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "PutAnomalyDetector");
+        params.put("Version", "2010-08-01");
+        PutAnomalyDetectorInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutAnomalyDetectorError::from_response(response))),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = PutAnomalyDetectorOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = PutAnomalyDetectorOutputDeserializer::deserialize(
+                        "PutAnomalyDetectorResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Creates a dashboard if it does not already exist, or updates an existing dashboard. If you update a dashboard, the entire contents are replaced with what you specify here.</p> <p>All dashboards in your account are global, not region-specific.</p> <p>A simple way to create a dashboard using <code>PutDashboard</code> is to copy an existing dashboard. To copy an existing dashboard using the console, you can load the dashboard and then use the View/edit source command in the Actions menu to display the JSON block for that dashboard. Another way to copy a dashboard is to use <code>GetDashboard</code>, and then use the data returned within <code>DashboardBody</code> as the template for the new dashboard when you call <code>PutDashboard</code>.</p> <p>When you create a dashboard with <code>PutDashboard</code>, a good practice is to add a text widget at the top of the dashboard with a message that the dashboard was created by script and should not be changed in the console. This message could also point console users to the location of the <code>DashboardBody</code> script or the CloudFormation template used to create the dashboard.</p>
     fn put_dashboard(
         &self,
         input: PutDashboardInput,
@@ -4940,7 +5744,7 @@ impl CloudWatch for CloudWatchClient {
         })
     }
 
-    /// <p>Creates or updates an alarm and associates it with the specified metric or metric math expression.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is then evaluated and its state is set appropriately. Any actions associated with the new state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an IAM user, you must have Amazon EC2 permissions for some alarm operations:</p> <ul> <li> <p> <code>iam:CreateServiceLinkedRole</code> for all alarms with EC2 actions</p> </li> <li> <p> <code>ec2:DescribeInstanceStatus</code> and <code>ec2:DescribeInstances</code> for all alarms on EC2 instance status metrics</p> </li> <li> <p> <code>ec2:StopInstances</code> for alarms with stop actions</p> </li> <li> <p> <code>ec2:TerminateInstances</code> for alarms with terminate actions</p> </li> <li> <p>No specific permissions are needed for alarms with recover actions</p> </li> </ul> <p>If you have read/write permissions for Amazon CloudWatch but not for Amazon EC2, you can still create an alarm, but the stop or terminate actions are not performed. However, if you are later granted the required permissions, the alarm actions that you created earlier are performed.</p> <p>If you are using an IAM role (for example, an EC2 instance profile), you cannot stop or terminate the instance using alarm actions. However, you can still see the alarm state and perform any other actions such as Amazon SNS notifications or Auto Scaling policies.</p> <p>If you are using temporary security credentials granted using AWS STS, you cannot stop or terminate an EC2 instance using alarm actions.</p> <p>The first time you create an alarm in the AWS Management Console, the CLI, or by using the PutMetricAlarm API, CloudWatch creates the necessary service-linked role for you. The service-linked role is called <code>AWSServiceRoleForCloudWatchEvents</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">AWS service-linked role</a>.</p>
+    /// <p>Creates or updates an alarm and associates it with the specified metric, metric math expression, or anomaly detection model.</p> <p>Alarms based on anomaly detection models cannot have Auto Scaling actions.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is then evaluated and its state is set appropriately. Any actions associated with the new state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an IAM user, you must have Amazon EC2 permissions for some alarm operations:</p> <ul> <li> <p> <code>iam:CreateServiceLinkedRole</code> for all alarms with EC2 actions</p> </li> <li> <p> <code>ec2:DescribeInstanceStatus</code> and <code>ec2:DescribeInstances</code> for all alarms on EC2 instance status metrics</p> </li> <li> <p> <code>ec2:StopInstances</code> for alarms with stop actions</p> </li> <li> <p> <code>ec2:TerminateInstances</code> for alarms with terminate actions</p> </li> <li> <p>No specific permissions are needed for alarms with recover actions</p> </li> </ul> <p>If you have read/write permissions for Amazon CloudWatch but not for Amazon EC2, you can still create an alarm, but the stop or terminate actions are not performed. However, if you are later granted the required permissions, the alarm actions that you created earlier are performed.</p> <p>If you are using an IAM role (for example, an EC2 instance profile), you cannot stop or terminate the instance using alarm actions. However, you can still see the alarm state and perform any other actions such as Amazon SNS notifications or Auto Scaling policies.</p> <p>If you are using temporary security credentials granted using AWS STS, you cannot stop or terminate an EC2 instance using alarm actions.</p> <p>The first time you create an alarm in the AWS Management Console, the CLI, or by using the PutMetricAlarm API, CloudWatch creates the necessary service-linked role for you. The service-linked role is called <code>AWSServiceRoleForCloudWatchEvents</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">AWS service-linked role</a>.</p>
     fn put_metric_alarm(
         &self,
         input: PutMetricAlarmInput,

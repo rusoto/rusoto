@@ -17,7 +17,7 @@ exclude = ["test_resources/*"]
 [dependencies]
 bytes = "0.4.12"
 futures = "0.1.16"
-xml-rs = "0.7"
+xml-rs = "0.8"
 
 [dependencies.rusoto_core]
 version = "0.40.0"

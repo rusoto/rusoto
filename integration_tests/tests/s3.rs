@@ -181,7 +181,7 @@ fn test_puts_gets_deletes() {
     init_logging();
 
     let bucket_name = format!("test-bucket-{}-{}", "default".to_owned(), get_time().sec);
-    let mut test_client = TestS3Client::new(bucket_name.clone());
+    let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone());
 
     // modify the bucket's CORS properties
@@ -243,7 +243,7 @@ fn test_puts_gets_deletes_utf8() {
     init_logging();
 
     let bucket_name = format!("test-bucket-{}-{}", "utf-8".to_owned(), get_time().sec);
-    let mut test_client = TestS3Client::new(bucket_name.clone());
+    let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone());
 
     let utf8_filename = format!("test[über]file@{}", get_time().sec);
@@ -265,7 +265,7 @@ fn test_puts_gets_deletes_binary() {
     init_logging();
 
     let bucket_name = format!("test-bucket-{}-{}", "binary".to_owned(), get_time().sec);
-    let mut test_client = TestS3Client::new(bucket_name.clone());
+    let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone());
 
     let binary_filename = format!("test_file_b{}", get_time().sec);
@@ -288,7 +288,7 @@ fn test_puts_gets_deletes_metadata() {
     init_logging();
 
     let bucket_name = format!("test-bucket-{}-{}", "metadata".to_owned(), get_time().sec);
-    let mut test_client = TestS3Client::new(bucket_name.clone());
+    let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone());
 
     let metadata_filename = format!("test_metadata_file_{}", get_time().sec);
@@ -332,7 +332,7 @@ fn test_puts_gets_deletes_presigned_url() {
     init_logging();
 
     let bucket_name = format!("test-bucket-{}-{}", "presigned".to_owned(), get_time().sec);
-    let mut test_client = TestS3Client::new(bucket_name.clone());
+    let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone());
 
     let filename = format!("test_file_{}_for_presigned", get_time().sec);
@@ -416,7 +416,7 @@ fn test_multipart_stream_uploads() {
     init_logging();
 
     let bucket_name = format!("test-bucket-{}-{}", "multipart".to_owned(), get_time().sec);
-    let mut test_client = TestS3Client::new(bucket_name.clone());
+    let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone());
 
     let multipart_filename = format!("test_multipart_file_{}", get_time().sec);
@@ -462,7 +462,6 @@ fn test_multipart_upload(
     region: &Region,
     credentials: &AwsCredentials,
     bucket: &str,
-
     filename: &str,
 ) {
     let create_multipart_req = CreateMultipartUploadRequest {

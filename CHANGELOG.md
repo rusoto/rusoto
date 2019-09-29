@@ -6,11 +6,14 @@
 
 (Please put changes here)
 
+- Upgrade to botocore from `1.12.163` to `1.12.230`
+- The types `rusoto_events::{CloudWatchEvents,CloudWatchEventsClient}` were renamed to `rusoto_events::{EventBridge,EventBridgeClient}`
 - Deserialize PostTextResponse correctly by allowing null values in the slots field
 - Fix Profile Config Loading should ignore comments with '=' chars
 - Add App Mesh service
 - Fix service_crategen to parse operations with multiple static params
 - Refactor S3 integration tests - about a `#[test]` per behavior
+- Add support for non signing clients
 
 ## [0.40.0] - 2019-06-28
 

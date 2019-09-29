@@ -21,11 +21,11 @@ use http::header::{HeaderName, HeaderValue};
 use http::{HeaderMap, Method, StatusCode};
 use hyper::body::Payload;
 use hyper::client::connect::Connect;
+use hyper::client::Builder as HyperBuilder;
 use hyper::client::HttpConnector;
 use hyper::client::ResponseFuture as HyperResponseFuture;
 use hyper::Error as HyperError;
 use hyper::{Body, Client as HyperClient, Request as HyperRequest, Response as HyperResponse};
-use hyper::client::Builder as HyperBuilder;
 use tokio_timer::Timeout;
 
 use log::Level::Debug;

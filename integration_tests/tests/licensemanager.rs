@@ -18,9 +18,9 @@ fn should_list_domains() {
             match e {
                 RusotoError::Service(err) => {
                     assert!(format!("{:?}", err).contains("Denied"));
-                },
+                }
                 _ => (),
             };
-        },
+        }
     }
 }

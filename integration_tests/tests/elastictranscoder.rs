@@ -339,7 +339,7 @@ fn list_presets() {
                 .filter(|x| x.id == Some(AWS_ETS_WEB_PRESET_ID.to_owned()))
                 .next();
             web_preset.unwrap().clone()
-        },
+        }
     };
 
     assert_eq!(found_preset.id, Some(AWS_ETS_WEB_PRESET_ID.to_owned()));

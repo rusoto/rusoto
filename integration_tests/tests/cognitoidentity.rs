@@ -4,8 +4,7 @@ extern crate rusoto_cognito_identity;
 extern crate rusoto_core;
 
 use rusoto_cognito_identity::{
-    CognitoIdentity, CognitoIdentityClient, ListIdentitiesInput,
-    ListIdentityPoolsInput,
+    CognitoIdentity, CognitoIdentityClient, ListIdentitiesInput, ListIdentityPoolsInput,
 };
 use rusoto_core::{Region, RusotoError};
 

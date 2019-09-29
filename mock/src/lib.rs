@@ -43,8 +43,8 @@ use std::fs::File;
 use std::io::Read;
 use std::time::Duration;
 
-use futures::future::{ok, err, FutureResult};
-use http::{HeaderMap, header::HeaderName, HttpTryFrom, StatusCode};
+use futures::future::{err, ok, FutureResult};
+use http::{header::HeaderName, HeaderMap, HttpTryFrom, StatusCode};
 use rusoto_core::credential::{AwsCredentials, CredentialsError, ProvideAwsCredentials};
 use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
@@ -79,14 +79,14 @@ pub struct MockRequestDispatcher {
 }
 
 enum RequestOutcome {
-  Performed(StatusCode),
-  Failed(HttpDispatchError),
+    Performed(StatusCode),
+    Failed(HttpDispatchError),
 }
 
 impl Default for RequestOutcome {
-  fn default() -> RequestOutcome {
-    RequestOutcome::Performed(StatusCode::default())
-  }
+    fn default() -> RequestOutcome {
+        RequestOutcome::Performed(StatusCode::default())
+    }
 }
 
 impl MockRequestDispatcher {
@@ -101,10 +101,10 @@ impl MockRequestDispatcher {
 
     /// Mocks the service request failing with a communications error
     pub fn with_dispatch_error(error: HttpDispatchError) -> MockRequestDispatcher {
-      MockRequestDispatcher {
-          outcome: RequestOutcome::Failed(error),
-          ..MockRequestDispatcher::default()
-      }
+        MockRequestDispatcher {
+            outcome: RequestOutcome::Failed(error),
+            ..MockRequestDispatcher::default()
+        }
     }
 
     /// Mocks the service response body what would be
@@ -136,7 +136,8 @@ impl MockRequestDispatcher {
 
     /// Mocks a single service header that would be returned from AWS
     pub fn with_header(mut self, key: &str, value: &str) -> MockRequestDispatcher {
-        self.headers.insert(key.parse::<HeaderName>().unwrap(), value.into());
+        self.headers
+            .insert(key.parse::<HeaderName>().unwrap(), value.into());
         self
     }
 }
@@ -149,12 +150,12 @@ impl DispatchSignedRequest for MockRequestDispatcher {
             self.request_checker.as_ref().unwrap()(&request);
         }
         match self.outcome {
-          RequestOutcome::Performed(ref status) => ok(HttpResponse {
-            status: *status,
-            body: ByteStream::from(self.body.clone()),
-            headers: self.headers.clone()
-          }),
-          RequestOutcome::Failed(ref error) => err(error.clone()),
+            RequestOutcome::Performed(ref status) => ok(HttpResponse {
+                status: *status,
+                body: ByteStream::from(self.body.clone()),
+                headers: self.headers.clone(),
+            }),
+            RequestOutcome::Failed(ref error) => err(error.clone()),
         }
     }
 }

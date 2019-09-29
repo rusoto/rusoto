@@ -1,10 +1,10 @@
 #![cfg(feature = "appmesh")]
 
-extern crate rusoto_core;
 extern crate rusoto_appmesh;
+extern crate rusoto_core;
 
-use rusoto_core::Region;
 use rusoto_appmesh::{AppMesh, AppMeshClient, ListMeshesInput};
+use rusoto_core::Region;
 
 #[test]
 fn main() {
