@@ -502,7 +502,7 @@ fn digest_payload(payload: &[u8]) -> (String, usize) {
 
 #[inline]
 fn hmac(secret: &[u8], message: &[u8]) -> Hmac<Sha256> {
-    let mut hmac = Hmac::<Sha256>::new(secret).expect("failed to create hmac");
+    let mut hmac = Hmac::<Sha256>::new_varkey(secret).expect("failed to create hmac");
     hmac.input(message);
     hmac
 }
