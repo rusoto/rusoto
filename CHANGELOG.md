@@ -12,6 +12,7 @@
 - Fix Profile Config Loading should ignore comments with '=' chars
 - Add App Mesh service
 - Fix service_crategen to parse operations with multiple static params
+- Refactor S3 integration tests - about a `#[test]` per behavior
 - Add support for non signing clients
 
 ## [0.40.0] - 2019-06-28
