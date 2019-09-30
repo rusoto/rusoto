@@ -3,7 +3,6 @@ extern crate env_logger;
 extern crate futures;
 extern crate futures_fs;
 extern crate http;
-#[macro_use]
 extern crate log;
 extern crate reqwest;
 extern crate rusoto_core;
@@ -815,19 +814,6 @@ fn test_delete_object(client: &S3Client, bucket: &str, filename: &str) {
         .expect("Couldn't delete object");
     println!("{:#?}", result);
 }
-
-//fn list_items_in_bucket(client: &S3Client, bucket: &str) {
-//let list_obj_req = ListObjectsV2Request {
-//bucket: bucket.to_owned(),
-//start_after: Some("foo".to_owned()),
-//..Default::default()
-//};
-//let result = client
-//.list_objects_v2(list_obj_req)
-//.sync()
-//.expect("Couldn't list items in bucket (v2)");
-//println!("Items in bucket: {:#?}", result);
-/*}*/
 
 fn list_items_in_bucket_paged_v1(client: &S3Client, bucket: &str) {
     let mut list_request = ListObjectsRequest {
