@@ -14,6 +14,8 @@
 - Fix service_crategen to parse operations with multiple static params
 - Refactor S3 integration tests - about a `#[test]` per behavior
 - Add support for non signing clients
+- Don't decode query string parameters before encoding it. Results in fixing the prefix and marker
+params for s3 `list_objects` methods
 
 ## [0.40.0] - 2019-06-28
 
