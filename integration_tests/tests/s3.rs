@@ -120,7 +120,6 @@ impl Drop for TestS3Client {
     }
 }
 
-// NOTE: Do we want to use logging calls instead of printlns??
 // inititializes logging
 fn init_logging() {
     let _ = env_logger::try_init();
@@ -454,6 +453,81 @@ fn test_multipart_stream_uploads() {
         &test_client.bucket_name,
         &streaming_filename,
     )
+}
+
+#[test]
+fn test_list_objects_encoding() {
+    init_logging();
+
+    let bucket_name = format!("test-bucket-{}-{}", "encoding".to_owned(), get_time().sec);
+    let test_client = TestS3Client::new(bucket_name.clone());
+    test_client.create_test_bucket(bucket_name.clone());
+
+    let filename = "a%2Fb/c/test_file".to_owned();
+    let prefix = "a%2Fb/c".to_owned();
+    test_client.put_test_object(filename.clone());
+
+    let list_obj_req_v1 = ListObjectsRequest {
+        bucket: bucket_name.clone(),
+        marker: Some(prefix.clone()),
+        prefix: Some(prefix.clone()),
+        ..Default::default()
+    };
+
+    let resp_v1 = test_client
+        .s3
+        .list_objects(list_obj_req_v1)
+        .sync()
+        .expect("failed to list objects v1");
+
+    assert!(&resp_v1.contents.is_some());
+    let contents_v1 = resp_v1.contents.clone().unwrap();
+    assert_eq!(contents_v1.len(), 1);
+
+    let object = &contents_v1[0];
+    assert!(&object.key.is_some());
+
+    let key = object.key.clone().unwrap();
+    assert_eq!(key, filename);
+
+    // wrap up v1 list obj test with getting the obj with the key returned
+    let get_obj_req = GetObjectRequest {
+        bucket: bucket_name.clone(),
+        key: key.clone(),
+        ..Default::default()
+    };
+    assert!(test_client.s3.get_object(get_obj_req).sync().is_ok());
+
+    let list_obj_req_v2 = ListObjectsV2Request {
+        bucket: bucket_name.clone(),
+        prefix: Some(prefix.clone()),
+        ..Default::default()
+    };
+    let resp_v2 = &test_client
+        .s3
+        .list_objects_v2(list_obj_req_v2)
+        .sync()
+        .expect("failed to list objects v2");
+
+    assert!(&resp_v2.contents.is_some());
+    let contents_v2 = resp_v2.contents.clone().unwrap();
+    assert_eq!(contents_v2.len(), 1);
+
+    let object = &contents_v2[0];
+    assert!(&object.key.is_some());
+
+    let key = object.key.clone().unwrap();
+    assert_eq!(key, filename);
+
+    // wrap up v2 list obj test with getting the obj with the key returned
+    let get_obj_req = GetObjectRequest {
+        bucket: bucket_name.clone(),
+        key: key.clone(),
+        ..Default::default()
+    };
+    assert!(test_client.s3.get_object(get_obj_req).sync().is_ok());
+
+    test_delete_object(&test_client.s3, &bucket_name, &key);
 }
 
 fn test_multipart_upload(
