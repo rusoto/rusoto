@@ -58,7 +58,7 @@ pub struct AwsCredentials {
     key: String,
     #[serde(rename = "SecretAccessKey")]
     secret: String,
-    #[serde(rename = "Token")]
+    #[serde(rename = "SessionToken")]
     token: Option<String>,
     #[serde(rename = "Expiration")]
     expires_at: Option<DateTime<Utc>>,
@@ -544,7 +544,7 @@ mod tests {
     use std::io::Read;
     use std::path::Path;
 
-    use crate::test_utils::{is_secret_hidden_behind_asterisks, lock, ENV_MUTEX, SECRET};
+    use crate::test_utils::{is_secret_hidden_behind_asterisks, lock_env, SECRET};
     use futures::Future;
 
     use super::*;
@@ -568,7 +568,7 @@ mod tests {
 
     #[test]
     fn profile_provider_finds_right_credentials_in_file() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         let profile_provider = ProfileProvider::with_configuration(
             "tests/sample-data/multiple_profile_credentials",
             "foo",
