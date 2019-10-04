@@ -311,6 +311,12 @@
     "protocolVersion": "2016-11-15",
     "baseTypeName": "Ec2"
   },
+  "ec2-instance-connect": {
+    "version": "0.40.0",
+    "coreVersion": "0.40.0",
+    "protocolVersion": "2018-04-02",
+    "baseTypeName": "Ec2InstanceConnect"
+  },
   "ecr": {
     "version": "0.40.0",
     "coreVersion": "0.40.0",

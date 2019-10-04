@@ -55,6 +55,7 @@ members = [
     "rusoto/services/dynamodb",
     "rusoto/services/dynamodbstreams",
     "rusoto/services/ec2",
+    "rusoto/services/ec2-instance-connect",
     "rusoto/services/ecr",
     "rusoto/services/ecs",
     "rusoto/services/elasticache",

@@ -219,6 +219,10 @@ path = "../rusoto/services/dynamodbstreams"
 optional = true
 path = "../rusoto/services/ec2"
 
+[dependencies.rusoto_ec2_instance_connect]
+optional = true
+path = "../rusoto/services/ec2-instance-connect"
+
 [dependencies.rusoto_ecr]
 optional = true
 path = "../rusoto/services/ecr"
@@ -689,6 +693,7 @@ all = [
 	   	"dynamodb",
 	   	"dynamodbstreams",
 	   	"ec2",
+      "ec2-instance-connect",
 	   	"ecr",
 	   	"ecs",
 	   	"elasticache",
@@ -841,6 +846,7 @@ ds = ["rusoto_ds"]
 dynamodb = ["rusoto_dynamodb"]
 dynamodbstreams = ["rusoto_dynamodbstreams"]
 ec2 = ["rusoto_ec2"]
+ec2-instance-connect = ["rusoto_ec2_instance_connect"]
 ecr = ["rusoto_ecr"]
 ecs = ["rusoto_ecs"]
 elasticache = ["rusoto_elasticache"]

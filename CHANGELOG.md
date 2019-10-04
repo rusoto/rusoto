@@ -14,6 +14,7 @@
 - Fix service_crategen to parse operations with multiple static params
 - Refactor S3 integration tests - about a `#[test]` per behavior
 - Add support for non signing clients
+- Add EC2 Instance Connect service
 
 ## [0.40.0] - 2019-06-28
 
