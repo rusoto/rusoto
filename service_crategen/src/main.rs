@@ -73,6 +73,6 @@ fn main() {
             .values_of("service")
             .map(std::iter::Iterator::collect);
 
-        commands::generate::generate_services(&service_configs, out_dir, &service.as_ref());
+        commands::generate::generate_services(&service_configs, out_dir, service.as_ref());
     }
 }

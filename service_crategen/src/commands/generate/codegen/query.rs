@@ -187,7 +187,7 @@ fn generate_list_serializer(service: &Service<'_>, shape: &Shape) -> String {
     if primitive {
         parts.push(format!(
             "params.put(&key, {});",
-            serialize_primitive_expression(&member_shape.shape_type, "obj")
+            serialize_primitive_expression(member_shape.shape_type, "obj")
         ));
     } else {
         parts.push(format!(
@@ -357,7 +357,7 @@ fn optional_primitive_field_serializer(
         return "".to_owned();
     }
     let member_shape = service.shape_for_member(member).unwrap();
-    let expression = serialize_primitive_expression(&member_shape.shape_type, "field_value");
+    let expression = serialize_primitive_expression(member_shape.shape_type, "field_value");
 
     format!(
         "if let Some(ref field_value) = obj.{field_name} {{
@@ -376,7 +376,7 @@ fn required_primitive_field_serializer(
 ) -> String {
     let member_shape = service.shape_for_member(member).unwrap();
     let expression = serialize_primitive_expression(
-        &member_shape.shape_type,
+        member_shape.shape_type,
         &format!("obj.{}", generate_field_name(member_name)),
     );
 
@@ -387,8 +387,8 @@ fn required_primitive_field_serializer(
     )
 }
 
-fn serialize_primitive_expression(shape_type: &ShapeType, var_name: &str) -> String {
-    match *shape_type {
+fn serialize_primitive_expression(shape_type: ShapeType, var_name: &str) -> String {
+    match shape_type {
         ShapeType::String
         | ShapeType::Timestamp
         | ShapeType::Integer
