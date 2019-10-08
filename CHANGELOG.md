@@ -10,12 +10,20 @@
 - Upgrade to botocore from `1.12.163` to `1.12.230`
 - The types `rusoto_events::{CloudWatchEvents,CloudWatchEventsClient}` were renamed to `rusoto_events::{EventBridge,EventBridgeClient}`
 - Deserialize PostTextResponse correctly by allowing null values in the slots field
-- Fix Profile Config Loading should ignore comments with '=' chars
+- Fix Profile Config Loading: should ignore comments with '=' chars
 - Add App Mesh service
 - Fix service_crategen to parse operations with multiple static params
 - Refactor S3 integration tests - about a `#[test]` per behavior
 - Add support for non signing clients
 - Add EC2 Instance Connect service
+- Allow deserialization of regions without an endpoint specified
+- Add ApNortheast3 region
+- Add MeSouth1 region
+- Add x-amz-content-sha256 header to signed and canonical headers
+- Added `Eq` and `Hash` implementations on `Region`
+- Fixed parsing of Athena error messages
+- Fix credential_process behavior when using the non-default profile
+- Correctly read session tokens from credential_process
 
 ## [0.40.0] - 2019-06-28
 

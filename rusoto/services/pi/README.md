@@ -23,7 +23,7 @@ To use `rusoto_pi` in your application, add it as a dependency in your `Cargo.to
 
 ```toml
 [dependencies]
-rusoto_pi = "0.40.0"
+rusoto_pi = "0.41.0"
 ```
 
 ## Contributing

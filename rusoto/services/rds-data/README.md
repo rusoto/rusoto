@@ -23,7 +23,7 @@ To use `rusoto_rds_data` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_rds_data = "0.40.0"
+rusoto_rds_data = "0.41.0"
 ```
 
 ## Contributing

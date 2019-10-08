@@ -23,7 +23,7 @@ To use `rusoto_mediapackage` in your application, add it as a dependency in your
 
 ```toml
 [dependencies]
-rusoto_mediapackage = "0.40.0"
+rusoto_mediapackage = "0.41.0"
 ```
 
 ## Contributing
