@@ -57,7 +57,7 @@ fn generate_examples(crate_dir_path: &Path) -> Option<String> {
 pub fn generate_services(
     services: &BTreeMap<String, ServiceConfig>,
     out_dir: &Path,
-    service_to_generate: &Option<&Vec<&str>>,
+    service_to_generate: Option<&Vec<&str>>,
 ) {
     if !out_dir.exists() {
         fs::create_dir(out_dir).expect("Unable to create output directory");

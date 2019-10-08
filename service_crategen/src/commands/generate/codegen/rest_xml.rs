@@ -160,7 +160,6 @@ fn generate_documentation(operation: &Operation, service: &Service<'_>) -> Strin
             if operation.name == "ChangeResourceRecordSets" {
                 docs = format!("/// For TXT records, see <a href=\"./util/fn.quote_txt_record.html\">util::quote_txt_record</a>\n{}", docs);
             }
-            ()
         }
         _ => (),
     }

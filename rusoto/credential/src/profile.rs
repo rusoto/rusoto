@@ -207,7 +207,7 @@ impl ProvideAwsCredentials for ProfileProvider {
         let inner = match ProfileProvider::default_config_location().map(|location| {
             parse_config_file(&location).and_then(|config| {
                 config
-                    .get(&ProfileProvider::default_profile_name())
+                    .get(&self.profile)
                     .and_then(|props| props.get("credential_process"))
                     .map(std::borrow::ToOwned::to_owned)
             })
@@ -430,7 +430,7 @@ mod tests {
     use std::path::Path;
 
     use super::*;
-    use crate::test_utils::{lock, ENV_MUTEX};
+    use crate::test_utils::lock_env;
     use crate::{CredentialsError, ProvideAwsCredentials};
 
     #[test]
@@ -475,7 +475,7 @@ mod tests {
             super::parse_config_file(Path::new("tests/sample-data/credential_process_config"));
         assert!(result.is_some());
         let profiles = result.unwrap();
-        assert_eq!(profiles.len(), 1);
+        assert_eq!(profiles.len(), 2);
         let default_profile = profiles
             .get(DEFAULT)
             .expect("No Default profile in default_profile_credentials");
@@ -544,7 +544,7 @@ mod tests {
 
     #[test]
     fn profile_provider_happy_path() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         let provider = ProfileProvider::with_configuration(
             "tests/sample-data/multiple_profile_credentials",
             "foo",
@@ -560,7 +560,7 @@ mod tests {
 
     #[test]
     fn profile_provider_via_environment_variable() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         let credentials_path = "tests/sample-data/default_profile_credentials";
         env::set_var(AWS_SHARED_CREDENTIALS_FILE, credentials_path);
         let result = ProfileProvider::new();
@@ -572,7 +572,7 @@ mod tests {
 
     #[test]
     fn profile_provider_profile_name_via_environment_variable() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         let credentials_path = "tests/sample-data/multiple_profile_credentials";
         env::set_var(AWS_SHARED_CREDENTIALS_FILE, credentials_path);
         env::set_var(AWS_PROFILE, "bar");
@@ -588,7 +588,7 @@ mod tests {
 
     #[test]
     fn profile_provider_bad_profile() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         let provider = ProfileProvider::with_configuration(
             "tests/sample-data/multiple_profile_credentials",
             "not_a_profile",
@@ -604,7 +604,7 @@ mod tests {
 
     #[test]
     fn profile_provider_credential_process() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         env::set_var(
             AWS_CONFIG_FILE,
             "tests/sample-data/credential_process_config",
@@ -617,12 +617,43 @@ mod tests {
         let creds = result.ok().unwrap();
         assert_eq!(creds.aws_access_key_id(), "baz_access_key");
         assert_eq!(creds.aws_secret_access_key(), "baz_secret_key");
+        assert_eq!(
+            creds.token().as_ref().expect("session token not parsed"),
+            "baz_session_token"
+        );
+        assert!(creds.expires_at().is_some());
+
+        env::remove_var(AWS_CONFIG_FILE);
+    }
+
+    #[test]
+    fn profile_provider_credential_process_foo() {
+        let _guard = lock_env();
+        env::set_var(
+            AWS_CONFIG_FILE,
+            "tests/sample-data/credential_process_config",
+        );
+        let mut provider = ProfileProvider::new().unwrap();
+        provider.set_profile("foo");
+        let result = provider.credentials().wait();
+
+        assert!(result.is_ok());
+
+        let creds = result.ok().unwrap();
+        assert_eq!(creds.aws_access_key_id(), "foo_access_key");
+        assert_eq!(creds.aws_secret_access_key(), "foo_secret_key");
+        assert_eq!(
+            creds.token().as_ref().expect("session token not parsed"),
+            "foo_session_token"
+        );
+        assert!(creds.expires_at().is_some());
+
         env::remove_var(AWS_CONFIG_FILE);
     }
 
     #[test]
     fn profile_provider_profile_name() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         let mut provider = ProfileProvider::new().unwrap();
         assert_eq!(DEFAULT, provider.profile());
         provider.set_profile("foo");
@@ -679,7 +710,7 @@ mod tests {
 
     #[test]
     fn default_profile_name_from_env_var() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         env::set_var(AWS_PROFILE, "bar");
         assert_eq!("bar", ProfileProvider::default_profile_name());
         env::remove_var(AWS_PROFILE);
@@ -687,7 +718,7 @@ mod tests {
 
     #[test]
     fn default_profile_name_from_empty_env_var() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         env::set_var(AWS_PROFILE, "");
         assert_eq!(DEFAULT, ProfileProvider::default_profile_name());
         env::remove_var(AWS_PROFILE);
@@ -695,14 +726,14 @@ mod tests {
 
     #[test]
     fn default_profile_name() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         env::remove_var(AWS_PROFILE);
         assert_eq!(DEFAULT, ProfileProvider::default_profile_name());
     }
 
     #[test]
     fn default_profile_location_from_env_var() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         env::set_var(AWS_SHARED_CREDENTIALS_FILE, "bar");
         assert_eq!(
             Ok(PathBuf::from("bar")),
@@ -713,7 +744,7 @@ mod tests {
 
     #[test]
     fn default_profile_location_from_empty_env_var() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         env::set_var(AWS_SHARED_CREDENTIALS_FILE, "");
         assert_eq!(
             ProfileProvider::hardcoded_profile_location(),
@@ -724,7 +755,7 @@ mod tests {
 
     #[test]
     fn default_profile_location() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         env::remove_var(AWS_SHARED_CREDENTIALS_FILE);
         assert_eq!(
             ProfileProvider::hardcoded_profile_location(),
