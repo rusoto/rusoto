@@ -110,11 +110,13 @@ Information on release schedules and procedures are in [RELEASING](RELEASING.md)
 
 See [CONTRIBUTING](CONTRIBUTING.md).
 
-## Supported OSs and Rust versions
+## Supported OSs, Rust versions and non-AWS projects
 
 Linux, OSX and Windows are supported and tested via Azure Pipelines and Appveyor.
 
 Rust stable, beta and nightly are supported.
+
+Rusoto's primary aim is to be used with AWS. Other projects that provide AWS-like APIs, such as Ceph, Minio, Yandex Object Storage, etc... are not a focus at this time. PRs to fix issues with Rusoto and AWS-like APIs are welcome but generally won't be created by Rusoto maintainers.
 
 ## License
 
