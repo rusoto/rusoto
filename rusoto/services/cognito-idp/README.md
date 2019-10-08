@@ -23,7 +23,7 @@ To use `rusoto_cognito_idp` in your application, add it as a dependency in your 
 
 ```toml
 [dependencies]
-rusoto_cognito_idp = "0.40.0"
+rusoto_cognito_idp = "0.41.0"
 ```
 
 ## Contributing

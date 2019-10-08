@@ -23,7 +23,7 @@ To use `rusoto_secretsmanager` in your application, add it as a dependency in yo
 
 ```toml
 [dependencies]
-rusoto_secretsmanager = "0.40.0"
+rusoto_secretsmanager = "0.41.0"
 ```
 
 ## Contributing

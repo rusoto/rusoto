@@ -23,7 +23,7 @@ To use `rusoto_ecs` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_ecs = "0.40.0"
+rusoto_ecs = "0.41.0"
 ```
 
 ## Contributing

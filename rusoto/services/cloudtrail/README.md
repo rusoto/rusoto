@@ -23,7 +23,7 @@ To use `rusoto_cloudtrail` in your application, add it as a dependency in your `
 
 ```toml
 [dependencies]
-rusoto_cloudtrail = "0.40.0"
+rusoto_cloudtrail = "0.41.0"
 ```
 
 ## Contributing
