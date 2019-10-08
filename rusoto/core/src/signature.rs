@@ -5,6 +5,9 @@
 //!
 //! If needed, the request will be re-issued to a temporary redirect endpoint.  This can happen with
 //! newly created S3 buckets not in us-standard/us-east-1.
+//!
+//! Please note that this module does not expect URIs to already be encoded.
+//!
 
 use std::borrow::Cow;
 use std::collections::btree_map::Entry;
