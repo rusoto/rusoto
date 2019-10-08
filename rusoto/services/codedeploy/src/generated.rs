@@ -5121,7 +5121,7 @@ impl PutLifecycleEventHookExecutionStatusError {
 "LifecycleEventAlreadyCompletedException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::LifecycleEventAlreadyCompleted(err.msg)),
 "UnsupportedActionForDeploymentTypeException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::UnsupportedActionForDeploymentType(err.msg)),
 "ValidationException" => return RusotoError::Validation(err.msg),
-_ => {}
+_ => {{}}
                             }
         }
         return RusotoError::Unknown(res);

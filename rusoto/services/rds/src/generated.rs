@@ -18654,7 +18654,7 @@ impl DeleteDBInstanceAutomatedBackupError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "DBInstanceAutomatedBackupNotFound" => return RusotoError::Service(DeleteDBInstanceAutomatedBackupError::DBInstanceAutomatedBackupNotFoundFault(parsed_error.message)),"InvalidDBInstanceAutomatedBackupState" => return RusotoError::Service(DeleteDBInstanceAutomatedBackupError::InvalidDBInstanceAutomatedBackupStateFault(parsed_error.message)),_ => {}
+                                    "DBInstanceAutomatedBackupNotFound" => return RusotoError::Service(DeleteDBInstanceAutomatedBackupError::DBInstanceAutomatedBackupNotFoundFault(parsed_error.message)),"InvalidDBInstanceAutomatedBackupState" => return RusotoError::Service(DeleteDBInstanceAutomatedBackupError::InvalidDBInstanceAutomatedBackupStateFault(parsed_error.message)),_ => {{}}
                                 }
             }
         }
@@ -19610,7 +19610,7 @@ impl DescribeDBInstanceAutomatedBackupsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "DBInstanceAutomatedBackupNotFound" => return RusotoError::Service(DescribeDBInstanceAutomatedBackupsError::DBInstanceAutomatedBackupNotFoundFault(parsed_error.message)),_ => {}
+                                    "DBInstanceAutomatedBackupNotFound" => return RusotoError::Service(DescribeDBInstanceAutomatedBackupsError::DBInstanceAutomatedBackupNotFoundFault(parsed_error.message)),_ => {{}}
                                 }
             }
         }
@@ -20525,7 +20525,7 @@ impl DescribeReservedDBInstancesOfferingsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ReservedDBInstancesOfferingNotFound" => return RusotoError::Service(DescribeReservedDBInstancesOfferingsError::ReservedDBInstancesOfferingNotFoundFault(parsed_error.message)),_ => {}
+                                    "ReservedDBInstancesOfferingNotFound" => return RusotoError::Service(DescribeReservedDBInstancesOfferingsError::ReservedDBInstancesOfferingNotFoundFault(parsed_error.message)),_ => {{}}
                                 }
             }
         }
@@ -22083,7 +22083,7 @@ impl PurchaseReservedDBInstancesOfferingError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ReservedDBInstanceAlreadyExists" => return RusotoError::Service(PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceAlreadyExistsFault(parsed_error.message)),"ReservedDBInstanceQuotaExceeded" => return RusotoError::Service(PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceQuotaExceededFault(parsed_error.message)),"ReservedDBInstancesOfferingNotFound" => return RusotoError::Service(PurchaseReservedDBInstancesOfferingError::ReservedDBInstancesOfferingNotFoundFault(parsed_error.message)),_ => {}
+                                    "ReservedDBInstanceAlreadyExists" => return RusotoError::Service(PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceAlreadyExistsFault(parsed_error.message)),"ReservedDBInstanceQuotaExceeded" => return RusotoError::Service(PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceQuotaExceededFault(parsed_error.message)),"ReservedDBInstancesOfferingNotFound" => return RusotoError::Service(PurchaseReservedDBInstancesOfferingError::ReservedDBInstancesOfferingNotFoundFault(parsed_error.message)),_ => {{}}
                                 }
             }
         }

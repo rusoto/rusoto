@@ -10336,7 +10336,7 @@ impl AuthorizeClusterSecurityGroupIngressError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AuthorizationAlreadyExists" => return RusotoError::Service(AuthorizeClusterSecurityGroupIngressError::AuthorizationAlreadyExistsFault(parsed_error.message)),"AuthorizationQuotaExceeded" => return RusotoError::Service(AuthorizeClusterSecurityGroupIngressError::AuthorizationQuotaExceededFault(parsed_error.message)),"ClusterSecurityGroupNotFound" => return RusotoError::Service(AuthorizeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(parsed_error.message)),"InvalidClusterSecurityGroupState" => return RusotoError::Service(AuthorizeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(parsed_error.message)),_ => {}
+                                    "AuthorizationAlreadyExists" => return RusotoError::Service(AuthorizeClusterSecurityGroupIngressError::AuthorizationAlreadyExistsFault(parsed_error.message)),"AuthorizationQuotaExceeded" => return RusotoError::Service(AuthorizeClusterSecurityGroupIngressError::AuthorizationQuotaExceededFault(parsed_error.message)),"ClusterSecurityGroupNotFound" => return RusotoError::Service(AuthorizeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(parsed_error.message)),"InvalidClusterSecurityGroupState" => return RusotoError::Service(AuthorizeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(parsed_error.message)),_ => {{}}
                                 }
             }
         }
@@ -10545,7 +10545,7 @@ impl BatchModifyClusterSnapshotsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "BatchModifyClusterSnapshotsLimitExceededFault" => return RusotoError::Service(BatchModifyClusterSnapshotsError::BatchModifyClusterSnapshotsLimitExceededFault(parsed_error.message)),"InvalidRetentionPeriodFault" => return RusotoError::Service(BatchModifyClusterSnapshotsError::InvalidRetentionPeriodFault(parsed_error.message)),_ => {}
+                                    "BatchModifyClusterSnapshotsLimitExceededFault" => return RusotoError::Service(BatchModifyClusterSnapshotsError::BatchModifyClusterSnapshotsLimitExceededFault(parsed_error.message)),"InvalidRetentionPeriodFault" => return RusotoError::Service(BatchModifyClusterSnapshotsError::InvalidRetentionPeriodFault(parsed_error.message)),_ => {{}}
                                 }
             }
         }
@@ -15002,7 +15002,7 @@ impl ModifyClusterSnapshotScheduleError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ClusterNotFound" => return RusotoError::Service(ModifyClusterSnapshotScheduleError::ClusterNotFoundFault(parsed_error.message)),"InvalidClusterSnapshotScheduleState" => return RusotoError::Service(ModifyClusterSnapshotScheduleError::InvalidClusterSnapshotScheduleStateFault(parsed_error.message)),"SnapshotScheduleNotFound" => return RusotoError::Service(ModifyClusterSnapshotScheduleError::SnapshotScheduleNotFoundFault(parsed_error.message)),_ => {}
+                                    "ClusterNotFound" => return RusotoError::Service(ModifyClusterSnapshotScheduleError::ClusterNotFoundFault(parsed_error.message)),"InvalidClusterSnapshotScheduleState" => return RusotoError::Service(ModifyClusterSnapshotScheduleError::InvalidClusterSnapshotScheduleStateFault(parsed_error.message)),"SnapshotScheduleNotFound" => return RusotoError::Service(ModifyClusterSnapshotScheduleError::SnapshotScheduleNotFoundFault(parsed_error.message)),_ => {{}}
                                 }
             }
         }
@@ -16053,7 +16053,7 @@ impl RestoreTableFromClusterSnapshotError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ClusterNotFound" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::ClusterNotFoundFault(parsed_error.message)),"ClusterSnapshotNotFound" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::ClusterSnapshotNotFoundFault(parsed_error.message)),"InProgressTableRestoreQuotaExceededFault" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::InProgressTableRestoreQuotaExceededFault(parsed_error.message)),"InvalidClusterSnapshotState" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::InvalidClusterSnapshotStateFault(parsed_error.message)),"InvalidClusterState" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::InvalidClusterStateFault(parsed_error.message)),"InvalidTableRestoreArgument" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::InvalidTableRestoreArgumentFault(parsed_error.message)),"UnsupportedOperation" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::UnsupportedOperationFault(parsed_error.message)),_ => {}
+                                    "ClusterNotFound" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::ClusterNotFoundFault(parsed_error.message)),"ClusterSnapshotNotFound" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::ClusterSnapshotNotFoundFault(parsed_error.message)),"InProgressTableRestoreQuotaExceededFault" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::InProgressTableRestoreQuotaExceededFault(parsed_error.message)),"InvalidClusterSnapshotState" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::InvalidClusterSnapshotStateFault(parsed_error.message)),"InvalidClusterState" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::InvalidClusterStateFault(parsed_error.message)),"InvalidTableRestoreArgument" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::InvalidTableRestoreArgumentFault(parsed_error.message)),"UnsupportedOperation" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::UnsupportedOperationFault(parsed_error.message)),_ => {{}}
                                 }
             }
         }
@@ -16113,7 +16113,7 @@ impl RevokeClusterSecurityGroupIngressError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AuthorizationNotFound" => return RusotoError::Service(RevokeClusterSecurityGroupIngressError::AuthorizationNotFoundFault(parsed_error.message)),"ClusterSecurityGroupNotFound" => return RusotoError::Service(RevokeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(parsed_error.message)),"InvalidClusterSecurityGroupState" => return RusotoError::Service(RevokeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(parsed_error.message)),_ => {}
+                                    "AuthorizationNotFound" => return RusotoError::Service(RevokeClusterSecurityGroupIngressError::AuthorizationNotFoundFault(parsed_error.message)),"ClusterSecurityGroupNotFound" => return RusotoError::Service(RevokeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(parsed_error.message)),"InvalidClusterSecurityGroupState" => return RusotoError::Service(RevokeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(parsed_error.message)),_ => {{}}
                                 }
             }
         }
