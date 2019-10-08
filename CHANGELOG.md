@@ -2,10 +2,11 @@
 
 ## [Unreleased]
 
-- Add `HttpClient::from_builder`
-
 (Please put changes here)
 
+## [0.41.0] - 2019-10-07
+
+- Add `HttpClient::from_builder`
 - Upgrade to botocore from `1.12.163` to `1.12.230`
 - The types `rusoto_events::{CloudWatchEvents,CloudWatchEventsClient}` were renamed to `rusoto_events::{EventBridge,EventBridgeClient}`
 - Deserialize PostTextResponse correctly by allowing null values in the slots field
