@@ -27,18 +27,20 @@ Rusoto uses [semantic versioning 2.0.0](http://semver.org/).
 3. Publish new version of `rusoto_credential` if changes have been made to it.
 4. Publish new version of `rusoto_core` if changes have been made to it.
 5. Publish new version of `rusoto_mock` if it changes have been made to it.
-6. Run `publish-services.sh` in the `rusoto/services` dir. *Warning*: takes >2 hours on a low end Macbook. The script can be run again if an issue comes up without problems - crates.io prevents republishing.
+6. Run `publish-services.sh` in the `rusoto/services` dir. *Warning*: takes >4 hours on a low end Macbook. The script can be run again if an issue comes up without problems - crates.io prevents republishing.
 7. Tag master branch with the new version.  Example: `git tag -a rusoto-v0.21.0 -m "Rusoto 0.21.0 release."` then `git push --tags origin`.
 
 ### Git tags
 
-Due to multiple crates being in the repo, releases for each crate will be in the format `crate-vmajor.minor.patch`.
+Due to multiple crates being in the repo, releases for each crate will be in the format `crate-vmajor.minor.patch`. Rusoto core, service crates, credentials and `rusoto_mock` will all have the same versions for a new release:
 
 Examples:
 
-* `rusoto-v0.21.0`
-* `credentials-v0.3.0`
-* `mock-v0.27.0`
+* `rusoto-v0.41.0`
+* `credentials-v0.41.0`
+* `mock-v0.41.0`
+
+When bug fixes for a crate are published, all crates get a new release.
 
 ### Release notes
 
