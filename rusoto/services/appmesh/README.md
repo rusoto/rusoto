@@ -23,7 +23,7 @@ To use `rusoto_appmesh` in your application, add it as a dependency in your `Car
 
 ```toml
 [dependencies]
-rusoto_appmesh = "0.40.0"
+rusoto_appmesh = "0.41.0"
 ```
 
 ## Contributing

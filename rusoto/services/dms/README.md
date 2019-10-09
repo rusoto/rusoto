@@ -23,7 +23,7 @@ To use `rusoto_dms` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_dms = "0.40.0"
+rusoto_dms = "0.41.0"
 ```
 
 ## Contributing

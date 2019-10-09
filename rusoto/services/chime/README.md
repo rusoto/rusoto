@@ -23,7 +23,7 @@ To use `rusoto_chime` in your application, add it as a dependency in your `Cargo
 
 ```toml
 [dependencies]
-rusoto_chime = "0.40.0"
+rusoto_chime = "0.41.0"
 ```
 
 ## Contributing
